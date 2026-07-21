@@ -66,7 +66,8 @@
 ## Chapter Templates and Invariants
 
 ### Goals
-- 3 short bullet points explaining what are the goals of the chapter
+- 3 short bullet points of less of 100 characters each explaining what are the
+  goals of the chapter
 
 ### Topics
 - The `### Topics` section for each chapter should be in nested bullet points
@@ -83,7 +84,12 @@
   ```
 - The `### Topics` should be less than 20-25 lines and 175-200 words
 
-### Chapter
+### Slides
+- This points to the slides in `book_springer/lectures_source` containing the
+  book chapter
+- Each slide deck should be about 30-35 slides
+
+### Lesson Materials
 - For each chapter
   - Read the table of content for the slides in `### Topics` and the content in
     `### Lesson Materials`
@@ -107,6 +113,7 @@
 
 | Chap                                                    | Slides                                                                     | TOC complete | Mat complete | Criticize | Slides finalized | Tutorial complete | Book complete |
 | ------------------------------------------------------- | -------------------------------------------------------------------------- | ------------ | ------------ | --------- | ---------------- | ----------------- | ------------- |
+|                                                         |                                                                            |              |              |           |                  |                   |               |
 | Motivation                                              |                                                                            |              |              |           |                  |                   |               |
 | 01. Why Decisions, Not Predictions                      | Lesson01.01_From_Data_Science_To_Decision_Science.txt                      | 50%          |              |           |                  |                   |               |
 | 02. The Cost of Ignoring Causality                      | Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt                |              |              |           |                  |                   |               |
@@ -115,6 +122,8 @@
 |                                                         | msml610/lectures_source/Lesson03.2-Propositional_and_first_order_logic.txt | 80%          | 80%          | -         |                  |                   |               |
 |                                                         | msml610/lectures_source/Lesson03.3-Non_classical_logics.txt                | 80%          | 80%          | -         |                  |                   |               |
 | 05. Probalistic ML                                      |                                                                            |              |              |           |                  |                   |               |
+|                                                         | msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt                   |              |              |           |                  |                   |               |
+|                                                         | msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt             |              |              |           |                  |                   |               |
 | 06. Causal ML                                           |                                                                            |              |              |           |                  |                   |               |
 | Data                                                    |                                                                            |              |              |           |                  |                   |               |
 | 07. Building Causal Knowledge                           |                                                                            |              |              |           |                  |                   |               |
@@ -204,40 +213,30 @@
 
 ### Slides
 - `book_springer/lectures_source/Lesson02.01_From_Data_Science_To_Decision_Science.txt`
-  - [100%]: Decision pipeline framework, data science vs decision science
-    paradigm shift, prediction vs action framing
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [85%]: Ladder of Causation; Data Science → Decision Science; Causal vs
-    Predictive Questions; Analytics Sophistication; Why AI Projects Fail
-- `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
-  - [40%]: Predictions vs Decisions Side-by-Side; Simpson's Paradox; Causal
-    Resolution; Policy Reversal
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
-  - [5%]: Example of ladder of causation (Tornado Warning)
+- `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
 
 ## 03: Handling Causality, Uncertainty, Business Objectives, and Dynamics
 
 ### Goals
-- Integrate causality and probability to build models that identify true causal
-  effects, handle confounding, and distinguish mechanisms from spurious
-  correlations
-- Quantify uncertainty end-to-end—from domain knowledge through inference to
-  decision-relevant confidence bounds—enabling robust decisions despite
-  incomplete information
-- Encode business objectives as utility functions and incorporate real-world
-  dynamics, feedback loops, and cost asymmetries into the decision system
+- Combine causality and probability to find true effects
+- Quantify uncertainty from evidence to decision bounds
+- Encode business goals as utility-based decision functions
 
 ### Topics
 - Causal Models and Effect Identification
-  - Moving beyond correlation: confounding, mediators, and spurious paths in observational data
+  - Moving beyond correlation: confounding, mediators, and spurious paths in
+    observational data
   - Structural causal models (SCMs) and DAGs: formalizing mechanisms
   - Identification criteria: back-door, front-door, do-calculus
 - Probabilistic Uncertainty Quantification
   - Bayesian inference: priors, posteriors, posterior predictive distributions
   - Epistemic uncertainty over model; aleatoric irreducible noise
-  - Decision-relevant bounds: confidence intervals, credible intervals, thresholds
+  - Decision-relevant bounds: confidence intervals, credible intervals,
+    thresholds
 - Business Objectives and Decision Rules
   - Utility functions: preferences, risk attitudes, multi-criteria trade-offs
   - Cost asymmetries: false-positive and false-negative costs
@@ -271,24 +270,19 @@
 - Representation as a Foundation for Decisions
   - Why representation choice shapes what questions a model can answer
 - Formal Knowledge Representation
-  - Symbolic logic: propositional and first-order logic for structured reasoning
-  - Ontologies and semantic networks: organizing domain knowledge into reusable
-    structures
+  - Symbolic and non-classical logic: propositional/first-order logic,
+    non-monotonic reasoning, open- vs. closed-world assumptions
+  - Ontologies, semantic networks, and knowledge graphs: organizing domain
+    knowledge into reusable structures
   - Logic-based agents: inference engines and rule-based reasoning systems
 - Graphical Models for Uncertainty
-  - Bayesian networks: encoding conditional independence and probabilistic
-    structure
-// - D-separation and Markov blankets: reading independence directly from graph
-//    topology
-  - Inference algorithms: belief propagation and variable elimination for exact
-    answers
+  - Bayesian networks: conditional independence, d-separation, and Markov
+    blankets
+  - Inference algorithms: exact inference, belief propagation, and MCMC
+    sampling for exact and approximate answers
 - Causal Graphical Models
   - Structural causal models (SCMs): formal representation of generative
     mechanisms
-  - DAGs: encoding causal order, observed vs. unobserved variables, edge
-    direction
-//  - Identifying confounders, mediators, and colliders directly from graph
-//    structure
 - Integrating Logic and Causality
   - Combining symbolic reasoning with probabilistic inference for hybrid systems
   - From correlation to causal reasoning: what graphs add beyond raw data
@@ -296,38 +290,23 @@
     best
 
 ### Slides
+- `book_springer/lectures_source/Lesson04.01_Knowledge_Representation.txt`
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson03.1-Knowledge_representation.txt`
-  - [90%]: Formal knowledge representation: propositional/first-order logic,
-    symbolic vs. sub-symbolic representation, ontologies,
-    logic-based/knowledge-based agents and inference
 - `msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt`
-  - [95%]: Bayesian networks as graphical models, conditional independence,
-    d-separation, Markov blanket
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
-  - [90%]: Causal DAGs, structural causal models, causal edges and stability,
-    mechanisms, observed vs. unobserved variables,
-    confounders/mediators/colliders
 - `msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt`
-  - [80%]: Constructing Bayesian networks, causal vs. diagnostic models,
-    ordering of nodes, assumptions
-- `msml610/lectures_source/Lesson09.2-Hidden_Markov_Models.txt`
-  - [25%]: Markov Logic Networks: unifying first-order logic with probabilistic
-    graphical models (Markov Random Fields) for hybrid symbolic/probabilistic
-    reasoning, soft/weighted logic rules
-- `msml610/lectures_source/Lesson08.4.txt`
-  - [70%]: Causal models, graphical models, d-separation, identification
-    concepts
 - `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
-  - [50%]: Do-calculus, interventions, graphical criteria for identification
-- Not covered
-  - [15%]: Advanced identifiability theory, instrumental-variable theory,
-    generalization across environments
+- `msml610/lectures_source/Lesson08.4.txt`
+- `msml610/lectures_source/Lesson09.2-Hidden_Markov_Models.txt`
 
 ## 05: Probabilistic ML
 
 ### Goals
+- Master Bayesian inference: priors, posteriors, and approximate inference (MCMC, VI)
+- Build probabilistic models that quantify epistemic and aleatoric uncertainty
+- Convert posterior uncertainty into decisions and principled model choices
 
 ### Topics
 - Bayesian Inference Foundations
@@ -389,6 +368,10 @@
 
 ## 06: Causal ML
 
+### Goals
+- Do calculus
+- Confounders, mediators
+
 ### Topics
 - Causal Graphical Models
   - Structural causal models (SCMs): formal specification of generative
@@ -407,10 +390,6 @@
   - Instrumental variables: leveraging exogenous variation to break confounding
   - Sensitivity analysis: quantifying robustness to unmeasured confounding
   - Identifying limits: when causal effects are unidentifiable from data
-- Causal Discovery from Observational Data
-  - Learning causal DAGs without running experiments
-  - Constraint-based and score-based search methods over graph space
-  - Markov equivalence: understanding the limits of discovery from data alone
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
@@ -422,13 +401,13 @@
 - `msml610/lectures_source/Lesson08.4.txt`
   - [90%]: Identification, d-separation, graphical criteria, confounding bias,
     back-door adjustment, propensity-score/IPW methods
-- `msml610/lectures_source/Lesson12.2-Causal_Discovery.txt`
-  - [90%]: Causal discovery from observational data, identifiability, Markov
-    equivalence, algorithm families (constraint, score, functional), validation
 - `msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.txt`
   - [20%]: Instrumental variables: exogenous variable Z breaking confounding
     when back-door adjustment fails, complier-effect limitation, natural
     experiments as an alternative source of exogenous variation
+- `msml610/lectures_source/Lesson12.2-Causal_Discovery.txt`
+  - [90%]: Causal discovery from observational data, identifiability, Markov
+    equivalence, algorithm families (constraint, score, functional), validation
 - Not covered
   - [15%]: Sensitivity analysis for unmeasured confounding, formal
     non-identifiability bounds, online/real-time causal discovery in streaming
@@ -436,7 +415,18 @@
 
 # Part III: Data
 
-## 07: Building Causal Knowledge
+## 07: Building Probabilistic and Causal Knowledge
+
+### Goals
+- How to build probabilistic and causal networks
+- Causal Discovery from Observational Data
+  - Learning causal DAGs without running experiments
+  - Constraint-based and score-based search methods over graph space
+  - Markov equivalence: understanding the limits of discovery from data alone
+
+- DAGs: causal order, observed vs. unobserved variables, edge direction
+- Confounders, mediators, moderators, and colliders: reading variable roles
+  from graph structure
 
 ### Topics
 - Eliciting Causal Knowledge from Experts

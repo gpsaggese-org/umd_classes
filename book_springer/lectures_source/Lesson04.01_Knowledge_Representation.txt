@@ -1,0 +1,43 @@
+# Representation as a Foundation for Decisions
+
+* Why Knowledge Representation Matters
+* What Is Knowledge Representation?
+* Expressiveness vs. Tractability
+* Symbolic vs. Sub-symbolic Representation
+
+# Formal Knowledge Representation
+
+* Propositional Logic: Syntax and Semantics
+* First-Order Logic: Quantifiers and Inference
+* Non-Monotonic Logic and Default Reasoning
+* Open World vs. Closed World Assumptions
+* Ontologies: Components and Structure
+* Description Logics and OWL
+* Knowledge Graphs and the Semantic Web
+* Logical Entailment and Inference
+* Rule-Based Systems and Knowledge-Based Agents
+
+# Graphical Models for Uncertainty
+
+* Why Logic Fails Under Uncertainty
+* Full Joint Probability Distribution and Conditional Independence
+* Bayesian Networks: Definition and Structure
+* Constructing a Bayesian Network: Ordering and Causal vs. Diagnostic Models
+* Case Study: The Burglar Alarm Example
+
+# Causal Graphical Models
+
+* Causal DAGs vs. Non-Causal Bayesian Networks
+* The Ladder of Causation: Tornado Warning Example
+* Structural Causal Models: Sprinkler Example
+* Observed vs. Unobserved, Endogenous vs. Exogenous Variables
+* Building a Causal DAG
+* Mediators and Moderators
+* Confounders and Colliders
+* Fork and Inverted Fork Path Structures
+
+# Integrating Logic and Causality
+
+* Markov Logic Networks: Combining Logic and Probability
+* From Correlation to Causal Reasoning
+* Choosing a Representation: Logic, Probability, or Causal Graphs
