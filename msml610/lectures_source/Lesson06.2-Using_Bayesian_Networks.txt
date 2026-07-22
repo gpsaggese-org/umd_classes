@@ -14,7 +14,7 @@
 
 * Bayesian Networks: Semantics
 
-- **Definition**: Two equivalent semantic interpretations of a Bayesian Network:
+- @Definition@: Two equivalent semantic interpretations of a Bayesian Network:
 
   1. **Joint Distribution View**
      - The network encodes the _joint probability distribution_ over all
@@ -28,18 +28,18 @@
   2. **Conditional Independence View**
      - The structure encodes _conditional independency_ between variables
      - Useful for inference and reasoning
-     - A variable is conditionally independent of its non-descendants given its
-       parents
+     - A variable is conditionally independent of its non-descendants given
+       its parents
 
 // ### Representing the full joint distribution (p. 533)
 
 * Chain Rule for a Joint Distribution
-- **Theorem**: A joint distribution can always be expressed using the chain rule
+- @Theorem@: A joint distribution can always be expressed using the chain rule
   for any:
   - Subset of its random variables
   - Ordering of the random variables
 
-- **Proof**
+- @Proof@
 1. **Express one variable** conditionally to the remaining ones
    $$
    \Pr(\blue{x_1, ..., x_{n-1}}, \red{x_n})
@@ -84,7 +84,7 @@
 * Evaluate a Bayesian Network: Example
 ::: columns
 :::: {.column width=60%}
-- **Problem**: Given Pearl LA example, you want to compute the probability that:
+- @Problem@: Given Pearl LA example, you want to compute the probability that:
   - The alarm has sounded: $Alarm$
   - Neither a burglary nor an earthquake has occurred:
     $\lnot Burglary \land \lnot Earthquake$
@@ -117,9 +117,8 @@ digraph BayesianFlow {
 ::::
 :::
 
-- **Solution**
-- Compute the probability as a product of conditional probabilities from the
-  Bayesian Network:
+- @Solution@: Compute the probability as a product of conditional probabilities
+  from the Bayesian Network:
   \begin{align*}
   & \Pr(JohnCalls, MaryCalls, Alarm, \lnot Burglary, \lnot Earthquake) \\
   & = \Pr(JohnCalls|Alarm) \cdot \\
@@ -153,7 +152,8 @@ digraph BayesianFlow {
    - Test the network by predicting known outcomes and comparing with actual data
 
 * Bayesian Networks: Properties
-- **Fact**: Bayesian networks are a representation with several interesting properties
+- @Fact@: Bayesian networks are a representation with several interesting
+  properties
   - **Complete**
     - Encode all information in a joint probability
   - **Consistent** (non-redundant)
@@ -265,12 +265,12 @@ digraph BayesianNetwork {
 
 ::: columns
 :::: {.column width=65%}
-- **Definition**: A _causal model_ goes from causes to symptoms
+- @Definition@: A _causal model_ goes from causes to symptoms
   - E.g., $Burglary \to Alarm$
   - Simpler (i.e., fewer and more robust dependencies)
   - "Easier" to estimate
 
-- **Definition**: A _diagnostic model_ goes from symptoms to causes
+- @Definition@: A _diagnostic model_ goes from symptoms to causes
   - E.g., $MaryCalls \to Alarm$ or $Alarm \to Burglary$
   - Tenuous / unstable
   - Difficult to estimate
@@ -673,7 +673,7 @@ digraph StockPriceGraph {
 // ### 13.2.2, Efficient representation of conditional distributions (p. 433)
 
 * Specifying a Conditional Probability Table
-- **Problem**: Conditional Probability Table (CPT) for a node requires $O(2^k)$
+- @Problem@: Conditional Probability Table (CPT) for a node requires $O(2^k)$
   values in the worst case
   - Difficult to specify even with a small number of parents $k$
 
@@ -683,7 +683,7 @@ digraph StockPriceGraph {
   - Context-specific independence
 
 * Deterministic Nodes
-- **Definition**: _deterministic nodes_ have values specified by their parents,
+- @Definition@: _deterministic nodes_ have values specified by their parents,
   without uncertainty, e.g.,
   - A logical relationship:
     - Useful when a condition is met if any of the sub-conditions are true
@@ -691,19 +691,18 @@ digraph StockPriceGraph {
   - A numerical relationship:
     - $BestPrice = \min(Price_i)$
 
-- **Note**
+- @Note@
   - Deterministic nodes do not involve randomness or probability
   - Often used in models to simplify relationships and computations
 
 - Noisy Logical Relationships
 
 * Noisy Logic Relationships
-- **Definition**: _noisy logical relationships_ (e.g., noisy-OR, noisy-MAX):
+- @Definition@: _noisy logical relationships_ (e.g., noisy-OR, noisy-MAX):
   - Are a probabilistic version of a logical relationship
   - Can be simpler to describe given $k$ parents
 
-- **Example**
-- In _propositional logic_, relationships are expressed like
+- @Example@: In _propositional logic_, relationships are expressed like
   $Fever \iff Cold \lor Flu \lor Malaria$
 
 - In _Bayesian networks_, the assumptions are:
@@ -721,12 +720,11 @@ digraph StockPriceGraph {
     \end{align*}
 
 * Context-specific Independence
-- **Definition**: a variable exhibits _context-specific independence_ if it is
+- @Definition@: a variable exhibits _context-specific independence_ if it is
   conditionally independent of its parents given certain values of others
 
-- **Example**
-  - $Damage$ occurs depending on the $Ruggedness$ of your car and whether an
-    $Accident$ occurred in that period:
+- @Example@: $Damage$ occurs depending on the $Ruggedness$ of your car and
+  whether an $Accident$ occurred in that period:
     \begingroup \scriptsize
     $$
     \Pr(Damage \mid Ruggedness, Accident) =
@@ -742,16 +740,17 @@ digraph StockPriceGraph {
 - Many real world problems involve continuous quantities
   - E.g., height, mass, temperature, money
 
-- **Problem**: Conditional Probability Table (CPT) is not suitable for continuous RVs
+- @Problem@: Conditional Probability Table (CPT) is not suitable for
+  continuous RVs
 
-- **Solution**:
+- @Solution@:
   1. Discretization (i.e., use intervals)
      - Cons: loss of accuracy and large CPTs
   2. Continuous variables
      - Families of probability density functions (e.g., Gaussian distribution)
      - Non-parametric PDFs
 
-- **Definition**: _hybrid Bayesian networks_ mix discrete and continuous
+- @Definition@: _hybrid Bayesian networks_ mix discrete and continuous
   variables, e.g.,
   - _"A customer buys a number of apples (discrete) depending on its cost
     (continuous)"
@@ -759,14 +758,14 @@ digraph StockPriceGraph {
     information (e.g., maker model)"_
 
 * Bayesian Network: Car Insurance Company (1/2)
-- **Problem**:
+- @Problem@:
   - A _car insurance company_:
     - Receive an application from an individual to insure a specific vehicle
     - Analyze information about the individual and its car
     - Decide on appropriate annual premium to charge
     - Pay out a claim, based on the type of claim
 
-- **Solution**: build a Bayesian network that captures the causal structure of
+- @Solution@: build a Bayesian network that captures the causal structure of
   the domain
 
   - _Input information_:
@@ -881,12 +880,11 @@ digraph InsuranceRiskModel {
 
 * Exact Inference in Bayesian Networks
 
-- **Goal**
-  - Compute the posterior $P(X|\vE=\ve)$ for the query variable $X$ given
-    evidence $\ve$, where:
-    - Query variable $X$
-    - Evidence variables $\vE = \{E_1, \dots, E_m\}$
-    - Hidden variables $\vY = \{Y_1, \dots, Y_\ell\}$
+- @Goal@: Compute the posterior $P(X|\vE=\ve)$ for the query variable $X$
+  given evidence $\ve$, where:
+  - Query variable $X$
+  - Evidence variables $\vE = \{E_1, \dots, E_m\}$
+  - Hidden variables $\vY = \{Y_1, \dots, Y_\ell\}$
 
 - **Inference by Enumeration**
   - Use the full joint distribution and sum over all hidden variables:
@@ -898,7 +896,7 @@ digraph InsuranceRiskModel {
   - Removes irrelevant variables
     - Variables that are not ancestors of the query or evidence can be ignored
 
-- **Problems**
+- @Challenges@:
   - Exact inference is efficient $O(n)$ for trees, but intractable $O(2^n)$ in
     general
   - It does not work for continuous variables
@@ -933,21 +931,22 @@ digraph InsuranceRiskModel {
   quantities that are difficult to calculate exactly
   - E.g., samples from the posterior probability of a Bayes network
 
-- **Pros**
-  - The accuracy of the approximation depends on the number of samples generated
+- @Pros@:
+  - The accuracy of the approximation depends on the number of samples
+    generated
   - You can get arbitrarily close to the true probability distribution with
     enough samples
   - Is used in many branches of science
 
-- **Cons**
+- @Cons@:
   - Difficult to understand how the variables interact
   - Computationally intensive
 
 * Sampling from Arbitrary Distributions
 
-- **Goal**: Sample from a discrete or continuous probability distribution
+- @Goal@: Sample from a discrete or continuous probability distribution
 
-- **Solution**
+- @Solution@:
   - Start with uniform random numbers $r \in [0, 1]$
   - Construct CDF (cumulative distribution function) $F(x)$
     - $F(x) = \Pr(X \leq x)$
@@ -957,7 +956,8 @@ digraph InsuranceRiskModel {
   - For continuous distributions:
     - Use inverse transform: $x = F^{-1}(r)$, e.g.,
       $$
-      F(x) = 1 - e^{-\lambda x} \to x = F^{-1}(r) = -\frac{1}{\lambda} \ln(1 - r)
+      F(x) = 1 - e^{-\lambda x} \to x = F^{-1}(r) =
+      -\frac{1}{\lambda} \ln(1 - r)
       $$
     - If $F^{-1}$ has no closed form, use numerical methods
 
@@ -965,17 +965,17 @@ digraph InsuranceRiskModel {
 
 * Sampling Bayesian Network Without Evidence
 
-- **Goal**: Generate samples from a Bayesian network without evidence (prior
+- @Goal@: Generate samples from a Bayesian network without evidence (prior
   sampling)
 
 ::: columns
 :::: {.column width=65%}
-- **Solution**
-- Sample variables in topological order
-- Source nodes have known unconditional probability distribution
-  - E.g., $\Pr(Rain) = 0.5$
-- Conditional variable's probability distribution depends on parent's values
-  - E.g., $\Pr(WetGrass | Rain = T) = 0.1$
+- @Solution@:
+  - Sample variables in topological order
+  - Source nodes have known unconditional probability distribution
+    - E.g., $\Pr(Rain) = 0.5$
+  - Conditional variable's probability distribution depends on parent's values
+    - E.g., $\Pr(WetGrass | Rain = T) = 0.1$
 
 ::::
 :::: {.column width=30%}
@@ -1030,9 +1030,9 @@ digraph BayesianFlow {
 - **Rejection sampling** is a method for sampling from a hard-to-sample
   distribution
 
-- **Goal**: Compute $\Pr(X=x| E=e)$ when evidence $e$ is rare
+- @Goal@: Compute $\Pr(X=x| E=e)$ when evidence $e$ is rare
 
-- **Algorithm**:
+- @Algorithm@:
   1. Generate samples from the prior distribution
      - Estimate $\Pr(x, e)$
   2. Reject samples not matching evidence, i.e., $X \land E \neq e$
@@ -1061,18 +1061,18 @@ digraph BayesianFlow {
   $$
 
 * Rejection Sampling: Pros and Cons
-- **Pros**
+- @Pros@:
   - Consistent estimate
     - I.e., converges to true value as number of samples increases
 
-- **Cons**
+- @Cons@:
   - Many samples are rejected, depending on rarity of $\Pr(E=e)$
   - Fraction of samples matching evidence $e$ decreases exponentially with more
     evidence variables
     - Curse of dimensionality
     - Not suitable for complex systems
   - Difficult with continuous variables
-    - E.g., $\Pr(E=e)$ is theoretically 0 due to limited floating-point precision
+    - Theoretically $\Pr(E=e)$ is 0 due to limited floating-point precision
 
 * Importance Sampling
 ::: columns
@@ -1091,14 +1091,13 @@ digraph BayesianFlow {
 ::::
 :::
 
-- **Example**:
-  - Estimate $\Pr(A | E=e)$ where $E$ is rare
+- @Example@: Estimate $\Pr(A | E=e)$ where $E$ is rare
   - Standard sampling might miss $E=e$
   - Importance sampling focuses samples near $E=e$ with reweighting
   - Analogy: Rebalance biased survey by giving underrepresented groups higher
     weights
 
-- **Pros**
+- @Pros@:
   - Improves inference efficiency over rejection sampling
 
 * Markov Chain Monte Carlo
@@ -1177,30 +1176,29 @@ digraph BayesianFlow {
 - Special case of Markov Chain Monte Carlo (MCMC) method that samples one
   variable at a time
 
-- **Algorithm**:
+- @Algorithm@:
   - Start with an initial complete assignment to all non-evidence variables
   - Keep evidence variables fixed at observed values
   - For each non-evidence variable $X_i$:
     - Sample $X_i$ from $P(X_i | \text{MB}(X_i))$ where $\text{MB}(X_i)$ is
       the Markov blanket, i.e., parents, children, spouse of a node
 
-- **Example**:
-  - Weather network: $P(Cloudy | Sprinkler, Rain, WetGrass)$
+- @Example@: Weather network: $P(Cloudy | Sprinkler, Rain, WetGrass)$
   - Fix $WetGrass = true$, $Sprinkler = true$
   - Sample $Cloudy$ and $Rain$ iteratively
 
-- **Pros**
+- @Pros@:
   - Simple to implement for any Bayesian network
   - Handles large, complex graphs with local updates
 
-- **Cons**
+- @Cons@:
   - Can mix slowly if variables are highly correlated
   - May need many samples for accurate estimates
 
 * Metropolis–Hastings Sampling
 - More general Markov Chain Monte Carlo method than Gibbs sampling
 
-- **Algorithm**
+- @Algorithm@:
   - Start at a current state $\vx$
   - Propose a new state $\vx'$ from a proposal distribution $q(x' | x)$, e.g.,
     - With 95% probability Gibbs sampling
@@ -1209,16 +1207,16 @@ digraph BayesianFlow {
     - $A(x, x') = \min(1, \frac{\pi(x')q(x|x')}{\pi(x)q(x'|x)})$
   - Move to $x'$ with probability $A(x,x')$, otherwise stay at $x$
 
-- **Intuition**
+- **Intuition**:
   - Propose local moves
   - Accept if they lead to higher probability, or sometimes accept
     lower-probability states to explore
   - Balances exploration and exploitation to avoid getting stuck in local modes
 
-- **Pros**
+- @Pros@:
   - Very flexible: works with any proposal distribution
   - Can handle high-dimensional spaces
 
-- **Cons**
+- @Cons@:
   - May "mix" slowly if proposal steps are poorly chosen
   - Requires careful tuning of proposal distribution for efficiency

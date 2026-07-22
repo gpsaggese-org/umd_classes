@@ -137,10 +137,10 @@
 | 15. Deployment, Monitoring, and Adaptation              | Lesson15.01_Deployment_Monitoring_And_Adaptation.txt                       |              |              |           |                  |                   |               |
 | 16. Trust, Explainability, Fairness, and Governance     |                                                                            |              |              |           |                  |                   |               |
 
-| Slides                                                                     | Typst | | TOC complete | Mat complete | Criticize | Slides finalized | Tutorial complete |
+| Slides                                                                     | Typst | TOC complete | Mat complete | Criticize | Slides finalized | Tutorial complete |
 | -------------------------------------------------------------------------- | ----- | ------------ | ------------ | --------- | ---------------- | ----------------- |
 |                                                                            |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson00-Class.txt                                 |       |              |              |           |                  |                   |
+| msml610/lectures_source/Lesson00-Class.txt                                 | yes   |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson01.1-AI_and_Machine_Learning.txt             |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson01.1.aux.md                                  |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson01.2-The_Foundations_of_AI.txt               |       |              |              |           |                  |                   |
