@@ -457,9 +457,7 @@ digraph ML_Phases {
 - What matters is how students do once they graduate and find a job
   - This is the **out-of-sample phase**
 
-# ##############################################################################
 # Growth Function
-# ##############################################################################
 
 * Dichotomy: Definition
 - **Problem**: classify $N$ (fixed) points $\vx_1, ..., \vx_N$ with an hypothesis
@@ -876,9 +874,7 @@ digraph ML_Phases {
 //
 //// TODO: Improve this
 
-# ##############################################################################
 # The VC Dimension
-# ##############################################################################
 
 * VC Dimension of an Hypothesis Set
 - The **VC dimension of a hypothesis set** $\calH$, denoted as $d_{VC}(\calH)$,

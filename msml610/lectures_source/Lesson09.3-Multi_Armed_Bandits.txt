@@ -22,9 +22,7 @@ MSML610: Advanced Machine Learning
 
 **References**:
 
-# ##############################################################################
 # Introduction
-# ##############################################################################
 
 * What are Multi-Armed Bandits?
 
@@ -267,9 +265,7 @@ digraph ExploitationExploration {
   - Random sampling: $\Omega(\sqrt{T})$ regret
   - Need adaptive exploration that concentrates on promising arms
 
-# ##############################################################################
 # Algorithms
-# ##############################################################################
 
 * Baseline Strategies
 
@@ -562,9 +558,7 @@ digraph OptimismConcept {
   - You have domain knowledge about variance structure (UCB-V)
   - You need best possible asymptotic performance (KL-UCB)
 
-# ##############################################################################
 # Bayesian Approaches
-# ##############################################################################
 
 * Bayesian Bandits
 

@@ -224,9 +224,7 @@
       examples for one update
     - Requires storing all data in memory
 
-### ############################################################################
 ### Stochastic Gradient Descent
-### ############################################################################
 
 * Stochastic Gradient Descent
 - Idea of **Stochastic Gradient Descent (SGD)**: update the weights only for one

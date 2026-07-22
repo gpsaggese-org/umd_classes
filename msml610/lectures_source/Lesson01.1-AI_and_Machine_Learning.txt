@@ -230,9 +230,7 @@
 - @Solution@: **"Satisficing" (perfect good enough vs perfect)**
   - Acting appropriately given computational constraints
 
-## #############################################################################
 ## What is Machine Learning?
-## #############################################################################
 
 * Machine Learning: Definitions
 
@@ -339,23 +337,28 @@
 :::: {.column width=30%}
 
 ```tikz
-  \definecolor{AIcolor}{RGB}{255,150,150}
-  \definecolor{MLcolor}{RGB}{150,255,150}
-  \definecolor{DLcolor}{RGB}{150,255,255}
-  \definecolor{LLMcolor}{RGB}{230,150,230}
+  % Define colors
+  \definecolor{AIcolor}{RGB}{255,150,150}    % Light Red
+  \definecolor{MLcolor}{RGB}{150,255,150}    % Light Green
+  \definecolor{DLcolor}{RGB}{150,255,255}    % Light Teal/Cyan
+  \definecolor{LLMcolor}{RGB}{230,150,230}   % Light Purple
 
+  % Draw AI circle
   \fill[AIcolor] (0,0) circle (3);
   \draw (0,0) circle (3);
   \node[above] at (0,2) {\textbf{AI}};
 
+  % Draw ML circle inside AI
   \fill[MLcolor] (0.5,-0.5) circle (2);
   \draw (0.5,-0.5) circle (2);
   \node[above] at (0.5,0.5) {\textbf{ML}};
 
+  % Draw DL circle inside ML
   \fill[DLcolor] (1,-1) circle (1);
   \draw (1,-1) circle (1);
   \node[above] at (1,-0.6) {\textbf{DL}};
 
+  % Draw LLM circle inside DL
   \fill[LLMcolor] (1.2,-1.2) circle (0.6);
   \draw (1.2,-1.2) circle (0.6);
   \node[above] at (1.2,-1.4) {\textbf{LLMs}};

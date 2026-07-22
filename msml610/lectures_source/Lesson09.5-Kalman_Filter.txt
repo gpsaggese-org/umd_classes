@@ -31,9 +31,7 @@ MSML610: Advanced Machine Learning
 // ./notebooks/quantopian/quantopian_kalman_filter.ipynb
 // AIMA 14.4 (p. 479)
 
-# ##############################################################################
 # Discrete Bayes Filtering
-# ##############################################################################
 
 // https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/blob/master/02-Discrete-Bayes.ipynb
 
@@ -170,9 +168,7 @@ digraph BayesianUpdateAlgo {
 }
 ```
 
-# #############################################################################
 # Unidimensional Kalman Filters
-# #############################################################################
 
 // https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/blob/master/04-One-Dimensional-Kalman-Filters.ipynb
 
@@ -356,9 +352,7 @@ digraph BayesianUpdateAlgo {
   - Is the scaling term that mixes the prediction and the measurement
   - Depends on the ratio of uncertainty of prior and measurement
 
-# ##############################################################################
 # Multivariate Kalman Filters
-# ##############################################################################
 
 // https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/blob/master/05-Multivariate-Gaussians.ipynb
 // https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/blob/master/06-Multivariate-Kalman-Filters.ipynb
@@ -647,9 +641,7 @@ set of first-order differential equations
 - If $\mQ$ is too large, the filter is unduly influenced by the noise in
   the measurements
 
-## #############################################################################
 ## Non-Linear Filtering
-## #############################################################################
 
 * Optimality
 - The Kalman filter is optimal (in a least square sense) under **assumptions**

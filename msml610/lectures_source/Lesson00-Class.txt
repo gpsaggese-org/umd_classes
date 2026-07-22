@@ -135,9 +135,7 @@ Book_cover_Reinforcement_learning.jpg){ height=20% }
 ::::
 :::
 
-# ##############################################################################
 # Class Map
-# ##############################################################################
 
 // TODO(gp): Refresh this once the slides are complete
 // lectures_source/get_syllabus.sh

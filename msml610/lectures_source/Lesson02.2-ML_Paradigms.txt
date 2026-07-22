@@ -190,9 +190,7 @@ digraph BayesianFlow {
   - E.g., newsfeed ranking adjusting based on user clicks
 - In **healthcare**, optimize treatment plans over time
 
-## #############################################################################
 ## Machine Learning in Practice
-## #############################################################################
 
 * Machine Learning Flow (1/2)
 - **Question**
@@ -323,9 +321,7 @@ digraph BayesianFlow {
     - E.g., in the Netflix prize, Netflix didn't end up implementing the best
       algorithm since it wasn't scalable enough
 
-## #############################################################################
 ## Pipeline Organization
-## #############################################################################
 
 * How Are Machine Learning Systems Organized?
 

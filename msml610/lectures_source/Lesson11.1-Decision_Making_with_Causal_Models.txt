@@ -33,18 +33,14 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-# ##############################################################################
 # Why Prediction Is Not Enough
-# ##############################################################################
 
 // Books and Articles:
 // - 2024, Hurwitz & Thompson, "Causal Artificial Intelligence"
 // - 2018, Pearl & Mackenzie, "The Book of Why"
 // - 2009, Pearl, "Causality: Models, Reasoning, and Inference"
 
-## #############################################################################
 ## Prediction Pipelines vs. Decision Pipelines
-## #############################################################################
 
 * From Predictions to Decisions
 
@@ -114,9 +110,7 @@ MSML610: Advanced Machine Learning
 | Interaction w/ world | No feedback with the world  | Actions change the world              |
 \endgroup
 
-## #############################################################################
 ## When Prediction Fails
-## #############################################################################
 
 * Simpson's Paradox
 
@@ -229,9 +223,7 @@ digraph SimpsonCaseB {
 - Predictive patterns in historical data reflect the _policy that generated the
   data_, not what happens when we change it
 
-## #############################################################################
 ## Causal Models as the Foundation for Decisions
-## #############################################################################
 
 * Causal Models for Decisions
 
@@ -277,18 +269,14 @@ digraph DecisionLoop {
   - Pure prediction skips the middle step
   - New data from interventions updates the model, closing the loop
 
-# ##############################################################################
 # Foundations of Decision Theory
-# ##############################################################################
 
 // Books and Articles:
 // - 1944, von Neumann & Morgenstern, "Theory of Games and Economic Behavior"
 // - 1954, Savage, "The Foundations of Statistics"
 // - 2020, Russell & Norvig, "AIMA", Chap. 16
 
-## #############################################################################
 ## Utility Functions and Expected Utility
-## #############################################################################
 
 * Utility Functions
 
@@ -379,9 +367,7 @@ digraph DecisionLoop {
   - Even though $T_2$ is more effective, its side-effect penalty outweighs the
     gain
 
-## #############################################################################
 ## Causal Interventions and Expected Outcomes
-## #############################################################################
 
 * From Observational to Interventional Expectation
 
@@ -480,9 +466,7 @@ digraph PostMutation {
   - Adjusted: $\sum_z \Pr(\text{recovery} | \text{drug}, z) \Pr(z) = 0.83$
   - The adjusted value is what plugs into expected utility
 
-## #############################################################################
 ## Risk Preferences and Multi-Criteria Trade-offs
-## #############################################################################
 
 * Risk Preferences
 
@@ -559,18 +543,14 @@ digraph PostMutation {
   - If the optimal action is stable across a plausible range of utilities, the
     decision is robust
 
-# ##############################################################################
 # Decision Support with Causal Models
-# ##############################################################################
 
 // Books and Articles:
 // - 2009, Koller & Friedman, "Probabilistic Graphical Models", Chap. 23
 // - 2005, Howard & Matheson, "Influence Diagrams"
 // - 2004, O'Hagan et al., "Uncertain Judgements: Eliciting Experts' Probabilities"
 
-## #############################################################################
 ## Decision Networks
-## #############################################################################
 
 * Decision Networks: Motivation
 
@@ -688,9 +668,7 @@ digraph ID {
   - Exact solution is intractable for large continuous problems
   - Assumes a single rational decision-maker with stable utilities
 
-## #############################################################################
 ## Bayesian Decision-Making
-## #############################################################################
 
 * Posteriors to Optimal Actions
 
@@ -843,9 +821,7 @@ digraph ID {
 - **Bottom line**: Bayesian framing slots naturally into causal decision-making
   because both use joint distributions end-to-end
 
-## #############################################################################
 ## Prior Elicitation
-## #############################################################################
 
 * Prior Elicitation: What and Why
 
@@ -899,18 +875,14 @@ digraph ID {
     - _"Does the decision change under plausible alternative priors?"_
   - Document the elicitation process to defend decisions
 
-# ##############################################################################
 # Sequential Decision-Making and Active Learning
-# ##############################################################################
 
 // Books and Articles:
 // - 1966, Howard, "Information Value Theory"
 // - 2020, Sutton & Barto, "Reinforcement Learning: An Introduction"
 // - 2018, Frazier, "A Tutorial on Bayesian Optimization"
 
-## #############################################################################
 ## Value of Information
-## #############################################################################
 
 * Value of Information: Motivation
 
@@ -971,9 +943,7 @@ digraph ID {
   - Compute EVSI by integrating over all possible $(E = +, E = -)$ outcomes
   - Run the test if $\text{EVSI} - \text{cost} > 0$
 
-## #############################################################################
 ## Exploration vs. Exploitation
-## #############################################################################
 
 * Exploration vs Exploitation
 
@@ -1010,9 +980,7 @@ digraph ID {
     effect
   - Exploiting this structure cuts samples needed to find the best combination
 
-## #############################################################################
 ## Bayesian Optimization for Experimentation
-## #############################################################################
 
 * Bayesian Optimization
 
@@ -1127,9 +1095,7 @@ digraph ID {
 - A causal model + Bayesian uncertainty + a principled exploration policy gives
   you a system that learns which actions work with minimal cost
 
-# ##############################################################################
 # Uncertainty in Causal Decisions
-# ##############################################################################
 
 // Books and Articles:
 // - 2009, Der Kiureghian & Ditlevsen, "Aleatory or Epistemic? Does it Matter?"
@@ -1275,9 +1241,7 @@ digraph ID {
 - **Warning**: most off-the-shelf ML models report only a point prediction,
   neither kind of uncertainty is visible
 
-## #############################################################################
 ## Communicating Uncertainty
-## #############################################################################
 
 * Communicating Uncertainty to Stakeholders
 

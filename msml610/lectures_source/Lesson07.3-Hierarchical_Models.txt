@@ -42,9 +42,7 @@ MSML610: Advanced Machine Learning
 
 // 3, Hierarchical models
 
-# #############################################################################
 # Hierarchical Models
-# #############################################################################
 
 * Hierarchical Models
 - Aka "multilevel", "nested", "mixed-effects" models

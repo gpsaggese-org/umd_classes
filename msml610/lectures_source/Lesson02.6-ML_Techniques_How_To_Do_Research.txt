@@ -158,9 +158,7 @@
     - Minimum Description Length (MDL) penalizes complex models and repeated
       fitting
 
-### ############################################################################
 ### Research Methodology
-### ############################################################################
 
 * How to Achieve Out-Of-Sample Fit
 - **Goal**: Choose an hypothesis $g \in \calH$ approximates the unknown target

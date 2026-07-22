@@ -40,9 +40,7 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-## #############################################################################
 ## Naive Bayes Model
-## #############################################################################
 
 * Naive Bayes Model
 - **Problem**: predict classes $H_1, ..., H_n$ using evidence $\vE$:
@@ -241,9 +239,7 @@ MSML610: Advanced Machine Learning
     $$
   - Blends prior of equiprobable feature values with MLE estimates
 
-## #############################################################################
 ## Decision Trees
-## #############################################################################
 
 // AIMA 19.3 Learning Decision Trees
 
@@ -598,9 +594,7 @@ MSML610: Advanced Machine Learning
 
 - Use **number of trees and max depth per tree** to control space size
 
-## #############################################################################
 ## Random Forests
-## #############################################################################
 
 * From Decision Trees to Random Forests
 - Decision trees are **high capacity models**:
@@ -656,9 +650,7 @@ MSML610: Advanced Machine Learning
   - Loss of interpretability
   - Overfitting (cross-validation is needed)
 
-## #############################################################################
 ## Linear Models
-## #############################################################################
 
 * Linear Regression Model
 - **Data set**
@@ -766,9 +758,7 @@ MSML610: Advanced Machine Learning
   - In $\calX$ if $\Phi$ is invertible; or
   - By classifying any $\vx \in \calX$ in $\calZ$
 
-## #############################################################################
 ## Perceptron
-## #############################################################################
 
 * Example of Classification Problems
 - **Binary classification problem**

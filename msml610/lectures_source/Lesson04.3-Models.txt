@@ -42,9 +42,7 @@ MSML610: Advanced Machine Learning
 
 
 
-## #############################################################################
 ## Similarity-Based Models
-## #############################################################################
 
 * Similarity-Based Models: Intuition
 - **Idea**: the model evaluated in one point $h(\vx)$ is affected by:
@@ -311,9 +309,7 @@ MSML610: Advanced Machine Learning
     examples in the training set)
   - Use a _constant kernel_ (responses are not weighted by distance)
 
-## #############################################################################
 ## Clustering
-## #############################################################################
 
 * K-Means Clustering: Problem Formulation
 - $N$ _unlabeled_ points $\{\vx_1, \vx_2, ..., \vx_N\}$
@@ -453,9 +449,7 @@ MSML610: Advanced Machine Learning
 | Cluster 3  | 35 yrs    | 120K           | 20             | High Income, Low Spending Customers |
 \endgroup
 
-## #############################################################################
 ## Anomaly Detection
-## #############################################################################
 
 * Anomaly Detection: Problem Formulation
 - **Problem**:

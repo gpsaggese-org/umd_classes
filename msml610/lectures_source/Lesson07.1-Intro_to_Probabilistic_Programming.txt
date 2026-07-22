@@ -177,9 +177,7 @@ MSML610: Advanced Machine Learning
 
 # Coin Example
 
-## #############################################################################
 ## Analytical Approach
-## #############################################################################
 
 * Coin Example: Problem
 - **Problem**:
@@ -472,9 +470,7 @@ Kruschke diagram
 
 // 2, Programming probabilistically
 
-## #############################################################################
 ## Probabilistic Programming
-## #############################################################################
 
 * Bayesian Statistics
 ::: columns

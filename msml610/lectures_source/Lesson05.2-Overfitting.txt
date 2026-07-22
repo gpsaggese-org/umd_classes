@@ -37,9 +37,7 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-# ##############################################################################
 # Overfitting
-# ##############################################################################
 
 // Overfitting
 
@@ -163,9 +161,7 @@ MSML610: Advanced Machine Learning
 
 ![](msml610/lectures_source/figures/L05.2.Optimal_fit2.png){ width=80% }
 
-# ##############################################################################
 # Bias Variance Analysis
-# ##############################################################################
 
 * VC Analysis vs Bias-Variance Analysis
 - Both VC analysis and bias-variance analysis are concerned with the hypothesis
@@ -676,9 +672,7 @@ MSML610: Advanced Machine Learning
   - $\uparrow$ deterministic noise (target complexity) $\implies \uparrow$ overfitting
   - $\uparrow$ stochastic noise $\sigma^2 \implies \uparrow$ overfitting
 
-# ##############################################################################
 # Learning Curves
-# ##############################################################################
 
 * Learning Curves vs Bias-Variance Curves
 - **Learning curves** are the dual of the bias-variance curves

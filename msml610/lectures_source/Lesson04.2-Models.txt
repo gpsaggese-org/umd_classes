@@ -42,9 +42,7 @@ MSML610: Advanced Machine Learning
 
 
 
-## #############################################################################
 ## Logistic Regression
-## #############################################################################
 
 * Logistic Regression Is a Probabilistic Classifier
 - **Logistic regression** learns:
@@ -348,9 +346,7 @@ MSML610: Advanced Machine Learning
   - Equal digits don't contribute to error
   - Different digits give positive contribution
 
-## #############################################################################
 ## LDA, QDA
-## #############################################################################
 
 * Basic Idea of Parametric Models
 - Assume a model generates data
@@ -501,9 +497,7 @@ MSML610: Advanced Machine Learning
 - If $f_i(\vx)$ is from a multivariate Gaussian distribution with diagonal
   $\mSigma$ (feature independence), you can simplify expressions further
 
-## #############################################################################
 ## Kernel Methods
-## #############################################################################
 
 * Kernel: Definition
 
@@ -653,9 +647,7 @@ MSML610: Advanced Machine Learning
 
 - Kernel trick is more computationally efficient for inner product computation
 
-## #############################################################################
 ## Support Vector Machines (Optional)
-## #############################################################################
 
 * Support Vector Machines (SVM)
 - Arguably one of the most successful classification algorithm, together with

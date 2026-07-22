@@ -35,14 +35,10 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-# ##############################################################################
 # The Discovery Problem
-# ##############################################################################
 
 
-## #############################################################################
 ## Inferring Causal Structure from Observational Data
-## #############################################################################
 
 
 * Causal Discovery: Motivation
@@ -132,9 +128,7 @@ digraph Discovery {
 ::::
 :::
 
-## #############################################################################
 ## Identifiability and Causal Sufficiency
-## #############################################################################
 
 
 * Markov Equivalence
@@ -252,9 +246,7 @@ digraph PathCancellation {
 - In theory: Exact cancellations are rare
 - In practice: Near-cancellations in finite samples cause errors
 
-## #############################################################################
 ## Practical Limitations
-## #############################################################################
 
 
 * Practical Challenges for Causal Discovery
@@ -303,14 +295,10 @@ digraph PathCancellation {
   - Score-based search is NP-hard in general
   - Practical implication: exact discovery is infeasible beyond small graphs
 
-# ##############################################################################
 # When to Use Discovery vs Domain Knowledge
-# ##############################################################################
 
 
-## #############################################################################
 ## Discovery as Hypothesis Generation
-## #############################################################################
 
 * Discovery vs Domain Knowledge
 
@@ -345,9 +333,7 @@ digraph PathCancellation {
   - Replace RCTs for treatment-effect estimation
   - Claim causation from purely observational pipelines
 
-## #############################################################################
 ## Combining Discovery with Domain Knowledge
-## #############################################################################
 
 
 * Using Domain Knowledge as Constraints
@@ -403,9 +389,7 @@ digraph Workflow {
 }
 ```
 
-# ##############################################################################
 # Discovery Algorithm Families
-# ##############################################################################
 
 
 * Three Main Algorithm Families
@@ -621,9 +605,7 @@ mindmap
   - Advantage: Strongest causal guarantees; can resolve ambiguities
   - Limitation: Expensive; requires designing good experiments
 
-# ##############################################################################
 # Challenges and Validation
-# ##############################################################################
 
 
 * Validating a Discovered DAG

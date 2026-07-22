@@ -31,9 +31,7 @@ MSML610: Advanced Machine Learning
 // ./notebooks/quantopian/quantopian_kalman_filter.ipynb
 // AIMA 14.4 (p. 479)
 
-# #############################################################################
 # Dynamic Bayesian networks
-# #############################################################################
 
 // ## 14.5, Dynamic Bayesian networks (p. 498)
 

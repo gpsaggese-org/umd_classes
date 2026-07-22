@@ -22,9 +22,7 @@ MSML610: Advanced Machine Learning
 
 **References**:
 
-# ##############################################################################
 # HMMs
-# ##############################################################################
 
 // - AIMA 14.3 (p. 473)
 
@@ -208,9 +206,7 @@ MSML610: Advanced Machine Learning
   - Deep learning handles complex temporal dependencies and long-term
     relationships
 
-# ##############################################################################
 # Markov Random Fields
-# ##############################################################################
 
 * Markov Random Fields
 
@@ -279,9 +275,7 @@ graph MRF {
 ::::
 :::
 
-# ##############################################################################
 # Markov Logic Network
-# ##############################################################################
 
 // https://en.wikipedia.org/wiki/Markov_logic_network
 
@@ -336,17 +330,13 @@ graph MRF {
   - If all weights are finite: allows some violations but assigns them lower
     probability
 
-# ##############################################################################
 # Variational Inference
-# ##############################################################################
 
 // https://en.wikipedia.org/wiki/Variational_Bayesian_methods
 
 // Martin 2e
 
-## #############################################################################
 ## Expectation-Maximization (EM) Algorithm
-## #############################################################################
 
 * EM Algorithm: Intuition and Applications
 

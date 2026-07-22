@@ -44,9 +44,7 @@ MSML610: Advanced Machine Learning
 
 # Generalized Linear Models
 
-## ##############################################################################
 ## Simple Linear Model
-## ##############################################################################
 
 * Linear Model
 - Many problems can be formulated as **linear regression**:
@@ -341,9 +339,7 @@ MSML610: Advanced Machine Learning
 
 // ## 4.6, Logistic regression
 
-## #############################################################################
 ## Logistic Regression
-## #############################################################################
 
 * Logistic Regression
 - **Logistic regression model**

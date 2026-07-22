@@ -40,9 +40,7 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-# ##############################################################################
 # Introduction and Motivation
-# ##############################################################################
 
 * Why A/B Testing Matters
 
@@ -62,15 +60,11 @@ MSML610: Advanced Machine Learning
 - **Example**: Google reports running >10,000 experiments per year to validate
   ranking changes before launch
 
-# ##############################################################################
 # Randomization as Causal Identification
-# ##############################################################################
 
 // TODO(gp): Repeated with Lesson08.4
 
-## #############################################################################
 ## Why Randomization Breaks Confounding
-## #############################################################################
 
 * The Core Problem: Confounding
 
@@ -167,9 +161,7 @@ digraph RCT {
 - **Key insight**: The identification problem disappears because the data
   come from the **intervention distribution**, not the observational one
 
-## #############################################################################
 ## Potential Outcomes and ATE
-## #############################################################################
 
 * Potential Outcomes Framework
 
@@ -221,13 +213,9 @@ digraph RCT {
   - Two-sided marketplaces (Uber, Airbnb) routinely violate it
   - We will revisit with **switchback experiments**
 
-# ##############################################################################
 # A/B Testing in Practice
-# ##############################################################################
 
-## #############################################################################
 ## Classic A/B Test Design
-## #############################################################################
 
 * Anatomy of a Classic A/B Test
 
@@ -258,9 +246,7 @@ digraph RCT {
 
 - **Q**: Which error is worse for a startup vs. a bank?
 
-## #############################################################################
 ## Power Analysis and Sample Size
-## #############################################################################
 
 * Power Analysis: The Key Formula
 
@@ -312,9 +298,7 @@ digraph RCT {
 - **Pro tip**: Always compute MDE _before_ running the test, not after
   - Avoids the seductive "we'll just look at the data" mindset
 
-## #############################################################################
 ## Common A/B Testing Pitfalls
-## #############################################################################
 
 * Peeking and the Multiple Comparisons Trap
 
@@ -375,13 +359,9 @@ digraph RCT {
   - **Cluster-level randomization** (by city, marketplace, social group)
   - **Switchback experiments** (next section)
 
-# ##############################################################################
 # Advanced Experimental Designs
-# ##############################################################################
 
-## #############################################################################
 ## Switchback Experiments
-## #############################################################################
 
 * Why Switchbacks? The Marketplace Problem
 
@@ -440,9 +420,7 @@ digraph Switchback {
 - _Rule of thumb_: use switchback when SUTVA is clearly violated; otherwise
   prefer user-level A/B
 
-## #############################################################################
 ## Multi-Armed Bandits
-## #############################################################################
 
 * From A/B to Multi-Armed Bandits
 
@@ -542,9 +520,7 @@ digraph EE {
 - This connects bandits to **uplift modeling** (Ch. 6) and **policy learning**
   (Ch. 11)
 
-## #############################################################################
 ## Limits of Standard A/B Testing
-## #############################################################################
 
 * When A/B Testing Is Not Enough
 
@@ -580,9 +556,7 @@ digraph EE {
 - Often complemented with **structural causal models** that explicitly model
   the spillover mechanism
 
-# ##############################################################################
 # When to Experiment vs. Observe
-# ##############################################################################
 
 * Decision Framework: Experiment or Observe?
 

@@ -37,13 +37,9 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-# ##############################################################################
 # Learn-Validation Approach
-# ##############################################################################
 
-## #############################################################################
 ## Train / Test
-## #############################################################################
 
 * Estimating Out-Of-Sample Error with One Point
 - Pick a **single out-of-sample point** $(\vx', y)$
@@ -190,9 +186,7 @@ MSML610: Advanced Machine Learning
   - Learned model and $E_{val}$ depend on the split; different splits can give
     different results
 
-## #############################################################################
 ## Cross-Validation
-## #############################################################################
 
 * Cross-validation
 ::: columns

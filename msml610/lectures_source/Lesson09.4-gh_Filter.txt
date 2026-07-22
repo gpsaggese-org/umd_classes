@@ -31,9 +31,7 @@ MSML610: Advanced Machine Learning
 // ./notebooks/Kalman_and_Bayesian_filters_in_python
 // - AIMA 14.4 (p. 479)
 
-# ##############################################################################
 # gh Filter
-# ##############################################################################
 
 * Tracking Objects
 - Many problems can be formulated as **tracking objects**
