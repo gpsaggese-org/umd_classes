@@ -1,41 +1,9 @@
-// notes_to_pdf.py --input msml610/lectures_source/figures/Lesson5-Theory_Statistical_learning.txt --output tmp.pdf --type slides --debug_on_error --skip_action cleanup_after --toc_type navigation
-
-// /Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My\ Drive/books/Math\ -\ Machine\ learning/LearningFromData/Abu-Mostafa\ Yaser\ S.,\ Malik\ Magdon\ \(2012\)\ --Ismail,\ et\ al.,\ Learning\ From\ Data\ -\ A\ short\ course\ \(2012\).pdf 
-
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 05.1: Machine Learning Theories}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- Abu-Mostafa et al.: _"Learning From Data"_ (2012)
-
-::::
-:::: {.column width=20%}
-![](msml610/lectures_source/figures/book_covers/Book_cover_Learning_from_Data.jpg){ height=20% }
-::::
-:::
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L05.1: Machine Learning Theories
+// slides_engine=typst
+// references=
+// - Abu-Mostafa et al.: _"Learning From Data"_ (2012)
 
 # Is Machine Learning Even Possible?
 

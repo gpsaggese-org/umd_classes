@@ -1,35 +1,10 @@
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 09.5: Kalman Filter}}$$**
-\endgroup
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA 14: Probabilistic reasoning over time
-- https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python
-
-// /Users/saggese/src/notes1/notes/math.Kalman_and_Bayesian_filters_in_Python.Labbe.2018.txt
-// /Users/saggese/src/notes1/notebooks/Kalman_and_Bayesian_filters_in_python
-// ./notes/math.Kalman_filter.txt
-// ./notebooks/quantopian/quantopian_kalman_filter.ipynb
-// AIMA 14.4 (p. 479)
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L09.5: Kalman Filter
+// slides_engine=typst
+// references=
+// - AIMA 14: Probabilistic reasoning over time
+// - https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python
 
 # Dynamic Bayesian networks
 

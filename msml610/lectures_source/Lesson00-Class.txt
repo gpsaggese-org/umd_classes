@@ -7,7 +7,7 @@
 # MSML610
 
 * Invariants of a Class Lecture
-- **Invariants**
+- @Invariants@
   - Focus on intuition over math (unless necessary)
   - Emphasize realistic assumptions and numerical methods
     - Analytical solutions are so 1800s
@@ -44,26 +44,17 @@
 ::::
 :::: {.column width=40%}
 
-![](msml610/lectures_source/figures/book_covers/\
-Book_cover_Hundred_page_ML_book.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/\
-Book_cover_Machine_Learning_Engineering.jpg){ height=20% }
+![](msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book.jpg){ height=20% }
+![](msml610/lectures_source/figures/book_covers/Book_cover_Machine_Learning_Engineering.jpg){ height=20% }
 
-![](msml610/lectures_source/figures/book_covers/\
-Book_cover_Learning_from_Data.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/\
-Book_cover_Bayesian_analysis_with_Python.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/\
-Book_cover_AIMA.jpg){ height=20% }
+![](msml610/lectures_source/figures/book_covers/Book_cover_Learning_from_Data.jpg){ height=20% }
+![](msml610/lectures_source/figures/book_covers/Book_cover_Bayesian_analysis_with_Python.jpg){ height=20% }
+![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
 
-![](msml610/lectures_source/figures/book_covers/\
-Book_cover_ML_A_probabilistic_perspective.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/\
-Book_cover_Probabilistic_Graphical_Models.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/\
-Book_cover_The_Elements_of_Statistical_Learning.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/\
-Book_cover_Reinforcement_learning.jpg){ height=20% }
+![](msml610/lectures_source/figures/book_covers/Book_cover_ML_A_probabilistic_perspective.jpg){ height=20% }
+![](msml610/lectures_source/figures/book_covers/Book_cover_Probabilistic_Graphical_Models.jpg){ height=20% }
+![](msml610/lectures_source/figures/book_covers/Book_cover_The_Elements_of_Statistical_Learning.jpg){ height=20% }
+![](msml610/lectures_source/figures/book_covers/Book_cover_Reinforcement_learning.jpg){ height=20% }
 ::::
 :::
 

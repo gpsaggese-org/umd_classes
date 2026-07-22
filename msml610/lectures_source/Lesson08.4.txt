@@ -1,50 +1,9 @@
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 08.4: }}$$**
-\endgroup
-
-\vspace{1cm}
-
-::: columns
-:::: {.column width=75%}
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- Facure, Causal Inference in Python, 2023
-
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){width=1.5cm}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Book_of_why.jpg){width=1.5cm}
-
-::::
-:::
-
-// open "/Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/books/Math - Bayesian methods/2023 - Facure - Causal Inference in Python_ Applying Causal Inference in the Tech Industry.pdf"
-// https://matheusfacure.github.io/python-causality-handbook/landing-page.html
-
-// Notebooks: https://github.com/matheusfacure/causal-inference-in-python-code/tree/main/causal-inference-in-python
-
-// /Users/saggese/src/notes1/books/2023.Facure.Causal_Inference.md
-
-// Chap 1: Introduction to Causal Inference
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L08.4: }
+// slides_engine=typst
+// references=
+// - Facure, Causal Inference in Python, 2023
 
 # Introduction to Causal Inference
 

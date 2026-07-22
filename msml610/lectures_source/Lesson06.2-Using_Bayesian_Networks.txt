@@ -1,44 +1,12 @@
-// notes_to_pdf.py --input lectures_source/Lesson07-Bayesian_statistics_1.txt --output tmp.pdf --type slides --debug_on_error --skip_action cleanup_after --toc_type navigation
-
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 06.2: Using Bayesian Networks}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA (Artificial Intelligence: a Modern Approach)
-  - Chap 12, Quantifying uncertainty
-  - Chap 13: Probabilistic reasoning
-  - Chap 14: Probabilistic reasoning over time
-
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
-
-::::
-:::
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L06.2: Using Bayesian Networks
+// slides_engine=typst
+// references=
+// - AIMA (Artificial Intelligence: a Modern Approach)
+// - Chap 12, Quantifying uncertainty
+// - Chap 13: Probabilistic reasoning
+// - Chap 14: Probabilistic reasoning over time
 
 # Semantics of Bayesian Networks
 

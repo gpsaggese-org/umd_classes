@@ -1,44 +1,11 @@
-// TODO: Improve the bold
-
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 09: A/B Testing and Experimentation}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=65%}
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- Pearl, Glymour, Jewell: _"Causal Inference in Statistics: A Primer"_ (2016)
-
-- Kohavi, Tang, Xu: _"Trustworthy Online Controlled Experiments"_ (2020)
-
-- Sutton, Barto: _"Reinforcement Learning: An Introduction"_ (2018)
-
-::::
-:::: {.column width=40%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Causal_AI.jpg){ height=20% }
-
-::::
-:::
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L09: A/B Testing and Experimentation
+// slides_engine=typst
+// references=
+// - Pearl, Glymour, Jewell: _"Causal Inference in Statistics: A Primer"_ (2016)
+// - Kohavi, Tang, Xu: _"Trustworthy Online Controlled Experiments"_ (2020)
+// - Sutton, Barto: _"Reinforcement Learning: An Introduction"_ (2018)
 
 # Introduction and Motivation
 

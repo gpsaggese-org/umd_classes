@@ -1,44 +1,10 @@
-
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 04.1: Machine Learning Models}}$$**
-\endgroup
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- Burkov: _"Machine Learning Engineering"_ (2020)
-
-- Hastie et al.: _"The Elements of Statistical Learning"_ (2nd ed, 2009)
-
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book.jpg){ height=20% }
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_The_Elements_of_Statistical_Learning.jpg){ height=20% }
-
-::::
-:::
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L04.1: Machine Learning Models
+// slides_engine=typst
+// references=
+// - Burkov: _"Machine Learning Engineering"_ (2020)
+// - Hastie et al.: _"The Elements of Statistical Learning"_ (2nd ed, 2009)
 
 ## Naive Bayes Model
 

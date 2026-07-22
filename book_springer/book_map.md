@@ -218,6 +218,11 @@
   - Intended audience and prerequisites
   - How chapters build on each other and fit into the decision pipeline
 
+- Focus on intuition over math (unless necessary)
+- Emphasize realistic assumptions and numerical methods
+  - Analytical solutions are so 1800s
+- Interactive Jupyter notebook tutorials for hands-on approach
+
 ### Slides
 - N/A
 
