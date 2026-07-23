@@ -160,14 +160,14 @@
 | msml610/lectures_source/Lesson05.1-Learning_Theory.txt                     |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson05.2-Overfitting.txt                         |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson05.3-Learn_Validation.txt                    |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt                   | yes   |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt             | yes   |              |              |           |                  |                   |
+| msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt                   | yes   | 80%          |              |           |                  |                   |
+| msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt             | yes   | 80%          |              |           |                  |                   |
 | msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt  |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt           |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt                 |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt           |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt           |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt                     |       |              |              |           |                  |                   |
+| msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt                     | yes   |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson08.2-Causal_Networks.txt                     |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson08.3-Do_Calculus.txt                         |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson08.4.txt                                     |       |              |              |           |                  |                   |
@@ -186,8 +186,9 @@
 | msml610/lectures_source/Lesson12.2-Causal_Discovery.txt                    |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson13.1-Explainability.txt                      |       |              |              |           |                  |                   |
 
-- Apply msml610/lectures_source/prompt.convert_to_typst.md to all the files in msml610/lectures_source/Lesson*
-- /slides.lint_5_at_the_time
+- [ ] Apply msml610/lectures_source/prompt.convert_to_typst.md to all the files in msml610/lectures_source/Lesson*
+- [ ] `/slides.lint_incrementally`
+- [ ] `/slides.add_bold_and_italic`
 
 # Detailed TOC
 

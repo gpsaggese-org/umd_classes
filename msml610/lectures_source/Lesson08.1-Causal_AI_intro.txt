@@ -10,331 +10,314 @@
 ## Background
 
 * Big Data and Traditional AI
-- **Focus for past 10 years**:
+- @Background@: focus for past 10 years
   - Collect and organize massive data volumes
   - Run analytics (dashboards, models, reports) on data
 
-- **What Are Data Analytics?**
+- @Definition@: **Data Analytics** encompasses organized data and insights
 
 \begingroup \footnotesize
-| **Category**               | **Description**                               | **Example**                              |
-|----------------------------|-----------------------------------------------|------------------------------------------|
-| **Collections of data**    | Organized datasets for analysis               | Customer purchase histories in CRM       |
-| **Descriptive statistics** | Key metrics: mean, median, standard deviation | Average quarterly sales to track trends  |
-| **Historical reports**     | Review of past performance                    | Monthly sales reports from last year     |
-| **Dashboards**             | Visuals of key metrics for quick insights     | Quarterly revenue and expense dashboard  |
-| **Models**                 | Statistical tools to forecast, explain        | Churn prediction from customer behavior  |
+```{=typst}
+#styled-table(
+  headers: ("Category", "Description", "Example"),
+  rows: (
+    ("Collections of data", "Organized datasets for analysis", "Customer purchase histories in CRM"),
+    ("Descriptive statistics", "Key metrics (mean, median, std dev)", "Average quarterly sales to track trends"),
+    ("Historical reports", "Review of past performance", "Monthly sales reports from last year"),
+    ("Dashboards", "Visuals of key metrics for quick insights", "Quarterly revenue and expense dashboard"),
+    ("Models", "Statistical tools to forecast, explain", "Churn prediction from customer behavior"),
+  ),
+)
+```
 \endgroup
 
 * Data Analytics Sophistication
+- @Comparison@: business questions drive methodology choice
 
 \begingroup \footnotesize
-| **Business Question**       | **Methodology**                  |
-|-----------------------------|----------------------------------|
-| What happened?              | Descriptive statistics           |
-| What will happen?           | Predictive models                |
-| What should we do?          | Prescriptive programs            |
-| What's the best we can do?  | Simulation + optimization        |
+```{=typst}
+#styled-table(
+  headers: ("Business Question", "Methodology"),
+  rows: (
+    ("What happened?", "Descriptive statistics"),
+    ("What will happen?", "Predictive models"),
+    ("What should we do?", "Prescriptive programs"),
+    ("What's the best we can do?", "Simulation + optimization"),
+  ),
+)
+```
 \endgroup
 
 \begin{center}
   \includegraphics[width=0.9\textwidth]{msml610/lectures_source/figures/L08.1.Analytical_sophistication.png}
 \end{center}
 
-// ![](msml610/lectures_source/figures/L08.1_Lesson09-Dashboard.png)
+* Analytics Sophistication Ladder
+- @Definition@: **Analytics sophistication** increases with business value
+  - Level 0: Descriptive (what happened)
+  - Level 1: Predictive (what will happen)
+  - Level 2: Prescriptive (what should we do)
+  - Level 3: Optimization (what's best we can do)
 
-* Test
-
-// include:msml610/lectures_source/Lesson01.1.aux.md "Analytical Sophistication 1"
-// //include:msml610/lectures_source/Lesson01.1.aux.md "Analytical Sophistication 2"
+# Why Causal AI Matters
 
 ## What ML Systems Can and Cannot Tell You
 
 * The Illusion of Understanding
-- **Prediction vs. Explanation**
+- @Comparison@: Prediction vs. Explanation
   - Models find patterns in historical data
-  - Can't explain mechanisms or answer "what if" scenarios
+  - Cannot explain mechanisms or answer _"what if?"_ scenarios
 
-- **High accuracy $\neq$ Understanding causation**
-  - A model with 95% churn prediction accuracy won't tell you what _causes_ churn
-  - Accurate sales forecasts can't predict effects of _pricing changes_
+- @Problem@: High accuracy $\neq$ understanding causation
+  - A model with 95% churn prediction accuracy won't tell what _causes_ churn
+  - Accurate sales forecasts cannot predict effects of _pricing changes_
 
-- **The Real Problem**
-  - Without causation, you react to past events
-  - You can't proactively _change outcomes_
+- @Implication@: Without causation, you react to past events
+  - Cannot proactively _change outcomes_
 
 * Association, Correlation, and Causation
-::: columns
-:::: {.column width=60%}
-- **Association**
-  - Variables co-occur or are statistically dependent
-  - E.g., _"People who buy diapers also buy beer"_
-  - No info on direction or mechanism
+- @Fact@: Association $\to$ Correlation $\to$ Causation
+  - Each level adds specificity about variable relationships
 
-::::
-:::: {.column width=35%}
-```latex
-\usepackage{tikz}
-\usetikzlibrary{positioning}
+  - **Association** means that variables co-occur or are
+    statistically dependent
+    - Example: _"People who buy diapers also buy beer"_
+    - No information on direction or mechanism
 
-\begin{document}
-\begin{tikzpicture}[
-    box/.style={
-        draw=black,
-        ultra thick, % Changed 'thick' to 'ultra thick'
-        rounded corners=12pt,
-        minimum height=#1,
-        minimum width=#1*1.8,
-        align=center,
-        font=\Large\bfseries
-    }
-]
+  - **Correlation** is a linear relationship between variables
+    - Example: _"Ice cream sales and drowning deaths correlate"_ (both seasonal)
+    - Captures strength and direction, not causation
 
-% Outermost box: Association.
-\node[box=4.5cm, fill=blue!15] (association) {};
-\node[font=\Large\bfseries, anchor=north] at ([yshift=-8pt]association.north) {Association};
+  - **Causation** understanding that changing one variable _directly_
+    changes another
+    - Example: _"Asbestos causes cancer"_
+    - Requires causal model or experimental evidence
 
-% Middle box: Correlation.
-\node[box=3.0cm, fill=orange!20] (correlation) at ([yshift=-8pt]association.center) {};
-\node[font=\Large\bfseries, anchor=north] at ([yshift=-6pt]correlation.north) {Correlation};
-
-% Innermost box: Causation.
-\node[box=1.5cm, fill=red!25] (causation) at ([yshift=-6pt]correlation.center) {};
-\node[font=\Large\bfseries] at (causation.center) {Causation};
-
-\end{tikzpicture}
-\end{document}
-```
-::::
-:::
-- **Correlation**
-  - Linear relationship between variables
-  - E.g., _"Ice cream sales and drowning deaths correlate"_ (both seasonal)
-
-- **Causation**
-  - Changing one variable _directly_ changes another
-  - E.g., _"Asbestos causes cancer"_
-  - Requires causal model or experiment
-
-- **The illusion**: high correlation _feels like_ understanding
+- @Key idea@: high correlation _feels like_ understanding but isn't
   - Real understanding means knowing what happens when you _intervene_
 
 * What ML Systems Can Tell You
+
+- @Characteristics@: Traditional ML excels at three capabilities
+
 - **Pattern recognition**
   - Find correlations in data
   - Identify similar items (e.g., through clustering, classification)
   - Forecast based on past trends
 
-- **Predictive accuracy on held-out test data**
+- **Predictive accuracy** on held-out test data
   - Accurate prediction if conditions remain stable
-    - Only works when training and future data match
+  - Only works when training and future data match
 
 - **Feature importance**
   - Find variables with strongest statistical associations
-  - Doesn't distinguish correlation from causation
+  - Cannot distinguish correlation from causation
 
 * What ML Systems Cannot Tell You
-- **Causation from observational data alone**
-  - Strong correlations $\leftarrow$ confounding, reverse causation, or coincidence
+
+- @Limitations@: Traditional ML struggles with five critical problems
+
+- **Understanding causation** from observational data alone
+  - Strong correlations can derive from confounding, reverse causation, or
+    coincidence
 
 - **Effects of interventions**
   - _"If we change X, what happens to Y?"_
-    - E.g., _"If we lower prices by 10%, will revenue increase?"_
-  - Observational data can't answer without causal assumptions
+  - Example: _"If we lower prices by 10%, will revenue increase?"_
+  - Observational data cannot answer without causal assumptions
 
 - **Counterfactuals**
   - _"What would have happened with a different decision?"_
-    - E.g., _"Would customer churn if we offered them a discount?"_
+  - Example: _"Would customer churn if we offered them a discount?"_
 
 - **Fairness**
-  - A model can be _statistically_ unbiased but _causally_ biased
+  - Model can be _statistically_ unbiased but _causally_ biased
   - _Statistically unbiased_: $\EE[Prediction] = \EE[True Value]$
-  - _Causally biased_: model uses variables that are proxies for protected
-    attributes, even if those variables aren't explicitly protected
-    - E.g., using variables correlated to race, gender in decisions
+  - _Causally biased_: model uses proxies for protected attributes
+    - Example: variables correlated to race and gender in decisions
 
 - **Optimal decisions**
   - ML optimizes for accuracy, not business outcomes
-    - E.g., a 90% accurate model might lead to worse decisions than an 85%
-      accurate one, depending on the consequences of different errors
-
-# Why Causal AI Matters
-
-## Problems with Traditional AI
+  - Example: 90% accurate model may lead to worse decisions than 85% accurate
+    one, depending on error consequences
 
 * Problem 1: Correlation is Not Causation!
-- **Correlation**: statistical relationships between variables
-  - Pros:
+
+- @Definition@: **Correlation** is statistical relationships between variables
+  - Pros
     - Find patterns in past data to predict future
-  - Cons:
-    - Doesn't explain cause
+
+  - Cons
+    - Cannot explain cause
     - Variables move together by coincidence or hidden factors
 
-- **Causation** explains how changing one variable influences another
+- @Definition@: **Causation** explains how changing one variable influences
+  another
   - Cannot be concluded from correlation alone
 
-- **Data doesn't understand causes and effects**
-  - Only humans identify variables and relationships from context
-  - Without causation, you can't make intelligent decisions
+- @Key idea@: Data **cannot distinguish** causes from effects
+  - _Only humans_ identify variables and relationships from context
+  - Without causation, cannot make intelligent decisions
 
-* Correlation is Not Causation: Examples
-- **Intuitively**
-  - You know that association is not causation
-  - Humans confuse association with causation, e.g.,
-    - _"You eat X, get stomachaches"_ $\to$ infer _"X is bad for you"_
-    - _"Buy stock before price spikes"_ $\to$ infer _"you can time markets"_
+* Correlation is Not Causation: Intuitive Examples
 
-- Sometimes both directions are possible, e.g.,
-  - _"Top-notch consulting improves businesses"_ or
+- @Examples@: Humans routinely confuse association with causation
+  - _"You eat X, get stomachaches"_ $\to$ infer _"X is bad for you"_
+  - _"Buy stock before price spikes"_ $\to$ infer _"you can time markets"_
+
+- @Problem@: Bidirectional causality can be plausible
+  - _"Does top-notch consulting improve businesses?"_ or
   - _"Do successful businesses hire top consultants?"_
 
-* Correlation is Not Causation: Examples
-::::
-:::: {.column width=35%}
-- **In hotel industry**
+* Correlation is Not Causation: Business Examples
+
+- @Example@: **Hotel pricing paradox**
   - Prices are low when hotel is empty
   - Prices are high when demand is high and hotel full
-  - A naive prediction suggests to increase prices to sell more rooms
-::::
-:::: {.column width=35%}
-// // include:msml610/lectures_source/Lesson01.1.aux.md "Hotel Pricing Paradox"
-TODO(gp): Add figure
-::::
-:::
+  - Naive prediction: _"increase prices to sell more rooms"_
+  - Causal reality: high prices reflect demand, not cause it
 
-- **Online marketplace company**
-  - Decide how to set prices and when to have sales
-  - Causal question: _"What is the impact of lowering prices on units sold?"_
-  - Gains from selling more need to compensate for the loss of selling cheaper
-  - Price cuts can have different impacts depending on:
-    - The _type_ of business (e.g., clothing vs drugs)
-    - The _timing_ (e.g., before Christmas)
+// TODO(ai_gp): Add picture
+
+- @Example@: **Online marketplace pricing**
+  - Decision: how to set prices and when to have sales
+  - Causal question: _"What is impact of lowering prices on units sold?"_
+  - Gain from volume must compensate for price reduction
+  - Price cuts have different impacts by context
+    - Business type (e.g., clothing vs drugs)
+    - Timing (e.g., before Christmas)
 
 * Problem 2: Decision Making
-- Businesses need **decisions, not just predictions**
 
-- E.g., _"What happens if a product price is reduced by 10%?"_
-  - Will more customers buy?
+- @Problem@: Businesses need **decisions, not just predictions**
+
+- @Example@: Price reduction scenario
+  - _"What happens if a product price is reduced by 10%?"_
+  - Will more customers buy the product?
   - Will revenue decrease? What to do then?
   - Why are customers leaving? Quality issue? Emerging competitor?
 
-- **Example of policy questions**
+- @Examples@: Policy questions require causal reasoning
   - _"Low-sugar vs low-fat diet: which works?"_
   - _"If we increase credit lines, how does bank margin change?"_
   - _"Build a library or give tablets to boost test scores?"_
 
 * Problem 3: ML Explainability
-- **Regulators require defense of ML/AI decisions**
+
+- @Problem@: Regulators require **defense of ML/AI decisions**
   - E.g., hiring decisions, policy setup
+  - Many ML systems are black boxes
+    - E.g., neural networks
+    - Humans cannot understand input-to-output process
+    - Cannot explain decisions to shareholders
+    - Features like age, race, sex introduce bias
 
-- **Many ML systems are black boxes**
-  - E.g., neural networks
-  - Humans can't understand input-to-output process
-  - Can't explain decisions to shareholders
-  - Features like age, race, sex introduce bias
-
-- **Drawbacks**
-  - Fines
+- @Cons@
+  - Fines from regulatory violations
   - Customer backlash
   - Activist pressure
 
-- **Solution**
-  - Explainable AI lets users comprehend, explain, trust machine results
+- @Solution@: **Explainable AI** enables comprehension and trust
+  - Users can understand, explain, and verify model results
 
 * Problem 4: How ML Systems Make Decisions Today
-- **Typical workflow**
+
+- @Workflow@: Typical ML deployment pipeline
   - Collect data $\to$ Train model $\to$ Make predictions
   - Deploy: _"If model predicts X, take action Y"_
 
-- **Critical limitation**
-  - Systems optimize
-    - For prediction accuracy
-    - Not for decision quality or business outcomes
+- @Problem@: Systems optimize for wrong objectives
+  - Optimize for prediction accuracy, not decision quality
+  - Ignore business outcomes
   - E.g., fraud detector with 95% accuracy that blocks 50% legitimate
     transactions is a poor system
 
 * Data Science for Decisions: Examples
-- **Recommendation systems** (e.g., Netflix, Amazon, TikTok)
+
+- @Example@: **Recommendation systems** (Netflix, Amazon, TikTok)
   - Model predicts which items users will click based on historical clicks
   - System recommends top-N items based on predicted clicks
-  - _Problem_: Can't run counterfactual experiments offline
+  - _Problem_: Cannot run counterfactual experiments offline
     - Recommending novel items has no historical data to learn from
-    - Optimizing purely for clicks may harm long-term engagement (users get
-      bored, echo chambers, filter bubbles)
+    - Optimizing purely for clicks may harm long-term engagement
+      (users get bored, echo chambers, filter bubbles)
 
-- **Hiring pipelines**
+- @Example@: **Hiring pipelines**
   - Model scores candidates
   - HR uses scores to rank applicants
   - _Problem_: Training data encodes historical hiring bias
 
-- **Fraud detection**
+- @Example@: **Fraud detection**
   - Model flags suspicious transactions
   - System blocks transactions automatically
   - _Problem_: High false positive rate without knowing how to improve
 
 * Problem 5: Feedback Loops
-- Prediction systems can change the world through **feedback loops**
 
-- **Recommendation systems**
+- @Problem@: Prediction systems change the world through **feedback loops**
+
+- @Example@: **Recommendation systems**
   - Model recommends sensational content $\to$ users click more
   - Future training data has more clicks on sensational content
   - Model recommends even more sensational content
-  - _Problem_: Radicalization, echo chambers, mental health issues
+  - Consequence: Radicalization, echo chambers, mental health issues
 
-- **Criminal justice relapse prediction**
-  - Minorities policed more $\to$ arrested more $\to$ data more biased
+- @Example@: **Criminal justice relapse prediction**
+  - Minorities policed more $\to$ arrested more $\to$ data biased
   - Model trained on arrest data (biased against minorities)
   - Judges use models for bail/sentencing
-  - _Problem_: Model becomes increasingly biased over time
+  - Consequence: Model becomes increasingly biased over time
 
-- **College admissions**
-  - Model trained on past acceptance decisions (which encode historical racism,
-    sexism)
+- @Example@: **College admissions**
+  - Model trained on past acceptance decisions (encode historical racism, sexism)
   - Model used to screen applications
-  - Filter for applicants is biased
-  - _Problem_: Historical biases are perpetuated
+  - Filter for applicants becomes biased
+  - Consequence: Historical biases are perpetuated
 
-// TODO(gp): Add a plot
 * Problem 6: Distribution Shift
-- **The world is always changing**
-  - **Concept drift**
-    - I.e., $\Pr(Y | X)$, the link between inputs and predictions changes over
-      time, the "rules"
-    - E.g., customer preferences change over times $\to$ model trained on 2020
-      data becomes less accurate by 2023
-  - **Covariate shift**
-    - I.e., $\Pr(X)$, input distribution changes but relationship stays the same
-    - E.g., more young customers join platform $\to$ model trained on older
-      customer base performs worse
-  - **Label shift**
-    - I.e., $\Pr(Y)$, outcome distribution changes
-    - E.g., fraud rate increases due to new fraud tactics $\to$ model trained on
-      old fraud rate is less effective
 
-- **Why causal models help**
+- @Problem@: Real-world distributions shift over time, breaking trained models
+
+- @Definition@: **Concept drift**
+  - Link between inputs and predictions changes: $\Pr(Y | X)$
+  - Example: customer preferences change; model from 2020 becomes less accurate
+    by 2023
+
+- @Definition@: **Covariate shift**
+  - Input distribution changes but relationship stays same: $\Pr(X)$
+  - Example: more young customers join platform; model trained on older
+    customer base performs worse
+
+- @Definition@: **Label shift**
+  - Outcome distribution changes: $\Pr(Y)$
+  - Example: fraud rate increases from new tactics; model from old rate
+    becomes less effective
+
+- @Solution@: Causal models provide stability
   - Encode mechanisms, not just patterns
-    - Mechanisms more stable across distribution shifts
-  - Understand "why" $\to$ predict in new contexts
+  - Mechanisms more stable across distribution shifts
+  - Understand _"why"_ to predict in new contexts
 
 ## Optimization vs. Inference vs. Decision Theory
 
 * Optimization vs. Inference vs. Decision Theory
-- **Three paradigms that ML conflates**
 
-- **Optimization**: find best action given _known_ objective
+- @Comparison@: Three paradigms that ML conflates
+
+- @Definition@: **Optimization** finds best action given _known_ objective
   - Assumes world behavior is known
-    - E.g., minimize cost, maximize throughput, tune parameters
-  - _Tools_: gradient descent, linear programming, evolutionary algorithms
+  - Example: minimize cost, maximize throughput, tune parameters
+  - Tools: gradient descent, linear programming, evolutionary algorithms
 
-- **Statistical inference**: estimate parameters from data
+- @Definition@: **Statistical inference** estimates parameters from data
   - Learns from observations given model structure
-    - E.g., estimate treatment effects, compute confidence intervals
-  - _Tools_: regression, Bayesian estimation, hypothesis testing
+  - Example: estimate treatment effects, compute confidence intervals
+  - Tools: regression, Bayesian estimation, hypothesis testing
 
-- **Decision theory**: choose actions under _uncertainty_
-  - E.g., _"Launch product with uncertain demand?"_
-    - Requires reasoning about interventions and outcomes
-  - _Tools_: utility functions, expected value of information, causal models
+- @Definition@: **Decision theory** chooses actions under _uncertainty_
+  - Example: _"Launch product with uncertain demand?"_
+  - Requires reasoning about interventions and outcomes
+  - Tools: utility functions, expected value of information, causal models
 
 * Where ML Falls Short
 - ML focuses on **inference and optimization**
