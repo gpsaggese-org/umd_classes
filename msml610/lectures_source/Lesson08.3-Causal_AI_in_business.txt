@@ -24,9 +24,10 @@
 * Why AI Projects Fail?
 
 - @Problem@: AI projects approach problems only from ML perspective
-  - Data scientists focus on accuracy and technical metrics
-  - Work in isolation from domain experts, business users, data engineers
-  - Lack of problem context leads to irrelevant solutions
+  - Data scientists:
+    - Focus on accuracy and technical metrics
+    - Work in isolation from domain experts, business users, data engineers
+    - Lack problem context, leading to irrelevant solutions
 
 - @Limitations@: Five common failure modes
   - **Misalignment**: Models solve wrong problem or answer irrelevant questions
@@ -132,7 +133,8 @@ digraph CausalFlowGrid {
 - @Definition@: **Causal models** simplify systems without losing key
   relationships
 
-- **Visual models** abstract complexity into interpretable formats
+- @Pros@: **Visual models** abstract complexity into interpretable
+  formats
   - Highlight direction and strength of influence
   - Aid communication between stakeholders
   - Reduce cognitive overload by excluding irrelevant details
@@ -150,7 +152,7 @@ digraph CausalFlowGrid {
   - Change price one-time or over time?
   - Develop individual pricing model for each customer?
 
-- The causal DAG illustrates price's complex effects:
+- @Illustration@: The causal DAG illustrates price's complex effects:
   ```graphviz[height=50%]
   digraph CausalDiagram {
       splines=true;
@@ -180,23 +182,23 @@ digraph CausalFlowGrid {
 
 * Step 5: Data Acquisition and Integration
 
-- @Workflow@: Leverage existing data and collect new data
+- @Procedure@: Leverage existing data and collect new data
   - Use data collected for correlation-based ML
   - Collect data specifically for causal AI objectives
 
-- **Prepare data** to match refined causal model
+- @Procedure@: Prepare data to match refined causal model
   - Clean, normalize, align data with model assumptions
   - Map observed variables to DAG nodes
   - Encode categorical variables
   - Handle missing data (imputation or exclusion)
   - Normalize or scale values
 
-- **Control for bias and confounding**
-  - Goal: Ensure data structure supports causal estimation
+- @Procedure@: Control for bias and confounding
+  - Ensure data structure supports causal estimation
 
 * Step 6: Model Modification
 
-- @Workflow@: Refine initial DAG design
+- @Procedure@: Refine initial DAG design
   - Reduce bias and improve reliability
   - Clarify variables as confounders, mediators, or outcomes
 
@@ -204,24 +206,24 @@ digraph CausalFlowGrid {
   - Do not control for mediators or colliders
   - Control for direct and indirect confounders
 
-- **Test models** against technical and business objectives
+- @Procedure@: Test models against technical and business objectives
   - Isolate causal effects with necessary controls
   - Ensure assumptions align with data and domain logic
 
 * Step 7: Preparing for Deployment in Business
 
-- @Workflow@: Transition from experimentation to decision-making
+- @Procedure@: Transition from experimentation to decision-making
   - Validate model against real-world business outcomes
   - Ensure stakeholders understand and trust causal logic
 
-- **Develop user-friendly interfaces** for business users
+- @Procedure@: Develop user-friendly interfaces for business users
   - Automate data pipelines for timely updates
 
-- **Set up monitoring**
+- @Procedure@: Set up monitoring
   - Establish metrics for performance tracking and drift detection
   - Create feedback loops to refine models post-deployment
 
-- **Document and train** stakeholders
+- @Procedure@: Document and train stakeholders
   - Provide clear model documentation
   - Train on interpreting results and making informed decisions
 
@@ -248,23 +250,23 @@ digraph CausalFlowGrid {
 
 * Executing for a Hybrid Team Project
 
-- @Workflow@: Establish a collaborative approach
+- @Procedure@: Establish a collaborative approach
   - Align strategic goals with technical efforts
   - Emphasize early stakeholder engagement and shared ownership
 
-- @Step@: Define team goals
-  - Use SMART objectives aligned with business strategy
+1. **Define team goals**
+   - Use SMART objectives aligned with business strategy
 
-- @Step@: Target a project
-  - Choose a bounded, feasible, high-value use case
-  - Prioritize early wins for trust and momentum
+2. **Target a project**
+   - Choose a bounded, feasible, high-value use case
+   - Prioritize early wins for trust and momentum
 
-- @Step@: Define the hypothesis
-  - Build a preliminary DAG with experts' input
+3. **Define the hypothesis**
+   - Build a preliminary DAG with experts' input
 
-- @Step@: Incremental model development
-  - Build the model in small stages
-  - Iterate with regular feedback
+4. **Incremental model development**
+   - Build the model in small stages
+   - Iterate with regular feedback
 
 ## Explainability and Interpretability
 
@@ -300,7 +302,7 @@ digraph CausalFlowGrid {
 
 * Causal AI in Interpretable AI
 
-- @Advantages@: Causal AI enables deeper interpretability
+- @Pros@: Causal AI enables deeper interpretability
   - DAGs present variables, relationships, strengths clearly
   - Counterfactuals predict action outcomes
   - Remove confounders to prevent skewed estimates
@@ -314,7 +316,7 @@ digraph CausalFlowGrid {
   - Departs from purely data-driven systems
   - Reflects human thinking and decision-making
 
-- @Convergence@: Multiple AI paradigms merge
+- @Comparison@: Multiple AI paradigms merge
   - Causal AI
   - Traditional AI
   - Deep learning
@@ -327,7 +329,7 @@ digraph CausalFlowGrid {
   - Autonomous driving: when should the car defer to human control?
   - Financial risk: which decisions warrant caution despite high confidence?
 
-- @Advantages@: Probabilistic models output full distributions, not point
+- @Pros@: Probabilistic models output full distributions, not point
   estimates
   - Standard ML: _"The diagnosis is pneumonia"_
   - Probabilistic ML: _"87% pneumonia, 13% flu, plus credible intervals"_
@@ -396,7 +398,7 @@ digraph CausalFlowGrid {
   - Assigns value showing how much each feature pushed decision
   - Enables ranking features by importance and visualizing impact
 
-- @Trade-off@: Model performance vs. explainability
-  - Simpler models easier to explain but lower accuracy
-  - Complex models better performance but need post-hoc explanation
+- @Comparison@: Model performance vs. explainability
+  - Simpler models: easier to explain, lower accuracy
+  - Complex models: better performance, need post-hoc explanation
   - Choice depends on application's accuracy vs. interpretability requirements
