@@ -4,47 +4,6 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{0.5cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 07.2: Posterior-based Decisions}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA (Artificial Intelligence: a Modern Approach)
-  - Chap 15: Probabilistic programming
-
-- Martin, Bayesian Analysis with Python, 2018 (2e)
-
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){width=1.5cm}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Bayesian_analysis_with_Python.jpg){width=1.5cm}
-
-::::
-:::
 
 # Posterior-Based Decisions
 
@@ -280,9 +239,9 @@ MSML610: Advanced Machine Learning
 ## Posterior Predictive Checks
 
 - **Samples from Posterior Distribution**
-- Given **\blue{posterior distribution $\Pr(\theta | y)$}**, generate predictions
-  **\red{$\tilde{y}$}** based on data **\green{$y$}** and estimated parameters
-  **\purple{$\hat{\theta}$}**:
+- Given **\textcolor{blue}{posterior distribution $\Pr(\theta | y)$}**, generate predictions
+  **\textcolor{red}{$\tilde{y}$}** based on data **\textcolor{darkgreen}{\text{$y$}}** and estimated parameters
+  **\textcolor{purple}{$\hat{\theta}$}**:
   $$
   \Pr(\textcolor{red}{\tilde{y}} | \textcolor{darkgreen}{\text{y}})
   = \int_{\textcolor{purple}{\hat{\theta}}} \Pr(\tilde{y} | \theta)
@@ -292,12 +251,12 @@ MSML610: Advanced Machine Learning
   - This is called the _"posterior predictive distribution"_ as it
     predicts _future data_ using the _posterior distribution_
 
-- **\black{Conceptually}**
+- **\textcolor{black}{\text{Conceptually}}**
   - Sample a value of $\theta$ from the posterior $\Pr(\theta | y)$
   - Feed the value of $\theta$ to the likelihood $\Pr(\tilde{y} | \theta)$
   - Obtain $\tilde{y}$
 
-- This process has **\black{two sources of uncertainty}**:
+- This process has **\textcolor{black}{\text{two sources of uncertainty}}**:
   - Parameter uncertainty
     - Captured by the posterior $\Pr(\theta | y)$
   - Sampling uncertainty

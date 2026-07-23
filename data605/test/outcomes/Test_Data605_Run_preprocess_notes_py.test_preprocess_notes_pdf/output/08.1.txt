@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{08.1: Cluster Architecture}}$$**
+**$$\text{\textcolor{blue}{\text{08.1: Cluster Architecture}}}$$**
 \endgroup
 
 \vspace{1cm}

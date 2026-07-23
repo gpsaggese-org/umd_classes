@@ -5,758 +5,398 @@ fontsize: 10pt
 \let\uline\underline
 \let\ul\underline
 
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
+# Causal AI in Business
 
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
+## Business Context and Motivation
+
+- **Digital Transformation in Business**
+
+- @Definition@: **Digital transformation** uses digital technologies to reduce
+  costs and improve revenues
+
+- @Techniques@: Five key approaches
+  - **Integration**: Embed digital tools (AI, cloud, IoT, automation)
+  - **Cultural change**: Encourage innovation, agility, data-driven mindset
+  - **Customer-centric**: Use digital solutions for engagement and satisfaction
+  - **Process automation**: Streamline operations through AI, robots, analytics
+  - **Data-driven decisions**: Leverage big data, ML, real-time analytics
+
+- **Why AI Projects Fail?**
+
+- @Problem@: AI projects approach problems only from ML perspective
+  - Data scientists focus on accuracy and technical metrics
+  - Work in isolation from domain experts, business users, data engineers
+  - Lack of problem context leads to irrelevant solutions
+
+- @Limitations@: Five common failure modes
+  - **Misalignment**: Models solve wrong problem or answer irrelevant questions
+  - **Black-box models**: Difficult to interpret or explain to stakeholders
+  - **Data issues**: Poor quality, missing, or biased data
+  - **Deployment challenges**: Not easily integrated into production systems
+  - **Lack of monitoring**: No process for tracking performance post-deployment
+
+- **How to Make AI Project Succeed**
+
+- @Techniques@: Four success factors
+
+1. **Create a hybrid team**
+   - Represents all business aspects
+   - Uses collaborative framework
+   - Communicates with single language (e.g., DAGs)
+
+2. **Meet regularly** to ensure continuity
+
+3. **Find an executive sponsor**
+   - Understands project goals and potential
+
+4. **Initial pilot**
+   - Small team for targeted problem
+   - Demonstrates AI approach merit
+
+## The Causal AI Workflow
+
+- **AI in Business: The Causal AI Workflow**
+
+- @Question@: How do you apply Causal AI in Business?
+
+\centering
+
+```graphviz[width=80%]
+digraph CausalFlowGrid {
+  layout=neato;
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, width=1.4, height=0.6, fixedsize=true];
+
+  // Design-grade rainbow in edge order (ROYGBIV + magenta wrap)
+  BusinessGoals   [label="Business Goals",        pos="0,2!",  fillcolor="#E53935", fontcolor="white"]; // Red
+  UseCases        [label="Use Cases",             pos="2,2!",  fillcolor="#FB8C00", fontcolor="black"]; // Orange
+  CausalModels    [label="Causal Models",         pos="4,2!",  fillcolor="#FDD835", fontcolor="black"]; // Yellow
+  DataSources     [label="Data Sources",          pos="4,1!",  fillcolor="#43A047", fontcolor="white"]; // Green
+  KnowledgeModels [label="Knowledge\nModels",     pos="4,0!",  fillcolor="#1E88E5", fontcolor="white"]; // Blue
+  Algorithms      [label="Algorithms/\nLibraries", pos="2,0!", fillcolor="#5E35B1", fontcolor="white"]; // Indigo
+  Interventions   [label="Interventions/\nCounterfactuals", pos="0,0!", fillcolor="#8E24AA", fontcolor="white"]; // Violet
+  Results         [label="Key Results/\nTakeaways", pos="0,1!", fillcolor="#D81B60", fontcolor="white"]; // Magenta (wrap toward red)
+
+  Placeholder     [label="", pos="2,1!", style=invis]; // layout anchor
+
+  edge [color="#555555", penwidth=1.4, splines=true];
+
+  BusinessGoals -> UseCases;
+  UseCases -> CausalModels;
+  CausalModels -> DataSources;
+  DataSources -> KnowledgeModels;
+  KnowledgeModels -> Algorithms;
+  Algorithms -> Interventions;
+  Interventions -> Results;
+  Results -> BusinessGoals;
+}
+```
+
+- **Step 1: What Are the Intended Outcomes?**
+
+- @Problem@: Most AI projects (even 90%) fail from misalignment between
+  business goals and project
+
+- @Questions@: Key questions to answer
+  - What process are you analyzing?
+  - What happens if a course of action is taken or not?
+  - Outcomes: positive, negative, unacceptable, optimal?
+  - What related data can be combined and leveraged?
+  - What are possible and feasible interventions?
+  - Confounding factors correlated with outcomes and treatments?
+
+- **Step 2: What Are the Proposed Interventions?**
+
+- @Definition@: **Levers** are variables to achieve business outcomes
+
+- @Example@: Customer marketing for a product
+  - Introduce a new product?
+  - Bundle multiple products (improve sales or inhibit long-term)?
+  - Focus advertisement on quality vs other options?
+  - Add more variations of same product?
+  - Discontinue or divest product line?
+
+- **Step 3: What Factors Create Changes?**
+
+- @Definition@: **Identify confounders** that obscure or distort relationships
+  - Confounders mute or inflate relationship strength
+
+- @Definition@: **Direct effect**: Effect through intervention pathway
+
+- @Definition@: **Indirect effect**: Effect by environment or intervention
+  byproduct
+
+- @Definition@: **Total causal effect**: All factors modifying outcome
+
+- **Step 4: Build Causal DAG**
+
+- @Definition@: **Causal models** simplify systems without losing key
+  relationships
+
+- **Visual models** abstract complexity into interpretable formats
+  - Highlight direction and strength of influence
+  - Aid communication between stakeholders
+  - Reduce cognitive overload by excluding irrelevant details
+  - Guide data collection by identifying impactful variables
+
+- @Key idea@: **Balance** is critical
+  - Too much simplicity loses insight
+  - Too much complexity loses clarity
+
+- **Marketing Example: Price Intervention**
+
+- @Example@: Assume **price is intervention** and goal is **maximize revenue**
+  - Increase price by how much?
+  - Decrease price by how much?
+  - Change price one-time or over time?
+  - Develop individual pricing model for each customer?
+
+- The causal DAG illustrates price's complex effects:
+  ```graphviz[height=50%]
+  digraph CausalDiagram {
+      splines=true;
+      nodesep=1.0;
+      ranksep=0.75;
+
+      node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+      Price [label="Price", fillcolor="#F4A6A6"];
+      Behavior [label="Behavior", fillcolor="#FFD1A6"];
+      ProductAmount [label="Product Amount", fillcolor="#B2E2B2"];
+      Revenue [label="Revenue", fillcolor="#A6C8F4"];
+      CompetitiveOffers [label="Competitive Offers", fillcolor="#C6A6F4"];
+      Supply [label="Product Supply", fillcolor="#A6E7F4"];
+      StoreDistance [label="Distance to store", fillcolor="#D2B48C"];
+
+      Price -> Behavior;
+      Behavior -> Revenue;
+      Price -> ProductAmount;
+      ProductAmount -> Revenue;
+      Price -> CompetitiveOffers;
+      CompetitiveOffers -> ProductAmount;
+      Supply -> ProductAmount;
+      StoreDistance -> ProductAmount;
+  }
+  ```
+
+- **Step 5: Data Acquisition and Integration**
+
+- @Workflow@: Leverage existing data and collect new data
+  - Use data collected for correlation-based ML
+  - Collect data specifically for causal AI objectives
+
+- **Prepare data** to match refined causal model
+  - Clean, normalize, align data with model assumptions
+  - Map observed variables to DAG nodes
+  - Encode categorical variables
+  - Handle missing data (imputation or exclusion)
+  - Normalize or scale values
+
+- **Control for bias and confounding**
+  - Goal: Ensure data structure supports causal estimation
+
+- **Step 6: Model Modification**
+
+- @Workflow@: Refine initial DAG design
+  - Reduce bias and improve reliability
+  - Clarify variables as confounders, mediators, or outcomes
+
+- @Cons@: Avoid common pitfalls
+  - Do not control for mediators or colliders
+  - Control for direct and indirect confounders
+
+- **Test models** against technical and business objectives
+  - Isolate causal effects with necessary controls
+  - Ensure assumptions align with data and domain logic
+
+- **Step 7: Preparing for Deployment in Business**
+
+- @Workflow@: Transition from experimentation to decision-making
+  - Validate model against real-world business outcomes
+  - Ensure stakeholders understand and trust causal logic
+
+- **Develop user-friendly interfaces** for business users
+  - Automate data pipelines for timely updates
+
+- **Set up monitoring**
+  - Establish metrics for performance tracking and drift detection
+  - Create feedback loops to refine models post-deployment
+
+- **Document and train** stakeholders
+  - Provide clear model documentation
+  - Train on interpreting results and making informed decisions
+
+- @Goal@: Deliver measurable business value
+
+- **Roles in Hybrid Teams**
+
+\begingroup \scriptsize
+```{=typst}
+#styled-table(
+  headers: ("Role", "Responsibilities"),
+  rows: (
+    ("Business Strategists", "Align modeling with business goals; Sponsor projects; Communicate insights"),
+    ("Subject-Matter Experts", "Provide domain expertise; Identify relevant variables; Validate DAGs"),
+    ("Data Experts", "Source and clean data; Map data to model variables; Handle missing values"),
+    ("Data Scientists", "Construct and validate DAGs; Apply causal inference methods; Simulate decisions"),
+    ("Software Developers", "Build tools and interfaces; Create data pipelines"),
+    ("IT Professionals", "Provide infrastructure and governance; Ensure model execution; Integrate systems"),
+    ("Project Managers", "Coordinate collaboration and timelines; Manage documentation; Ensure alignment"),
+  ),
+)
+```
 \endgroup
-::::
-:::
 
-\vspace{1cm}
+- **Executing for a Hybrid Team Project**
 
-\begingroup \Large
-**$$\text{\blue{Lesson 08.3: Do Calculus}}$$**
-\endgroup
-
-\vspace{1cm}
-
-::: columns
-:::: {.column width=75%}
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA (Artificial Intelligence: a Modern Approach)
-
-- Pearl et al., The Book of Why, 2017
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){width=1.5cm}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Book_of_why.jpg){width=1.5cm}
-
-::::
-:::
-
-## Intervention and Counterfactuals
-
-- **Interventions in Causal Networks**
-
-- **Causal Bayesian Networks** represent cause–effect relations between variables
-  - E.g., $Rain$ $\rightarrow$ $WetGrass$
-
-- **Interventions**
-  - _Intervention_ means setting a variable to a fixed value, overriding its
-    causal mechanism
-
-::: columns
-:::: {.column width=40%}
-- E.g., _"Turning the sprinkler on manually"_ regardless of cloudiness
-  - Replace equation $S = f_S(C, U_S)$ with $S = \text{true}$
-  - Causal link from $Cloudy$ to $Sprinkler$ is _cut_, forming a new "mutilated"
-    model
-::::
-:::: {.column width=25%}
-```graphviz
-digraph BayesianFlow {
-    splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-
-    Weather [label="Weather", fillcolor="#A6E7F4", xlabel="P(W)"];
-    Rain [label="Rain", fillcolor="#A6C8F4", xlabel="P(R | W)"];
-    Sprinkler [label="Sprinkler", fillcolor="#FFD1A6", xlabel="P(S | W)"];
-    WetGrass [label="WetGrass", fillcolor="#B2E2B2", xlabel="P(G | R, S)"];
-
-    { rank = same; Rain; Sprinkler; }
-
-    Weather -> Rain;
-    Weather -> Sprinkler;
-    Rain -> WetGrass;
-    Sprinkler -> WetGrass;
-}
-```
-\scriptsize \center
-_Original graph_
-::::
-:::: {.column width=25%}
-```graphviz
-digraph BayesianFlow {
-    splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-
-    Weather [label="Weather", fillcolor="#A6E7F4", xlabel="P(W)"];
-    Rain [label="Rain", fillcolor="#A6C8F4", xlabel="P(R | W)"];
-    Sprinkler [label="Sprinkler", fillcolor="#FF8888", xlabel="P(S | W) = True"];
-    WetGrass [label="WetGrass", fillcolor="#B2E2B2", xlabel="P(G | R, S)"];
-
-    { rank = same; Rain; Sprinkler; }
-
-    Weather -> Rain;
-    Rain -> WetGrass;
-    Sprinkler -> WetGrass;
-}
-
-```
-\scriptsize \center
-_Mutilated graph_
-::::
-:::
-
-- **Interventions in Causal Networks**
-
-- **The do-operator**
-  - Denoted as $\text{do}(X = x)$
-  - Represents performing an action that _sets_ $X$ to $x$, not _observing_
-    $X = x$
-  - $do(X_j = x_j^k)$ removes $\Pr(x_j | \text{parents}(X_j))$ from the product
-    and gives a new joint distribution:
-    $$
-    P_{X_j = x_j^k}(x_1, \ldots, x_n) =
-    \begin{cases}
-    \prod_{i \ne j} \Pr(x_i | \text{parents}(X_i)) & \text{if } X_j = x_j^k \\
-    0 & \text{otherwise}
-    \end{cases}
-    $$
-
-- **Difference between observation and intervention**
-    $$\Pr(Y | do(X=x) \ne \Pr(Y | X)$$
-  - Observing $S = \text{true}$ _provides information_ about its causes
-    - E.g., information about weather (and the Markov blanket)
-  - Intervening with $\text{do}(S = \text{true})$ _breaks_ those causal
-    dependencies
-    - E.g., it doesn't inform about anything
-
-- **Intervention**
-- **Estimate causal effect** of $X_j$ on $X_i$ with adjustment formula:
-    $$
-    \Pr(X_i = x_i | \text{do}(X_j = x_j^k)) =
-    \sum_{\text{parents}(X_j)} \Pr(x_i | x_j^k, \text{parents}(X_j)) \Pr(\text{parents}(X_j))
-    $$
-
-- **Example**
-  - In the Sprinkler model $do(S=\text{true})$, gives the new distribution:
-    $$
-    \Pr(c, r, w, g | do(S=true)) = \Pr(c)\Pr(r|c)\Pr(w|r, S=true)\Pr(g|w)
-    $$
-    - Only descendants of $Sprinkler$ (i.e., $WetGrass$) change
-    - $Weather$ and $Rain$ remain unaffected
-
-- **Intuition**
-  - Do-operator isolates _causal effects_ by simulating external manipulation
-  - Essential for answering "what if" questions: _What happens if you intervene
-    and change X?_
-
-- **Counterfactuals**
-- A **counterfactual** describes what would have happened in the past under a
-  different scenario
-  - _"What would the outcome have been, if X had been different?"_
-
-- **Business examples**
-  - _"What if we had two suppliers instead of one? Would we have fewer delays?"_
-  - _"Would customers be more satisfied if we shipped products in one week
-    instead of three?"_
-  - That's what businesses want, but they can't get it from correlation-based
-    models!
-
-- **Causal reasoning**
-  - Goes beyond correlation and association
-  - Requires a causal model to simulate alternate realities
-  - E.g.,
-    - Actual: _"A student received tutoring and scored 85%"_
-    - Counterfactual: _"What if the student didn't receive tutoring?"_
-    - Causal model estimates the alternative outcome (e.g., 70%)
-
-- **Challenges**
-  - Requires strong assumptions and accurate models
-  - Difficult to validate directly since counterfactuals are unobservable
-
-- **Causal Discovery**
-- **Definition**
-  - Causal discovery learns causal network structure from data
-  - Identify which variables directly cause others (learn causal directions, not
-    just correlations)
-
-- **Approaches to causal discovery**
-  - **Search-based methods**
-    - Start with an empty or initial model and iteratively modify it (add,
-      reverse, or delete links)
-    - Evaluate each candidate network based on fit to data (e.g., likelihood)
-    - Use search strategies while ensuring the network remains acyclic
-  - **Constraint-based methods**
-    - Infer causal directions from conditional independence tests among
-      variables
-    - If $X$ and $Y$ are independent given $Z$, this constrains possible arrows
-
-- **Dealing with complexity**
-  - Possible network structures grow super-exponentially with the number of
-    variables
-  - Complexity penalties to avoid overfitting
-
-- **Causality connection**
-  - Causal discovery bridges Bayesian learning and causal inference
-  - Under certain assumptions, infer causality from observational data not only
-    from experiments
-
-## Randomized Controlled Trial
-
-- **What is a Randomized Controlled Trial?**
-- **RCTs estimate causal effects** by comparing treatment and control groups
-  - Randomly assign treatment, not chosen by subjects
-    - E.g., assign new drug vs placebo by flipping a coin
-  - Ensure groups are statistically equivalent except for treatment
-  - Isolate treatment effect
-
-- **Goal**: estimate $\Pr(Y | do(X))$
-  - Randomization simulates do-operator by removing incoming arrows to $X$
-  - Eliminate (known and unknown) confounding paths from background variables
-  - Turn observational data into experimental data
-    - Use $\Pr(Y | X)$ to measure $\Pr(Y | do(X))$
-  - Allow causal inference without knowing the causal graph
-
-- **Pros**
-  - Implement intervention in a principled, unbiased way
-  - Foundation for scientific experimentation and evidence-based policy
-  - Gold standard of causal inference (when feasible)
-
-- **Randomized Controlled Trial: Example**
-- **Research question**: _"Does offering an after-school tutoring program
-  increase the probability that a student passes the end-of-term exam?"_
-
-- **Population**: eligible students in a district with proper sample size $n$
-
-- **Treatment and control**
-  - $X = 1$ (treatment): student is offered/assigned to tutoring
-  - $X = 0$ (control): student is not offered tutoring
-
-- **Assignment mechanism (RCT)**
-  - Students are randomly assigned to $X \in \{0, 1\}$
-  - Randomization ensures, in expectation, balance on prior GPA, motivation,
-    parental income, etc
-
-- **Outcome**
-  - $\Pr(Y \mid do(X)) = \Pr(Y \mid X)$
-  - $Y_{X=x} = I \{\text{pass exam}\}$ measured at term’s end for treatment vs
-    control
-  - Measure and report $Y_{X=1} - Y_{X=0}$
-
-- **Randomized Controlled Trial: Limits**
-- **May be unethical**
-  - E.g., assigning harmful treatment
-  - E.g., you want to verify if asbestos causes cancer
-
-- **Can be expensive or impractical**
-
-- **It doesn't always work**
-  - Non-compliance: some participants may not follow assigned treatment
-  - Attrition: dropout rates may differ between groups
-  - May not generalize to broader populations
-  - Requires careful implementation and monitoring
-
-- **Blind RCT**: participants don’t know which group they’re in (e.g., placebo)
-
-- **Double-blind RCTs**: participants and investigators/clinicians don't know
-  assignments
-
-## Back-door Adjustment
-
-- **Back-Door Paths: Example**
-::: columns
-:::: {.column width=65%}
-- **Example**
-  - A company wants to understand the causal effect of _price_ on _sales_
-  - Advertising spend $AdSpend$ is a **confounder** since it can affect both:
-    - The _price_ the company can set
-    - E.g., the cost increases to cover advertisement costs and the product is
-      perceived as more valuable
-    - The _sales_ (directly)
-
-- The **back-door path** is $Price$ $\to$ $AdSpend$ $\to$ $Sales$ 
-
-::::
-:::: {.column width=30%}
-
-![](msml610/lectures_source/figures/L08.3_Lesson09-Price_Quantity.png){height=30%}
-
-```graphviz[width=70%]
-digraph CausalDAG {
-    splines=true;
-    nodesep=0.5;
-    ranksep=0.5;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-
-    Price [label="Price", fillcolor="#F4A6A6"];
-    Sales [label="Sales", fillcolor="#B2E2B2"];
-    AdSpend [label="Ad Spend", fillcolor="#A6E7F4", style="rounded,filled,dashed"];
-
-    // Force ranks
-    {rank=same; Price; Sales;}
-
-    Price -> Sales;
-    AdSpend -> Price;
-    AdSpend -> Sales;
-}
-```
-::::
-:::
-
-- The company **needs to control** for $AdSpend$ to estimate the causal effect of
-  $Price$ on $Sales$ by:
-  1. Using $AdSpent$ as covariate in the regression
-  2. Designing experiment holding $AdSpend$ constant or randomized
-  3. Using back-door criterion
-
-- **The Back-Door Adjustment**
-- **Hypotheses**
-  - You have a (correct) causal graph
-  - You block the back-door paths (needs definition!) that satisfy the back-door
-    criterion (needs definitions!)
-
-- **Thesis**
-  - The *adjustment formula* holds
-    $$\Pr(Y \mid do(X)) = \sum_z \Pr(Y \mid X, Z=z) \Pr(Z=z)$$
-
-- **Consequences**
-  - It allows you an intervention (level 2 of the causality ladder) only using
-    observational data (level 1 of the causality ladder)
-    - Correlation implies causation
-  - This is an alternative to randomized controlled experiments
-  - **Mind blown!**
-
-- **Back-Door Criterion: Overview**
-- A **back-door path** is any path from $X$ to $Y$ starting with an arrow into
-  $X$ and ending pointing into $Y$
-  - E.g., $X \leftrightarrow ... \leftrightarrow ... \rightarrow Y$
-  - Arrow direction doesn't matter
-  - Unblocked paths create spurious associations
-  - _Intuition_: Paths make $X$ and $Y$ look related even if changing $X$
-    doesn't change $Y$
-
-- **Back-door criterion**: A set of variables $Z$ satisfies the criterion
-  relative to $X \leftrightarrow ... Z ... \rightarrow Y$ if:
-  - No variable in $Z$ is a descendant of $X$
-  - $Z$ blocks every path from $X$ to $Y$ starting with an arrow into $X$
-  - _Intuition_: Block variables that interfere with the effect you're
-    estimating and remove paths where $X$ and $Y$ connect through common causes
-
-- Condition on variables satisfying the back-door criterion to estimate a causal
-  effect without intervention
-  - This guy won the Nobel prize for CS for this! **Mind blown!**
-
-- **Chains, Forks, and Colliders**
-::: columns
-:::: {.column width=60%}
-- In a **chain** $X \rightarrow M \rightarrow Y$
-  - Conditioning on $M$ blocks causal effect
-  - Mediators must remain unconditioned
-  - ![](assets/emoji/skull.png){ width=14px } _Do not do it_!
-::::
-:::: {.column width=35%}
-```graphviz
-digraph CausalFlow {
-    splines=true;
-    nodesep=0.5;
-    ranksep=0.5;
-    rankdir=LR;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-
-    X [fillcolor="#A6C8F4", label="X"];
-    M [fillcolor="#F4A6A6", label="M"];
-    Y [fillcolor="#A6C8F4", label="Y"];
-
-    X -> M;
-    M -> Y;
-}
-```
-::::
-:::
-
-\vspace{1.0cm}
-
-::: columns
-:::: {.column width=60%}
-- In a **fork** $X \leftarrow Z \rightarrow Y$
-  - Conditioning on $Z$ removes confounding
-  - ![](assets/emoji/emoji_smile.png){ width=12px } _Need to do it_!
-::::
-:::: {.column width=35%}
-```graphviz[width=60%]
-digraph CausalDAG {
-    splines=true;
-    nodesep=0.5;
-    ranksep=0.5;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-
-    X [fillcolor="#F4A6A6"];
-    C [fillcolor="#A6C8F4"];
-    D [fillcolor="#A6C8F4"];
-
-    {rank=same; C; D;}
-
-    X -> C;
-    X -> D;
-}
-```
-::::
-:::
-
-\vspace{0.5cm}
-
-::: columns
-:::: {.column width=60%}
-- In a **collider** $X \rightarrow M \leftarrow Y$
-  - Conditioning on $M$ introduces bias
-  - Colliders must remain unconditioned
-  - ![](assets/emoji/skull.png){ width=14px } _do not do it_!
-::::
-:::: {.column width=35%}
-```graphviz[width=60%]
-digraph ColliderExample {
-    splines=true;
-    nodesep=0.5;
-    ranksep=0.5;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-
-    X [label="X", fillcolor="#A6C8F4"];
-    Y [label="Y", fillcolor="#A6C8F4"];
-    Z [label="Z", fillcolor="#F4A6A6"];
-
-    {rank=same; X; Y;}
-
-    X -> Z;
-    Y -> Z;
-}
-```
-::::
-:::
-
-- **Common Mistakes**
-- The back-door criterion tells you all and only what you need to condition on
-  (i.e., block) to:
-  - Transform observation in intervention
-  - Say that "correlation IS causation"
-
-- Before this, the solution that researchers used was to "condition on everything"
-  - **This is incorrect!**
-
-- **Common mistakes**
-  - Conditioning on a descendant of $X$ can bias the estimate
-  - Controlling for too many variables can open colliders and introduce bias
-  - Forgetting to block all back-door paths
-  - Using variables that lie on the causal path (blocks the mediator of the
-    effect)
-  - Ignoring unobserved confounders: can make causal effect unidentifiable
-
-- **1000s of papers and their conclusions are wrong!**
-  - In medicine, economics, social science people have used observational study
-    incorrectly
-
-- **When Back-Door Adjustment Fails**
-- **Back-door is simple but not universally applicable**
-  - No set of observable variables satisfies the back-door criterion
-    - In order to condition on a variable it needs to be observable
-    - E.g., an unobserved or unknown confounders
-  - You need to know a good approximation of the true causal graph
-    - Very easy to omit variables
-
-- **Alternatives**:
-  - _Front-door criterion_: uses mediators
-  - _Instrumental variables_: uses external variation
-  - _Do-calculus_: symbolic transformations to eliminate $do()$
-
-## Front-door Adjustment
-
-- **Front-Door Adjustment in Causal Inference**
-- **Front-door criterion** identifies causal effects with unobserved confounders
-  - Applies when a **mediator variable** transmits all causal influence from
-    treatment to outcome
-
-::: columns
-:::: {.column width=60%}
-- Assume the causal graph looks like:
-  - $X$: treatment or cause
-  - $M$: mediator
-  - $Y$: outcome
-  - $U$: unobserved confounder
-::::
-:::: {.column width=35%}
-```graphviz
-digraph CerealAds {
-    splines=true;
-    nodesep=0.5;
-    ranksep=0.5;
-    rankdir=TB;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-
-    U [label="U", fillcolor="#B2E2B2", style="rounded,filled,dashed"];
-    X [label="X", fillcolor="#A6C8F4"];
-    M [label="M", fillcolor="#C6A6F4"];
-    Y [label="Y", fillcolor="#FFD1A6"];
-
-    { rank=same; X; Y; M }
-
-    U -> X;
-    U -> Y;
-    X -> M;
-    M -> Y;
-}
-```
-::::
-:::
-
-- **Hypotheses**:
-  1. _All directed paths_ from $X$ to $Y$ go through $M$
-  2. _No unobserved confounder_ affects $X$ and $M$
-  3. _All backdoor paths_ from $M$ to $Y$ are blocked by $X$
-
-- **Thesis**: estimate the causal effect $P(Y | do(X))$ despite unobserved $U$
-  \begingroup \small
-  $$P(Y \mid do(X)) = \sum_m P(M \mid X) \sum_{x'} P(Y \mid M, X') P(X')$$
-  \endgroup
-  - _Intuition_: estimate observed link $X \to M$ and $M \to Y$
-
-- **Cereal and Ads: Example**
-::: columns
-:::: {.column width=50%}
-- **Research question**: _"Does watching ads (X) make people buy more cereal (Y)?"_
-
-- You might think **yes, of course!**, I say **no, not so fast!**
-
-- **Hidden factor**: _"Parents who care about breakfast (U)"_ might:
-  - Let kids watch more TV to have them eat breakfast and see ads
-  - Buy more cereal anyway
-::::
-:::: {.column width=45%}
-```graphviz
-digraph CerealAds {
-    splines=true;
-    nodesep=0.5;
-    ranksep=0.5;
-    rankdir=TB;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-
-    X [label="X\n(Watch ads)", fillcolor="#A6C8F4"];
-    U [label="U\n(Care about breakfast)", fillcolor="#B2E2B2", style="rounded,filled,dashed"];
-    Y [label="Y\n(Buy cereal)", fillcolor="#FFD1A6"];
-
-    { rank=same; X; Y; }
-
-    U -> X;
-    U -> Y;
-    X -> Y;
-}
-```
-::::
-:::
-
-- Hidden factor $U$ confounds "Watch ads" and "Buy cereals"
-  - Correlation exists even if ads don't cause it
-  - Observing $X$ and $Y$ without controlling for $U$ leads to spurious
-    association
-  - Same of "ice cream" and "drowning"
-
-- A spurious relationship is **terrible for the business**!
-  - It means you spend money on ads and that doesn't matter
-  - Google and Facebook are worth \$3T and it's all predicated on "Watch ads"
-    $\implies$ "Buy stuff"
-
-- **Cereal and Ads: Solutions**
-- **Strategy 1: Back-door adjustment**
-  - If you _know_ and can _measure_ $U$ "how much parents care about breakfast",
-    include $U$ as a control variable in analysis
-  - _Intuition_:
-    - Compare families with _the same_ breakfast attitudes ($U$ fixed)
-    - See if ads ($X$) still change cereal buying ($Y$)
-
-- **Strategy 2: Use randomization**
-  - Randomized experiments break link between $X$ and $U$
-    - Randomly show ads to some families and not others
-    - Randomization ignores parental breakfast attitude; differences in buying
-      come from ads
-  - This is why controlled experiments are gold standard for causal inference
-
-- **Strategy 3: Front-door Adjustment**
-
-- **Cereal and Ads: Finding a Mediator**
-
-::: columns
-:::: {.column width=60%}
-- Imagine ads work by _"making kids ask for cereal"_ (aka "nagging") $M$
-  - This is a true advertisement strategy!
-  - At the convenience store the candies are at the bottom of the desk
-- There is a **mediator** variable
-::::
-:::: {.column width=35%}
-![](msml610/lectures_source/figures/L08.3.Nagging_kids.png)
-::::
-:::
-
-\vspace{0.5cm}
-
-::: columns
-:::: {.column width=45%}
-- So the **causal chain** is:
-  - Ads $(X)$ $\to$ ...
-  - Kids Nagging $(M)$ $\to$ ...
-  - Parents Buy Cereal $(Y)$
-- The hidden factor _"parents that care about breakfast"_ $U$:
-  - Affects how much cereal gets bought
-  - Doesn't affect how much kids nag (only ads do that)
-::::
-:::: {.column width=50%}
-```graphviz
-digraph CerealAds {
-    splines=true;
-    nodesep=0.5;
-    ranksep=0.5;
-    rankdir=TB;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-
-    U [label="U\n(Care about breakfast)", fillcolor="#B2E2B2", style="rounded,filled,dashed"];
-    X [label="X\n(Watch ads)", fillcolor="#A6C8F4"];
-    M [label="M\n(Kids nag)", fillcolor="#C6A6F4"];
-    Y [label="Y\n(Buy cereal)", fillcolor="#FFD1A6"];
-
-    { rank=same; X; Y; M }
-
-    U -> X;
-    U -> Y;
-    X -> M;
-    M -> Y;
-}
-```
-::::
-:::
-
-- **When Front-Door Works**
-::: columns
-:::: {.column width=55%}
-- **Is the front-door criterion verified** for _"kids' nagging"_ $M$?
-  - Influence of ads on buying goes through nagging ($X \to M \to Y$)
-  - No hidden confounders affect both ads and nagging (TV schedule is random,
-    not linked to parents' breakfast attitudes)
-  - All confounding between nagging and buying is blocked by controlling for ads
-::::
-:::: {.column width=40%}
-```graphviz
-digraph CerealAds {
-    splines=true;
-    nodesep=0.5;
-    ranksep=0.5;
-    rankdir=TB;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-
-    U [label="U\n(Care about breakfast)", fillcolor="#B2E2B2", style="rounded,filled,dashed"];
-    X [label="X\n(Watch ads)", fillcolor="#A6C8F4"];
-    M [label="M\n(Kids nag)", fillcolor="#C6A6F4"];
-    Y [label="Y\n(Buy cereal)", fillcolor="#FFD1A6"];
-
-    { rank=same; X; Y; M }
-
-    U -> X;
-    U -> Y;
-    X -> M;
-    M -> Y;
-}
-```
-::::
-:::
-
-- **Yes! The front-door criterion is verified**
-
-- Instead of doing an intervention $do(X)$, just observe!
-  1. Observe how often ads make kids nag, $\Pr(M | X)$
-  2. Observe nagging changes buying, $\Pr(Y | M, X')$
-  3. Combine both to estimate what happens if you _force_ more ads
-     $$\Pr(Y | do(X)) = \sum_m \Pr(M | X) \sum_{x'} \Pr(Y | M, X') \Pr(X')$$
-     - _Intuition_: "How ads cause nagging" × "How nagging causes buying"
-
-## Do-Calculus
-
-- **Do-Calculus**
-- **Do-calculus** is a formal system for reasoning about causal effects in
-  graphical models (Judea Pearl, 2000)
-
-- **Problem**
-  - You care about **causal effects** like:
-    $$
-    \Pr(Y | do(X = x))
-    $$
-    - I.e., distribution of $Y$ if you intervene and set $X$ to $x$, breaking
-      causal links into $X$
-
-  - You have **observational data** like:
-    $$
-    \Pr(Y | X = x)
-    $$
-  - In general $\Pr(Y | X) \ne \Pr(Y | do(X = x))$ due to "correlation is not
-    causation" (confounding, ...)
-
-- **Solution**: do-calculus provides algebraic rules to transform intervention
-  expressions (do-operator, i.e.,, $do(X = x)$) into expressions computable from
-  observational data, given certain conditions
-
-- **The Rules of Do-Calculus**
-- Do-calculus provides **three transformation rules** for manipulating
-  expressions involving $do()$:
-
-  1. **Insertion/Deletion of Observations:**
-     If $Y \perp Z \mid X, W$ in $G_{\overline{X}}$ (where incoming edges to X
-     are removed), then:
-     $$\Pr(Y \mid do(X), Z, W) = \Pr(Y \mid do(X), W)$$
-
-  2. **Action/Observation Exchange:**
-     If $Y \perp Z \mid X, W$ in $G_{\overline{X}, \underline{Z}}$ (incoming edges
-     to X removed, outgoing from Z removed), then:
-     $$\Pr(Y \mid do(X), do(Z), W) = \Pr(Y \mid do(X), Z, W)$$
-
-  3. **Insertion/Deletion of Actions:**
-     If $Y \perp Z \mid X, W$ in $G_{\overline{X}, \overline{Z(W)}}$ (incoming
-     edges to X and to Z excluding those from W removed), then:
-     $$\Pr(Y \mid do(X), do(Z), W) = \Pr(Y \mid do(X), W)$$
-
-- These rules allow the systematic reduction of expressions involving $do()$ into
-  observational terms, if the causal graph permits
-
-- **Back/Front-door Adjustments and Do-calculus**
-- The **back-door** and **front-door** criteria are **specific applications** of
-  do-calculus
-  - They are simpler, graphical conditions that allow $P(Y \mid do(X))$ to be
-    expressed using observational probabilities
-
-- **Back-door adjustment**: If a set of variables $Z$ blocks all back-door
-  paths from $X$ to $Y$ (paths that go into $X$), then:
-  $$
-  \Pr(Y | do(X)) = \sum_z \Pr(Y | X, Z) \Pr(Z)
-  $$
-
-- **Front-door adjustment**: If there exists a variable $Z$ such that:
-  1. Z is affected by X
-  2. Z affects Y
-  3. All back-door paths from X to Z are blocked
-  4. All back-door paths from Z to Y are blocked by X
-  then:
-  $$
-  \Pr(Y | do(X)) = \sum_z \Pr(Z | X) \sum_{x'} \Pr(Y | Z, X') \Pr(X')
-  $$
+- @Workflow@: Establish a collaborative approach
+  - Align strategic goals with technical efforts
+  - Emphasize early stakeholder engagement and shared ownership
 
+- @Step@: Define team goals
+  - Use SMART objectives aligned with business strategy
+
+- @Step@: Target a project
+  - Choose a bounded, feasible, high-value use case
+  - Prioritize early wins for trust and momentum
+
+- @Step@: Define the hypothesis
+  - Build a preliminary DAG with experts' input
+
+- @Step@: Incremental model development
+  - Build the model in small stages
+  - Iterate with regular feedback
+
+## Explainability and Interpretability
+
+- **The Importance of Explainability**
+
+- @Question@: Can we understand how AI models make decisions?
+  - How do ML models make decisions?
+  - Can they be trusted?
+  - Are they biased?
+
+- @Problem@: AI systems must foster trust, transparency, and user confidence
+  - Loss of trust, regulation violations, fines, lawsuits
+  - Example: false negative in medical screening for cancer
+
+- @Solution@: Humans in the loop
+  - Ensure interpretation and context are considered
+
+- **Techniques for Interpretability**
+
+- @Definition@: **LIME** (Local Interpretable Model-agnostic Explanations)
+  - Focus on single prediction
+  - Approximate model locally with interpretable model
+  - Perturb input data, observe prediction changes
+
+- @Definition@: **PDP** (Partial Dependence Plots)
+  - Show marginal effect of features on predicted outcome
+
+- @Definition@: **ICE** (Individual Conditional Expectation)
+  - Show feature-prediction relationship for individual instances
+
+- @Definition@: **SHAP** (SHapley Additive exPlanations)
+  - Quantify feature contribution to specific prediction
+
+- **Causal AI in Interpretable AI**
+
+- @Advantages@: Causal AI enables deeper interpretability
+  - DAGs present variables, relationships, strengths clearly
+  - Counterfactuals predict action outcomes
+  - Remove confounders to prevent skewed estimates
+  - Humans understand output (experts and non-experts both)
+  - Hybrid teams enhance context, reduce blind spots
+
+- **The Future of Causal AI**
+
+- @Characteristics@: Causal AI evolution
+  - Moves from academia to commercial use
+  - Departs from purely data-driven systems
+  - Reflects human thinking and decision-making
+
+- @Convergence@: Multiple AI paradigms merge
+  - Causal AI
+  - Traditional AI
+  - Deep learning
+  - Generative techniques
+
+- **Why Probabilistic Machine Learning Matters**
+
+- @Question@: When is confidence more important than prediction?
+  - Medical diagnosis: classifier needs to know how sure it is
+  - Autonomous driving: when should the car defer to human control?
+  - Financial risk: which decisions warrant caution despite high confidence?
+
+- @Advantages@: Probabilistic models output full distributions, not point
+  estimates
+  - Standard ML: _"The diagnosis is pneumonia"_
+  - Probabilistic ML: _"87% pneumonia, 13% flu, plus credible intervals"_
+
+- @Applications@: Uncertainty quantification
+  - Drives better decisions under risk
+  - Handles limited or noisy data naturally
+  - Encodes domain expertise formally when data is expensive
+
+- @Intuition@: Probability embraces what we _don't_ know as information, not
+  failure
+
+- **Probabilistic ML: Robustness Through Uncertainty**
+
+- @Problem@: Deterministic models fail silently
+  - Overfit to small datasets
+  - Produce overconfident predictions on out-of-distribution data
+  - Struggle with missing values (require imputation or deletion)
+
+- @Solution@: Probabilistic frameworks solve naturally
+  - **Uncertainty propagation**: Bayesian model averaging builds Occam's razor
+  - **Principled incomplete data handling**: Integrate over unknown values
+  - **Composability**: Chain probabilistic models, track uncertainty flow
+
+- @Key idea@: Probability enables decision-making under uncertainty
+  - When to act, when to wait, when to defer to humans
+
+- **Why Explainability Matters**
+
+- @Problem@: Modern AI systems are powerful but opaque
+  - Deep neural networks with millions of parameters hard to interpret
+  - Business logic becomes implicit rather than explicit
+  - Regulators and stakeholders demand accountability
+
+- @Applications@: Explanations critical for high-stakes decisions
+  - Healthcare diagnosis, loan approval, criminal justice
+  - Autonomous vehicles, aircraft control
+  - Users and decision-makers need to verify model behavior
+
+- @Example@: Medical diagnosis scenario
+  - Model predicts 85% likelihood of disease X
+  - Which symptoms drove this prediction?
+  - Without explanation: doctor cannot assess clinical validity
+  - With explanation: doctor can override or accept
+
+- @Key idea@: Explainability enables accountability and builds trust
+
+- **Approaches to Explainability**
+
+- @Definition@: **Explainability** is the degree to which we understand why a
+  model made a particular prediction
+  - Global explanation: _"How does the model work overall?"_
+  - Local explanation: _"Why this specific outcome?"_
+  - Feature importance: _"Which inputs most influence prediction?"_
+
+- @Techniques@: Two main approaches
+  1. **Intrinsic methods**: Design inherently interpretable models
+     - Decision trees, linear regression, rule-based systems
+     - Transparent structure allows direct inspection
+  2. **Post-hoc methods**: Explain predictions after training
+     - Feature attribution (LIME, SHAP, integrated gradients)
+     - Attention mechanisms, counterfactual explanations
+
+- @Example@: SHAP quantifies feature contribution
+  - Computes each feature's contribution to prediction shift
+  - Assigns value showing how much each feature pushed decision
+  - Enables ranking features by importance and visualizing impact
+
+- @Trade-off@: Model performance vs. explainability
+  - Simpler models easier to explain but lower accuracy
+  - Complex models better performance but need post-hoc explanation
+  - Choice depends on application's accuracy vs. interpretability requirements

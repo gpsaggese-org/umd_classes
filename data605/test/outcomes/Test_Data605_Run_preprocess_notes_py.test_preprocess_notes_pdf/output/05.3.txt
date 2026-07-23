@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{05.3: Apache HBase}}$$**
+**$$\text{\textcolor{blue}{\text{05.3: Apache HBase}}}$$**
 \endgroup
 
 ::: columns
@@ -383,13 +383,13 @@ wiki_table['Home']['text']
 
 - **Data in Tabular Form**
 \tiny
-|  | Name | | |Home | |Office |  | \red{Social} |
-|---------|---------|---------|---------|---------|---------------|---------|------------| \red{---------} |
-| Key | First | | Last | Phone | Email | Phone | Email | \red{FacebookID} |
-|---------|---------|---------|---------|---------|---------------|---------|------------| \red{---------} |
-| 101 | Florian | \green{Garfield}| Krepsbach | 555-1212 | florian@wobegon.org | 666-1212 | fk@phc.com | \red{-} |
-| 102 | Marilyn | \green{-} | Tollerud | 555-1213 |  | 666-1213 | | \red{-} |
-| 103 | Pastor | \green{-} | Inqvist |  |  | 555-1214 | inqvist@wel.org | \red{-} |
+|  | Name | | |Home | |Office |  | \textcolor{red}{\text{Social}} |
+|---------|---------|---------|---------|---------|---------------|---------|------------| \textcolor{red}{---------} |
+| Key | First | | Last | Phone | Email | Phone | Email | \textcolor{red}{\text{FacebookID}} |
+|---------|---------|---------|---------|---------|---------------|---------|------------| \textcolor{red}{---------} |
+| 101 | Florian | \textcolor{darkgreen}{\text{Garfield}}| Krepsbach | 555-1212 | florian@wobegon.org | 666-1212 | fk@phc.com | \textcolor{red}{-} |
+| 102 | Marilyn | \textcolor{darkgreen}{-} | Tollerud | 555-1213 |  | 666-1213 | | \textcolor{red}{-} |
+| 103 | Pastor | \textcolor{darkgreen}{-} | Inqvist |  |  | 555-1214 | inqvist@wel.org | \textcolor{red}{-} |
 :::columns
 ::::{.column width=20%}
 ```
@@ -572,7 +572,7 @@ UPDATE People SET Phone="555-3434" WHERE ID=403;
 ::::{.column width=60%}
 | ID  | FirstName | LastName  | Phone              |
 | --- | --------- | --------- | ------------------ |
-| 101 | Florian   | Krepsbach | \magenta{555-3434} |
+| 101 | Florian   | Krepsbach | \textcolor{magenta}{555-3434} |
 | 102 | Marilyn   | Tollerud  | 555-1213           |
 | 103 | Pastor    | Ingvist   | 555-1214           |
 ::::

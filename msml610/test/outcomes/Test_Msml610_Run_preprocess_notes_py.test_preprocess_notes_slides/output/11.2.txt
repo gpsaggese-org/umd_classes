@@ -4,83 +4,50 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 11: Deep Learning}}$$**
-\endgroup
-
-\vspace{1cm}
-
-::: columns
-:::: {.column width=75%}
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
-
-::::
-:::: {.column width=20%}
-
-::::
-:::
-
 
 
 # Neural Networks
 
 #### Deep Learning: Definition
 
-- **\textcolor{red}{Definition}**: _deep learning_ is a family of ML models and techniques using
+- **Definition**: _deep learning_ is a family of ML models and techniques using
   complex expressions and tunable connection strengths
   $$\text{Deep Learning} \subseteq \text{Machine Learning}$$
 
-- **\textcolor{darkgreen}{Key characteristics}**:
+- **Key characteristics**:
   - Hypotheses represented as computation graphs with learnable weights
   - Graphs have layers with many connection paths between inputs and outputs
   - Model fit via gradient descent on the loss function
 
-- **\textcolor{blue}{Applications}**: Deep learning excels in several fields:
+- **Applications**: Deep learning excels in several fields:
   - Machine translation
   - Image recognition and synthesis
   - Speech recognition and synthesis
 
 #### DL vs ML
-- **\textcolor{red}{Remark}**: many ML methods can handle a large number of input variables,
+- **Remark**: many ML methods can handle a large number of input variables,
   _but_:
   - The path from input to output is very short (e.g., multiply and sum)
   - There are no variable interactions
   - The expressive power of such models is very limited
 
-- **\textcolor{darkgreen}{Examples}**: decision trees
+- **Examples**: decision trees
   - Allow long computation paths
   - Only a small fraction of variables can interact
 
-- **\textcolor{blue}{Problem}**:
+- **Problem**:
   - Real-world concepts are far more complex
 
 ## Biological Inspiration
 
 #### Biological Inspiration for Neural Networks
-- **\textcolor{red}{Intuition}**: To perform a function like in a biological system, replicate its
+- **Intuition**: To perform a function like in a biological system, replicate its
   structure
 
-- **\textcolor{darkgreen}{Remark}**: there is a leap of faith: the _structure_ matters to achieve a
+- **Remark**: there is a leap of faith: the _structure_ matters to achieve a
   _functionality_
 
-- **\textcolor{blue}{Examples}**
+- **Examples**
   - You want to fly, birds fly, birds have wings $\implies$ build a contraption
     with wings
   - You want to learn, the brain learns, the brain has many neurons and synapses
@@ -89,7 +56,7 @@ MSML610: Advanced Machine Learning
 #### Neurons in the Brain
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Fact}**: the brain is jam-packed with neurons
+- **Fact**: the brain is jam-packed with neurons
   - Each neuron has inputs (dendrites) and an output (axon)
   - Neurons connect their output to inputs of different neurons, sending pulse
     of electricity
@@ -102,16 +69,16 @@ MSML610: Advanced Machine Learning
 :::
 
 #### Neural Network
-- **\textcolor{red}{Intuition}**: get inspiration from networks of neurons in the brain
+- **Intuition**: get inspiration from networks of neurons in the brain
   - Human brain consist of layers of interconnected nodes
 
-- **\textcolor{darkgreen}{Remark}**: resemblance with neural structures is superficial
+- **Remark**: resemblance with neural structures is superficial
   - Architecture is inspired by the brain but does not replicate its complexity
   - Each connection has a weight that adjusts as learning proceeds
   - Neural networks simplify the brain's processes to make them computationally
     feasible
 
-- **\textcolor{blue}{Remark}**: deep learning encompasses a broader range of models and
+- **Remark**: deep learning encompasses a broader range of models and
   algorithms beyond neural networks
   $$\text{Neural Networks} \subseteq \text{Deep Learning}$$
   - Neural networks are building blocks for many deep learning models
@@ -123,17 +90,17 @@ MSML610: Advanced Machine Learning
 #### The "One Learning Algorithm" Theory
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Fact}**: the brain can perform various tasks
+- **Fact**: the brain can perform various tasks
   - E.g., process vision, sense of touch, do math, play pickleball
   - Doesn't have thousands of different programs
   - Seems to have a _single_ learning algorithm
 
-- **\textcolor{darkgreen}{Fact}**: the "one learning algorithm" idea has been experimentally
+- **Fact**: the "one learning algorithm" idea has been experimentally
   verified
   - Re-route the connection from eyes to the brain's sound-processing area
   - After training, the brain can "see" (in the sense of visual discrimination)
 
-- **\textcolor{blue}{AI dream}**:
+- **AI dream**:
   - If you can implement a version of the brain algorithm, you can have a machine
     that can learn anything
 ::::
@@ -143,12 +110,12 @@ MSML610: Advanced Machine Learning
 :::
 
 #### Why Resurgence of Neural Networks?
-- **\textcolor{red}{Remark}**: AI winter
+- **Remark**: AI winter
   - AI was proposed in the 1950
   - Popular in '80s and '90s
   - Then fell out of fashion due to limitations
 
-- **\textcolor{blue}{Key Reasons for Resurgence}**
+- **Key Reasons for Resurgence**
 
   - _Increased Computational Power_
     - GPUs and TPUs suited for matrix operations in neural nets
@@ -176,19 +143,19 @@ MSML610: Advanced Machine Learning
 
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Problem}**: logistic regression with non-linear transformations might seem
+- **Problem**: logistic regression with non-linear transformations might seem
   sufficient for any problem
   - However, the number of features increases rapidly
   - Neural networks synthesize their own features, offering an advantage
 
-- **\textcolor{darkgreen}{Example}**: in computer vision for $50 \times 50$ 256-color images
+- **Example**: in computer vision for $50 \times 50$ 256-color images
   - There are 7500 bytes available as features
   - Using all cubic terms for a non-linear model requires $\approx 7500 ^ 3$
     features $\propto (10^4)^3 = 10^{12} = 1$ trillion features
   - Which ones are really needed?
   - The features are predetermined and not learned
 
-- **\textcolor{blue}{Solution}**: each neuron in a neural network performs logistic regression
+- **Solution**: each neuron in a neural network performs logistic regression
   - Features used are computed by other neurons
   - You are not limited to using inputs $\vx$ or polynomial terms derived from
     $\vx$
@@ -197,7 +164,7 @@ MSML610: Advanced Machine Learning
 :::: {.column width=40%}
 ![](msml610/lectures_source/figures/L11.Shallow_vs_Deep.png)
 
-- **\textcolor{violet}{Remark}**: shallow model has short computation path
+- **Remark**: shallow model has short computation path
   - A decision tree has some long paths
   - A deep learning network has long paths with many variables interacting
 ::::
@@ -208,17 +175,17 @@ MSML610: Advanced Machine Learning
 #### Neural Network Perceptron
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Definition}**: A perceptron has $n$ inputs and 1 output (like a brain neuron)
+- **Definition**: A perceptron has $n$ inputs and 1 output (like a brain neuron)
   - Aka "artificial neuron", "logistic unit"
 
-- **\textcolor{darkgreen}{Intuition}**: The inputs are combined using a non-linear activation function
+- **Intuition**: The inputs are combined using a non-linear activation function
   $\theta(s)$ to implement:
   $$
   y = h_{\vw}(\vx) = \theta(\vw^T \vx)
   $$
   - Same functional form as logistic regression ($\theta$ is logit) or linear
     classification ($\theta$ is sign)
-- **\textcolor{blue}{Remark}**: The parameters $\vw$ are typically called _weights_ in neural
+- **Remark**: The parameters $\vw$ are typically called _weights_ in neural
   network literature
 ::::
 :::: {.column width=40%}
@@ -262,13 +229,13 @@ MSML610: Advanced Machine Learning
 
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Sigmoid Function}**
+- **Sigmoid Function**
     $$\theta(s) = \frac{1}{1 + \exp(-s)}$$
   - Output range: $[0, 1]$
   - Smooth, differentiable, and used for probabilistic outputs
   - Saturates at extremes (suffers from vanishing gradient)
 
-- **\textcolor{blue}{Hyperbolic Tangent}**
+- **Hyperbolic Tangent**
     $$\theta(s) = \tanh(s) = \frac{e^s - e^{-s}}{e^s + e^{-s}}$$
   - Zero-centered
   - Output range: $[-1, +1]$
@@ -306,7 +273,7 @@ MSML610: Advanced Machine Learning
 
 #### Activation Functions
 
-- **\textcolor{red}{Intuition}**: Map the neuron's input signal $s$ to an output activation value
+- **Intuition**: Map the neuron's input signal $s$ to an output activation value
   $\theta(s)$
   - Approximately linear for small $s$
   - Saturate or threshold for large $|s|$
@@ -315,12 +282,12 @@ MSML610: Advanced Machine Learning
 
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{darkgreen}{ReLU (Rectified Linear Unit)}**:
+- **ReLU (Rectified Linear Unit)**:
   - $\theta(s) = \max(0, s)$
   - Output range: $[0, \infty)$
   - Non-differentiable at $s = 0$; can cause dead neurons
 
-- **\textcolor{blue}{Softplus Function}**:
+- **Softplus Function**:
   - $\theta(s) = \log(1 + \exp(s))$
   - Smooth approximation of ReLU
   - Always differentiable; output in $[0, \infty)$
@@ -357,10 +324,10 @@ MSML610: Advanced Machine Learning
 :::
 
 #### Neural Networks to Compute Boolean Functions
-- **\textcolor{red}{Goal}**: Build \textcolor{blue}{\texttt{AND}}, \textcolor{blue}{\texttt{OR}}, \textcolor{blue}{\texttt{NOT}} functions with linear perceptrons using
+- **Goal**: Build \textcolor{blue}{\texttt{AND}}, \textcolor{blue}{\texttt{OR}}, \textcolor{blue}{\texttt{NOT}} functions with linear perceptrons using
   proper bias and weights
 
-- **\textcolor{darkgreen}{Example}**: \textcolor{blue}{\texttt{AND}} is implemented by a single neuron with 2 inputs $x_1$ and
+- **Example**: \textcolor{blue}{\texttt{AND}} is implemented by a single neuron with 2 inputs $x_1$ and
   $x_2$ and bias
     ```
     x_1   x_2   AND
@@ -375,24 +342,24 @@ MSML610: Advanced Machine Learning
     $$
     Weights are $(w_0, w_1, w_2) = (-3, 2, 2)$
 
-- **\textcolor{blue}{Problem}**: You cannot classify 4 points in a \textcolor{blue}{\texttt{XOR}} position in a plane with
+- **Problem**: You cannot classify 4 points in a \textcolor{blue}{\texttt{XOR}} position in a plane with
   a _single_ perceptron
   - Use two perceptrons to separate two regions of space
   - Then combine the outputs of the 2 perceptrons together
 
 #### Universal Approximation in Feedforward Networks
 
-- **\textcolor{red}{Power of Composition}**
+- **Power of Composition**
   - Connecting perceptrons enables complex functions
   - A network of sufficient size and depth can approximate any (Boolean or
     continuous) function to arbitrary precision
   - Each layer builds on the previous one
 
-- **\textcolor{darkgreen}{Role of Nonlinearity}**
+- **Role of Nonlinearity**
   - Nonlinear activation functions (e.g., sigmoid, tanh, ReLU) are essential
   - Without nonlinearity, layers reduce to a single linear transformation
 
-- **\textcolor{blue}{Example}**
+- **Example**
   - To separate two classes with a circular boundary:
     - Use multiple perceptrons (e.g., 8-16) to approximate the circle with a
       polygon
@@ -413,13 +380,13 @@ MSML610: Advanced Machine Learning
 
 #### Feedforward vs Recurrent Neural Networks
 
-- **\textcolor{red}{Feedforward Neural Networks}**
+- **Feedforward Neural Networks**
   - Information flows in one direction from inputs to outputs without feedback in
     the graph
   - Limited in handling "static" / one-shot dependencies
     - E.g., classifying a handwritten digit from an image
 
-- **\textcolor{blue}{Recurrent Neural Networks (RNNs)}**
+- **Recurrent Neural Networks (RNNs)**
   - Allow cycles in the computational graph (with delays)
     - Each unit can take inputs from its previous output (memory)
     - Process sequences: outputs depend on current and previous inputs
@@ -430,7 +397,7 @@ MSML610: Advanced Machine Learning
 
 #### Structure of Feedforward Neural Network
 
-- **\textcolor{red}{Layered Architecture}**
+- **Layered Architecture**
   - A feedforward network consists of an ordered set of $L+1$ layers, indexed by
     $l$
     1. Input layer ($l = 0$)
@@ -438,7 +405,7 @@ MSML610: Advanced Machine Learning
     3. Output layer ($l = L$)
   - Each layer $l$ contains $d(l)$ units or neurons, and can vary in size
 
-- **\textcolor{blue}{Input Layer}**
+- **Input Layer**
   - $l = 0$
   - Represents the input vector $(x_0, x_1, x_2, ..., x_d)$
   - $x_0 = 1$ acts as the bias input
@@ -451,7 +418,7 @@ MSML610: Advanced Machine Learning
 
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Hidden Layers}**
+- **Hidden Layers**
   - $0 < l < L$
   - Each neuron
     - Includes a bias unit with constant output 1
@@ -460,7 +427,7 @@ MSML610: Advanced Machine Learning
   - Each layer is fully connected
     - Every node in layer $l-1$ connects to every node in layer $l$
 
-- **\textcolor{blue}{Output Layer}**
+- **Output Layer**
   - $l = L$
   - Final layer producing the output vector $\vy$
   - Output can be:
@@ -543,12 +510,12 @@ MSML610: Advanced Machine Learning
 :::
 
 #### Conventions for Neurons in a Neural Network
-- **\textcolor{red}{Definition}**: each neuron $x^{(l)}_j$:
+- **Definition**: each neuron $x^{(l)}_j$:
   - Belongs to a layer with index $l$
   - Accepts inputs from the previous layer (index $i$)
   - Has an index $j$ in the layer for its output
 
-- **\textcolor{blue}{Definition}**: weights are identified by 3 indices $w^{(l)}_{ij}$ where:
+- **Definition**: weights are identified by 3 indices $w^{(l)}_{ij}$ where:
   - $ij$ are organized as input-output
   - $0 \le l \le L$: denotes the layer
   - $0 \le j \le d(l)$: denotes the output of the layer (i.e., the neuron in the
@@ -575,7 +542,7 @@ MSML610: Advanced Machine Learning
 ```
 
 #### Feedforward Propagation Algorithm
-- **\textcolor{red}{Algorithm}**: compute the output $\vx^{(l)}$ of the generic $l$-th layer
+- **Algorithm**: compute the output $\vx^{(l)}$ of the generic $l$-th layer
   1. The outputs of the input layer ($l = 0$) are the inputs of the network
      $$
      \vx^{(0)} = (x^{(0)}_0, x^{(0)}_1, ..., x^{(0)}_{d(0)}) = \vx = (1, x_1, ..., x_d)
@@ -596,7 +563,7 @@ MSML610: Advanced Machine Learning
        classification
 
 #### Vectorized Feedforward Propagation Algorithm
-- **\textcolor{red}{Algorithm}**: vectorize neuron evaluation
+- **Algorithm**: vectorize neuron evaluation
   1. The $j$-th neuron of the $l$-th layer uses the $d(l-1)$ outputs of the
      previous layer to compute its output
      $$
@@ -617,7 +584,7 @@ MSML610: Advanced Machine Learning
      $$
 
 #### Cost Function for Single-Class NN Classification
-- **\textcolor{red}{Definition}**: for binary classification using neural networks, use
+- **Definition**: for binary classification using neural networks, use
   _logistic regression_ cost function with a
   _regularization term_
 
@@ -628,27 +595,27 @@ MSML610: Advanced Machine Learning
   \frac{\lambda}{N} \sum_{j=1}^p \|\vw_j\|^2
   $$
 
-- **\textcolor{blue}{Remark}**: by convention, we don't regularize the bias (i.e., $j$ starts from
+- **Remark**: by convention, we don't regularize the bias (i.e., $j$ starts from
   =1 and not 0), as it is constant and does not affect the minimum $\vw$
 
 #### Multi-output NN for Multi-class Classification
-- **\textcolor{red}{(Naive) Solution}**: one-vs-all approach
+- **(Naive) Solution**: one-vs-all approach
   - Train $n$ models (one per class) to recognize each class
   - Pick the model with the highest probability
   - The output is a one-hot encoding of each class
 
-- **\textcolor{darkgreen}{Example}**
+- **Example**
   - Use 4 output neurons to discriminate pedestrian, car, motorcycle, truck
   - Encode pedestrian = \textcolor{blue}{\texttt{(1, 0, 0, 0)}}
   - Encode car = \textcolor{blue}{\texttt{(0, 1, 0, 0)}}
 
-- **\textcolor{blue}{Solution}**: instead of training $n$ neural networks, train a single neural
+- **Solution**: instead of training $n$ neural networks, train a single neural
   network with an output layer of $n$ nodes
   - Global optimization vs $n$ local optimizations
   - End-to-end learning
 
 #### Cost Function for Multi-Class NN Classification
-- **\textcolor{red}{Definition}**: the loss function for multi-class classification using
+- **Definition**: the loss function for multi-class classification using
   neural networks:
   - encode one-hot
   - the expected outputs $\vy_i$
@@ -665,26 +632,26 @@ MSML610: Advanced Machine Learning
   \end{alignat*}
   $$
 
-- **\textcolor{blue}{Remark}**: avoid to consider the inputs ($l \ne 0$) and the bias terms
+- **Remark**: avoid to consider the inputs ($l \ne 0$) and the bias terms
   ($i \ne 0, j \ne 0$)
 
 #### Issues with Fitting a Neural Networks
 
-- **\textcolor{red}{Generalization}**
+- **Generalization**
   - Match model complexity to data resources
   - High flexibility, so lots of data is needed
   - Overly complex models can overfit if data is insufficient
   - E.g., a deep neural network with millions of parameters requires a large
     dataset to train effectively without overfitting
 
-- **\textcolor{blue}{Optimization}**
+- **Optimization**
   - Several layers of perceptrons with a hard threshold turn the optimization
     problem into a combinatorial one
   - E.g., challenges in finding the global minimum due to the non-convex nature
     of the problem
 
 #### Fitting a Neural Networks for SGD
-- **\textcolor{red}{Solution}**: use Stochastic Gradient Descent (SGD) to determine the
+- **Solution**: use Stochastic Gradient Descent (SGD) to determine the
   weights $\vw$
   - Consider the error on a single example $(\vx, y)$:
     $$
@@ -703,7 +670,7 @@ MSML610: Advanced Machine Learning
     \frac{\partial e(\vw)}{\partial w^{(l)}_{ij}} \; \forall i, j, l
     $$
 
-- **\textcolor{blue}{Problem}**: the entire formula for the hypothesis $h_{\vw}(\vx)$ is very
+- **Problem**: the entire formula for the hypothesis $h_{\vw}(\vx)$ is very
   convoluted:
   - Non-linearity $\theta$ of ...
   - Linear combinations of weights and $\theta$ of ...
@@ -718,28 +685,28 @@ MSML610: Advanced Machine Learning
   \endgroup
 
 #### Computing the Gradient
-- **\textcolor{red}{Goal}**: compute all partial derivatives to get
+- **Goal**: compute all partial derivatives to get
   $$\nabla_{\vw} e(\vw)$$
 
-- **\textcolor{darkgreen}{You can}**:
+- **You can**:
   1. Compute the analytic expression of the derivatives by brute force
   2. Approximate the derivatives numerically by changing each $w^{(l)}_{ij}$ and
      computing the variation of $e$
   3. Use backpropagation to compute the gradient
 
-- **\textcolor{blue}{Backpropagation}** (or "backprop")
+- **Backpropagation** (or "backprop")
   - Very efficient algorithm for computing gradients of the loss function with
     respect to all weights in the network
   - Enables training of multi-layer neural networks via gradient descent
   - Based on the chain rule of calculus
 
-- **\textcolor{violet}{Intuition}**
+- **Intuition**
   - Forward pass computes predictions
   - Backward pass computes how much each weight contributed to the error
   - Adjust weights to reduce future errors
 
 #### Backpropagation in Neural Networks
-- **\textcolor{red}{Algorithm}**:
+- **Algorithm**:
   1. Initialize weights $\vw$ randomly
      - Avoid $\vv{0}$ as it is an unstable equilibrium point
   2. For each iteration
@@ -759,21 +726,21 @@ MSML610: Advanced Machine Learning
        $$
   3. Iterate until termination
 
-- **\textcolor{blue}{Remark}**: the cost function is not convex
+- **Remark**: the cost function is not convex
   - No guarantee of finding the global minimum
 
 #### Backpropagation in Neural Networks
-- **\textcolor{red}{Remark}**: if we want to use batch gradient descent (instead of SGD)
+- **Remark**: if we want to use batch gradient descent (instead of SGD)
   - Accumulate the partial derivatives considering all the examples in the
     training set
   - Update the weights with the accumulated values
 
 #### Gradient Checking
-- **\textcolor{red}{Problem}**: for some algorithms the analytical expression of the gradient
+- **Problem**: for some algorithms the analytical expression of the gradient
   becomes complicated: mistakes are possible
   - E.g., back-propagation in neural networks
 
-- **\textcolor{darkgreen}{Solution}**: one approach is to:
+- **Solution**: one approach is to:
   1. Compute the gradient analytically
   2. Compute the gradient numerically
      $$
@@ -785,22 +752,22 @@ MSML610: Advanced Machine Learning
      - Pick $\varepsilon$ small (e.g., $\varepsilon = 10^{-4}$) but not so small
        to cause too many numerical issues
 
-- **\textcolor{blue}{Remark}**: automatic differentiation packages solve this issue
+- **Remark**: automatic differentiation packages solve this issue
 
 #### Automatic Differentiation
-- **\textcolor{red}{Automatic Differentiation}**
+- **Automatic Differentiation**
   - Computes gradients using calculus rules on numerical programs
   - Applies the chain rule efficiently from output to input
   - Avoids manual gradient derivation for new architectures
 
-- **\textcolor{darkgreen}{Pros}**
+- **Pros**
   - Major deep learning frameworks (e.g., \textcolor{blue}{\texttt{TensorFlow}}, \textcolor{blue}{\texttt{PyTorch}}) implement
     automatic differentiation
   - Enables rapid experimentation with network structures, activation functions,
     and loss functions
   - Frees you from manually re-deriving learning rules
 
-- **\textcolor{blue}{Encourage end-to-end learning}**
+- **Encourage end-to-end learning**
   - Complex tasks (e.g., machine translation) modeled as compositions of
     trainable subsystems
   - Trained on input-output pairs without explicit internal supervision
@@ -812,16 +779,16 @@ MSML610: Advanced Machine Learning
 
 #### Convolutional Neural Networks
 
-- **\textcolor{red}{Motivation}**
+- **Motivation**
   - Feedforward networks don't scale with high-dimensional inputs like images
   - CNNs exploit spatial structure in data
 
-- **\textcolor{darkgreen}{Key Idea}**
+- **Key Idea**
   - Local connectivity leverages adjacent pixels' meaning
   - Weight sharing detects spatially local patterns
   - Convolutions are learnable filters applied across input regions
 
-- **\textcolor{blue}{Basic Components}**
+- **Basic Components**
   - Convolutional layer: applies multiple filters across input
   - Activation function: non-linearity (e.g., ReLU) after convolution
   - Pooling layer (e.g., max pooling): reduces spatial dimensions
@@ -831,27 +798,27 @@ MSML610: Advanced Machine Learning
 
 #### Convolutional Neural Networks
 
-- **\textcolor{red}{Convolutional Layer Mechanics}**
+- **Convolutional Layer Mechanics**
   - _Filter_ (aka _kernel_) is small matrix of weights (E.g., $3 \times 3$)
   - Apply dot product between filter and local patch of input
 
-- **\textcolor{orange}{Weight Sharing}**
+- **Weight Sharing**
   - Each filter is reused across all spatial locations
   - _Spatial invariance_: things detectable in an image should be independent of
     the position in the image
   - Reduces number of parameters and improves generalization
 
-- **\textcolor{darkgreen}{Feature Map}** is the output of a convolutional layer after applying filters
+- **Feature Map** is the output of a convolutional layer after applying filters
   to the input
   - Represents spatial patterns such as edges, textures, or more complex
     features learned by the network
 
-- **\textcolor{teal}{Stacking Convolutions}**
+- **Stacking Convolutions**
   - Multiple layers can detect increasingly abstract features:
     - Early layers detect edges, textures
     - Later layers detect object parts or entire objects
 
-- **\textcolor{cyan}{Example}**
+- **Example**
   - An image of size 32 x 32 x 3 with a 5 x 5 filter creates a 28 x 28 feature
     map (ignoring padding)
 
@@ -878,22 +845,22 @@ MSML610: Advanced Machine Learning
 
 #### Convolutional Neural Networks
 
-- **\textcolor{red}{Pros}**
+- **Pros**
   - Parameter efficiency due to local connectivity and weight sharing
   - Invariant to translation and small distortions in input
   - Scalable to large input sizes
 
-- **\textcolor{darkgreen}{Definition}**: _pooling_ is a downsampling operation that reduces the spatial
+- **Definition**: _pooling_ is a downsampling operation that reduces the spatial
   dimensions (both width and depth) of feature maps
   - Reducing computation
   - Controlling overfitting
   - Making features more translation-invariant
   - Common pooling: max pooling, average pooling
 
-- **\textcolor{blue}{Common Architectures}**
+- **Common Architectures**
   - LeNet, AlexNet, VGG, ResNet
 
-- **\textcolor{violet}{Applications}**
+- **Applications**
   - Vision tasks
     - Image classification
     - Object detection
@@ -906,24 +873,24 @@ MSML610: Advanced Machine Learning
 
 ::: columns
 :::: {.column width=70%}
-- **\textcolor{red}{Motivation for Deep Networks}**
+- **Motivation for Deep Networks**
   - Deeper networks perform better on complex tasks
   - Very deep networks suffer from vanishing/exploding gradient problems
 
-- **\textcolor{orange}{Key Idea}**: Residual Learning
+- **Key Idea**: Residual Learning
   - Learn a residual function $F(x) = H(x) - x$ instead of a direct mapping
     $H(x)$
   - Easier to learn a small change from a function than a new function
 
-- **\textcolor{darkgreen}{Residual Block Structure}**
+- **Residual Block Structure**
   - Each block computes $F(x)$ and outputs $F(x) + x$
   - $x$ is the _shortcut connection_ or _skip connection_
 
-- **\textcolor{teal}{Pros}**
+- **Pros**
   - Enable training of deeper networks (e.g., hundreds of layers)
   - Help gradients flow during backpropagation
 
-- **\textcolor{cyan}{Empirical Success}**
+- **Empirical Success**
   - ResNets outperform plain networks of the same depth
   - Achieved state-of-the-art results on ImageNet and other benchmarks
 ::::
@@ -958,7 +925,7 @@ digraph ResidualBlock {
 ## Recurrent Neural Networks
 
 #### Recurrent Neural Networks (RNNs)
-- **\textcolor{red}{Definition}**: _Recurrent Neural Networks_:
+- **Definition**: _Recurrent Neural Networks_:
   - Process input sequences one element at a time
   - Maintain memory of previous inputs (hidden state)
   - Output depends on current input and previous hidden state
@@ -991,21 +958,21 @@ digraph FeedbackSystem {
 }
 ```
 
-- **\textcolor{blue}{Remark}**: Trained using backpropagation through time
+- **Remark**: Trained using backpropagation through time
 
 #### Recurrent Neural Networks (RNNs)
 
-- **\textcolor{red}{Pros}**
+- **Pros**
   - Designed for sequential data
     - E.g., time series, text
   - Capture temporal dependencies of arbitrary length (in theory)
 
-- **\textcolor{darkgreen}{Cons}**
+- **Cons**
   - Struggle with vanishing gradients
   - Slow training due to sequential processing (no parallelism over time steps)
   - Struggle with long-term memory retention
 
-- **\textcolor{blue}{Examples}**:
+- **Examples**:
   - Time series prediction: Forecast future values based on past observations
   - Language modeling: Predict next word in a sequence
   - Sentiment analysis: Determine sentiment of a sentence by considering
@@ -1013,7 +980,7 @@ digraph FeedbackSystem {
 
 #### Vanishing and Exploding Gradient Problem
 
-- **\textcolor{red}{Problem}**:
+- **Problem**:
   - _Vanishing Gradient_:
     - Gradients become small in early layers during backpropagation
     - Leads to slow or no learning
@@ -1025,36 +992,36 @@ digraph FeedbackSystem {
   - Both issues are caused by repeated multiplication of gradients in the chain
     rule
 
-- **\textcolor{darkgreen}{Solutions}**
+- **Solutions**
   - Normalize inputs
   - Use ReLU or similar activations to mitigate vanishing gradients
   - Apply gradient clipping for exploding gradients
   - Apply batch normalization
 
-- **\textcolor{blue}{Remark}**: These issues motivated architectures like LSTM and ResNet
+- **Remark**: These issues motivated architectures like LSTM and ResNet
 
 #### Long Short-Term Memory (LSTM) Networks
 
 
 
-- **\textcolor{red}{Definition}**: Long Short-Term Memory is an architecture with memory cells and
+- **Definition**: Long Short-Term Memory is an architecture with memory cells and
   several special gates:
   - _Forget gate_: decides what information to discard from the cell state
   - _Input gate_: controls what new information to store
   - _Output gate_: determines what to output from the cell
 
-- **\textcolor{darkgreen}{Pros}**
+- **Pros**
   - Designed to overcome vanishing gradient problem in standard RNNs
   - Captures long-range dependencies through gated memory cells
   - Flexible architecture for learning when to remember or forget
 
-- **\textcolor{blue}{Cons}**
+- **Cons**
   - More complex than RNNs: includes multiple gates and a memory cell
   - Higher computational cost due to increased number of parameters
   - Slower training and inference compared to simpler models (e.g., GRUs)
   - Difficult to parallelize over time steps
 
-- **\textcolor{violet}{Remark}**: especially effective in natural language processing and time
+- **Remark**: especially effective in natural language processing and time
   series tasks
   - E.g., machine translation, speech recognition, and language modeling
 
@@ -1088,25 +1055,25 @@ digraph FeedbackSystem {
 #### Gated Recurrent Units (GRUs)
 
 
-- **\textcolor{red}{Definition}**: Gated Recurrent Unites are alternative to LSTMs for sequential
+- **Definition**: Gated Recurrent Unites are alternative to LSTMs for sequential
   modeling
   - Combine forget and input gates into a single _update gate_
   - Retain essential functionality with fewer components:
     - Update gate controls how much of the past state to keep
     - Reset gate controls how much of the past information to forget
 
-- **\textcolor{darkgreen}{Pros}**
+- **Pros**
   - Requires fewer parameters, leading to faster training
   - Comparable or better performance than LSTM on many tasks
   - Easier to tune and implement
   - Suitable for real-time and low-resource applications
 
-- **\textcolor{blue}{Cons}**
+- **Cons**
   - Less expressive than LSTM for very complex patterns
   - Lacks a separate memory cell, which may limit ability to retain long-term
     information
 
-- **\textcolor{violet}{Example}**
+- **Example**
   - GRUs are preferred in real-time speech recognition systems due to their
     efficiency
 
@@ -1133,18 +1100,18 @@ digraph FeedbackSystem {
 
 #### Techniques for Training Deep Neural Networks
 
-- **\textcolor{red}{Problem}**: deep networks are hard to train for several reasons:
+- **Problem**: deep networks are hard to train for several reasons:
   1. Vanishing/exploding gradients
   2. Training can be slow
   3. Optimization is sensitive to hyperparameters
 
-- **\textcolor{darkgreen}{Momentum}**
+- **Momentum**
   - Modifies gradient descent to accelerate convergence
   - Updates use an exponentially decaying average of past gradients
   - Update rule: $v_t = \beta v_{t-1} + \eta \nabla \theta_t$
   - Helps overcome local minima and reduces oscillations
 
-- **\textcolor{blue}{Adam (Adaptive Moment Estimation)}**
+- **Adam (Adaptive Moment Estimation)**
   - Combines momentum with adaptive learning rates
   - Maintains estimates of both first moment (mean) and second moment
     (uncentered variance) of gradients
@@ -1156,34 +1123,34 @@ digraph FeedbackSystem {
 
 #### Techniques for Training Deep Neural Networks
 
-- **\textcolor{red}{Batch Normalization}**
+- **Batch Normalization**
   - Normalizes the input of each layer to have zero mean and unit variance
   - Computed over each mini-batch:
     $$\hat{x} = \frac{x - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}}$$
   - Introduces learnable parameters $\gamma$ and $\beta$ to scale and shift the
     normalized values
 
-- **\textcolor{blue}{Pros}**
+- **Pros**
   - Reduces internal covariate shift
   - Enables higher learning rates
   - Acts as a regularizer, reducing need for dropout
 
 #### Regularization in Neural Networks
-- **\textcolor{red}{Goal}**: (soft) weight elimination
+- **Goal**: (soft) weight elimination
   - Fewer weights $\implies$ smaller VC dimension
   - Remove neurons (push weights towards 0)
 
-- **\textcolor{darkgreen}{Remark}**: Regardless of activation function (e.g., \textcolor{blue}{\texttt{tanh}}), small weight
+- **Remark**: Regardless of activation function (e.g., \textcolor{blue}{\texttt{tanh}}), small weight
   means linear regime, large weight means binary regime
 
-- **\textcolor{blue}{(Naive) Solution}**: using a normal regularization
+- **(Naive) Solution**: using a normal regularization
   $$
   \Omega(\vw) = \sum_{i,j,l} (w^{(l)}_{ij})^2
   $$
   - Cons: a neuron in binary regime is penalized more than many neurons in
     linear regime
 
-- **\textcolor{violet}{Solution}**: so for neural networks use a regularizer as:
+- **Solution**: so for neural networks use a regularizer as:
   $$
   \Omega(\vw) = \lambda \sum_{i, j, l} \frac{(w^{(l)}_{ij})^2}{\beta^2 + (w^{(l)}_{ij})^2}
   $$
@@ -1193,51 +1160,51 @@ digraph FeedbackSystem {
 ## Deep Learning for NLP
 
 #### NLP Tasks
-- **\textcolor{red}{Part-of-speech (POS) tagging}**
+- **Part-of-speech (POS) tagging**
   - Assign a POS (e.g., noun, verb, adjective) to each word in a sentence 
   - Need: labelled data
 
-- **\textcolor{orange}{Co-reference resolution}**
+- **Co-reference resolution**
   - E.g., _"Mike told that John was sick, so I took him to the hospital"_
     - Who does _"him"_ refer to?
     - _"John"_ with high probability
   - The output is a distribution over possible antecedents
   - Need: labelled data
 
-- **\textcolor{darkgreen}{Sentiment analysis}**
+- **Sentiment analysis**
   - Classify a text as having positive or negative sentiment
     - E.g., "the movie was poorly written and acted" $\to$ negative
   - Need: nothing in theory
 
-- **\textcolor{teal}{Machine translation}**
+- **Machine translation**
   - Translate a sentence from a source language to a target language
     - E.g., from Spanish to English
   - Need: large corpus of source/target sentence pairs
 
-- **\textcolor{cyan}{Information extraction}**
+- **Information extraction**
   - Extract structured information from unstructured text
 
-- **\textcolor{blue}{Named entity recognition}** (NER)
+- **Named entity recognition** (NER)
   - Identify and classify named entities (e.g., people, organizations, locations)
     in text
 
 #### Part-of-speech (POS) Tagging
-- **\textcolor{red}{Example}**
+- **Example**
   - Input: _"The dog barks loudly"_
   - Output: \textcolor{blue}{\texttt{Determiner (DT), Noun (NN), Verb (VB), Adverb (RB)}}
 
-- **\textcolor{darkgreen}{Techniques}**
+- **Techniques**
   - _Rule-based_: hand-crafted grammar rules
   - _Statistical_: models (e.g., Hidden Markov Models)
   - _Machine Learning_: classifiers (e.g., SVM)
   - _Neural Networks_: LSTM, BiLSTM, or Transformers
 
-- **\textcolor{blue}{Problems}**
+- **Problems**
   - _Ambiguity_: "can" can be a verb or a noun
   - _Context-dependency_: Tags depend on the surrounding words
 
 #### NLP Using Rules-Based Systems
-- **\textcolor{red}{(Naive) Solution}**: systems based on rules for parsing and semantic
+- **(Naive) Solution**: systems based on rules for parsing and semantic
   analysis
   - Cons: performance limited by linguistic complexity
     - E.g., _"cut"_ can be a verb or a noun
@@ -1245,14 +1212,14 @@ digraph FeedbackSystem {
       - Transitive or intransitive
       - The meaning depends on the context
 
-- **\textcolor{blue}{Solution}**: vast amount of text in machine-readable form $\to$ use
+- **Solution**: vast amount of text in machine-readable form $\to$ use
   data-driven ML approach
 
 #### The Bitter Lesson
-- **\textcolor{red}{Fact}**: _"General methods leveraging computation ultimately outperform
+- **Fact**: _"General methods leveraging computation ultimately outperform
   human-knowledge-based systems"_, Sutton (2019)
 
-- **\textcolor{darkgreen}{Key Observation}**
+- **Key Observation**
   - Human-designed heuristics and domain knowledge tend to lose
   - General-purpose learning algorithms that scale with computation tend to win
   - E.g.,
@@ -1261,26 +1228,26 @@ digraph FeedbackSystem {
     - Vision: feature-engineered models replaced by end-to-end trained
       convolutional networks
 
-- **\textcolor{blue}{Why "Bitter"?}**
+- **Why "Bitter"?**
   - Humans like to inject knowledge into systems
   - But machines learn better when allowed to discover patterns from data
     themselves
 
 #### The Bitter Lesson
-- **\textcolor{red}{Implications}**
+- **Implications**
   - Invest in scalable methods over handcrafted knowledge
   - Embrace compute-heavy solutions that learn from data
   - Focus on architectures that can generalize across domains
   - Accept that performance gains come from scaling data and compute
 
-- **\textcolor{blue}{Controversy}**
+- **Controversy**
   - Seen by some as dismissive of domain expertise and symbolic methods
   - Encourage a shift toward empirical and data-driven AI research
 
 #### Word Representation
-- **\textcolor{red}{Goal}**: create representation of words for NLP tasks
+- **Goal**: create representation of words for NLP tasks
 
-- **\textcolor{darkgreen}{Requirements}**:
+- **Requirements**:
   - No manual feature engineering (not scalable)
   - Allow for generalization between related words
     - Syntactically: "colorless" and "ideal" are both adjectives
@@ -1288,7 +1255,7 @@ digraph FeedbackSystem {
     - Topically: "sunny" and "rainy" are both weather terms
     - Sentiment: "awesome" and "cringeworthy" are opposite
 
-- **\textcolor{blue}{Solutions}**:
+- **Solutions**:
   1. Encode a word into an input vector (e.g., one-hot vector)
      - Cons: doesn't capture similarity between words
   2. Represent as a vector of n-gram counts
@@ -1301,57 +1268,57 @@ digraph FeedbackSystem {
      - E.g., 100 dimensions
 
 #### Word Embeddings: Emerging Properties
-- **\textcolor{red}{Fact}**: similar words have similar word embeddings
+- **Fact**: similar words have similar word embeddings
   - Words tend to cluster based on their topics
 
-- **\textcolor{darkgreen}{Fact}**: difference between embeddings of related words seems to have a
+- **Fact**: difference between embeddings of related words seems to have a
   meaning
   - E.g., negative, plural, superlative, past tense are "vectors" in embedding
     space
   - E.g., \textcolor{blue}{\texttt{Greece}} - \textcolor{blue}{\texttt{Athens}} = country/capital relationship
 
-- **\textcolor{blue}{Remark}**: these properties are:
+- **Remark**: these properties are:
   - Not enforced
   - Approximate
   - Emergent
 
 #### Word Embeddings: Pretrained vs Custom
-- **\textcolor{red}{Remark}**: word embeddings can be used independently of the task
+- **Remark**: word embeddings can be used independently of the task
   - Can pretrain and reuse them
     - Word2vec
     - GloVe (global vectors)
     - FastText
 
-- **\textcolor{blue}{Remark}**: for some tasks better to learn word embeddings end-to-end with
+- **Remark**: for some tasks better to learn word embeddings end-to-end with
   the task
   - E.g., POS tagging: the same word needs to be represented in different ways
     - E.g., _"cut"_ can be verb or noun $\to$ multiple semantic embeddings
 
 #### Language Models
-- **\textcolor{red}{Problem}**:
+- **Problem**:
   - Word embedding are a good representation for words in isolation
   - Language consists of sequence of words where the context of each word is
     important
   - E.g., in _"Michael told me that John was sick, so I took him to the
     hospital"_, _"him"_ can refer to multiple people
 
-- **\textcolor{darkgreen}{Definition}**: a _language model_ is a probability distribution of sequences
+- **Definition**: a _language model_ is a probability distribution of sequences
   of words
   - I.e., predict the next word in a text given all the previous words
   - Supervised learning on enormous amount of data
 
-- **\textcolor{blue}{Question}**: how to learn a language model?
+- **Question**: how to learn a language model?
   1. Feedforward neural network
   2. Recurrent neural network
   3. Transformer architecture
 
 #### Feedforward Network for Language Models
-- **\textcolor{red}{Learning set-up}**:
+- **Learning set-up**:
   - Large feedforward network
   - Fixed-size context window of $n$ words
   - Word embeddings
 
-- **\textcolor{blue}{Problems}**:
+- **Problems**:
   1. _Context_ might need to be very long
      - Not all the words are important
      - E.g., a sentence with 20 words requires a large number of parameters if
@@ -1383,10 +1350,10 @@ digraph FeedbackSystem {
 ```
 
 #### RNNs for Language Models
-- **\textcolor{red}{Intuition}**: RNNs process sequence of data, one piece of data at a time
+- **Intuition**: RNNs process sequence of data, one piece of data at a time
   - Process language, one word at a time
 
-- **\textcolor{blue}{Architecture}**
+- **Architecture**
   1. Each input word is encoded as word embedding vector
   2. A hidden layer gets the previous state and the new word
      - Allocate storage space for features of inputs useful for the task
@@ -1408,7 +1375,7 @@ digraph FeedbackSystem {
 ```
 
 #### RNNs for Language Models: Pros and Cons
-- **\textcolor{red}{Pros}**:
+- **Pros**:
   - Context too long:
     - The number of parameters is constant independently of the context (i.e.,
       n-grams)
@@ -1416,7 +1383,7 @@ digraph FeedbackSystem {
     - No problem of asymmetry since the weights are the same for every word
       position
 
-- **\textcolor{blue}{Cons}**:
+- **Cons**:
   - Can be difficult to train
     - Solution: Use transformers
   - Solve the context problem, but only in theory
@@ -1426,29 +1393,29 @@ digraph FeedbackSystem {
     - Solution: Use LSTMs
 
 #### Sequence-to-Sequence Models
-- **\textcolor{red}{Definition}**: Seq-to-Seq learn to transform sequences of differing lengths
+- **Definition**: Seq-to-Seq learn to transform sequences of differing lengths
   and structures
   - Training is supervised with input-output sequence pairs
 
-- **\textcolor{darkgreen}{Examples}**
+- **Examples**
   - Machine translation
   - Text summarization
   - Speech recognition
 
-- **\textcolor{blue}{Remark}**: models are composed of two main components:
+- **Remark**: models are composed of two main components:
   - _Encoder_: Compress information from input sequence into a fixed-size context
     vector
   - _Decoder_: Generates output sequence from the context vector
   - Both encoder and decoder are typically RNNs (e.g., LSTM or GRU)
 
-- **\textcolor{violet}{Limitations}**:
+- **Limitations**:
   // TODO(ai_gp): The following is unclear, explain better
   - Fixed-size context vector can become a bottleneck for long sequences
   - Attention mechanisms so decoder can access all encoder states
 
 
 #### Sequence-to-Sequence Attention
-- **\textcolor{red}{Intuition}**
+- **Intuition**
   - Instead of processing input sequentially (like RNNs), attention processes all
     simultaneously
   - Each token can "look at" others and decide which are most important
@@ -1457,14 +1424,14 @@ digraph FeedbackSystem {
   - It's like context-based summarization of the source sentence into a
     fixed-dimensional representation
 
-- **\textcolor{blue}{Motivation}**
+- **Motivation**
   - Enables models to focus on relevant parts of the input sequence
   - Mimics human cognitive attention by weighting important information
 
 #### Sequence-to-Sequence Attention
 ::: columns
 :::: {.column width=65%}
-- **\textcolor{red}{Definition}**: if the RNN model is
+- **Definition**: if the RNN model is
   $\vh_i = RNN(\vh_{i-1}, \vx_i)$
 
 - The sequence-to-sequence attention is the concatenation of
@@ -1494,17 +1461,17 @@ digraph FeedbackSystem {
 
 
 #### Types of Attention
-- **\textcolor{red}{Self-Attention}**: Each input attends to all inputs, including itself
+- **Self-Attention**: Each input attends to all inputs, including itself
   - Useful for capturing dependencies within a single sequence
   - E.g., in language models, each word can attend to all other words in a
     sentence
 
-- **\textcolor{darkgreen}{Cross-Attention}**: One sequence attends to another
+- **Cross-Attention**: One sequence attends to another
   - Facilitates the interaction between different sequences
   - E.g., in machine translation, the target language sequence attends to the
     source language sequence
 
-- **\textcolor{blue}{Multi-Head Attention}**
+- **Multi-Head Attention**
   - Applies attention multiple times in parallel (with different linear
     projections)
   - The results are concatenated together to form $\vc_i$
@@ -1515,7 +1482,7 @@ digraph FeedbackSystem {
     relationships)
 
 #### Attention: Vectorized Formula
-- **\textcolor{red}{Definition}**: compute a weighted sum of values ($V$) using weights
+- **Definition**: compute a weighted sum of values ($V$) using weights
   derived from queries ($Q$) and keys ($K$)
   $$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
   where:
@@ -1525,7 +1492,7 @@ digraph FeedbackSystem {
   - $d_k$: dimensionality of the key vectors
   - $QK^T$: dot products between each query and all keys (shape: $n_q \times n_k$)
 
-- **\textcolor{darkgreen}{Steps}**:
+- **Steps**:
   1. _Dot Product_: Compute similarity between each query and all keys
      - $QK^T$ produces attention scores
   2. _Scaling_: Divide scores by $\sqrt{d_k}$
@@ -1534,21 +1501,21 @@ digraph FeedbackSystem {
      - Converts scores into a probability distribution (attention weights)
   4. _Weighted Sum_: Multiply weights by $V$ to produce context vectors
 
-- **\textcolor{blue}{Pros}**
+- **Pros**
   - Parallelizable computation
   - Better handling of long-range dependencies than RNNs
 
 #### Sequence-to-Sequence: Decoding
-- **\textcolor{red}{Goal}**: training a sequence-to-sequence model requires to:
+- **Goal**: training a sequence-to-sequence model requires to:
   - Maximize the probability of each word in the target training sentence
   - Conditioned on the source and previous target words
 
-- **\textcolor{darkgreen}{Remark}**: at inference time:
+- **Remark**: at inference time:
   - Given a source sentence
   - Generate the target word one at a time
   - Feed back the target word for the next time step
 
-- **\textcolor{blue}{Greedy Decoding}**
+- **Greedy Decoding**
   - Pick the next word that has the highest probability
   - _Pros_
     - Fast
@@ -1557,7 +1524,7 @@ digraph FeedbackSystem {
     - Greedy decoding doesn't have a mechanism to correct a mistake
     - Many times the model needs to see what comes next
 
-- **\textcolor{violet}{Beam Search}**:
+- **Beam Search**:
   - Keep the top $k$ hypotheses at each stage
   - Choose the hypothesis with the best score
 
@@ -1567,13 +1534,13 @@ digraph FeedbackSystem {
     - E.g., BERT, GPT, T5, and others
   - Enables scalability and parallelization
 
-- **\textcolor{red}{Self-attention}**
+- **Self-attention**
   - Eliminates recurrence by processing sequences in parallel
   - Model long-distance context without a sequential dependency
   - Multi-head attention to capture different aspects of relationships between
     tokens
 
-- **\textcolor{darkgreen}{Transformer layer}**
+- **Transformer layer**
   - Transformer has many (6 or more) transformer layers
   - Each layer has
     - Self-attention
@@ -1582,7 +1549,7 @@ digraph FeedbackSystem {
     - Residual connection
 
 
-- **\textcolor{blue}{Positional embedding}**
+- **Positional embedding**
   - Transformer architecture has no inherent way to capture token order in
     sequences
   - Add "positional embeddings" to input embeddings to provide information about
@@ -1605,11 +1572,12 @@ digraph FeedbackSystem {
   hand-labeled images (e.g., ImageNet)
 
 #### Masked Language Models
-- **\textcolor{red}{Remark}**: word prediction in language models are made left-to-right
-- **\textcolor{darkgreen}{Problem}**: sometimes the context comes later in the context
+- **Remark**: word prediction in language models are made left-to-right
+- **Problem**: sometimes the context comes later in the context
   - E.g., "the river rose five feet"
 
-- **\textcolor{blue}{Solution}**: train models using masking a word and predicting it
+- **Solution**: train models using masking a word and predicting it
   - E.g., "the river _______ five feet"
 
-- **\textcolor{violet}{Remark}**: the sentence provides its own labels
+- **Remark**: the sentence provides its own labels
+

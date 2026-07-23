@@ -21,12 +21,12 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{09.2: Apache Spark: Primitives}}$$**
+**$$\text{\textcolor{blue}{\text{09.2: Apache Spark: Primitives}}}$$**
 \endgroup
 
 ::: columns
 :::: {.column width=75%}
-- **Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+- **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
 - **References**:
   - Key concepts discussed in the slides
@@ -45,7 +45,7 @@ UMD DATA605 - Big Data Systems
 #### Transformations vs Actions
 ::: columns
 :::: {.column width=45%}
-- **\textcolor{red}{Transformations}**
+- **Transformations**
   - Transform a Spark RDD into a new RDD without modifying input data
   - Immutability like functional programming
   - E.g., \textcolor{blue}{\texttt{select()}}, \textcolor{blue}{\texttt{filter()}}, \textcolor{blue}{\texttt{join()}}, \textcolor{blue}{\texttt{orderBy()}}
@@ -56,13 +56,13 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- Transformations are **\textcolor{darkgreen}{evaluated lazily}**
+- Transformations are **evaluated lazily**
   - Spark optimizes the computation by analyzing the workload
     - E.g., joining, pipeline operations, breaking into stages
   - Record results as "lineage"
     - The sequence of stages is rearranged and optimized without changing the results
 
-- **\textcolor{blue}{Actions}**
+- **Actions**
   - Trigger computation evaluation
   - E.g., \textcolor{blue}{\texttt{show(), take(), count(), collect(), save()}}
 
@@ -141,7 +141,7 @@ _MapReduce in 1 (show-off) line_
   - Return a new RDD with the intersection of elements in the source dataset and
     the argument
 
-From [\textcolor{blue}{\underline{here}}](https://spark.apache.org/docs/latest/rdd-programming-guide.html)
+From [here](https://spark.apache.org/docs/latest/rdd-programming-guide.html)
 
 #### Spark Transformations: 2 / 3
 - \textcolor{blue}{\texttt{join(otherDataset, [numTasks])}}
@@ -177,14 +177,14 @@ From [\textcolor{blue}{\underline{here}}](https://spark.apache.org/docs/latest/r
   - Return an array with the first \textcolor{blue}{\texttt{n}} dataset elements
   - \textcolor{blue}{\texttt{.collect()[:n]}} differs from \textcolor{blue}{\texttt{.take(n)}}
 
-- From [\textcolor{blue}{\underline{here}}](https://spark.apache.org/docs/latest/rdd-programming-guide.html)
+- From [here](https://spark.apache.org/docs/latest/rdd-programming-guide.html)
 
 #### Spark: Fault-tolerance
 ::: columns 
 :::: {.column width=50%}
 - Spark leverages _immutability_ and _lineage_ for fault tolerance
 
-- In case of **\textcolor{red}{failure}**
+- In case of **failure**
   - Reproduce RDD by replaying the lineage
   - Checkpoints aren't needed 
   - Keep data in memory for increased performance
@@ -199,7 +199,7 @@ From [\textcolor{blue}{\underline{here}}](https://spark.apache.org/docs/latest/r
 #### Spark: RDD Persistence
 ::: columns
 :::: {.column width=60%}
-- **\textcolor{red}{Users explicitly cache an RDD}**
+- **Users explicitly cache an RDD**
   - I.e., \textcolor{blue}{\texttt{persist()}}, \textcolor{blue}{\texttt{unpersist()}}
   - Cache if RDD is expensive to compute
     - E.g., filtering large data
@@ -213,11 +213,11 @@ From [\textcolor{blue}{\underline{here}}](https://spark.apache.org/docs/latest/r
 ::::
 :::
 
-- **\textcolor{darkgreen}{Cache}**
+- **Cache**
   - Enhances speed of future actions (often by >10x)
   - Managed by Spark using LRU policy + garbage collector
 
-- **\textcolor{blue}{Users can choose the storage level}**
+- **Users can choose the storage level**
   - \textcolor{blue}{\texttt{MEMORY\_ONLY}} (default)
   - \textcolor{blue}{\texttt{DISK\_ONLY}} (e.g., Python Pickle)
   - \textcolor{blue}{\texttt{MEMORY\_AND\_DISK}}
@@ -230,7 +230,7 @@ From [\textcolor{blue}{\underline{here}}](https://spark.apache.org/docs/latest/r
 :::: {.column width=55%}
 - Spark unifies persistence and fault-tolerance through RDD lineage
 
-- **\textcolor{red}{Caching and Persistence}**
+- **Caching and Persistence**
   - Store RDDs in memory or disk to avoid repeated computation
   - Useful for iterative algorithms and interactive queries
   - E.g., \textcolor{blue}{\texttt{cache()}} (memory only) or \textcolor{blue}{\texttt{persist()}} (custom storage level)
@@ -240,12 +240,12 @@ From [\textcolor{blue}{\underline{here}}](https://spark.apache.org/docs/latest/r
 ::::
 :::
 
-- **\textcolor{darkgreen}{Fault-Tolerance Mechanism}**
+- **Fault-Tolerance Mechanism**
   - RDDs are immutable and record lineage of transformations
   - If a partition is lost, Spark reconstructs it using lineage
   - No need to checkpoint unless lineage is too long
 
-- **\textcolor{blue}{Persistence is Fault-Tolerant}**
+- **Persistence is Fault-Tolerant**
   - Cached RDDs can be recomputed from lineage if data is lost
   - Ensures recovery without manual intervention
 
@@ -253,20 +253,20 @@ From [\textcolor{blue}{\underline{here}}](https://spark.apache.org/docs/latest/r
 ::: columns
 :::: {.column width=60%}
 - Certain Spark operations trigger a data shuffle
-- E.g., **\textcolor{red}{reduceByKey()}**
+- E.g., **reduceByKey()**
   - Combine values \textcolor{blue}{\texttt{[v1, ..., vn]}} for key \textcolor{blue}{\texttt{k}} into \textcolor{blue}{\texttt{(k, v)}} where
     \textcolor{blue}{\texttt{v = reduce(v1, ..., vn)}}
   - Values for a key must be on the same partition/machine
 
-- **\textcolor{darkgreen}{Data shuffle}** = re-distribute data across partitions/machines
+- **Data shuffle** = re-distribute data across partitions/machines
 
-- **\textcolor{blue}{Data shuffle is expensive}** because of:
+- **Data shuffle is expensive** because of:
   - Data serialization (pickle)
   - Disk I/O (saving to disk)
   - Network I/O (copying across Executors)
   - Deserialization and memory allocation
 
-- **\textcolor{violet}{Spark schedules general task graphs}**
+- **Spark schedules general task graphs**
   - Automatic function pipelining
   - Data locality aware
   - Partitioning aware to avoid shuffles
@@ -279,15 +279,15 @@ From [\textcolor{blue}{\underline{here}}](https://spark.apache.org/docs/latest/r
 :::
 
 #### Broadcast Variables
-- **\textcolor{red}{Challenge}**
+- **Challenge**
   - Sending common variables to nodes with code can be costly
   - Involves serialization, network transfer, deserialization
   - Sending large, constant data repeatedly increases costs
 
-- **\textcolor{darkgreen}{Solution}**
+- **Solution**
   - Cache read-only variables on each node, to avoid repeated transfers
 
-- **\textcolor{blue}{Example}**
+- **Example**
   \small
   ```python
   # \textcolor{blue}{\texttt{var}} is large variable.
@@ -299,17 +299,17 @@ From [\textcolor{blue}{\underline{here}}](https://spark.apache.org/docs/latest/r
   ```
 
 #### Spark: Accumulators
-- **\textcolor{red}{Accumulator}** is a shared variable used for aggregating values across tasks
+- **Accumulator** is a shared variable used for aggregating values across tasks
   - Updated using associative and commutative operations (e.g., sum, max)
   - Efficient in parallel systems like MapReduce
 
-- **\textcolor{darkgreen}{Usage Example}**
+- **Usage Example**
   - Accumulator initialized on the driver
   - Updated inside transformations (e.g., \textcolor{blue}{\texttt{foreach}}) across workers
   - Value is collected back to the driver
   - Accumulator only guaranteed to update once per action
 
-- **\textcolor{blue}{Example}**
+- **Example**
   \small
   ```python
   >>> accum = sc.accumulator(0)
@@ -319,14 +319,14 @@ From [\textcolor{blue}{\underline{here}}](https://spark.apache.org/docs/latest/r
   ```
 
 #### Spark vs Hadoop MapReduce
-- **\textcolor{red}{Performance}**: Spark faster
+- **Performance**: Spark faster
   - Processes data in-memory
   - Outperforms MapReduce, needs lots of memory
   - Hadoop MapReduce persists to disk after actions
 
-- **\textcolor{darkgreen}{Ease of use}**: Spark easier to program
+- **Ease of use**: Spark easier to program
 
-- **\textcolor{blue}{Data processing}**: Spark more general
+- **Data processing**: Spark more general
 
 #### Gray Sort Competition
 \begingroup \scriptsize
@@ -346,4 +346,4 @@ From [\textcolor{blue}{\underline{here}}](https://spark.apache.org/docs/latest/r
   - Spark-based System 3x faster with 1/10 the number of nodes
   - Speed up is ~30x
 
-- [\textcolor{blue}{\underline{Ref}}](http://databricks.com/blog/2014/11/05/spark-officially-sets-a-new-record-in-large-scale-sorting.html)
+- [Ref](http://databricks.com/blog/2014/11/05/spark-officially-sets-a-new-record-in-large-scale-sorting.html)

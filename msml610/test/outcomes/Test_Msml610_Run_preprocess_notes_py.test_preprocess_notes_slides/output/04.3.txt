@@ -5,57 +5,14 @@ fontsize: 10pt
 \let\uline\underline
 \let\ul\underline
 
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 04.3: Machine Learning Models}}$$**
-\endgroup
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
-
-- Burkov: _"Machine Learning Engineering"_ (2020)
-
-- Hastie et al.: _"The Elements of Statistical Learning"_ (2nd ed, 2009)
-
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book.jpg){ height=20% }
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_The_Elements_of_Statistical_Learning.jpg){ height=20% }
-
-::::
-:::
-
-
-
 ## Similarity-Based Models
 
 #### Similarity-Based Models: Intuition
-- **\textcolor{red}{Idea}**: the model evaluated in one point $h(\vx)$ is affected by:
+- **Idea**: the model evaluated in one point $h(\vx)$ is affected by:
   - Other data points in the training set $(\vx_n, y_n) \in \calD$
   - The effect is based on the distance $d(\vx, \vx_n) = \|\vx - \vx_n\|$
 
-- The model is a **\textcolor{blue}{superposition of effects}**
+- The model is a **superposition of effects**
   - Sum of the effect of each point in the training set, scaled down by the
     distance
     $$
@@ -86,7 +43,7 @@ MSML610: Advanced Machine Learning
 #### Radial Basis Function Model for Regression
 - Aka RBF
 
-- The model form for **\textcolor{red}{regression}** is:
+- The model form for **regression** is:
   $$
   h(\vx) = \sum_{i=1}^{N} w_i \exp(-\gamma \|\vx - \vx_i\| ^2)
   $$
@@ -98,7 +55,7 @@ MSML610: Advanced Machine Learning
 
 
 #### Radial Basis Function Model for Classification
-- For **\textcolor{red}{classification}** use a similar approach to "linear regression for
+- For **classification** use a similar approach to "linear regression for
   classification"
   - Fit a regression model:
     $$
@@ -135,10 +92,10 @@ MSML610: Advanced Machine Learning
 - RBF has lots of parameters
   - Parameters $\vw$ equal data points $N$ (e.g., $N = 10^{9}$)
   - One parameter $w_i$ per training point (e.g., $N = 10^6$)
-  - **\textcolor{red}{Cons}**: Negative impact on generalization error
+  - **Cons**: Negative impact on generalization error
 
 #### RBF: Reducing Model VC Dimension
-- **\textcolor{red}{To reduce number of parameters}**
+- **To reduce number of parameters**
   - Pick $K \ll N$ centers $\vmu_1, ... , \vmu_K$ instead of
     $\vx_1, ... , \vx_N$
     - Use $k$-means clustering to find centers
@@ -148,17 +105,17 @@ MSML610: Advanced Machine Learning
     h(\vx) = \sum_{i=1}^{K} w_i \exp (-\gamma \|\vx - \vmu_i\|^2)
     $$
 
-- **\textcolor{blue}{Still many parameters}** because:
+- **Still many parameters** because:
   - $K$ (scalar) weights $w_k$
   - $K$ reference points $\vmu_k$ ($d$-dimensional vectors)
 
 #### RBF: Learning Models (1/2)
-- **\textcolor{red}{Learn}** $w_i, \gamma$, with fixed centers $\vmu_i$, for an RBF model:
+- **Learn** $w_i, \gamma$, with fixed centers $\vmu_i$, for an RBF model:
   $$
   h(\vx) = \sum_{i=1}^{K} w_i \exp (-\gamma \|\vx - \vmu_i\|^2)
   $$
 
-- **\textcolor{blue}{Minimize:}**
+- **Minimize:**
   $$
   E_{in} = \sum_i (h_{\vw, \gamma}(\vx_i) - y_i)^2 = f(\vw, \gamma)
   $$
@@ -169,13 +126,13 @@ MSML610: Advanced Machine Learning
   - Fix $\gamma$, solve for $\vw$ (one-step learning)
   - Fix $\vw$, solve for $\gamma$ (gradient descent)
 
-- **\textcolor{red}{Step 1}**
+- **Step 1**
   - Assume $\gamma$ is known and fixed
   - Learn $\vw$
 
 - Impose perfect interpolation:
   $$E_{in} = \frac{1}{n} \sum (h(\vx_i) - y_i)^2 = 0$$
-- **\textcolor{blue}{Problem}**:
+- **Problem**:
   $$
   h(\vx_j)
   = \sum_i w_i \exp(-\gamma \|\vx_i - \vx_j\| ^2)
@@ -198,37 +155,37 @@ MSML610: Advanced Machine Learning
     - Assign weights:
       $$\vw = (\mat{\Phi}^T \mat{\Phi})^{-1} \mat{\Phi}^T \vy$$
 
-- **\textcolor{red}{Step 2}**
+- **Step 2**
   - Assume $\vw$ is known and fixed
   - Learn $\gamma$
 
 #### RBF Network vs Neural Networks
-- The regression model for Neural Networks and RBF model is **\textcolor{red}{similar}**:
-  - **\textcolor{orange}{RBF}**:
+- The regression model for Neural Networks and RBF model is **similar**:
+  - **RBF**:
     $$
     h(\vx)
     = \sum_i w_i e^{-\gamma \|\vx - \vx_i\|^2}
     = \vw^T \vv{\vphi}
     $$
-  - **\textcolor{darkgreen}{Neural networks}**:
+  - **Neural networks**:
     $$
     h(\vx)
     = \Theta(\vw^{(L)T} \vx^{(L)})
     = \Theta(\vw^{(L)T} \vv{\Theta}(\mW^{(L-1)} ...))
     $$
 
-- **\textcolor{teal}{Difference}**:
+- **Difference**:
   - RBF has a single layer
   - Neural networks have multiple layers
 
-- **\textcolor{cyan}{Similarities}**:
+- **Similarities**:
   - Combine features with weights using dot product
   - Extract features from inputs
     - RBF features: $e^{-\gamma \|\vx - \vx_i\|^2}$, always $> 0$
     - NN hidden layers: features can be $> 0$ or $< 0$
 
 #### RBF Network vs SVM
-- The **\textcolor{red}{model form}** is the same:
+- The **model form** is the same:
   - RBF:
     $$h(\vx) = \sign(\sum_i w_i e^{-\gamma \|\vx - \vx_i\|^2}$$
   - SVM:
@@ -239,7 +196,7 @@ MSML610: Advanced Machine Learning
   - SVM: only support vectors contribute to the model
 
 #### K-Nearest Neighbor (KNN) Model
-- The **\textcolor{red}{model form}** is like:
+- The **model form** is like:
   $$
   h_{\vw}(\vx) = \frac{1}{n} \sum_{\vx_i \text{closest to } \vx} w_i
   $$
@@ -247,7 +204,7 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=60%}
 
-- **\textcolor{blue}{Idea}**:
+- **Idea**:
   - Closeness implies a distance (e.g., euclidean metric) or similarity (e.g., a
     kernel)
   - Consider the $k$ closest points to the evaluation point $\vx$
@@ -270,7 +227,7 @@ MSML610: Advanced Machine Learning
   - Similar to Voronoi tessellations: each point has a region where it is the
     closest and assigns its output to that region
 
-- $k$ is **\textcolor{red}{the only parameter}** for KNN
+- $k$ is **the only parameter** for KNN
   - For $k = 1$ $\implies$ $N$ neighborhoods, one around each training point
   - For $k = N$ $\implies$ single neighborhood
   - Effective number of parameters: $\frac{N}{k}$, imagining $N / k$
@@ -285,10 +242,10 @@ MSML610: Advanced Machine Learning
 :::
 
 #### KNN: Assumptions on the Data
-- KNN makes **\textcolor{red}{no assumption on data}**
+- KNN makes **no assumption on data**
   - Opposite of linear model with strong data assumption
 
-- KNN assumes **\textcolor{blue}{locality in parameter space}**
+- KNN assumes **locality in parameter space**
   - Model is constant in example's neighborhood
   - E.g., $k = 1$: Voronoi tessellation (low-bias/high-variance)
   - E.g., $k = N$: Average value (high-bias/low-variance)
@@ -304,10 +261,10 @@ MSML610: Advanced Machine Learning
   - Typical model complexity behavior in bias-variance diagrams
 
 #### KNN vs RBF Models
-- **\textcolor{red}{Similarities}**
+- **Similarities**
   - K-Nearest Neighbor is a _discrete_ version of the RBF model
 
-- **\textcolor{blue}{Differences:}**
+- **Differences:**
   - Consider only the $k$ _closest examples_ to the point $\vx$ (not all
     examples in the training set)
   - Use a _constant kernel_ (responses are not weighted by distance)
@@ -335,21 +292,21 @@ MSML610: Advanced Machine Learning
   \end{alignat*}
   \vspace{-1cm}
 
-- **\textcolor{red}{K-means clustering is NP-hard}** (combinatorial) and thus intractable
+- **K-means clustering is NP-hard** (combinatorial) and thus intractable
   - In fact there are $K^N$ possible assignments
 
 #### K-Means Clustering: Lloyd's Algorithm
-- **\textcolor{red}{Start with a random assignment}** of $N$ points to $K$ clusters
+- **Start with a random assignment** of $N$ points to $K$ clusters
   - Better than picking random centroids
 
-- **\textcolor{darkgreen}{Each iteration}** has 2 steps
+- **Each iteration** has 2 steps
 
-  - **\textcolor{blue}{Step 1}**: Move centroid
+  - **Step 1**: Move centroid
     - Move each cluster's centroid to the mean point
     - Iterate over $K$ clusters
     - $\vmu_k \leftarrow \frac{1}{|S_k|}\sum_{\vx_n \in S_k}\vx_n$
 
-  - **\textcolor{violet}{Step 2}**: Cluster assignment
+  - **Step 2**: Cluster assignment
     - Assign each $\vx_n$ to the closest cluster center
     - Iterate over $N$ points
     - $S_k \leftarrow
@@ -357,11 +314,11 @@ MSML610: Advanced Machine Learning
       \forall l \ne k \}$
 
 #### K-Means Clustering: Convergence
-- **\textcolor{red}{K-means algorithm converges}** since:
+- **K-means algorithm converges** since:
   - Finite number of possible partitions (and values of objective functions)
   - Objective function $J(\cdot)$ always decreases
 
-- **\textcolor{darkgreen}{Objective function always decreases}**
+- **Objective function always decreases**
   - Cost function $J(\vmu_1, ..., \vmu_K, c_1, ..., c_N)$ depends on:
     - Centroids $c_1, .., c_N$
     - Point assignments $\vmu_1, ..., \vmu_K$
@@ -370,7 +327,7 @@ MSML610: Advanced Machine Learning
     - Adjusting assignments (fixed centroids)
   - Similar to coordinate descent
 
-- Generally converges to a **\textcolor{blue}{local minimum}**
+- Generally converges to a **local minimum**
   - Run K-means multiple times with different random initializations
   - Choose best result
 
@@ -405,7 +362,7 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=60%}
 
-- **\textcolor{red}{Elbow Method}**
+- **Elbow Method**
   - Vary clusters $K$
   - Compute optimal cost function $J(\cdot)$
   - Choose $K$ at "elbow" point if visible
@@ -419,7 +376,7 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-- **\textcolor{blue}{End-to-end approach}**
+- **End-to-end approach**
   - Choose $K$ to optimize later stages
   - E.g., more t-shirt sizes (more clusters) $\implies$
     - Satisfy customers
@@ -427,7 +384,7 @@ MSML610: Advanced Machine Learning
     - Increases inventory management
 
 #### Interpretation of Clusters
-- Cluster meaning **\textcolor{red}{often interpreted manually}** (difficult to automate)
+- Cluster meaning **often interpreted manually** (difficult to automate)
   - Examine cluster centroids
     - Centroid values show "typical" point in each cluster
     - High, low, or zero feature values highlight key characteristics
@@ -442,7 +399,7 @@ MSML610: Advanced Machine Learning
   - Train a classifier like decision tree
     - Important features for predicting cluster reveal their meaning
 
-- **\textcolor{blue}{Example: Customer Segmentation}**
+- **Example: Customer Segmentation**
 
 \begingroup \scriptsize
 | Cluster    | Age       | Annual Income | Spending Score | Label                              |
@@ -455,12 +412,12 @@ MSML610: Advanced Machine Learning
 ## Anomaly Detection
 
 #### Anomaly Detection: Problem Formulation
-- **\textcolor{red}{Problem}**:
+- **Problem**:
   - $\{\vx_1, ..., \vx_N\}$ examples with features $\vx \in \bbR^P$ for good
     instances
   - Detect bad/anomalous instances
 
-- **\textcolor{blue}{Algorithm}**:
+- **Algorithm**:
   - Unknown characteristics of _"bad instances"_
   - Learn common traits of _"good instances"_ using unsupervised learning
     - Find distribution for $\vx_i$: $\Pr(\vx \text{ is good})$
@@ -473,10 +430,10 @@ MSML610: Advanced Machine Learning
     $\Pr(\vx_{new} \text{ is good}) \le \varepsilon$ flag as anomaly
 
 #### Anomaly Detection: Example of Aircraft Engines
-- **\textcolor{red}{Problem}**
+- **Problem**
   - Test aircraft engines to identify anomalies in a new engine
 
-- **\textcolor{blue}{Solution}**:
+- **Solution**:
   - Features $\vx_i$ can be:
     - Heat generated
     - Vibration intensity
@@ -488,10 +445,10 @@ MSML610: Advanced Machine Learning
     or needs more testing
 
 #### Anomaly Detection: Example of Hacked Account
-- **\textcolor{red}{Problem}**
+- **Problem**
   - Find if an account for a given user $i$ was hacked
 
-- **\textcolor{blue}{Solution}**:
+- **Solution**:
   - Model features that represent "user $i$ activity" 
   - Features $\vx_i$ can be:
     - How many times s/he logs a day
@@ -504,10 +461,10 @@ MSML610: Advanced Machine Learning
   - Identify unusual users by checking $\Pr(\vx_{new} \text{ is good}) \le \varepsilon$
 
 #### Anomaly Detection: Example of Data Center
-- **\textcolor{red}{Problem}**
+- **Problem**
   - Monitor servers in a data center to find malfunctioning or hanged servers
 
-- **\textcolor{blue}{Solution}**:
+- **Solution**:
   - Features $\vx_i$ can be:
     - Memory in use
     - CPU load
@@ -521,11 +478,11 @@ MSML610: Advanced Machine Learning
 #### Using a Gaussian Model for Anomaly Detection
 - Aka "density estimation"
 - Given $N$ examples $\vx_1, ..., \vx_N \in \bbR^p$
-- Ensure that the **\textcolor{red}{features have a Gaussian distribution}**
+- Ensure that the **features have a Gaussian distribution**
   - If not, apply some transformations, e.g., $\log(x_i + k)$
-- **\textcolor{darkgreen}{Estimate the parameters}** of the Gaussian model $f_X(\vx)$
+- **Estimate the parameters** of the Gaussian model $f_X(\vx)$
 
-- Given a new example $\vx_{new}$ **\textcolor{blue}{compute}**
+- Given a new example $\vx_{new}$ **compute**
   $\Pr(\vx_{new} \text{ is good}) \le \varepsilon$ to flag an anomaly
 
 #### Estimate Univariate Gaussian Model
@@ -569,17 +526,17 @@ MSML610: Advanced Machine Learning
 #### Estimate a Multi-Variate Gaussian Model
 ::: columns
 :::: {.column width=60%}
-- **\textcolor{red}{Problem}**:
+- **Problem**:
   - Often features vary together (e.g., network use and CPU load), causing
     mis-classifications with independent assumptions
   - Components of $\vx_{new}$ are within range but nonsensical together
     - E.g., low network use with high CPU load
 
-- **\textcolor{darkgreen}{Solution 1}**:
+- **Solution 1**:
   - Engineer features to highlight anomalies
   - Address variable correlation not modeled in independent Gaussian models
 
-- **\textcolor{blue}{Solution 2}**:
+- **Solution 2**:
   - Estimate the entire multivariate model instead of assuming independence
 ::::
 :::: column
@@ -634,7 +591,7 @@ MSML610: Advanced Machine Learning
   - E.g., 10,000 good vs 20 bad examples
   - Address class imbalance for accurate model performance
 
-- **\textcolor{red}{Algorithm}**:
+- **Algorithm**:
   - Pick 60% of $y = 0$ data to train (only on good examples)
   - Split remaining $y = 0$ and $y = 1$ into validation and test sets
     - Ensure both sets represent the overall dataset
@@ -646,7 +603,7 @@ MSML610: Advanced Machine Learning
   - Use test set to evaluate final model
     - Train on normal data, test on both normal and anomalous data
 
-- **\textcolor{blue}{Aircraft engine example}**
+- **Aircraft engine example**
 
 \begingroup \scriptsize
 | **Dataset**    | $y = 0$ (Good Engines) | $y = 1$ (Bad Engines) |

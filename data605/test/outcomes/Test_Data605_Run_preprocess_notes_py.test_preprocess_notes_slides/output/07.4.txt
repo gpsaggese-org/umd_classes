@@ -21,14 +21,14 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{07.4: Big Data Architectures}}$$**
+**$$\text{\textcolor{blue}{\text{07.4: Big Data Architectures}}}$$**
 \endgroup
 
 ::: columns
 :::: {.column width=65%}
 \vspace{1cm}
 
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
 ::::
 :::: {.column width=30%}
@@ -37,80 +37,80 @@ UMD DATA605 - Big Data Systems
 :::
 
 #### Software Testing
-- **\textcolor{red}{Goal}**
+- **Goal**
   - Evaluate functionality, reliability, performance, and security of a product
     to ensure it meets requirements
   - Software testing is critical in development
 
-- **\textcolor{darkgreen}{Adages}**
+- **Adages**
   - _"If it's not tested, it doesn't work"_
   - _"Debugging is 2x harder than writing code"_
     - Corollary: _"If you do your best to write code, how can you debug it?"_
 
-- **\textcolor{blue}{Many different types of testing}**
+- **Many different types of testing**
   - What do you test?
   - From what point of view?
   - ...
 
 #### What Are You Testing?
-- **\textcolor{red}{Unit testing}**
+- **Unit testing**
   - Test individual components for correct functionality in isolation
 
-- **\textcolor{darkgreen}{Integration testing}**
+- **Integration testing**
   - Ensure components work together as expected
   - Detect interface defects
 
-- **\textcolor{blue}{System testing}**
+- **System testing**
   - Evaluate a fully integrated system's compliance with requirements
 
 #### How Are You Testing?
-- **\textcolor{red}{Smoke/sanity testing}**
+- **Smoke/sanity testing**
   - Quick check of functionalities to ensure main functions work
   - E.g., decide if a new build is stable
   - E.g., application doesn't crash on launch
 
-- **\textcolor{orange}{Regression testing}**
+- **Regression testing**
   - Ensure new changes don't affect existing functionality
 
-- **\textcolor{darkgreen}{Acceptance testing}**
+- **Acceptance testing**
   - Final testing phase before release
   - More common in waterfall than Agile
 
-- **\textcolor{teal}{Performance testing}**
+- **Performance testing**
   - Load, stress, and spike testing
 
-- **\textcolor{cyan}{Security testing}**
+- **Security testing**
   - Identify vulnerabilities, threats, and risks
 
-- **\textcolor{blue}{Usability testing}**
+- **Usability testing**
   - Assess ease of use for end-users
   - E.g., uI/UX
 
-- **\textcolor{violet}{Compatibility testing}**
+- **Compatibility testing**
   - Check compatibility with browsers, database versions, OS, mobile devices
 
 #### CI / CD
-- **\textcolor{red}{Continuous integration (CI)}**
+- **Continuous integration (CI)**
   - Merge code changes into a central repository multiple times a day
   - Automate build and test after each change
   - Add code with unit tests
   - _Goal_: Detect and fix integration errors quickly
 
-- **\textcolor{darkgreen}{Continuous deployment (CD)}**
+- **Continuous deployment (CD)**
   - Automatically deploy code changes to production
     - Without human intervention
     - After build and test phases pass
   - _Goal_: Deliver features, bug fixes, and updates continuously
 
-- **\textcolor{blue}{Examples}**
+- **Examples**
   - GitHub Actions, GitLab Workflows, AWS Code, Jenkins
 
 #### RESTful API
-- **\textcolor{red}{REST API}**
+- **REST API**
   - REST = REpresentational State Transfer
   - Style of building API for web services / distributed systems
 
-- **\textcolor{darkgreen}{Uniform interface}**
+- **Uniform interface**
   - Refer to resources
     - E.g., document, services, URI, persons
   - Use HTTP methods
@@ -118,7 +118,7 @@ UMD DATA605 - Big Data Systems
   - Naming convention, link format
   - Response (XML or JSON)
 
-- **\textcolor{blue}{Stateless}**
+- **Stateless**
   - Each request contains all necessary information
   - No shared state
   - Inspired by HTTP (modulo cookies)
@@ -126,12 +126,12 @@ UMD DATA605 - Big Data Systems
 #### RESTful API
 ::: columns
 :::: {.column width=50%}
-- **\textcolor{red}{Cacheable}**
+- **Cacheable**
   - APIs label response data as cacheable or non-cacheable
   - Client can reuse cacheable responses
   - Increase scalability and performance
 
-- **\textcolor{blue}{Layered system}**
+- **Layered system**
   - Each layer interfaces only with the immediate layer
   - E.g., in a tier application
 ::::
@@ -141,35 +141,35 @@ UMD DATA605 - Big Data Systems
 :::
 
 #### Stages of Deployment
-- **\textcolor{red}{Software is deployed through several environments}**
+- **Software is deployed through several environments**
   - Each environment tests, validates, and prepares software for release to end
     user
 
-- **\textcolor{orange}{Development environment (Dev)}**
+- **Development environment (Dev)**
   - Individual for each developer or feature team
   - _Goal_: Developers write and initially test code
 
-- **\textcolor{darkgreen}{Testing}**
+- **Testing**
   - Aka "Quality Assurance (QA)"
   - Mirrors production environment to perform under similar conditions
   - _Goal_: Systematic testing to uncover defects and ensure quality
 
-- **\textcolor{teal}{Pre-prod}**
+- **Pre-prod**
   - Aka staging
   - Final testing phase before deployment to production
   - Replica of production environment for final checks and stakeholder review
 
-- **\textcolor{cyan}{Production (Prod)}**
+- **Production (Prod)**
   - Live environment where software is available to end users
   - Optimized for security, performance, and scalability
   - Focus on uptime, user experience, and data integrity
 
 #### Semantic Versioning
-- **\textcolor{red}{Semantic versioning}** conveys meaning about changes to software
+- **Semantic versioning** conveys meaning about changes to software
   - Systematic approach
   - Communicate to users potential impact of updating to a new version
 
-- **\textcolor{blue}{Increment version}**
+- **Increment version**
 
   - Major Version \textcolor{blue}{\texttt{X.y.z}}
     - Incompatible API changes
@@ -194,7 +194,7 @@ UMD DATA605 - Big Data Systems
 #### Microservices vs Monolithic Architecture
 ::: columns
 :::: {.column width=40%}
-- **\textcolor{red}{Many styles of building complex systems}**
+- **Many styles of building complex systems**
   - _Monolith_: all features in one deployable unit
   - _Microservices_: many small services collaborating over the network
 
@@ -204,17 +204,17 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **\textcolor{blue}{Heuristics}**
+- **Heuristics**
   - Start from business domains, not technology layers
   - Align service boundaries with independent business capabilities
   - E.g., online shop with separate services for catalog, cart, payment,
     shipping
 
 #### Monolithic Architecture
-- **\textcolor{red}{Monolith}** = all features in one deployable unit
-- **\textcolor{darkgreen}{Pros}**:
+- **Monolith** = all features in one deployable unit
+- **Pros**:
   - _Simplicity_: Simpler to develop, test, deploy, and scale as a single unit
-- **\textcolor{blue}{Cons}**
+- **Cons**
   - _Tightly coupled components_: Components run in the same process, leading to
     scalability and resilience issues
   - _Technology stack uniformity_: Developed with a single technology stack,
@@ -226,9 +226,9 @@ UMD DATA605 - Big Data Systems
 #### Microservice Architecture
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Microservices}** = many small services collaborating over the network
+- **Microservices** = many small services collaborating over the network
 
-- **\textcolor{darkgreen}{Cons}**
+- **Cons**
   - Complex deployment
   - Requires tooling
 ::::
@@ -237,7 +237,7 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **\textcolor{blue}{Pros}**:
+- **Pros**:
   - _Modularity_: Small, independently deployable services with specific business
     functionality
   - _Scalability_: Scale services independently for efficient resource use based

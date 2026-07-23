@@ -4,78 +4,39 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
 
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 02.3: ML Techniques - Input Processing}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=65%}
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
-
-- Burkov: _"The Hundred-Page Machine Learning Book"_ (2019)
-
-- Russell et al.: _"Artificial Intelligence: A Modern Approach"_ (4th ed, 2020)
-
-- Hastie et al.: _"The Elements of Statistical Learning"_ (2nd ed, 2009)
-
-::::
-:::: {.column width=40%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/Book_cover_The_Elements_of_Statistical_Learning.jpg){ height=20% }
-::::
-:::
 
 
 ## Input Processing
 
 #### Data Processing Transformations
 
-- **\textcolor{red}{Purpose of data processing}**
+- **Purpose of data processing**
   - Prepare raw data for effective machine learning
   - Improve model performance and generalization
 
-- **\textcolor{orange}{Data cleanup}**
+- **Data cleanup**
   - Apply filters or smoothing to remove irrelevant variations
 
-- **\textcolor{darkgreen}{Handling missing data}**
+- **Handling missing data**
 
-- **\textcolor{teal}{Types of transformations}**
+- **Types of transformations**
   - Normalization and standardization
   - Encoding categorical data
   - Feature construction
   - Dimensionality reduction
   - Discretization
 
-- **\textcolor{cyan}{Data augmentation}**
+- **Data augmentation**
   - Increase dataset size using transformations (common in vision)
 
 #### Data Cleaning
 
-- **\textcolor{red}{Purpose of data cleaning}**
+- **Purpose of data cleaning**
   - Ensure data quality for accurate model training
   - Detect and correct errors or inconsistencies in the dataset
 
-- **\textcolor{darkgreen}{Typical steps in data cleaning}**
+- **Typical steps in data cleaning**
   - *Remove duplicates*: Identical records are eliminated
   - *Correct data entry errors*: Fix misspellings or misformatted entries
   - *Standardize data*:
@@ -85,22 +46,22 @@ MSML610: Advanced Machine Learning
     - Type conversion (e.g., strings to integers)
     - Dealing with unexpected characters or encodings
 
-- **\textcolor{blue}{Relevance to ML models}**
+- **Relevance to ML models**
   - Poor data quality leads to biased or incorrect predictions
   - Clean data reduces variance and improves generalization
 
 #### Handling Outliers and Missing Data
 
-- **\textcolor{red}{Outliers}**
+- **Outliers**
   - *Definition*: Data points significantly different from others
   - *Causes*: Measurement errors, variability in the data
   - *Detection*: Box plots, Z-scores, or interquartile method
   - *Treatment*: Removal, capping, or transformation (e.g., log scale)
 
-- **\textcolor{darkgreen}{Missing data}**
+- **Missing data**
   - *Detection*: Count of null values or incomplete entries
 
-- **\textcolor{blue}{Remediation}**
+- **Remediation**
   - *Deletion*: Remove rows or columns with too many missing values
   - *Imputation*:
     - Mean/median/mode substitution
@@ -111,30 +72,30 @@ MSML610: Advanced Machine Learning
 
 #### Normalization and Standardization
 
-- **\textcolor{red}{Goal}**: Adjust feature scales for better convergence and learning
+- **Goal**: Adjust feature scales for better convergence and learning
   - _Normalize_: Rescale to $[0, 1]$
   - _Standardize_: Zero mean, unit variance
 
-- **\textcolor{darkgreen}{Why it helps}**
+- **Why it helps**
   - Equal feature contribution in distance-based models
   - Faster convergence in gradient-based algorithms
   - Enables regularization
   - Easier feature interpretation
 
-- **\textcolor{blue}{Common methods}**
+- **Common methods**
   - Min-Max normalization: $x' = \frac{x - x_{min}}{x_{max} - x_{min}}$
   - Z-score standardization: $x' = \frac{x - \mu}{\sigma}$
 
 #### Encoding Categorical Data
 
-- **\textcolor{red}{Goal}**: Convert non-numeric categories into numeric representations
+- **Goal**: Convert non-numeric categories into numeric representations
 
-- **\textcolor{darkgreen}{Label encoding}**
+- **Label encoding**
   - Assigns an integer to each category
     - E.g., \textcolor{blue}{\texttt{red}}, \textcolor{blue}{\texttt{green}}, \textcolor{blue}{\texttt{blue}} $\to$ \textcolor{blue}{\texttt{1}}, \textcolor{blue}{\texttt{2}}, \textcolor{blue}{\texttt{3}}
   - Can mislead models if order is not meaningful
 
-- **\textcolor{blue}{One-hot encoding}**
+- **One-hot encoding**
   - Creates binary vector per category
     - E.g., \textcolor{blue}{\texttt{red}}, \textcolor{blue}{\texttt{green}}, \textcolor{blue}{\texttt{blue}} $\to$ \textcolor{blue}{\texttt{[1,0,0]}}, \textcolor{blue}{\texttt{[0,1,0]}}, \textcolor{blue}{\texttt{[0,0,1]}}
   - Avoids ordinal assumption
@@ -142,49 +103,49 @@ MSML610: Advanced Machine Learning
 
 #### Feature Construction
 
-- **\textcolor{red}{Goal}**: Derive more informative features from raw inputs
+- **Goal**: Derive more informative features from raw inputs
 
-- **\textcolor{darkgreen}{Methods}**
+- **Methods**
   - Combining variables (e.g., area = height × width)
   - Extracting parts (e.g., year from a date)
   - Logical features
     - E.g., transform \textcolor{blue}{\texttt{2023-04-15}} $\to$ (\textcolor{blue}{\texttt{Saturday}}, \textcolor{blue}{\texttt{is\_weekend = True}})
 
-- **\textcolor{blue}{Why it helps}**
+- **Why it helps**
   - Encodes domain knowledge
   - Improves model expressiveness and performance
 
 #### Dimensionality Reduction
 
-- **\textcolor{red}{Goal}**: Reduce number of features while preserving key information
+- **Goal**: Reduce number of features while preserving key information
 
-- **\textcolor{darkgreen}{Why it helps}**
+- **Why it helps**
   - Reduce overfitting
   - Reduce data redundancy
   - Improve model speed
   - Allow visualization
 
-- **\textcolor{blue}{Common techniques}**
+- **Common techniques**
   - PCA: linear combinations that maximize variance
   - LDA: projects data to maximize class separability
 
-- **\textcolor{violet}{Example}**
+- **Example**
   - Reduce 1024x640 image pixels to 10 principal components
   - Quantize color images into gray scale
 
 #### Discretization
 
-- **\textcolor{red}{Goal}**: Convert continuous values into categorical bins
+- **Goal**: Convert continuous values into categorical bins
 
-- **\textcolor{darkgreen}{Why it helps}**
+- **Why it helps**
   - Simplifies models or enables categorical algorithms
   - Helps detect threshold effects in data
 
-- **\textcolor{blue}{Techniques}**
+- **Techniques**
   - Equal-width binning
   - Quantile binning
 
-- **\textcolor{violet}{Example}**
+- **Example**
   - Discretize age
     - \textcolor{blue}{\texttt{Child}}: $[0, 13)$
     - \textcolor{blue}{\texttt{Teen}}: $[13, 20)$
@@ -194,12 +155,12 @@ MSML610: Advanced Machine Learning
 
 #### Noise Removal
 
-- **\textcolor{red}{Goal}**: Remove irrelevant or corrupt data variations
+- **Goal**: Remove irrelevant or corrupt data variations
 
-- **\textcolor{darkgreen}{Why it helps}**
+- **Why it helps**
   - Improves signal clarity and model robustness
     - E.g., clean noisy speech by removing high-frequency noise
 
-- **\textcolor{blue}{Methods}**
+- **Methods**
   - Smoothing (e.g., moving average)
   - Filtering (e.g., low-pass filter in audio)

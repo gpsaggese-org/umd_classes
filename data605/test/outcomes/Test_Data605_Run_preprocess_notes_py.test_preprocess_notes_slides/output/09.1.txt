@@ -21,12 +21,12 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{09.1: Apache Spark: Principles}}$$**
+**$$\text{\textcolor{blue}{\text{09.1: Apache Spark: Principles}}}$$**
 \endgroup
 
 ::: columns
 :::: {.column width=75%}
-- **Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+- **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
 - **References**:
   - Concepts in the slides
@@ -44,11 +44,11 @@ UMD DATA605 - Big Data Systems
 #### Hadoop MapReduce: Shortcomings
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Hadoop is hard to administer}**
+- **Hadoop is hard to administer**
   - Many layers (HDFS, Yarn, Hadoop, ...)
   - Extensive configuration
 
-- **\textcolor{darkgreen}{Hadoop is hard to use}**
+- **Hadoop is hard to use**
   - Verbose API
   - Limited language support (e.g., Java is native)
   - MapReduce jobs read / write data on disk
@@ -60,7 +60,7 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **\textcolor{blue}{Large but fragmented ecosystem}**
+- **Large but fragmented ecosystem**
   - No native support for:
     - Machine learning
     - SQL
@@ -72,7 +72,7 @@ UMD DATA605 - Big Data Systems
 #### (Apache) Spark
 ::: columns
 :::: {.column width=70%}
-- **\textcolor{red}{Open-source}**
+- **Open-source**
   - DataBrick monetizes it (\$100B startup in 2025)
 ::::
 :::: {.column width=20%}
@@ -80,22 +80,22 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **\textcolor{orange}{General processing engine}**
+- **General processing engine**
   - Large set of operations beyond \textcolor{blue}{\texttt{Map()}} and \textcolor{blue}{\texttt{Reduce()}}
   - Combine operations in any order
   - Computation organized as a DAG, decomposed into parallel tasks
   - Scheduler/optimizer for parallel workers
 
-- **\textcolor{darkgreen}{Supports several languages}**
+- **Supports several languages**
   - Java, Scala (preferred), Python supported through bindings
 
-- **\textcolor{teal}{Data abstraction}**
+- **Data abstraction**
   - Resilient Distributed Dataset (RDD)
   - DataFrames, Datasets built on RDDs
 
-- **\textcolor{cyan}{Fault tolerance through RDD lineage}**
+- **Fault tolerance through RDD lineage**
 
-- **\textcolor{blue}{In-memory computation}**
+- **In-memory computation**
   - Keep intermediate results in memory, if possible
 
 #### Berkeley: From Research to Companies
@@ -106,11 +106,11 @@ UMD DATA605 - Big Data Systems
   - Focus on data-intensive systems and machine learning
   - Open-source ecosystems enabling broad adoption
 
-- **\textcolor{red}{AMPLab}**
+- **AMPLab**
   - Collaborative projects creating systems like Spark
   - Industry engagement guiding real-world impact
 
-- **\textcolor{blue}{RISELab}**
+- **RISELab**
   - Shift to systems supporting AI, security, and automation
   - Platforms like Ray and ML-focused infrastructure
 ::::
@@ -133,7 +133,7 @@ UMD DATA605 - Big Data Systems
 
 #### Berkeley AMPLab Data Analytics Stack
 - So many tools that they have their own Big Data stack!
-  [\textcolor{blue}{\underline{https://amplab.cs.berkeley.edu/software/}}](https://amplab.cs.berkeley.edu/software/)
+  https://amplab.cs.berkeley.edu/software/
 
 \center
 ![](data605/lectures_source/images/lecture_9_1/lec_9_1_slide_6_image_1.png){width=80%}
@@ -141,27 +141,27 @@ UMD DATA605 - Big Data Systems
 #### Apache Spark: Introduction
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Unified stack}**
+- **Unified stack**
   - Different computation models in a single framework
 
-  - **\textcolor{orange}{Spark SQL}**
+  - **Spark SQL**
     - ANSI SQL compliant
     - Work with structured relational data
 
-  - **\textcolor{darkgreen}{Spark MLlib}**
+  - **Spark MLlib**
     - Build ML pipelines
     - Support popular ML algorithms
     - Built on Spark DataFrame
 
-  - **\textcolor{teal}{Spark Streaming}**
+  - **Spark Streaming**
     - Handle continually growing tables
     - Treat tables as static
 
-  - **\textcolor{cyan}{GraphX}**
+  - **GraphX**
     - Manipulate graphs
     - Perform graph-parallel computation
 
-- **\textcolor{blue}{Extensibility}**
+- **Extensibility**
   - Read from many sources
   - Write to many backends
 ::::
@@ -179,7 +179,7 @@ _General purpose applications_
 #### Resilient Distributed Dataset (RDD)
 ::: columns
 :::: {.column width=60%}
-- **\textcolor{red}{Resilient Distributed Dataset (RDD)}**
+- **Resilient Distributed Dataset (RDD)**
   - Collection of data elements
   - Partitioned across nodes
   - Operated on in parallel
@@ -192,24 +192,24 @@ _General purpose applications_
 ::::
 :::
 
-- **\textcolor{darkgreen}{Applications}**
+- **Applications**
   - Best for applying the same operation to all dataset elements (vectorized)
   - Less suitable for asynchronous fine-grained updates to shared state
     - E.g., updating one value in a dataframe
 
-- **\textcolor{blue}{Ways to create RDDs}**
+- **Ways to create RDDs**
   - Reference data in external storage
     - E.g., file-system, HDFS, HBase
   - Parallelize an existing collection in your driver program
   - Transform RDDs into other RDDs
 
 #### Transformations vs Actions
-- **\textcolor{red}{Transformations}**
+- **Transformations**
   - Lazy evaluation
   - Compute only when an Action requires it
   - Build a graph of transformations
 
-- **\textcolor{blue}{Actions}**
+- **Actions**
   - Aka "materialize"
   - Force calculations on RDDs and return values
 
@@ -220,7 +220,7 @@ _General purpose applications_
 
 ::: columns
 :::: {.column width=45%}
-- **\textcolor{red}{Goal}**
+- **Goal**
   - Estimate $\pi$ using random sampling in the unit square
   - Fraction of points inside the unit circle approximates $\pi/4$
 
@@ -247,11 +247,11 @@ _General purpose applications_
 #### Spark: Architecture
 ::: columns
 :::: {.column width=50%}
-- **\textcolor{red}{Architecture}** 
+- **Architecture** 
   - Who does what
   - I.e., responsibilities of each component
 
-- **\textcolor{orange}{Spark Application}**
+- **Spark Application**
   - Code describing computation
   - E.g., Python code calling Spark
 ::::
@@ -260,19 +260,19 @@ _General purpose applications_
 ::::
 :::
 
-- **\textcolor{darkgreen}{Spark Driver}**
+- **Spark Driver**
   - Transform operations into DAG computations
   - Distribute task execution across _Executors_
   - Communicate with _Cluster Manager_ for resources
 
-- **\textcolor{teal}{Spark Session}**
+- **Spark Session**
   - Interface to Spark system
 
-- **\textcolor{cyan}{Cluster Manager}**
+- **Cluster Manager**
   - Manage and allocate resources
   - Support Hadoop, YARN, Mesos, Kubernetes
 
-- **\textcolor{blue}{Spark Executor}**
+- **Spark Executor**
   - Run worker node to execute tasks
   - Typically one executor per node
   - Relies on JVM
@@ -281,9 +281,9 @@ _General purpose applications_
 
 ::: columns
 :::: {.column width=40%}
-- **\textcolor{red}{Architecture}**
+- **Architecture**
   - Who does what
-- **\textcolor{orange}{Computation model}**
+- **Computation model**
   - How are things done
 ::::
 :::: {.column width=55%}
@@ -292,19 +292,19 @@ _General purpose applications_
 ::::
 :::
 
-- **\textcolor{darkgreen}{Spark Driver}**
+- **Spark Driver**
   - Converts _Application_ into _Jobs_
   - Describes computation with _Transformations_ and triggers with _Actions_
 
-- **\textcolor{teal}{Spark Job}**
+- **Spark Job**
   - Parallel computation in response to a _Action_
   - Each _Job_ is a DAG with dependent _Stages_
 
-- **\textcolor{cyan}{Spark Stage}**
+- **Spark Stage**
   - Smaller operation within a _Job_
   - _Stages_ run serially or in parallel
 
-- **\textcolor{blue}{Spark Task}**
+- **Spark Task**
   - Each _Stage_ has multiple _Tasks_
   - Single unit of work sent to a _Executor_
   - Each _Task_ maps to a single core and works on a single data partition
@@ -312,11 +312,11 @@ _General purpose applications_
 #### Distributed Data and Partitions
 ::: columns
 :::: {.column width=50%}
-- **\textcolor{red}{Data is distributed}** as partitions across physical nodes
+- **Data is distributed** as partitions across physical nodes
   - Store each partition in memory
   - Enable efficient parallelism
 
-- **\textcolor{blue}{Spark Executors}** process data "close" to them
+- **Spark Executors** process data "close" to them
   - Minimize network bandwidth
   - Ensure data locality
   - Similar to Hadoop

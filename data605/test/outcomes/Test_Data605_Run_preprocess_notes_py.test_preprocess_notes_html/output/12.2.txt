@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{12.2: Neo4j}}$$**
+**$$\text{\textcolor{blue}{\text{12.2: Neo4j}}}$$**
 \endgroup
 
 ::: columns

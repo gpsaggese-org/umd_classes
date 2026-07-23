@@ -5,42 +5,6 @@ fontsize: 10pt
 \let\uline\underline
 \let\ul\underline
 
-
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 05.1: Machine Learning Theories}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- Abu-Mostafa et al.: _"Learning From Data"_ (2012)
-
-::::
-:::: {.column width=20%}
-![](msml610/lectures_source/figures/book_covers/Book_cover_Learning_from_Data.jpg){ height=20% }
-::::
-:::
-
 # Is Machine Learning Even Possible?
 
 - **A Simple Visual ML Experiment (1/2)**
@@ -49,13 +13,13 @@ MSML610: Advanced Machine Learning
 :::: {.column width=50%}
 - Consider the supervised classification problem
 
-- **\black{Input}**
+- **\textcolor{black}{\text{Input}}**
   - A 9 bit vector represented as a 3x3 array
-- **\black{Training set}**
-  - The \blue{blue row} $\vx_1, \vx_2, \vx_3$ for $f(\vx) = -1$
-  - The \green{green row} $\vx_4, \vx_5, \vx_6$ for $f(\vx) = +1$
-- **\black{Test set}**
-  - For the \red{red pattern} $\vx_0$, is $f(\vx_0) = -1 \text{ or } +1$?
+- **\textcolor{black}{\text{Training set}}**
+  - The \textcolor{blue}{\text{blue row}} $\vx_1, \vx_2, \vx_3$ for $f(\vx) = -1$
+  - The \textcolor{darkgreen}{\text{green row}} $\vx_4, \vx_5, \vx_6$ for $f(\vx) = +1$
+- **\textcolor{black}{\text{Test set}}**
+  - For the \textcolor{red}{\text{red pattern}} $\vx_0$, is $f(\vx_0) = -1 \text{ or } +1$?
 
 ::::
 :::: {.column width=50%}
@@ -104,12 +68,12 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=70%}
 
-- **\black{Model 1}**
+- **\textcolor{black}{\text{Model 1}}**
   - $f(\vx) = +1$ when $\vx$ has an axis of symmetry
   - $f(\vx) = -1$ when $\vx$ is not symmetric
   - The test set is symmetrical $\implies f(\vx_0) = +1$
 
-- **\black{Model 2}**
+- **\textcolor{black}{\text{Model 2}}**
   - $f(\vx) = +1$ when the top left square $\vx$ is empty
   - $f(\vx) = -1$ when the top left square $\vx$ is full
   - The test set has top left square full $\implies f(\vx_0) = -1$
@@ -120,7 +84,7 @@ MSML610: Advanced Machine Learning
 
 - How can a limited data set reveal enough information to define the entire
   target function?
-  - **\black{Is machine learning possible?}**
+  - **\textcolor{black}{\text{Is machine learning possible?}}**
 ::::
 :::: {.column width=30%}
 
@@ -188,11 +152,11 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=50%}
 
-- Consider a bin with \red{red} and \green{green} marbles
-  - We want to estimate $\Pr(\text{pick a \red{red} marble}) = \mu$ where the
+- Consider a bin with \textcolor{red}{\text{red}} and \textcolor{darkgreen}{\text{green}} marbles
+  - We want to estimate $\Pr(\text{pick a \textcolor{red}{\text{red}} marble}) = \mu$ where the
     value of $\mu$ is unknown
   - We pick $N$ marbles independently with replacement
-  - The fraction of \red{red} marbles is $\nu$
+  - The fraction of \textcolor{red}{\text{red}} marbles is $\nu$
 
 ::::
 :::: {.column width=45%}
@@ -204,7 +168,7 @@ MSML610: Advanced Machine Learning
 - Does $\nu$ say anything about $\mu$?
   - **"No"**
     - In strict terms, we don't know anything about the marbles we didn't pick
-    - The sample can be mostly \green{green}, while the bin is mostly \red{red}
+    - The sample can be mostly \textcolor{darkgreen}{\text{green}}, while the bin is mostly \textcolor{red}{\text{red}}
     - This is _possible_, but _not probable_
   - **"Yes"**
     - Under certain conditions, the sample frequency is close to the real
@@ -245,8 +209,8 @@ MSML610: Advanced Machine Learning
   - You know $f(\vx)$ at points $\vx \in \calX$
   - You choose an hypothesis $h: \calX \rightarrow \calY = \{0, 1\}$
   - Each point $\vx \in \calX$ is a marble
-  - You color \red{red} if the hypothesis is correct $h(\vx) = f(\vx)$,
-    \green{green} otherwise
+  - You color \textcolor{red}{\text{red}} if the hypothesis is correct $h(\vx) = f(\vx)$,
+    \textcolor{darkgreen}{\text{green}} otherwise
   - The in-sample error $E_{in}(h)$ corresponds to $\nu$
   - The marbles of unknown color corresponds to $E_{out}(h) = \mu$
   - $\vx_1, ..., \vx_n$ are picked randomly and independently from a

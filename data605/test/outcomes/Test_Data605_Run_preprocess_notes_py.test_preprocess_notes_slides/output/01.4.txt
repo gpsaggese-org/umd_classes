@@ -21,23 +21,23 @@ UMD DATA605: Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{01.4: Data Models}}$$**
+**$$\text{\textcolor{blue}{\text{01.4: Data Models}}}$$**
 \endgroup
 
 \vspace{1cm}
 
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
 #### Data Models
-- **\textcolor{red}{Data modeling}**
+- **Data modeling**
   - Represents and captures structure and properties of real-world entities
-  - Abstraction: real-world $\to$ **\textcolor{darkgreen}{representation}**
+  - Abstraction: real-world $\to$ **representation**
 
-- **\textcolor{blue}{Data model}**
+- **Data model**
   - Describes how data is _represented_ (e.g., relational, key-value) and _accessed_ (e.g., insert operations, query)
   - Schema in a DB describes a specific data collection using a data model
 
-- **\textcolor{violet}{Why need data model?}**
+- **Why need data model?**
   - Know data structure to write general-purpose code
   - Share data across programs, organizations, systems
   - Integrate information from multiple sources
@@ -47,15 +47,15 @@ UMD DATA605: Big Data Systems
 ::: columns
 :::: {.column width=50%}
 
-- **\textcolor{red}{Physical layer}**
+- **Physical layer**
   - How is the data physically stored
   - How to represent complex data structures (e.g., B-trees for indexing)
-- **\textcolor{darkgreen}{Logical layer}**
+- **Logical layer**
   - Entities
   - Attributes
   - Type of information stored
   - Relationships among the above
-- **\textcolor{blue}{Views}**
+- **Views**
   - Restrict information flow
   - Security and/or ease-of-use
 
@@ -72,18 +72,18 @@ UMD DATA605: Big Data Systems
 ::: columns
 :::: {.column width=50%}
 
-- **\textcolor{red}{Modeling constructs}**
+- **Modeling constructs**
   - Concepts to represent data structure
   - E.g.,
     - Entity types
     - Entity attributes
     - Relationships between entities
     - Relationships between attributes
-- **\textcolor{darkgreen}{Integrity constraints}**
+- **Integrity constraints**
   - Ensure data integrity
     - Avoid errors and inconsistencies
     - E.g., field can't be empty, must be an integer
-- **\textcolor{blue}{Manipulation constructs}**
+- **Manipulation constructs**
   - E.g., insert, update, delete data
 
 ::::
@@ -95,11 +95,11 @@ UMD DATA605: Big Data Systems
 :::
 
 #### Data Independence
-- **\textcolor{red}{Logical data independence}**
+- **Logical data independence**
   - Change data representation without altering programs
   - E.g., API abstracting backend
 
-- **\textcolor{blue}{Physical data independence}**
+- **Physical data independence**
   - Change data layout on disk without altering programs
     - Index data
     - Partition/distribute/replicate data
@@ -107,7 +107,7 @@ UMD DATA605: Big Data Systems
     - Sort data
 
 #### Examples of Data Models
-- **\textcolor{red}{Some examples of data models}**
+- **Some examples of data models**
   - Relational model (SQL)
   - Entity-relationship (ER) model
   - XML
@@ -115,7 +115,7 @@ UMD DATA605: Big Data Systems
   - Object-relational
   - RDF
   - Property graph
-- **\textcolor{blue}{Serialization formats}** as data models
+- **Serialization formats** as data models
   - CSV
   - Parquet
   - JSON
@@ -124,44 +124,44 @@ UMD DATA605: Big Data Systems
   - Python Pickle
 
 #### Good Data Models
-- **\textcolor{red}{Good data model}** should be:
+- **Good data model** should be:
   - Expressive
     - Capture real-world data
   - Easy to use
   - Perform well
 
-- **\textcolor{darkgreen}{Trade-off between characteristics}**
+- **Trade-off between characteristics**
   - E.g., more powerful models
     - Represent more datasets
     - Harder to use/query
     - Less efficient (e.g., more memory, time)
 
-- **\textcolor{blue}{Evolution of data models}** captures data structure
+- **Evolution of data models** captures data structure
   - Structured data $\to$ Relational DBs
   - Semi-structured web data $\to$ XML, JSON
   - Unstructured data $\to$ NoSQL DBs
 
 #### A Brief History of Databases (Early 1960s)
-- **\textcolor{red}{1960s: Early beginning}**
+- **1960s: Early beginning**
   - Computers become attractive technology
   - Enterprises adopt computers
   - Applications use own data stores
     - Each application has its own format
     - Data unavailable to other programs
 
-- **\textcolor{darkgreen}{Database}**: term for "shared data banks" by multiple applications
+- **Database**: term for "shared data banks" by multiple applications
   - Define data format
   - Store as "data dictionary" (schema)
   - Implement "database management" software to access data
 
-- **\textcolor{blue}{Issues}**
+- **Issues**
   - How to write data dictionaries?
   - How to access data?
   - Who controls the data?
     - E.g., integrity, security, privacy concerns
 
 #### A Brief History of Databases (1960s)
-- **\textcolor{red}{1960s, Hierarchical and Network Model}**
+- **1960s, Hierarchical and Network Model**
   - Connect records of different types
   - Example: connect accounts with customers
   - Network model aimed for generality and flexibility
@@ -172,7 +172,7 @@ UMD DATA605: Big Data Systems
   - Used by over 95% of top Fortune 1000 companies
   - Processes 50 billion transactions daily, manages 15 million GBs of data
 
-- **\textcolor{blue}{Cons}**
+- **Cons**
   - Exposed too much internal data (structures/pointers)
   - Leaky abstraction
 
@@ -180,13 +180,13 @@ UMD DATA605: Big Data Systems
 
 ::: columns
 :::: {.column width=50%}
-- **\textcolor{red}{Relational model}**
+- **Relational model**
   - Data as tuples in relations
   - SQL
 
 \vspace{1cm}
 
-- **\textcolor{darkgreen}{Hierarchical model}**
+- **Hierarchical model**
   - Tree-like structure
     - One parent, many children
     - Connected through links
@@ -194,7 +194,7 @@ UMD DATA605: Big Data Systems
 
 \vspace{1cm}
 
-- **\textcolor{blue}{Network model}**
+- **Network model**
   - Graph organization
     - Multiple parents and children
   - Graph DBs resurgence in 2010s
@@ -210,7 +210,7 @@ UMD DATA605: Big Data Systems
 :::
 
 #### A Brief History of Databases (1970s)
-- **\textcolor{red}{1970s: Relational model}**
+- **1970s: Relational model**
   - Set theory, first-order predicate logic
     - Ted Codd developed the Relational Model
   - Elegant, formal model
@@ -222,11 +222,11 @@ UMD DATA605: Big Data Systems
     - Reason about data and relations
     - Remove redundancies
 
-- **\textcolor{darkgreen}{Influential projects}**
+- **Influential projects**
   - INGRES (UC Berkeley), System R (IBM)
   - Ignored IMS compatibility
 
-- **\textcolor{blue}{Debates}**:
+- **Debates**:
   - Relational Model vs Network Model proponents
 
 #### Entity-Relationship Model
@@ -234,12 +234,12 @@ UMD DATA605: Big Data Systems
 ::: columns
 :::: {.column width=50%}
 
-- **\textcolor{red}{Entity-Relationship Model}**
+- **Entity-Relationship Model**
   - Proposed in 1976 by Peter Chen
 
 - Describes knowledge as:
-  - **\textcolor{darkgreen}{Entities}**: Physical or logical objects, "Nouns"
-  - **\textcolor{blue}{Relationships}**: Connections between entities, "Verbs"
+  - **Entities**: Physical or logical objects, "Nouns"
+  - **Relationships**: Connections between entities, "Verbs"
 
 - Map ER model to relational DB
   - Entities, relationships $\to$ tables
@@ -256,12 +256,12 @@ UMD DATA605: Big Data Systems
 :::
 
 #### A Brief History of Databases (1980s)
-- **\textcolor{red}{1980s: Relational model acceptance}**
+- **1980s: Relational model acceptance**
   - SQL standard due to IBM's backing
   - Enhanced relational model
     - Set-valued attributes, aggregation
 
-- **\textcolor{blue}{Late 80's}**
+- **Late 80's**
   - Object-oriented DBs
     - Store objects, not tables
     - Overcome _impedance mismatch_ between languages and databases
@@ -274,27 +274,27 @@ UMD DATA605: Big Data Systems
 - OOP is a data model
   - Object behavior described through data (fields) and code (methods)
 
-- **\textcolor{red}{Composition}**
+- **Composition**
   - \textcolor{blue}{\texttt{has-a}} relationships
   - E.g., \textcolor{blue}{\texttt{Employee}} class has an \textcolor{blue}{\texttt{Address}} class
-- **\textcolor{darkgreen}{Inheritance}**
+- **Inheritance**
   - \textcolor{blue}{\texttt{is-a}} relationships
   - E.g., \textcolor{blue}{\texttt{Employee}} class derives from \textcolor{blue}{\texttt{Person}} class
 
-- **\textcolor{blue}{Polymorphism}**
+- **Polymorphism**
   - Code executed depends on the class of the object
   - One interface, many implementations
   - E.g., \textcolor{blue}{\texttt{draw()}} method on a \textcolor{blue}{\texttt{Circle}} vs \textcolor{blue}{\texttt{Square}} object, both descending from
     \textcolor{blue}{\texttt{Shape}} class
 
-- **\textcolor{violet}{Encapsulation}**
+- **Encapsulation**
   - E.g., private vs public fields/members
   - Prevents external code from accessing inner workings of an object
 
 #### A Brief History of Databases (1990s)
 ::: columns
 :::: {.column width=50%}
-- **\textcolor{red}{Late 90's-today}**
+- **Late 90's-today**
 - Web/Internet emerges
 - XML: eXtensible Markup Language
   - For _semi-structured_ data
@@ -334,7 +334,7 @@ UMD DATA605: Big Data Systems
 ::: columns
 :::: {.column width=40%}
 - Aka RDF
-- **\textcolor{red}{(subject, predicate, object) triple}**
+- **(subject, predicate, object) triple**
 
 - Example of RDF triple
   - \textcolor{blue}{\texttt{Subject}}=sky
@@ -344,7 +344,7 @@ UMD DATA605: Big Data Systems
 - Maps to a labeled, directed multi-graph
   - More general than a tree
 
-- **\textcolor{blue}{Stored in}**:
+- **Stored in**:
   - Relational DBs
   - Dedicated "triple-stores" DBs
 ::::
@@ -358,11 +358,11 @@ UMD DATA605: Big Data Systems
 
 ::: columns
 :::: {.column width=40%}
-- **\textcolor{red}{Graph}**:
+- **Graph**:
   - Vertices and edges
   - Properties for each edge and vertex
 
-- **\textcolor{blue}{Stored in}**:
+- **Stored in**:
   - Relational DBs
   - Graph DBs
 ::::

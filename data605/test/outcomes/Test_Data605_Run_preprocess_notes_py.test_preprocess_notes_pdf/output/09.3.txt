@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{09.3: Python Dask}}$$**
+**$$\text{\textcolor{blue}{\text{09.3: Python Dask}}}$$**
 \endgroup
 
 ::: columns

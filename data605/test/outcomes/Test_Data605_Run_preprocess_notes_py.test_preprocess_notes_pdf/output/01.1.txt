@@ -21,7 +21,7 @@ UMD DATA605: Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{01.1: Introduction}}$$**
+**$$\text{\textcolor{blue}{\text{01.1: Introduction}}}$$**
 \endgroup
 
 \vspace{1cm}
