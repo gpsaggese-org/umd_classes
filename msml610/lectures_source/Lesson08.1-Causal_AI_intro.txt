@@ -7,8 +7,6 @@
 
 # Introduction and Motivation
 
-## Background
-
 * Big Data and Traditional AI
 - @Background@: focus for past 10 years
   - Collect and organize massive data volumes
@@ -81,16 +79,16 @@
 
   - **Association** means that variables co-occur or are
     statistically dependent
-    - Example: _"People who buy diapers also buy beer"_
+    - E.g., _"People who buy diapers also buy beer"_
     - No information on direction or mechanism
 
   - **Correlation** is a linear relationship between variables
-    - Example: _"Ice cream sales and drowning deaths correlate"_ (both seasonal)
+    - E.g., _"Ice cream sales and drowning deaths correlate"_ (both seasonal)
     - Captures strength and direction, not causation
 
   - **Causation** understanding that changing one variable _directly_
     changes another
-    - Example: _"Asbestos causes cancer"_
+    - E.g., _"Asbestos causes cancer"_
     - Requires causal model or experimental evidence
 
 - @Key idea@: high correlation _feels like_ understanding but isn't
@@ -123,22 +121,22 @@
 
 - **Effects of interventions**
   - _"If we change X, what happens to Y?"_
-  - Example: _"If we lower prices by 10%, will revenue increase?"_
+  - E.g., _"If we lower prices by 10%, will revenue increase?"_
   - Observational data cannot answer without causal assumptions
 
 - **Counterfactuals**
   - _"What would have happened with a different decision?"_
-  - Example: _"Would customer churn if we offered them a discount?"_
+  - E.g., _"Would customer churn if we offered them a discount?"_
 
 - **Fairness**
   - Model can be _statistically_ unbiased but _causally_ biased
   - _Statistically unbiased_: $\EE[Prediction] = \EE[True Value]$
   - _Causally biased_: model uses proxies for protected attributes
-    - Example: variables correlated to race and gender in decisions
+    - E.g., variables correlated to race and gender in decisions
 
 - **Optimal decisions**
   - ML optimizes for accuracy, not business outcomes
-  - Example: 90% accurate model may lead to worse decisions than 85% accurate
+  - E.g., 90% accurate model may lead to worse decisions than 85% accurate
     one, depending on error consequences
 
 * Problem 1: Correlation is Not Causation!
@@ -278,102 +276,110 @@
 
 - @Problem@: Real-world distributions shift over time, breaking trained models
 
-- @Definition@: **Concept drift**
-  - Link between inputs and predictions changes: $\Pr(Y | X)$
-  - Example: customer preferences change; model from 2020 becomes less accurate
-    by 2023
+  - **Concept drift**: link between inputs and predictions 
+    $\Pr(Y | X)$ changes
+    - E.g., customer preferences change $\to$ model from 2020 becomes less accurate
+      by 2023
 
-- @Definition@: **Covariate shift**
-  - Input distribution changes but relationship stays same: $\Pr(X)$
-  - Example: more young customers join platform; model trained on older
-    customer base performs worse
+  - **Covariate shift**: input distribution $\Pr(X)$ changes but
+    relationship stays same
+    - E.g., more young customers join platform $\to$ model trained on older
+      customer base performs worse
 
-- @Definition@: **Label shift**
-  - Outcome distribution changes: $\Pr(Y)$
-  - Example: fraud rate increases from new tactics; model from old rate
-    becomes less effective
+  - **Label shift**: outcome distribution $\Pr(Y)$ changes
+    - E.g., fraud rate increases from new tactics $\to$ model from old rate becomes
+      less effective
 
 - @Solution@: Causal models provide stability
   - Encode mechanisms, not just patterns
-  - Mechanisms more stable across distribution shifts
+  - Mechanisms are more stable across distribution shifts
   - Understand _"why"_ to predict in new contexts
 
 ## Optimization vs. Inference vs. Decision Theory
 
 * Optimization vs. Inference vs. Decision Theory
 
-- @Comparison@: Three paradigms that ML conflates
+- @Comparison@: traditional machine learning conflates three paradigms
 
-- @Definition@: **Optimization** finds best action given _known_ objective
-  - Assumes world behavior is known
-  - Example: minimize cost, maximize throughput, tune parameters
-  - Tools: gradient descent, linear programming, evolutionary algorithms
+  - **Statistical inference** estimates parameters from data
+    - Learns from observations given model structure
+    - E.g., estimate treatment effects, compute confidence intervals
+    - _Tools_: regression, Bayesian estimation, hypothesis testing
 
-- @Definition@: **Statistical inference** estimates parameters from data
-  - Learns from observations given model structure
-  - Example: estimate treatment effects, compute confidence intervals
-  - Tools: regression, Bayesian estimation, hypothesis testing
+  - **Optimization** finds best action given a _known_ objective
+    - Assumes world behavior is known
+    - E.g., minimize cost, maximize throughput, tune parameters
+    - _Tools_: gradient descent, linear programming, evolutionary algorithms
 
-- @Definition@: **Decision theory** chooses actions under _uncertainty_
-  - Example: _"Launch product with uncertain demand?"_
-  - Requires reasoning about interventions and outcomes
-  - Tools: utility functions, expected value of information, causal models
+  - **Decision theory** chooses actions under _uncertainty_
+    - E.g., _"Launch product with uncertain demand?"_
+    - Requires reasoning about interventions and outcomes
+    - _Tools_: utility functions, expected value of information, causal models
 
 * Where ML Falls Short
-- ML focuses on **inference and optimization**
-- **Real problems need decision theory**
-  - Act under uncertainty with causal knowledge
+
+- @Problem@: Traditional ML focuses on **inference and optimization** only
+
+- @Key idea@: Real business problems require **decision theory**
+  - Must act under uncertainty with causal knowledge
 
 \begingroup \footnotesize
-| **Paradigm**    | **Question**              | **Assumes**     | **Output**            |
-|-----------------|---------------------------|-----------------|-----------------------|
-| Optimization    | What maximizes $f(x)$?    | Known objective | Optimal $x^*$         |
-| Inference       | What is $\theta$?         | Model structure | Parameter estimates   |
-| Decision theory | What should we _do_?      | Uncertainty     | Recommended action    |
+```{=typst}
+#styled-table(
+  headers: ("Paradigm", "Question", "Assumes", "Output"),
+  rows: (
+    ("Optimization", "What maximizes $f(x)$?", "Known objective", "Optimal $x^*$"),
+    ("Inference", "What is $\theta$?", "Model structure", "Parameter estimates"),
+    ("Decision theory", "What should we do?", "Uncertainty", "Recommended action"),
+  ),
+)
+```
 \endgroup
 
-// TODO(gp): Add plot Inference -> Causal models -> Decision Theory
-- **Causal AI bridges inference and decision theory**
-  - Inference: what the world looks like
-  - Causal models: what happens when you act
-  - Decision theory: which action to choose
+- @Solution@: **Causal probabilistic AI** inference and decision theory
+  - _Inference_: what the world looks like
+  - _Causal models_: what happens when you act
+  - _Decision theory_: which action to choose
 
 ## The Cost of Ignoring Causality
 
 * The Cost of Ignoring Causality (1/2)
-- Wrong decisions, wasted resources occur when organizations ignore causality
 
-- **Simpson's Paradox**
+- @Problem@: Wrong decisions and wasted resources occur when organizations
+  ignore causality
+
+- @Example@: **Simpson's Paradox**
   - Aggregate data shows opposite trend from subgroups
-  - E.g., Berkeley admissions: overall bias shown, but no bias within departments
-  - _Causal fix_: condition on the right variables using DAG
+  - E.g., Berkeley admissions show overall bias, but no bias within
+    departments
+  - _Solution_: Condition on right variables using DAG
 
-- **Confounding bias**
+- @Example@: **Confounding bias**
   - Hidden variable drives both treatment and outcome
   - E.g., ice cream sales and drowning deaths both rise in summer
-  - _Causal fix_: identify and control for confounders
+  - _Solution_: Identify and control for confounders
 
-- **Collider bias**
+- @Example@: **Collider bias**
   - Conditioning on common effect creates false associations
-  - E.g., in hospitalized patients unrelated diseases appear correlated (since
-    they both cause hospitalization)
-  - _Causal fix_: don't condition on colliders
+  - E.g., in hospitalized patients, unrelated diseases appear correlated
+    (both cause hospitalization)
+  - _Solution_: Do not condition on colliders
 
 * The Cost of Ignoring Causality (2/2)
 
-- **Feedback loop amplification**
+- @Example@: **Feedback loop amplification**
   - Biased predictions reinforce bias in future training data
-  - E.g., more police to minority neighborhoods $\to$ more arrests $\to$ model
-    learns neighborhoods are more dangerous $\to$ send more police
-  - _Causal fix_: model feedback explicitly
+  - E.g., more police to minorities $\to$ more arrests $\to$ model learns
+    neighborhoods dangerous $\to$ send more police
+  - _Solution_: Model feedback loops explicitly
 
-- **Intervention backfire**
+- @Example@: **Intervention backfire**
   - Acting on correlation leads to wrong actions
   - E.g., hospitals with more staff have higher mortality rates
     - Confounded by patient severity: sicker patients need more staff
-  - A naive intervention (_"reduce staff to lower mortality"_) would be
+  - Naive intervention (_"reduce staff to lower mortality"_) would be
     catastrophic
-  - _Causal fix_: distinguish correlation from causal effect before acting
+  - _Solution_: Distinguish correlation from causal effect before acting
 
 * Causal AI
 - **Understands the why**
