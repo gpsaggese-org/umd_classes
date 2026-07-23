@@ -160,8 +160,8 @@
 | msml610/lectures_source/Lesson05.1-Learning_Theory.txt                     |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson05.2-Overfitting.txt                         |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson05.3-Learn_Validation.txt                    |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt                   |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt             |       |              |              |           |                  |                   |
+| msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt                   | yes   |              |              |           |                  |                   |
+| msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt             | yes   |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt  |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt           |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt                 |       |              |              |           |                  |                   |
