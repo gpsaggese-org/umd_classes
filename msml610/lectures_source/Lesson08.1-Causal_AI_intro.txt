@@ -382,43 +382,47 @@
   - _Solution_: Distinguish correlation from causal effect before acting
 
 * Causal AI
-- **Understands the why**
+
+- @Capabilities@: Causal AI unlocks five key abilities
+
+- **Understand the why**
   - Determines cause-and-effect between variables
-  - E.g., _"Did marketing campaign increase sales?"_
+  - Example: _"Did marketing campaign increase sales?"_
 
 - **Identify interventions**
   - Identifies variables and interventions to change outcomes
-  - E.g., _"Which lifestyle changes reduce blood pressure?"_
+  - Example: _"Which lifestyle changes reduce blood pressure?"_
 
 - **Predict counterfactuals**
   - Hypothesize outcomes under different circumstances
-  - E.g., student grades if they attended a different school
+  - Example: student grades if they attended a different school
 
 - **Avoid bias**
-  - Ensure fairness beyond training data biases by accounting for confounding
-    variables
+  - Ensure fairness beyond training data biases
+  - Account for confounding variables explicitly
 
 - **Improve decisions**
   - Understand relationships for better choices
-  - E.g., improve supply chain by understanding impact of decisions on logistics
+  - Example: improve supply chain by understanding impact of decisions on logistics
 
 * Causal AI vs Traditional AI
-- **Current AI**
-  - Use correlation to:
-    - Analyze data
-    - Identify patterns
-    - Make predictions
-  - Model quality depends on data quality
-    - Biased or unclean data $\to$ poor model
 
-- **Causal AI**
-  - Science of inferring causation from association
-  - Understanding when and why causation and association differ
-  - Understand cause-and-effect relationships to intervene on the cause for
-    desired effect
+- @Comparison@: **Current AI** focuses on correlation
 
-- _"The next revolution of data science is the science of interpreting reality,
-  not of summarizing data"_ (Judea Pearl, 2021)
+- Uses correlation to:
+  - Analyze data
+  - Identify patterns
+  - Make predictions
+  - Model quality depends on data quality (biased or unclean data $\to$ poor model)
+
+- @Comparison@: **Causal AI** infers causation from association
+
+- Science of inferring causation from association
+- Understanding when and why causation and association differ
+- Understand cause-and-effect relationships to intervene for desired effect
+
+- @Quote@: _"The next revolution of data science is the science of
+  interpreting reality, not of summarizing data"_ (Judea Pearl, 2021)
 
 # Causal AI Fundamentals
 
@@ -426,58 +430,63 @@
 
 * The Ladder of Causation
 
-- Pearl provided a 3-level framework for understanding causality
-  1) Association
-  2) Intervention
-  3) Counterfactuals
+- @Definition@: Pearl's 3-level framework for understanding causality
+  1. Association
+  2. Intervention
+  3. Counterfactuals
 
 \begingroup \scriptsize
-| **Level**          | **Symbol**         | **Activity** | **Questions** |
-| ------------------ | -------------------| -------------| --------------|
-| 1. Association     | $\Pr(Y | X)$       | Observing    | What is?      |
-| 2. Intervention    | $\Pr(Y | do(X), Z)$| Intervening  | What if?      |
-| 3. Counterfactuals | $\Pr(Y_X | x', y')$| Imagining    | Why?          |
+```{=typst}
+#styled-table(
+  headers: ("Level", "Symbol", "Activity", "Questions"),
+  rows: (
+    ("1. Association", "$Pr(Y | X)$", "Observing", "What is?"),
+    ("2. Intervention", "$Pr(Y | do(X), Z)$", "Intervening", "What if?"),
+    ("3. Counterfactuals", "$Pr(Y_X | x', y')$", "Imagining", "Why?"),
+  ),
+)
+```
 \endgroup
 
 * Rung 1: Association
-- **Question**: _"How would seeing $X$ change your belief in $Y$?"_
 
-- **Math**: $\Pr(Y|X)$
+- @Question@: _"How would seeing $X$ change your belief in $Y$?"_
 
-- **Activity**:
-  - Passive observation to determine if $X, Y$ relate
-  - Traditional AI/ML based on this
+- @Definition@: $\Pr(Y|X)$
 
-- **Examples**
+- @Activity@: Passive observation to determine if $X, Y$ relate
+  - Traditional AI/ML based on this rung only
+
+- @Examples@
   - _"Trees have green leaves in spring"_
   - _"What does a symptom tell you about disease?"_
   - _"What does a survey tell you about elections?"_
 
 * Rung 2: Intervention
-- **Question**: _"What happens to $Y$ if you do $X$?"_
 
-- **Math**: $\Pr(Y | do(X), Z)$
+- @Question@: _"What happens to $Y$ if you do $X$?"_
 
-- **Activity**:
-  - Understand impact of action $X$ on $Y$ under conditions $Z$
+- @Definition@: $\Pr(Y | do(X), Z)$
+
+- @Activity@: Understand impact of action $X$ on $Y$ under conditions $Z$
   - Requires causal model, not just observations
 
-- **Examples**
+- @Examples@
   - _"Spring makes leaves turn green"_
   - _"Did headache disappear from pain reliever or food?"_
   - _"If I take aspirin, will headache cure?"_
   - _"If we ban sodas, what happens?"_
 
 * Rung 3: Counterfactuals
-- **Question**: _"Was $X$ that caused $Y$?"_
 
-- **Symbol**: $\Pr(Y_X | x', y')$
+- @Question@: _"Was $X$ that caused $Y$?"_
 
-- **Activity**:
-  - Imagine what would happen if facts were different
+- @Definition@: $\Pr(Y_X | x', y')$
+
+- @Activity@: Imagine what would happen if facts were different
   - Highest form of reasoning—requires understanding cause-and-effect
 
-- **Examples**
+- @Examples@
   - _"What if child received adult drug dose?"_
   - _"What would jury conclude?"_
   - _"Why did marketing campaign fail?"_
@@ -487,18 +496,20 @@
 ## Correlation vs Causation Models
 
 * Correlation vs Causation Model
-- **Correlation**: how variables relate
-- **Causality**: whether one variable causes another
+
+- @Definition@: **Correlation** describes how variables relate
+- @Definition@: **Causality** describes whether one variable causes another
 
 - Both accept inputs, transform, compute predictions
 - **Correlation-based AI**: works with abundant historical data
 - **Causal-based AI**: build business model first, then integrate data
 
 * Correlation-Based Model Process
-- **"Data first" approach**
+
+- @Approach@: **"Data first"** paradigm
   - More data = better
 
-- **Process**:
+- @Workflow@: Standard ML pipeline
   - Acquire data
   - Integrate and clean data
   - Exploratory data analysis (EDA)
@@ -506,97 +517,104 @@
   - Build and test models
   - Deploy models in production
 
-- **Common failures of correlation-based AI**
-  - Organizational issues
+- @Cons@: Common failures of correlation-based AI
+  - Organizational issues in team structure
   - Opaque models, lack explainability
-  - Spurious correlations
-  - Never articulate "what's the business goal?"
+  - Spurious correlations mistaken for signals
+  - Never articulate business goal
 
 * Causation-based Model Process
-- **"Model first" approach**
-  - Understand business question before data
 
-- **Process**
+- @Approach@: **"Model first"** paradigm
+  - Understand business question before collecting data
+
+- @Workflow@: Causal AI pipeline
   - What is the intended outcome?
   - What is the proposed intervention?
   - What are confounding and effecting factors?
   - Create model diagram/graph
-  - Data acquisition
-  - ...
+  - Data acquisition and validation
 
 ## Data Science vs. Decision Science
 
 * From Data Science to Decision Science
-- Data science and Decision science are **two different paradigms**
+
+- @Comparison@: Data science and Decision science are **two different paradigms**
 
 \begingroup \footnotesize
-| **Dimension**     | **Data Science**              | **Decision Science**            |
-|-------------------|-------------------------------|---------------------------------|
-| Goal              | Predict outcomes              | Choose best actions             |
-| Core question     | _"What will happen?"_         | _"What should we do?"_          |
-| Method            | Statistical models, ML        | Causal models, decision theory  |
-| Output            | Score, forecast, cluster      | Recommended action + expected outcome |
-| Success metric    | Accuracy, AUC, RMSE           | Business outcome, ROI, impact   |
-| Data requirement  | Historical observations       | Observations + causal structure |
+```{=typst}
+#styled-table(
+  headers: ("Dimension", "Data Science", "Decision Science"),
+  rows: (
+    ("Goal", "Predict outcomes", "Choose best actions"),
+    ("Core question", "What will happen?", "What should we do?"),
+    ("Method", "Statistical models, ML", "Causal models, decision theory"),
+    ("Output", "Score, forecast, cluster", "Recommended action + outcome"),
+    ("Success metric", "Accuracy, AUC, RMSE", "Business outcome, ROI, impact"),
+    ("Data requirement", "Historical observations", "Observations + causal structure"),
+  ),
+)
+```
 \endgroup
 
-- **Key insight**:
+- @Key idea@: Gap between prediction and decision is _causal reasoning_
   - Organizations have data science teams doing prediction
   - Business stakeholders need decision science
-  - Gap between "what will happen" and "what should we do" is _causal reasoning_
 
-- **Machine learning**
+- @Problem@: Machine learning excels at prediction but fails at decisions
   - Excels at prediction
   - Fails at "what-if" questions
   - Fails for decisions involving interventions
-  - Association works for predicting without intervention
-  - Models can be useless or harmful
+  - Association alone cannot support decisions
+  - Models can be useless or harmful without causal reasoning
 
 * Causal Questions vs. Predictive Questions
-- Predictive question: _what will happen?_
-- Causal question: _what to do?_, _why it happened?_, _what will happen_?
+
+- @Comparison@: Two classes of questions drive different methods
 
 \begingroup \footnotesize
-| **Predictive Question**                  | **Causal Question**                          |
-|------------------------------------------|----------------------------------------------|
-| Which patients will be readmitted?       | Which intervention reduces readmission?      |
-| Which customers will churn?              | What action prevents churn?                  |
-| What will sales be next quarter?         | How would a 10% price cut affect sales?      |
-| Which students will fail the exam?       | Does tutoring improve exam scores?           |
-| Which transactions are fraudulent?       | What policy changes reduce fraud?            |
+```{=typst}
+#styled-table(
+  headers: ("Predictive Question", "Causal Question"),
+  rows: (
+    ("Which patients will be readmitted?", "Which intervention reduces readmission?"),
+    ("Which customers will churn?", "What action prevents churn?"),
+    ("What will sales be next quarter?", "How would a 10% price cut affect sales?"),
+    ("Which students will fail the exam?", "Does tutoring improve exam scores?"),
+    ("Which transactions are fraudulent?", "What policy changes reduce fraud?"),
+  ),
+)
+```
 \endgroup
 
-- **Predictive questions**:
-  - Standard ML, observational data only
+- @Approach@: **Predictive questions** use standard ML
+  - Observational data only
   - Useful for _monitoring_ and _alerting_
 
-- **Causal questions**:
-  - Causal models or experiments
+- @Approach@: **Causal questions** require causal models or experiments
   - Answer "what if" and "why"
   - Useful for _decisions_ and _policy design_
 
 * A Roadmap From Prediction to Decision Intelligence
 
-// TODO(gp): Add a diagram
+- @Definition@: **Level 0: Descriptive**
+  - Question: _"What happened?"_
+  - Tools: Dashboards, reports, statistics (backward-looking)
 
-- **Level 0: Descriptive**
-  - _"What happened?"_
-  - Dashboards, reports, statistics (backward-looking)
+- @Definition@: **Level 1: Predictive**
+  - Question: _"What will happen?"_
+  - Tools: ML models, forecasting (assumes stable world)
 
-- **Level 1: Predictive**
-  - _"What will happen?"_
-  - ML models, forecasting (assumes stable world)
+- @Definition@: **Level 2: Causal**
+  - Question: _"Why?"_ and _"What if we intervene?"_
+  - Tools: DAGs, do-calculus (understand mechanisms)
 
-- **Level 2: Causal**
-  - _"Why?"_ and _"What if we intervene?"_
-  - DAGs, do-calculus (understand mechanisms)
+- @Definition@: **Level 3: Decision**
+  - Question: _"What should we do?"_
+  - Tools: Causal models + decision theory + business goals
 
-- **Level 3: Decision**
-  - _"What should we do?"_
-  - Causal models + decision theory + business goals
-
-- Most organizations stuck at Level 1
-  - Causal AI enables jump to Levels 2 and 3
+- @Key idea@: Most organizations stuck at Level 1
+  - Causal AI enables jump to Levels 2 and 3 for competitive advantage
 
 # Causal AI in Business
 
@@ -604,70 +622,53 @@
 
 * Digital Transformation in Business
 
-- **Digital transformation** uses digital technologies to:
-  - Reduce costs
-  - Improve revenues
+- @Definition@: **Digital transformation** uses digital technologies to reduce
+  costs and improve revenues
 
-- How?
-  - **Integration of digital technology**
-    - Embed digital tools (AI, cloud, IoT, automation) into business areas
-  - **Cultural and organizational change**
-    - Encourage innovation, agility, data-driven mindset
-  - **Customer-centric approach**
-    - Use digital solutions (personalized experiences, AI-driven insights) to
-      enhance customer engagement, satisfaction
-  - **Process automation and optimization**
-    - Streamline operations through AI, robots, analytics
-  - **Data-driven decision making**
-    - Leverage big data, machine learning, real-time analytics for smarter,
-      faster, strategic decisions
+- @Techniques@: Five key approaches
+  - **Integration**: Embed digital tools (AI, cloud, IoT, automation)
+  - **Cultural change**: Encourage innovation, agility, data-driven mindset
+  - **Customer-centric**: Use digital solutions for engagement and satisfaction
+  - **Process automation**: Streamline operations through AI, robots, analytics
+  - **Data-driven decisions**: Leverage big data, ML, real-time analytics
 
 * Why AI Projects Fail?
-- **AI projects fail** because they approach problems only from an ML
-  perspective
-  - Data scientists:
-    - Focus on model accuracy and technical metrics
-    - Work in isolation from domain experts, business users, and data engineers
-  - Lack of understanding of problem context leads to irrelevant solutions
 
-- **Misalignment with business goals**
-  - Models solve the wrong problem or answer irrelevant questions
+- @Problem@: AI projects approach problems only from ML perspective
+  - Data scientists focus on accuracy and technical metrics
+  - Work in isolation from domain experts, business users, data engineers
+  - Lack of problem context leads to irrelevant solutions
 
-- **Black-box models** fail to solve real-world problems
-  - Models are difficult to interpret or explain to stakeholders
-  - Lack of transparency reduces trust and adoption
-
-- **Data issues** undermine model performance
-  - Poor quality, missing, or biased data
-
-- **Deployment and integration challenges**
-  - Models not easily integrated into production systems
-  - Real-time constraints or infrastructure limitations
-
-- **Lack of feedback loops**
-  - No process for monitoring model performance post-deployment
+- @Limitations@: Five common failure modes
+  - **Misalignment**: Models solve wrong problem or answer irrelevant questions
+  - **Black-box models**: Difficult to interpret or explain to stakeholders
+  - **Data issues**: Poor quality, missing, or biased data
+  - **Deployment challenges**: Not easily integrated into production systems
+  - **Lack of monitoring**: No process for tracking performance post-deployment
 
 * How to Make AI Project Succeed
+
+- @Techniques@: Four success factors
+
 1. **Create a hybrid team**
    - Represents all business aspects
    - Uses collaborative framework
-   - Communicates with a single language (e.g., DAGs)
-   - Team size varies by company and project complexity
+   - Communicates with single language (e.g., DAGs)
 
-2. **Meet regularly to ensure continuity**
+2. **Meet regularly** to ensure continuity
 
 3. **Find an executive sponsor**
-   - Understands project's goals and potential
+   - Understands project goals and potential
 
 4. **Initial pilot**
    - Small team for targeted problem
-   - Demonstrate AI approach merit
+   - Demonstrates AI approach merit
 
 ## The Causal AI Workflow
 
-* AI in Business
+* AI in Business: The Causal AI Workflow
 
-- How do you use Causal AI in Business?
+- @Question@: How do you apply Causal AI in Business?
 
 \centering
 
@@ -702,74 +703,65 @@ digraph CausalFlowGrid {
 ```
 
 * Step 1: What Are the Intended Outcomes?
-- Most AI projects (even 90%) fail
-  - Misalignment between business goals and project
 
-- **Questions**
+- @Problem@: Most AI projects (even 90%) fail from misalignment between
+  business goals and project
+
+- @Questions@: Key questions to answer
   - What process are you analyzing?
   - What happens if a course of action is taken or not?
   - Outcomes: positive, negative, unacceptable, optimal?
   - What related data can be combined and leveraged?
   - What are possible and feasible interventions?
-    - Confounding factors correlated with outcomes and treatments?
-    - Factors exist but cannot be accurately measured?
-  - ...
+  - Confounding factors correlated with outcomes and treatments?
 
 * Step 2: What Are the Proposed Interventions?
-- What are **levers** to achieve a business outcome?
 
-- E.g., customer marketing for a product
+- @Definition@: **Levers** are variables to achieve business outcomes
+
+- @Example@: Customer marketing for a product
   - Introduce a new product?
-  - Does bundling multiple products
-    - Improve sales?
-    - Inhibit long-term sales?
-  - Should advertisement focus on product quality vs other options?
-  - Add more variations of the same product?
-  - Discontinue the product?
-  - Divest the product line?
-  - ...
+  - Bundle multiple products (improve sales or inhibit long-term)?
+  - Focus advertisement on quality vs other options?
+  - Add more variations of same product?
+  - Discontinue or divest product line?
 
 * Step 3: What Factors Create Changes?
-- **Identify confounders**
-  - Obscure relationship between variables
-  - Mute or inflate relationship
 
-- **Direct effect**
-  - Effect through intervention
+- @Definition@: **Identify confounders** that obscure or distort relationships
+  - Confounders mute or inflate relationship strength
 
-- **Indirect effect**
-  - Effect by environment or intervention byproduct
+- @Definition@: **Direct effect**: Effect through intervention pathway
 
-- **Total causal effect**
-  - Effect of all factors modifying outcome
+- @Definition@: **Indirect effect**: Effect by environment or intervention
+  byproduct
+
+- @Definition@: **Total causal effect**: All factors modifying outcome
 
 * Step 4: Build Causal DAG
-- **Causal models**
-  - Simplify systems without losing key relationships
-  - Focus on essential variables and interactions
 
-- **Visual models**
-  - Abstract complexity into interpretable formats
+- @Definition@: **Causal models** simplify systems without losing key
+  relationships
+
+- **Visual models** abstract complexity into interpretable formats
   - Highlight direction and strength of influence
-
-- **Simplicity**
   - Aid communication between stakeholders
   - Reduce cognitive overload by excluding irrelevant details
   - Guide data collection by identifying impactful variables
-  - Support hypothesis testing through counterfactual and intervention scenarios
 
-- **Balance is key**
+- @Key idea@: **Balance** is critical
   - Too much simplicity loses insight
   - Too much complexity loses clarity
 
 * Marketing Example: Price Intervention
-- Assume **price is intervention** and you want to **maximize revenue**
-  - Increase price? By how much?
-  - Decrease price? By how much?
+
+- @Example@: Assume **price is intervention** and goal is **maximize revenue**
+  - Increase price by how much?
+  - Decrease price by how much?
   - Change price one-time or over time?
   - Develop individual pricing model for each customer?
 
-- The causal DAG is:
+- The causal DAG illustrates price's complex effects:
   ```graphviz[height=50%]
   digraph CausalDiagram {
       splines=true;
@@ -778,7 +770,6 @@ digraph CausalFlowGrid {
 
       node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-      // Node styles
       Price [label="Price", fillcolor="#F4A6A6"];
       Behavior [label="Behavior", fillcolor="#FFD1A6"];
       ProductAmount [label="Product Amount", fillcolor="#B2E2B2"];
@@ -787,7 +778,6 @@ digraph CausalFlowGrid {
       Supply [label="Product Supply", fillcolor="#A6E7F4"];
       StoreDistance [label="Distance to store", fillcolor="#D2B48C"];
 
-      // Edges
       Price -> Behavior;
       Behavior -> Revenue;
       Price -> ProductAmount;
@@ -798,157 +788,144 @@ digraph CausalFlowGrid {
       StoreDistance -> ProductAmount;
   }
   ```
-  - Lots of confounders!
 
 * Step 5: Data Acquisition and Integration
-- Use **data collected** for correlation-based ML
 
-- Collect **data specifically** for causal AI
-  - Treat, condition, transform data
+- @Workflow@: Leverage existing data and collect new data
+  - Use data collected for correlation-based ML
+  - Collect data specifically for causal AI objectives
 
-- Prepare data to match refined causal model
+- **Prepare data** to match refined causal model
   - Clean, normalize, align data with model assumptions
-
-- **Transformation data**
   - Map observed variables to DAG nodes
   - Encode categorical variables
   - Handle missing data (imputation or exclusion)
   - Normalize or scale values
 
-- Control for bias and confounding
-
-- **Goal**: Ensure data structure supports causal estimation
+- **Control for bias and confounding**
+  - Goal: Ensure data structure supports causal estimation
 
 * Step 6: Model Modification
-- **After initial DAG** is designed
-  - Refine to reduce bias and improve reliability
+
+- @Workflow@: Refine initial DAG design
+  - Reduce bias and improve reliability
   - Clarify variables as confounders, mediators, or outcomes
 
-- **Avoid common pitfalls**
-  - Do not control for mediators or colliders, which can distort results
-  - Control for direct and indirect confounders to prevent biased estimates
+- @Cons@: Avoid common pitfalls
+  - Do not control for mediators or colliders
+  - Control for direct and indirect confounders
 
 - **Test models** against technical and business objectives
-
-- Determines necessary controls to **isolate causal effects**
-  - Ensure causal assumptions align with data and domain logic
-  - Improve model interpretability and predictive power
+  - Isolate causal effects with necessary controls
+  - Ensure assumptions align with data and domain logic
 
 * Step 7: Preparing for Deployment in Business
 
-- Transition **from experimentation to decision-making processes**
+- @Workflow@: Transition from experimentation to decision-making
   - Validate model against real-world business outcomes
-  - Ensure stakeholders understand and trust causal logic and assumptions
+  - Ensure stakeholders understand and trust causal logic
 
 - **Develop user-friendly interfaces** for business users
-  - Automate data pipelines for timely updates and monitoring
+  - Automate data pipelines for timely updates
 
-- **Set up monitoring**:
+- **Set up monitoring**
   - Establish metrics for performance tracking and drift detection
-  - Create feedback loops to refine and improve models post-deployment
+  - Create feedback loops to refine models post-deployment
 
-- **Document and train**:
-  - Provide clear model documentation for auditors and users
-  - Train stakeholders on interpreting results and making informed decisions
+- **Document and train** stakeholders
+  - Provide clear model documentation
+  - Train on interpreting results and making informed decisions
 
-- **Goal**: Deliver measurable business value
+- @Goal@: Deliver measurable business value
 
 * Roles in Hybrid Teams
 
 \begingroup \scriptsize
-| **Role**               | **Responsibilities**                   |
-| ---------------------- | -------------------------------------- |
-| Business Strategists   | Align modeling with business goals     |
-|                        | Sponsor projects                       |
-|                        | Communicate insights to stakeholders   |
-| Subject-Matter Experts | Provide domain expertise               |
-|                        | Identify relevant variables            |
-|                        | Validate DAGs                          |
-| Data Experts           | Source and clean data                  |
-|                        | Map data to model variables            |
-|                        | Handle missing values                  |
-| Data Scientists        | Construct and validate DAGs            |
-|                        | Apply causal inference methods         |
-|                        | Simulate decisions                     |
-| Software Developers    | Build tools and interfaces             |
-|                        | Create data pipelines                  |
-| IT Professionals       | Provide infrastructure and governance  |
-|                        | Ensure model execution                 |
-|                        | Integrate with enterprise systems      |
-| Project Managers       | Coordinate collaboration and timelines |
-|                        | Manage documentation                   |
-|                        | Ensure alignment with strategic goals  |
+```{=typst}
+#styled-table(
+  headers: ("Role", "Responsibilities"),
+  rows: (
+    ("Business Strategists", "Align modeling with business goals; Sponsor projects; Communicate insights"),
+    ("Subject-Matter Experts", "Provide domain expertise; Identify relevant variables; Validate DAGs"),
+    ("Data Experts", "Source and clean data; Map data to model variables; Handle missing values"),
+    ("Data Scientists", "Construct and validate DAGs; Apply causal inference methods; Simulate decisions"),
+    ("Software Developers", "Build tools and interfaces; Create data pipelines"),
+    ("IT Professionals", "Provide infrastructure and governance; Ensure model execution; Integrate systems"),
+    ("Project Managers", "Coordinate collaboration and timelines; Manage documentation; Ensure alignment"),
+  ),
+)
+```
 \endgroup
 
 * Executing for a Hybrid Team Project
-- **Establish a collaborative approach**
+
+- @Workflow@: Establish a collaborative approach
   - Align strategic goals with technical efforts
   - Emphasize early stakeholder engagement and shared ownership
 
-- **Define team goals**
+- @Step@: Define team goals
   - Use SMART objectives aligned with business strategy
 
-- **Target a project**
+- @Step@: Target a project
   - Choose a bounded, feasible, high-value use case
   - Prioritize early wins for trust and momentum
 
-- **Define the hypothesis**
+- @Step@: Define the hypothesis
   - Build a preliminary DAG with experts' input
 
-- **Incremental model development**
+- @Step@: Incremental model development
   - Build the model in small stages
   - Iterate with regular feedback
 
 ## Explainability and Interpretability
 
 * The Importance of Explainability
-- **Understanding AI-based models**
+
+- @Question@: Can we understand how AI models make decisions?
   - How do ML models make decisions?
   - Can they be trusted?
   - Are they biased?
 
-- AI systems need to foster trust, transparency, and user confidence
-
-- Management faces
+- @Problem@: AI systems must foster trust, transparency, and user confidence
   - Loss of trust, regulation violations, fines, lawsuits
-  - E.g., false negative in medical screening for cancer
+  - Example: false negative in medical screening for cancer
 
-- **Humans in the loop**
+- @Solution@: Humans in the loop
   - Ensure interpretation and context are considered
 
 * Techniques for Interpretability
-- **Local Interpretable Model-agnostic Explanations** (LIME)
+
+- @Definition@: **LIME** (Local Interpretable Model-agnostic Explanations)
   - Focus on single prediction
   - Approximate model locally with interpretable model
   - Perturb input data, observe prediction changes
 
-- **Partial Dependence Plots** (PDP)
+- @Definition@: **PDP** (Partial Dependence Plots)
   - Show marginal effect of features on predicted outcome
-  - Vary one feature, keep others constant
 
-- **Individual Conditional Expectation** (ICE)
+- @Definition@: **ICE** (Individual Conditional Expectation)
   - Show feature-prediction relationship for individual instances
 
-- **SHapley Additive exPlanations** (SHAP)
+- @Definition@: **SHAP** (SHapley Additive exPlanations)
   - Quantify feature contribution to specific prediction
 
 * Causal AI in Interpretable AI
-- **Understand causes, effects, and solutions**
-  - DAGs present variables, relationships, strengths
+
+- @Advantages@: Causal AI enables deeper interpretability
+  - DAGs present variables, relationships, strengths clearly
   - Counterfactuals predict action outcomes
   - Remove confounders to prevent skewed estimates
-  - Humans understand output (experts and non-experts)
+  - Humans understand output (experts and non-experts both)
   - Hybrid teams enhance context, reduce blind spots
 
 * The Future of Causal AI
-- **Causal AI**:
+
+- @Characteristics@: Causal AI evolution
   - Moves from academia to commercial use
   - Departs from purely data-driven systems
   - Reflects human thinking and decision-making
 
-// TODO: Add a diagram
-
-- **Convergence**:
+- @Convergence@: Multiple AI paradigms merge
   - Causal AI
   - Traditional AI
   - Deep learning
