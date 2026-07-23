@@ -15,11 +15,11 @@
   costs and improve revenues
 
 - @Techniques@: Five key approaches
-  - **Integration**: Embed digital tools (AI, cloud, IoT, automation)
-  - **Cultural change**: Encourage innovation, agility, data-driven mindset
-  - **Customer-centric**: Use digital solutions for engagement and satisfaction
-  - **Process automation**: Streamline operations through AI, robots, analytics
-  - **Data-driven decisions**: Leverage big data, ML, real-time analytics
+  1. **Integration**: Embed digital tools (AI, cloud, IoT, automation)
+  2. **Cultural change**: Encourage innovation, agility, data-driven mindset
+  3. **Customer-centric**: Use digital solutions for engagement and satisfaction
+  4. **Process automation**: Streamline operations through AI, robots, analytics
+  5. **Data-driven decisions**: Leverage big data, ML, real-time analytics
 
 * Why AI Projects Fail?
 
@@ -96,7 +96,7 @@ digraph CausalFlowGrid {
 - @Problem@: Most AI projects (even 90%) fail from misalignment between
   business goals and project
 
-- @Questions@: Key questions to answer
+- @Question@: Key questions to answer
   - What process are you analyzing?
   - What happens if a course of action is taken or not?
   - Outcomes: positive, negative, unacceptable, optimal?
