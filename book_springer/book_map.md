@@ -170,7 +170,7 @@
 | msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt                     | yes   | 80%          | 80%          |           |                  |                   |
 | msml610/lectures_source/Lesson08.2-Causal_AI_concepts.txt                  | yes   | 80%          | 80%          |           |                  |                   |
 | msml610/lectures_source/Lesson08.3-Causal_AI_in_business.txt               | yes   | 80%          | 80%          |           |                  |                   |
-| msml610/lectures_source/Lesson08.4-Causal_networks.txt                     |       |              |              |           |                  |                   |
+| msml610/lectures_source/Lesson08.4-Causal_networks.txt                     | yes   | 80%          | 80%          |           |                  |                   |
 | msml610/lectures_source/Lesson08.5-Do_calculus.txt                         |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson08.6-Causal_inference.txt                    |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson08.7-Causal_experiments.txt                  |       |              |              |           |                  |                   |
