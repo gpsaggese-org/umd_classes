@@ -1189,6 +1189,64 @@ digraph ColliderDiagram {
 
 ## Types of Paths in Causal AI
 
+* Chain
+
+::: columns
+:::: {.column width=60%}
+- @Definition@: **Chain** $X \to M \to Y$ is sequential causal path
+  - $X$ affects $M$, which affects $Y$
+  - Represents mediation or transmission of causal effect
+  - $M$ is intermediate (mediator) variable
+
+- _Conditioning on $M$ blocks path_ interrupts causal effect
+::::
+:::: {.column width=40%}
+```graphviz
+digraph ChainStructure {
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+    rankdir=LR;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    X [fillcolor="#FFD1A6"];
+    M [fillcolor="#F4A6A6"];
+    Y [fillcolor="#A6C8F4"];
+
+    X -> M;
+    M -> Y;
+}
+```
+::::
+:::
+
+::: columns
+:::: {.column width=40%}
+- @Example@:
+  - $Education$ influences $Income$, which influences $LifeQuality$
+  - Education's effect on quality passes through income
+  - Path: $Education \to Income \to LifeQuality$
+::::
+:::: {.column width=35%}
+```graphviz
+digraph EducationChain {
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+    rankdir=LR;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    Education [fillcolor="#FFD1A6"];
+    Income [fillcolor="#F4A6A6"];
+    LifeQuality [fillcolor="#A6C8F4"];
+    Education -> Income;
+    Income -> LifeQuality;
+}
+```
+::::
+:::
+
+
 * Fork Structure
 ::: columns
 :::: {.column width=60%}
@@ -1247,13 +1305,67 @@ digraph LifestyleFork {
 
 * Inverted Fork
 
-- @Definition@: **Inverted fork** (collider structure)
+::: columns
+:::: {.column width=60%}
+- @Definition@: **Inverted fork** (collider structure) $B \to A \leftarrow C$
   - Two or more arrows converge on common node
   - Colliders block associations (unless conditioned on)
 
 - @Key idea@: **Conditioning on collider opens path**
   - Induces spurious correlations
   - Basis of selection bias
+
+- _Without conditioning_: $B$ and $C$ independent
+- _With conditioning on $A$_: $B$ and $C$ become dependent
+::::
+:::: {.column width=40%}
+```graphviz
+digraph ColliderStructure {
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    B [fillcolor="#A6C8F4"];
+    A [fillcolor="#F4A6A6"];
+    C [fillcolor="#A6C8F4"];
+
+    {rank=same; B; C;}
+
+    B -> A;
+    C -> A;
+}
+```
+::::
+:::
+
+::: columns
+:::: {.column width=60%}
 - @Example@: **Sales collider**
   - $MarketingSpend$ and $ProductQuality$ influence $Sales$
-  - Conditioning on $Sales$ induces false dependence
+  - Before observing sales: spend and quality independent
+  - After conditioning on sales: spend and quality become dependent
+  - High sales with low quality suggests high marketing spend
+::::
+:::: {.column width=40%}
+```graphviz
+digraph SalesCollider {
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Marketing [fillcolor="#A6C8F4"];
+    Sales [fillcolor="#F4A6A6"];
+    Quality [fillcolor="#A6C8F4"];
+
+    {rank=same; Marketing; Quality;}
+
+    Marketing -> Sales;
+    Quality -> Sales;
+}
+```
+::::
+:::
