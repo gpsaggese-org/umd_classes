@@ -931,11 +931,12 @@ digraph CausalTriangle {
 
 * Confounder Variable: Example
 ::: columns
-:::: {.column width=40%}
+:::: {.column width=60%}
 - @Example@: _Ice cream sales and drowning correlate_
   - Is it causality?
-  - Spurious explanations abound
-    - E.g., distraction, sugar spike, hyperventilation, etc.
+
+- Spurious explanations abound
+  - E.g., distraction, sugar spike, hyperventilation, etc.
 ::::
 :::: {.column width=40%}
 ```tikz
@@ -989,9 +990,39 @@ digraph CausalTriangle {
 
 * Confounder Variable: Example
 
+::: columns
+:::: {.column width=60%}
+
 - @Key idea@: **No cause-effect** between $IceCreamSales$ and $Drowning$
   - $Temperature$ is the confounder
-  - Controlling for temperature removes association
+
+::::
+:::: {.column width=40%}
+
+```graphviz
+digraph CausalTriangle {
+    rankdir=TB;
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Temperature [label="Temperature", fillcolor="#FFD1A6"];
+    IceCreamSales [label="IceCreamSales", fillcolor="#A6C8F4"];
+    Drowning [label="Drowning", fillcolor="#F4A6A6"];
+
+    {rank=same; IceCreamSales; Drowning;}
+
+    Temperature -> IceCreamSales;
+    Temperature -> Drowning;
+}
+```
+
+::::
+:::
+
+- In fact controlling for temperature removes association
 
 ::: columns
 :::: {.column width=50%}
@@ -1026,6 +1057,9 @@ digraph CausalTriangle {
 \end{axis}
 ```
 
+::::
+:::: {.column width=50%}
+
 ```tikz
 \begin{axis}[
     xlabel={Ice Cream Sales},
@@ -1049,44 +1083,21 @@ digraph CausalTriangle {
 {Flat: no causal effect};
 \end{axis}
 ```
-
-::::
-:::: {.column width=40%}
-```graphviz
-digraph CausalTriangle {
-    rankdir=TB;
-    splines=true;
-    nodesep=0.5;
-    ranksep=0.5;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-
-    Temperature [label="Temperature", fillcolor="#FFD1A6"];
-    IceCreamSales [label="IceCreamSales", fillcolor="#A6C8F4"];
-    Drowning [label="Drowning", fillcolor="#F4A6A6"];
-
-    {rank=same; IceCreamSales; Drowning;}
-
-    Temperature -> IceCreamSales;
-    Temperature -> Drowning;
-}
-```
-
 ::::
 :::
 
 * Collider
 ::: columns
-:::: {.column width=60%}
-- @Definition@: **Collider** $A$
-  - Variable influenced by multiple sources $B$, $C$
+:::: {.column width=50%}
+- @Definition@: **Collider** $A$ is a variable influenced by multiple sources
+  $B$, $C$
   - Complicates reasoning about relationships $B, C \to Y$
 ::::
-:::: {.column width=35%}
+:::: {.column width=50%}
 ```graphviz
 digraph ColliderDiagram {
   layout=dot;
-  rankdir=TB;
+  rankdir=LR;
   node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
   B [label="Cause 1 (B)", fillcolor="#A6C8F4"];
@@ -1104,15 +1115,14 @@ digraph ColliderDiagram {
 ::::
 :::
 
-* Collider: Examples
 ::: columns
-:::: {.column width=60%}
-- @Example@: **Exercise vs. Heart Disease**
+:::: {.column width=70%}
+- @Example@: Exercise vs. Heart Disease
   - $Diet$ and $Exercise$ influence $Body Weight$
   - $Body Weight$ influences $Heart Disease$
   - $Body Weight$ is collider
 ::::
-:::: {.column width=35%}
+:::: {.column width=30%}
 ```graphviz
 digraph ColliderDiagram {
   layout=dot;
@@ -1135,16 +1145,16 @@ digraph ColliderDiagram {
 :::
 
 * Collider Bias
-- @Definition@: **Collider bias** (Berkson's paradox)
+- @Definition@: **Collider bias** (aka Berkson's paradox)
   - Conditioning on collider opens blocked path
   - Introduces spurious association between parents
 
 ::: columns
 :::: {.column width=70%}
-- @Example@: **Variables**
+- @Example@: Consider the causal graph with the following variables
   - $D$ = Diet, $E$ = Exercise, $W$ = Body Weight, $H$ = Heart Disease
 
-- @Definition@: **Without conditioning on $W$**
+- _Without conditioning on $W$_
   - $E$ and $D$ independent
   - Knowing $E$ doesn't inform $D$
   - Collider $W$ blocks association
@@ -1171,7 +1181,7 @@ digraph ColliderDiagram {
 ::::
 :::
 
-- @Definition@: **After conditioning on $W$**
+- _After conditioning on $W$_
   - Fix $W$ at specific value
   - Creates dependency between $E$ and $D$
   - Changes in $E$ balanced by changes in $D$
@@ -1182,13 +1192,12 @@ digraph ColliderDiagram {
 * Fork Structure
 ::: columns
 :::: {.column width=60%}
-- @Definition@: **Fork** $D \leftarrow X \to C$
-  - Single variable $X$ influences multiple targets
+- @Definition@: **Fork** $D \leftarrow X \to C$ is when a single variable $X$
+  influences multiple targets
   - $X$ is confounder (common cause) of $C$ and $D$
   - Induces dependence even without direct link
 
-- @Remark@: **Conditioning on $X$ blocks path**
-  - Removes spurious correlation
+- _Conditioning on $X$ blocks path_ removes spurious correlation
 ::::
 :::: {.column width=35%}
 ```graphviz
@@ -1212,9 +1221,29 @@ digraph CausalDAG {
 ::::
 :::
 
-- @Example@: **Lifestyle fork**
+::: columns
+:::: {.column width=60%}
+- @Example@:
   - $Lifestyle$ confounds $Weight$ and $BloodPressure$
   - Outcomes correlated due to shared cause
+::::
+:::: {.column width=35%}
+```graphviz
+digraph LifestyleFork {
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    Lifestyle [fillcolor="#F4A6A6"];
+    Weight [fillcolor="#A6C8F4"];
+    BloodPressure [fillcolor="#A6C8F4"];
+    {rank=same; Weight; BloodPressure;}
+    Lifestyle -> Weight;
+    Lifestyle -> BloodPressure;
+}
+```
+::::
+:::
 
 * Inverted Fork
 
