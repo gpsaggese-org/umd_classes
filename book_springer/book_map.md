@@ -168,9 +168,12 @@
 | msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt           |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt           |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt                     | yes   |              |              |           |                  |                   |
-
-| msml610/lectures_source/Lesson08.4.txt                                     |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson08.5-Experimentation.txt                     |       |              |              |           |                  |                   |
+| msml610/lectures_source/Lesson08.2-Causal_AI_concepts.txt                  | yes   |              |              |           |                  |                   |
+| msml610/lectures_source/Lesson08.3-Causal_AI_in_business.txt               | yes   |              |              |           |                  |                   |
+| msml610/lectures_source/Lesson08.4-Causal_networks.txt                     |       |              |              |           |                  |                   |
+| msml610/lectures_source/Lesson08.5-Do_calculus.txt                         |       |              |              |           |                  |                   |
+| msml610/lectures_source/Lesson08.6-Causal_inference.txt                    |       |              |              |           |                  |                   |
+| msml610/lectures_source/Lesson08.7-Causal_experiments.txt                  |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson09.1-Reasoning_over_time.txt                 |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson09.2-Hidden_Markov_Models.txt                |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt                 |       |              |              |           |                  |                   |
