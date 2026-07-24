@@ -1198,7 +1198,7 @@ digraph ColliderDiagram {
   - Represents mediation or transmission of causal effect
   - $M$ is intermediate (mediator) variable
 
-- _Conditioning on $M$ blocks path_ interrupts causal effect
+- _Conditioning on $M$ blocks path_ and interrupts causal effect
 ::::
 :::: {.column width=40%}
 ```graphviz
@@ -1247,7 +1247,7 @@ digraph EducationChain {
 :::
 
 
-* Fork Structure
+* Fork
 ::: columns
 :::: {.column width=60%}
 - @Definition@: **Fork** $D \leftarrow X \to C$ is when a single variable $X$
@@ -1255,7 +1255,7 @@ digraph EducationChain {
   - $X$ is confounder (common cause) of $C$ and $D$
   - Induces dependence even without direct link
 
-- _Conditioning on $X$ blocks path_ removes spurious correlation
+- _Conditioning on $X$ blocks path_ and removes spurious correlation
 ::::
 :::: {.column width=35%}
 ```graphviz
@@ -1307,16 +1307,12 @@ digraph LifestyleFork {
 
 ::: columns
 :::: {.column width=60%}
-- @Definition@: **Inverted fork** (collider structure) $B \to A \leftarrow C$
-  - Two or more arrows converge on common node
+- @Definition@: **Inverted fork** $B \to A \leftarrow C$ is when two or more
+  arrows converge on common node
   - Colliders block associations (unless conditioned on)
 
-- @Key idea@: **Conditioning on collider opens path**
-  - Induces spurious correlations
+- _Conditioning on collider opens path_ and induces spurious correlations
   - Basis of selection bias
-
-- _Without conditioning_: $B$ and $C$ independent
-- _With conditioning on $A$_: $B$ and $C$ become dependent
 ::::
 :::: {.column width=40%}
 ```graphviz
@@ -1341,14 +1337,14 @@ digraph ColliderStructure {
 :::
 
 ::: columns
-:::: {.column width=60%}
+:::: {.column width=70%}
 - @Example@: **Sales collider**
   - $MarketingSpend$ and $ProductQuality$ influence $Sales$
   - Before observing sales: spend and quality independent
   - After conditioning on sales: spend and quality become dependent
   - High sales with low quality suggests high marketing spend
 ::::
-:::: {.column width=40%}
+:::: {.column width=30%}
 ```graphviz
 digraph SalesCollider {
     splines=true;
