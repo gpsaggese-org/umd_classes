@@ -137,7 +137,7 @@
 | 15. Deployment, Monitoring, and Adaptation              | Lesson15.01_Deployment_Monitoring_And_Adaptation.txt                       |              |              |           |                  |                   |               |
 | 16. Trust, Explainability, Fairness, and Governance     |                                                                            |              |              |           |                  |                   |               |
 
-| Slides                                                                     | Typst | TOC complete | Mat complete | Criticize | Slides finalized | Tutorial complete |
+| Slides                                                                     | Typst | TOC complete | Mat complete | Criticize | Slides complete  | Tutorial complete |
 | -------------------------------------------------------------------------- | ----- | ------------ | ------------ | --------- | ---------------- | ----------------- |
 |                                                                            |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson00-Class.txt                                 | yes   |              |              |           |                  |                   |
@@ -160,16 +160,16 @@
 | msml610/lectures_source/Lesson05.1-Learning_Theory.txt                     |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson05.2-Overfitting.txt                         |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson05.3-Learn_Validation.txt                    |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt                   | yes   | 80%          |              |           |                  |                   |
-| msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt             | yes   | 80%          |              |           |                  |                   |
+| msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt                   | yes   | 80%          | 80%          |           |                  |                   |
+| msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt             | yes   | 80%          | 80%          |           |                  |                   |
 | msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt  |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt           |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt                 |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt           |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt           |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt                     | yes   |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson08.2-Causal_AI_concepts.txt                  | yes   |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson08.3-Causal_AI_in_business.txt               | yes   |              |              |           |                  |                   |
+| msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt                     | yes   | 80%          | 80%          |           |                  |                   |
+| msml610/lectures_source/Lesson08.2-Causal_AI_concepts.txt                  | yes   | 80%          | 80%          |           |                  |                   |
+| msml610/lectures_source/Lesson08.3-Causal_AI_in_business.txt               | yes   | 80%          | 80%          |           |                  |                   |
 | msml610/lectures_source/Lesson08.4-Causal_networks.txt                     |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson08.5-Do_calculus.txt                         |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson08.6-Causal_inference.txt                    |       |              |              |           |                  |                   |
@@ -334,6 +334,9 @@
   - From correlation to causal reasoning: what graphs add beyond raw data
   - Choosing a representation: when logic, probability, or causal graphs fit
     best
+
+### TODO
+- Add `## Structural Causal Model`
 
 ### Slides
 - `book_springer/lectures_source/Lesson04.01_Knowledge_Representation.txt`
