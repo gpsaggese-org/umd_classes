@@ -141,8 +141,8 @@ digraph CausalDiagram {
 :::: {.column width=60%}
 
 - Causal model for sales example:
-  $$
   \small
+  $$
   \left\{
   \begin{aligned}
   & BusinessSize \leftarrow f_s(u_s) \\
@@ -198,8 +198,8 @@ digraph SalesModelExtended {
 
 * Applying a Treatment to Sales Example
 - **Assumption**: the causal model is:
-  $$
   \small
+  $$
   \left\{
   \begin{aligned}
   & T \leftarrow f_t(u_t) \\
@@ -210,8 +210,8 @@ digraph SalesModelExtended {
 
 - **Question**: _"what would happen to the outcome $Y$ if I were to set the
   treatment to $t_0$?"_
-  $$
   \small
+  $$
   \left\{
   \begin{aligned}
   & T \leftarrow t_0 \\
@@ -235,8 +235,8 @@ digraph SalesModelExtended {
   $$
 
 - **Remark**: Conditioning and intervention are different
-  $$
   \small
+  $$
   \EE[AmountSold | isOnSales = 1] \ne \EE[AmountSold | do(IsOnSales = 1)]
   $$
 
@@ -861,7 +861,7 @@ digraph CausalGraph {
 - Causation flows only in the direction of the arrows
   - I.e., changing $M$ affects $Y$, but doesn't affect $T$
 - Association flows both ways
-  - I.e., $T$ and $Y$ are dependent, $T \not\!\perp Y$
+  - I.e., $T$ and $Y$ are dependent, $T \not\perp Y$
 
 - **Proposition**: conditioning on mediator variable blocks association flow
   $$(T \perp Y) | M$$
@@ -878,7 +878,7 @@ digraph CausalGraph {
     studied (otherwise it would be difficult to get a promotion)
   - So $Study$ and $JobPromotion$ are:
     - Dependent
-    - Not independent $Study \cancel \perp JobPromotion$
+    - Not independent $Study \not\perp JobPromotion$
 
 - If you hold the intermediary variable fixed, i.e., conditioning on $M$,
   _"looking for only people with the same skills at problem solving"_
@@ -900,7 +900,7 @@ digraph CausalGraph {
   - Association flows backward through the arrows
 
 - **Proposition**: conditioning on the common cause blocks the association:
-  $$T \cancel \perp Y, (T \perp Y) | X$$
+  $$T \not\perp Y, (T \perp Y) | X$$
   - **Example**: if you know that you are a good programmer (e.g., you have an
     impressive resume), asking you a tech question won't give new information
     about if you are a good employee or not
@@ -911,7 +911,7 @@ digraph CausalGraph {
   - $T$ and $Y$ are independent: $T \perp Y$
 
 - **Proposition**: conditioning on $X$ makes $T$ and $Y$ dependent:
-  $T \cancel \perp Y | X$ and opens the path
+  $T \not\perp Y | X$ and opens the path
   - Aka "explaining away": one cause explains the effect, making the other cause
     less likely
   - Opens the path if you condition on any descendant of the collider
@@ -2090,60 +2090,39 @@ Variables that _predict the treatment well_ but not the outcome
     inference
 
 // TODO: Use inline
-```latex
-\usepackage{tikz}
-\usepackage[T1]{fontenc}
-\usepackage{helvet}
-\renewcommand{\familydefault}{\sfdefault}
-\usetikzlibrary{arrows.meta,positioning,calc}
-
-\begin{document}
-\begin{tikzpicture}[
-  font=\large,
-  every node/.style={inner sep=8pt},
-  every path/.style={line width=1.5pt}
-]
-
-% Define styles
-\tikzset{
-  label_font/.style={font=\small},
-  axis_arrow/.style={->,line width=1.5pt},
-  outcome_node/.style={minimum width=1.2cm, minimum height=1.2cm, text centered},
-  outcome_label/.style={font=\bfseries\Large}
-}
-
-% Set up the grid dimensions
-\def\cellwidth{2.5}
-\def\cellheight{2}
-\def\gridx{3}
-\def\gridy{2.5}
+```tikz
+[scale=0.8]
 
 % Draw axes
-% Y-axis (Units)
-\draw[axis_arrow] (0,0) -- (0,6) node[left, label_font, xshift=-0.3cm] {Units};
-\draw[axis_arrow] (0,0) -- (6.5,0) node[below, label_font, yshift=-0.3cm] {Time};
+\draw[->, line width=1.5pt] (0,0) -- (0,6);
+\draw[->, line width=1.5pt] (0,0) -- (6.5,0);
 
 % Axis labels
-\node[label_font, left=0.5cm of {(0,1)}] {Control};
-\node[label_font, left=0.5cm of {(0,4.5)}] {Treated};
-\node[label_font, below=0.5cm of {(1.5,-0.5)}] {Pre};
-\node[label_font, below=0.5cm of {(4.5,-0.5)}] {Post};
+\node[font=\small] at (-0.8, 1) {Control};
+\node[font=\small] at (-0.8, 4.5) {Treated};
+\node[font=\small] at (1.5, -0.8) {Pre};
+\node[font=\small] at (4.5, -0.8) {Post};
+
+% Y-axis label
+\node[font=\small] at (-0.5, 6.2) {Units};
+% X-axis label
+\node[font=\small] at (6.8, -0.3) {Time};
 
 % Grid cells with outcomes
 % Control-Pre: Y(0)
-\node[outcome_node, outcome_label] at (1.5,1) {Y(0)};
+\node[font=\bfseries\Large] at (1.5,1) {Y(0)};
 \draw (0.5,0.2) rectangle (2.5,1.8);
 
 % Control-Post: Y(0)
-\node[outcome_node, outcome_label] at (4.5,1) {Y(0)};
+\node[font=\bfseries\Large] at (4.5,1) {Y(0)};
 \draw (3.5,0.2) rectangle (5.5,1.8);
 
 % Treated-Pre: Y(0)
-\node[outcome_node, outcome_label] at (1.5,4.5) {Y(0)};
+\node[font=\bfseries\Large] at (1.5,4.5) {Y(0)};
 \draw (0.5,3.7) rectangle (2.5,5.3);
 
 % Treated-Post: Y(1)
-\node[outcome_node, outcome_label] at (4.5,4.5) {Y(1)};
+\node[font=\bfseries\Large] at (4.5,4.5) {Y(1)};
 \draw (3.5,3.7) rectangle (5.5,5.3);
 
 % Horizontal dashed line separating Pre and Post
@@ -2153,15 +2132,12 @@ Variables that _predict the treatment well_ but not the outcome
 \draw[dashed, line width=1pt] (3,0.2) -- (3,5.8);
 
 % Annotation: "Time correlations"
-\draw[->, line width=2pt, line cap=round, color=black] (2.8,5.9) to[bend left=30] (4.2,5.9);
-\node[above=0.3cm of {(3.5,5.9)}, label_font] {Time correlations};
+\draw[->, line width=2pt] (2.8,5.9) to[bend left=30] (4.2,5.9);
+\node[font=\small] at (3.5, 6.4) {Time correlations};
 
 % Annotation: "Unit correlations"
-\draw[->, line width=2pt, color=black] (5.8,2.2) to[bend right=30] (5.8,4.3);
-\node[right=0.3cm of {(5.8,3.5)}, label_font] {Unit correlations};
-
-\end{tikzpicture}
-\end{document}
+\draw[->, line width=2pt] (5.8,2.2) to[bend right=30] (5.8,4.3);
+\node[font=\small] at (6.3, 3.25) {Unit correlations};
 ```
 
 * Canonical Difference-in-Differences: The Setup
