@@ -50,7 +50,6 @@ digraph BayesianFlow {
 _Original graph_
 ::::
 :::: {.column width=25%}
-// TODO(ai_gp): Make P(S | W) = True red
 ```graphviz
 digraph BayesianFlow {
     splines=true;
@@ -297,56 +296,13 @@ digraph CausalDAG {
 
 ::: columns
 :::: {.column width=60%}
-- @Definition@: A **back-door path** is any path from $X$ to $Y$ starting with
-  an arrow into $X$ (even if against the direction of the DAG edge)
-  - E.g., $X \leftarrow \cdots \leftrightsquigarrow Y$
-  - It creates spurious associations between $X$ and $Y$ (even if changing $X$
-    doesn't affect $Y$)
-
-- @Example@: Confounder creates back-door path
-  - $Z$ affects both $X$ and $Y$
-  - Path: $X \leftarrow Z \to Y$ is a back-door path
-  - Conditioning on $Z$ blocks this path
-::::
-:::: {.column width=40%}
-// TODO(ai_gp): Write backdoor in red and use red to highlight the path
-```graphviz
-digraph BackdoorExample {
-    splines=true;
-    nodesep=0.5;
-    ranksep=0.5;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-
-    Z [label="Z\n(Confounder)", fillcolor="#A6E7F4"];
-    X [label="X\n(Treatment)", fillcolor="#F4A6A6"];
-    Y [label="Y\n(Outcome)", fillcolor="#B2E2B2"];
-
-    { rank=same; X; Y; }
-
-    Z -> X;
-    Z -> Y;
-    X -> Y [label="causal"];
-}
-```
-::::
-:::
-
-\vspace{0.5cm}
-
-::: columns
-:::: {.column width=60%}
-- @Definition@: Direct causal effect $X \to Y$ is **not** back-door path:
-  - No arrows into $X$ (no confounders)
+- @Definition@: **Front-door path** is a direct causal effect $X \to Y$
+  - No arrows into $X$, (so no back door path, no confounders)
   - Clean causal pathway
-  - No need to condition on anything
-
-- @Example@: Direct causal effect
-  - Path: $X \to Y$ only
-  - No spurious associations
-  - Can estimate causal effect by observing $X$ and $Y$
 ::::
 :::: {.column width=40%}
+\vspace{1cm}
+
 ```graphviz
 digraph NoBackdoorExample {
     splines=true;
@@ -366,13 +322,127 @@ digraph NoBackdoorExample {
 ::::
 :::
 
-* Backdoor criteria
+\vspace{0.5cm}
 
-- @Definition@: A set $Z$ satisfies the **back-door criterion** relative to
-  $X \to Y$ if:
-  1. No variable in $Z$ is a descendant of $X$
-  2. $Z$ blocks all back-door paths from $X$ to $Y$
-  - _Intuition_: Remove spurious paths by controlling for common causes
+- @Definition@: A **back-door path** is any path from $X$ to $Y$ starting with
+  an arrow into $X$ (even if against the direction of the DAG edge)
+  - E.g., $X \leftarrow \cdots \leftrightarrow Y$
+  - It creates spurious associations between $X$ and $Y$ (even if changing $X$
+    doesn't affect $Y$)
+
+::: columns
+:::: {.column width=60%}
+
+- @Example@:
+  - Confounder $Z$ creates back-door path between $X$ and $Y$ (even if there was
+    no direct path between $X$ and $Y$)
+  - Path: $X \leftarrow Z \to Y$ is a back-door path
+  - Conditioning on $Z$ blocks this path
+::::
+:::: {.column width=40%}
+```graphviz
+digraph BackdoorExample {
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Z [label="Z\n(Confounder)", fillcolor="#A6E7F4"];
+    X [label="X\n(Treatment)", fillcolor="#F4A6A6"];
+    Y [label="Y\n(Outcome)", fillcolor="#B2E2B2"];
+
+    { rank=same; X; Y; }
+
+    Z -> X [color="red", penwidth=2.5];
+    Z -> Y [color="red", penwidth=2.5, label="Backdoor path", fontcolor="red"];
+    X -> Y [label="causal", style="dotted"];
+}
+```
+::::
+:::
+
+* Backdoor Criteria
+
+- @Definition@: A set $\mathcal{Z} = {Z_1, ..., Z_n}$ satisfies the **back-door
+  criterion** relative to $X \to Y$ if:
+  1. No variable in $\mathcal{Z}$ is a descendant of $X$
+  2. $\mathcal{Z}$ blocks all back-door paths from $X$ to $Y$
+
+- @Intuition@: A set for the back-door criteria removes spurious paths by
+  controlling for common causes
+
+::: columns
+:::: {.column width=60%}
+// TODO(ai_gp): Explain which set is \mathcal{Z}
+// TDOO(ai_gp): Make the example more complex with more nodes
+- @Example@: Back-door criterion:
+  - Condition on $Z$
+  - Blocks path: $X \leftarrow Z \to Y$
+  - $Z$ not a descendant of $X$
+  - Enables causal inference
+::::
+:::: {.column width=40%}
+
+```graphviz[width=60%]
+digraph SatisfiesBD {
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
+
+    Z [label="Z", fillcolor="#A6E7F4", style="rounded,filled,dashed"];
+    X [label="X", fillcolor="#F4A6A6"];
+    Y [label="Y", fillcolor="#B2E2B2"];
+
+    { rank=same; X; Y; }
+
+    Z -> X [color="red", penwidth=2.5];
+    Z -> Y [color="red", penwidth=2.5];
+    X -> Y;
+}
+```
+::::
+:::
+
+::: columns
+:::: {.column width=60%}
+// TODO(ai_gp): Explain which set is \mathcal{Z}
+// TDOO(ai_gp): Make the example more complex with more nodes
+
+- @Counterexample@: Not a back-door
+  - Condition on $M$ (descendant of $X$)
+  - Violates criterion 1
+  - $M$ is a descendant of $X$
+  - Introduces bias
+
+::::
+:::: {.column width=40%}
+
+```graphviz[width=80%]
+digraph FailsBD {
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
+
+    Z [label="Z", fillcolor="#A6E7F4"];
+    X [label="X", fillcolor="#F4A6A6"];
+    M [label="M", fillcolor="#FFD1A6"];
+    Y [label="Y", fillcolor="#B2E2B2"];
+
+    { rank=same; X; M; Y; }
+
+    Z -> X [color="red", penwidth=2.5];
+    Z -> Y [color="red", penwidth=2.5];
+    X -> M;
+    M -> Y;
+}
+```
+::::
+:::
 
 - @Consequence@: Condition on variables satisfying back-door criterion to
   estimate causal effect from observational data without intervention
@@ -404,8 +474,6 @@ digraph CausalFlow {
     M -> Y;
 }
 ```
-::::
-:::
 
 \vspace{1.0cm}
 
