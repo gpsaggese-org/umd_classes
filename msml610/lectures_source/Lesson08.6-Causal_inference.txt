@@ -8,8 +8,10 @@
 # Introduction to Causal Inference
 
 * Sales example
-- There are stores that put **product on sales** for **Christmas**
 
+- @Example@: there are stores that put **product on sales** for Christmas
+
+// TODO(gp): Convert into a table.
   \begingroup
   \centering
   ![](msml610/lectures_source/figures/L08.4.xmas_sales_df.png){width=60%}
@@ -17,41 +19,47 @@
 
   where:
   - `store`: id of the store
-  - `weeks_to_xmas`: how many weeks before Christmas the measurement was done
-  - `avg_week_sales`: how much they sold in average
-  - `is_on_sale`: if store puts product on sale
-  - `weekly_amount_on_sale`: how much that store has sold in that week
+  - `weeks_to_xmas`: weeks before Christmas the measurement was done
+  - `avg_week_sales`: average sales for that week
+  - `is_on_sale`: whether store puts product on sale
+  - `weekly_amount_on_sale`: amount sold that week when on sale
 
-- **Causal inference question**: _"What is the impact of $T$ on $Y$?"_
-  - E.g., what is the impact of `is_on_sale` on `weekly_amount_sold`?
-  - E.g., when is the best moment to have sales (i.e., `weeks_to_xmas`)?
+- @Question@: _"What is the impact of $T$ on $Y$?"_
+  - E.g., impact of `is_on_sale` on `weekly_amount_sold`?
+  - E.g., when is best moment for sales (i.e., `weeks_to_xmas`)?
 
-* Definitions
+* Causal Inference: Basic Definitions
+
+- @Definition@: **Unit of analysis** is the entity for which outcomes are
+  measured
+
+  ```{=typst}
+  #styled-table(
+    headers: ("Study", "Unit of analysis"),
+    rows: (
+      ("Drug experiment", "Patient"),
+      ("Marketing experiment", "Customer"),
+      ("Sales promotion", "Store or product"),
+      ("Education policy", "Student"),
+    ),
+  )
+  ```
+
 ::: columns
 :::: {.column width=80%}
-- **Unit of analysis**
-  - The entity for which outcomes are measured
 
-\begingroup \small
-| **Study**          | **Unit of analysis** |
-|--------------------|------------------|
-| Drug experiment    | Patient          |
-| Marketing experiment | Customer       |
-| Sales promotion    | Store or product |
-| Education policy   | Student          |
-\endgroup
+- @Definition@: **Treatment** $T$ indicates treatment assignment
+  - $T_i = 1$ if unit $i$ received the treatment
+  - Sometimes denoted as $D$
+  - E.g., `is_on_sale`, `received_discount`, `saw_ad`
 
-- **Treatment $T$**
-  - $T_i = 1$ if unit $i$ has received the treatment
-  - Sometimes $T$ is denoted with $D$
-  - E.g., `is_on_sale` at `weeks_to_xmas`, `is_on_sale`, `received_discount`,
-    `saw_ad`
-- **Outcome $Y$**
-  - The variable one wants to influence, $Y_i$
+- @Definition@: **Outcome** $Y$ is the variable of interest
+  - $Y_i$ is the outcome for unit $i$
   - E.g., `weekly_amount_sold`
 
 ::::
 :::: {.column width=15%}
+
 ```graphviz
 digraph CausalDiagram {
   rankdir=TB;
@@ -66,39 +74,49 @@ digraph CausalDiagram {
   T   -> Y;
 }
 ```
+
 ::::
 :::
 
-// TODO: Add a picture of a diverging road
 * The Fundamental Problem of Causal Inference
-- _"You can never observe the same unit with and without treatment"_
-  - One potential outcome is real, the other remains counterfactual
+
+- @Fact@: _"You can never observe the same unit with and without
+  treatment"_
+  - One potential outcome is _real_
+  - The other remains _counterfactual_
 
 ::: columns
 :::: {.column width=50%}
-- **Example**
-  - Plot outcome `weekly_amount_sold` conditioned on treatment `is_on_sale`
-  - Stores with a sale sell more (from 50 to 150)
-  - Matches intuition: _"people buy more when prices are low due to sales"_
+
+- @Example@: outcome `weekly_amount_sold` conditioned on `is_on_sale`
+  - Stores with sales sell more (from 50 to 150)
+  - Matches intuition: _"people buy more when prices are low"_
+
 ::::
 :::: {.column width=45%}
+
 ![](msml610/lectures_source/figures/L08.4.xmas_boxplot.png)
+
 ::::
 :::
-- **Is it true?**
-  - Maybe only larger businesses can afford aggressive price drops?
-  - Maybe customers buy close to Christmas anyway?
 
-- Observing both counterfactual situations would reveal the effect of price
-  drops (but it is **impossible**)
+- @Question@: Is the association _causal_ with price drop?
+  - Maybe larger businesses can afford aggressive price drops
+  - Maybe customers buy close to Christmas anyway
 
+- @Key idea@: observing both counterfactual scenarios would reveal effect of
+  price drops, but this is _impossible_ with observational data
+
+// TODO(ai_gp): Move it somewhere else in Lesson08.x
 * Causal Model
-- A **causal model** is a series of one-way assignments $\leftarrow$
-  - Causality is non-reversible: you can't rearrange the equation
+
+- @Definition@: a **causal model** is a set of one-way assignments $\leftarrow$
+  - Causality is non-reversible, i.e., equations can't be rearranged
 
 ::: columns
 :::: {.column width=60%}
-- **Example**
+
+- @Example@:
   $$
   \left\{
   \begin{aligned}
@@ -107,40 +125,44 @@ digraph CausalDiagram {
   \end{aligned}
   \right.
   $$
-  where:
+
   - $u_t, u_y$ are _exogenous_ variables (outside the model)
-    - Account for everything not covered by model variables
+    - Account for unmeasured factors
   - Treatment $T$ and $u_y$ cause outcome $Y$
-  - $T$ and $Y$ are _endogenous_ variables (inside the model)
+  - $T$ and $Y$ are _endogenous_ (inside the model)
 
 ::::
-:::: {.column width=35%}
-  ```graphviz[width=80%]
-  digraph CausalDiagram {
-    rankdir=TB;
-    splines=true;
-    nodesep=0.5;
-    ranksep=0.5;
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-    // Node styles
-    T   [label="T", fillcolor="#A6E7F4"];
-    Y   [label="Y", fillcolor="#A6C8F4"];
-    u_t [label="u_t", fillcolor="#FFD1A6"];
-    u_y [label="u_y", fillcolor="#FFD1A6"];
-    // Edges
-    u_t -> T;
-    T   -> Y;
-    u_y -> Y;
-  }
-  ```
+:::: {.column width=40%}
+
+// TODO(ai_gp): Use <SUB> and </SUB> to render the 
+```graphviz[width=80%]
+digraph CausalDiagram {
+  rankdir=TB;
+  splines=true;
+  nodesep=0.5;
+  ranksep=0.5;
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+  // Node styles
+  T   [label="T", fillcolor="#A6E7F4"];
+  Y   [label="Y", fillcolor="#A6C8F4"];
+  u_t [label="u_t", fillcolor="#FFD1A6"];
+  u_y [label="u_y", fillcolor="#FFD1A6"];
+  // Edges
+  u_t -> T;
+  T   -> Y;
+  u_y -> Y;
+}
+```
+
 ::::
 :::
 
 * Causal Model: Sales Example
+
 ::: columns
 :::: {.column width=60%}
 
-- Causal model for sales example:
+- @Example@: causal model for sales
   \small
   $$
   \left\{
@@ -153,7 +175,7 @@ digraph CausalDiagram {
   $$
 
 ::::
-:::: {.column width=35%}
+:::: {.column width=40%}
 
 ```graphviz
 digraph SalesModelExtended {
@@ -189,11 +211,9 @@ digraph SalesModelExtended {
 ```
 
 ::::
-::::
+:::
 
-\vspace{0.5cm}
-
-- One can make an assumption of linear model for $f_y(.)$ and get:
+- Assuming linear $f_y$:
   $$AmountSold = \alpha + \beta_1 IsOnSales + \beta_2 BusinessSize + \varepsilon$$
 
 * Applying a Treatment to Sales Example
