@@ -1,11 +1,11 @@
 // type=UMD_slides
 // course_title=MSML610: Advanced Machine Learning
-// lesson_title=L08.4: }
+// lesson_title=L08.4: Causal Inference
 // slides_engine=typst
 // references=
 // - Facure, Causal Inference in Python, 2023
 
-# Introduction to Causal Inference
+# Causal Inference
 
 * Sales example
 - There are stores that put **product on sales** for **Christmas**
@@ -2090,7 +2090,11 @@ Variables that _predict the treatment well_ but not the outcome
     inference
 
 // TODO: Use inline
-```latex
+// NOTE: This diagram uses raw_latex type because it requires custom font setup
+// (helvet, T1 encoding) that isn't in the standard wrappers. The raw_latex type
+// uses the code as-is without modification.
+```raw_latex
+\documentclass{standalone}
 \usepackage{tikz}
 \usepackage[T1]{fontenc}
 \usepackage{helvet}
@@ -2161,7 +2165,6 @@ Variables that _predict the treatment well_ but not the outcome
 \node[right=0.3cm of {(5.8,3.5)}, label_font] {Unit correlations};
 
 \end{tikzpicture}
-\end{document}
 ```
 
 * Canonical Difference-in-Differences: The Setup
