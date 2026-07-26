@@ -374,13 +374,8 @@ digraph BackdoorExample {
 
 ::: columns
 :::: {.column width=60%}
-// TODO(ai_gp): Explain which set is \mathcal{Z}
-// TDOO(ai_gp): Make the example more complex with more nodes
-- @Example@: Back-door criterion:
-  - Condition on $Z$
-  - Blocks path: $X \leftarrow Z \to Y$
-  - $Z$ not a descendant of $X$
-  - Enables causal inference
+- @Example@: Back-door criterion with $\mathcal{Z} = \{Z\}$
+  - No element in $\mathcal{Z}$ is a descendant of $X$
 ::::
 :::: {.column width=40%}
 
@@ -408,14 +403,9 @@ digraph SatisfiesBD {
 
 ::: columns
 :::: {.column width=60%}
-// TODO(ai_gp): Explain which set is \mathcal{Z}
-// TDOO(ai_gp): Make the example more complex with more nodes
-
-- @Counterexample@: Not a back-door
-  - Condition on $M$ (descendant of $X$)
-  - Violates criterion 1
-  - $M$ is a descendant of $X$
-  - Introduces bias
+- @Counterexample@: $\mathcal{Z} = \{M\}$ violates back-door criterion
+  - $M$ is a descendant of $X$ ✗
+  - Violates criterion 1 (descendants of $X$ cannot be in $\mathcal{Z}$)
 
 ::::
 :::: {.column width=40%}
@@ -444,9 +434,6 @@ digraph FailsBD {
 ::::
 :::
 
-- @Consequence@: Condition on variables satisfying back-door criterion to
-  estimate causal effect from observational data without intervention
-
 * Chains, Forks, and Colliders
 
 ::: columns
@@ -474,6 +461,8 @@ digraph CausalFlow {
     M -> Y;
 }
 ```
+::::
+:::
 
 \vspace{1.0cm}
 
@@ -539,26 +528,27 @@ digraph ColliderExample {
 * Common Mistakes in Back-Door Adjustment
 
 - @Key idea@: Back-door criterion specifies _exactly_ which variables to
-  condition on to transform observation into intervention
+  condition on and not condition on to transform observation into intervention
 
-- @Historical mistake@: Pre-criterion, researchers "conditioned on everything"
-  - **This is wrong!**
+- @Error@: Before the back-door criterion was formalized, researchers
+  "conditioned on everything"
+  - **Conditioning on everything is wrong!**
 
-- @Common errors@
+- @Consequence@: Thousands of published papers across medicine, economics, social
+  science use _incorrect observational methods_
+
+- Other **common errors** are:
   - Conditioning on descendant of $X$ biases estimate
   - Controlling too many variables opens colliders, introduces bias
   - Missing back-door paths creates spurious confounding
   - Conditioning on mediators blocks causal effect
   - Ignoring unobserved confounders makes effect unidentifiable
 
-- @Consequence@: Thousands of published papers use incorrect observational
-  methods across medicine, economics, social science
-
 * When Back-Door Adjustment Fails
 
 - @Limitations@: Back-door criterion not universally applicable
   - No observable set satisfies criterion if unobserved confounders exist
-  - Requires accurate causal graph—easy to omit variables
+  - Requires accurate causal graph, but it is easy to omit variables
 
 - @Alternatives@
   - _Front-door criterion_: uses mediators, handles unobserved confounders
@@ -570,7 +560,7 @@ digraph ColliderExample {
 * Front-Door Adjustment: Definition
 
 - @Definition@: **Front-door criterion** identifies causal effects when
-  unobserved confounders exist—a mediator transmits all influence from
+  unobserved confounders exist, but a _mediator_ transmits all influence from
   treatment to outcome
 
 ::: columns
@@ -617,11 +607,12 @@ digraph CerealAds {
 
 * Cereal and Ads: Does Advertising Cause Sales?
 
-::: columns
-:::: {.column width=50%}
 - @Question@: Does watching ads $(X)$ cause cereal purchases $(Y)$?
   - Naïve answer: yes, obviously!
   - **But wait...**
+
+::: columns
+:::: {.column width=60%}
 
 - @Hidden confounder@: _"Parents who care about breakfast"_ $(U)$
   - Enable more TV time (increases ad exposure)
@@ -630,10 +621,9 @@ digraph CerealAds {
 
 - Observing $X$ and $Y$ without controlling $U$ yields spurious association
   - Same phenomenon: ice cream sales and drowning deaths
-  - **Problem for business**: spend on ads that don't actually drive sales
 
 ::::
-:::: {.column width=45%}
+:::: {.column width=40%}
 ```graphviz
 digraph CerealAds {
     splines=true;
@@ -657,6 +647,8 @@ digraph CerealAds {
 ::::
 :::
 
+- @Problem@: businesses spend on ads that don't actually drive sales
+
 * Cereal and Ads: Three Solution Strategies
 
 - @Strategy 1: Back-door adjustment@
@@ -676,7 +668,7 @@ digraph CerealAds {
 * Front-Door Mediator: Kids Nagging
 
 ::: columns
-:::: {.column width=60%}
+:::: {.column width=65%}
 - @Mechanism@: Ads work by making kids nag for cereal $(M)$
   - Real advertising strategy: kids see ads, ask parents for product
   - Retail displays kids at eye level (e.g., candy at checkout)
@@ -689,16 +681,16 @@ digraph CerealAds {
 \vspace{0.5cm}
 
 ::: columns
-:::: {.column width=45%}
-- @Causal chain@: $X \to M \to Y$
+:::: {.column width=60%}
+- @Causal chain@:
   - Ads $(X)$ $\to$ Kids nag $(M)$ $\to$ Parents buy cereal $(Y)$
 
 - @Structure satisfies front-door@
   - Unobserved $U$ affects $Y$ but _not_ $M$
-  - Hidden breakfast-caring attitude doesn't cause nagging—only ads do
+  - Hidden breakfast-caring attitude doesn't cause nagging: only ads do
   - Can estimate $\Pr(Y | do(X))$ without observing $U$
 ::::
-:::: {.column width=50%}
+:::: {.column width=40%}
 ```graphviz
 digraph CerealAds {
     splines=true;
@@ -727,13 +719,14 @@ digraph CerealAds {
 * Applying Front-Door: Does It Work?
 
 ::: columns
-:::: {.column width=55%}
-- @Verification@: Does kids' nagging satisfy front-door?
+:::: {.column width=60%}
+- @Question@: Does kids' nagging satisfy front-door?
+
+- @Answer@
   - All ads influence flows through nagging ($X \to M \to Y$)
   - No confounder affects both ads and nagging (TV schedule random)
   - All confounding between nagging and buying blocked by controlling ads
-
-- **Yes, front-door criterion holds**
+  - **Yes, front-door criterion holds**
 
 ::::
 :::: {.column width=40%}
@@ -763,27 +756,29 @@ digraph CerealAds {
 :::
 
 - @Solution@: Estimate $\Pr(Y | do(X))$ from observational data alone
-  1. Observe: How often ads cause nagging, $\Pr(M | X)$
-  2. Observe: How nagging changes buying, $\Pr(Y | M, X')$
-  3. Combine: $$\Pr(Y | do(X)) = \sum_m \Pr(M | X) \sum_{x'} \Pr(Y | M, X')
-     \Pr(X')$$
+  1. Observe: How often ads cause nagging $\Pr(M | X)$
+  2. Observe: How nagging changes buying $\Pr(Y | M, X')$
+  3. Combine:
+     $$\Pr(Y | do(X)) = \sum_m \Pr(M | X) \sum_{x'} \Pr(Y | M, X') \Pr(X')$$
 
 ## Do-Calculus
 
 * Do-Calculus: Formal Framework
 
-- @Definition@: **Do-calculus** provides formal rules for reasoning about
-  causal effects in graphical models (Pearl, 2000)
+- @Definition@: **Do-calculus** provides formal rules for reasoning about causal
+  effects in graphical models (Pearl, 2000)
 
 - @Problem@
-  - Want: Causal effects $\Pr(Y | do(X = x))$ (intervention distribution)
-  - Have: Observational data $\Pr(Y | X = x)$ (conditional distribution)
-  - Gap: Generally $\Pr(Y | X) \ne \Pr(Y | do(X))$ due to confounding
+  - **We want**: Causal effects $\Pr(Y | do(X = x))$ (intervention distribution)
+  - **We have**: Observational data $\Pr(Y | X = x)$ (conditional distribution)
+  - **Gap**: Generally $\Pr(Y | X) \ne \Pr(Y | do(X))$ due to confounding
 
-- @Solution@: Do-calculus transforms intervention expressions into
-  observational terms computable from data, given graph structure
+- @Solution@: Do-calculus transforms intervention expressions into observational
+  terms computable from data, given graph structure
 
 * Do-Calculus: Three Rules
+- @Goal@: Systematically reduce $do()$ expressions to observable terms when graph
+  structure permits
 
 - @Rule 1: Insertion/Deletion of Observations@
   - If $Y \perp Z | X, W$ in $G_{\overline{X}}$ (remove incoming edges to $X$):
@@ -799,17 +794,14 @@ digraph CerealAds {
     incoming to $X$ and to $Z$ except from $W$):
   $$\Pr(Y | do(X), do(Z), W) = \Pr(Y | do(X), W)$$
 
-- @Purpose@: Systematically reduce $do()$ expressions to observable terms when
-  graph structure permits
-
 * Back/Front-Door as Applications of Do-Calculus
 
 - @Relationship@: Back-door and front-door are **special cases** of do-calculus
   - Simpler graphical conditions allowing $\Pr(Y | do(X))$ from observational
     data
 
-- @Back-door adjustment@: If $Z$ blocks all back-door paths $X \to Y$ (paths
-  into $X$), then:
+- @Back-door adjustment@: If $\mathcal{Z}$ blocks all back-door paths $X \to Y$
+  (paths into $X$), then:
   $$
   \Pr(Y | do(X)) = \sum_z \Pr(Y | X, Z) \Pr(Z)
   $$
@@ -823,6 +815,3 @@ digraph CerealAds {
   $$
   \Pr(Y | do(X)) = \sum_z \Pr(Z | X) \sum_{x'} \Pr(Y | Z, X') \Pr(X')
   $$
-
-// Propensity score
-// Significance tests
