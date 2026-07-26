@@ -1,0 +1,21 @@
+- Managing Code
+  - Coding while you sleep
+    https://code.claude.com/docs/en/remote-control
+    https://code.claude.com/docs/en/web-quickstart
+    https://code.claude.com/docs/en/desktop-quickstart
+    https://code.claude.com/docs/en/security-guidance
+
+- Automating PR creation
+
+- Automating PR review
+
+- Automating Documentation
+
+- Rules and AI skills
+
+# Coding Architecture
+
+# Unit testing
+
+# Refs
+papers/AIgentic_Development_System/

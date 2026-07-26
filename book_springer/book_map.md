@@ -171,7 +171,7 @@
 | msml610/lectures_source/Lesson08.2-Causal_AI_concepts.txt                  | yes   | 80%          | 80%          |           |                  |                   |
 | msml610/lectures_source/Lesson08.3-Causal_AI_in_business.txt               | yes   | 80%          | 80%          |           |                  |                   |
 | msml610/lectures_source/Lesson08.4-Causal_networks.txt                     | yes   | 80%          | 80%          |           |                  |                   |
-| msml610/lectures_source/Lesson08.5-Do_calculus.txt                         |       |              |              |           |                  |                   |
+| msml610/lectures_source/Lesson08.5-Do_calculus.txt                         | yes   | 70%          | 70%          |           |                  |                   |
 | msml610/lectures_source/Lesson08.6-Causal_inference.txt                    |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson08.7-Causal_experiments.txt                  |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson09.1-Reasoning_over_time.txt                 |       |              |              |           |                  |                   |
@@ -188,7 +188,8 @@
 | msml610/lectures_source/Lesson12.2-Causal_Discovery.txt                    |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson13.1-Explainability.txt                      |       |              |              |           |                  |                   |
 
-- [ ] Apply msml610/lectures_source/prompt.convert_to_typst.md to all the files in msml610/lectures_source/Lesson*
+- [ ] Apply `msml610/lectures_source/prompt.convert_to_typst.md` to all the files
+  in `msml610/lectures_source/Lesson*`
 - [ ] `/slides.lint_incrementally`
 - [ ] `/slides.add_bold_and_italic`
 
