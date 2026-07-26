@@ -110,7 +110,8 @@ digraph CausalDiagram {
 // TODO(ai_gp): Move it somewhere else in Lesson08.x
 * Causal Model
 
-- @Definition@: a **causal model** is a set of one-way assignments $\leftarrow$
+- @Definition@: a **causal model** is a set of one-way assignments (e.g.,
+  $\leftarrow$ or `:=`)
   - Causality is non-reversible, i.e., equations can't be rearranged
 
 ::: columns
@@ -157,7 +158,7 @@ digraph CausalDiagram {
 ::::
 :::
 
-* Causal Model: Sales Example
+* Sales Example: Causal Model
 
 ::: columns
 :::: {.column width=60%}
@@ -213,11 +214,12 @@ digraph SalesModelExtended {
 ::::
 :::
 
-- Assuming linear $f_y$:
+- Assuming linear $f_t$ and $f_y$:
   $$AmountSold = \alpha + \beta_1 IsOnSales + \beta_2 BusinessSize + \varepsilon$$
 
-* Applying a Treatment to Sales Example
-- **Assumption**: the causal model is:
+* Sales Example: Applying a Treatment
+
+- @Assumption@: causal model is
   \small
   $$
   \left\{
@@ -228,8 +230,7 @@ digraph SalesModelExtended {
   \right.
   $$
 
-- **Question**: _"what would happen to the outcome $Y$ if I were to set the
-  treatment to $t_0$?"_
+- @Question@: _"What happens to outcome $Y$ if we set treatment to $t_0$?"_
   \small
   $$
   \left\{
@@ -239,150 +240,151 @@ digraph SalesModelExtended {
   \end{aligned}
   \right.
   $$
-- The intervention is represented by the $do()$ operator, e.g., $do(T = t_0)$
 
-* Conditioning vs Intervention
-- _Conditioning_ represent what happens to businesses that make a price cut
+- @Definition@: **intervention** is represented by the $do()$ operator, e.g.,
+  $do(T = t_0)$
+
+* Sales Example: Conditioning vs Intervention
+
+- @Definition@: **Conditioning** observes outcomes of businesses that chose to cut
+  prices
   $$
   \EE[AmountSold | isOnSales = 1]
   $$
-  - Filter samples for business that _decide_ to cut prices
-  - Some business (e.g., large businesses) are _self-selecting_ to cut prices
+  - Filter samples for businesses that _decide_ to cut prices
+  - Some businesses (e.g., large) _self-select_ into price cuts
 
-- _Intervention_ is what happens if _we force_ every business to engage in sales
+- @Definition@: **Intervention** forces _all_ businesses to engage in sales
   $$
   \EE[AmountSold | do(IsOnSales = 1)]
   $$
 
-- **Remark**: Conditioning and intervention are different
+- @Remark@: conditioning and intervention differ
   \small
   $$
   \EE[AmountSold | isOnSales = 1] \ne \EE[AmountSold | do(IsOnSales = 1)]
   $$
 
 * Individual Treatment Effect
-- **Definition**: the impact of the treatment $T$ on the outcome $Y$ for an
-  individual unit $i$ is:
-  $$\tau_i \defeq Y_i|do(T=t_1) - Y_i|do(T=t_0)$$
-  - The effect $\tau_i$ of going from treatment $t_0$ to $t_1$ for unit $i$ is
-    the difference in the outcome of that unit under $t_1$ compared to $t_0$
 
-- E.g., for the sales example
+- @Definition@: the **impact of treatment $T$ on outcome $Y$ for unit $i$** is
+  $$\tau_i \defeq Y_i|do(T=t_1) - Y_i|do(T=t_0)$$
+  - In words, the effect $\tau_i$ is the difference in outcome $Y$ for unit $i$
+    under the different interventions $t_1$ vs $t_0$
+
+- E.g.,
   $$AmountSold_i|do(IsOnSales=1) - AmountSold_i|do(IsOnSales=0)$$
 
-- **Problem**: you can only observe one term due to the fundamental problem of
-  causal inference
-  - Represent it in theory, but can't recover it from data
+- @Problem@:
+  - **Only one term is observable**, because of the fundamental problem of causal
+    inference
+  - Representable in theory, not recoverable from data alone
 
 * Potential Outcomes
-- Aka "counterfactuals"
 
-- **Definition**: the $do()$ operator represents _"unit $i$ outcome $Y$ if
-  treatment is set to $t$"_
-  - $Y_{t,i}$ is Rubin's notation
-  - $Y_i | do(T_i = t)$ is Pearl's notation
+- @Definition@: **Potential outcomes** (aka counterfactuals) represent the
+  outcome if treatment is set to $t$
+  - Rubin's notation: $Y_{t,i}$
+  - Pearl's notation: $Y_i | do(T_i = t)$
 
-- For binary treatment:
-  - $Y_{0i}$ potential outcome without treatment
-  - $Y_{1i}$ potential outcome with treatment
-  - One is "factual" (i.e., observable)
-  - The other is "counterfactual" (i.e., theoretical, not observable)
-  - Alternative expression:
+- @Example@: Potential outcome for binary treatment
+  - $Y_{0i}$ = outcome without treatment
+  - $Y_{1i}$ = outcome with treatment
+  - One is _factual_ (observable), the other is _counterfactual_ (unobservable)
+  - Combined expression:
     $$
-    Y_i = T_i * Y_{1i} + (1 - T_i) * Y_{0i} = Y_{0i} + (Y_{1i} - Y_{0i}) * T_i
+    Y_i = Y_{0i} + (Y_{1i} - Y_{0i}) \cdot T_i
     $$
 
-- **Remark**: there is a difference between conditioning and intervention
-  - $Y|do(T=t)$ is _"what a business would sell if it cut prices"_
-  - $Y|T=t$ is _"what a business that cut the prices sold"_
+- @Recap@: conditioning vs intervention differ
+  - $Y|do(T=t)$ = _"what a business would sell under forced price cut"_
+  - $Y|T=t$ = _"what a business that chose to cut prices sold"_
 
 * Consistency of the Treatment
 
-- **Assumption**: consistency of the treatment means that there is a single
-  version of the treatment
-  - I.e., $T = T_i$ means only one thing
-  - No hidden multiple versions of the treatment
+- @Assumption@: **consistency** means it exists only version of the treatment,
+  i.e., $T = T_i$ has one meaning
+  - No hidden multiple treatment variations
 
-- E.g.,
-  - A drug can come in multiple dosages, but only one is used
-  - Giving a discount coupon: the value of the coupon is the same, it's given
-    only once, in way that is always equivalent
-  - In _"help from a financial planner"_: is "help" a one-time consultation or
-    regular advice?
+- @Examples@:
+  - A _drug_ can be administered with multiple dosages, but only one dose is used
+    per subject
+  - _Discount coupon_: its value is fixed and it is delivered once
+  - _"Help from financial advisor"_: one-time consultation or ongoing?
 
-* No Interference (SUTVA)
-- Aka "Stable Unit of Treatment Value (SUTVA)"
+* No Interference
 
-- **Assumption**: the effect of one unit is not influenced by the treatment of
-  other units
-  - E.g., there are no spillovers or network effects
+- Aka "Stable Unit of Treatment Value" (SUTVA)
 
-- E.g., vaccinating one person makes other close people less likely to catch the
-  illness even if they don't get the treatment
+- @Assumption@: one unit's effect is **not influenced** by treatment of other units
+  - E.g., no spillovers or network effects
+
+- @Counterexample@: vaccination violates SUTVA assumption
+  - Vaccinating person A reduces infection risk for nearby person B
+  - Even if B is untreated, they still benefit (spillover)
 
 * Average Treatment Effect
-- Assume you can see both potential outcomes $Y_{1i}$ and $Y_{0i}$ at the same
-  time (which is impossible)
 
-- **Definition**: Average Treatment Effect (ATE) is the impact that the treatment
-  $T$ would have on the average (on all units):
+- @Definition@: **Average Treatment Effect (ATE)** is the impact of a treatment
+  on average across all units
   $$
   ATE \defeq \EE[Y_{1i} - Y_{0i}] = \EE[Y | do(T=1)] - \EE[Y | do(T=0)]
   $$
 
-- E.g., average impact of price cuts on amount sold:
+- @Example@: average impact of price cuts on sales
   $$
   ATE = \EE[AmountSold_{1i} - AmountSold_{0i}]
   $$
 
-* Average Treatment effect on the Treated (ATT)
-- **Definition**: Average Treatment effect on the Treated (ATT) is the impact of
-  the treatment on the units that got the treatment:
+- @Remark@: requires observing both $Y_{1i}$ and $Y_{0i}$ (impossible in practice)
+
+* Average Treatment Effect on the Treated
+
+- @Definition@: **Average Treatment Effect on the Treated (ATT)** is impact of
+  treatment on units that received it
   $$
   ATT = \EE[(Y_{1i} - Y_{0i}) | T=1]
   $$
 
-- E.g., how much sales increase for the business engaged in price cuts:
+- @Example@: sales increase for businesses that cut prices
   $$
   ATT = \EE[(AmountSold_{1i} - AmountSold_{0i}) | IsOnSales=1]
   $$
 
 * Conditional Average Treatment Effects (CATE)
-- **Definition**: Conditional Average Treatment Effects (CATE) is the impact of
-  the treatment on the units in a group defined by $X=x$
+
+- @Definition@: **CATE** is impact of treatment on units in group $X=x$
   $$
   CATE = \EE[(Y_{1i} - Y_{0i}) | X=x]
   $$
-  - It's like $ATE$ but on a subgroup with a certain characteristics
-  - Note that there is both intervention and conditioning
+  - Like $ATE$ but stratified by characteristics $X$
+  - Combines intervention and conditioning
 
-- E.g., the impact of having sales during the week of Christmas:
+- @Example@: impact of sales during Christmas week
   $$
   CATE = \EE[AmountSold_{1i} - AmountSold_{0i} | weeksToXmas = 0]
   $$
 
-- **Remark**: We can _define_ these quantities $ATE$, $CATE$, $ATT$, but not
-  _measure_ them directly
-  - Because we can't observe both potential outcomes $Y_{1i}$ and $Y_{0i}$ at the
-    same time
+- @Remark@: can _define_ $ATE$, $CATE$, $ATT$, but not _measure_ directly
+  - Cannot observe both $Y_{1i}$ and $Y_{0i}$ for same unit
 
-- **Remark**: We can extend the definition to continuous treatments using partial
-  derivatives of $Y_i$,  $\frac{\partial \mathbb{\EE}[Y_i]}{\partial t}$
+- @Remark@: extend to continuous treatments via partial derivative
+  $$\frac{\partial \EE[Y_i]}{\partial t}$$
 
 * Bias
-- **Definition**: _bias_ is what makes association different from causation
-  - Treated and untreated groups differ in ways other than treatment
 
-- The claim _"cutting prices increases the amount sold by a business"_ can be
-  questioned with:
-  - _"Those businesses that cut prices could probably have sold more anyway, even
-    with no price cuts"_
+- @Definition@: **Bias** makes association differ from causation
+  - Treated and untreated groups differ beyond treatment
 
-- Formally bias refers to potential outcomes
-  - We are trying to estimate:
-    $$\EE[Y_{it}] \triangleq \EE[Y_i | do(T=t)]$$
-    using $\EE[Y_i | T=t]$, which is a "biased estimator" (i.e., an incorrect
-    one)
+- @Example@: claim _"cutting prices increases sales"_ can be questioned by
+  _"Those businesses cut prices because they're already strong; they'd sell more
+  even without price cuts"_
+
+- @Intuition@: formally, bias arises when estimating causal quantity
+  $$\EE[Y_i | do(T=t)]$$
+  using observational association
+  $$\EE[Y_i | T=t]$$
+  which yields biased (incorrect) estimates
 
 * The Bias Equation
 - **Causal inference** is interested in:
