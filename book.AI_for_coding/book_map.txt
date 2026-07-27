@@ -4,6 +4,7 @@
     https://code.claude.com/docs/en/web-quickstart
     https://code.claude.com/docs/en/desktop-quickstart
     https://code.claude.com/docs/en/security-guidance
+    /install-github-app
 
 - Automating PR creation
 
