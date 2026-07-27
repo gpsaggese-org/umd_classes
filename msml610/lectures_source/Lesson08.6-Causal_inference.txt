@@ -343,7 +343,7 @@ digraph SalesModelExtended {
 - @Definition@: **Average Treatment Effect on the Treated (ATT)** is impact of
   treatment on units that received it
   $$
-  ATT = \EE[(Y_{1i} - Y_{0i}) | T=1]
+  ATT \defeq \EE[(Y_{1i} - Y_{0i}) | T=1]
   $$
 
 - @Example@: sales increase for businesses that cut prices
@@ -351,68 +351,72 @@ digraph SalesModelExtended {
   ATT = \EE[(AmountSold_{1i} - AmountSold_{0i}) | IsOnSales=1]
   $$
 
-* Conditional Average Treatment Effects (CATE)
+* Conditional Average Treatment Effects
 
-- @Definition@: **CATE** is impact of treatment on units in group $X=x$
+- @Definition@: **Conditional Average Treatment Effects (CATE)** is the impact of
+  treatment on units in a specific group characteristed by $X=x$
   $$
-  CATE = \EE[(Y_{1i} - Y_{0i}) | X=x]
+  CATE \defeq \EE[(Y_{1i} - Y_{0i}) | X=x]
   $$
-  - Like $ATE$ but stratified by characteristics $X$
-  - Combines intervention and conditioning
+  - CATE combines intervention and conditioning
+  - It is like $ATE$ but stratified by characteristics $X$
 
 - @Example@: impact of sales during Christmas week
   $$
   CATE = \EE[AmountSold_{1i} - AmountSold_{0i} | weeksToXmas = 0]
   $$
 
-- @Remark@: can _define_ $ATE$, $CATE$, $ATT$, but not _measure_ directly
+- @Remark@: we can _define_ $ATE$, $CATE$, $ATT$, but we cannot _measure_
+  them directly
   - Cannot observe both $Y_{1i}$ and $Y_{0i}$ for same unit
 
-- @Remark@: extend to continuous treatments via partial derivative
-  $$\frac{\partial \EE[Y_i]}{\partial t}$$
+- We can extend ATE, ATT, and CATE to continuous treatments via partial
+  derivative $\frac{\partial \EE[Y_i]}{\partial t}$
 
-* Bias
+* Confounding Bias
 
-- @Definition@: **Bias** makes association differ from causation
-  - Treated and untreated groups differ beyond treatment
+- @Definition@: **Confounding bias** makes association differ from causation
+  because treated and untreated groups differ beyond treatment
 
 - @Example@: claim _"cutting prices increases sales"_ can be questioned by
-  _"Those businesses cut prices because they're already strong; they'd sell more
+  _"those businesses cut prices because they're already strong; they'd sell more
   even without price cuts"_
 
 - @Intuition@: formally, bias arises when estimating causal quantity
   $$\EE[Y_i | do(T=t)]$$
   using observational association
   $$\EE[Y_i | T=t]$$
-  which yields biased (incorrect) estimates
+  which yields biased (i.e., incorrect) estimates
 
-* The Bias Equation
-- **Causal inference** is interested in:
-  \begingroup
-  \small
-  $$
-  \EE[Y_1 - Y_0] = \EE[Y | do(T = 1)] - \EE[Y | do(T = 0)]
-  $$
-  \endgroup
-- **What is measured** is:
-  \begingroup
-  \small
-  $$
-  \EE[Y | T = 1] - \EE[Y | T = 0]
-  $$
-  \endgroup
+* The Confounding Bias Equation
+- @Goal@: We want to decompose observed difference into treatment effect and bias
 
-- Let's express one in terms of the other
-- Replacing the observed outcomes (each unit has two potential outcomes but
-  only one can be observed and the other is 0)
-  \begingroup
-  \small
+- Step 1: the observed difference between treated and untreated groups is:
+  $$\EE[Y | T=1] - \EE[Y | T=0] = ...$$
+
+- Step 2: each unit has two potential outcomes but only one is observed:
+  - If we observe the treated outcome: $(Y | T=1) = (Y_1 | T=1)$
+  - If we observe the control outcome: $(Y | T=0) = (Y_0 | T=0)$
+    $$... = \EE[Y_1 | T=1] - \EE[Y_0 | T=0]$$
+
+- Step 3: add and subtract the counterfactual $\EE[Y_0 | T=1]$:
   $$
-  Y | T=1 = (Y_1 | T=1) + \cancel{(Y_0 | T=1)} = Y_1 | T=1
+  ... = \EE[Y_1 | T=1] - \EE[Y_0 | T=0] + \EE[Y_0 | T=1] - \EE[Y_0 | T=1]
   $$
-  \endgroup
-- Adding and subtracting $\EE[Y_0 | T=1]$, reordering and merging expectations
-  // Make entire block smaller
+
+- Step 4: rearrange to group the treatment effect and bias separately:
+  $$
+  ... = \EE[Y_1 | T=1] - \EE[Y_0 | T=1] + \EE[Y_0 | T=1] - \EE[Y_0 | T=0]
+  $$
+
+* The Confounding Bias Equation
+
+- Step 5: combine the first two terms using linearity of expectation:
+  $$
+  ... = \EE[Y_1 - Y_0 | T=1] + \EE[Y_0 | T=1] - \EE[Y_0 | T=0]
+  $$
+
+- Final Decomposition
   \begingroup
   \small
   $$
@@ -421,56 +425,19 @@ digraph SalesModelExtended {
   \underbrace{\EE[Y_0 | T = 1] - \EE[Y_0 | T = 0]}_{\text{Bias}}
   $$
   \endgroup
-- Association = causation + bias term from group difference
+  **Association = Treatment effect + Bias**
 
-//* Decomposing Observed Difference into Treatment Effect and Bias
-//
-//- Observed Outcomes
-//  - Each unit has two potential outcomes but only one is observed:
-//
-//$$Y | T=1 = Y_1 | T=1 \quad \text{(only treated potential outcome observed)}$$
-//
-//$$Y | T=0 = Y_0 | T=0 \quad \text{(only control potential outcome observed)}$$
-//
-//- Step 2: Difference in Means
-//
-//The observed difference between treated and untreated groups:
-//
-//$$\EE[Y | T=1] - \EE[Y | T=0] = \EE[Y_1 | T=1] - \EE[Y_0 | T=0]$$
-//
-//- Step 3: Add and Subtract the Counterfactual
-//
-//To decompose this into effect and bias, add and subtract $\EE[Y_0 | T=1]$:
-//
-//$$\EE[Y_1 | T=1] - \EE[Y_0 | T=0] = \EE[Y_1 | T=1] - \EE[Y_0 | T=0] + \EE[Y_0 | T=1] - \EE[Y_0 | T=1]$$
-//
-//- Step 4: Regroup Terms
-//
-//Rearrange to group the treatment effect and bias separately:
-//
-//$$= \EE[Y_1 | T=1] - \EE[Y_0 | T=1] + \EE[Y_0 | T=1] - \EE[Y_0 | T=0]$$
-//
-//- Step 5: Merge Expectations
-//
-//Combine the first two terms using linearity of expectation:
-//
-//$$= \EE[Y_1 - Y_0 | T=1] + \EE[Y_0 | T=1] - \EE[Y_0 | T=0]$$
-//
-//- Final Decomposition
-//
-//$$\boxed{\EE[Y | T=1] - \EE[Y | T=0] = \underbrace{\EE[Y_1 - Y_0 | T=1]}_{\text{ATT}} + \underbrace{\EE[Y_0 | T=1] - \EE[Y_0 | T=0]}_{\text{Bias}}}$$
-//
-//- Interpretation
-//  - **ATT** (Average Treatment Effect on the Treated): The causal effect—what we want to estimate
-//  - **Bias**: The difference in control potential outcomes between treated and untreated groups
-//    - If bias = 0, then observed difference = causal effect
-//    - If bias not 0, observed difference is misleading (confounded)
+- @Interpretation@
+  - _ATT_ (Average Treatment Effect on the Treated): The causal effect we want
+    to estimate
+  - _Bias_: The difference in control potential outcomes between treated and
+    untreated groups
+    - If bias $= 0 \implies$ observed difference = causal effect
+    - If bias $\neq 0 \implies$ observed difference is misleading (confounded)
 
 * The Bias Equation: Remarks
-- Bias equation says:
-  $$
-  \text{Association = causation + a bias term}
-  $$
+
+- @Summary@: the bias equation formalizes _association $\neq$ causation_
   \begingroup
   \small
   $$
@@ -480,93 +447,114 @@ digraph SalesModelExtended {
   $$
   \endgroup
 
-- **Remark**: bias arises from differences between treated and control groups,
-  besides the treatment
-  - Unobservable factors change together with treatment (i.e., confounders)
+- Bias arises from group differences unrelated to treatment
+  - Unobservable confounders correlate with treatment
 
-- In sales example, treated and untreated businesses differ beyond price cuts
-  - E.g., differ in size, location, day of the week on which they have a sale,
-    cities they are located in
+- @Example@: sales businesses differ beyond price cuts
+  - Size, location, sale timing, cities vary between treated/untreated
 
-- **Corollary**: for association to be causation, treated and control units must
-  be _exchangeable_
+- @Implication@: for association to equal causation, groups must be
+  **exchangeable** (comparable on potential outcomes)
 
 * The Bias Equation: Visual Example
+
 ::: columns
 :::: {.column width=50%}
-- Plot `weekly_amount_sold` by `avg_week_sales` (business size)
-  - Color points: treatment (red) / control (blue)
+
+- Plot `weekly_amount_sold` vs `avg_week_sales` (business size)
+  - \red{Red}: treated (cut prices)
+  - \blue{Blue}: control (no price cut)
+
+- Treated units concentrated on right: they are not exchangeable
+
 ::::
 :::: {.column width=45%}
+
 ![](msml610/lectures_source/figures/L08.4.Association_Causation_Bias0.png)
+
 ::::
 :::
-
-- Treated units concentrated on the right (not exchangeable)
 
 \vspace{0.5cm}
 
 ::: columns
 :::: {.column width=50%}
-- Difference in amount sold between groups has two causes
-  - _Treatment effect_: Price cut increases amount sold
-  - _Business size_: Bigger businesses sell more, can do more price cuts
 
-- The challenge for causal inference is to untangle the two effects
+- Observed difference has _two causes_
+  - Treatment effect: price cuts boost sales
+  - Confounding: larger businesses naturally sell more and cut prices
+
+- @Problem@: disentangle treatment from confounding
+
 ::::
 :::: {.column width=45%}
+
 ![](msml610/lectures_source/figures/L08.4.Association_Causation_Bias1.png)
 ![](msml610/lectures_source/figures/L08.4.Association_Causation_Bias2.png)
+
 ::::
 :::
 
 * Simpson's Paradox
+
+- @Definition@: **Simpson's paradox** is when a trend within groups reverses or
+  disappears when groups combined
+
 ::: columns
 :::: {.column width=50%}
-- **Definition**: trend appears in different data groups but reverses or
-  disappear when combined
+
+- @Key insight@:
+  - Confounder influences relationship
+  - Aggregation hides confounding effects
+
+// TODO(ai_gp): Explain the picture
 
 ::::
 :::: {.column width=45%}
+
 ![](msml610/lectures_source/figures/L08.4.Simpson_Paradox.png)
+
 ::::
 :::
 
-- Paradox occurs due to a confounder influencing the relationship
-  - Aggregated data distorts results due to hidden variable
-
 * Simpson's Paradox: Admission Bias in University
-- A university has male acceptance rate 67.5% and female acceptance rate 48.3%
-  - **Question**: is there a bias against females, due to lower acceptance rate?
 
-- **Solution**: break down data by the two departments, Engineering and English
+- University has male acceptance 67.5% and female 48.3%
 
-\begingroup \scriptsize
-| **Department** | **Male** |  |  | **Female** |  |  |
-|:-----------|---------:|--:|--:|-----------:|--:|--:|
-|            | Applicants | Accepted | Rate | Applicants | Accepted | Rate |
-| **University** | 120 | 81 | 67.5% | 120 | 58 | 48.3% |
-| **Engineering** | 100 | 80 | 80% | 20 | 18 | 90% |
-| **English** | 20 | 1 | 5% | 100 | 40 | 40% |
-\endgroup
+- @Question@: is there gender bias against females?
 
-- At the department level women have higher acceptance in both Engineering (90%
-  vs 80%) and in English (40% vs 5%)
+- @Solution@: stratify by department
 
-- **Explanation of paradox**
-  - Engineering has high acceptance; English has low acceptance
-  - More men apply to Engineering; more women apply to English
-  - Women apply more to harder department, making their overall acceptance rate
-    appear lower
+  ```{=typst}
+  #styled-table(
+    headers: ("Dept", "M Apps", "M Accept", "M Rate", "F Apps", "F Accept", "F Rate"),
+    rows: (
+      ("Overall", "120", "81", "67.5%", "120", "58", "48.3%"),
+      ("Engineering", "100", "80", "80%", "20", "18", "90%"),
+      ("English", "20", "1", "5%", "100", "40", "40%"),
+    ),
+    col-widths: (1fr, 0.8fr, 0.9fr, 0.8fr, 0.8fr, 0.9fr, 0.8fr),
+  )
+  ```
+
+- Within each dept, women have higher acceptance
+  - Engineering: 90% (F) vs 80% (M)
+  - English: 40% (F) vs 5% (M)
+
+- @Key insight@: women apply more to harder dept
+  - Engineering (high acceptance) attracts more men
+  - English (low acceptance) attracts more women
+  - Aggregation masks this pattern
 
 // Identifying the Treatment Effect
 
 * Identifying the Treatment Effect
-- We can't observe $\EE[Y_{1i} - Y_{0i}]$ since we can only observe one of the
-  potential outcomes $Y_{1i}$ or $Y_{0i}$, but _not both_
-- **Question**: how can we recover causal quantities from observable data?
+- @Question@: 
+  - We can't observe $\EE[Y_{1i} - Y_{0i}]$ since we can only observe one of the
+    potential outcomes $Y_{1i}$ or $Y_{0i}$, but _not both_
+  - How can we recover causal quantities from observable data?
 
-- **Solution**: the bias equation says that:
+- @Solution@: the bias equation says that:
   \begingroup
   \small
   $$
@@ -575,17 +563,19 @@ digraph SalesModelExtended {
   \underbrace{\EE[Y_0 | T = 1] - \EE[Y_0 | T = 0]}_{\text{Bias}}
   $$
   \endgroup
-- If the treatment and the control group are comparable regardless of the
-  treatment (exchangeable), i.e., $\EE[Y_0|T=0] = \EE[Y_0|T=1]$ then:
+
+- **Case 1**: If the treatment and the control group are comparable regardless of
+  the treatment (exchangeable), i.e., $\EE[Y_0|T=0] = \EE[Y_0|T=1]$ then:
   - The bias term vanishes: $bias = 0$
   - The measured difference in means equals $ATT = \EE[(Y_1 - Y_0) | T = 1]$
 
-- If treatment effect is homogeneous (both groups respond similarly to
-  treatment), i.e., $\EE[(Y_1 - Y_0) | T = 1] = \EE[(Y_1 - Y_0) | T = 0]$ then:
+- **Case 2**: If treatment effect is homogeneous (both groups respond similarly
+  to treatment), i.e., $\EE[(Y_1 - Y_0) | T = 1] = \EE[(Y_1 - Y_0) | T = 0]$
+  then:
   - The measured difference of means equals $ATE = \EE[Y_1 - Y_0]$
 
-- **Sales Example**: if businesses that cut and don't cut prices are similar to
-  each other (i.e., exchangeable), then the difference in amount sold be entirely
+- @Example@: if businesses that cut and don't cut prices are similar to each
+  other (i.e., exchangeable), then the difference in amount sold be entirely
   attributed to the price cut
 
 * Independence Property (Aka Unconfoundedness)
