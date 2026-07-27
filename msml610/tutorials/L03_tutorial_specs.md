@@ -1,15 +1,16 @@
 # Knowledge Representation Notebooks - Specifications
 
 ## Overview
-
-This document outlines 5 Jupyter notebooks designed to explore key topics from **Lesson 03: Knowledge Representation** (MSML610). Each notebook bridges theory and practice, with hands-on implementation and interactive visualization.
-
----
+This document outlines 5 Jupyter notebooks designed to explore key topics from
+**Lesson 03: Knowledge Representation** (MSML610). Each notebook bridges theory
+and practice, with hands-on implementation and interactive visualization
 
 ## 1. Interactive Logic Explorer
 
 ### Goal
-Students gain intuitive understanding of propositional logic by building and analyzing logical formulas, truth tables, and inference rules. Explore the relationship between syntax, semantics, and computation.
+Students gain intuitive understanding of propositional logic by building and
+analyzing logical formulas, truth tables, and inference rules. Explore the
+relationship between syntax, semantics, and computation
 
 ### Learning Objectives
 - Construct propositional formulas and evaluate truth values
@@ -25,11 +26,8 @@ Students gain intuitive understanding of propositional logic by building and ana
 - Satisfiability and NP-completeness
 
 ### Key Packages
-- **sympy** — symbolic logic, propositional formula manipulation
-- **python-sat** — SAT solver backends
-- **pandas** — truth table organization
-- **matplotlib** / **plotly** — interactive visualizations
-- **itertools** — model enumeration (built-in)
+- **sympy**: symbolic logic, propositional formula manipulation
+- **python-sat**: SAT solver backends
 
 ### Learning Activities
 1. Build formulas interactively: `(Rain ∧ Cold) ∨ Sunny`
@@ -39,12 +37,12 @@ Students gain intuitive understanding of propositional logic by building and ana
 5. Measure SAT solver complexity as # variables increases
 6. Interactive "Wumpus World" knowledge base reasoning
 
----
-
 ## 2. Ontology Design & Reasoning Workshop
 
 ### Goal
-Students design a formal ontology from scratch, define reasoning tasks, and implement core inference operations. Understand the structure-semantics relationship in knowledge representation.
+Students design a formal ontology from scratch, define reasoning tasks, and
+implement core inference operations. Understand the structure-semantics
+relationship in knowledge representation
 
 ### Learning Objectives
 - Define ontologies using classes, individuals, properties, axioms
@@ -54,18 +52,19 @@ Students design a formal ontology from scratch, define reasoning tasks, and impl
 - Query and retrieve knowledge from ontologies
 
 ### Core Concepts
-- Ontology components (classes, individuals, properties, constraints, hierarchies)
+- Ontology components (classes, individuals, properties, constraints,
+  hierarchies)
 - Description logic (ALC basics, SHOIN expressiveness)
-- Reasoning tasks (subsumption, satisfiability, classification, instance checking)
+- Reasoning tasks (subsumption, satisfiability, classification, instance
+  checking)
 - Semantic web foundations (OWL, RDF)
 - Grounding and interpretation
 
 ### Key Packages
-- **owlready2** — OWL ontology construction and reasoning
-- **rdflib** — RDF/OWL serialization and querying
-- **networkx** — graph operations, hierarchy traversal
-- **matplotlib** / **pyvis** — ontology visualization
-- **pandas** — entity/property tables
+- **owlready2**: OWL ontology construction and reasoning
+- **rdflib**: RDF/OWL serialization and querying
+- **networkx**: graph operations, hierarchy traversal
+- **pyvis**: ontology visualization
 
 ### Learning Activities
 1. Build university ontology: `Student`, `Professor`, `Course`, `Department`
@@ -77,12 +76,12 @@ Students design a formal ontology from scratch, define reasoning tasks, and impl
 7. Detect inconsistencies (e.g., conflicting axioms)
 8. Visualize ontology as interactive class diagram
 
----
-
 ## 3. Rule-Based Expert System Simulator
 
 ### Goal
-Students implement forward and backward chaining inference engines, encode domain knowledge as rules, and explore how reasoning and uncertainty handling work in practice.
+Students implement forward and backward chaining inference engines, encode
+domain knowledge as rules, and explore how reasoning and uncertainty handling
+work in practice
 
 ### Learning Objectives
 - Implement forward chaining (data-driven) inference
@@ -101,11 +100,8 @@ Students implement forward and backward chaining inference engines, encode domai
 - Uncertainty and probabilistic inference
 
 ### Key Packages
-- **experta** — forward/backward chaining expert system framework
-- **pyke** — logic programming engine (alternative)
-- **networkx** — rule dependency graphs
-- **matplotlib** — inference trace visualization
-- **pandas** — fact/rule tables
+- **experta**: forward/backward chaining expert system framework
+- **pyke**: logic programming engine (alternative)
 
 ### Learning Activities
 1. Build medical diagnosis expert system:
@@ -119,12 +115,12 @@ Students implement forward and backward chaining inference engines, encode domai
 6. Visualize rule dependency graph and inference tree
 7. Compare symbolic reasoning vs. learned ML classifier
 
----
-
 ## 4. Knowledge Graph Querying & Construction
 
 ### Goal
-Students build and query knowledge graphs using RDF-style triples, connect to real knowledge bases (DBpedia, WikiData), and implement graph-based reasoning via path traversal.
+Students build and query knowledge graphs using RDF-style triples, connect to
+real knowledge bases (DBpedia, WikiData), and implement graph-based reasoning
+via path traversal
 
 ### Learning Objectives
 - Model entities and relations as graphs (nodes, edges)
@@ -144,12 +140,12 @@ Students build and query knowledge graphs using RDF-style triples, connect to re
 - Graph traversal for reasoning
 
 ### Key Packages
-- **networkx** — graph construction and algorithms
-- **SPARQLwrapper** — query remote SPARQL endpoints
-- **rdflib** — RDF triple handling and in-memory graphs
-- **pandas** — triple storage and result display
-- **pyvis** — interactive large-scale graph visualization
-- **requests** — WikiData JSON API calls
+- **networkx**: graph construction and algorithms
+- **SPARQLwrapper**: query remote SPARQL endpoints
+- **rdflib**: RDF triple handling and in-memory graphs
+- **pandas**: triple storage and result display
+- **pyvis**: interactive large-scale graph visualization
+- **requests**: WikiData JSON API calls
 
 ### Learning Activities
 1. Build small university knowledge graph manually
@@ -163,12 +159,12 @@ Students build and query knowledge graphs using RDF-style triples, connect to re
 7. Perform schema inference (entity typing, relation discovery)
 8. Compare structured queries (SPARQL) vs. embedding-based search
 
----
-
 ## 5. Symbolic vs Neural Representations Hybrid
 
 ### Goal
-Students compare how knowledge is encoded symbolically vs. as learned vector representations, implement both approaches, and explore the expressiveness-interpretability tradeoff.
+Students compare how knowledge is encoded symbolically vs. as learned vector
+representations, implement both approaches, and explore the
+expressiveness-interpretability tradeoff
 
 ### Learning Objectives
 - Access structured symbolic knowledge (WordNet, semantic networks)
@@ -188,13 +184,12 @@ Students compare how knowledge is encoded symbolically vs. as learned vector rep
 - Grounding and interpretability
 
 ### Key Packages
-- **nltk** — WordNet access, synsets, semantic similarity
-- **networkx** — semantic network graph structure
-- **scikit-learn** — embeddings, similarity metrics, dimensionality reduction
-- **gensim** — Word2Vec, FastText embedding training
-- **torch** / **tensorflow** — optional: graph neural networks
-- **numpy** — vector operations
-- **matplotlib** / **umap-learn** — embedding space visualization (t-SNE, UMAP)
+- **nltk**: WordNet access, synsets, semantic similarity
+- **networkx**: semantic network graph structure
+- **scikit-learn**: embeddings, similarity metrics, dimensionality reduction
+- **gensim**: Word2Vec, FastText embedding training
+- **torch** / **tensorflow**: optional: graph neural networks
+- **umap-learn**: embedding space visualization (t-SNE, UMAP)
 
 ### Learning Activities
 1. Load WordNet and explore:

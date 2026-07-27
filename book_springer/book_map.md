@@ -193,6 +193,47 @@
 - [ ] `/slides.lint_incrementally`
 - [ ] `/slides.add_bold_and_italic`
 
+## Book.springer Tutorials
+
+> find book_springer/tutorials -name *.ipynb
+```
+book_springer/tutorials/Lesson10_01_q_learning/q_learning.ipynb
+```
+
+## MSML610 Tutorials
+
+> find msml610/tutorials -name *.ipynb
+```
+msml610/tutorials/L05_statistical_learning/L05_01_01_hoeffding_inequality.ipynb
+msml610/tutorials/L05_statistical_learning/L05_01_02_bin_analogy_ml.ipynb
+msml610/tutorials/L05_statistical_learning/L05_01_03_vc_dimension.ipynb
+msml610/tutorials/L05_statistical_learning/L05_01_04_growth_function.ipynb
+msml610/tutorials/L05_statistical_learning/L05_02_01_bias_variance.ipynb
+msml610/tutorials/L05_statistical_learning/L05_02_02_overfitting.ipynb
+msml610/tutorials/L06_bayesian_networks/L06_01_exact_inference.ipynb
+msml610/tutorials/L06_bayesian_networks/L06_02_approximate_inference.ipynb
+msml610/tutorials/L07_prob_programming/L07_01_bayesian_coin.ipynb
+msml610/tutorials/L07_prob_programming/L07_02_probabilistic_programming.ipynb
+msml610/tutorials/L07_prob_programming/L07_02_robust_modeling.ipynb
+msml610/tutorials/L07_prob_programming/L07_03_hierarchical_models.ipynb
+msml610/tutorials/L07_prob_programming/L07_04_generalized_linear_models.ipynb
+msml610/tutorials/L07_prob_programming/L07_05_evaluating_models.ipynb
+msml610/tutorials/L08_causal_inference/L08_04_01_causal_inference.ipynb
+msml610/tutorials/L08_causal_inference/L08_04_02_causal_inference.ipynb
+msml610/tutorials/L08_causal_inference/L08_04_05_propensity_score.ipynb
+msml610/tutorials/L08_causal_inference/L08_04_07_metalearners.ipynb
+msml610/tutorials/L08_causal_inference/L08_04_08_difference_in_difference.ipynb
+msml610/tutorials/L09_kalman_filter/L09_04_gh_filter.ipynb
+msml610/tutorials/L09_kalman_filter/L09_05_01_discrete_bayes_dog.ipynb
+msml610/tutorials/L09_kalman_filter/L09_05_02_univariate_kalman_filter.ipynb
+msml610/tutorials/L09_kalman_filter/L09_05_03_multivariate_kalman_filter.ipynb
+msml610/tutorials/L09_kalman_filter/L09_05_04_non_linear_kalman_filter.ipynb
+msml610/tutorials/L09_multi_armed_bandits/L09_03_multi_armed_bandits.ipynb
+msml610/tutorials/L10_causal_discovery/L10_2_causal_discovery.ipynb
+msml610/tutorials/L12_reinforcement_learning/L12_01_gridworld_4x3.ipynb
+msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipynb
+```
+
 # Detailed TOC
 
 # Part I: Why Businesses Need Decisions, Not Predictions
