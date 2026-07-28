@@ -1146,6 +1146,8 @@ digraph CausalGraph {
     - Analyze only survivors (survivorship bias)
     - Analyze only adherent patients (adherence bias)
     - Self-selection 
+  - In practice selection bias occurs when the treatment assignment itself
+    depends on the confounder
 
 - @Caveat@: Can occur even with randomization
   - E.g., randomizing $T$ only decouples $T$ from confounders,
@@ -1230,24 +1232,66 @@ digraph G {
 
 # The Unreasonable Effectiveness of Linear Regression
 
-* Lending Industry: Example
-- **Example**: banking and lending industry
-  - Offer more credit to customers who have a lower chance of defaulting
-  - Understand the impact of loan amount / credit card limits on default rate
+// TODO(gp): Maybe move it to the previous section
 
-- **Intuition**:
-  - Increasing credit card limit should increase the odds of defaulting on the
-    credit card bill
-  - People tend to spend more when limits increase
-  - Higher balances $\implies$ more interest $\implies$ harder to repay
+* Lending Industry: Problem Setup
 
-- **Data**:
-  - Looking at banking data there is a negative correlation between credit lines
-    and default rate
-  - The underwriting model would recommend to give more money to risky customers
+- @Example@: banking and lending industry
+  - Business goal: offer more credit to customers with lower default risk
+  - What is the causal impact of credit limits on default?
 
-* Lending Industry: Example
-- **Reality**
+- @Intuition@: theory suggests higher credit limits increase default risk
+  - More available credit $\to$ higher spending $\to$ higher balances $\to$ more
+    interest paid $\to$ harder to repay debt
+
+- @Data@: bank historical data shows unexpected pattern
+  - Customers with higher credit limits have _lower_ default rates
+  - Customers with lower credit limits have _higher_ default rates
+  - Negative correlation between credit limit and default
+
+- @Problem@: this contradicts theory
+  - _Naive interpretation_ (association ML)
+    - Increase credit limits to reduce defaults
+    - Give riskiest customers the most credit
+  - This would be disastrous in practice
+
+- @Question@: why does observed data contradict causal intuition?
+
+* Lending Industry: Confounding
+
+- @Reality@: the bank's underwriting process introduces selection bias
+  - Bank estimates customer risk (hard to measure) using proxy variable $X$
+    (e.g., credit score, income, employment history)
+
+- @Causal mechanism@:
+  - Risk $\to$ bank's credit decision
+  - Risk $\to$ default rate
+  - Bank gives high limits to _low-risk_ customers only
+
+- @Result@: the negative correlation is _spurious_
+  - Observed correlation is driven by who _got_ the high limits
+  - Not by the causal effect of limits on default
+  - Confounded by unobserved or imperfectly measured risk
+
+* Lending Industry: The Causal Graph
+
+- @Components@:
+  - _Risk_: true underlying customer risk (latent)
+  - _Proxy_: observed proxy (credit score, income)
+  - _CreditLimit_: decision made by bank
+  - _Default_: outcome we want to predict
+
+::: columns
+:::: {.column width=50%}
+
+- @Causal paths@:
+  - _Risk_ $\to$ _Proxy_ $\to$ _CreditLimit_ (bank's logic)
+  - _Risk_ $\to$ _Default_ (causation)
+  - _CreditLimit_ $\to$ _Default_ (true causal effect)
+  - All confounded through _Risk_
+
+::::
+:::: {.column width=50%}
 ```graphviz
 digraph CausalGraph {
     rankdir=LR;
@@ -1256,7 +1300,6 @@ digraph CausalGraph {
     node [fontname="Helvetica", fontsize=12];
     edge [fontname="Helvetica", fontsize=10];
 
-    // Exogenous variable (no causal parents).
     Risk [
         shape=ellipse,
         penwidth=2,
@@ -1267,18 +1310,16 @@ digraph CausalGraph {
         label="Risk"
     ];
 
-    // Endogenous variable (has parent: Risk).
-    X [
+    Proxy [
         shape="box",
         style="filled,solid,rounded",
         penwidth=1,
         color="#62D4A4",
         fillcolor="#EAF9F3",
         fontcolor=black,
-        label="X"
+        label="Proxy"
     ];
 
-    // Endogenous variable (has parent: X).
     CreditLimit [
         shape="box",
         style="filled,solid,rounded",
@@ -1289,7 +1330,6 @@ digraph CausalGraph {
         label="Credit limit"
     ];
 
-    // Target variable (no descendants, under study).
     Default [
         shape=box,
         penwidth=2,
@@ -1300,16 +1340,33 @@ digraph CausalGraph {
         label="Default"
     ];
 
-    // Causal edges.
-    Risk -> X [style=solid, color=black];
-    X -> CreditLimit [style=solid, color=black];
-    X -> Default [style=solid, color=black];
+    Risk -> Proxy [style=solid, color=black];
+    Proxy -> CreditLimit [style=solid, color=black];
+    Proxy -> Default [style=solid, color=black];
     CreditLimit -> Default [style=solid, color=black];
 }
 ```
+::::
+:::
 
-- The risk of default is difficult to estimate so income or credit scores
-  can be used as proxy variable `X`
+- @Key insight@: controlling for _Proxy_ blocks bias
+  - Among customers with _same_ _Proxy_, higher limits reveal true causal effect
+
+* Lending Industry: Key Insight
+
+- @Recap@: **selection bias** occurs when the treatment assignment itself depends
+  on the confounder
+  - Bank's decision to increase limits depends on risk assessment
+  - This creates spurious correlation in the observed data
+
+- @Lesson@: correlation $\neq$ causation when confounders present
+  - Negative observed correlation hides positive true causal effect
+  - A decision based on observed data would backfire
+
+- @Solution@: recover causal effect using
+  1. Randomized experiments (e.g., random limit assignments)
+  2. Causal inference adjusting for confounding (e.g., regression)
+  3. Causal graphs to identify confounding paths and use adjustment formula
 
 * Bank Loan Risk: Adjustment Formula
 - **Assumption**: assuming conditional independence $(Y_0, Y_1) \perp T | X$, use
