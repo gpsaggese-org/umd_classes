@@ -6,7 +6,7 @@
 // - AIMA (Artificial Intelligence: a Modern Approach)
 // - Pearl et al., The Book of Why, 2017
 
-## Intervention and Counterfactuals
+# Intervention and Counterfactuals
 
 * Interventions in Causal Networks
 
@@ -162,7 +162,7 @@ _Mutilated graph_
     variables
   - Need complexity penalties to avoid overfitting
 
-## Randomized Controlled Trial
+# Randomized Controlled Trial
 
 * Randomized Controlled Trials
 
@@ -222,9 +222,9 @@ _Mutilated graph_
   - _Double-blind RCT_: both participants and investigators unaware of
     assignment
 
-## Backdoor Adjustment
+# Backdoor Adjustment
 
-* Back-Door Paths: Example
+* Backdoor Paths: Example
 
 ::: columns
 :::: {.column width=70%}
@@ -325,8 +325,11 @@ digraph NoBackdoorExample {
 \vspace{0.5cm}
 
 - @Definition@: A **backdoor path** is any path from $X$ to $Y$ starting with
-  an arrow into $X$ (even if against the direction of the DAG edge)
+  an arrow into $X
+  - It must be into $X$ since otherwise it will be a causal path
+  - The rest of the path can be against the direction of DAG edges
   - E.g., $X \leftarrow \cdots \leftrightarrow Y$
+  - E.g., $IceCreamSales \leftarrow Season \rightarrow DrowningDeaths$
   - It creates spurious associations between $X$ and $Y$ (even if changing $X$
     doesn't affect $Y$)
 
@@ -555,7 +558,7 @@ digraph ColliderExample {
   - _Instrumental variables_: uses external variation
   - _Do-calculus_: symbolic transformations to eliminate $do()$
 
-## Frontdoor Adjustment
+# Frontdoor Adjustment
 
 * Front-Door Adjustment: Definition
 
@@ -761,7 +764,7 @@ digraph CerealAds {
   3. Combine:
      $$\Pr(Y | do(X)) = \sum_m \Pr(M | X) \sum_{x'} \Pr(Y | M, X') \Pr(X')$$
 
-## Do-Calculus
+# Do-Calculus
 
 * Do-Calculus: Formal Framework
 

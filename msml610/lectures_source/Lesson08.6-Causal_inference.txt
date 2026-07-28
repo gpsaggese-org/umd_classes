@@ -7,7 +7,7 @@
 
 # Introduction to Causal Inference
 
-* Sales example
+* Sales Example
 
 - @Example@: there are stores that put **product on sales** for Christmas
 
@@ -1098,27 +1098,28 @@ digraph CausalGraph {
   - I.e., all groups of X must have both treated and control units
 
 * Confounding Bias
-- @Definition@: **confounding** happens when there is an open backdoor path
+- @Definition@: **confounding** happens when there is an _open_ _backdoor path_
   through which association flows non-causally
-  - Backdoor path means a path that enters the treatment variable through an
+  - _Backdoor path_ means a path that enters the treatment variable through an
     incoming arrow
-  - E.g., treatment and outcome share a common cause
+  - _Open_: the path is unblocked (e.g., by conditioning), actively channeling
+    association
+  - The result is that treatment and outcome share a common cause
 
 - @Problem@: it's difficult to adjust for all common causes
   - Some causes are unknown
-  - Known causes might be difficult to measure
+  - Known causes might be difficult to observe
 
-- @Example@: does new management training program increase employers'
-  engagement?
-  - @Problem@: training is optional
-    - Only managers who are already doing a great job attend the program
+- @Example@: _"Does new management training program increase employers'
+  engagement?"_
+  - Training is optional
+    - Managers who are already doing a great job can attend the program
     - The managers that need the training the most, don't attend
-    - When you measure engagement of the teams, engagement under managers who took
-      the training is much higher
-    - There is a common cause between treatment and outcome, so they move together
-      regardless of a causal effect
-  - @Solution@: need to control for manager's quality before taking the
-    training
+  - When you measure engagement of the teams, engagement under managers who took
+    the training is much higher
+  - There is a common cause between treatment and outcome, so they move together
+    regardless of a causal effect
+  - The solution is control for manager's quality before taking the training
 
 * Surrogate Confounding
 
@@ -1126,37 +1127,47 @@ digraph CausalGraph {
   - E.g., you can't measure confounder "manager quality"
 
 - @Solution@: measure variable that can be proxies for confounder
-  - E.g., causes (manager's tenure, education level), effects (team's attrition,
-    past performance)
+  - Measure causes of the variable (e.g., manager's tenure, education level) or
+    effects (e.g., team's attrition, past performance)
 
-* Selection bias
-- @Definition@: bias introduced when the analysis conditions on a variable that
-  is:
-  - a collider
-  - a mediator
-  - post-treatment variable
+* Selection Bias
+- @Definition@: **selection bias** is introduced when the analysis conditions on
+  a variable $X$ that is a:
+  - Collider $A \rightarrow X \leftarrow B$
+    - E.g.,  $SatScores \rightarrow Admission \leftarrow Extracurriculars$
+  - Mediator $T \rightarrow X \rightarrow Y$
+    - E.g., excluding drug patients who got a drug-caused side effect biases the
+      estimated drug effect on mortality
+  - Post-treatment variable $Y \rightarrow X$
+    - E.g., studying performance predictors only among promoted employees, where
+      promotion depends on performance
 
-- Selection bias is not only about "bad sampling", e.g.,
-  - Analyze only survivors (survivorship bias)
-  - Analyze only adherent patients
-  - Self-selection 
+- @Caveat@: selection bias is not only about "bad sampling", e.g.,
+    - Analyze only survivors (survivorship bias)
+    - Analyze only adherent patients (adherence bias)
+    - Self-selection 
 
 - @Caveat@: Can occur even with randomization
+  - E.g., randomizing $T$ only decouples $T$ from confounders,
+    but if we condition on a post-treatment variable during analysis still
+    introduces bias.
 
-- @Solution@: condition on variables causing selection
-  - Cannot fully eliminate bias when:
+- @Solution@: Need to condition on variables driving selection
+
+- @Problem@: We cannot always fully eliminate selection bias when:
     - Things causing selection are unmeasured/unmeasurable
     - Treatment or outcome causes selection directly
     - Unmeasured common cause between selection and outcome
 
-* Selection bias: Example
-- @Example@
+* Selection Bias: Example
 - A software company wants to estimate the impact of a new feature
-- Randomize rollout of the feature
-  - 10% of the customers are randomly chosen to get the feature
-- You can't measure satisfaction directly so you send a survey to customers in
-  the rollout (treated) and in the control group, asking if you would recommend
-  the product
+
+- @Procedure@
+  - Randomize rollout of the feature
+    - E.g., 10% of the customers are randomly chosen to get the feature
+  - You can't measure satisfaction directly
+    - Send a survey to customers in the treated and in the control group, asking
+      if you would recommend the product
 
 - @Question@: is the difference in satisfaction due entirely to causal effect
   of new feature?
@@ -1188,13 +1199,14 @@ digraph G {
 - @Problem@: you measure the satisfaction only for the customers who responded
   to the survey (i.e., conditioning on responding to the survey)
 
-* Selection bias through the collider: Example
+* Selection Bias Through the Collider: Example
+// TODO(ai_gp): Add a better picture
 - Suppose:
   - Treatment $T$ affects hospitalization $H$
   - Disease severity $S$ also affects hospitalization $H$
-  $$
-  T \rightarrow H \leftarrow S
-  $$
+    $$
+    T \rightarrow H \leftarrow S
+    $$
   - $H$ is a collider
 
 - If we analyze only hospitalized patients (conditioning on $H$)
@@ -1202,13 +1214,13 @@ digraph G {
   - Open the path between $T$ and $S$
   - This can create a false treatment effect
 
-* Selection bias through mediator: Example
+* Selection Bias Through Mediator: Example
 - Suppose:
   - Treatment $T$ affects blood pressure $M$
   - Blood pressure affects stroke risk $Y$
-  $$
-  T \rightarrow M \rightarrow Y
-  $$
+    $$
+    T \rightarrow M \rightarrow Y
+    $$
 
 - If we adjust for $M$:
   - Part of the treatment effect is blocked
