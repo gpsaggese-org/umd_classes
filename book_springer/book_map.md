@@ -319,7 +319,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
   - Moving beyond correlation: confounding, mediators, and spurious paths in
     observational data
   - Structural causal models (SCMs) and DAGs: formalizing mechanisms
-  - Identification criteria: back-door, front-door, do-calculus
+  - Identification criteria: backdoor, frontdoor, do-calculus
 - Probabilistic Uncertainty Quantification
   - Bayesian inference: priors, posteriors, posterior predictive distributions
   - Epistemic uncertainty over model; aleatoric irreducible noise
@@ -442,7 +442,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
 ### Goals
 - Represent causal assumptions with DAGs and structural causal models
 - Use do-calculus to identify interventional effects from observational data
-- Apply back-door, front-door, and IV methods; know when identification fails
+- Apply backdoor, frontdoor, and IV methods; know when identification fails
 
 ### Topics
 - Causal Graphical Models
@@ -456,7 +456,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
   - From interventions to potential outcomes: individual, average, and
     conditional treatment effects
 - Identification Criteria
-  - Back-door and front-door criteria for identifying effects under
+  - Backdoor and frontdoor criteria for identifying effects under
     confounding and mediation
   - D-separation and graph structure; confounding bias and propensity-score
     adjustment in practice

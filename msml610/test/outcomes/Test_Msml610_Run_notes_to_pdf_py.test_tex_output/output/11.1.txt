@@ -1659,7 +1659,7 @@ Combined & 273 / 350 = 78\% & 289 / 350 = 83\% \\
   \item
     Randomized experiments (no confounders)
   \item
-    Successful back-door or front-door adjustment (i.e., complete
+    Successful backdoor or frontdoor adjustment (i.e., complete
     knowledge of the causal graph + sufficient data)
   \end{itemize}
 \end{itemize}
@@ -1725,10 +1725,10 @@ After: \endgroup
   \EE[Y | do(a)] = \sum_{y} y \cdot \Pr(Y = y | do(A = a))
   \]
 \item
-  Using back-door adjustment formula, compute interventional
+  Using backdoor adjustment formula, compute interventional
   distribution \[
   \Pr(Y | do(A)) = \sum_{Z} \Pr(Y | A, Z) \Pr(Z)
-  \] where \(Z\) is a back-door adjustment set
+  \] where \(Z\) is a backdoor adjustment set
 \item
   \textbf{\textcolor{red}{Example}}: drug decision
 

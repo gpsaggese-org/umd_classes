@@ -63,7 +63,7 @@
   $$
   where $Y^{1}, Y^{0}$ are potential outcomes
 
-- **No back-door adjustment needed** — the design closes all back-door paths
+- **No backdoor adjustment needed** — the design closes all backdoor paths
 
 // TODO(gp): Merge the graphs in the same slide
 * Causal Graph of an Observational Study

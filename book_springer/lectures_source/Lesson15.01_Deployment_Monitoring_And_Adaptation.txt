@@ -346,7 +346,7 @@ digraph Serve {
   no live signal reveals them
   - _Graph structure_: are the edges still the right causal story?
   - _Sufficiency of the adjustment set_: does the confounding set still close
-    all back-door paths?
+    all backdoor paths?
 
 - **Why data cannot decide**: many graphs fit the same observational
   distribution (Markov equivalence), so the data underdetermines the structure

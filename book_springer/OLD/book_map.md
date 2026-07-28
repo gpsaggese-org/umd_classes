@@ -164,7 +164,7 @@
     functional/LiNGAM-ANM); Markov equivalence; identifiability; faithfulness;
     refutation
 - `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
-  - [25%] — do-calculus rules; back/front-door adjustment
+  - [25%] — do-calculus rules; back/frontdoor adjustment
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
   - [15%] — SCM; causal DAGs (basics)
 - `msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt`

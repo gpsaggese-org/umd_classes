@@ -357,7 +357,7 @@ digraph DecisionLoop {
 
 - **Property**: They are equivalent under:
   - Randomized experiments (no confounders)
-  - Successful back-door or front-door adjustment (i.e., complete knowledge of
+  - Successful backdoor or frontdoor adjustment (i.e., complete knowledge of
     the causal graph + sufficient data)
 
 * Intervention in an Decision Network
@@ -426,11 +426,11 @@ digraph PostMutation {
   \EE[Y | do(a)] = \sum_{y} y \cdot \Pr(Y = y | do(A = a))
   $$
 
-- Using back-door adjustment formula, compute interventional distribution
+- Using backdoor adjustment formula, compute interventional distribution
   $$
   \Pr(Y | do(A)) = \sum_{Z} \Pr(Y | A, Z) \Pr(Z)
   $$
-  where $Z$ is a back-door adjustment set
+  where $Z$ is a backdoor adjustment set
 
 - **Example**: drug decision
   - Observational: $\Pr(\text{recovery} | \text{drug}) = 0.78$

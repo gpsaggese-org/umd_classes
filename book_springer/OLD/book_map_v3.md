@@ -233,7 +233,7 @@
 - Causal Models and Effect Identification
   - Moving beyond correlation: confounding, mediators, and spurious paths in observational data
   - Structural causal models (SCMs) and DAGs: formalizing mechanisms
-  - Identification criteria: back-door, front-door, do-calculus
+  - Identification criteria: backdoor, frontdoor, do-calculus
 - Probabilistic Uncertainty Quantification
   - Bayesian inference: priors, posteriors, posterior predictive distributions
   - Epistemic uncertainty over model; aleatoric irreducible noise
@@ -400,8 +400,8 @@
   - Transforming observational queries into interventional quantities
   - Three rules of do-calculus: identifying when interventions are identifiable
 - Identification Criteria
-  - Back-door criterion: adjusting for confounders to identify effects
-  - Front-door criterion: handling unobserved confounding via mediators
+  - Backdoor criterion: adjusting for confounders to identify effects
+  - Frontdoor criterion: handling unobserved confounding via mediators
   - D-separation: reading conditional independence from causal graphs
 - Advanced Identification Methods
   - Instrumental variables: leveraging exogenous variation to break confounding
@@ -417,17 +417,17 @@
   - [100%]: Causal DAGs, structural causal models, mechanisms, identifying
     causal structures
 - `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
-  - [100%]: Do-calculus, interventional identification, front-door and back-door
+  - [100%]: Do-calculus, interventional identification, frontdoor and backdoor
     criteria
 - `msml610/lectures_source/Lesson08.4.txt`
   - [90%]: Identification, d-separation, graphical criteria, confounding bias,
-    back-door adjustment, propensity-score/IPW methods
+    backdoor adjustment, propensity-score/IPW methods
 - `msml610/lectures_source/Lesson12.2-Causal_Discovery.txt`
   - [90%]: Causal discovery from observational data, identifiability, Markov
     equivalence, algorithm families (constraint, score, functional), validation
 - `msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.txt`
   - [20%]: Instrumental variables: exogenous variable Z breaking confounding
-    when back-door adjustment fails, complier-effect limitation, natural
+    when backdoor adjustment fails, complier-effect limitation, natural
     experiments as an alternative source of exogenous variation
 - Not covered
   - [15%]: Sensitivity analysis for unmeasured confounding, formal

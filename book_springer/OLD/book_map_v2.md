@@ -180,7 +180,7 @@
 - [100%]: `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
   - Causal DAGs, structural causal models, causal edges and stability, mechanisms, observed vs unobserved variables
 - [95%]: `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
-  - Do-calculus, interventions, counterfactuals, back-door and front-door adjustments, do-operator, graphical criteria
+  - Do-calculus, interventions, counterfactuals, backdoor and frontdoor adjustments, do-operator, graphical criteria
 - [90%]: `msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt`
   - Bayesian networks as graphical models, conditional independence, d-separation, Markov blanket
 - [85%]: `msml610/lectures_source/Lesson03-Knowledge_representation.txt`
@@ -250,7 +250,7 @@
 - [75%]: `msml610/lectures_source/Lesson08.4.txt`
   - Identification, d-separation, graphical criteria, confounding bias, instrumental variables
 - [70%]: `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
-  - Do-calculus, interventional identification, front-door and back-door criteria
+  - Do-calculus, interventional identification, frontdoor and backdoor criteria
 - [60%]: `msml610/lectures_source/Lesson13.1-Explainability.txt`
   - Causal explanations vs feature attribution, distinguishing causal from correlational discovery
 - [50%]: Not covered - Latent variable models, LiNGAM/ANM algorithms, sensitivity analysis bounds, E-values, causal representation learning

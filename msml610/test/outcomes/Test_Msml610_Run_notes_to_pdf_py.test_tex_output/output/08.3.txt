@@ -560,9 +560,9 @@ MSML610: Advanced Machine Learning \endgroup
 \item
   Randomized Controlled Trial
 \item
-  Back-door Adjustment
+  Backdoor Adjustment
 \item
-  Front-door Adjustment
+  Frontdoor Adjustment
 \item
   Do-Calculus
 \end{itemize}
@@ -865,9 +865,9 @@ MSML610: Advanced Machine Learning \endgroup
 \item
   \emph{\textbf{\textcolor{red}{Randomized Controlled Trial}}}
 \item
-  Back-door Adjustment
+  Backdoor Adjustment
 \item
-  Front-door Adjustment
+  Frontdoor Adjustment
 \item
   Do-Calculus
 \end{itemize}
@@ -1027,16 +1027,16 @@ MSML610: Advanced Machine Learning \endgroup
 \item
   Randomized Controlled Trial
 \item
-  \emph{\textbf{\textcolor{red}{Back-door Adjustment}}}
+  \emph{\textbf{\textcolor{red}{Backdoor Adjustment}}}
 \item
-  Front-door Adjustment
+  Frontdoor Adjustment
 \item
   Do-Calculus
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Back-Door Paths: Example}
-\protect\phantomsection\label{back-door-paths-example}
+\protect\phantomsection\label{backdoor-paths-example}
 \begin{columns}[T]
 \begin{column}{0.65\linewidth}
 \begin{itemize}
@@ -1065,7 +1065,7 @@ MSML610: Advanced Machine Learning \endgroup
     \end{itemize}
   \end{itemize}
 \item
-  The \textbf{\textcolor{blue}{back-door path}} is \(Price\) \(\to\)
+  The \textbf{\textcolor{blue}{backdoor path}} is \(Price\) \(\to\)
   \(AdSpend\) \(\to\) \(Sales\)
 \end{itemize}
 \end{column}
@@ -1091,13 +1091,13 @@ MSML610: Advanced Machine Learning \endgroup
   \item
     Designing experiment holding \(AdSpend\) constant or randomized
   \item
-    Using back-door criterion
+    Using backdoor criterion
   \end{enumerate}
 \end{itemize}
 \end{frame}
 
 \begin{frame}{The Back-Door Adjustment}
-\protect\phantomsection\label{the-back-door-adjustment}
+\protect\phantomsection\label{the-backdoor-adjustment}
 \begin{itemize}
 \tightlist
 \item
@@ -1108,8 +1108,8 @@ MSML610: Advanced Machine Learning \endgroup
   \item
     You have a (correct) causal graph
   \item
-    You block the back-door paths (needs definition!) that satisfy the
-    back-door criterion (needs definitions!)
+    You block the backdoor paths (needs definition!) that satisfy the
+    backdoor criterion (needs definitions!)
   \end{itemize}
 \item
   \textbf{\textcolor{darkgreen}{Thesis}}
@@ -1143,11 +1143,11 @@ MSML610: Advanced Machine Learning \endgroup
 \end{frame}
 
 \begin{frame}{Back-Door Criterion: Overview}
-\protect\phantomsection\label{back-door-criterion-overview}
+\protect\phantomsection\label{backdoor-criterion-overview}
 \begin{itemize}
 \tightlist
 \item
-  A \textbf{\textcolor{red}{back-door path}} is any path from \(X\) to
+  A \textbf{\textcolor{red}{backdoor path}} is any path from \(X\) to
   \(Y\) starting with an arrow into \(X\) and ending pointing into \(Y\)
 
   \begin{itemize}
@@ -1163,7 +1163,7 @@ MSML610: Advanced Machine Learning \endgroup
     changing \(X\) doesn't change \(Y\)
   \end{itemize}
 \item
-  \textbf{\textcolor{darkgreen}{Back-door criterion}}: A set of
+  \textbf{\textcolor{darkgreen}{Backdoor criterion}}: A set of
   variables \(Z\) satisfies the criterion relative to
   \(X \leftrightarrow ... Z ... \rightarrow Y\) if:
 
@@ -1180,7 +1180,7 @@ MSML610: Advanced Machine Learning \endgroup
     through common causes
   \end{itemize}
 \item
-  Condition on variables satisfying the back-door criterion to estimate
+  Condition on variables satisfying the backdoor criterion to estimate
   a causal effect without intervention
 
   \begin{itemize}
@@ -1279,7 +1279,7 @@ MSML610: Advanced Machine Learning \endgroup
 \begin{itemize}
 \tightlist
 \item
-  The back-door criterion tells you all and only what you need to
+  The backdoor criterion tells you all and only what you need to
   condition on (i.e., block) to:
 
   \begin{itemize}
@@ -1309,7 +1309,7 @@ MSML610: Advanced Machine Learning \endgroup
     Controlling for too many variables can open colliders and introduce
     bias
   \item
-    Forgetting to block all back-door paths
+    Forgetting to block all backdoor paths
   \item
     Using variables that lie on the causal path (blocks the mediator of
     the effect)
@@ -1330,16 +1330,16 @@ MSML610: Advanced Machine Learning \endgroup
 \end{frame}
 
 \begin{frame}{When Back-Door Adjustment Fails}
-\protect\phantomsection\label{when-back-door-adjustment-fails}
+\protect\phantomsection\label{when-backdoor-adjustment-fails}
 \begin{itemize}
 \tightlist
 \item
-  \textbf{\textcolor{red}{Back-door is simple but not universally applicable}}
+  \textbf{\textcolor{red}{Backdoor is simple but not universally applicable}}
 
   \begin{itemize}
   \tightlist
   \item
-    No set of observable variables satisfies the back-door criterion
+    No set of observable variables satisfies the backdoor criterion
 
     \begin{itemize}
     \tightlist
@@ -1363,7 +1363,7 @@ MSML610: Advanced Machine Learning \endgroup
   \begin{itemize}
   \tightlist
   \item
-    \emph{Front-door criterion}: uses mediators
+    \emph{Frontdoor criterion}: uses mediators
   \item
     \emph{Instrumental variables}: uses external variation
   \item
@@ -1381,20 +1381,20 @@ MSML610: Advanced Machine Learning \endgroup
 \item
   Randomized Controlled Trial
 \item
-  Back-door Adjustment
+  Backdoor Adjustment
 \item
-  \emph{\textbf{\textcolor{red}{Front-door Adjustment}}}
+  \emph{\textbf{\textcolor{red}{Frontdoor Adjustment}}}
 \item
   Do-Calculus
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Front-Door Adjustment in Causal Inference}
-\protect\phantomsection\label{front-door-adjustment-in-causal-inference}
+\protect\phantomsection\label{frontdoor-adjustment-in-causal-inference}
 \begin{itemize}
 \tightlist
 \item
-  \textbf{\textcolor{red}{Front-door criterion}} identifies causal
+  \textbf{\textcolor{red}{Frontdoor criterion}} identifies causal
   effects with unobserved confounders
 
   \begin{itemize}
@@ -1524,7 +1524,7 @@ MSML610: Advanced Machine Learning \endgroup
 \begin{itemize}
 \tightlist
 \item
-  \textbf{\textcolor{red}{Strategy 1: Back-door adjustment}}
+  \textbf{\textcolor{red}{Strategy 1: Backdoor adjustment}}
 
   \begin{itemize}
   \tightlist
@@ -1565,7 +1565,7 @@ MSML610: Advanced Machine Learning \endgroup
     inference
   \end{itemize}
 \item
-  \textbf{\textcolor{blue}{Strategy 3: Front-door Adjustment}}
+  \textbf{\textcolor{blue}{Strategy 3: Frontdoor Adjustment}}
 \end{itemize}
 \end{frame}
 
@@ -1634,13 +1634,13 @@ MSML610: Advanced Machine Learning \endgroup
 \end{frame}
 
 \begin{frame}{When Front-Door Works}
-\protect\phantomsection\label{when-front-door-works}
+\protect\phantomsection\label{when-frontdoor-works}
 \begin{columns}[T]
 \begin{column}{0.55\linewidth}
 \begin{itemize}
 \tightlist
 \item
-  \textbf{\textcolor{red}{Is the front-door criterion verified}} for
+  \textbf{\textcolor{red}{Is the frontdoor criterion verified}} for
   \emph{``kids' nagging''} \(M\)?
 
   \begin{itemize}
@@ -1664,7 +1664,7 @@ MSML610: Advanced Machine Learning \endgroup
 
 \begin{itemize}
 \item
-  \textbf{\textcolor{blue}{Yes! The front-door criterion is verified}}
+  \textbf{\textcolor{blue}{Yes! The frontdoor criterion is verified}}
 \item
   Instead of doing an intervention \(do(X)\), just observe!
 
@@ -1697,9 +1697,9 @@ MSML610: Advanced Machine Learning \endgroup
 \item
   Randomized Controlled Trial
 \item
-  Back-door Adjustment
+  Backdoor Adjustment
 \item
-  Front-door Adjustment
+  Frontdoor Adjustment
 \item
   \emph{\textbf{\textcolor{red}{Do-Calculus}}}
 \end{itemize}
@@ -1775,12 +1775,12 @@ MSML610: Advanced Machine Learning \endgroup
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Back/Front-door Adjustments and Do-calculus}
-\protect\phantomsection\label{backfront-door-adjustments-and-do-calculus}
+\begin{frame}{Back/Frontdoor Adjustments and Do-calculus}
+\protect\phantomsection\label{backfrontdoor-adjustments-and-do-calculus}
 \begin{itemize}
 \item
-  The \textbf{\textcolor{red}{back-door}} and
-  \textbf{\textcolor{orange}{front-door}} criteria are
+  The \textbf{\textcolor{red}{backdoor}} and
+  \textbf{\textcolor{orange}{frontdoor}} criteria are
   \textbf{\textcolor{darkgreen}{specific applications}} of do-calculus
 
   \begin{itemize}
@@ -1791,13 +1791,13 @@ MSML610: Advanced Machine Learning \endgroup
     probabilities
   \end{itemize}
 \item
-  \textbf{\textcolor{teal}{Back-door adjustment}}: If a set of variables
-  \(Z\) blocks all back-door paths from \(X\) to \(Y\) (paths that go
+  \textbf{\textcolor{teal}{Backdoor adjustment}}: If a set of variables
+  \(Z\) blocks all backdoor paths from \(X\) to \(Y\) (paths that go
   into \(X\)), then: \[
   \Pr(Y | do(X)) = \sum_z \Pr(Y | X, Z) \Pr(Z)
   \]
 \item
-  \textbf{\textcolor{cyan}{Front-door adjustment}}: If there exists a
+  \textbf{\textcolor{cyan}{Frontdoor adjustment}}: If there exists a
   variable \(Z\) such that:
 
   \begin{enumerate}
@@ -1807,9 +1807,9 @@ MSML610: Advanced Machine Learning \endgroup
   \item
     Z affects Y
   \item
-    All back-door paths from X to Z are blocked
+    All backdoor paths from X to Z are blocked
   \item
-    All back-door paths from Z to Y are blocked by X then: \[
+    All backdoor paths from Z to Y are blocked by X then: \[
     \Pr(Y | do(X)) = \sum_z \Pr(Z | X) \sum_{x'} \Pr(Y | Z, X') \Pr(X')
     \]
   \end{enumerate}

@@ -259,7 +259,7 @@ digraph DecisionNet {
   $$a^* = \argmax_{a \in \mathcal{A}} \EE_{Y \sim \Pr(Y|do(a))}[U(Y)]$$
 - **Example**: comparing drugs on observational recovery rates conflates
   who a doctor chose to treat with what the treatment does; adjusting for
-  the back-door set before computing expected utility fixes the ranking
+  the backdoor set before computing expected utility fixes the ranking
 - **Key idea**: decision theory and causal identification are not separate
   topics; expected utility is only valid once its inputs are interventional
 
@@ -558,7 +558,7 @@ digraph SCM_MDP {
   where confounding is most severe
   - A new policy fit on this data can exploit correlations that are
     artifacts of the logging policy, not the environment
-- **Solution**: apply the back-door adjustment from Lesson 2.1 to the
+- **Solution**: apply the backdoor adjustment from Lesson 2.1 to the
   sequential setting
   $$\EE[R | do(a), s] = \sum_u \Pr(u|s)\,\EE[R|a,s,u]$$
 - **Key idea**: off-policy evaluation is identification, applied one time

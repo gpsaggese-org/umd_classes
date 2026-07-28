@@ -39,8 +39,8 @@
 // From msml610/lectures_source/Lesson08.3-Do_Calculus.txt:Do-Calculus
 * The Rules of Do-Calculus
 // From msml610/lectures_source/Lesson08.3-Do_Calculus.txt:The Rules of Do-Calculus
-* Back/Front-door Adjustments and Do-calculus
-// From msml610/lectures_source/Lesson08.3-Do_Calculus.txt:Back/Front-door Adjustments and Do-calculus
+* Back/Frontdoor Adjustments and Do-calculus
+// From msml610/lectures_source/Lesson08.3-Do_Calculus.txt:Back/Frontdoor Adjustments and Do-calculus
 
 ## From Interventions to Treatment Effects
 * Individual Treatment Effect

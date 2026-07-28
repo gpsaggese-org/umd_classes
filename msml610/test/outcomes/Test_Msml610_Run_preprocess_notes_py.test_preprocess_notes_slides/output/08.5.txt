@@ -230,7 +230,7 @@ _Mutilated graph_
 - **Double-blind RCTs**: participants and investigators/clinicians don't know
   assignments
 
-## Back-door Adjustment
+## Backdoor Adjustment
 
 #### Back-Door Paths: Example
 ::: columns
@@ -243,7 +243,7 @@ _Mutilated graph_
       perceived as more valuable
     - The _sales_ (directly)
 
-- The **back-door path** is $Price$ $\to$ $AdSpend$ $\to$ $Sales$ 
+- The **backdoor path** is $Price$ $\to$ $AdSpend$ $\to$ $Sales$ 
 
 ::::
 :::: {.column width=30%}
@@ -277,12 +277,12 @@ digraph CausalDAG {
   $Price$ on $Sales$ by:
   1. Using $AdSpent$ as covariate in the regression
   2. Designing experiment holding $AdSpend$ constant or randomized
-  3. Using back-door criterion
+  3. Using backdoor criterion
 
 #### The Back-Door Adjustment
 - **Hypotheses**
   - You have a (correct) causal graph
-  - You block the back-door paths (needs definition!) that satisfy the back-door
+  - You block the backdoor paths (needs definition!) that satisfy the backdoor
     criterion (needs definitions!)
 
 - **Thesis**
@@ -297,7 +297,7 @@ digraph CausalDAG {
   - **Mind blown!**
 
 #### Back-Door Criterion: Overview
-- A **back-door path** is any path from $X$ to $Y$ starting with an arrow into
+- A **backdoor path** is any path from $X$ to $Y$ starting with an arrow into
   $X$ and ending pointing into $Y$
   - E.g., $X \leftrightarrow ... \leftrightarrow ... \rightarrow Y$
   - Arrow direction doesn't matter
@@ -305,14 +305,14 @@ digraph CausalDAG {
   - _Intuition_: Paths make $X$ and $Y$ look related even if changing $X$
     doesn't change $Y$
 
-- **Back-door criterion**: A set of variables $Z$ satisfies the criterion
+- **Backdoor criterion**: A set of variables $Z$ satisfies the criterion
   relative to $X \leftrightarrow ... Z ... \rightarrow Y$ if:
   - No variable in $Z$ is a descendant of $X$
   - $Z$ blocks every path from $X$ to $Y$ starting with an arrow into $X$
   - _Intuition_: Block variables that interfere with the effect you're
     estimating and remove paths where $X$ and $Y$ connect through common causes
 
-- Condition on variables satisfying the back-door criterion to estimate a causal
+- Condition on variables satisfying the backdoor criterion to estimate a causal
   effect without intervention
   - This guy won the Nobel prize for CS for this! **Mind blown!**
 
@@ -407,7 +407,7 @@ digraph ColliderExample {
 :::
 
 #### Common Mistakes
-- The back-door criterion tells you all and only what you need to condition on
+- The backdoor criterion tells you all and only what you need to condition on
   (i.e., block) to:
   - Transform observation in intervention
   - Say that "correlation IS causation"
@@ -418,7 +418,7 @@ digraph ColliderExample {
 - **Common mistakes**
   - Conditioning on a descendant of $X$ can bias the estimate
   - Controlling for too many variables can open colliders and introduce bias
-  - Forgetting to block all back-door paths
+  - Forgetting to block all backdoor paths
   - Using variables that lie on the causal path (blocks the mediator of the
     effect)
   - Ignoring unobserved confounders: can make causal effect unidentifiable
@@ -428,22 +428,22 @@ digraph ColliderExample {
     incorrectly
 
 #### When Back-Door Adjustment Fails
-- **Back-door is simple but not universally applicable**
-  - No set of observable variables satisfies the back-door criterion
+- **Backdoor is simple but not universally applicable**
+  - No set of observable variables satisfies the backdoor criterion
     - In order to condition on a variable it needs to be observable
     - E.g., an unobserved or unknown confounders
   - You need to know a good approximation of the true causal graph
     - Very easy to omit variables
 
 - **Alternatives**:
-  - _Front-door criterion_: uses mediators
+  - _Frontdoor criterion_: uses mediators
   - _Instrumental variables_: uses external variation
   - _Do-calculus_: symbolic transformations to eliminate $do()$
 
-## Front-door Adjustment
+## Frontdoor Adjustment
 
 #### Front-Door Adjustment in Causal Inference
-- **Front-door criterion** identifies causal effects with unobserved confounders
+- **Frontdoor criterion** identifies causal effects with unobserved confounders
   - Applies when a **mediator variable** transmits all causal influence from
     treatment to outcome
 
@@ -539,7 +539,7 @@ digraph CerealAds {
     $\implies$ "Buy stuff"
 
 #### Cereal and Ads: Solutions
-- **Strategy 1: Back-door adjustment**
+- **Strategy 1: Backdoor adjustment**
   - If you _know_ and can _measure_ $U$ "how much parents care about breakfast",
     include $U$ as a control variable in analysis
   - _Intuition_:
@@ -553,7 +553,7 @@ digraph CerealAds {
       come from ads
   - This is why controlled experiments are gold standard for causal inference
 
-- **Strategy 3: Front-door Adjustment**
+- **Strategy 3: Frontdoor Adjustment**
 
 #### Cereal and Ads: Finding a Mediator
 
@@ -610,7 +610,7 @@ digraph CerealAds {
 #### When Front-Door Works
 ::: columns
 :::: {.column width=55%}
-- **Is the front-door criterion verified** for _"kids' nagging"_ $M$?
+- **Is the frontdoor criterion verified** for _"kids' nagging"_ $M$?
   - Influence of ads on buying goes through nagging ($X \to M \to Y$)
   - No hidden confounders affect both ads and nagging (TV schedule is random,
     not linked to parents' breakfast attitudes)
@@ -642,7 +642,7 @@ digraph CerealAds {
 ::::
 :::
 
-- **Yes! The front-door criterion is verified**
+- **Yes! The frontdoor criterion is verified**
 
 - Instead of doing an intervention $do(X)$, just observe!
   1. Observe how often ads make kids nag, $\Pr(M | X)$
@@ -698,23 +698,23 @@ digraph CerealAds {
 - These rules allow the systematic reduction of expressions involving $do()$ into
   observational terms, if the causal graph permits
 
-#### Back/Front-door Adjustments and Do-calculus
-- The **back-door** and **front-door** criteria are **specific applications** of
+#### Back/Frontdoor Adjustments and Do-calculus
+- The **backdoor** and **frontdoor** criteria are **specific applications** of
   do-calculus
   - They are simpler, graphical conditions that allow $P(Y \mid do(X))$ to be
     expressed using observational probabilities
 
-- **Back-door adjustment**: If a set of variables $Z$ blocks all back-door
+- **Backdoor adjustment**: If a set of variables $Z$ blocks all backdoor
   paths from $X$ to $Y$ (paths that go into $X$), then:
   $$
   \Pr(Y | do(X)) = \sum_z \Pr(Y | X, Z) \Pr(Z)
   $$
 
-- **Front-door adjustment**: If there exists a variable $Z$ such that:
+- **Frontdoor adjustment**: If there exists a variable $Z$ such that:
   1. Z is affected by X
   2. Z affects Y
-  3. All back-door paths from X to Z are blocked
-  4. All back-door paths from Z to Y are blocked by X
+  3. All backdoor paths from X to Z are blocked
+  4. All backdoor paths from Z to Y are blocked by X
   then:
   $$
   \Pr(Y | do(X)) = \sum_z \Pr(Z | X) \sum_{x'} \Pr(Y | Z, X') \Pr(X')

@@ -162,8 +162,8 @@
 // `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
   - Intervention and Counterfactuals (5)
   - Randomized Controlled Trial (3)
-  - Back-door Adjustment (6)
-  - Front-door Adjustment (5)
+  - Backdoor Adjustment (6)
+  - Frontdoor Adjustment (5)
   - Do-Calculus (3)
 
 ### Target TOC
@@ -288,8 +288,8 @@
 // `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
   - Intervention and Counterfactuals (5)
   - Randomized Controlled Trial (3)
-  - Back-door Adjustment (6)
-  - Front-door Adjustment (5)
+  - Backdoor Adjustment (6)
+  - Frontdoor Adjustment (5)
   - Do-Calculus (3)
 
 ### Target TOC

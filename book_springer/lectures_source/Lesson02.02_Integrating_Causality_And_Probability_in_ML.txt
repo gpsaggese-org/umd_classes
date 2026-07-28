@@ -388,13 +388,13 @@ digraph DoOperator {
 
 - **Problem**: can $\Pr(Y | do(X))$ be computed from purely observational
   data, without ever randomizing $X$?
-- **Definition**: a _back-door path_ from $X$ to $Y$ is any path starting
+- **Definition**: a _backdoor path_ from $X$ to $Y$ is any path starting
   with an arrow into $X$
   - These paths carry non-causal association and have to be blocked
-- **Definition**: a set $Z$ satisfies the _back-door criterion_ for
+- **Definition**: a set $Z$ satisfies the _backdoor criterion_ for
   $(X, Y)$ if no variable in $Z$ is a descendant of $X$, and $Z$ blocks
-  every back-door path
-- **Theorem**: if $Z$ satisfies the back-door criterion, the adjustment
+  every backdoor path
+- **Theorem**: if $Z$ satisfies the backdoor criterion, the adjustment
   formula holds
   $$\Pr(Y | do(X)) = \sum_z \Pr(Y | X, Z=z)\Pr(Z=z)$$
 - **Key idea**: this formula turns an intervention, rung 2, into a
@@ -408,12 +408,12 @@ digraph DoOperator {
 - **Example**: estimating the causal effect of price on sales
   - Advertising spend is a confounder: it can raise the price a product can
     command _and_ raise sales directly
-  - The back-door path is $Price \leftarrow AdSpend \to Sales$
+  - The backdoor path is $Price \leftarrow AdSpend \to Sales$
 - Conditioning on advertising spend blocks that path
   $$\Pr(Sales | do(Price)) = \sum_a \Pr(Sales | Price, AdSpend=a)\Pr(AdSpend=a)$$
 - **Common mistakes**: conditioning on a descendant of $X$, or on a
   mediator, biases the estimate instead of fixing it
-  - The back-door criterion says precisely which variables to condition on,
+  - The backdoor criterion says precisely which variables to condition on,
     not "condition on everything"
 ::::
 :::: {.column width=40%}
@@ -438,18 +438,18 @@ digraph BackDoor {
 
 ::: columns
 :::: {.column width=55%}
-- **Problem**: sometimes no observable set blocks every back-door path,
+- **Problem**: sometimes no observable set blocks every backdoor path,
   because the confounder itself is unobserved
-- **Definition**: the _front-door criterion_ identifies the effect through a
+- **Definition**: the _frontdoor criterion_ identifies the effect through a
   mediator $M$ when
   1. All paths from $X$ to $Y$ go through $M$
   2. No unobserved confounder affects both $X$ and $M$
-  3. $X$ blocks every back-door path from $M$ to $Y$
+  3. $X$ blocks every backdoor path from $M$ to $Y$
 - **Example**: does watching ads $(X)$ increase cereal purchases $(Y)$?
   - An unobserved factor, how much parents care about breakfast $(U)$,
     could drive both
   - Ads work through a mediator: they make kids nag $(M)$ for cereal
-  - $U$ does not affect nagging, only ads do, so the front-door criterion
+  - $U$ does not affect nagging, only ads do, so the frontdoor criterion
     holds
     $$\Pr(Y | do(X)) = \sum_m \Pr(M=m|X)\sum_{x'}\Pr(Y|M=m,X=x')\Pr(X=x')$$
 ::::
@@ -484,7 +484,7 @@ digraph FrontDoor {
 - **Limitations**: a credible instrument is hard to find, and the estimate
   applies only to the units whose treatment actually shifts with the
   instrument
-- **Key idea**: back-door adjustment, front-door adjustment, and
+- **Key idea**: backdoor adjustment, frontdoor adjustment, and
   instrumental variables are three different ways of turning the same
   problem, identifying $\Pr(Y | do(X))$, into a computation over
   observational data
@@ -551,7 +551,7 @@ digraph FrontDoor {
 // From Lesson 08.4
 // From paper [B050] Causal Inference: What If
 
-- Every identification result in this lesson, back-door, front-door, or
+- Every identification result in this lesson, backdoor, frontdoor, or
   randomization, rests on assumptions that do not verify themselves from
   data
 - **Positivity**: every covariate group must have a positive chance of
@@ -579,7 +579,7 @@ digraph FrontDoor {
   $$\Pr(\theta | \mathcal{D}) \propto \Pr(\mathcal{D} | \theta) \Pr(\theta)$$
 - The posterior's spread _is_ the epistemic uncertainty; a separate noise
   term in the structural equation captures the aleatoric part
-- **Key idea**: a causal effect estimated from a back-door or front-door
+- **Key idea**: a causal effect estimated from a backdoor or frontdoor
   adjustment is not one number, it is a posterior over that number, and the
   width of that posterior is itself decision-relevant
 

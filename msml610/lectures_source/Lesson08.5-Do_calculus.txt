@@ -222,7 +222,7 @@ _Mutilated graph_
   - _Double-blind RCT_: both participants and investigators unaware of
     assignment
 
-## Back-door Adjustment
+## Backdoor Adjustment
 
 * Back-Door Paths: Example
 
@@ -247,10 +247,10 @@ _Mutilated graph_
   - $AdSpend$ is a **confounder** since it affects both price and sales
     - Higher ad budgets increase product value perception $\to$ higher price
     - Ad spend directly increases sales
-    - Back-door path: $Price \leftarrow AdSpend \to Sales$
+    - Backdoor path: $Price \leftarrow AdSpend \to Sales$
   - Company needs to control for $AdSpend$ to isolate price effect via:
     1. Regression with $AdSpend$ as covariate
-    2. Back-door criterion
+    2. Backdoor criterion
 
 ::::
 :::: {.column width=30%}
@@ -282,7 +282,7 @@ digraph CausalDAG {
 - @Theorem@:
   - Assume:
     - Correct causal graph available
-    - Can identify variables blocking back-door paths (exact definition later)
+    - Can identify variables blocking backdoor paths (exact definition later)
   - The **adjustment formula** enables causal inference from observational data
     $$\Pr(Y | do(X)) = \sum_z \Pr(Y | X, Z=z) \Pr(Z=z)$$
 
@@ -296,8 +296,8 @@ digraph CausalDAG {
 
 ::: columns
 :::: {.column width=60%}
-- @Definition@: **Front-door path** is a direct causal effect $X \to Y$
-  - No arrows into $X$, (so no back door path, no confounders)
+- @Definition@: **Frontdoor path** is a direct causal effect $X \to Y$
+  - No arrows into $X$, (so no backdoor path, no confounders)
   - Clean causal pathway
 ::::
 :::: {.column width=40%}
@@ -324,7 +324,7 @@ digraph NoBackdoorExample {
 
 \vspace{0.5cm}
 
-- @Definition@: A **back-door path** is any path from $X$ to $Y$ starting with
+- @Definition@: A **backdoor path** is any path from $X$ to $Y$ starting with
   an arrow into $X$ (even if against the direction of the DAG edge)
   - E.g., $X \leftarrow \cdots \leftrightarrow Y$
   - It creates spurious associations between $X$ and $Y$ (even if changing $X$
@@ -334,9 +334,9 @@ digraph NoBackdoorExample {
 :::: {.column width=60%}
 
 - @Example@:
-  - Confounder $Z$ creates back-door path between $X$ and $Y$ (even if there was
+  - Confounder $Z$ creates backdoor path between $X$ and $Y$ (even if there was
     no direct path between $X$ and $Y$)
-  - Path: $X \leftarrow Z \to Y$ is a back-door path
+  - Path: $X \leftarrow Z \to Y$ is a backdoor path
   - Conditioning on $Z$ blocks this path
 ::::
 :::: {.column width=40%}
@@ -364,17 +364,17 @@ digraph BackdoorExample {
 
 * Backdoor Criteria
 
-- @Definition@: A set $\mathcal{Z} = {Z_1, ..., Z_n}$ satisfies the **back-door
+- @Definition@: A set $\mathcal{Z} = {Z_1, ..., Z_n}$ satisfies the **backdoor
   criterion** relative to $X \to Y$ if:
   1. No variable in $\mathcal{Z}$ is a descendant of $X$
-  2. $\mathcal{Z}$ blocks all back-door paths from $X$ to $Y$
+  2. $\mathcal{Z}$ blocks all backdoor paths from $X$ to $Y$
 
-- @Intuition@: A set for the back-door criteria removes spurious paths by
+- @Intuition@: A set for the backdoor criteria removes spurious paths by
   controlling for common causes
 
 ::: columns
 :::: {.column width=60%}
-- @Example@: Back-door criterion with $\mathcal{Z} = \{Z\}$
+- @Example@: Backdoor criterion with $\mathcal{Z} = \{Z\}$
   - No element in $\mathcal{Z}$ is a descendant of $X$
 ::::
 :::: {.column width=40%}
@@ -403,7 +403,7 @@ digraph SatisfiesBD {
 
 ::: columns
 :::: {.column width=60%}
-- @Counterexample@: $\mathcal{Z} = \{M\}$ violates back-door criterion
+- @Counterexample@: $\mathcal{Z} = \{M\}$ violates backdoor criterion
   - $M$ is a descendant of $X$ ✗
   - Violates criterion 1 (descendants of $X$ cannot be in $\mathcal{Z}$)
 
@@ -527,10 +527,10 @@ digraph ColliderExample {
 
 * Common Mistakes in Back-Door Adjustment
 
-- @Key idea@: Back-door criterion specifies _exactly_ which variables to
+- @Key idea@: Backdoor criterion specifies _exactly_ which variables to
   condition on and not condition on to transform observation into intervention
 
-- @Error@: Before the back-door criterion was formalized, researchers
+- @Error@: Before the backdoor criterion was formalized, researchers
   "conditioned on everything"
   - **Conditioning on everything is wrong!**
 
@@ -540,26 +540,26 @@ digraph ColliderExample {
 - Other **common errors** are:
   - Conditioning on descendant of $X$ biases estimate
   - Controlling too many variables opens colliders, introduces bias
-  - Missing back-door paths creates spurious confounding
+  - Missing backdoor paths creates spurious confounding
   - Conditioning on mediators blocks causal effect
   - Ignoring unobserved confounders makes effect unidentifiable
 
 * When Back-Door Adjustment Fails
 
-- @Limitations@: Back-door criterion not universally applicable
+- @Limitations@: Backdoor criterion not universally applicable
   - No observable set satisfies criterion if unobserved confounders exist
   - Requires accurate causal graph, but it is easy to omit variables
 
 - @Alternatives@
-  - _Front-door criterion_: uses mediators, handles unobserved confounders
+  - _Frontdoor criterion_: uses mediators, handles unobserved confounders
   - _Instrumental variables_: uses external variation
   - _Do-calculus_: symbolic transformations to eliminate $do()$
 
-## Front-door Adjustment
+## Frontdoor Adjustment
 
 * Front-Door Adjustment: Definition
 
-- @Definition@: **Front-door criterion** identifies causal effects when
+- @Definition@: **Frontdoor criterion** identifies causal effects when
   unobserved confounders exist, but a _mediator_ transmits all influence from
   treatment to outcome
 
@@ -600,7 +600,7 @@ digraph CerealAds {
 - @Assumptions@
   1. All directed paths from $X$ to $Y$ pass through $M$
   2. No unobserved confounder affects both $X$ and $M$
-  3. All back-door paths from $M$ to $Y$ blocked by $X$
+  3. All backdoor paths from $M$ to $Y$ blocked by $X$
 
 - @Formula@: Estimate $\Pr(Y | do(X))$ despite unobserved $U$
   $$\Pr(Y | do(X)) = \sum_m \Pr(M | X) \sum_{x'} \Pr(Y | M, X') \Pr(X')$$
@@ -651,7 +651,7 @@ digraph CerealAds {
 
 * Cereal and Ads: Three Solution Strategies
 
-- @Strategy 1: Back-door adjustment@
+- @Strategy 1: Backdoor adjustment@
   - If can observe and measure $U$ (parent breakfast attitudes), control for it
   - Compare families with identical attitudes, see if ads change buying
   - Requires knowing and measuring the confounder
@@ -662,7 +662,7 @@ digraph CerealAds {
   - Differences in purchase arise purely from ads
   - Gold standard for causal inference
 
-- @Strategy 3: Front-door adjustment@
+- @Strategy 3: Frontdoor adjustment@
   - Works without observing $U$, using only observable mediator
 
 * Front-Door Mediator: Kids Nagging
@@ -685,7 +685,7 @@ digraph CerealAds {
 - @Causal chain@:
   - Ads $(X)$ $\to$ Kids nag $(M)$ $\to$ Parents buy cereal $(Y)$
 
-- @Structure satisfies front-door@
+- @Structure satisfies frontdoor@
   - Unobserved $U$ affects $Y$ but _not_ $M$
   - Hidden breakfast-caring attitude doesn't cause nagging: only ads do
   - Can estimate $\Pr(Y | do(X))$ without observing $U$
@@ -720,13 +720,13 @@ digraph CerealAds {
 
 ::: columns
 :::: {.column width=60%}
-- @Question@: Does kids' nagging satisfy front-door?
+- @Question@: Does kids' nagging satisfy frontdoor?
 
 - @Answer@
   - All ads influence flows through nagging ($X \to M \to Y$)
   - No confounder affects both ads and nagging (TV schedule random)
   - All confounding between nagging and buying blocked by controlling ads
-  - **Yes, front-door criterion holds**
+  - **Yes, frontdoor criterion holds**
 
 ::::
 :::: {.column width=40%}
@@ -796,20 +796,20 @@ digraph CerealAds {
 
 * Back/Front-Door as Applications of Do-Calculus
 
-- @Relationship@: Back-door and front-door are **special cases** of do-calculus
+- @Relationship@: Backdoor and frontdoor are **special cases** of do-calculus
   - Simpler graphical conditions allowing $\Pr(Y | do(X))$ from observational
     data
 
-- @Back-door adjustment@: If $\mathcal{Z}$ blocks all back-door paths $X \to Y$
+- @Backdoor adjustment@: If $\mathcal{Z}$ blocks all backdoor paths $X \to Y$
   (paths into $X$), then:
   $$
   \Pr(Y | do(X)) = \sum_z \Pr(Y | X, Z) \Pr(Z)
   $$
 
-- @Front-door adjustment@: If mediator $Z$ satisfies:
+- @Frontdoor adjustment@: If mediator $Z$ satisfies:
   1. $X \to Z \to Y$ (all influence through $Z$)
   2. No confounder affects $X$ and $Z$
-  3. Back-door paths $Z \to Y$ blocked by $X$
+  3. Backdoor paths $Z \to Y$ blocked by $X$
 
   then:
   $$
