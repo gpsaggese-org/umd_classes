@@ -33,6 +33,19 @@
   - Feedback loops and learning from outcomes
   - Why each stage matters and what breaks when stages are skipped
 
+* A book in the age of AI
+
+- What matters is taste, reviewing for clarity, creating a path, tutorials
+- Trying to explain concepts to make it easy for a human to understand
+- Took me 12 months to put this together
+
+- Book is a subset of content
+  - Each content is available in the form of slides (without all the chit-chat)
+  - Each slide set is around 30 slides which corresponds to a chapter of
+    a technical book (~1000 words)
+  - Tutorials are available for each slide set
+  - Book makes reference to examples in the slides
+
 * Book Roadmap
 
 - How This Book Is Organized
