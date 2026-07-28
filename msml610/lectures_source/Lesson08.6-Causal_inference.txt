@@ -1,6 +1,6 @@
 // type=UMD_slides
 // course_title=MSML610: Advanced Machine Learning
-// lesson_title=L08.4: }
+// lesson_title=L08.6: Causal Inference
 // slides_engine=typst
 // references=
 // - Facure, Causal Inference in Python, 2023
@@ -1098,37 +1098,39 @@ digraph CausalGraph {
   - I.e., all groups of X must have both treated and control units
 
 * Confounding Bias
-- **Definition**: confounding happens when there is an open backdoor path through
-  which association flows non-causally
+- @Definition@: **confounding** happens when there is an open backdoor path
+  through which association flows non-causally
+  - Backdoor path means a path that enters the treatment variable through an
+    incoming arrow
   - E.g., treatment and outcome share a common cause
 
-- **Problem**: it's difficult to adjust for all common causes
+- @Problem@: it's difficult to adjust for all common causes
   - Some causes are unknown
   - Known causes might be difficult to measure
 
-- **Example**: does new management training program increase employers'
+- @Example@: does new management training program increase employers'
   engagement?
-  - **Problem**: training is optional
+  - @Problem@: training is optional
     - Only managers who are already doing a great job attend the program
     - The managers that need the training the most, don't attend
     - When you measure engagement of the teams, engagement under managers who took
       the training is much higher
     - There is a common cause between treatment and outcome, so they move together
       regardless of a causal effect
-  - **Solution**: need to control for manager's quality before taking the
+  - @Solution@: need to control for manager's quality before taking the
     training
 
 * Surrogate Confounding
 
-- **Problem**: the confounder variable might be not be observable / measurable
+- @Problem@: the confounder variable might be not be observable / measurable
   - E.g., you can't measure confounder "manager quality"
 
-- **Solution**: measure variable that can be proxies for confounder
+- @Solution@: measure variable that can be proxies for confounder
   - E.g., causes (manager's tenure, education level), effects (team's attrition,
     past performance)
 
 * Selection bias
-- **Definition**: bias introduced when the analysis conditions on a variable that
+- @Definition@: bias introduced when the analysis conditions on a variable that
   is:
   - a collider
   - a mediator
@@ -1139,16 +1141,16 @@ digraph CausalGraph {
   - Analyze only adherent patients
   - Self-selection 
 
-- **Caveat**: Can occur even with randomization
+- @Caveat@: Can occur even with randomization
 
-- **Solution**: condition on variables causing selection
+- @Solution@: condition on variables causing selection
   - Cannot fully eliminate bias when:
     - Things causing selection are unmeasured/unmeasurable
     - Treatment or outcome causes selection directly
     - Unmeasured common cause between selection and outcome
 
 * Selection bias: Example
-- **Example**
+- @Example@
 - A software company wants to estimate the impact of a new feature
 - Randomize rollout of the feature
   - 10% of the customers are randomly chosen to get the feature
@@ -1156,7 +1158,7 @@ digraph CausalGraph {
   the rollout (treated) and in the control group, asking if you would recommend
   the product
 
-- **Question**: is the difference in satisfaction due entirely to causal effect
+- @Question@: is the difference in satisfaction due entirely to causal effect
   of new feature?
 
 ```graphviz
@@ -1183,7 +1185,7 @@ digraph G {
 }
 ```
 
-- **Problem**: you measure the satisfaction only for the customers who responded
+- @Problem@: you measure the satisfaction only for the customers who responded
   to the survey (i.e., conditioning on responding to the survey)
 
 * Selection bias through the collider: Example

@@ -172,7 +172,7 @@
 | msml610/lectures_source/Lesson08.3-Causal_AI_in_business.txt               | yes   | 80%          | 80%          |           |                  |                   |
 | msml610/lectures_source/Lesson08.4-Causal_networks.txt                     | yes   | 80%          | 80%          |           |                  |                   |
 | msml610/lectures_source/Lesson08.5-Do_calculus.txt                         | yes   | 70%          | 70%          |           |                  |                   |
-| msml610/lectures_source/Lesson08.6-Causal_inference.txt                    |       |              |              |           |                  |                   |
+| msml610/lectures_source/Lesson08.6-Causal_inference.txt                    | .     |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson08.7-Causal_experiments.txt                  |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson09.1-Reasoning_over_time.txt                 |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson09.2-Hidden_Markov_Models.txt                |       |              |              |           |                  |                   |
