@@ -4,7 +4,42 @@ When running Claude Code with `--print --output-format=stream-json`, every event
 is written to stdout as a newline-delimited JSON stream (NDJSON). Each line is
 a self-contained JSON record.
 
-cc --model=deepseek/deepseek-v4-flash -p '/notebook.create_api_intro https://gymnasium.farama.org/api/vector and save it in tutorials/gymnasium/gymnasium.05.API.Vector.ipynb' --include-partial-messages --print --output-format=stream-json
+| Flag(s)                                                              | Output Format           | Notes                                                                 |
+|------------------------------------------------------------------------|---------------------------|------------------------------------------------------------------------|
+| `-p "..."`                                                            | Human-readable text      | Baseline: just Claude's final answer, then exits                      |
+| `-p "..." --verbose`                                                  | Human-readable text      | No real effect alone; only matters combined with `--output-format stream-json` |
+| `-p "..." --debug`                                                    | Text + debug logs        | Adds internal tracing (API calls, tool/hook activity, retries) on stdout |
+| `-p --output-format=stream-json "..."`                                | Newline-delimited JSON   | Structured, machine-parseable event stream (assistant/user/system/result) |
+| `-p --output-format=stream-json --verbose "..."`                      | Newline-delimited JSON   | `--verbose` is required for stream-json to work as intended            |
+| `-p --output-format=stream-json --verbose --include-partial-messages "..."` | Newline-delimited JSON (token-level) | Adds `stream_event` messages with token-by-token deltas, tool calls, etc. — true real-time streaming |
+
+PROMPT="Describe recursion in 100 words"
+
+cc -p "Describe recursion in 100 words" 2>&1 | tee tmp1.txt
+cc -p "Describe recursion in 100 words" --verbose 2>&1 | tee tmp2.txt
+cc -p "Describe recursion in 100 words" --debug 2>&1 | tee tmp3.txt
+cc -p "Describe recursion in 100 words" --output-format=stream-json 2>&1 | tee tmp4.txt
+cc -p "Describe recursion in 100 words" --output-format=stream-json --include-partial-messages 2>&1 | tee tmp5.txt
+cc -p "Describe recursion in 100 words" --verbose --output-format=stream-json --include-partial-messages 2>&1 | tee tmp6.txt
+
+ 25167 Jul 30 17:29 tmp1.txt
+115069 Jul 30 17:30 tmp2.txt
+ 24455 Jul 30 17:31 tmp3.txt
+ 61436 Jul 30 17:59 tmp4.txt
+ 26337 Jul 30 18:04 tmp5.txt
+122959 Jul 30 18:05 tmp6.txt
+
+tmp1.txt (25KB) — baseline output with JSON events (init, status, stream messages, final result summary)
+
+tmp2.txt (115KB) — --verbose adds extensive debug logging, ~4.5x larger. Contains detailed event traces and state at each step
+
+tmp3.txt (24KB) — --debug similar to baseline size; appears to be alternate debug output format or filtered logging
+
+tmp4.txt (61KB) — --output-format=stream-json structures output purely as JSON stream events, no plain text result summary at end
+
+tmp5.txt (26KB) — stream-json + --include-partial-messages adds incomplete message fragments as they stream, only slightly larger than tmp1
+
+tmp6.txt (123KB) — --verbose + stream-json + --include-partial-messages combines all three, largest output. Verbose + streaming partial messages = most detailed event log
 
 ## Record types
 

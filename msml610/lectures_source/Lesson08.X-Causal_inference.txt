@@ -399,6 +399,7 @@ digraph CausalGraph {
     propensity score
 
 * Propensity Score Estimation
+
 - @Fact@: We can use ML models to estimate propensity score $e(x)$
   - As always, we need out-of-fold accuracy to avoid overfitting
   - Replace true (unknown) propensity score with estimated version
@@ -568,29 +569,29 @@ digraph CausalGraph {
 // TODO: Bias-Variance Trade-off
 
 * Positivity
-- **Positivity** means that every unit has non-zero probability of receiving each
-  treatment level
+- @Definition@: **Positivity** is a property implying that every unit has
+  non-zero probability of receiving each treatment level
   $$
   \Pr(T = t | X) > 0 \text{ for all } t, X
   $$
-- Essential for IPW validity
 
-- **Problems**
+- @Problems@
+- Positivity is essential for IPW validity
+  - IPW fails when positivity violated: cannot reweight units that don't exist
   - Some subgroups have almost no treated or control units
   - Cannot estimate counterfactual outcomes in those regions
-  - IPW fails when positivity violated: cannot reweight units that don't exist
 
-### IPW Sensitivity
+* IPW Sensitivity
 - Propensity score distribution easy to visualize
 - Can directly check if treatment groups overlap
 
-### Comparison with Regression
+* Comparison with Regression
 - Regression can extrapolate beyond region with data
 - Assumes linear (or specified) functional form for $E[Y | T, X]$
 - Can recover ATE even with positivity violation if model specification correct
 - IPW makes no functional form assumptions → fails without positivity
 
-### Positivity-Bias Trade-Off
+* Positivity-Bias Trade-Off
 - More covariates in propensity model $\to$
   - Stronger unconfoundedness / conditional independence assumption
   - Weaker positivity
