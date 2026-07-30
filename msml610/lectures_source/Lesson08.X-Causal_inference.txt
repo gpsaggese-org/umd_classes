@@ -377,63 +377,83 @@ digraph CausalGraph {
 // msml610/tutorials/L08_causal_inference/L08_04_05_propensity_score.ipynb
 
 * Propensity Score
-- @Definition@: **propensity score** is the conditional probability of a unit $x$
-  to receive treatment given covariates:
+- @Definition@: **propensity score** is the conditional probability of a unit
+  with covariates $x$ to receive the treatment:
   $$
   e(x) = \Pr(T=1 | X=x)
   $$
 
-- @Intuition@
+- @Example@: manager training
+  - Model: `intervention ~ tenure + last_engagement_score + department_score`
+  - Covariates are $X$ = `tenure`, `last_engagement_score`, `department_score`
+
+- @Property@ (Rosenbaum-Rubin balancing result)
+  - Treatment should become "as good as random" after controlling for propensity
+    score
+  - If two entities have the same propensity score but different treatment
+    status, the difference is due to chance
+
+- @Applications@
   - Propensity score can be used as dimensionality reduction technique
   - Instead of conditioning on high-dimensional $X$, condition on single
     propensity score
 
-- @Property@
-  - If two managers have same propensity score but different treatment status,
-    difference is due to chance
-  - Treatment should become "as good as random" after controlling for propensity
-    score
-
 * Propensity Score Estimation
-- Can use ML models to estimate propensity score
-  - Need out-of-fold predictions to avoid overfitting bias
-
-- **Example**: binary treatment
-  - Use logistic regression to estimate $e(x)$ from covariates $X$
+- @Fact@: We can use ML models to estimate propensity score $e(x)$
+  - As always, we need out-of-fold accuracy to avoid overfitting
   - Replace true (unknown) propensity score with estimated version
   - Apply in observational data where assignment mechanism unknown
 
+- @Example@: Binary treatment
+  - Use logistic regression $\Pr(T=1 | X)$ to estimate $e(x)$ from covariates $X$
+
 * FWL Orthogonalization and Propensity Score
-- Both FWL approach and propensity score orthogonalize treatment but use
-  different models for $T$
-  - FWL theorem: linear regression models $$\EE[T | X]$$ in debiasing step
-    - Residualize both $T$ and $X$
-    - Low-dim $X$, linear T-X relationship
-  - Propensity score estimation achieves similar orthogonalization
-    - Include propensity score $\hat{e}(X)$ as control in regression
-    - E.g., `engagement_score ~ intervention + propensity_score`
-    - High-dim $X$, flexible T-X relationship
+- @Comparison@: Both FWL approach and propensity score orthogonalize treatment
+  $T$ from confounders $X$ but use different models for $T$
+  - **FWL theorem**
+    - Fit $\EE[T | X]$ with linear regression
+    - Take residual $\tilde{T} = T - \EE[T | X]$
+    - Do the same for outcome: $\tilde{Y}$
+    - Regress $\tilde{Y}$ on $\tilde{T}$
+    - Needs $T$-$X$ relationship to actually be linear
+    - Works best with low-dimensional $X$
 
-* Propensity score matching
-- Matches treated and control units based on propensity score similarity
-- Essentially 1-Nearest Neighbors (i.e., KNN with K=1) on propensity score
-  - Fit KNN on treated units to impute $Y_1$ for controls
-  - Fit KNN on control units to impute $Y_0$ for treated
-- Matched value is outcome of nearest unit
-  $$
-  \hat{ATE}
-  = \frac{1}{N}\sum (
-    ( {Y_{i} - Y_{jm}(i)} )T_{i} + 
-    ( {Y_{jm}(i) - Y_{i}} )( 1 - T_{i} )
-  )
-  $$
+  - **Propensity score estimation**
+    - Estimate $\hat{e}(X) = \Pr(T=1 | X)$ with any model (logistic regression,
+      ML, etc.)
+    - Add $\hat{e}(X)$ directly as a regressor alongside $T$
+      - E.g., `engagement_score ~ intervention + propensity_score`
+    - No explicit residualization step putting $\hat{e}(X)$ in the regression
+      partials it out automatically (just folded into one model)
+    - Since $\hat{e}(X)$ can be any flexible function of $X$, this handles
+      high-dimensional, nonlinear $T$-$X$ relationships
 
-- **Cons**
+* Propensity Score Matching
+
+- @Definition@: **Propensity Score Matching** matches treated and control units
+  based on propensity score similarity
+
+- @Algorithm@: 
+  - Fit $e(\vx)$ on training data
+  - Use K-Nearest Neighbors with K=1 on propensity score $e(\vx)$
+    - Run KNN on treated units to impute $Y_1$ for controls
+    - Run KNN on control units to impute $Y_0$ for treated
+// TODO(ai_gp): Explain, correct this formula
+  - Matched value is outcome of nearest unit
+    $$
+    \hat{ATE}
+    = \frac{1}{N}\sum (
+      ( {Y_{i} - Y_{jm}(i)} )T_{i} + 
+      ( {Y_{jm}(i) - Y_{i}} )( 1 - T_{i} )
+    )
+    $$
+
+- @Limitation@
   - KNN inefficient in high dimensions
   - Difficult to derive variance
 
 * Inverse Propensity Weighting (IPW)
-- **Core Principle**
+- @Key insight@
   - Re-weight data by inverse probability of observed treatment
   - Create pseudo-population where treatment appears randomly assigned
 
