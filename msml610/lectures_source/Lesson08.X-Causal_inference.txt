@@ -430,8 +430,19 @@ digraph CausalGraph {
 
 * Propensity Score Matching
 
-- @Definition@: **Propensity Score Matching** matches treated and control units
-  based on propensity score similarity
+- @Recall@: the **fundamental problem of causal inference**: for each unit you
+  observe only $Y_1$ or $Y_0$, never both
+  - Thus ATE can't be computed directly
+
+- @Naive Solution@: for a treated unit $Y_{1i}$, find a control unit with the
+  exact same covariates $X = \vx$ to stand in for its missing $Y_{0i}$ (and vice versa)
+  - In practice with many covariates, almost no two units share the same $X$
+    (curse of dimensionality)
+
+- @Alternative Solution@: **Propensity Score Matching** 
+  - Impute the missing potential outcome for every unit
+  - Matches treated and control units based on propensity score similarity $e(X)$
+    instead of $X$
 
 - @Algorithm@: 
   - Fit $e(\vx)$ on training data
@@ -453,22 +464,42 @@ digraph CausalGraph {
   - Difficult to derive variance
 
 * Inverse Propensity Weighting (IPW)
-- @Key insight@
-  - Re-weight data by inverse probability of observed treatment
+
+- @Question@: Can we recover an unbiased $\EE[Y_t]$ (and ATE) from observational
+  data where treatment isn't random?
+  - $\Pr(T | X) \neq \Pr(T)$
+  - Treated and control groups differ systematically in their covariates $X$
+
+- @Key idea@ Inverse Propensity Weighting (Horvitz-Thompson 1952)
+  - Apply the same approach as importance weighting
+  - Reweight samples drawn from one distribution (observed treatment assignment)
+    to estimate an expectation under another distribution (random assignment)
   - Create pseudo-population where treatment appears randomly assigned
 
-- For treated units:
-  - Up-weight those unlikely to be treated (low $e(x)$)
-  - They're informative, they look like untreated units but got treatment anyway,
-    so they reveal what would happen to
-- For control units:
-  - Up-weight those likely to be treated (high $e(x)$)
-  - Down-weights common treatment cases: Treated units with high propensity
-    (likely to be treated) get lower weight, since they're less informative.
+- @Definition@: the IPW estimator of the mean potential outcome
+  $$
+  \EE[Y_t]
+    = \EE\left[
+        \frac{\mathbb{1}(T=t)Y}{\Pr(T=t|X)}
+      \right]
+  $$
 
-  $$E[Y_t] = \EE[ \frac{\mathbf{1}(T=t)Y}{P(T=t|X)}]$$
+- @Algorithm@: weight each unit by its inverse propensity so treatment looks
+  randomly assigned
+  - For treated units:
+    - Up-weight those unlikely to be treated (low $e(x)$)
+      - They look like control units but got treated anyway, so they reveal
+        what would happen to control-like units if they were treated
+    - Down-weight those likely to be treated (high $e(x)$)
+      - Common case, unsurprising, less informative
+  - For control units:
+    - Up-weight those likely to be treated (high $e(x)$)
+      - They look like treated units but weren't treated, so they reveal
+        what would happen to treated-like units if they were left untreated
+    - Down-weight those unlikely to be treated (low $e(x)$)
+      - Common case, unsurprising, less informative
 
-- The same scaling can be applied to recover the ATE:
+- @Formula@: the same scaling recovers the ATE
   $$
   ATE
   = \EE\left[
@@ -479,21 +510,19 @@ digraph CausalGraph {
       \right]
   $$
 
-- IPW is similar to importance weighting
-
-- To estimate the variance use bootstrap method (resample with replacement
+- @Estimation@: use bootstrap to estimate variance (resample with replacement
   multiple times)
   - Fit IPW estimator on each sample
   - Calculate 2.5th and 97.5th percentiles for 95% CI
 
 * Stabilized Propensity Weights
 
-- **Problems**
+- @Problem@ with Inverse Propensity Weights
   - Raw inverse propensity weights can be very large
   - Treatment with low probability $\Pr(T | X)$ creates extreme weights
   - Computational stability issue
 
-- **Solution**: Stabilized propensity weights
+- @Solution@: Stabilized propensity weights
   $$
   w = \frac{\Pr(T = t)}{\Pr(T = t | X)}
   $$
@@ -505,18 +534,18 @@ digraph CausalGraph {
   - E.g., keep between 1% and 99%
   - Trade-off: slight bias increase for substantial variance reduction
 
-- **Visual intuition**
+- @Intuition@
   - Plot propensity score distributions by treatment status
   - Before weighting: distributions shifted (confounding)
   - After weighting: distributions overlap (treatment appears random)
   - Overlapping distributions essential for IPW validity
 
 * Propensity Score for Selection Bias
-- IPW originally developed (Horvitz-Thompson 1952) for selection bias
-  - Can adjust for non-response in surveys
-  - Can handle both confounding and selection together
+- @Applications@: IPW can:
+  - Adjust for non-response in surveys
+  - Handle both confounding and selection together
 
-- **Example**
+- @Example@
   - You send a survey asking people to rate your product on a 1-to-5 scale
   - Survey respondents may differ from non-respondents
     - E.g., non-respondents are often unsatisfied customers and vice versa
