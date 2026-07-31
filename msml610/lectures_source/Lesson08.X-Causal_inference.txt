@@ -365,9 +365,17 @@ digraph CausalGraph {
   - The study is likely biased upward because managers with already-engaged teams
     are more likely to self-select into training
 
+- @Remark@: this is a classic instrumental-variables (encouragement design)
+  setup, where random assignment is the instrument for actual training uptake
+  - If self-selection is driven by unobserved factors (e.g., motivation), no
+    amount of conditioning on observed covariates removes the bias
+  - The propensity-score methods in this section adjust for confounding on
+    _observed_ covariates; the instrument-based fix is covered later (see
+    "Non-compliance and instruments")
+
 * Non-compliance
 
-- @Definition@: **non compliance** is when people do not receives the treatment
+- @Definition@: **non-compliance** is when people do not receive the treatment
   as assigned
 
 - @Consequences@:
@@ -428,6 +436,9 @@ digraph CausalGraph {
       partials it out automatically (just folded into one model)
     - Since $\hat{e}(X)$ can be any flexible function of $X$, this handles
       high-dimensional, nonlinear $T$-$X$ relationships
+    - Caveat: this only makes the _treatment-assignment_ model flexible; the
+      outcome regression itself still assumes a linear relationship between
+      $Y$ and $\hat{e}(X)$
 
 * Propensity Score Matching
 
@@ -440,7 +451,7 @@ digraph CausalGraph {
   - In practice with many covariates, almost no two units share the same $X$
     (curse of dimensionality)
 
-- @Alternative Solution@: **Propensity Score Matching** 
+- @Solution@: **Propensity Score Matching**
   - Impute the missing potential outcome for every unit
   - Matches treated and control units based on propensity score similarity $e(X)$
     instead of $X$
@@ -460,7 +471,7 @@ digraph CausalGraph {
     )
     $$
 
-- @Limitation@
+- @Limitations@
   - KNN inefficient in high dimensions
   - Difficult to derive variance
 
@@ -471,7 +482,7 @@ digraph CausalGraph {
   - $\Pr(T | X) \neq \Pr(T)$
   - Treated and control groups differ systematically in their covariates $X$
 
-- @Key idea@ Inverse Propensity Weighting (Horvitz-Thompson 1952)
+- @Key idea@: Inverse Propensity Weighting (Horvitz-Thompson 1952)
   - Apply the same approach as importance weighting
   - Reweight samples drawn from one distribution (observed treatment assignment)
     to estimate an expectation under another distribution (random assignment)
@@ -518,7 +529,7 @@ digraph CausalGraph {
 
 * Stabilized Propensity Weights
 
-- @Problem@ with Inverse Propensity Weights
+- @Problem@: with Inverse Propensity Weights
   - Raw inverse propensity weights can be very large
   - Treatment with low probability $\Pr(T | X)$ creates extreme weights
   - Computational stability issue
@@ -556,8 +567,9 @@ digraph CausalGraph {
     respond
   - Creates pseudo-population representing full population
 
-- You can also compute the weights for both selection and confounding by
-  multiplying the re-weighting and can stability using the marginal probability
+- @Formula@: compute the weights for both selection and confounding by
+  multiplying the two re-weightings, and stabilize using the marginal
+  probability
   $$
   W = \frac{
     \hat{\Pr}(T = t)
@@ -575,30 +587,35 @@ digraph CausalGraph {
   \Pr(T = t | X) > 0 \text{ for all } t, X
   $$
 
-- @Problems@
 - Positivity is essential for IPW validity
+
+- @Problems@
   - IPW fails when positivity violated: cannot reweight units that don't exist
   - Some subgroups have almost no treated or control units
   - Cannot estimate counterfactual outcomes in those regions
 
-* IPW Sensitivity
-- Propensity score distribution easy to visualize
-- Can directly check if treatment groups overlap
+* IPW Diagnostics
+- @Techniques@
+  - Propensity score distribution easy to visualize
+  - Can directly check if treatment groups overlap
 
 * Comparison with Regression
-- Regression can extrapolate beyond region with data
-- Assumes linear (or specified) functional form for $E[Y | T, X]$
-- Can recover ATE even with positivity violation if model specification correct
-- IPW makes no functional form assumptions → fails without positivity
+- @Comparison@
+  - Regression can extrapolate beyond region with data
+  - Assumes linear (or specified) functional form for $E[Y | T, X]$
+  - Can recover ATE even with positivity violation if model specification
+    correct
+  - IPW makes no functional form assumptions $\to$ fails without positivity
 
 * Positivity-Bias Trade-Off
-- More covariates in propensity model $\to$
-  - Stronger unconfoundedness / conditional independence assumption
-  - Weaker positivity
-- Fewer covariates
-  - Better positivity
-  - More potential confounding bias
-- Balance is contextual and requires judgment
+- @Comparison@
+  - More covariates in propensity model $\to$
+    - Stronger unconfoundedness / conditional independence assumption
+    - Weaker positivity
+  - Fewer covariates
+    - Better positivity
+    - More potential confounding bias
+  - Balance is contextual and requires judgment
 
 // #############################################################################
 // Chap 6: Effect Heterogeneity
