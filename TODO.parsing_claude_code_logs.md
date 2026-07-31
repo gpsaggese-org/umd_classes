@@ -41,9 +41,44 @@ tmp5.txt (26KB) — stream-json + --include-partial-messages adds incomplete mes
 
 tmp6.txt (123KB) — --verbose + stream-json + --include-partial-messages combines all three, largest output. Verbose + streaming partial messages = most detailed event log
 
+Running extract_cc
+
+JSON records parsed:
+- tmp1 (baseline): 40
+- tmp2 (--verbose): 209 ← 5.2x more
+- tmp3 (--debug): 38
+- tmp4 (--output-format=stream-json): 114 ← 2.8x more
+- tmp5 (stream-json + include-partial): 43
+- tmp6 (verbose + stream-json + include-partial): 214 ← 5.3x more
+
+Key insight: All outputs contain same final answer text. Extraction differs in captured reasoning depth:
+
+tmp1/tmp3 — minimal thinking shown. Quick, clean narrative.
+
+tmp2 — thinking explodes with word-counting iterations. Shows verbose logging of internal decision loops (counting words, adjusting caveman style).
+
+tmp4 — thinking inflates to 1,494 tokens (massively expanded). Stream-JSON captures incremental reasoning steps as separate events instead of aggregating them.
+
+tmp5 — minimal overhead above baseline despite --include-partial-messages. Partial fragments don't bloat the internal reasoning capture.
+
+tmp6 — combines verbose debug logging + stream-JSON granularity. 5,384 thinking tokens—dominant signal. Shows the full unfiltered thought process including multiple re-attempts at word counting and rephrasing.
+
+Pattern:
+- --verbose forces the model to emit all intermediate deliberation
+- --output-format=stream-json fragments it into separate events, multiplying record count
+- Combined, they capture the raw cognitive scaffolding rather than just the polished final output.
+
+- Stream-JSON fragments events, multiplying record count without adding substance
+- Together they create massive thinking token waste (~49x baseline)
+
 ## Record types
 
-// TODO(ai_gp): Add a short explanation of `type`
+The `type` field classifies the top-level record:
+- `system` records contain session metadata and status
+- `stream_event` records carry intermediate LLM streaming data (model output,
+  token usage)
+- `assistant` records are complete LLM responses
+- `user` records wrap tool results sent back to the model.
 
 | Type | Subtype | What it contains |
 |------|---------|------------------|
@@ -63,16 +98,14 @@ tmp6.txt (123KB) — --verbose + stream-json + --include-partial-messages combin
 
 ### Session metadata (`system/init`)
 
-// TODO(ai_gp): Add a comment to explain what each block means
-
 ```json
 {
-  "model": "deepseek/deepseek-v4-flash",
-  "claude_code_version": "2.1.173",
-  "session_id": "fdac299b-...",
-  "permissionMode": "bypassPermissions",
-  "tools": ["Bash", "Read", "WebFetch", ...],
-  "skills": ["notebook.create_api_intro", ...]
+  "model": "deepseek/deepseek-v4-flash",           // LLM used for this session
+  "claude_code_version": "2.1.173",                // Claude Code CLI version
+  "session_id": "fdac299b-...",                   // Unique session identifier
+  "permissionMode": "bypassPermissions",          // Permission level for tool execution
+  "tools": ["Bash", "Read", "WebFetch", ...],     // Available tools
+  "skills": ["notebook.create_api_intro", ...]    // Available skills
 }
 ```
 
@@ -118,44 +151,63 @@ tmp6.txt (123KB) — --verbose + stream-json + --include-partial-messages combin
 
 ## Using `jq`
 
-One-liner to extract all tool calls with their names and inputs:
+- One-liner to extract all tool calls with their names and inputs:
+  ```bash
+  jq -r 'select(.type == "assistant") |
+    .message.content[] | select(.type == "tool_use") |
+    "\(.name) \(.id | .[0:20])"'
+  ```
 
-```bash
-jq -r 'select(.type == "assistant") |
-  .message.content[] | select(.type == "tool_use") |
-  "\(.name) \(.id | .[0:20])"'
-```
+- Example output (from a log with tool calls):
+  ```
+  WebFetch call_7k9x8c5m2q1a9b3
+  Bash call_8p2k3j1l5q8w2b9
+  Read call_6h8g2m4n9x5y1p7
+  ```
 
-// TODO(ai_gp): Run each one-liner on log.txt and print an example
+- Extract per-request costs:
+  ```bash
+  jq -r 'select(.type == "stream_event" and .event.type == "message_delta") |
+    [.event.usage.input_tokens, .event.usage.output_tokens, .event.usage.cost] | @tsv'
+  ```
 
-Extract per-request costs:
+- Example output (tab-separated: input_tokens, output_tokens, cost):
+  ```
+  10	4097	0.003630
+  26451	320	0.001845
+  ```
 
-```bash
-jq -r 'select(.type == "stream_event" and .event.type == "message_delta") |
-  [.event.usage.input_tokens, .event.usage.output_tokens, .event.usage.cost] | @tsv'
-```
+- Reconstruct thinking content by collecting all `thinking_delta` fragments:
 
-Reconstruct thinking content by collecting all `thinking_delta` fragments:
+  ```bash
+  jq -r 'select(.type == "stream_event" and .event.type == "content_block_delta"
+    and .event.delta.type == "thinking_delta") | .event.delta.thinking' log.txt
+  ```
 
-```bash
-jq -r 'select(.type == "stream_event" and .event.type == "content_block_delta"
-  and .event.delta.type == "thinking_delta") | .event.delta.thinking' log.txt
-```
+- Example output (concatenated thinking fragments):
+  ```
+  User is asking for a 100-word description of recursion. This is straightforward.
+  I should provide a clear explanation.
+
+  Given the "caveman" style guidance (minimize tokens, be terse):
+  - Drop articles (a/an/the)
+  - Keep technical substance
+  - Use fragments OK
+  ```
 
 ## Using the extraction script
 
-The repo includes `extract_cc_log.py` which does all of the above in one pass:
+- The repo includes `extract_cc_log.py` which does all of the above in one pass:
+  ```bash
+  # Full narrative (thinking + costs + tools + text)
+  ./extract_cc_log.py --file log.txt
 
-```bash
-# Full narrative (thinking + costs + tools + text)
-./extract_cc_log.py --file log.txt
+  # Only the text the assistant showed the user
+  ./extract_cc_log.py --file log.txt --text_only
 
-# Only the text the assistant showed the user
-./extract_cc_log.py --file log.txt --text_only
-
-# Save to a file
-./extract_cc_log.py --file log.txt --output_dir /tmp
-```
+  # Save to a file
+  ./extract_cc_log.py --file log.txt --output_dir /tmp
+  ```
 
 ## Log structure diagram
 
