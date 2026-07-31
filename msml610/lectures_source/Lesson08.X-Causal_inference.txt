@@ -12,115 +12,128 @@
 # Effect heterogeneity
 
 * From ATE to CATE
-- Average Treatment Effect (ATE) $\EE[Y_1 - Y_0]$ answers:
-  - _"Should we roll out a treatment to entire population?"_
-- Conditional Average Treatment Effect (CATE) $\EE[Y_1 - Y_0 | X]$ answers
-  - _"Which units should we treat?"_
-  - _"What's the optimal treatment for each unit?"_
-  - Enables personalization, since each unit is different in terms of its
-    covariate $X$
+- @Comparison@
+  - **Average Treatment Effect (ATE)** 
+    - Answers _"Should we roll out a treatment to entire population?"_
+    - Computes $\EE[Y_1 - Y_0]$ 
 
-* CATE
-- You have customers and a treatment
-  - $Y$ = outcome (purchase amount, satisfaction, churn probability, etc.)
+  - **Conditional Average Treatment Effect (CATE)**
+    - Answers
+      - _"Which units should we treat?"_
+      - _"What's the optimal treatment for each unit?"_
+    - Enables personalization, since each unit is different in terms of its
+      covariate $X$
+    - Computes $\EE[Y_1 - Y_0 | X]$ 
+
+* Conditional Average Treatment Effect
+- @Example@: you have customers and a treatment effect $T \to Y$
   - $T$ = treatment (discount, advertisement exposure, recommendation, pricing
     change, etc.)
-- You want to personalize the treatment (e.g., different discounts to different
-  customers)
+  - $Y$ = outcome (purchase amount, satisfaction, churn probability, etc.)
+  - You want to personalize the treatment
+    - E.g., different discounts to different customers
 
-- It's like customer segmentation: create groups of customers based on how they
-  respond to your treatment
+- @Definition@: **unit response to a treatment** measures how the outcome $Y$
+  changes when the treatment $T$ changes slightly, holding all the other factors
+  fixed
+  $$\frac{\Delta Y}{\Delta T}\Big|_{X=x}$$
+- Aka "treatment effect", "marginal effect", "treatment sensitivity"
+
+- @Key insight@: It's like customer segmentation
+  - Create groups of customers based on how they respond to your treatment
   - E.g., some customers reacts well to discounts, others poorly
-
-- We want to measure "customer’s response to a treatment" (aka treatment effect or
-  marginal effect):
-  $$\frac{\delta Y}{\delta T}\Big|_{X=x}$$
-  how the outcome Y changes when the treatment T changes slightly,
-  holding other factors fixed
-
-- High / medium / low treatment effect (group with high slope)
+  - E.g., high / medium / low treatment effect
 
 * Why Prediction Is Not the Answer
-- Predictive models estimate outcome $Y = f(X, T)$, not treatment sensitivity
-  $$\frac{\delta Y}{\delta T}\Big|_{X=x}$$
-  - Partitioning units by $Y$ does not partition by treatment effect
-  - Example: high sales prediction does not guarantee high discount sensitivity
-- Treatment slopes are non-observable at unit level
-  - Fundamental problem: cannot observe same unit under multiple treatment
-    conditions
+- @Fact@: Predictive models estimate
+  - Outcome $Y = f(X, T)$
+    - E.g., low vs high sales
+  - Not treatment sensitivity $\frac{\Delta Y}{\Delta T}\Big|_{X=x}$
+    - E.g., high discount sensitivity
+
+- @Problem@: treatment slopes are non-observable at unit level
+  - Fundamental problem of causal inference: you cannot observe same unit under
+    multiple treatment conditions
   - Therefore cannot directly compute treatment sensitivity and ML can't predict
     it
 
 * Restaurant Discount: Example
-- A chain of restaurants that operate across the country. A key component of this
-  business is 
-- Understanding when it should give discounts to its customers
-- The company ran a nationwide experiment that lasted three years, where it
-  randomized discounts in six different restaurants in the chain
-  - The unit of treatment is (day, restaurant)
+- @Problem@
+  - A chain of restaurants operate across the country and needs to understanding
+    when it should give discounts to its customers
+  - Run a nationwide experiment, where it randomized discounts in different
+    restaurants in the chain
+  - The unit of treatment is $(day, restaurant)$
 
+- @Solution@
 - Linear regression with treatment-covariate interactions estimates CATE
   - Model:
-    $$
-    y_i = \beta_0 + \beta_1 t_i + \beta_2 X_i + \beta_3 t_i X_i + e_i
-    $$
-  - Slope prediction:
-    $$
-    \frac{\partial y_i}{\partial t_i} = \beta_1 + \beta_3 X_i
-    $$
-
-- The interaction term $t_i \cdot X_i$ (treatment × covariate) is the simplest
-  way to make the slope depend on the covariate
+    $y_i = \beta_0 + \beta_1 t_i + \beta_2 X_i + \beta_3 t_i X_i + e_i$
+  - The interaction term $t_i \cdot X_i$ (treatment $\cdot$ covariate) is the
+    simplest way to make the slope depend on the covariate
   - Each unit with different $X_i$ gets a different slope prediction despite
-    unobservable slopes.
+    unobservable slopes
 
-- You can estimate the fit and then use the coefficients to compute the
-  CATE
-  - A shortcut is to use 
+- You can estimate the model and then use the coefficients to compute the CATE
+  - Slope is $\frac{\partial y_i}{\partial t_i} = \beta_1 + \beta_3 X_i$
+// TODO(ai_gp): Unclear, explain better
+  - A shortcut is to use:
     CATE = prediction(t+1) - prediction(t)
 
-- If the treatment was not randomized, then you will need to do identification
+- If the treatment was not randomized, then we will need to do identification
   removing confounding
 
 * Evaluating CATE Predictions
-- This is similar to a ML problem, but you don't have the actual outcomes (since
-  they are not observable)
+- @Problem@: CATE looks like a standard ML prediction problem, but the target
+  is never observable
+  - _"$Y_{1i}$ and $Y_{0i}$ are never observed for the same unit"_
+    (fundamental problem of causal inference)
+  - Cannot compute standard ML metrics (e.g., MSE) on
+    $$
+    \tau(x) \defeq \EE[Y_1 - Y_0 | X = x]
+    $$
 
-- Fundamental problem: $Y_{1i}$ and $Y_{0i}$ are never observed for the same
-  unit
-- Cannot compute standard ML metrics (e.g., MSE on $\tau_i$)
-  $$
-  \tau(x) \defeq \EE[Y_1 - Y_0 | X = x]
-  $$
+- @Solution@: replace unit-level ground truth with group-level evaluation
+  1. Partition data by model predictions, and estimate the effect within each
+     partition instead of per unit
+  2. Use a train/test split, so the CATE model is evaluated on held-out data it
+     wasn't fit on
 
-1) Ground truth is non-observable at unit level, so evaluation must use
-   group-level metrics
-   - Instead: partition data by model predictions and estimate effects in each
-     partition
-2) Use train/test split for unbiased evaluation of CATE model on held-out data
-
-* Process:
+* CATE Algorithm
 1. Fit the CATE model on training data
-   ```
+
+   ::: small-code
+   ```python
    regr_model = smf.ols("sales ~ discounts*(month + weekday + ...)",
                         data=train).fit()
    ```
+   :::
+
 2. Predict CATE values on test data
-   ```
+
+   ::: small-code
+   ```python
    test_pred = regr_model.predict(test.assign(discounts=test["discounts"]+1)) \
               - regr_model.predict(test)
    ```
+   :::
+
 3. Partition test data (by quantiles of those predictions)
-   ```
+   
+   ::: small-code
+   ```python
    # Divide test data into 10 groups based on predicted CATE values
    quantiles = pd.qcut(test_pred, q=10)
    # Low quantile: days with low predicted CATE
    # High quantile: days with high predicted CATE
    ```
+   :::
+
 4. Estimate group effects (regression within each group)
    ```
    effect = regress(sales ~ discounts)
    ```
+
 5. Evaluate (do the effects match the predictions?)
    - If your CATE predictions are good:
      - Quantile 1 (low prediction) → low actual effect
