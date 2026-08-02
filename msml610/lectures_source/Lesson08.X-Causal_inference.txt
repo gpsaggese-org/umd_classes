@@ -113,8 +113,9 @@
 
    ::: small-code
    ```python
-   test_pred = regr_model.predict(test.assign(discounts=test["discounts"]+1)) \
-              - regr_model.predict(test)
+   test_pred = (regr_model.predict(
+                  test.assign(discounts=test["discounts"]+1))
+              - regr_model.predict(test))
    ```
    :::
 
@@ -130,24 +131,29 @@
    :::
 
 4. Estimate group effects (regression within each group)
-   ```
+
+   ::: small-code
+   ```python
    effect = regress(sales ~ discounts)
    ```
+   :::
 
-5. Evaluate (do the effects match the predictions?)
+5. Evaluate
+   - Do the effects match the predictions?
    - If your CATE predictions are good:
-     - Quantile 1 (low prediction) → low actual effect
-     - Quantile 10 (high prediction) → high actual effect
-     - Monotonic staircase pattern = good model
+     - Quantile 1 (low prediction) $\to$ low actual effect
+     - Quantile 10 (high prediction) $\to$ high actual effect
+   - Monotonic staircase pattern $\implies$ good model
    - Random model produces flat curve (same effect in all quantiles = ATE)
 
+// TODO(ai_gp): Improve the following
 * Cumulative Effect
 - Sort data by CATE score, accumulate groups sequentially
   - Estimate effect on top 1%, then top 2%, then top 3%, etc
   - Result: curve showing effect by cumulative sample percentage
 
 - Well-ordered model curve shape: starts high, gradually converges to ATE
-  - Bad model: quickly converges to ATE or fluctuates around it
+- Bad model: quickly converges to ATE or fluctuates around it
 
 * Cumulative Gain
 - **Definition**: cumulative gain measures how much value a CATE model captures
