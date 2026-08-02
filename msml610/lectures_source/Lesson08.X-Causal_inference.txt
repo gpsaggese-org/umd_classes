@@ -95,13 +95,14 @@
     \tau(x) \defeq \EE[Y_1 - Y_0 | X = x]
     $$
 
-- @Solution@: replace unit-level ground truth with group-level evaluation
-  1. Partition data by model predictions, and estimate the effect within each
-     partition instead of per unit
-  2. Use a train/test split, so the CATE model is evaluated on held-out data it
-     wasn't fit on
+- @Solution@: replace unit-level evaluation with group-level evaluation
+  1. Partition outcomes by groups in terms of model prediction magnitude
+  2. Estimate the effect within each group
+  2. Use a train/test split to evaluate CATE model on held-out data it wasn't
+     fitted on
 
 * CATE Algorithm
+// TODO(ai_gp): Add picture from example
 1. Fit the CATE model on training data
 
    ::: small-code
@@ -111,7 +112,13 @@
    ```
    :::
 
-2. Predict CATE values on test data
+   - The interaction terms let the slope (i.e., `discounts`) differ by
+     covariate (i.e., `days`)
+
+2. Predict CATE values on _test data_
+
+   - For each test unit, ask: "what happens to predicted sales if this unit's
+     discount goes up by one unit, holding everything else fixed?"
 
    ::: small-code
    ```python
@@ -121,34 +128,38 @@
    ```
    :::
 
-3. Partition test data (by quantiles of those predictions)
+3. Partition test data by quantiles (e.g., deciles) of those predictions
    
    ::: small-code
    ```python
-   # Divide test data into 10 groups based on predicted CATE values
+   # Divide test data into 10 groups based on predicted CATE values.
    quantiles = pd.qcut(test_pred, q=10)
-   # Low quantile: days with low predicted CATE
-   # High quantile: days with high predicted CATE
+   # Low quantile: days with low predicted CATE (i.e., don't respond to
+   # High quantile: days with high predicted CATE.
    ```
    :::
 
-4. Estimate group effects (regression within each group)
+4. Estimate effect in each group by regression within each group
 
    ::: small-code
    ```python
-   effect = regress(sales ~ discounts)
+   effect = regress("sales ~ discounts")
    ```
    :::
 
-5. Evaluate
-   - Do the effects match the predictions?
+5. Evaluate the effect across the groups
+   - Monotonic staircase pattern $\implies$ good model
    - If your CATE predictions are good:
      - Quantile 1 (low prediction) $\to$ low actual effect
      - Quantile 10 (high prediction) $\to$ high actual effect
-   - Monotonic staircase pattern $\implies$ good model
    - Random model produces flat curve (same effect in all quantiles = ATE)
 
 * Cumulative Effect
+- @Recap@: Previous CATE algorithm checks the model using 10 non-overlapping
+  deciles
+  - We can ask the same question sweeping from ranked units from "least
+    responsive" to "most responsive"
+
 - @Definition@: **Cumulative effect curve** shows the effect by cumulative sample
   percentage
 
@@ -156,38 +167,55 @@
   - Sort data by CATE score
   - Accumulate groups sequentially
   - Estimate effect on top 1%, then top 2%, then top 3%, etc
+    - E.g., `effect = regress(sales ~ discounts)` within a group
+  - At 100% the slice is the entire test set and estimates the ATE by
+    construction
 
-- @Fact@: the curve shape identifies a good vs bad model
-  - Well-ordered model: starts high, gradually converges to ATE
-  - Bad model: quickly converges to ATE or fluctuates around it
+- @Interpretation@: the curve shape identifies a good vs bad model
+  - _Well-ordered model_: starts high (most responsive unit / highest CATE),
+    gradually converges down to ATE
+  - _Bad model_: quickly converges to ATE or fluctuates around it since the
+    ranking carries no real information
+
+- @Problem@: small eraly slices (e.g., top 1%) contain few units and so effects
+  are noisy
+  - Cumulative gain solves this problem
 
 * Cumulative Gain
-- @Definition@: **Cumulative gain** measures how much value a CATE model captures
-  by sequentially treating units with highest predicted effects
-
-- Multiply cumulative effect by cumulative sample proportion:
-  $$
-  \text{Gain} = \frac{N_{\text{cumulative}}}{N_{\text{total}}} \times (\text{effect} - ATE)
-  $$
+// TODO(ai_gp): Add picture
+- @Definition@: **Cumulative gain** measures the same effect as the cumulative
+  effect but automatically downweights the noisy small-sample region
+  - Multiply cumulative effect by cumulative sample proportion:
+    $$
+    \text{Gain} = \frac{N_{cumulative}}{N_{total}} \times (\text{effect} - ATE)
+    $$
   - Downscales early portion where sample size (and confidence) is small
-  - Centers around zero, with gains relative to population average effect
+  - Curve is anchored at 0 at both ends (since gains are relative to population
+    average effect, i.e., ATE)
 
 - @Interpretation@
-  - Well-ordered model: steep initial climb, then plateaus near ATE
-  - Random model: flat line (no gain above ATE anywhere)
-  - Enables visual model comparison on a single plot
+  - _Well-ordered model_: steep initial climb (since each added unit responds
+    strongly to the treatment), then bends down towards 0
+  - _Random model_: flat line (no gain above ATE anywhere)
+  - Enables visual comparison of different models on a single plot since all
+    curves are normalized
 
-* Area Under Curve (AUC)
+* Area Under Cumulative Gain Curve
+// TODO(ai_gp): Add picture
 
-- @Definition@: area under the cumulative gain curve aggregates CATE model quality
-  into a single summary metric
+- @Definition@: **Area under the cumulative gain curve** aggregates CATE model
+  quality into a single summary metric
+  - Integrate performance across every possible threshold at once, instead of
+    picking a single threashold (same logic as ROC-AUC for classifiers)
 
-- @Intuition@
-  - Larger AUC = better CATE ordering
-  - AUC = 0 if model predicts constant effect (equivalent to random assignment)
-  - AUC > 0 indicates true heterogeneity in treatment response
+- @Interpretation@
+  - AUC > 0 $\implies$ model finds true heterogeneity in treatment response
+  - Larger AUC $\implies$ better CATE ordering
+  - AUC = 0 $\implies$ model predicts constant effect (equivalent to random
+    assignment)
+  - AUC < 0 $\implies$ model systematically miscalibrated
 
-- @Application@
+- @Applications@
   - Automates model selection among competing CATE approaches
   - Enables hyperparameter tuning via grid search or Bayesian optimization
 
@@ -200,181 +228,227 @@
 # Metalearners
 
 * Metalearners
-- **Goal**: Estimate conditional average treatment effect (CATE) to identify how
-  unit $i$ responds differently to treatment
-  $$\tau_i(x) \triangleq \EE[Y_i(1) - Y_i(0) | X]$$
+- @Goal@: Estimate conditional average treatment effect (CATE) to identify how
+  unit $i$ (with covariates $X = x$) responds differently to treatment:
+  $$\tau(x) \triangleq \EE[Y(1) - Y(0) | X = x]$$
+  - It measures how much a unit's outcome would differ under treatment vs no
+    treatment, given what we know about that unit (i.e., its covariates $x$)
+  - Treatments are:
+    - Discrete treatments: binary or categorical
+    - Continuous treatments: dose, price, discount level
 
-- **Definition**: metalearners leverage / recycle off-the-shelf machine learning
-  algorithms for treatment effect estimation
-  - Can estimate ATE but mainly used for CATE estimation
+- @Definition@: **Metalearners** use off-the-shelf machine learning algorithms
+  for treatment effect estimation
+  - E.g., random forests, gradient boosting, neural nets
   - Work well with high-dimensional data
 
-- Often this is a _ranking problem_: correctly order units by treatment
-  sensitivity
-  - Discrete treatments: binary or categorical
-  - Continuous treatments: dose, price, discount level
+- @Key insight@: _"Meta"_ because the trick is one level above the model
+  - We have a recipe for turning existing ML models into CATE estimators, even if
+    the underlying models don't know anything about causality
+
+- @Fact@: 
+  - Business cares about units that "react strongly" to treatment vs "react
+    weakly", not the actual numerical values
+  - Often CATE is formulated as a _ranking problem_
 
 * Marketing Email: Example
-- Marketing team at an online retailer
+- @Goal@: 
+  - Marketing team at an online retailer wants to determine which customers are
+    receptive to a marketing email (treatment) to increase customer spending
+    (outcome)
 
-- **Goal**: Determine which customers are receptive to a marketing email
-  - The email has potential to increase customer spending
-
-- **Problem**:
+- @Problem@:
+  - Sending an email is not free (time, money, relationship goodwill)
   - Your budget of discount is limited 
   - Some customers don't like receiving marketing emails
     - Avoid sending email to unreceptive customers to maintain relationship
       quality
 
-- **Solution**: 
-- Estimate CATE of email on customers' future purchase volume
+- @Solution@: 
+  - Instead of predicting who will spend a lot (a prediction problem), estimate
+    how much extr spending each customer would generate because of the email
+    - Estimate CATE of email on customers' future purchase volume
 
-- Data
-  - Historical data about sending emails to fit CATE model
-  - Data from experiments where emails were randomized (use for evaluation)
+* Marketing Email: Example
+- @Historical data@ about sending emails is _used to fit CATE model_
+  - Abundant but not randomly assigned (marketing team has already been targeting
+    customers likely to buy)
 
-- The treatment variable is `mkt_email`
-- The outcome variable is `next_mnth_pv` (purchase volume one month after sending
-  the email)
-- Covariates (e.g., age, time since first purchase, how much bought on each
-  category)
+- @Experimental data@ where emails were randomized is _used for evaluation_
+
+- @Treatment variable@ $T$ is `mkt_email`
+  - Whether customer $i$ received the email
+
+- @Outcome variable@ $Y$ is `next_mnth_pv`, i.e., purchase volume one month after
+  sending the email
+
+- @Covariates@ $X$ are used to personalize the estimate
+  - E.g., age, time since first purchase, how much bought on each category
 
 * T-Learner
-- **Approach**: Fit separate outcome models for each treatment level
-  - For binary treatment: estimate
-    $\mu_0(x) = \EE[Y | T=0, X]$ and 
-    $\mu_1(x) = \EE[Y | T=1, X]$
-  - Predict both potential outcomes for each unit and then estimate CATE as:
-    $$\hat{\tau}(x)_i = \hat{\mu}_1(X_i) - \hat{\mu}_0(X_i)$$
+- @Key insight@: Fit separate outcome models for each treatment level, instead of
+  trying to fit the effect of treatment directly
+  - "T" in T-Learner stands for "two"
 
-- **Advantages**: Simple and straightforward implementation
+- @Algorithm@
+  1. E.g., for binary treatment, predict both potential outcomes for each unit
+     $$
+     \begin{aligned}
+     \mu_0(x) &= \EE[Y | T=0, X=x] \\
+     \mu_1(x) &= \EE[Y | T=1, X=x]
+     \end{aligned}
+     $$
+  2. $\mu_0$ is trained only on control units and $\mu_1$ only on treated units
+  3. Then estimate CATE for the covariate $X_i$ using both models:
+     $$\hat{\tau}(x)_i = \hat{\mu}_1(X_i) - \hat{\mu}_0(X_i)$$
 
-- **Disadvantage**: Prone to regularization bias
+- @Pros@: Simple and straightforward implementation of the definition using
+  off-the-shelf ML models
 
-* Regularization Bias
-- **Problem**: In T-learner you need to fit two models at the same time
-  - If treated data is sparse, $mu_1$ becomes overly regularized and simple
-    (e.g., a constant)
-  - If untreated data is abundant, $mu_0$ can fit a non-linearity
+- @Cons@: Fitting two independent models on two differently sized groups creates
+  a bias (aka "regularization bias")
 
-- **Result**:
-  - Bias in CATE estimation (nonlinear difference minus linear difference)
-  - E.g., model with nonlinear outcome but constant treatment effect produces
-    wrong nonlinear CATE
-  - In imbalanced data, regularization creates artificial heterogeneity
-  // TODO: add picture
+* Regularization Bias: Definition
+- @Problem@
+  - Every ML model has some built-in brake on overfitting (i.e., regularization)
+  - The less data the models sees, the more the regularization kicks in, forcing
+    the fitted function toward something simpler and flatter
+
+- @Fact@ 
+  - Treated units are often scarse since treatment is expensive, risky, or rate
+    - $\mu_1$ becomes overly regularized and simple (e.g., a flat average)
+  - Untreated data is abundant
+    - $\mu_0$ can fit complex non-linear patterns in the outcome
+  - CATE is the difference and inherits the wiggliness of non-linear model
+
+- @Example@
+  - Consider the case where:
+    - The treatment effect CATE is the same for every customer
+    - The outcome $Y$ is a complex non-linear function of covariates $X$
+  - $\mu_0$ captures the complexity since it has lots of data
+  - $\mu_1$ ends up flat since it's starved of data
+  - CATE is the difference and varies drammatically across covariates
+  - In imbalanced data, regularization creates "artificial heterogeneity"
+
+// TODO: add picture
 
 * X-Learner
-- **Approach**
-  - Address regularization bias of T-learner
-  - Two-stage approach with propensity score weighting
-  - Performs better when one treatment group is much larger than the other
+- @Key insight@
+  - Fix the regularization bias of T-learner with two-stage approach (using
+    imputation and then learning effect models)
+  - "X" in X-Leaner is because it's deliberately mixing information across
+    the treated/control groups
 
-- **Stage 1**: Fit initial outcome models (same as T-learner)
-  - $\mu_0(X)$ and $\mu_1(X)$ for control and treated groups
+- @Algorithm@:
+  1. Fit initial outcome models (same as T-learner)
+     - $\mu_0(X)$ for control group, $\mu_1(X)$ for treated group
+  2. Estimate imputed treatment effects for each unit using the fit models:
+     - For control units, estimate missing treatment outcome:
+       $$\hat{\tau}(X, T=0) = \hat{\mu}_1(X, T=0) - Y_{T=0}$$
+     - For treated units, estimate missing control outcome:
+       $$\hat{\tau}(X, T=1) = Y_{T=1} - \hat{\mu}_0(X, T=1)$$
+  3. Fit effect models
+     - Fit $\hat{\mu}_{\tau 0}(x)$ to predict $\hat{\tau}(X, T=0)$
+     - Fit $\hat{\mu}_{\tau 1}(x)$ to predict $\hat{\tau}(X, T=1)$
 
-- **Stage 2**: Estimate imputed treatment effects
-  - For control units: estimate missing treatment outcome:
-    $$\hat{\tau}(X, T=0) = \hat{\mu}_1(X, T=0) - Y_{T=0}$$
-  - For treated units: estimate missing control outcome:
-    $$\hat{\tau}(X, T=1) = Y_{T=1} - \hat{\mu}_0(X, T=1)$$
+* X-Learner with Weighting Scheme
+- @Problem@: In X-Learner the two estimates $\hat{\mu}_{\tau 0}(x)$ and
+  $\hat{\mu}_{\tau 1}(x)$ have different level of trustworthiness, since have
+  different amount of data
 
-- **Stage 3**: Fit effect models
-  - Fit $\hat{\mu}_{\tau 0}(x)$ to predict $\hat{\tau}(X, T=0)$
-  - Fit $\hat{\mu}_{\tau 1}(x)$ to predict $\hat{\tau}(X, T=1)$
-
-- **Pros**
-  - X-learner shines when large imbalance between treatment and control groups
-
-* X-Learner With Weighting Scheme
-- Combine second-stage models using propensity score $\hat{e}(x) = \Pr(T=1|X)$
+- @Solution@: Combine the estimates using propensity score $\hat{e}(x) = \Pr(T=1|X)$
   $$\hat{\tau}(x) 
   = \hat{\mu}_{\tau 0}(x) \cdot \hat{e}(x) + 
     \hat{\mu}_{\tau 1}(x) \cdot (1 - \hat{e}(x))$$
 
-- **Intuition**
-  - When treatment is rare: $\hat{e}(x)$ is small, down-weights flawed
-    $\hat{\mu}_{\tau 0}$
-  - When treatment is common: $1 - \hat{e}(x)$ is large, up-weights correct
-    $\hat{\mu}_{\tau 1}$
-  - Automatically emphasizes the model trained on larger sub-sample
+- @Intuition@
+  - When treatment is rare:
+    - $\hat e(x)$ is small, so $\hat\mu_{\tau 0}$ (which depends on the
+      poorly-estimated $\mu_1$) is correctly down-weighted
+    - $1-\hat e(x)$ is large, correctly up-weighting the more reliable
+      $\hat\mu_{\tau 1}$
+  - When treatment is common:
+    - $\hat e(x)$ is large, correctly up-weighting the now-reliable
+      $\hat\mu_{\tau 0}$
+    - $1-\hat e(x)$ is small, correctly down-weighting $\hat\mu_{\tau 1}$ (which
+      now depends on a poorly-estimated $\mu_0$, since the control group is the
+      small one)
+  - Net effect: whichever arm had more data ends up dominating the final CATE
+    estimate
 
 * Metalearners for Continuous Treatments
-- **Problem**: Randomized discount experiment at restaurant chain
-  - Goal: which days should discounts be highest?
-  - Treatment: discount amount (continuous, 0-40%)
-  - Outcome: sales volume one day later
+- @Problem@: Randomized experiment at restaurant chain to understand the discount
+  to give on each day
+  - _Treatment_: discount amount (e.g., continuous 0-40%)
+  - _Outcome_: sales volume one day later
+  - Sharper question than "discount or not?"
 
-- **Insight**
+- @Insight@
   - Customers more sensitive to prices on some days (e.g., holidays)
   - CATE tells us how much demand increases per unit discount
-  - High CATE days $\Rightarrow$ use more discounts
-  - Low CATE days $\Rightarrow$ use fewer
+    - High CATE days $\Rightarrow$ use more discounts
+    - Low CATE days $\Rightarrow$ use fewer
 
-- **Problem**
-- Discrete approaches fail because they
-  - Can't fit separate models for each discount level (infinite treatments)
+- @Problem@
+- Discrete approaches (T-Learner and X-Learner) fail because they:
+  - Can't fit separate models for each discount level (e.g., there might be
+    infinite treatments)
+
+- @Solution@: 
   - Need methods that handle continuous treatment as a feature or component
-
-- **Solution**: S-learner and Double-ML
+  - E.g., S-learner and Double-ML
 
 * S-Learner
-- **Approach**: Single machine learning model that includes treatment $T$ and
+- @Key insight@: Single machine learning model that includes treatment $T$ and
   covariates $X$ to predict outcome $Y$
-  - Goal is to estimate $\mu_s(x, t) = E[Y | T, X]$
-  - "S-Learner" since it's "single"
+  - Goal is to estimate $\mu_s(x, t) = \EE[Y | T, X]$
   - This model doesn't output treatment effect, rather it outputs counterfactual
     predictions (i.e., predictions under different treatment regimes)
+  - "S" in S-Learner" means "single"
 
-- **For binary treatment**: CATE = $\mu_s(X_i, T=1) - \mu_s(X_i, T=0)$
+- **For binary treatment**:
+  - Estimate with the same model both cases for treatment and control
+  - Compute CATE = $\mu_s(X_i, T=1) - \mu_s(X_i, T=0)$
 
-- **For continuous treatment**: Extended procedure needed
-  - Create grid of treatment values (e.g., [0, 10, 20, 30, 40] for discounts)
-  - Compute predictions for all treatment level
-  - Summarize as slope via simple linear regression to extract CATE
-  - Formula: $\beta = \text{Cov}(t, y) / \text{Var}(t)$
+- **For continuous treatment**: Need an extended procedure needed (next slide)
 
-- **Pros**:
-  - Simple
+- @Pros@:
+  - Simple (similar to supervised learning)
   - Supports both binary and continuous treatments
   - Performs reasonably well
 
-- **Cons**:
-  - Biases treatment effect toward zero
-  - Treatment variable can be completely discarded if weak relative to other
-    covariates
+- @Cons@:
+  - Treatment variable can be completely discarded by model if weak relative to
+    other covariates (due to regularization)
 
-- **Solution**:
-  - Use Double/Debiased Machine Learning (R-learner) to address bias
+* S-Learner: Algorithm for Continuous Treatment
 
-* S-Learner: Implementation Steps
-
-- **Step 1**: Train single model on all data
-  - `s_learner.fit(X + [T], y)` where T is treatment feature
-
-- **Step 2**: Create counterfactual grid
-  - Define treatment grid: e.g., $[0, 10, 20, 30, 40]$
-  - Cross-join with test set: each test unit at each treatment level
-  - Makes predictions on expanded grid
-
-- **Step 3**: Extract slopes
-  - Group by unit, apply linear regression
-  - Extract slope coefficient as unit-level CATE
-  - Can also use slope formula directly:
-    $\hat{\beta} = \text{Cov}(t,y) / \text{Var}(t)$
-
-- **Result**: CATE prediction for each unit
+- @Algorithm@:
+  1. Train single model on all data
+     - `s_learner.fit(X + [T], y)` where T is treatment feature
+  2. Create counterfactual grid
+     - We can't just compare treatment "on vs off", but we need to sweep a grid
+       of treatment values
+       - E.g., `[0, 10, 20, 30, 40]` for discounts
+     - Cross-join with test set: each test unit at each treatment level
+     - Makes predictions on expanded grid
+   3. Extract slopes
+     - Group by unit, apply linear regression
+     - Extract slope coefficient as unit-level CATE
+     - Can also use slope formula directly:
+       $\hat{\beta} = \text{Cov}(t,y) / \text{Var}(t)$
+   4. Compute CATE prediction for each unit
 
 * S-Learner: The Bias Problem
 
-- **Problem**
+- @Problem@
   - ML models are regularized by default
   - Regularization can suppress treatment effect unless treatment signal is very
     strong
   - ML model may discard treatment feature entirely
   - Distribution of estimated ATE is shifted toward zero compared to true effect
 
-- **Solution**
+- @Solution@
   - Use orthogonalization techniques
 
 * R-learner (Double/Debiased Machine Learning)

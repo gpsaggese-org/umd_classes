@@ -73,7 +73,7 @@
 - `website/docs/blog/posts/draft.in_5_mins.helpers_render_images.md`
   - `helpers_root/dev_scripts_helpers/documentation/render_images.py`
   - `helpers_root/dev_scripts_helpers/documentation/test/test_render_images.py`
-  - `docs/tools/documentation_toolchain/all.render_images.explanation.md`
+  - `dev_scripts_helpers/documentation/render_images.README.md`
 
 - `website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md`
 
@@ -112,7 +112,7 @@
   - `helpers_root/linters2/README.md`
 
 - Pre-commit
-  - `helpers_root/docs/tools/all.precommit.how_to_guide.md`
+  - `helpers_root/linters2/lint.README.md`
 
 - `helpers_root/docs/tools/all.invoke_git_branch_copy.how_to_guide.md`
 
