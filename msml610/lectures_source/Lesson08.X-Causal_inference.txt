@@ -76,9 +76,11 @@
 
 - You can estimate the model and then use the coefficients to compute the CATE
   - Slope is $\frac{\partial y_i}{\partial t_i} = \beta_1 + \beta_3 X_i$
-// TODO(ai_gp): Unclear, explain better
-  - A shortcut is to use:
-    CATE = prediction(t+1) - prediction(t)
+
+  - @Shortcut@: predict the outcome at $t+1$ and at $t$, then subtract
+    $$CATE_i = \hat{y}_i(t+1) - \hat{y}_i(t)$$
+    - For this linear model, the difference equals the same slope
+      $\beta_1 + \beta_3 X_i$, since the effect doesn't depend on $t$
 
 - If the treatment was not randomized, then we will need to do identification
   removing confounding
@@ -146,17 +148,21 @@
    - Monotonic staircase pattern $\implies$ good model
    - Random model produces flat curve (same effect in all quantiles = ATE)
 
-// TODO(ai_gp): Improve the following
 * Cumulative Effect
-- Sort data by CATE score, accumulate groups sequentially
-  - Estimate effect on top 1%, then top 2%, then top 3%, etc
-  - Result: curve showing effect by cumulative sample percentage
+- @Definition@: **Cumulative effect curve** shows the effect by cumulative sample
+  percentage
 
-- Well-ordered model curve shape: starts high, gradually converges to ATE
-- Bad model: quickly converges to ATE or fluctuates around it
+- @Algorithm@:
+  - Sort data by CATE score
+  - Accumulate groups sequentially
+  - Estimate effect on top 1%, then top 2%, then top 3%, etc
+
+- @Fact@: the curve shape identifies a good vs bad model
+  - Well-ordered model: starts high, gradually converges to ATE
+  - Bad model: quickly converges to ATE or fluctuates around it
 
 * Cumulative Gain
-- **Definition**: cumulative gain measures how much value a CATE model captures
+- @Definition@: **Cumulative gain** measures how much value a CATE model captures
   by sequentially treating units with highest predicted effects
 
 - Multiply cumulative effect by cumulative sample proportion:
@@ -166,22 +172,22 @@
   - Downscales early portion where sample size (and confidence) is small
   - Centers around zero, with gains relative to population average effect
 
-- **Interpretation**
+- @Interpretation@
   - Well-ordered model: steep initial climb, then plateaus near ATE
   - Random model: flat line (no gain above ATE anywhere)
   - Enables visual model comparison on a single plot
 
 * Area Under Curve (AUC)
 
-- **Definition**: area under the cumulative gain curve aggregates CATE model quality
+- @Definition@: area under the cumulative gain curve aggregates CATE model quality
   into a single summary metric
 
-- **Intuition**
+- @Intuition@
   - Larger AUC = better CATE ordering
   - AUC = 0 if model predicts constant effect (equivalent to random assignment)
   - AUC > 0 indicates true heterogeneity in treatment response
 
-- **Application**
+- @Application@
   - Automates model selection among competing CATE approaches
   - Enables hyperparameter tuning via grid search or Bayesian optimization
 
