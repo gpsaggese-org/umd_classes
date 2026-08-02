@@ -4,27 +4,44 @@ courses, generating lecture materials (slides, scripts, quizzes), and improving
 slide quality through automated LLM-powered transformations
 
 ## Structure of the Dir
-- `lectures_commentary/`: Output directory for lecture commentary
-- `lectures_quizzes/`: Output directory for multiple choice quiz files
-- `lectures_recap/`: Output directory for discussion and recap question files
-- `lectures_video_script/`: Output directory for generated script files
-- `lectures_source/`: Input directory containing `Lesson*.txt` files
-- `lectures_pdf/`: Output directory for generated PDF files
+- Each book and class dir contain the following dirs
+  - `lectures_commentary/`: Output directory for lecture commentary (i.e., slides
+    with presenter notes) as PDF and html
+  - `lectures_quizzes/`: Output directory for multiple choice quiz files
+  - `lectures_recap/`: Output directory for discussion and recap question files
+  - `lectures_video_script/`: Output directory for generated video script files
+  - `lectures_source/`: Input directory containing `Lesson*.txt` files
+  - `lectures_pdf/`: Output directory for generated PDF files of the lecture
+    slides
+  - `book_source/`: Output dir for the book (`.typ` or `.tex`)
+  - `book_pdf/`: Output dir for the compiled PDF of the book
+  - `test/`: Dir with the unit tests
+  - `tutorial`: Dir with the Jupyter notebook tutorials for each source
+
+// TODO(ai_gp): Make sure all dirs have this layout
+// data605
+// msml610
+// book_springer
+// book.Agentic_AI
+// book.AI_for_coding
+// book.AI_for_data_science
+// book.Causal_Probabilistic_ML
+// book.Decentralized_AI
+// book.Modern_AI_for_Finance
 
 ## Description of Files
-- `common_utils.py`: Shared utility functions for argument validation, file
-  finding, directory management, and PDF page counting
+- The scripts implement the functionalities from the following class:
+  - **Analysis**: Counting and analysis scripts
+  - **Generation**: Generation of other artifacts from the scripts
+  - **Improvement**: Slide improvement scripts
+  - **Processing**: Image and PDF processing scripts
+  - **Test**: Test utilities
+  - **Utility**: Utility scripts
+  - **Orchestration**: Orchestration scripts
 
-- The scripts implement the following functions:
-  - _Analysis_: Counting and Analysis Scripts
-  - _Generation_: Generation Scripts
-  - _Improvement_: Slide Improvement Scripts
-  - _Processing_: Image and PDF Processing Scripts
-  - _Test_: Test Utilities
-  - _Utility_: Utility Scripts
-  - _Orchestration_: Orchestration Scripts
+- The files under `class_scripts` are
 
-- Under `class_scripts`
+// TODO(ai_gp): Put Goal first and order by goal
 
 | Script                              | Goal          | Function                                                             |
 | :---------------------------------- | :------------ | :------------------------------------------------------------------- |
@@ -35,7 +52,7 @@ slide quality through automated LLM-powered transformations
 | `count_words.py`                    | Analysis      | Count words in lecture scripts                                       |
 | `extract_png_from_pdf.py`           | Processing    | Extract PDF pages as PNG images with customizable DPI                |
 | `gen_lecture_commentary.py`         | Generation    | Generate book chapters from lecture source material                  |
-| `gen_lecture_script.py`             | Generation    | Generate lecture scripts from slides with intro/outro sections       |
+| `gen_lecture_video_script.py`       | Generation    | Generate lecture scripts from slides with intro/outro sections       |
 | `gen_quizzes.py`                    | Generation    | Generate quizzes (20 MC) or discussion questions (3-6) from lectures |
 | `gen_slides.py`                     | Generation    | Generate lecture slide PDFs from source files                        |
 | `gen_slides_test_utils.py`          | Test          | Helper functions for slide generation testing and validation         |
@@ -44,15 +61,34 @@ slide quality through automated LLM-powered transformations
 | `generate_slide_script.py`          | Generation    | Generate lecture scripts from slide content with LLM                 |
 | `get_lecture_file.py`               | Utility       | Find and print path to lecture source file                           |
 | `create_book_toc_from_slides.py`    | Generation    | Extract table of contents from lecture slides                        |
-| `for_loop_lessons.py`               | Orchestration | Main orchestrator for generating PDFs, scripts, and materials        |
-| `for_loop_slides.py`                | Orchestration | Transform slides using LLM with specified rules                      |
+| `for_loop_lessons.py`               | Orchestration | Main orchestrator for processing a set of lectures                   |
+| `for_loop_slides.py`                | Orchestration | Transform slides of a lectures using LLM                             |
 | `process_slides.py`                 | Processing    | Process slides with LLM transformations (reduce, check, improve)     |
 | `slide_check.py`                    | Quality       | Check and fix text in lecture slides (spelling, grammar)             |
 | `slide_improve.py`                  | Quality       | Improve slides using LLM suggestions                                 |
 | `slide_reduce.py`                   | Quality       | Reduce and simplify slides using LLM                                 |
 | `slides_utils.py`                   | Utility       | Extract and process slide content                                    |
 
-- Under `helpers_root/dev_scripts_helpers/documentation`
+
+gen_lecture_video_script.py: orchestrator/wrapper. Calls generate_slide_script.py for the body, then llm_cli.py for intro/outro, concatenates, lints with lint_txt.py. Output: narration script for video, text-only.
+
+generate_slide_script.py: does the actual per-slide LLM work. Groups slides (default 3/group), sends each group to LLM for a spoken-discussion script (~100 words/slide, plain language, transitions between slides). Output: markdown/text script — no images.
+
+// TODO(ai_gp): Merge generate_slide_script.py inside gen_lecture_video_script.py?
+
+generate_book_chapter.py: different target format — pairs each slide's markdown with a corresponding PNG (from a PNG dir or extracted from a PDF via pdf2image), generates per-slide commentary via LLM (explanatory prose, not spoken script), and produces a formatted book chapter (YAML title preamble, centered images + commentary, prettier-formatted). One LLM call per slide (not grouped), and embeds images — the other two are text-only.
+
+// TODO(ai_gp): Rename generate_book_chapter.py -> generate_lecture_commentary.py
+// TODO(ai_gp): Unify the flow from generate_slide_script.py and
+// generate_book_chapter.py since they are very similar
+
+// TODO(ai_gp): Consider merging for_loop_slides.py and process_slides.py since
+// they seem to have the same function or at least overlapping
+
+// TODO(ai_gp): gen_quizzes.py into gen_quizzes.py and gen_recap.py
+
+- The scripts under `helpers_root/dev_scripts_helpers/documentation` used by the
+  scripts in `class_scripts` are:
 
 | Script                | Description                                                            |
 | :-------------------- | :--------------------------------------------------------------------- |
@@ -63,31 +99,21 @@ slide quality through automated LLM-powered transformations
 ## Script Dependency Hierarchy
 
 - `for_loop_lessons.py` (Main orchestrator)
-  - action=`generate_pdf`
-    - `notes_to_pdf.py`
-  - action=`generate_tex`
-    - `notes_to_pdf.py`
-  - action=`generate_script`
-    - `generate_slide_script.py`
-    - `lint_txt.py`
-  - action=`reduce_slide`
-    - `process_slides.py`
-  - action=`check_slide`
-    - `process_slides.py`
+  - action=`generate_pdf` -> `notes_to_pdf.py`
+  - action=`generate_tex` -> `notes_to_pdf.py`
+  - action=`generate_script` -> `generate_slide_script.py`, `lint_txt.py`
+  - action=`reduce_slide` -> `process_slides.py`
+  - action=`check_slide` -> `process_slides.py`
   - action=`improve_slide` (not yet implemented)
-  - action=`generate_book_chapter`
-    - `gen_lecture_commentary.py`
-  - action=`generate_class_quizzes`
-    - `gen_quizzes.py`
-  - action=`generate_class_recap`
-    - `gen_quizzes.py`
-  - action=`generate_toc`
-    - `extract_toc_from_txt.py`
+  - action=`generate_book_chapter` -> `gen_lecture_commentary.py`
+  - action=`generate_class_quizzes` -> `gen_quizzes.py`
+  - action=`generate_class_recap` -> `gen_quizzes.py`
+  - action=`generate_toc` -> `extract_toc_from_txt.py`
 
 - **Wrapper/Convenience Scripts**
   - `gen_slides.py`
     - `notes_to_pdf.py`
-  - `gen_lecture_script.py`
+  - `gen_lecture_video_script.py`
     - `generate_slide_script.py`
     - `llm_cli.py`
     - `lint_txt.py`
@@ -100,8 +126,6 @@ slide quality through automated LLM-powered transformations
     - `process_slides.py`
   - `slide_reduce.py`
     - `process_slides.py`
-
-- **Quiz/Assessment Generation**
   - `gen_quizzes.py`
     - `llm_cli.py`
     - `lint_txt.py`
@@ -121,9 +145,9 @@ slide quality through automated LLM-powered transformations
 
 - Counts pages in all PDF files in the `{DIR}/book/` directory using macOS
   `mdls` command to extract PDF metadata
+
 - Count pages for a specific class:
   ```bash
-  > count_lecture_commentary_pages.py data605
   > count_lecture_commentary_pages.py msml610
   Lesson01.1-Intro.book_chapter.pdf	12
   Lesson01.2-Big_Data.book_chapter.pdf	18
@@ -137,9 +161,9 @@ slide quality through automated LLM-powered transformations
   source files in `{DIR}/lectures_source/` directory
 - Displays results in a formatted table supporting markdown (default), TSV, and
   CSV output formats
+
 - Count lecture slides with default markdown output:
   ```bash
-  > count_lecture_slides.py data605
   > count_lecture_slides.py msml610
   | File                                             |   Slides |   H1 |   H2 |   H3 |   Lines |   Words |   Chars |
   |--------------------------------------------------|----------|------|------|------|---------|---------|---------|
@@ -148,6 +172,7 @@ slide quality through automated LLM-powered transformations
   | Lesson01.3-Is_Data_Science_Just_Hype.txt         |       13 |    0 |    0 |    0 |     185 |     671 |    5274 |
   | Lesson02.1-Git.txt                               |       14 |    0 |    0 |    0 |     364 |    1265 |    9457 |
   ```
+
 - Count with TSV format for easy spreadsheet import:
   ```bash
   > count_lecture_slides.py msml610 --format tsv
@@ -155,6 +180,7 @@ slide quality through automated LLM-powered transformations
   Lesson01.1-Intro.txt	       9	   0	   0	   0	    201	    723	   5903
   Lesson01.2-Big_Data.txt	      16	   0	   0	   0	    309	   1282	   8845
   ```
+
 - Count with CSV format:
   ```bash
   > count_lecture_slides.py msml610 --format csv
@@ -167,6 +193,7 @@ slide quality through automated LLM-powered transformations
 
 - Counts pages in all PDF files in the `{DIR}/lectures_pdf/` directory and
   displays page counts for each lecture PDF file
+
 - Count pages for lecture PDFs:
   ```bash
   > count_lecture_pages.py data605
@@ -182,6 +209,7 @@ slide quality through automated LLM-powered transformations
 
 - Counts words in all files in the `{DIR}/lectures_video_script/` directory to help
   track lecture length and content volume
+
 - Count words in lecture scripts:
   ```bash
   > count_words.py data605
@@ -212,14 +240,14 @@ slide quality through automated LLM-powered transformations
   > gen_slides.py msml610 02.3 --theme dark
   ```
 
-## `class_scripts/gen_lecture_script.py`
+## `class_scripts/gen_lecture_video_script.py`
 
 - Generates complete lecture scripts from slides using LLM
 - Automatically creates intro and outro sections, combines all sections, and
   lints the final output
 - Generate lecture script:
   ```bash
-  > gen_lecture_script.py data605 01.1
+  > gen_lecture_video_script.py data605 01.1
   Generating lecture script for Lesson01.1
   Reading slides from: data605/lectures_source/Lesson01.1-Intro.txt
   Generating intro section...
@@ -231,7 +259,7 @@ slide quality through automated LLM-powered transformations
   ```
 - Generate script with forced regeneration:
   ```bash
-  > gen_lecture_script.py msml610 02.3 --force
+  > gen_lecture_video_script.py msml610 02.3 --force
   ```
 
 ## `class_scripts/generate_slide_script.py`
@@ -888,7 +916,7 @@ for reading and study.
 
 - Use the direct script:
   ```bash
-  > gen_lecture_script.py data605 01.1
+  > gen_lecture_video_script.py data605 01.1
   ```
 
 - Or use `for_loop_lessons.py`:

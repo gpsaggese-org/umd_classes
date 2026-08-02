@@ -454,7 +454,7 @@ class_scripts/extract_png_from_pdf.py                 40     40      4      0   
 class_scripts/for_loop_lessons.py                    220     83     60     10    60%
 class_scripts/for_loop_slides.py                      73     35     10      1    57%
 class_scripts/gen_lecture_commentary.py               51     51      2      0     0%
-class_scripts/gen_lecture_script.py                   57     57      4      0     0%
+class_scripts/gen_lecture_video_script.py                   57     57      4      0     0%
 class_scripts/gen_quizzes.py                          62     62      8      0     0%
 class_scripts/gen_slides.py                           67     28     16      1    51%
 class_scripts/gen_slides_test_utils.py               259    172     32      1    33%

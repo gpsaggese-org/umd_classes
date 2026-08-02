@@ -11,12 +11,12 @@ This script performs multiple steps:
 5. Lint the final script
 
 Usage:
-> gen_lecture_script.py data605 01.1
-> gen_lecture_script.py msml610 02.3
+> gen_lecture_video_script.py data605 01.1
+> gen_lecture_video_script.py msml610 02.3
 
 Import as:
 
-import class_scripts.gen_lecture_script as clgelesc
+import class_scripts.gen_lecture_video_script as clgelesc
 """
 
 import argparse
@@ -104,12 +104,12 @@ def _main(parser: argparse.ArgumentParser) -> None:
     hsystem.system(cmd)
     # Step 2: Generate intro.
     _LOG.info("Step 2: Generating intro")
-    intro_file = "tmp.gen_lecture_script.intro.txt"
+    intro_file = "tmp.gen_lecture_video_script.intro.txt"
     cmd = f"llm_cli.py -i {output_file} -p '{INTRO_PROMPT}' -o {intro_file}"
     hsystem.system(cmd)
     # Step 3: Generate outro.
     _LOG.info("Step 3: Generating outro")
-    outro_file = "tmp.gen_lecture_script.outro.txt"
+    outro_file = "tmp.gen_lecture_video_script.outro.txt"
     cmd = f"llm_cli.py -i {output_file} -p '{OUTRO_PROMPT}' -o {outro_file}"
     hsystem.system(cmd)
     # Step 4: Combine intro, script, and outro.
@@ -129,7 +129,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     ]
     combined_text = "\n".join(combined_parts)
     # Write to temporary file.
-    tmp_file = "tmp.gen_lecture_script.combined.txt"
+    tmp_file = "tmp.gen_lecture_video_script.combined.txt"
     hio.to_file(tmp_file, combined_text)
     # Move to final location.
     hio.to_file(output_file, combined_text)
