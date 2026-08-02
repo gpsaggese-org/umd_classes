@@ -38,7 +38,7 @@
 )
 ```
 
-- **Key idea**: shipping a prediction when the business needs a decision delivers
+- @Key idea@: shipping a prediction when the business needs a decision delivers
   little or no business value, however accurate the prediction is
 
 * Causal vs Predictive Questions
@@ -59,7 +59,7 @@
 )
 ```
 
-- **Key idea**
+- @Key idea@
   - Predictive questions can be answered from observational data alone, which is
     enough for monitoring and alerting, but not for choosing an action
   - Causal questions require causal models or experiments, and are the only ones
@@ -82,9 +82,9 @@
   bold-first-col: true,
 )
 ```
-- **Problem**: most organizations are stuck at Level 2, predicting well but
+- @Problem@: most organizations are stuck at Level 2, predicting well but
   unable to say what to do
-- **Key idea**: climbing to Levels 3 and 4 is the jump this book makes, from
+- @Key idea@: climbing to Levels 3 and 4 is the jump this book makes, from
   prediction pipelines to decision pipelines
 
 # The Cost of Ignoring Causality
@@ -95,7 +95,7 @@
 // From msml610/08.1/Correlation Encodes Confounding as Causation, msml610/11.1/Correlation Encodes Confounding as Causation
 // From paper [P007] A Survey on Causal Inference
 
-- **Problem**: a purely predictive model learns $\Pr(Y | X)$ from historical
+- @Problem@: a purely predictive model learns $\Pr(Y | X)$ from historical
   data and absorbs any association in the data, spurious or not
   - It answers _"what will happen?"_, not _"what should we do?"_
   - It assumes the world stays fixed, even though the actions informed by the
@@ -103,7 +103,7 @@
 
 ::: columns
 :::: {.column width=55%}
-- **Example**: ice cream sales and drowning deaths are highly correlated
+- @Example@: ice cream sales and drowning deaths are highly correlated
   - Predictor: _"more ice cream $\to$ predict more drownings"_ (accurate)
   - Decision built on it: _"ban ice cream to cut drownings"_ (disastrous)
   - Confounder: hot weather drives both
@@ -127,7 +127,7 @@ digraph IceCreamDrowning {
 ::::
 :::
 
-- **Key idea**:
+- @Key idea@:
   - The observational and interventional quantities disagree
     $$\Pr(Y | X) \neq \Pr(Y | do(X))$$
   - Acting on $\Pr(Y | X)$ is what makes correlation-based decisions backfire
@@ -135,7 +135,7 @@ digraph IceCreamDrowning {
 * Missing Interventions and Counterfactuals
 // From msml610/08.1/Missing Interventions and Counterfactuals
 
-- **Problem**: a correlation model answers _"what is?"_, never _"what if?"_ or
+- @Problem@: a correlation model answers _"what is?"_, never _"what if?"_ or
   _"why?"_
 - Two classes of business question stay permanently out of reach:
   - Intervention: _"If we cut price 10%, how do units sold and revenue
@@ -143,18 +143,18 @@ digraph IceCreamDrowning {
   - Counterfactual: _"Would this customer have churned had we offered a
     discount?"_
 
-- **Example**: a tutoring program correlates with higher exam scores
+- @Example@: a tutoring program correlates with higher exam scores
   - _"Does tutoring cause the improvement?"_, or
   - _"Do strong students self-select into it?"_
   - No amount of additional observational data resolves the question
 
-- **Key idea**: answering these questions requires a causal model, not a more
+- @Key idea@: answering these questions requires a causal model, not a more
   accurate predictor
 
 * Selection Bias and the Missing Counterfactual
 // From msml610/08.1/Selection Bias and the Missing Counterfactual
 
-- **Problem**: historical data records only the decisions actually made, never
+- @Problem@: historical data records only the decisions actually made, never
   the alternative
   - E.g., loan data shows outcomes for approved applicants, but not always data
     for rejected ones
@@ -162,11 +162,11 @@ digraph IceCreamDrowning {
     that were recorded, this bias comes from which units got recorded at
     all, a problem baked into the data before any model is fit
 
-- **Example**: a credit model trained only on approved loans learns what
+- @Example@: a credit model trained only on approved loans learns what
   predicts repayment among people the bank already trusted
   - It cannot say who among the rejected applicants would have repaid
 
-- **Key idea**: a model can be accurate on the population it observed and
+- @Key idea@: a model can be accurate on the population it observed and
   still be blind to the population the business needed to reason about
 
 ## Structural Failure Modes
@@ -174,17 +174,17 @@ digraph IceCreamDrowning {
 * Interference and Spillovers Across Units
 // From msml610/08.1/Interference and Spillovers Across Units
 
-- **Problem**: standard ML assumes each unit's outcome depends only on its own
+- @Problem@: standard ML assumes each unit's outcome depends only on its own
   treatment
   - Marketplaces, pricing equilibria, and social networks routinely violate
     this assumption
 
-- **Example**: a discount shown only to group A can cannibalize purchases from
+- @Example@: a discount shown only to group A can cannibalize purchases from
   group B
   - The two groups share the same limited supply or the same social network
   - Group B is no longer a clean counterfactual for group A
 
-- **Key idea**: when one unit's action changes another unit's outcome, the
+- @Key idea@: when one unit's action changes another unit's outcome, the
   usual estimate of a treatment effect is biased, however accurate the
   underlying predictor is
 
@@ -192,12 +192,12 @@ digraph IceCreamDrowning {
 // From msml610/08.1/Simpson's Paradox: When Aggregates Lie, msml610/11.1/Simpson's Paradox: When Aggregates Lie
 // From paper [P005] Simpson's Paradox, Confounding, and Collapsibility
 
-- **Definition**: the _Simpson's paradox_ is a trend within every subgroup
+- @Definition@: the _Simpson's paradox_ is a trend within every subgroup
   reverses once the subgroups are pooled
 
 // TODO(gp): Add a better picture of a Simpson's paradox
 
-- **Example**: a drug's recovery rate
+- @Example@: a drug's recovery rate
 ```{=typst}
 #styled-table(
   headers: ("Group", "Recovery w/ drug", "Recovery w/o drug"),
@@ -234,19 +234,19 @@ digraph SimpsonsParadox {
     group, so the harder-to-treat gender dominates the "drug" column and
     reverses the sign of an effect that helps everyone
 
-- **Key idea**: a model can look correct in aggregate and be wrong, or
+- @Key idea@: a model can look correct in aggregate and be wrong, or
   harmful, for every segment it is applied to
 
 * Berkson's Paradox
 // From msml610/08.1/Collider Bias: Conditioning Creates Illusions, msml610/08.2/Collider Bias: Conditioning Creates Illusions
 
-- **Definition**: a _collider_ is a variable influenced by two or more
+- @Definition@: a _collider_ is a variable influenced by two or more
   independent causes
 
-- **Fact**: Conditioning on a collider opens a spurious association between its
+- @Fact@: Conditioning on a collider opens a spurious association between its
   causes, a mechanism known as Berkson's paradox
 
-- **Example**: statistics skill and flattery both influence who gets promoted
+- @Example@: statistics skill and flattery both influence who gets promoted
   - Among everyone, statistics skill and flattery are independent
   - Among the _promoted_ only, they become negatively associated: bad at
     statistics implies must be a good flatterer
@@ -254,21 +254,21 @@ digraph SimpsonsParadox {
 // TODO(ai_gp): Add another example and explain
 // TODO(gp): Add reference to Pearl's book about how many studies are wrong
 
-- **Key idea**: conditioning on the wrong variable, not just omitting the
+- @Key idea@: conditioning on the wrong variable, not just omitting the
   right one, is enough to manufacture a correlation with no causal meaning
 
 * Discarding Domain Knowledge and Mechanisms
 // From msml610/08.1/Discarding Domain Knowledge and Mechanism
 // From paper [P001] Why Should I Trust You?
 
-- **Problem**: a purely correlation-based pipeline discards known structure,
+- @Problem@: a purely correlation-based pipeline discards known structure,
   physics, economics, or the causal graph, in favor of whatever pattern the
   data happens to contain
   - No principled way to inject constraints or priors
 
 ::: columns
 :::: {.column width=55%}
-- **Example**: a wolf-vs-husky classifier with high test accuracy keys on
+- @Example@: a wolf-vs-husky classifier with high test accuracy keys on
   _snow_ in the background, not on the animal
   - Accurate for the wrong reason, and worthless once conditions change
 ::::
@@ -291,7 +291,7 @@ digraph WolfHusky {
 ::::
 :::
 
-- **Key idea**: a model that ignores mechanism inherits every artifact of how
+- @Key idea@: a model that ignores mechanism inherits every artifact of how
   the training data was collected
 
 # The Cost of Ignoring Uncertainty
@@ -299,27 +299,27 @@ digraph WolfHusky {
 * Point Estimates Without Error Bars
 // From msml610/08.1/Point Estimates Without Error Bars
 
-- **Problem**: most business problems are "small data" problems with large
+- @Problem@: most business problems are "small data" problems with large
   uncertainty, yet standard ML pipelines emit a single number as if it were
   certain
   - No error bars, no posterior, no sense of how wrong the estimate could be
 
-- **Example**: a demand forecast of _"1,200 units next month"_ hides whether the
+- @Example@: a demand forecast of _"1,200 units next month"_ hides whether the
   true range is 1,100-1,300 or 400-3,000
   - The two ranges call for different inventory decisions
 
-- **Example**: a prediction that the price of a stock will go up 1%, has
+- @Example@: a prediction that the price of a stock will go up 1%, has
   implies different actions depending on the prediction uncertainty
   - For 1 +/- 2% at 95% confidence, ignore the prediction
   - For 1 +/- 0.01% at 95% confidence, buy
 
-- **Key idea**: a decision-maker needs the spread of an estimate at least as
+- @Key idea@: a decision-maker needs the spread of an estimate at least as
   much as its center
 
 * Epistemic vs Aleatoric Uncertainty Conflated
 // From msml610/08.1/Epistemic vs Aleatoric Uncertainty Conflated
 
-- **Problem**: standard models collapse two different kinds of uncertainty
+- @Problem@: standard models collapse two different kinds of uncertainty
   into one number
   - _Aleatoric_ uncertainty is irreducible randomness in the outcome itself
     - E.g., the outcome of a fair coin flip
@@ -330,32 +330,32 @@ digraph WolfHusky {
   exhibit maximal confidence off-distribution, precisely where it should exhibit
   maximal uncertainty
 
-- **Example**: a fraud model's low predicted risk for a novel transaction
+- @Example@: a fraud model's low predicted risk for a novel transaction
   pattern may reflect
   - Genuine low risk (aleatoric) or
   - Simply that the model has never seen this pattern before (epistemic)
 
-- **Key idea**: only epistemic uncertainty shrinks with more data; treating
+- @Key idea@: only epistemic uncertainty shrinks with more data; treating
   both as the same number misleads the decision of when to collect more
 
 * No Abstention: Systems That Never Say "I Don't Know"
 // From msml610/08.1/No Abstention: Systems That Never Say "I Don't Know"
 
-- **Problem**: a standard classifier or regressor always returns an answer,
+- @Problem@: a standard classifier or regressor always returns an answer,
   even when the input falls far outside its training distribution
   - No abstention or deferral mechanism
 
-- **Example**: a loan-approval model forced to score an applicant profile
+- @Example@: a loan-approval model forced to score an applicant profile
   unlike anything in its training data still returns a confident approval or
   denial, while it should route uncertain cases to a human
 
-- **Key idea**: a decision system that cannot say _"I don't know"_ cannot be
+- @Key idea@: a decision system that cannot say _"I don't know"_ cannot be
   trusted with high-stakes decisions
 
 * Overfitting and the Statistical Significance Traps
 // From msml610/08.1/Overfitting and the Statistical Significance Traps
 
-- **Problem**: without a prior or assumptions to constrain the fit, nothing
+- @Problem@: without a prior or assumptions to constrain the fit, nothing
   bounds overfitting
 
 - Statistical significance traps compound the problem:
@@ -366,7 +366,7 @@ digraph WolfHusky {
   - _Burning the test set_: reusing the same held-out data across many rounds
     of tuning turns it into training data in disguise
 
-- **Key idea**: overfitting is not a single mistake in one run, it accumulates
+- @Key idea@: overfitting is not a single mistake in one run, it accumulates
   from every repeated look at the same data
 
 # The Cost of Ignoring the Business Objective
@@ -377,54 +377,54 @@ digraph WolfHusky {
 // From msml610/08.1/Optimizing the Wrong Objective
 // From paper [P096] Problems of Monetary Management
 
-- **Problem**: models chase a proxy metric (e.g., clicks or accuracy) instead of
+- @Problem@: models chase a proxy metric (e.g., clicks or accuracy) instead of
   the business goal it stands in for (e.g., revenue, retention, or wellbeing)
 
-- **Definition**: _Goodhart's law_ states that once a proxy becomes a target,
+- @Definition@: _Goodhart's law_ states that once a proxy becomes a target,
   it stops measuring what you care about
 
-- **Example**: a recommender optimized purely for click-through rate learns to
+- @Example@: a recommender optimized purely for click-through rate learns to
   surface sensational content, growing clicks while eroding long-term
   engagement and trust
 
-- **Key idea**: the objective a model is trained on becomes the objective the
+- @Key idea@: the objective a model is trained on becomes the objective the
   business actually gets, whether or not that was the intent
 
 * Symmetric Losses for Asymmetric Errors
 // From msml610/08.1/Symmetric Losses for Asymmetric Errors
 
-- **Problem**: standard losses such as log-loss and mean squared error treat
+- @Problem@: standard losses such as log-loss and mean squared error treat
   every error the same size
   - Business errors are not symmetric
 
-- **Example**:
+- @Example@:
   - the cost of a false negative for stock return prediction should not be
     symmetric since there is a limit to how many consecutive losses, but not a
     limit to consecutive wins
 
-- **Example**: 
+- @Example@: 
     - A fraud false negative and a fraud false positive cost differently
     - A fraud model with 95% accuracy that blocks half of legitimate transactions
       is a costly decision system, however accurate it is by the standard metric
 
-- **Key idea**: cost asymmetry has to be built into the objective, not bolted
+- @Key idea@: cost asymmetry has to be built into the objective, not bolted
   in subsequent stages of a decision pipeline, or bolted on after deployment as
   an afterthought
 
 * Multi-Objective Decisions Under Constraints
 // From msml610/08.1/Multi-Objective Decisions Under Constraints
 
-- **Problem**: real decisions trade off competing goals under budget,
+- @Problem@: real decisions trade off competing goals under budget,
   capacity, and legal limits
   - A single scalar loss cannot express a constrained, multi-stakeholder
     trade-off
 
-- **Example**: a hospital choosing a cancer therapy weighs five-year survival,
+- @Example@: a hospital choosing a cancer therapy weighs five-year survival,
   quality of life, and cost simultaneously
   - No single "best" therapy exists independent of how those three are
     weighed against each other
 
-- **Key idea**: collapsing a multi-objective decision into one loss function
+- @Key idea@: collapsing a multi-objective decision into one loss function
   hides the trade-off instead of making it explicit
 
 ## From Scores to Actionable Decisions
@@ -433,38 +433,38 @@ digraph WolfHusky {
 // From msml610/08.1/Black-Box Scores Are Not Recommendations, msml610/13.1/Black-Box Scores Are Not Recommendations
 // From paper [P001] Why Should I Trust You?
 
-- **Problem**: a black-box score ranks units but names no lever and gives no
+- @Problem@: a black-box score ranks units but names no lever and gives no
   _why_
 
-- **Example**: 
+- @Example@: 
   - A churn score does not say which action prevents churn
   - Instead of _"this customer has churn score 0.8"_, a useful recommendation
     says _"offering a discount lowers this customer's churn probability by 12
     points"_
   - It names the lever, the effect, and the unit it acts on
 
-- **Fact**: credit, hiring, and healthcare increasingly require explanations, not
+- @Fact@: credit, hiring, and healthcare increasingly require explanations, not
   just scores, to justify decisions to regulators and stakeholders
 
-- **Key idea**: a recommendation needs an actionable lever and an explanation,
+- @Key idea@: a recommendation needs an actionable lever and an explanation,
   neither of which a bare prediction provides
 
 * The Cost of Solving Sub-Problems Separately
 // From msml610/08.1/The Cost of Solving Sub-Problems Separately
 
-- **Problem**: a decision pipeline is often split into smaller, individually
+- @Problem@: a decision pipeline is often split into smaller, individually
   optimized pieces, e.g., a prediction model followed by a separate rule that
   turns predictions into actions
 
-- **Example**: an inventory system that forecasts demand accurately, then
+- @Example@: an inventory system that forecasts demand accurately, then
   applies a fixed reorder rule, is likely to perform worse than a system trained
   to minimize inventory cost directly
 
-- **Fact**: End-to-end machine learning has been shown to outperform stitching
+- @Fact@: End-to-end machine learning has been shown to outperform stitching
   together separately-optimized parts
   - This applies also how to decision-making systems
 
-- **Key idea**: optimizing each piece in isolation does not add up to
+- @Key idea@: optimizing each piece in isolation does not add up to
   optimizing the decision
 
 # The Cost of Ignoring Dynamics and Feedback
@@ -474,7 +474,7 @@ digraph WolfHusky {
 * The Static-World Assumption Breaks
 // From msml610/08.1/The Static-World Assumption Breaks
 
-- **Problem**: any decision changes the world, breaking the distribution the
+- @Problem@: any decision changes the world, breaking the distribution the
   model was trained on
 - Three ways the world moves out from under a static model:
   - _Concept shift_: the link $\Pr(Y | X)$ between inputs and outcomes changes
@@ -482,7 +482,7 @@ digraph WolfHusky {
     relationship stays the same
   - _Label shift_: the outcome distribution $\Pr(Y)$ itself changes
 
-- **Example**: a card-fraud model trained on last year's transactions
+- @Example@: a card-fraud model trained on last year's transactions
   - _Concept shift_: attackers adopt new tactics, so a transaction pattern
     that used to be safe now signals fraud, changing $\Pr(Y | X)$
   - _Covariate shift_: contactless payments become far more common, changing
@@ -491,12 +491,12 @@ digraph WolfHusky {
     rate itself rises, changing $\Pr(Y)$
   - The model has no way to detect any of the three on its own
 
-- **Example**: a house-price model trained on pre-pandemic listings
+- @Example@: a house-price model trained on pre-pandemic listings
   - Remote work permanently changes what commute distance is worth (concept
     shift), while a shift to lower interest rates raises average sale prices
     across the board (label shift)
 
-- **Key idea**: a model that encodes (causal) mechanisms, not just patterns,
+- @Key idea@: a model that encodes (causal) mechanisms, not just patterns,
   degrades more gracefully because mechanisms are more stable across distribution
   shift than surface correlations
 
@@ -504,38 +504,38 @@ digraph WolfHusky {
 // From msml610/08.1/Feedback Loops and Bias Amplification
 // From paper [P003] Data Feedback Loops
 
-- **Problem**: predictions act on the world and reshape the future data the
+- @Problem@: predictions act on the world and reshape the future data the
   model will be retrained on
 
-- **Example**:
+- @Example@:
   - A recommender that surfaces sensational content earns more clicks on that
     content
   - Future training data contains even more clicks on sensational content
   - The next model recommends more of it still
 
-- **Example**:
+- @Example@:
   - Over-policing a neighborhood produces more arrests there
   - The arrest data trains a model that flags the neighborhood as higher risk
   - This new data justifies more policing
 
-- **Key idea**: a feedback loop turns a small initial bias into a growing one,
+- @Key idea@: a feedback loop turns a small initial bias into a growing one,
   purely from the model training on the outcomes of its own past decisions
 
 * Performativity: When the Prediction Changes the Outcome
 // From msml610/08.1/Performativity: When the Prediction Changes the Outcome
 // From paper [P099] Performative Prediction
 
-- **Definition**: _performativity_ is a prediction that changes the very
+- @Definition@: _performativity_ is a prediction that changes the very
   quantity it predicts
 
-- **Example**: a published credit-risk score moves borrower behavior, which
+- @Example@: a published credit-risk score moves borrower behavior, which
   moves the true default rate the score was trying to predict
 
-- **Example**: a navigation app that predicts a route as fastest routes many
+- @Example@: a navigation app that predicts a route as fastest routes many
   drivers onto it at once, congesting the road until it is no longer the
   fastest option, invalidating the very prediction that attracted them
 
-- **Key idea**: once a prediction is performative, $\Pr(Y | X)$ is no longer a
+- @Key idea@: once a prediction is performative, $\Pr(Y | X)$ is no longer a
   fixed target to fit, it is a function of which model gets deployed
 
 ## Missing Exploration and Long Horizons
@@ -543,55 +543,55 @@ digraph WolfHusky {
 * No Exploration: Trapped in the Logged Policy
 // From msml610/08.1/No Exploration: Trapped in the Logged Policy
 
-- **Problem**: an observational-only model never experiments, so it stays
+- @Problem@: an observational-only model never experiments, so it stays
   trapped inside the support of whatever policy logged the training data
   - It cannot learn the effect of an action nobody has ever taken, an
     overlap, or positivity, violation
 
-- **Example**: a pricing model trained on historical prices that never
+- @Example@: a pricing model trained on historical prices that never
   dropped below \$20 cannot say what happens at \$15, no matter how much
   historical data it has
 
-- **Key idea**: some business questions cannot be answered by more historical
+- @Key idea@: some business questions cannot be answered by more historical
   data, only by a deliberate intervention
 
 * Delayed and Long-Horizon Effects
 // From msml610/08.1/Delayed and Long-Horizon Effects
 
-- **Problem**: a model optimized for an immediate proxy ignores downstream
+- @Problem@: a model optimized for an immediate proxy ignores downstream
   outcomes and has no way to assign credit to actions over time
 
-- **Example**: a support team optimized for fast ticket closure closes
+- @Example@: a support team optimized for fast ticket closure closes
   tickets quickly, whether or not the underlying issue is resolved
   - The true cost, repeat complaints and lost trust, shows up months later,
     in a different metric
 
-- **Example**: a collections agency optimized to maximize dollars recovered
+- @Example@: a collections agency optimized to maximize dollars recovered
   this quarter pushes aggressive repayment plans that borrowers later
   default on
   - The extra recovery this quarter is repaid, months later, with a lower
     lifetime repayment rate and reputational damage
 
-- **Key idea**: short-term proxies and long-term business outcomes can point
+- @Key idea@: short-term proxies and long-term business outcomes can point
   in opposite directions, and only one of them is what the business actually
   cares about
 
 * Strategic and Adversarial Response
 // From msml610/08.1/Strategic and Adversarial Response
 
-- **Problem**: once a model is deployed, the people it scores learn to
+- @Problem@: once a model is deployed, the people it scores learn to
   optimize against it
   - Standard ML assumes passive agents; in business, agents are not passive
 
-- **Example**: publishing the features of a credit-scoring model invites
+- @Example@: publishing the features of a credit-scoring model invites
   credit gaming; publishing a search-ranking algorithm invites
   keyword-stuffing
 
-- **Example**: a tax-audit model that flags returns above a reported-income
+- @Example@: a tax-audit model that flags returns above a reported-income
   threshold causes self-employed filers to bunch their reported income just
   below that threshold once the rule becomes known
 
-- **Key idea**: a model trained on how agents behaved before deployment can
+- @Key idea@: a model trained on how agents behaved before deployment can
   become wrong the moment agents learn how it scores them
 
 # Why This Matters
@@ -603,11 +603,11 @@ digraph WolfHusky {
 
 - Most AI projects fail not because of failures at the modeling phase, but
   because they frame the problems incorrectly 
-  - **Misalignment**: the model optimizes a proxy, not the business goal
-  - **Black boxes**: outputs cannot be explained, so they are not trusted or
+  - @Misalignment@: the model optimizes a proxy, not the business goal
+  - @Black boxes@: outputs cannot be explained, so they are not trusted or
     adopted
-  - **No lever**: a score is delivered where an action was needed
-  - **No feedback**: performance is never monitored after deployment
+  - @No lever@: a score is delivered where an action was needed
+  - @No feedback@: performance is never monitored after deployment
 
 - Any accurate model that answers the wrong question is a failed project, however
   good its metrics look on a dashboard
@@ -645,15 +645,15 @@ digraph DecisionLoop {
 
 - The rest of the book builds the pipeline that proposes solutions for
   the problem highlighted in this chapter
-  - **Part II: Advanced Modeling Theory & Tools** supplies the machinery:
+  - @Part II: Advanced Modeling Theory & Tools@ supplies the machinery:
     knowledge representation, probabilistic ML (Bayesian inference,
     uncertainty), and causal ML (SCMs, do-calculus, causal discovery)
-  - **Part III: Data** turns domain knowledge into causal DAGs and causal
+  - @Part III: Data@ turns domain knowledge into causal DAGs and causal
     data pipelines, and confronts selection bias and distribution shift
-  - **Part IV: Decision-Making Theory & Tools** turns causal models into
+  - @Part IV: Decision-Making Theory & Tools@ turns causal models into
     actions: decision theory, the taxonomy of decision problems, simple
     decisions (bandits, RL), complex decisions (policy gradients, multi-agent),
     and agentic causal reasoning
-  - **Part V: Implementation, Deployment & Governance** covers stakeholder
+  - @Part V: Implementation, Deployment & Governance@ covers stakeholder
     alignment, deployment/monitoring/adaptation, and trust, explainability,
     fairness, and governance

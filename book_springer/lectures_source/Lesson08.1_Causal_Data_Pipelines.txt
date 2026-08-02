@@ -58,21 +58,21 @@
 
 ## Detecting Shift in Production
 * Why Assumptions Break in Production
-// From book_springer/lectures_source/Lesson15.01_Deployment_Monitoring_And_Adaptation.txt:Why Assumptions Break in Production
+// From book_springer/lectures_source/Lesson15.1_Deployment_Monitoring_And_Adaptation.txt:Why Assumptions Break in Production
 * A Taxonomy of Assumptions to Monitor
-// From book_springer/lectures_source/Lesson15.01_Deployment_Monitoring_And_Adaptation.txt:A Taxonomy of Assumptions to Monitor
+// From book_springer/lectures_source/Lesson15.1_Deployment_Monitoring_And_Adaptation.txt:A Taxonomy of Assumptions to Monitor
 
 # Measurement Error and Proxy Validity
 
 ## Proxy Quality and Construct Validity
 * Directly Testable Assumptions
-// From book_springer/lectures_source/Lesson15.01_Deployment_Monitoring_And_Adaptation.txt:Directly Testable Assumptions
+// From book_springer/lectures_source/Lesson15.1_Deployment_Monitoring_And_Adaptation.txt:Directly Testable Assumptions
 * Single-Source Problems: Example
 // From data605/lectures_source/Lesson07.2-Data_Wrangling.txt:Single-Source Problems: Example
 
 ## Attenuation from Measurement Error
 * Monitoring Directly Testable Assumptions
-// From book_springer/lectures_source/Lesson15.01_Deployment_Monitoring_And_Adaptation.txt:Monitoring Directly Testable Assumptions
+// From book_springer/lectures_source/Lesson15.1_Deployment_Monitoring_And_Adaptation.txt:Monitoring Directly Testable Assumptions
 * Noise Removal
 // From msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.txt:Noise Removal
 

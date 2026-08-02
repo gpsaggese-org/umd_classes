@@ -116,25 +116,25 @@
 | Chap                                                    | Slides                                                                     | TOC complete | Mat complete | Criticize | Slides finalized | Tutorial complete | Book complete |
 | ------------------------------------------------------- | -------------------------------------------------------------------------- | ------------ | ------------ | --------- | ---------------- | ----------------- | ------------- |
 |                                                         |                                                                            |              |              |           |                  |                   |               |
-| Motivation                                              |                                                                            |              |              |           |                  |                   |               |
+| **Motivation**                                          |                                                                            |              |              |           |                  |                   |               |
 | 01. Why Decisions, Not Predictions                      | Lesson01.01_From_Data_Science_To_Decision_Science.txt                      | 50%          |              |           |                  |                   |               |
 | 02. The Cost of Ignoring Causality                      | Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt                |              |              |           |                  |                   |               |
-| Advanced Modeling Theory & Tools                        |                                                                            |              |              |           |                  |                   |               |
+| **Advanced Modeling Theory & Tools**                    |                                                                            |              |              |           |                  |                   |               |
 | 04. Knowledge Representation                            | MSML610 Slides                                                             |              |              |           |                  |                   |               |
 | 05. Probalistic ML                                      | MSML610 Slides                                                             |              |              |           |                  |                   |               |
 | 06. Causal ML                                           | MSML610 Slides                                                             |              |              |           |                  |                   |               |
-| Data                                                    |                                                                            |              |              |           |                  |                   |               |
+| **Data**                                                |                                                                            |              |              |           |                  |                   |               |
 | 07. Building Causal Knowledge                           | MSML610 Slides                                                             |              |              |           |                  |                   |               |
 | 08. Causal data pipelines                               | MSML610 Slides                                                             |              |              |           |                  |                   |               |
-| Decision-Making Theory & Tools                          |                                                                            |              |              |           |                  |                   |               |
+| **Decision-Making Theory & Tools**                      |                                                                            |              |              |           |                  |                   |               |
 | 09. Decision Theory Foundations                         | MSML610 Slides                                                             |              |              |           |                  |                   |               |
-| 10. Taxonomy of Decision-Making Problems and Algorithms | Lesson10.01_Taxonomy_of_Decision_Problems.txt                              |              |              |           |                  |                   |               |
-| 11. Simple Decisions                                    | Lesson11.01_Simple_Decisions.txt                                           |              |              |           |                  |                   |               |
-| 12. Complex Decisions                                   | Lesson12.01_Complex_Decisions.txt                                          |              |              |           |                  |                   |               |
+| 10. Taxonomy of Decision-Making Problems and Algorithms | Lesson10.1_Taxonomy_of_Decision_Problems.txt                              |              |              |           |                  |                   |               |
+| 11. Simple Decisions                                    | Lesson11.1_Simple_Decisions.txt                                           |              |              |           |                  |                   |               |
+| 12. Complex Decisions                                   | Lesson12.1_Complex_Decisions.txt                                          |              |              |           |                  |                   |               |
 | 13. Agentic Causal Reasoning                            | Maybe remove                                                               |              |              |           |                  |                   |               |
-| Implementation, Deployment, & Governance                |                                                                            |              |              |           |                  |                   |               |
+| **Implementation, Deployment, & Governance**            |                                                                            |              |              |           |                  |                   |               |
 | 14. Building Stakeholder Alignment                      |                                                                            |              |              |           |                  |                   |               |
-| 15. Deployment, Monitoring, and Adaptation              | Lesson15.01_Deployment_Monitoring_And_Adaptation.txt                       |              |              |           |                  |                   |               |
+| 15. Deployment, Monitoring, and Adaptation              | Lesson15.1_Deployment_Monitoring_And_Adaptation.txt                       |              |              |           |                  |                   |               |
 | 16. Trust, Explainability, Fairness, and Governance     |                                                                            |              |              |           |                  |                   |               |
 
 | Slides                                                                     | Typst | TOC complete | Mat complete | Criticize | Slides complete  | Tutorial complete |
@@ -202,7 +202,7 @@ book_springer/tutorials/Lesson10_01_q_learning/q_learning.ipynb
 
 ## MSML610 Tutorials
 
-> find msml610/tutorials -name *.ipynb
+> find msml610/tutorials -name *.ipynb | sort
 ```
 msml610/tutorials/L05_statistical_learning/L05_01_01_hoeffding_inequality.ipynb
 msml610/tutorials/L05_statistical_learning/L05_01_02_bin_analogy_ml.ipynb
@@ -300,7 +300,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
   - Roadmap
 
 ### Slides
-- `book_springer/lectures_source/Lesson02.01_From_Data_Science_To_Decision_Science.txt`
+- `book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.txt`
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
@@ -381,7 +381,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
 - Add `## Structural Causal Model`
 
 ### Slides
-- `book_springer/lectures_source/Lesson04.01_Knowledge_Representation.txt`
+- `book_springer/lectures_source/Lesson04.1_Knowledge_Representation.txt`
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson03.1-Knowledge_representation.txt`
@@ -426,7 +426,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
     choosing among models
 
 ### Slides
-- `book_springer/lectures_source/Lesson05.01_Probabilistic_ML.txt`
+- `book_springer/lectures_source/Lesson05.1_Probabilistic_ML.txt`
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt`
@@ -467,7 +467,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
     identifiability from observational data
 
 ### Slides
-- `book_springer/lectures_source/Lesson06.01_Causal_ML.txt`
+- `book_springer/lectures_source/Lesson06.1_Causal_ML.txt`
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
@@ -509,7 +509,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
   - When temporal structure helps identification, and when it misleads it
 
 ### Slides
-- `book_springer/lectures_source/Lesson07.01_Building_Probabilistic_And_Causal_Knowledge.txt`
+- `book_springer/lectures_source/Lesson07.1_Building_Probabilistic_And_Causal_Knowledge.txt`
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
@@ -551,7 +551,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
   - Robust inference: methods that tolerate imperfect, noisy data
 
 ### Slides
-- `book_springer/lectures_source/Lesson08.01_Causal_Data_Pipelines.txt`
+- `book_springer/lectures_source/Lesson08.1_Causal_Data_Pipelines.txt`
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
@@ -562,7 +562,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
 - `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
 - `msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.txt`
 - `msml610/lectures_source/Lesson02.6-ML_Techniques_How_To_Do_Research.txt`
-- `book_springer/lectures_source/Lesson15.01_Deployment_Monitoring_And_Adaptation.txt`
+- `book_springer/lectures_source/Lesson15.1_Deployment_Monitoring_And_Adaptation.txt`
 
 # Part IV: Decision-Making Theory & Tools
 
@@ -897,7 +897,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
   - System reliability, documentation, and management of legacy components
 
 ### Lesson Materials
-- `book_springer/lectures_source/Lesson15.01_Deployment_Monitoring_And_Adaptation.txt`
+- `book_springer/lectures_source/Lesson15.1_Deployment_Monitoring_And_Adaptation.txt`
   - [98%]: Notebook-to-production gap, serving patterns, phased rollout
     (shadow/canary/ramp), guardrail metrics, assumption-monitoring taxonomy
     (directly/indirectly testable/domain-assessed), sensitivity analysis and

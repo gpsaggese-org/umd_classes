@@ -1,4 +1,4 @@
-Implement phase 2 from plan.md
+Implement phase 4 from plan.md
 And update the tests
 
 # Conventions
