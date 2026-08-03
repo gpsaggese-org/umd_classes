@@ -21,12 +21,12 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{02.2: Git Branching}}$$**
+**$$\text{\textcolor{blue}{\text{02.2: Git Branching}}}$$**
 \endgroup
 
 \vspace{1cm}
 
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
 ::: columns
 :::: {.column width=75%}
@@ -40,9 +40,9 @@ UMD DATA605 - Big Data Systems
 #### Git Branching
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Branching}**
+- **Branching**
   - Diverge from the main development line
-- **\textcolor{darkgreen}{Why branch?}**
+- **Why branch?**
   - Work without affecting the main code
   - Avoid changes in the main branch
   - Merge code downstream for updates
@@ -56,12 +56,12 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **\textcolor{blue}{Git branching is lightweight}**
+- **Git branching is lightweight**
   - Instantaneous
   - A branch is a pointer to a commit
   - Git stores data as snapshots, not file differences
 
-- **\textcolor{violet}{Git workflows branch and merge often}**
+- **Git workflows branch and merge often**
   - Multiple times a day
   - Surprising for users of centralized VCS
     - E.g., branch before lunch
@@ -125,8 +125,8 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=55%}
 - Tutorials
-  - [\textcolor{blue}{\underline{Work on main}}](https://github.com/gpsaggese/umd_classes/blob/master/data605/tutorials/tutorial_git/tutorial_git.md#work-on-main)
-  - [\textcolor{blue}{\underline{Hot fix}}](https://github.com/gpsaggese/umd_classes/blob/master/data605/tutorials/tutorial_git/tutorial_git.md#hot-fix)
+  - [Work on main](https://github.com/gpsaggese/umd_classes/blob/master/data605/tutorials/tutorial_git/tutorial_git.md#work-on-main)
+  - [Hot fix](https://github.com/gpsaggese/umd_classes/blob/master/data605/tutorials/tutorial_git/tutorial_git.md#hot-fix)
 
 - Start from a project with some commits
 
@@ -152,7 +152,7 @@ UMD DATA605 - Big Data Systems
 
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Need a hotfix}** to \textcolor{blue}{\texttt{master}}
+- **Need a hotfix** to \textcolor{blue}{\texttt{master}}
   \begingroup \small \color{blue}
   ```
   > git checkout master
@@ -164,7 +164,7 @@ UMD DATA605 - Big Data Systems
   ```
   \endgroup
 
-- **\textcolor{blue}{Fast forward}**
+- **Fast forward**
   - Now there is no divergent history between \textcolor{blue}{\texttt{master}} and \textcolor{blue}{\texttt{iss53}}
 ::::
 :::: {.column width=40%}
@@ -226,7 +226,7 @@ UMD DATA605 - Big Data Systems
 
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Mental model}**: a branch is just a pointer that indicates where the tip of
+- **Mental model**: a branch is just a pointer that indicates where the tip of
   the branch is
 - E.g., \textcolor{blue}{\texttt{C4'}} is reachable from \textcolor{blue}{\texttt{C3}}
   \begingroup \small \color{blue}
@@ -250,18 +250,18 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=55%}
 - Tutorial:
-  - [\textcolor{blue}{\underline{Merging conflicts}}](https://github.com/gpsaggese/umd_classes/blob/master/data605/tutorials/tutorial_git/tutorial_git.md#merging-conflicts)
+  - [Merging conflicts](https://github.com/gpsaggese/umd_classes/blob/master/data605/tutorials/tutorial_git/tutorial_git.md#merging-conflicts)
 
-- Sometimes **\textcolor{red}{Git can't merge}**, e.g.,
+- Sometimes **Git can't merge**, e.g.,
   - The same file has been modified by both branches
   - One file was modified by one branch and deleted by another
 
-- **\textcolor{darkgreen}{Git}**:
+- **Git**:
   - Does not create a merge commit
   - Pauses to let you resolve the conflict
   - Adds conflict resolution markers
 
-- **\textcolor{blue}{User merges manually}**
+- **User merges manually**
   - Edit the files using \textcolor{blue}{\texttt{git mergetool}}
   - Use \textcolor{blue}{\texttt{git add}} to mark as resolved
   - Use \textcolor{blue}{\texttt{git commit}} to finalize the merge
@@ -279,13 +279,13 @@ UMD DATA605 - Big Data Systems
 
 #### Git Rebasing
 
-- In Git, there are **\textcolor{red}{two ways of merging divergent history}**
+- In Git, there are **two ways of merging divergent history**
 - E.g., consider \textcolor{blue}{\texttt{master}} and \textcolor{blue}{\texttt{experiment}} have a common ancestor \textcolor{blue}{\texttt{C2}}
 
 ::: columns
 :::: {.column width=60%}
 
-- **\textcolor{darkgreen}{Merge}**
+- **Merge**
   - Go to the target branch
     \begingroup \small \color{blue}
     ```
@@ -295,7 +295,7 @@ UMD DATA605 - Big Data Systems
     \endgroup
   - Create a new snapshot \textcolor{blue}{\texttt{C5}} and commit
 
-- **\textcolor{blue}{Rebase}**
+- **Rebase**
   - Go to the branch to rebase
     \begingroup \small \color{blue}
     ```
@@ -322,11 +322,11 @@ UMD DATA605 - Big Data Systems
 #### Uses of Rebase
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Rebasing makes for a cleaner history}**
+- **Rebasing makes for a cleaner history**
   - The history looks like all the work happened in series
   - Although in reality, it happened in parallel to the development in the
     master branch
-- **\textcolor{blue}{Rebasing to contribute to a project}**
+- **Rebasing to contribute to a project**
   - Developer
     - You are contributing to a project that you don't maintain
     - You work on your branch
@@ -345,20 +345,20 @@ UMD DATA605 - Big Data Systems
 :::
 
 #### Golden Rule of Rebasing
-- **\textcolor{red}{Remember}**: rebasing means abandoning existing commits and creating new ones
+- **Remember**: rebasing means abandoning existing commits and creating new ones
   that are similar but different
 
 ::: columns
 :::: {.column width=55%}
 
-- **\textcolor{darkgreen}{Problem}**
+- **Problem**
   - You push commits to a remote
   - Others pull commits and base work on them
   - You rewrite commits with \textcolor{blue}{\texttt{git rebase}}
   - You push again with \textcolor{blue}{\texttt{git push --force}}
   - Collaborators must re-merge work
 
-- **\textcolor{blue}{Solution}**
+- **Solution**
   - Strict: _"Do not ever rebase commits outside your repository"_
   - Loose: _"Rebase your branch if only you use it, even if pushed to a server"_
 ::::
@@ -371,13 +371,13 @@ UMD DATA605 - Big Data Systems
 :::
 
 #### Rebase vs Merge: Philosophical Considerations
-- Deciding **\textcolor{red}{Rebase-vs-merge}** depends on the answer to the question:
+- Deciding **Rebase-vs-merge** depends on the answer to the question:
   - _What does the commit history of a repo mean?_
 
 ::: columns
 :::: {.column width=55%}
 
-1. **\textcolor{darkgreen}{History is the record of what actually happened}**
+1. **History is the record of what actually happened**
    - _"History should not be tampered with, even if messy!"_
    - Use \textcolor{blue}{\texttt{git merge}}
 ::::
@@ -392,7 +392,7 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=55%}
 
-2. **\textcolor{blue}{History represents how a project should have been made}**
+2. **History represents how a project should have been made**
    - _"You should tell the history in the way that is best for future readers"_
    - Use \textcolor{blue}{\texttt{git rebase}} and \textcolor{blue}{\texttt{filter-branch}}
 ::::
@@ -404,14 +404,14 @@ UMD DATA605 - Big Data Systems
 :::
 
 #### Rebase vs Merge: Philosophical Considerations
-- **\textcolor{red}{Many man-centuries have been wasted}** discussing rebase-vs-merge at the
+- **Many man-centuries have been wasted** discussing rebase-vs-merge at the
   watercooler
   - Total waste of time! Tell people to get back to work!
 
 - When you contribute to a project often people decide for you based on their
   preference
 
-- **\textcolor{darkgreen}{Best of the merge-vs-rebase approaches}**
+- **Best of the merge-vs-rebase approaches**
   - Rebase changes you've made in your local repo
     - Even if you have pushed but you know the branch is yours
     - Use \textcolor{blue}{\texttt{git pull --rebase}} to clean up the history of your work
@@ -419,12 +419,12 @@ UMD DATA605 - Big Data Systems
       merge`
   - Only \textcolor{blue}{\texttt{git merge}} to master to preserve the history of how something was built
 
-- **\textcolor{blue}{Personally}**
+- **Personally**
   - I like to squash-and-merge branches to \textcolor{blue}{\texttt{master}}
   - Rarely are my commits "complete"; they are just checkpoints
 
 #### Remote Branches
-- **\textcolor{red}{Remote branches}** are pointers to branches in remote repositories
+- **Remote branches** are pointers to branches in remote repositories
   \begingroup \small \color{blue}
   ```
   > git remote -v
@@ -433,7 +433,7 @@ UMD DATA605 - Big Data Systems
   ```
   \endgroup
 
-- **\textcolor{blue}{Tracking branches}**
+- **Tracking branches**
   - Local references representing the state of the remote repository
   - E.g., \textcolor{blue}{\texttt{master}} tracks \textcolor{blue}{\texttt{origin/master}}
   - You can't change the remote branch (e.g., \textcolor{blue}{\texttt{origin/master}})
@@ -457,8 +457,8 @@ UMD DATA605 - Big Data Systems
 #### Git Workflows
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Git workflows}** = ways of working and collaborating using Git
-- **\textcolor{blue}{Long-running branches}** = branches at different levels of stability that are
+- **Git workflows** = ways of working and collaborating using Git
+- **Long-running branches** = branches at different levels of stability that are
   always open
   - \textcolor{blue}{\texttt{master}} is always ready to be released
   - \textcolor{blue}{\texttt{develop}} branch to develop in
@@ -476,7 +476,7 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=55%}
 
-- **\textcolor{red}{Topic branches}** = short-lived branches for a single feature
+- **Topic branches** = short-lived branches for a single feature
   - E.g., \textcolor{blue}{\texttt{hotfix}}, \textcolor{blue}{\texttt{wip-XYZ}}
   - Easy to review
   - Siloed from the rest
@@ -498,7 +498,7 @@ UMD DATA605 - Big Data Systems
 #### Centralized Workflow
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Centralized workflow in centralized VCS}**
+- **Centralized workflow in centralized VCS**
   - Developers:
     - Check out the code from the central repo on their computer
     - Modify the code locally
@@ -512,7 +512,7 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **\textcolor{blue}{Centralized workflow in Git}**
+- **Centralized workflow in Git**
   - Developers:
     - Have push (i.e., write) access to the central repo
     - Need to fetch and then merge
@@ -525,7 +525,7 @@ UMD DATA605 - Big Data Systems
   - Read-write permissions for core contributors
   - Read-only for everybody else
 
-- **\textcolor{red}{Solution}**
+- **Solution**
   - "Forking" a repo
   - External contributors:
     - Clone the repo and create a branch with their work
@@ -541,7 +541,7 @@ UMD DATA605 - Big Data Systems
 
 ::: columns
 :::: {.column width=80%}
-- **\textcolor{blue}{Aka "GitHub workflow"}**
+- **Aka "GitHub workflow"**
   - The "innovation" was forking (Fork me on GitHub!)
   - GitHub was acquired by Microsoft for 7.5 billion USD
 ::::
@@ -565,11 +565,11 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-1. **\textcolor{red}{One repo is the official project}**
+1. **One repo is the official project**
    - Only the project maintainer pushes to the public repo
    - E.g., \textcolor{blue}{\texttt{causify-ai/csfy}}
 
-2. **\textcolor{darkgreen}{Each contributor}**
+2. **Each contributor**
    - Has read access to everyone else's public repo
    - Forks the project into a private copy
      - Write access to their own public repo
@@ -578,7 +578,7 @@ UMD DATA605 - Big Data Systems
    - Pushes changes to their own public copy
    - Sends a pull request to the maintainer asking to merge changes
 
-3. **\textcolor{blue}{The maintainer}**
+3. **The maintainer**
    - Adds the contributor's repo as a remote
    - Merges the changes into a local branch
    - Tests changes locally
@@ -587,7 +587,7 @@ UMD DATA605 - Big Data Systems
 #### Git log
 - \textcolor{blue}{\texttt{git log}} reports info about commits
 
-- **\textcolor{red}{refs}** are references to:
+- **refs** are references to:
   - \textcolor{blue}{\texttt{HEAD}} (commit you are working on, next commit)
   - \textcolor{blue}{\texttt{origin/master}} (remote branch)
   - \textcolor{blue}{\texttt{experiment}} (local branch)
@@ -613,7 +613,7 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=55%}
 
-- **\textcolor{red}{Double-dot notation}**
+- **Double-dot notation**
   - \textcolor{blue}{\texttt{1..2}} = commits that are reachable from 2 but not from 1
   - Like a "difference"
   - \textcolor{blue}{\texttt{git log master..experiment}} $\to$ \textcolor{blue}{\texttt{D,C}}
@@ -630,7 +630,7 @@ UMD DATA605 - Big Data Systems
 
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{blue}{Triple-dot notation}**
+- **Triple-dot notation**
   - \textcolor{blue}{\texttt{1...2}} = commits that are reachable from either branch but not from both
   - Like "union excluding intersection"
   - \textcolor{blue}{\texttt{git log master...experiment}} $\to$ \textcolor{blue}{\texttt{F,E,D,C}}
@@ -645,32 +645,32 @@ UMD DATA605 - Big Data Systems
 
 #### Advanced Git
 
-- **\textcolor{red}{Stashing}**
+- **Stashing**
   - Copy the state of your working directory (e.g., modified and staged files)
   - Save it in a stack
   - Apply it later
 
-- **\textcolor{darkgreen}{Cherry-picking}**
+- **Cherry-picking**
   - Apply a single commit from one branch onto another
 
-- **\textcolor{blue}{rerere}**
+- **rerere**
   - = "Reuse Recorded Resolution"
   - Git caches how to solve certain conflicts
-- **\textcolor{violet}{Submodules / subtrees}**
+- **Submodules / subtrees**
   - Projects including other Git projects
 
 #### Advanced Git
-- **\textcolor{red}{bisect}**
+- **bisect**
   - \textcolor{blue}{\texttt{git bisect}} helps identify the commit that introduced a bug
     - Bug appears at the top of the tree
     - Unknown revision where it started
     - Script returns 0 if good, non-zero if bad
     - \textcolor{blue}{\texttt{git bisect}} finds the revision where the script changes from good to bad
 
-- **\textcolor{darkgreen}{filter-branch}**
+- **filter-branch**
   - Rewrite repository history in a scriptable way
     - E.g., change email, remove sensitive file
   - Check out each version, run a command, commit the result
 
-- **\textcolor{blue}{Hooks}**
+- **Hooks**
   - Run scripts before committing, merging, etc

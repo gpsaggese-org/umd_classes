@@ -4,46 +4,7 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
 
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 02.2: Machine Learning Paradigms}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=65%}
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
-
-- Burkov: _"The Hundred-Page Machine Learning Book"_ (2019)
-
-- Russell et al.: _"Artificial Intelligence: A Modern Approach"_ (4th ed, 2020)
-
-- Hastie et al.: _"The Elements of Statistical Learning"_ (2nd ed, 2009)
-
-::::
-:::: {.column width=40%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/Book_cover_The_Elements_of_Statistical_Learning.jpg){ height=20% }
-::::
-:::
 
 
 # Machine Learning Paradigms
@@ -52,68 +13,68 @@ MSML610: Advanced Machine Learning
 
 #### Machine Learning Paradigms with Examples (1/3)
 
-- **\textcolor{red}{Supervised Learning}**
+- **Supervised Learning**
   - Learn from labeled data to predict labels for new inputs
   - E.g., image classification using ResNet on ImageNet
 
-- **\textcolor{orange}{Unsupervised Learning}**
+- **Unsupervised Learning**
   - Discover hidden patterns or structure in unlabeled data
   - E.g., K-means clustering for customer segmentation
 
-- **\textcolor{darkgreen}{Reinforcement Learning}**
+- **Reinforcement Learning**
   - Learn through interaction with an environment, receiving rewards/punishments
   - E.g., deep Q-Learning for playing Atari games
 
-- **\textcolor{teal}{Self-Supervised Learning}**
+- **Self-Supervised Learning**
   - Generate pseudo-labels from unlabeled data to pre-train models
   - E.g., BERT (Masked Language Modeling)
 
-- **\textcolor{cyan}{Semi-Supervised Learning}**
+- **Semi-Supervised Learning**
   - Combine small labeled data with large unlabeled data to improve performance
   - E.g., named entity recognition (NER) using annotated sentences with entity
     tags combined with many raw text documents
 
 #### Machine Learning Paradigms with Examples (2/3)
 
-- **\textcolor{red}{Online Learning}**
+- **Online Learning**
   - Learn incrementally from a stream of data in real time
   - E.g., online logistic regression for click-through rate prediction
 
-- **\textcolor{orange}{Multi-Task Learning}**
+- **Multi-Task Learning**
   - Train simultaneously a model to perform multiple related tasks
   - E.g., learn sentiment analysis and question answering
 
-- **\textcolor{darkgreen}{Meta-Learning}**
+- **Meta-Learning**
   - "Learning to learn": adapt quickly to new tasks using prior experience
   - E.g., a model can be fine-tuned quickly on a new task using just a few
     gradient steps
 
-- **\textcolor{teal}{Zero-Shot / Few-Shot Learning}**
+- **Zero-Shot / Few-Shot Learning**
   - Generalize to new tasks with no or few labeled examples
   - E.g., GPT-4 solving tasks with zero-shot prompting
 
-- **\textcolor{cyan}{Active Learning}**
+- **Active Learning**
   - The model selects the most informative samples to be labeled by an oracle
     (e.g., a human)
   - E.g., pick samples where the model is least confident to get more examples
 
 #### Machine Learning Paradigms with Examples (3/3)
 
-- **\textcolor{red}{Federated Learning}**
+- **Federated Learning**
   - Train models across decentralized devices without sharing raw data
   - E.g., fraud detection or credit scoring across banks
 
-- **\textcolor{darkgreen}{Evolutionary Learning}**
+- **Evolutionary Learning**
   - Optimize model structures or parameters using evolutionary algorithms
     inspired by natural selection and genetics
   - Gradient free, global search, variable length inputs
   - E.g., genetic algorithms
 
-- **\textcolor{blue}{Curriculum Learning}**
+- **Curriculum Learning**
   - Train models on easier tasks first, gradually increasing difficulty
   - E.g., training in robotic control simulations
 
-- **\textcolor{violet}{Multi-Agent Learning}**
+- **Multi-Agent Learning**
   - Multiple agents learn and interact in shared environments, often in
     game-theoretic settings (e.g., competition, collaboration)
   - E.g., AlphaStar to play StarCraft II
@@ -126,17 +87,17 @@ MSML610: Advanced Machine Learning
   - Requires labeled data for training
   - Measure performance with error on a separate test set
 
-- **\textcolor{red}{Classification}**: output is a discrete label, e.g.,
+- **Classification**: output is a discrete label, e.g.,
   - \textcolor{blue}{\texttt{Spam}} vs \textcolor{blue}{\texttt{Not Spam}}
   - Digit recognition \textcolor{blue}{\texttt{0}}, \textcolor{blue}{\texttt{1}}, ...
   - Sentiment analysis \textcolor{blue}{\texttt{Pos}}, \textcolor{blue}{\texttt{Neg}}, \textcolor{blue}{\texttt{Neutral}}
 
-- **\textcolor{darkgreen}{Regression}**: output is a continuous value, e.g.,
+- **Regression**: output is a continuous value, e.g.,
   - House prices given features like size and location
   - House demand
   - Stock prices
 
-- **\textcolor{blue}{Common algorithms}**:
+- **Common algorithms**:
   - Linear Regression
   - Decision Trees
   - K-nearest neighbors
@@ -144,31 +105,31 @@ MSML610: Advanced Machine Learning
   - ...
 
 #### Unsupervised Learning
-- Learn from data **\textcolor{red}{without}** labeled outputs
+- Learn from data **without** labeled outputs
   - Goal: discover patterns or structure in the data
   - No explicit feedback signal
   - Evaluation can be qualitative
 
-- **\textcolor{orange}{Main techniques}**:
-  - **\textcolor{darkgreen}{Clustering}**: Group similar examples, e.g.,
+- **Main techniques**:
+  - **Clustering**: Group similar examples, e.g.,
     - Customer segmentation
     - Grouping news articles by topic without knowing the topics
-  - **\textcolor{teal}{Dimensionality Reduction}**: Reduce number of variables with PCA while
+  - **Dimensionality Reduction**: Reduce number of variables with PCA while
     preserving structure
     - E.g., visualize high-dimensional data in 2D
-  - **\textcolor{cyan}{Density Estimation}**: Estimate probability distribution of data
+  - **Density Estimation**: Estimate probability distribution of data
     - E.g., anomaly detection in server logs
-  - **\textcolor{blue}{Association Rule Learning}**: Discover interesting relations between
+  - **Association Rule Learning**: Discover interesting relations between
     variables
     - E.g., market basket analysis (e.g., "people who buy X also buy Y")
 
-- **\textcolor{violet}{Common algorithms:}**
+- **Common algorithms:**
   - K-means
   - PCA
   - Autoencoders
 
 #### Reinforcement Learning
-- Learn by **\textcolor{red}{interacting with an environment}** to **\textcolor{darkgreen}{maximize cumulative reward}**
+- Learn by **interacting with an environment** to **maximize cumulative reward**
   - Learn policy $\pi(s) \to a$ that maximizes expected reward
   - Trade-off between exploration (trying new actions) and exploitation (using
     known good actions)
@@ -177,14 +138,14 @@ MSML610: Advanced Machine Learning
 
 ::: columns
 :::: {.column width=60%}
-- **\textcolor{blue}{Core elements:}**
+- **Core elements:**
   - Agent: Learner and decision maker
   - Environment: Everything the agent interacts with
   - State $s$
   - Action $a$
   - Reward $r$
 
-- **\textcolor{violet}{Algorithms:}**
+- **Algorithms:**
   - Q-learning
   - Policy Gradient methods
 ::::
@@ -214,31 +175,31 @@ digraph BayesianFlow {
 :::
 
 #### Reinforcement Learning: Examples
-- In **\textcolor{red}{game playing}**, learn strategies through trial and error
+- In **game playing**, learn strategies through trial and error
   - E.g., AlphaGo mastering the game of Go
-- In **\textcolor{orange}{robotics}**, learn control policies for movement and manipulation
-- In **\textcolor{darkgreen}{autonomous driving}**, learn safe and efficient driving behaviors
-- In **\textcolor{teal}{resource management}**, optimize allocation of limited resources over time
+- In **robotics**, learn control policies for movement and manipulation
+- In **autonomous driving**, learn safe and efficient driving behaviors
+- In **resource management**, optimize allocation of limited resources over time
   - E.g., data center cooling or CPU job scheduling
-- In **\textcolor{cyan}{personalized recommendations}**, adapt suggestions based on user
+- In **personalized recommendations**, adapt suggestions based on user
   interaction
   - E.g., newsfeed ranking adjusting based on user clicks
-- In **\textcolor{blue}{healthcare}**, optimize treatment plans over time
+- In **healthcare**, optimize treatment plans over time
 
 ## Machine Learning in Practice
 
 #### Machine Learning Flow (1/2)
-- **\textcolor{red}{Question}**
+- **Question**
   - E.g., "How can we predict house prices?"
-- **\textcolor{orange}{Input data}**
+- **Input data**
   - E.g., historical data of house sales
-- **\textcolor{darkgreen}{Features}**
+- **Features**
   - E.g., number of bedrooms, location, square footage
-- **\textcolor{teal}{Algorithm}**
+- **Algorithm**
   - E.g., linear regression, decision trees
-- **\textcolor{cyan}{Parameters}**
+- **Parameters**
   - E.g., learning rate, number of trees in a random forest
-- **\textcolor{blue}{Evaluation}**
+- **Evaluation**
   - E.g., accuracy, precision, recall
 
 #### Machine Learning Flow (2/2)
@@ -267,25 +228,25 @@ digraph BayesianFlow {
 }
 ```
 
-- **\textcolor{red}{Not all phases are equally important!}**
+- **Not all phases are equally important!**
   - Question $>$ Data $>$ Features $>$ Algorithm
 
-- Clarity of the **\textcolor{orange}{question}** impacts project success
-- Quality and relevance of **\textcolor{darkgreen}{data}** are crucial for performance
-- Proper **\textcolor{teal}{feature}** selection simplifies the model and improves accuracy
-- **\textcolor{cyan}{Algorithm}** is often less important (contrary to popular belief!)
+- Clarity of the **question** impacts project success
+- Quality and relevance of **data** are crucial for performance
+- Proper **feature** selection simplifies the model and improves accuracy
+- **Algorithm** is often less important (contrary to popular belief!)
 
 #### Question
-- **\textcolor{red}{Make the question concrete and precise}**
+- **Make the question concrete and precise**
   - Define the problem clearly
   - Specify inputs and expected outputs
   - Align question with business or research objectives
   - E.g.,:
-    - **\textcolor{darkgreen}{Bad}**: _"How can we improve sales?"_
-    - **\textcolor{blue}{Good}**: _"What factors most significantly impact sales of product X in
+    - **Bad**: _"How can we improve sales?"_
+    - **Good**: _"What factors most significantly impact sales of product X in
       region Y during season Z?"_
 
-- Formulating question is **\textcolor{violet}{the most important part}** of the machine learning
+- Formulating question is **the most important part** of the machine learning
   problem
   - Misunderstanding leads to:
     - Solving the wrong problem
@@ -296,22 +257,22 @@ digraph BayesianFlow {
   defining the problem and one minute resolving it"_ (Einstein)
 
 #### Input Data
-- Ensure **\textcolor{red}{data is specific to prediction}** goal
+- Ensure **data is specific to prediction** goal
   - E.g., use known movie ratings to predict unseen movie ratings from the same
     population
   - Training set $\approx$ test set
 
-- Relationship between data and prediction goal is **\textcolor{darkgreen}{not always direct}**
+- Relationship between data and prediction goal is **not always direct**
   - E.g., interested in prices but predict supply and demand instead
 
 - Poor-quality data leads to inaccurate predictions
   - _"Garbage in - garbage out"_
 
-- Recognize **\textcolor{blue}{when data is insufficient}** for valid answers
+- Recognize **when data is insufficient** for valid answers
   - _"Combination of data and desire for an answer does not ensure a reasonable
     answer can be extracted"_ (John Tukey)
 
-- **\textcolor{violet}{More data vs better models}**
+- **More data vs better models**
   - Meta-studies show difference between generic and best model is like
     5\%
   - _"It's not who has the best algorithm that wins. It's who has the most
@@ -320,15 +281,15 @@ digraph BayesianFlow {
     goes up"_ (IBM researcher in speech recognition)
 
 #### Features
-- **\textcolor{red}{Features}** provide high-level information about inputs
+- **Features** provide high-level information about inputs
   - E.g., use intensity and symmetry for scanned numbers instead of raw bit maps
 
-- **\textcolor{darkgreen}{Characteristics of good features}**:
+- **Characteristics of good features**:
   1. Perform data compression
   2. Retain relevant information
   3. Often created with expert knowledge
 
-- **\textcolor{blue}{Common mistakes in feature building}**:
+- **Common mistakes in feature building**:
   1. Automating feature selection may lead to overfitting
      - Black box predictions can be accurate but stop working anytime
      - E.g., Google Flu's unclear feature-model link
@@ -338,20 +299,20 @@ digraph BayesianFlow {
 
 #### Models
 - Best models are:
-  - **\textcolor{red}{Interpretable}**
+  - **Interpretable**
     - Allow users to understand and trust the model's decisions
     - E.g., decision trees are appropriate in medical studies since they produce
       a "reasoning"
-  - **\textcolor{orange}{Simple}**
+  - **Simple**
     - Easier to implement and maintain
     - Reduces the risk of overfitting
-  - **\textcolor{darkgreen}{Accurate}**
+  - **Accurate**
     - Often accuracy is traded off for remaining characteristics
     - E.g., accuracy vs interpretability, accuracy vs speed
-  - **\textcolor{teal}{Fast}**
+  - **Fast**
     - Reduce computational costs to train and test
     - E.g., real-time applications
-  - **\textcolor{cyan}{Scalable}**
+  - **Scalable**
     - Can handle large datasets efficiently (growing data and user bases)
     - E.g., in the Netflix prize, Netflix didn't end up implementing the best
       algorithm since it wasn't scalable enough
@@ -360,10 +321,10 @@ digraph BayesianFlow {
 
 #### How Are Machine Learning Systems Organized?
 
-- Machine learning systems organized in a **\textcolor{red}{pipeline}**
-  1. **\textcolor{darkgreen}{Break down}** problem into sub-problems
-  2. **\textcolor{blue}{Solve}** problems one at a time
-  3. **\textcolor{violet}{Combine}** solutions to solve initial problem
+- Machine learning systems organized in a **pipeline**
+  1. **Break down** problem into sub-problems
+  2. **Solve** problems one at a time
+  3. **Combine** solutions to solve initial problem
 
 - Performance $p$ of a pipeline:
   $$
@@ -375,10 +336,10 @@ digraph BayesianFlow {
 
 #### Example of Photo OCR System
 
-- **\textcolor{red}{Goal}**: build systems to read text in a picture
+- **Goal**: build systems to read text in a picture
   - OCR = "Optical Character Recognition"
 
-- **\textcolor{darkgreen}{Stages of ML pipeline for OCR:}**
+- **Stages of ML pipeline for OCR:**
   - Text detection: find text areas in the picture
   - Character segmentation: split text into letter boxes
     - E.g., \textcolor{blue}{\texttt{h e l l o}}
@@ -386,8 +347,8 @@ digraph BayesianFlow {
   - Spelling correction: fix text errors using context
     - E.g., \textcolor{blue}{\texttt{hell0}} corrected to \textcolor{blue}{\texttt{hello}}
 
-- **\textcolor{blue}{Sliding window approach}**
-  - **\textcolor{violet}{Problem}**: Unknown text location and size
+- **Sliding window approach**
+  - **Problem**: Unknown text location and size
   - Text detection
     - Train classifier to recognize letters vs non-letters
     - Scan image in two directions with different sizes for text
@@ -404,7 +365,7 @@ digraph BayesianFlow {
 
 - Use learning curves to make sure we are taking advantage of more data
 
-- The **\textcolor{red}{problem}** is getting large amount of data
+- The **problem** is getting large amount of data
 
 - Always ask yourself: _"how much work is to get 10x more data than we
   currently have?"_
@@ -432,9 +393,9 @@ digraph BayesianFlow {
   - You work on optimization for months
   - Find out that the optimization doesn't make much difference
 
-- **\textcolor{red}{Problem}**: On which part of the pipeline should time/resource be spent?
+- **Problem**: On which part of the pipeline should time/resource be spent?
 
-- **\textcolor{blue}{Solution}**: Ceiling analysis to Analyze pipeline performance
+- **Solution**: Ceiling analysis to Analyze pipeline performance
   - Single number for system performance
     - E.g., accuracy for OCR
   - For each component:

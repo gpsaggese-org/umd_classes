@@ -44,8 +44,8 @@
 
   - Intervention and Counterfactuals (5)
   - Randomized Controlled Trial (3)
-  - Back-door Adjustment (6)
-  - Front-door Adjustment (5)
+  - Backdoor Adjustment (6)
+  - Frontdoor Adjustment (5)
   - Do-Calculus (3)
 
 ## 4: From Causal Models to Code
@@ -91,8 +91,8 @@
 
   - Intervention and Counterfactuals (5)
   - Randomized Controlled Trial (3)
-  - Back-door Adjustment (6)
-  - Front-door Adjustment (5)
+  - Backdoor Adjustment (6)
+  - Frontdoor Adjustment (5)
   - Do-Calculus (3)
 
 ## 6: Causal Identification and Estimation

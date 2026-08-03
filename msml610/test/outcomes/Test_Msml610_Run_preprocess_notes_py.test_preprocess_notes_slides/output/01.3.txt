@@ -4,38 +4,7 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
 
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 01.3: A Brief History of AI}}$$**
-\endgroup
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
-- AIMA (Artificial Intelligence: a Modern Approach), Chap 1
-::::
-:::: {.column width=20%}
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){width=1.5cm}
-::::
-:::
 
 ## Brief History of AI
 
@@ -149,7 +118,7 @@ MSML610: Advanced Machine Learning
 
 
 #### The Beginning (1943-1956)
-- **\textcolor{red}{Artificial neuron}**
+- **Artificial neuron**
   - Model (McCullock-Pitts 1943) based on:
     - Brain physiology
     - Propositional logic
@@ -157,47 +126,47 @@ MSML610: Advanced Machine Learning
     - Neuron on/off based on stimulation from neighboring neurons
     - Implement logical AND, OR, NOT with simple neuron networks
 
-- **\textcolor{darkgreen}{Alan Turing, 1947}**
+- **Alan Turing, 1947**
   - Turing test, machine learning, reinforcement learning
   - Create human-level AI
     - Develop learning algorithms
     - Teach machine like a child
 
-- **\textcolor{blue}{Birth of AI}**
+- **Birth of AI**
   - McCarthy organized first AI workshop (1956)
   - The Logic Theorist (Newell and Simon, 1956)
     - Programs to "think non-numerically" and prove theorems
 
 #### Enthusiasm and Great Expectations (1952-1969)
-- **\textcolor{red}{Early years of AI were full of successes}**
+- **Early years of AI were full of successes**
   - Before computers could only do arithmetics
   - _"A machine can never do X (e.g., games, puzzles, IQ tests, ...)"_
     - AI researchers showed machines could do one $X$ after another
 
-- **\textcolor{orange}{General Problem Solver}**
+- **General Problem Solver**
   - Imitate human problem-solving
   - Consider sub-goals and possible actions
 
-- **\textcolor{darkgreen}{Program learned to play checkers}**
+- **Program learned to play checkers**
   - Use reinforcement learning from victories and mistakes
 
-- **\textcolor{teal}{Lisp (1958)}**
+- **Lisp (1958)**
   - High-level language used for 30 years in AI
 
-- **\textcolor{cyan}{First neural network}**
+- **First neural network**
   - 3000 vacuum tubes for 40 neurons
   - Minsky (1959)
 
-- **\textcolor{blue}{MIT and Stanford}**
+- **MIT and Stanford**
   - Minsky at MIT
     - Focus on neural network
   - McCarthy at Stanford
     - Focus on representation, logic
 
 #### First AI winter (1975-1980)
-- **\textcolor{red}{Early successes}** of AI set high expectations
+- **Early successes** of AI set high expectations
 
-- In 1965-1975 AI didn't succeed on **\textcolor{darkgreen}{real problems}** due to:
+- In 1965-1975 AI didn't succeed on **real problems** due to:
   - Solutions were based on human problem-solving methods
   - Difficulty handling "combinatorial explosion"
     - Theorem proving handles small problems with brute force, but doesn't scale
@@ -206,32 +175,32 @@ MSML610: Advanced Machine Learning
     - Compute power
     - Data
 
-- **\textcolor{blue}{First AI winter}**
+- **First AI winter**
   - Research funding and enthusiasm dropped significantly
   - Slow AI progress through late 1970s
 
 #### Expert Systems (1980-1990)
-- **\textcolor{red}{Expert systems}**
+- **Expert systems**
   - Aka "knowledge-based systems"
   - Combine weak methods with extensive domain knowledge as rules
   - Use inference engines to apply rules to facts
   - E.g., rule-based systems, logic programming (e.g., Prolog)
 
-- **\textcolor{darkgreen}{Weak AI}**
+- **Weak AI**
   - Aka narrow AI
   - Performs specific tasks, not general reasoning
   - Operates in a limited, well-defined domain
   - Uses "weak methods" (search, logic) that struggle to scale
 
-- **\textcolor{blue}{Commercial adoption and industry growth}**
+- **Commercial adoption and industry growth**
   - AI shifted to practical applications
   - Major US corporations deployed expert systems
   - AI emerged as a commercial industry
 
 #### Second AI Winter (late 1980-early 1990)
-- **\textcolor{red}{Hype in expert systems}** didn't deliver
+- **Hype in expert systems** didn't deliver
 
-- **\textcolor{darkgreen}{Reasons}**
+- **Reasons**
   - Building/maintaining expert systems is difficult
   - Reasoning methods ignore uncertainty
   - Systems can't learn from experience
@@ -240,20 +209,20 @@ MSML610: Advanced Machine Learning
   - E.g., early AI chess systems couldn't adapt to new strategies without manual
     updates
 
-- **\textcolor{blue}{Second AI winter}** in late 1980-early 1990
+- **Second AI winter** in late 1980-early 1990
 
 #### Return of Neural Networks (1986-)
 - Back-propagation algorithm is (re)discovered (mid-1980s)
   - Developed in early 1960s
 
-- **\textcolor{red}{Two approaches to AI are back}**
+- **Two approaches to AI are back**
   - Connectionist paradigm
     - Neural networks
     - E.g., recognizing handwritten digits
   - Symbolic paradigm
     - E.g., solving logical puzzles with rules
 
-- **\textcolor{blue}{Why connectionist approach?}**
+- **Why connectionist approach?**
   - Concepts not well-defined using symbolic axioms
     - Forms fluid internal concepts
     - Represents real-world complexity better
@@ -261,7 +230,7 @@ MSML610: Advanced Machine Learning
     - Image recognition: identify objects by learning from labeled images
 
 #### Probabilistic Reasoning and ML (1987-)
-- **\textcolor{red}{AI and scientific method}**
+- **AI and scientific method**
   - Rigorous methods to test performance
   - E.g., speech recognition, handwritten character recognition
   - Benchmarks for progress, e.g.,
@@ -269,13 +238,13 @@ MSML610: Advanced Machine Learning
     - ImageNet: image object recognition
     - SAT Competitions: boolean satisfiability solvers
 
-- **\textcolor{blue}{AI shifts ...}**
+- **AI shifts ...**
   - From Boolean logic to probability
   - From hand-coded rules to machine learning
   - From a-priori reasoning to experimental results
 
 #### Progress in Speech Recognition
-- **\textcolor{red}{1970s: ad-hoc approaches}**
+- **1970s: ad-hoc approaches**
   - Various architectures and approaches were attempted
   - Rule-based systems with limited robustness
   - Cons
@@ -283,7 +252,7 @@ MSML610: Advanced Machine Learning
   - _"Every time I fire a linguist, the performance of the speech recognizer goes
     up" (Jelinek, 1988)
 
-- **\textcolor{blue}{1980s: hidden Markov Models}**
+- **1980s: hidden Markov Models**
   - HMMs became dominant
   - Effective learning techniques
   - Trained on large speech corpora
@@ -294,7 +263,7 @@ MSML610: Advanced Machine Learning
   - General methods + lots of data beat handcrafted systems
 
 #### Bayesian Networks
-- **\textcolor{red}{Bayesian networks}**
+- **Bayesian networks**
   - Pearl, 1988
   - AI is linked with:
     - Probability
@@ -303,13 +272,13 @@ MSML610: Advanced Machine Learning
   - Efficiently represent uncertainty
   - Provide rigorous reasoning
 
-- **\textcolor{blue}{Examples}**
+- **Examples**
   - Diagnosing diseases based on symptoms
   - Predictive text input in smartphones
   - Fraud detection in banking
 
 #### Reinforcement Learning
-- **\textcolor{red}{Reinforcement learning}**
+- **Reinforcement learning**
   - Sutton, 1988
   - RL involves agents learning by interacting with an environment
     - E.g., a robot learning to navigate a maze by receiving rewards for
@@ -320,13 +289,13 @@ MSML610: Advanced Machine Learning
       certain probabilities
 
 #### Reunification (1990s-2000s)
-- **\textcolor{red}{Reunification of AI}**:
+- **Reunification of AI**:
   - Data engineering
   - Statistical modeling
   - Optimization
   - Machine learning
 
-- **\textcolor{blue}{Many subfields of AI were re-unified}**:
+- **Many subfields of AI were re-unified**:
   - Computer vision
   - Robotics
   - Speech recognition
@@ -334,7 +303,7 @@ MSML610: Advanced Machine Learning
   - NLP
 
 #### Big Data (2001-Present)
-- **\textcolor{red}{Focus shifts from algorithms to data}**
+- **Focus shifts from algorithms to data**
   - For 60 years, AI focused on algorithms and models
 
 - For many problems, data availability matters more than algorithms, e.g.,
@@ -350,12 +319,12 @@ MSML610: Advanced Machine Learning
 - In 2011, IBM's Watson beat human _Jeopardy!_ champions
 
 #### Deep Learning (2011-Present)
-- **\textcolor{red}{Deep learning}**
+- **Deep learning**
   - Use ML models with multiple layers of computing elements
   - Ideas known since 1970s, but then forgot
   - Success in handwritten digit recognition in 1990s
 
-- **\textcolor{darkgreen}{In 2012}**, a DL system showed dramatic improvement in \textcolor{blue}{\texttt{ImageNet}} competition
+- **In 2012**, a DL system showed dramatic improvement in \textcolor{blue}{\texttt{ImageNet}} competition
   - Previous systems used handcrafted features
   - Surge of interest in AI among researchers, companies, and investors
 
@@ -366,14 +335,14 @@ MSML610: Advanced Machine Learning
   - DL needs specialized hardware (e.g., GPU, TPU, FGPA) for parallel tensor
     operations
 
-- Towards **\textcolor{blue}{general artificial intelligence}**
+- Towards **general artificial intelligence**
   - Universal algorithm for learning and acting, not just specialized tasks
   - E.g., driving, playing chess, recognizing speech
 
 #### Progress in AI Research
 - Huge interest in deep learning
 
-- **\textcolor{red}{Between 2010 and 2019}**
+- **Between 2010 and 2019**
   - AI papers increased 20x
     - 1,000 $\to$ 20,000
   - Student enrollment in AI and CS increased 5x
@@ -383,7 +352,7 @@ MSML610: Advanced Machine Learning
   - AI startups increased 20x
     - 100 $\to$ 2,000
 
-- **\textcolor{blue}{Compute}**
+- **Compute**
   - Training times dropped 100x in 2 years
   - AI computing power doubles every 3 months
 
@@ -392,24 +361,24 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=65%}
 
-- **\textcolor{red}{Robotic vehicles}**
+- **Robotic vehicles**
   - Waymo passed 10 million miles without serious accident
 
-- **\textcolor{orange}{Legged locomotion}**
+- **Legged locomotion**
   - BigDog recovers on ice
   - Atlas walks on uneven terrain, jumps on boxes, backflips
 
-- **\textcolor{darkgreen}{Autonomous planning and scheduling}**
+- **Autonomous planning and scheduling**
   - Space probes, Mars rovers
 
-- **\textcolor{teal}{Machine translation}**
+- **Machine translation**
   - Translates 100 languages with human-level performance
 
-- **\textcolor{cyan}{Speech recognition}**
+- **Speech recognition**
   - Real-time speech-to-speech with human-level performance
   - AI assistants
 
-- **\textcolor{blue}{Recommendations}**
+- **Recommendations**
   - ML recommends based on past experiences
   - Spam filtering 99.9% accuracy
   - E.g., Amazon, Facebook, Netflix, Spotify, YouTube
@@ -424,19 +393,19 @@ MSML610: Advanced Machine Learning
 :::
 
 #### What Can AI Do Today? (2/2)
-- **\textcolor{red}{Game playing}**
+- **Game playing**
   - 1997: Deep Blue defeated Kasparov
   - 2011: Watson beat Jeopardy! champion
   - 2017: AlphaGo beat Go champion
   - 2018: AlphaZero super-human in Go and chess with only rules + self-play
   - AI beats humans in videogames: Dota2, StarCraft, Quake
 
-- **\textcolor{darkgreen}{Image understanding}**
+- **Image understanding**
   - Object recognition
   - Image captioning
   - ...
 
-- **\textcolor{blue}{Medicine}**
+- **Medicine**
   - AI equivalent to health care professionals
 
 - When will we reach AGI (Artificial General Intelligence)?
@@ -446,7 +415,7 @@ MSML610: Advanced Machine Learning
 #### Benefits of AI
 ::: columns
 :::: {.column width=65%}
-- Our civilization is the **\textcolor{red}{product of human intelligence}**
+- Our civilization is the **product of human intelligence**
   - Greater machine intelligence leads to better human society
   - _"First solve AI, then use AI to solve everything else"_
 ::::
@@ -455,7 +424,7 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-- **\textcolor{blue}{Benefits of AI and robots}**
+- **Benefits of AI and robots**
   - Free humanity from menial work
   - Increase production of goods and services
   - Expand human cognition
@@ -468,13 +437,13 @@ MSML610: Advanced Machine Learning
 
 ::: columns
 :::: {.column width=65%}
-- **\textcolor{red}{Autonomous weapons}**
+- **Autonomous weapons**
   - Locate and eliminate targets autonomously
   - Deploy large number of weapons
-- **\textcolor{darkgreen}{Surveillance and persuasion}**
+- **Surveillance and persuasion**
   - AI for mass surveillance
   - Tailor information on social media to modify behavior
-- **\textcolor{blue}{Biased decision making}**
+- **Biased decision making**
   - Misuse of ML results in biased decisions
   - E.g., parole evaluations, loan applications
 ::::
@@ -486,7 +455,7 @@ MSML610: Advanced Machine Learning
 :::
 
 #### Risks of AI (2/2)
-- **\textcolor{red}{Impact on employment}**
+- **Impact on employment**
   - Machines eliminate jobs
   - Rebuttal
     - Machines enhance productivity $\to$ companies become more profitable $\to$
@@ -497,14 +466,14 @@ MSML610: Advanced Machine Learning
     - Past tech advances (e.g., mechanical looms) disrupted employment, but
       adaptation followed
 
-- **\textcolor{darkgreen}{Safety critical applications}**
+- **Safety critical applications**
   - AI in safety-critical applications
     - E.g., self-driving cars, managing water supply or power grids
   - Avoiding fatal accidents is challenging
     - E.g., formal verification and statistical analysis insufficient
   - AI requires technical and ethical standards
 
-- **\textcolor{blue}{Cybersecurity}**
+- **Cybersecurity**
   - AI defends against cyberattacks
     - E.g., detect unusual behavior patterns
   - AI contributes to malware development
@@ -512,34 +481,34 @@ MSML610: Advanced Machine Learning
   - Cat-and-mouse game
 
 #### Human-level AI / AGI
-- **\textcolor{red}{Human-level AI}**
+- **Human-level AI**
   - Machines able to learn to do anything a human can do
   - Aka AGI (Artificial General Intelligence)
 
-- **\textcolor{darkgreen}{When AGI?}**
+- **When AGI?**
   - Expert prediction average is 2099
     - Papers show that expert predictions no better than amateurs
     - Experts expected AI to take 100 years to beat humans in Go
   - Unclear if new breakthroughs or refinements needed
 
-- **\textcolor{blue}{Artificial Super-Intelligence}**
+- **Artificial Super-Intelligence**
   - Machines surpass human ability in every domain and self-improving
   - Exponential take-off
 
 #### The Problem of Control
-- **\textcolor{red}{Can humans control machines more intelligent than them?}**
+- **Can humans control machines more intelligent than them?**
 
-- **\textcolor{darkgreen}{King Midas problem}**
+- **King Midas problem**
   - King Midas turned everything he touched into gold, including food and family
   - Humans ask for something, get it, then regret it
   - Rebuttal
     - If AGI arrived in a black box from space, exercise caution before opening
     - We design AI: if AI gains control, it's a "design failure"
 
-- **\textcolor{blue}{Problem of alignment}**
+- **Problem of alignment**
   - Super-intelligent AI might pursue goals in unintended, dangerous ways
 
-- **\textcolor{violet}{The paperclip problem}**
+- **The paperclip problem**
   - Thought experiment in AI safety (Nick Bostrom, 2003)
   - AI is tasked with maximizing paperclip production
   - AI becomes superintelligent and single-mindedly pursues this goal
@@ -549,13 +518,13 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=55%}
 
-- **\textcolor{red}{E/acc}**
+- **E/acc**
   - Accelerationism
   - Belief that rapid progress in AI is beneficial or inevitable
   - Solve global problems with more powerful AI tools
   - Slowing AI is unrealistic or counterproductive
 
-- **\textcolor{blue}{P(doom)}**
+- **P(doom)**
   - "Probability of Doom"
   - Estimated probability that advanced AI will cause catastrophic harm
   - Used informally by AI researchers to quantify risk
@@ -588,16 +557,16 @@ MSML610: Advanced Machine Learning
 :::
 
 #### Solutions to Problem of Control
-- **\textcolor{red}{Checks-and-balances}**
+- **Checks-and-balances**
   - Researchers and corporations develop voluntary self-governance principles for
     AI
   - Governments and international organizations established advisory bodies
 
-- **\textcolor{darkgreen}{Cons}**
+- **Cons**
   - Corporations checking themselves? What can possibly go wrong?
   - Preferences are not easy to invert and are inconsistent
 
-- **\textcolor{blue}{Solutions}**
+- **Solutions**
   - Put purpose into the machine even if objectives are unclear
   - Incentivize AI to switch off if uncertain about human objectives
   - Cooperative Inverse Reinforcement Learning (CIRL)
@@ -606,17 +575,17 @@ MSML610: Advanced Machine Learning
 #### Cooperative Inverse Reinforcement Learning
 - AI infers human goals based on actions
 
-- **\textcolor{red}{Observation}**: GP looks tired, sits on the couch, observes the messy table,
+- **Observation**: GP looks tired, sits on the couch, observes the messy table,
   and starts watching TV
 
-- **\textcolor{darkgreen}{Inference}**: AI infers:
+- **Inference**: AI infers:
   - GP is tired and wants to relax
   - Messy coffee table bothers him
 
-- **\textcolor{blue}{Action}**: AI:
+- **Action**: AI:
   - Fetches a glass of water
   - Tidies up the coffee table without disturbing GP
 
-- **\textcolor{violet}{Feedback loop}**: AI monitors GP's reactions
+- **Feedback loop**: AI monitors GP's reactions
   - If GP is relaxed and happy, AI understanding is reinforced
   - If GP is not happy, AI adjusts actions and improves inference

@@ -21,14 +21,14 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{03.3: Docker Compose}}$$**
+**$$\text{\textcolor{blue}{\text{03.3: Docker Compose}}}$$**
 \endgroup
 
 ::: columns
 :::: {.column width=75%}
 \vspace{1cm}
 
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
 ::::
 :::: {.column width=20%}
@@ -37,7 +37,7 @@ UMD DATA605 - Big Data Systems
 :::
 
 #### Docker Compose
-- **\textcolor{red}{Manage multi-container apps running on a single node}**
+- **Manage multi-container apps running on a single node**
   - Describe app in a single _declarative_ YAML file
     - Avoid long Docker command scripts
   - Compose interacts with Docker API to achieve the requested state
@@ -46,7 +46,7 @@ UMD DATA605 - Big Data Systems
     - Microservices: Web front-end, Ordering, Back-end DB
   - In 2020, Docker Compose became an open standard for "code-to-cloud" process
 
-- **\textcolor{blue}{Manage multi-container apps running on multiple hosts}**
+- **Manage multi-container apps running on multiple hosts**
   - Docker Stacks / Swarm
   - Kubernetes
 
@@ -56,7 +56,7 @@ UMD DATA605 - Big Data Systems
 - Default name for a Compose file is \textcolor{blue}{\texttt{docker-compose.yml}}
   - Specify \textcolor{blue}{\texttt{-f}} for custom filenames
 
-- **\textcolor{red}{Top-level keys}**:
+- **Top-level keys**:
   - \textcolor{blue}{\texttt{version}}:
     - Mandatory first line for API version
     - Use latest version, typically 3 or higher
@@ -68,8 +68,8 @@ UMD DATA605 - Big Data Systems
   - \textcolor{blue}{\texttt{volumes}}:
     - Create new volumes
 
-- **\textcolor{darkgreen}{Key in services}** describes a "service" in terms of container
-  - **\textcolor{blue}{Inner keys}** specify Docker run command params
+- **Key in services** describes a "service" in terms of container
+  - **Inner keys** specify Docker run command params
 ::::
 ::::{.column width=35%}
 \footnotesize
@@ -225,8 +225,8 @@ Commands:
   \endgroup
 
 #### Docker Compose: Tutorial
-- Example taken from [\textcolor{blue}{\underline{https://github.com/nigelpoulton/counter-app}}](https://github.com/nigelpoulton/counter-app)
-- [\textcolor{blue}{\underline{tutorial\_docker\_compose}}](https://github.com/gpsaggese/umd_classes/tree/main/data605/tutorials/tutorial_docker_compose)
+- Example taken from https://github.com/nigelpoulton/counter-app
+- [tutorial\_docker\_compose](https://github.com/gpsaggese/umd_classes/tree/main/data605/tutorials/tutorial_docker_compose)
   \begingroup \scriptsize \color{blue}
   ```
   > cd tutorials/tutorial_docker_compose

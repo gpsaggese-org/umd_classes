@@ -5,42 +5,6 @@ fontsize: 10pt
 \let\uline\underline
 \let\ul\underline
 
-
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 05.1: Machine Learning Theories}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
-
-- Abu-Mostafa et al.: _"Learning From Data"_ (2012)
-
-::::
-:::: {.column width=20%}
-![](msml610/lectures_source/figures/book_covers/Book_cover_Learning_from_Data.jpg){ height=20% }
-::::
-:::
-
 # Is Machine Learning Even Possible?
 
 #### A Simple Visual ML Experiment (1/2)
@@ -49,13 +13,13 @@ MSML610: Advanced Machine Learning
 :::: {.column width=50%}
 - Consider the supervised classification problem
 
-- **\black{Input}**
+- **\textcolor{black}{\text{Input}}**
   - A 9 bit vector represented as a 3x3 array
-- **\black{Training set}**
-  - The \blue{blue row} $\vx_1, \vx_2, \vx_3$ for $f(\vx) = -1$
-  - The \green{green row} $\vx_4, \vx_5, \vx_6$ for $f(\vx) = +1$
-- **\black{Test set}**
-  - For the \red{red pattern} $\vx_0$, is $f(\vx_0) = -1 \text{ or } +1$?
+- **\textcolor{black}{\text{Training set}}**
+  - The \textcolor{blue}{\text{blue row}} $\vx_1, \vx_2, \vx_3$ for $f(\vx) = -1$
+  - The \textcolor{darkgreen}{\text{green row}} $\vx_4, \vx_5, \vx_6$ for $f(\vx) = +1$
+- **\textcolor{black}{\text{Test set}}**
+  - For the \textcolor{red}{\text{red pattern}} $\vx_0$, is $f(\vx_0) = -1 \text{ or } +1$?
 
 ::::
 :::: {.column width=50%}
@@ -104,12 +68,12 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=70%}
 
-- **\black{Model 1}**
+- **\textcolor{black}{\text{Model 1}}**
   - $f(\vx) = +1$ when $\vx$ has an axis of symmetry
   - $f(\vx) = -1$ when $\vx$ is not symmetric
   - The test set is symmetrical $\implies f(\vx_0) = +1$
 
-- **\black{Model 2}**
+- **\textcolor{black}{\text{Model 2}}**
   - $f(\vx) = +1$ when the top left square $\vx$ is empty
   - $f(\vx) = -1$ when the top left square $\vx$ is full
   - The test set has top left square full $\implies f(\vx_0) = -1$
@@ -120,7 +84,7 @@ MSML610: Advanced Machine Learning
 
 - How can a limited data set reveal enough information to define the entire
   target function?
-  - **\black{Is machine learning possible?}**
+  - **\textcolor{black}{\text{Is machine learning possible?}}**
 ::::
 :::: {.column width=30%}
 
@@ -165,19 +129,19 @@ MSML610: Advanced Machine Learning
 :::
 
 #### Is Machine Learning Possible?
-- The function can assume **\textcolor{red}{any value outside data}**
+- The function can assume **any value outside data**
   - E.g., with summer temperature data, the function could assume a different
     value for winter
 
-- **\textcolor{darkgreen}{How to learn an unknown function?}**
+- **How to learn an unknown function?**
   - Estimating at unseen points seems impossible in general
   - Requires assumptions or models about behavior
 
 - Difference between:
-  - **\textcolor{blue}{Possible}**
+  - **Possible**
     - No knowledge of the unknown function
     - E.g., could be linear, quadratic, or sine wave outside known data
-  - **\textcolor{violet}{Probable}**
+  - **Probable**
     - Some knowledge of the unknown function from domain knowledge or historical
       data patterns
     - E.g., if historical weather data forms a sinusoidal pattern, unknown
@@ -188,11 +152,11 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=50%}
 
-- Consider a bin with \red{red} and \green{green} marbles
-  - We want to estimate $\Pr(\text{pick a \red{red} marble}) = \mu$ where the
+- Consider a bin with \textcolor{red}{\text{red}} and \textcolor{darkgreen}{\text{green}} marbles
+  - We want to estimate $\Pr(\text{pick a \textcolor{red}{\text{red}} marble}) = \mu$ where the
     value of $\mu$ is unknown
   - We pick $N$ marbles independently with replacement
-  - The fraction of \red{red} marbles is $\nu$
+  - The fraction of \textcolor{red}{\text{red}} marbles is $\nu$
 
 ::::
 :::: {.column width=45%}
@@ -204,7 +168,7 @@ MSML610: Advanced Machine Learning
 - Does $\nu$ say anything about $\mu$?
   - **"No"**
     - In strict terms, we don't know anything about the marbles we didn't pick
-    - The sample can be mostly \green{green}, while the bin is mostly \red{red}
+    - The sample can be mostly \textcolor{darkgreen}{\text{green}}, while the bin is mostly \textcolor{red}{\text{red}}
     - This is _possible_, but _not probable_
   - **"Yes"**
     - Under certain conditions, the sample frequency is close to the real
@@ -220,12 +184,12 @@ MSML610: Advanced Machine Learning
 
 - Estimate the mean $\mu$ using $N$ samples with $\nu = \frac{1}{N} \sum_i X_i$
 
-- The **\textcolor{red}{probably approximately correct}** (PAC) statement holds:
+- The **probably approximately correct** (PAC) statement holds:
   $$
   \Pr(|\nu - \mu| > \varepsilon) \le \frac{2}{e^{2 \varepsilon^2 N}}
   $$
 
-- **\textcolor{blue}{Remarks:}**
+- **Remarks:**
   - Valid for all $N$ and $\varepsilon$, not an asymptotic result
   - Holds only if you sample $\nu$ and $\mu$ at random and in the same way
   - If $N$ increases, it is exponentially small that $\nu$ will deviate from
@@ -245,8 +209,8 @@ MSML610: Advanced Machine Learning
   - You know $f(\vx)$ at points $\vx \in \calX$
   - You choose an hypothesis $h: \calX \rightarrow \calY = \{0, 1\}$
   - Each point $\vx \in \calX$ is a marble
-  - You color \red{red} if the hypothesis is correct $h(\vx) = f(\vx)$,
-    \green{green} otherwise
+  - You color \textcolor{red}{\text{red}} if the hypothesis is correct $h(\vx) = f(\vx)$,
+    \textcolor{darkgreen}{\text{green}} otherwise
   - The in-sample error $E_{in}(h)$ corresponds to $\nu$
   - The marbles of unknown color corresponds to $E_{out}(h) = \mu$
   - $\vx_1, ..., \vx_n$ are picked randomly and independently from a
@@ -264,9 +228,9 @@ MSML610: Advanced Machine Learning
 
 - You have learned that for a given $h$, in-sample performance $E_{in}(h) = \nu$
   needs to be close to out-of-sample performance $E_{out}(h) = \mu$
-  - This is the **\textcolor{red}{validation setup}**, after you have already learned a model
+  - This is the **validation setup**, after you have already learned a model
 
-- In a **\textcolor{darkgreen}{learning setup}** you have $h$ to choose from $M$ hypotheses
+- In a **learning setup** you have $h$ to choose from $M$ hypotheses
   - You need a bound on the out-of-sample performance of the chosen hypothesis
     $h \in \calH$, regardless of which hypothesis you choose
   - You need a Hoeffding counterpart for the case of choosing from multiple
@@ -287,10 +251,10 @@ MSML610: Advanced Machine Learning
     \\
     \end{alignat*}
     \endgroup
-- **\textcolor{blue}{Problem}**: the bound is weak
+- **Problem**: the bound is weak
 
 #### Validation vs Learning: Coin Analogy
-- In a **\textcolor{red}{validation set-up}**, you have a coin and want to determine if it is fair
+- In a **validation set-up**, you have a coin and want to determine if it is fair
 
 - Assume the coin is unbiased: $\mu = 0.5$
 - Toss the coin 10 times
@@ -299,12 +263,12 @@ MSML610: Advanced Machine Learning
   \Pr(\text{coin shows } \nu = 0) = 1 / 2^{10} = 1 / 1024 \approx 0.1\%
   $$
 
-- **\textcolor{blue}{Conclusion}**: the probability that the out-of-sample performance ($\nu=0.0$)
+- **Conclusion**: the probability that the out-of-sample performance ($\nu=0.0$)
   is completely different from the in-sample perf ($\mu=0.5$) is very low
 
 #### Validation vs Learning: Coin Analogy
 
-- In a **\textcolor{red}{learning set-up}**, you have many coins and you need to choose one and
+- In a **learning set-up**, you have many coins and you need to choose one and
   determine if it's fair
 
 - If you have 1000 fair coins, how likely is it that at least one appears totally
@@ -322,11 +286,11 @@ MSML610: Advanced Machine Learning
   \end{aligned}
   $$
 
-- **\textcolor{blue}{Conclusion}**: It is probable, more than 50\%
+- **Conclusion**: It is probable, more than 50\%
 
 
 #### Validation vs Learning: Hoeffding Inequality
-- In **\textcolor{red}{validation / testing}**
+- In **validation / testing**
   - Use Hoeffding to assess how well our $g$ (the _chosen hypothesis_)
     approximates $f$ (the _unknown hypothesis_):
     $$
@@ -342,14 +306,14 @@ MSML610: Advanced Machine Learning
   - Since the hypothesis $g$ is final and fixed, Hoeffding inequality guarantees
     that you can learn since it gives a bound for $E_{out}$ to track $E_{in}$
 
-- In **\textcolor{darkgreen}{learning}**
+- In **learning**
   - Need to account that our hypothesis is the best of $M$ hypotheses, so:
     $$
     \Pr(|E_{in} - E_{out}| > \varepsilon) \le 2 M \exp(-2 \varepsilon^2 N)
     $$
   - The bound for $E_{out}$ from Hoeffding is weak
 
-- **\textcolor{blue}{Questions}**:
+- **Questions**:
   - Is the bound weak because it needs to be?
   - Is it possible to replace it with a stricter bound?
 
@@ -358,7 +322,7 @@ MSML610: Advanced Machine Learning
   $$
   \Pr(|E_{in} - E_{out}| > \varepsilon) \le 2 M \exp(-2 \varepsilon^2 N)
   $$
-  is **\textcolor{red}{artificially}** too loose
+  is **artificially** too loose
 
 - $M$ was coming from the bad event:
   \begin{alignat*}{2}
@@ -376,7 +340,7 @@ MSML610: Advanced Machine Learning
 
 - The union bound assumes the events are disjoint, leading to a conservative
   estimate if events overlap
-- **\textcolor{blue}{In reality}**, bad events are extremely overlapping because bad hypotheses are
+- **In reality**, bad events are extremely overlapping because bad hypotheses are
   extremely similar
 
 ::::
@@ -417,16 +381,16 @@ digraph ML_Phases {
 - This set-up is very similar to studying and exams in a college course
 
 - Students study the material
-  - This is the **\textcolor{red}{learning phase}**
+  - This is the **learning phase**
 
 - Before the final exam, students receive practice problems and solutions
   - Studying the problems improves performance by understating what they need to
     improve
-  - This corresponds to the **\textcolor{blue}{validation set}**
+  - This corresponds to the **validation set**
 
 #### Training vs Testing: College Course Analogy (2/2)
 
-- The final exam corresponds to the **\textcolor{red}{testing phase}**
+- The final exam corresponds to the **testing phase**
   - These problems are different than the problems in the validation set
 
   - Why not give out exam problems to improve performance?
@@ -439,21 +403,21 @@ digraph ML_Phases {
     - Knowing exam problems in advance wouldn't gauge learning effectively
 
 - What matters is how students do once they graduate and find a job
-  - This is the **\textcolor{blue}{out-of-sample phase}**
+  - This is the **out-of-sample phase**
 
 # Growth Function
 
 #### Dichotomy: Definition
-- **\textcolor{red}{Problem}**: classify $N$ (fixed) points $\vx_1, ..., \vx_N$ with an hypothesis
+- **Problem**: classify $N$ (fixed) points $\vx_1, ..., \vx_N$ with an hypothesis
   set $\calH$ of multi-class classifiers
 - Consider an assignment $D$ of the points to certain class $\vd_1, ..., \vd_N$
-- $D$ is a **\textcolor{darkgreen}{dichotomy}** for hypothesis set $\calH$ $\iff$ there exists
+- $D$ is a **dichotomy** for hypothesis set $\calH$ $\iff$ there exists
   $h \in \calH$ that gets the desired classification $D$
 
 ::: columns
 :::: {.column width=65%}
 
-- **\textcolor{blue}{Example}**
+- **Example**
   - 4 points in a plane $A, B, C, D$
   - Binary classification
   - $\calH$ = \{ bidimensional perceptrons \}
@@ -533,8 +497,8 @@ digraph ML_Phases {
 :::
 
 #### Dichotomies vs Hypotheses
-- An **\textcolor{red}{hypothesis}** classifies each point of $\calX$: $\calX \rightarrow \{-1, +1\}$
-- A **\textcolor{darkgreen}{dichotomy}** classifies each point of a fixed set:
+- An **hypothesis** classifies each point of $\calX$: $\calX \rightarrow \{-1, +1\}$
+- A **dichotomy** classifies each point of a fixed set:
   $\{\vx_1, ..., \vx_N\} \rightarrow \{-1, +1\}$
   - Dichotomies are "mini-hypotheses", i.e., hypotheses restricted to given
     points
@@ -544,7 +508,7 @@ digraph ML_Phases {
     - Where the points are placed
     - How the points are assigned
 
-- The **\textcolor{blue}{number of different dichotomies}** is indicated by
+- The **number of different dichotomies** is indicated by
   $|\calH(\vx_1, ..., \vx_N)|$
   - The number of dichotomies is always finite, since
     $|\calH(\vx_1, ..., \vx_N)| \le N^K$
@@ -557,7 +521,7 @@ digraph ML_Phases {
   - Many (infinite) hypotheses can correspond to the same dichotomy
 
 #### Growth Function
-- The **\textcolor{red}{growth function}** counts the maximum number of possible dichotomies on
+- The **growth function** counts the maximum number of possible dichotomies on
   $N$ points for a hypothesis set $\calH$:
 
   $$
@@ -565,12 +529,12 @@ digraph ML_Phases {
   = \max_{\vx_1, \cdots, \vx_N \in \calX} |\calH(\vx_1, \cdots, \vx_N)|
   $$
 
-- **\textcolor{darkgreen}{Why growth function?}**
+- **Why growth function?**
   - The dichotomies depend on point distribution and assignment
   - The growth function considers the maximum by placing points in the most
     "favorable way" for the hypothesis set
 
-- To compute $m_{\calH}(N)$ by **\textcolor{blue}{brute force}**:
+- To compute $m_{\calH}(N)$ by **brute force**:
   - Consider all possible placements of $N$ points $\vx_1, ..., \vx_N$
   - Consider all possible assignments of the points to the classes
   - Consider all possible hypotheses $h \in \calH$
@@ -583,7 +547,7 @@ digraph ML_Phases {
   - $N$ (fixed) points $\vx_1, ..., \vx_N$
   - An assignment $D$ of the points to certain class $\vd_1, ..., \vd_N$
 
-- $D$ is a **\textcolor{red}{dichotomy}** for hypothesis set $\calH$ $\iff$ there exists
+- $D$ is a **dichotomy** for hypothesis set $\calH$ $\iff$ there exists
   $h \in \calH$ that gets the desired classification $D$
 
 - There are various quantities in the definition of dichotomy
@@ -616,7 +580,7 @@ digraph ML_Phases {
 
 ::: columns
 :::: {.column width=50%}
-- **\textcolor{red}{Perceptron on a plane}**
+- **Perceptron on a plane**
   - $m_{\calH}(3) = 8$
   - $m_{\calH}(4) = 14$ (2 XOR classifications not possible)
 ::::
@@ -659,7 +623,7 @@ digraph ML_Phases {
 
 ::: columns
 :::: {.column width=50%}
-- **\textcolor{blue}{Positive rays}** $\sign(x - a)$ on $\bbR$
+- **Positive rays** $\sign(x - a)$ on $\bbR$
   - $m_{\calH}(N) = N + 1$
   - Origin of rays $a$ can be placed in $N + 1$ intervals
 
@@ -698,7 +662,7 @@ digraph ML_Phases {
 ::: columns
 :::: {.column width=50%}
 
-- **\textcolor{red}{Positive intervals}** on $\bbR$ $x \in [a, b]$
+- **Positive intervals** on $\bbR$ $x \in [a, b]$
   - $m_{\calH}(N) = {N + 1 \choose 2} + 1 \sim \N^2$
   - Pick 2 distinct intervals out of $N + 1$, and there is a dichotomy with 2
     points in the same interval
@@ -744,7 +708,7 @@ digraph ML_Phases {
 ::: columns
 :::: {.column width=50%}
 
-- **\textcolor{blue}{Convex sets on a plane}**
+- **Convex sets on a plane**
   - $m_{\calH}(N) = 2^N$
   - Place points in a circle and can classify $N$ points in any way
 
@@ -787,12 +751,12 @@ digraph ML_Phases {
 #### Break Point of an Hypothesis Set
 - Given an hypothesis set $\calH$
 
-- A hypothesis set $\calH$ **\textcolor{red}{shatters $N$ points}** $\iff$ $m_{\calH}(N) = 2^N$
+- A hypothesis set $\calH$ **shatters $N$ points** $\iff$ $m_{\calH}(N) = 2^N$
   - There is a position of $N$ points and a class assignment that you can
     classify using $h \in \calH$
   - It does not mean all sets of $N$ points can be classified in any way
 
-- $k$ is a **\textcolor{blue}{break point}** for $\calH$ $\iff m_{\calH}(k) < 2^k$
+- $k$ is a **break point** for $\calH$ $\iff m_{\calH}(k) < 2^k$
   - I.e., no data set of size $k$ can be shattered by $\calH$
   - E.g.,
     - For 2D perceptron: a break point is 4
@@ -818,17 +782,17 @@ digraph ML_Phases {
    - You can have a generalization bound: machine learning works!
 
 - A hypothesis set can be characterized from the learning point of view by the
-  **\textcolor{red}{existence and value of a break point}**
+  **existence and value of a break point**
 
 
 # The VC Dimension
 
 #### VC Dimension of an Hypothesis Set
-- The **\textcolor{red}{VC dimension of a hypothesis set}** $\calH$, denoted as $d_{VC}(\calH)$,
+- The **VC dimension of a hypothesis set** $\calH$, denoted as $d_{VC}(\calH)$,
   is defined as the largest value of $N$ for which $m_{\calH}(N) = 2^N$
   - I.e., the VC dimension is the most points $\calH$ can shatter
 
-- **\textcolor{blue}{Properties}** of the VC dimension: if $d_{VC}(\calH) = N$ then
+- **Properties** of the VC dimension: if $d_{VC}(\calH) = N$ then
 
   - Exists a constellation of $N$ points that can be shattered by $\calH$
     - Not all sets of $N$ points can be shattered
@@ -844,8 +808,8 @@ digraph ML_Phases {
   - The VC dimension is the _order of the polynomial bounding_ $m_{\calH}$
 
 #### VC Dimension: Interpretation
-- The VC dimension **\textcolor{red}{measures the complexity}** of a hypothesis set in terms of
-  **\textcolor{blue}{effective parameters}**
+- The VC dimension **measures the complexity** of a hypothesis set in terms of
+  **effective parameters**
 
 - E.g.,
   - A perceptron in a $d$-dimensional space has $d_{VC} = d + 1$

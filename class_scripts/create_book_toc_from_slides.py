@@ -2,13 +2,16 @@
 r"""
 Generate comprehensive table of contents for book from lecture slides.
 
-Reads the book_map.md file which contains chapters and their associated lesson
-files, then extracts the table of contents from each lesson file and combines
-them into a single output markdown file.
+- Reads a `book_map.md` file which contains chapters and their associated
+  lesson files
+- Extracts the table of contents from each lesson file
+- Combines them into a single output markdown file.
 
 Usage:
+# Generate a table of contents with headers up to level 2 (H1-H2 only)
 > create_book_toc_from_slides.py --output book_toc.md --max_level 2
 
+# Generate a table of contents with headers up to level 5 (full depth)
 > create_book_toc_from_slides.py --output book_toc.md --max_level 5
 """
 

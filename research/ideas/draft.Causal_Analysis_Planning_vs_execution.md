@@ -249,6 +249,61 @@ choice itself; strategy optimization is secondary to founder quality.
 - **Asymmetric Information**: Assume founders don't know true market parameters;
   test whether planning helps reduce information uncertainty
 
+## Alternative Formalization: Optimal Stopping and Bandits
+
+- Merged from `draft.Agentic_Analysis_of_Lean_Startup_Decision_Making.md`. This
+  section recasts the same planning-vs-execution question in decision-theory /
+  RL terms, complementary to the agent-based simulation above.
+
+### Batch Startup Model
+- Agent spends `T_info` rounds gathering signals about world state `θ` (market
+  demand, product-market fit, unit economics) with no market feedback loop or
+  revenue
+- After `T_info` rounds, commits to decision `d*` maximizing expected value
+  given posterior belief: `P(θ | s_1, ..., s_T)`
+- This is an **optimal stopping problem**: founder chooses `T_info` balancing
+  value of information (marginal variance reduction) vs. cost of delay (burn
+  rate, competitor entry, market drift)
+- Decision quality is increasing and concave in `T_info` (diminishing
+  returns): posterior variance shrinks as `1/T_info` (classic Bayesian
+  updating)
+- **Staleness risk**: if `θ_t` drifts over time (`θ_t = θ_{t-1} + η_t`,
+  `η_t ~ N(0, σ_θ²)`), a long collection phase optimizes for outdated state
+
+### Iterative Startup Model
+- **Sequential decision process** (multi-armed bandit or online RL): at each
+  round `t`, take action `a_t` (ship feature, run experiment, test price),
+  observe reward `r_t = f(a_t, θ_t) + ε_t`, update belief before next round
+- Trades one-shot commitment for a **sequence of reversible bets**, each
+  generating real signal (revealed preference > surveys/forecasts, less
+  noisy)
+- **Thompson sampling / bandit logic**: exploit best-so-far while exploring
+  enough to avoid premature convergence to a locally-optimal-but-globally-wrong
+  strategy
+- **Switching cost** `c` (rebuild, re-onboard, context-switch, morale):
+  too-frequent iteration prevents signal from materializing ("thrashing"
+  regime, analogous to committee groupthink)
+
+### Example: Thrashing Failure
+- Startup with high switching cost and noisy signals: too-frequent pivots
+  prevent any strategy from generating meaningful revenue. Moving monthly
+  burns morale and reduces speed-to-signal. Both strategies fail, but batch
+  suffers less (at least it commits once)
+
+### Additional Questions
+- What is the phase transition between "batch works" and "iteration works"?
+  Does it depend on drift rate, noise level, runway, or some combination?
+- Can we identify optimal switching thresholds that minimize thrashing while
+  preserving adaptability (e.g., "pivot if confidence drops below 30%")?
+
+### Additional References
+- Wald, A., & Wolfowitz, J. (1948). _Optimum character of the sequential
+  probability ratio test_. The Annals of Mathematical Statistics
+- Thompson, W. R. (1933). _On the likelihood that one unknown probability
+  exceeds another in the light of the evidence of two samples_
+- Bergemann, D., & Välimäki, J. (2006). _Bandit problems_. Handbook of game
+  theory
+
 ## Useful Resources
 - [Lean Startup Methodology](http://theleanstartup.com/) — Classic reference on
   execution-first, rapid iteration approach

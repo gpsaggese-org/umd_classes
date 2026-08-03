@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{04.3: Data Storage}}$$**
+**$$\text{\textcolor{blue}{\text{04.3: Data Storage}}}$$**
 \endgroup
 
 ::: columns

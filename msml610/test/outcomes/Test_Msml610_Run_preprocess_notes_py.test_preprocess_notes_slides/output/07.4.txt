@@ -4,55 +4,13 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{0.5cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 07.4: Generalized Linear Models}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA (Artificial Intelligence: a Modern Approach)
-  - Chap 15: Probabilistic programming
-
-- Martin, Bayesian Analysis with Python, 2018 (2e)
-
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){width=1.5cm}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Bayesian_analysis_with_Python.jpg){width=1.5cm}
-
-::::
-:::
-
 
 # Generalized Linear Models
 
 ## Simple Linear Model
 
 #### Linear Model
-- Many problems can be formulated as **\textcolor{red}{linear regression}**:
+- Many problems can be formulated as **linear regression**:
   - $X$ and $Y$: uni-dimensional continuous RVs
   - Dataset of paired observations: $\{(x_1, y_1), ..., (x_n, y_n)\}$
   - $X$: independent variables
@@ -78,12 +36,12 @@ MSML610: Advanced Machine Learning
 :::
 
 #### Linear Model: Frequentist Approach
-- A **\textcolor{red}{linear model}** is described by:
+- A **linear model** is described by:
   $$
   y = \alpha + \beta x
   $$
 
-- **\textcolor{blue}{Frequentist approach}**:
+- **Frequentist approach**:
   - Find parameters $\alpha, \beta$ using least square fitting
     - Minimize average quadratic error between observed $y$ and predicted
       $\hat{y}$
@@ -99,7 +57,7 @@ MSML610: Advanced Machine Learning
     - Homoscedasticity (constant variance of $\varepsilon_i$)
 
 #### Linear Model: Bayesian Approach
-- **\textcolor{red}{Bayesian assumptions}**:
+- **Bayesian assumptions**:
   - Data $y$ is Gaussian with mean $\alpha + \beta x$ and standard deviation
     $$
     \sigma: y \sim N(\mu=\alpha + \beta x, \sigma)
@@ -114,7 +72,7 @@ MSML610: Advanced Machine Learning
       \end{cases}
     \end{equation*}
 
-- Use **\textcolor{blue}{vague priors}** to add problem knowledge:
+- Use **vague priors** to add problem knowledge:
   - Center intercept $\alpha$ around $0$
   - Info on sign of $\beta$ sometimes available
   - Use Half-Cauchy / exponential distribution for $\sigma$
@@ -124,7 +82,7 @@ MSML610: Advanced Machine Learning
 #### Linear Model: Synthetic Example
 ::: columns
 :::: {.column width=35%}
-- Generate **\textcolor{red}{random data from ground truth}**
+- Generate **random data from ground truth**
   - $\alpha = 2.5$
   - $\beta = 0.9$
   - Add noise
@@ -137,8 +95,8 @@ MSML610: Advanced Machine Learning
 #### Linear Model: Synthetic Example
 ::: columns
 :::: {.column width=45%}
-- Create **\textcolor{red}{linear model in PyMC}**
-- **\textcolor{blue}{Use vague priors}**
+- Create **linear model in PyMC**
+- **Use vague priors**
   - Prior of intercept $\alpha$ and $\beta$ centered around $0$
   - Half-Cauchy distribution for $\sigma$
 
@@ -169,8 +127,8 @@ MSML610: Advanced Machine Learning
 #### Linear Model: Bike Rental Example
 
 - Model relationship between:
-  - **\textcolor{red}{Temperature}** $X$
-  - **\textcolor{blue}{Number of bikes rented}** $Y$
+  - **Temperature** $X$
+  - **Number of bikes rented** $Y$
 
 ![](msml610/lectures_source/figures/L07.4.Bike_rental_data.png){ width=80% }
 
@@ -185,14 +143,14 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=45%}
 
-- **\textcolor{red}{Fit model}** with PyMC:
+- **Fit model** with PyMC:
   $$\mu = 69 + 7.9 X$$
 
-- **\textcolor{darkgreen}{Interpreting the model}**
+- **Interpreting the model**
   - Temperature 0: expected rented bikes = 69
   - Each degree increase: expected rented bikes = +7.9
 
-- **\textcolor{blue}{Parameters have uncertainty}**
+- **Parameters have uncertainty**
   - Posterior accounts for combined uncertainty
   - Bands represent quantiles [0.25, 0.75] and [0.03, 0.97] of prediction
 
@@ -205,24 +163,24 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-- **\textcolor{violet}{Do you see any problem in the model?}** ![](assets/emoji/puzzle.png){ width=14px }
+- **Do you see any problem in the model?** ![](assets/emoji/puzzle.png){ width=14px }
 
 #### Linear Model: Bike Rental Example (Criticism)
 
-- **\textcolor{red}{Problems}**
+- **Problems**
   1. Model outputs negative bike numbers
   2. Model predicts real numbers, but count is discrete
 
-- **\textcolor{darkgreen}{Root cause}**: Using Gaussian likelihood:
+- **Root cause**: Using Gaussian likelihood:
   - Extends to negative numbers
   - Is continuous
 
-- **\textcolor{blue}{Solutions}**:
+- **Solutions**:
   - _Hack_: Clip predictions below 0 and discretize output
   - _Elegant_: Use model defined for discrete positive numbers
 
 #### Count Data
-- **\textcolor{red}{Count data}** when random variable is discrete, bounded at 0
+- **Count data** when random variable is discrete, bounded at 0
   - E.g., number of rented bikes
 
   - Large numbers use continuous distribution
@@ -232,7 +190,7 @@ MSML610: Advanced Machine Learning
     - E.g., Poisson, negative binomial
 
 #### Generalized Liner Model (GLM)
-- **\textcolor{red}{Generalization of linear model}** using different distributions for
+- **Generalization of linear model** using different distributions for
   likelihood:
   \begin{equation*}
     \begin{cases}
@@ -257,17 +215,17 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=50%}
 
-- **\textcolor{red}{Poisson distribution}**
+- **Poisson distribution**
   - Models events in a fixed interval (time, space)
   - Assumes independent events at a constant rate
 
-- **\textcolor{darkgreen}{Examples}**
+- **Examples**
   - _Call centers_: customers per hour
   - _Natural events_: earthquakes in a region
   - _Traffic flow_: cars through a toll booth per day
   - _Biology_: mutations in a DNA segment
 
-- **\textcolor{blue}{Cons}**
+- **Cons**
   - Assumes mean equals variance (can't model "overdispersion")
 ::::
 :::: {.column width=50%}
@@ -278,7 +236,7 @@ MSML610: Advanced Machine Learning
 #### Negative Binomial Distribution
 ::: columns
 :::: {.column width=45%}
-- **\textcolor{red}{Negative binomial distribution}**
+- **Negative binomial distribution**
   - Models failures/trials for fixed successes in IID Bernoulli trials
   - Generalizes geometric distribution, modeling trials to first success
   - Models overdispersion
@@ -289,20 +247,20 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-- **\textcolor{blue}{E.g.,}**
+- **E.g.,**
   - _Customer service_: unsuccessful interactions before success
   - _Sports_: games lost before winning fixed number of games
 
 #### Overdispersion
-- **\textcolor{red}{Overdispersion}** occurs when variance of count data is much larger than mean
+- **Overdispersion** occurs when variance of count data is much larger than mean
   (e.g., 15-20x)
 
-- **\textcolor{darkgreen}{Examples}**:
+- **Examples**:
   - _Epidemiology_: modeling disease outbreak, number of new infections
     fluctuates widely
   - _Customer service_: large variation in daily complaints
 
-- **\textcolor{blue}{How to model it?}**
+- **How to model it?**
   - _Use Poisson_:
     - ![](assets/emoji/wrong.png){ width=12px }: mean and variance must be equal
   - _Use Gaussian_:
@@ -318,9 +276,9 @@ MSML610: Advanced Machine Learning
 #### Robust Regression
 ::: columns
 :::: {.column width=40%}
-- **\textcolor{red}{Outliers}** pull regression line away from data
+- **Outliers** pull regression line away from data
 
-- **\textcolor{blue}{Robust regression}** is a generalized linear model
+- **Robust regression** is a generalized linear model
   - Avoids feature transform/winsorization
 
 - Student's t-distribution
@@ -341,12 +299,12 @@ MSML610: Advanced Machine Learning
 ## Logistic Regression
 
 #### Logistic Regression
-- **\textcolor{red}{Logistic regression model}**
+- **Logistic regression model**
   - Generalized linear model
   - Models binary response variable
     - E.g., ham/spam, safe/unsafe, cloudy/sunny, hotdog/not hotdog
 
-- **\textcolor{darkgreen}{Logistic model}** is:
+- **Logistic model** is:
   \begin{equation*}
     \begin{cases}
     \theta = logit(\alpha + \beta x) \\
@@ -359,7 +317,7 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=50%}
 
-- **\textcolor{blue}{Logistic function}** (aka sigmoid)
+- **Logistic function** (aka sigmoid)
   $$
   logit(z) = \frac{1}{1 + \exp^{-z}}
   $$
@@ -419,7 +377,7 @@ MSML610: Advanced Machine Learning
 
 #### Classification with Logistic Regression
 
-- **\textcolor{red}{Logistic regression}**:
+- **Logistic regression**:
   - Computes probability of output being a certain value
   - Models $\theta = \Pr(Y=1 | X)$
   - Classifies output using decision rule, e.g.,
@@ -431,14 +389,14 @@ MSML610: Advanced Machine Learning
   - Once Bayesian, generalize more
   - No gradient descent, solved with Bayesian inference
 
-- **\textcolor{darkgreen}{Classification with logistic regression might seem a misnomer}**
-  - **\textcolor{blue}{Regression}** predicts continuous variable
-  - **\textcolor{violet}{Classification}** predicts discrete variable
+- **Classification with logistic regression might seem a misnomer**
+  - **Regression** predicts continuous variable
+  - **Classification** predicts discrete variable
   - Is "regression" since it computes probability of output being a certain
     value
 
 #### Boundary Decision for a Classifier
-- **\textcolor{red}{Boundary decision}** $\delta$ for a classifier are the values of independent
+- **Boundary decision** $\delta$ for a classifier are the values of independent
   variables making output probability 0.5
 
 - E.g., for logistic regression $\delta$:
@@ -449,7 +407,7 @@ MSML610: Advanced Machine Learning
     \end{align*}
   - Decision boundary uncertainty due to $\alpha$ and $\beta$ uncertainty
 
-- Probability threshold $0.5$ for equal **\textcolor{blue}{misclassification risk}**
+- Probability threshold $0.5$ for equal **misclassification risk**
   - Misclassification cost may not be symmetrical
   - Minimize false negatives
     - E.g., _"patient has disease, disease missed"_
@@ -457,7 +415,7 @@ MSML610: Advanced Machine Learning
     - E.g., _"patient doesn't have disease, predicted"_
 
 #### Odds
-- The **\textcolor{red}{odds of event}** _"$y=1$"_ is the ratio of favorable to unfavorable events
+- The **odds of event** _"$y=1$"_ is the ratio of favorable to unfavorable events
   $$
   \text{odds} \defeq \frac{\Pr(y=1)}{1 - \Pr(y=1)}
   $$
@@ -468,7 +426,7 @@ MSML610: Advanced Machine Learning
     $\frac{1/6}{5/6} = \frac{1}{5} = 0.2$
     - One favorable event for 5 unfavorable events
 
-- Interpreting **\textcolor{blue}{logistic regression in terms of odds}**:
+- Interpreting **logistic regression in terms of odds**:
   - Since $\theta = logit(\alpha + \beta x)$ and $\theta = \Pr(y = 1)$:
     $$
     \alpha + \beta x = \log ( \frac{\Pr(y=1)}{1 - \Pr(y=1)} )
@@ -501,11 +459,11 @@ MSML610: Advanced Machine Learning
 :::
 
 #### Heteroskedasticity
-- **\textcolor{red}{Heteroskedasticity}** is when variance of errors is not constant across
+- **Heteroskedasticity** is when variance of errors is not constant across
   observations
   - E.g., variance as a linear function of the dependent variable
 
-- **\textcolor{blue}{Example}**:
+- **Example**:
   - _"Baby height as a function of age"_ is heteroskedastic
   - Mean $\mu$ as square root of a linear model
   - Standard deviation $\sigma$ as a linear function of the predictor variable
@@ -539,10 +497,10 @@ MSML610: Advanced Machine Learning
 ## Multiple Linear Regression
 
 #### Multiple Linear Regression
-- In prediction problems, common to use **\textcolor{red}{several independent variables}**
+- In prediction problems, common to use **several independent variables**
   - E.g., student's grades = f(family income, mother's education, ...)
 
-- **\textcolor{blue}{Problem formulation}**
+- **Problem formulation**
   - $k$ independent variables
   - $N$ observations
   - Find a hyperplane of dimension $k$ to explain data
@@ -590,7 +548,7 @@ MSML610: Advanced Machine Learning
 
 #### Multiple Regression: Rented Bike Example 1/2
 
-- **\textcolor{red}{Assumption}**: number of bike rented is function of temperature and hour of
+- **Assumption**: number of bike rented is function of temperature and hour of
   the day
 
 - PyMC model
@@ -620,4 +578,4 @@ MSML610: Advanced Machine Learning
 
 #### Tutorial
 
-- [\textcolor{blue}{\underline{Generalized Linear Models}}](https://github.com/gpsaggese/umd_classes/blob/master/msml610/tutorials/notebooks/Lesson07.04_Generalized_Linear_Models.ipynb)
+- [Generalized Linear Models](https://github.com/gpsaggese/umd_classes/blob/master/msml610/tutorials/notebooks/Lesson07.04_Generalized_Linear_Models.ipynb)

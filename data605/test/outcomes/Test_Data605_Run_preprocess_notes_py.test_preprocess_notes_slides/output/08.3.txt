@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{08.3: Apache Hadoop}}$$**
+**$$\text{\textcolor{blue}{\text{08.3: Apache Hadoop}}}$$**
 \endgroup
 
 \vspace{1cm}
@@ -29,7 +29,7 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=75%}
 
-- **Instructor**: Dr. GP Saggese - [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+- **Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
 
 - **References**
   - Ghemawat et al.: _The Google File System_, 2003
@@ -43,45 +43,45 @@ UMD DATA605 - Big Data Systems
 #### Hadoop Ecosystem (aka Hadoop Zoo)
 :::columns
 ::::{.column width=50%}
-- **\textcolor{red}{Hadoop MapReduce}**
+- **Hadoop MapReduce**
   - A framework for processing large data sets in parallel across a Hadoop
     cluster
 
-- **\textcolor{orange}{HDFS}**
+- **HDFS**
   - Distributed file system
 
-- **\textcolor{darkgreen}{Pig}**
+- **Pig**
   - High-level data-flow framework for parallel computation
 ::::
 ::::{.column width=45%}
 ![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_59_image_1.png)
 ::::
 :::
-- **\textcolor{teal}{HBase}**
+- **HBase**
   - Scalable, distributed database
   - Structured data storage for large tables (like Google BigTable)
 
-- **\textcolor{cyan}{Cassandra}**
+- **Cassandra**
   - Scalable multi-master database with no single points of failure
 
-- **\textcolor{blue}{Hive}**
+- **Hive**
   - Data warehouse infrastructure
   - Provide data summarization and ad-hoc querying
 
-- **\textcolor{violet}{ZooKeeper}**
+- **ZooKeeper**
   - High-performance coordination service for distributed applications
 
-- **\textcolor{magenta}{YARN, Kafka, Storm, Spark, Solr, ...}**
+- **YARN, Kafka, Storm, Spark, Solr, ...**
 
 #### Hadoop Distributed File System (HDFS)
 ::: columns
 :::: {.column width=60%}
-- HDFS is a **\textcolor{red}{distributed file system}**
+- HDFS is a **distributed file system**
   - Designed to store large data sets reliably
   - Part of the Apache Hadoop ecosystem
   - Inspired by the Google File System (GFS)
 
-1. Optimized for **\textcolor{darkgreen}{high-throughput access}** to large files
+1. Optimized for **high-throughput access** to large files
    - Suitable for batch processing
    - Not low-latency access
 ::::
@@ -92,7 +92,7 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-2. Designed for **\textcolor{blue}{fault tolerance and scalability}**
+2. Designed for **fault tolerance and scalability**
    - Ensures fault tolerance through replication
      - Blocks are stored on different nodes and racks
      - Provides data availability even if some nodes fail
@@ -102,18 +102,18 @@ UMD DATA605 - Big Data Systems
 #### HDFS Architecture
 ::: columns
 :::: {.column width=50%}
-- **\textcolor{red}{NameNode}**
+- **NameNode**
   - Store file/dir hierarchy
   - Store file metadata
     - E.g., block location, size, permissions
 
-- **\textcolor{darkgreen}{DataNodes}**
+- **DataNodes**
   - Store actual data blocks
   - Split file into 16-256MB blocks
   - Replicate chunks (2x or 3x) across multiple _DataNodes_
   - Keep replicas in different racks
 
-- **\textcolor{blue}{Client}**
+- **Client**
   - API (e.g., Python, Java) to library
   - Mount HDFS on local filesystem
 ::::
@@ -126,14 +126,14 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=50%}
 
-- **\textcolor{red}{Read}**
+- **Read**
   - Contact _NameNode_ for _DataNode_ and block pointer
   - Choose nearest _DataNode_ for each block
   - Connect to _DataNode_ for data access
   - Read blocks in parallel to improve performance
   - Client reassembles data in correct order
 
-- **\textcolor{blue}{Write}**
+- **Write**
   - _NameNode_ creates blocks
   - Assign blocks to multiple _DataNodes_
   - Client sends data to _DataNodes_
@@ -156,15 +156,15 @@ UMD DATA605 - Big Data Systems
 - Data integrity ensured using checksums
 
 #### HDFS vs Traditional File Systems
-- Best for **\textcolor{red}{storing and processing large-scale files}**
+- Best for **storing and processing large-scale files**
   - E.g., logs, media, sensor data
   - Commonly used in data lakes and ETL pipelines
   - Supports very large files and directories
   - Performance degrades with many small files
 
-- Optimized for **\textcolor{darkgreen}{write-once, read-many}** access pattern
+- Optimized for **write-once, read-many** access pattern
 
-- Lacks low-latency access, but provides **\textcolor{blue}{high throughput}**
+- Lacks low-latency access, but provides **high throughput**
   - Good for analytics (OLAP)
   - Not suitable for transactional systems (OLTP)
     - E.g., bank
@@ -173,14 +173,14 @@ UMD DATA605 - Big Data Systems
 
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Hadoop}**: open-source MapReduce implementation
+- **Hadoop**: open-source MapReduce implementation
 ::::
 :::: {.column width=40%}
 ![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_42_image_1.png){width=60%}
 ::::
 :::
 
-- **\textcolor{blue}{Functionalities}**
+- **Functionalities**
   - Partition input data (HDFS)
   - Input adapters
     - E.g., HBase, MongoDB, Cassandra, Amazon Dynamo

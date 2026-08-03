@@ -4,59 +4,18 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 07.5: Bayesian Model Comparison}}$$**
-\endgroup
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA (Artificial Intelligence: a Modern Approach)
-  - Chap 15: Probabilistic programming
-
-- Martin, Bayesian Analysis with Python, 2018 (2e)
-
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){width=1.5cm}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Bayesian_analysis_with_Python.jpg){width=1.5cm}
-
-::::
-:::
 
 # Bayesian Model Comparison
 
 #### Models as Maps of the Real World
-- Typically you need to compare models to understand which one is **\textcolor{red}{"better"}**
+- Typically you need to compare models to understand which one is **"better"**
 
-- Models are a **\textcolor{darkgreen}{map, not a copy}** of the real world
+- Models are a **map, not a copy** of the real world
   - _"All models are wrong, but some are useful"_ (Box, 1976)
     - "Wrong": all models are wrong since they aren't the actual territory
     - "Useful" some models describe a problem better than others
 
-- Models have a **\textcolor{blue}{purpose}**
+- Models have a **purpose**
   - Are approximations to understand a problem
   - A model can't reproduce all aspects equally well
   - Different models capture different data aspects
@@ -68,7 +27,7 @@ MSML610: Advanced Machine Learning
 
 ::: columns
 :::: {.column width=50%}
-- **\textcolor{red}{Goal of PPC}**:
+- **Goal of PPC**:
   - Evaluate model's data explanation
   - Understand model limitations
   - Improve model
@@ -92,7 +51,7 @@ MSML610: Advanced Machine Learning
 
 ::: columns
 :::: {.column width=50%}
-- **\textcolor{red}{Compare KDE of observed and predicted data}**
+- **Compare KDE of observed and predicted data**
   - Linear model KDE doesn't match
   - Quadratic model KDE matches better
   - High uncertainty in both models, especially at tails
@@ -119,7 +78,7 @@ MSML610: Advanced Machine Learning
 - A Bayesian p-value summarizes the comparison between simulated and observed
   data
 
-- **\textcolor{red}{Procedure}**
+- **Procedure**
   - Given the posterior predictive $\tilde{Y}$
   - Choose a summary statistic $T$ (E.g., mean, median, standard deviation)
   - Compute $T$ for:
@@ -144,14 +103,14 @@ MSML610: Advanced Machine Learning
 #### Bayesian P-Value: Example
 - Study the height of people in a population
 
-- **\textcolor{red}{Fit the Bayesian model}**
+- **Fit the Bayesian model**
   - Assume a normal distribution with unknown mean and variance
   - Collect observed data of heights (e.g., 100 people)
   - Specify a prior distribution for mean and variance
   - Combine observed data with prior to obtain a posterior distribution of mean
     and variance of population height
 
-- **\textcolor{blue}{Compute Bayesian p-value}**
+- **Compute Bayesian p-value**
   - From posterior distribution:
     - Generate new simulated datasets
     - For each dataset, compute mean height
@@ -163,10 +122,10 @@ MSML610: Advanced Machine Learning
     - A value close to 0 or 1 indicates a poor fit
 
 #### Bayesian vs Frequentist P-Value
-- **\textcolor{red}{Frequentist p-value}** is the probability of getting observed data as or more
+- **Frequentist p-value** is the probability of getting observed data as or more
   extreme, assuming the null hypothesis is true
 
-- **\textcolor{blue}{Bayesian p-value}** is the probability that simulated data from the model
+- **Bayesian p-value** is the probability that simulated data from the model
   (i.e., posterior predictive check) is as or more extreme than the observed
   data
 
@@ -182,12 +141,12 @@ MSML610: Advanced Machine Learning
 ## The Balance Between Simplicity and Accuracy
 
 #### Occam's Razor
-- _"If you have **\textcolor{red}{equivalent}** explanations for the same phenomenon, you should
-  choose the **\textcolor{darkgreen}{simpler}** one"_
+- _"If you have **equivalent** explanations for the same phenomenon, you should
+  choose the **simpler** one"_
   - Quality of explanation $\approx$ accuracy
   - Simpler $\approx$ number of model parameters
 
-- **\textcolor{blue}{Complexity vs accuracy}**
+- **Complexity vs accuracy**
   - Increasing model complexity (e.g., number of model parameters) is
     accompanied by:
     - Increasing in-sample accuracy
@@ -199,25 +158,25 @@ MSML610: Advanced Machine Learning
 - Ideally balance complexity and accuracy in a quantitative way
 
 #### Overfitting and Underfitting
-- A model is **\textcolor{red}{overfit}** when it has many parameters, fitting the training data
+- A model is **overfit** when it has many parameters, fitting the training data
   well but unseen data poorly
   - Overfitting in terms of signal/noise:
     - Each dataset has "signal" and "noise"
     - We want the model to learn the signal
     - A model overfits when it learns the noise, obscuring the signal
 
-- A model is **\textcolor{blue}{underfit}** when it has few parameters, fitting the dataset poorly
+- A model is **underfit** when it has few parameters, fitting the dataset poorly
   - An underfit model doesn't learn the signal well
   - E.g., a constant fits a dataset, only learning the mean
 
 
 #### Bias-Variance Trade-Off
-- A model has **\textcolor{red}{high bias}** when:
+- A model has **high bias** when:
   - It has low ability to accommodate the data
   - I.e., underfitting
   - E.g., a polynomial of degree 0
 
-- A model has **\textcolor{blue}{high variance}** when:
+- A model has **high variance** when:
   - It has high capacity and it is sensitive to details in the data, capturing
     noise
   - I.e., overfitting
@@ -231,8 +190,8 @@ MSML610: Advanced Machine Learning
 ## Measures of Predictive Accuracy
 
 #### Accuracy Measures
-- **\textcolor{red}{In-sample accuracy}** is measured on the data used to fit a model
-- **\textcolor{blue}{Out-of-sample accuracy}** is measured on data not used to fit a model
+- **In-sample accuracy** is measured on the data used to fit a model
+- **Out-of-sample accuracy** is measured on data not used to fit a model
   - Aka "predictive accuracy"
 
 - In-sample accuracy > out-of-sample accuracy
@@ -244,7 +203,7 @@ MSML610: Advanced Machine Learning
 ### Information Criteria
 
 #### Information Criteria: Intuition
-- **\textcolor{red}{Information criteria}** compare models in terms of fitting the data taking
+- **Information criteria** compare models in terms of fitting the data taking
   into account their complexity through a penalization term
   - Out-of-sample accuracy $\approx$ in-sample accuracy + a term penalizing
     model complexity
@@ -255,12 +214,12 @@ MSML610: Advanced Machine Learning
 
 
 #### Maximum Likelihood Estimation (MLE)
-- **\textcolor{red}{MLE}** finds the parameter values that make the observed data most probable
+- **MLE** finds the parameter values that make the observed data most probable
   (given a model)
   - Denoted by $\hat{\theta}_{MLE}$
   - It's a point not a distribution
 
-- **\textcolor{blue}{Procedure}**:
+- **Procedure**:
   - Given the data $x_1, x_2, ..., x_n$
   - Assume it comes from a distribution with an unknown parameter $\theta$
   - Pick the value of $\theta$ that makes the data most likely given a likelihood
@@ -286,22 +245,22 @@ MSML610: Advanced Machine Learning
   - $\hat{\theta}_{MLE}$ is the maximum likelihood estimation of $\theta$
   - $\text{num}_{params}$ is the number of parameters
 
-- **\textcolor{red}{Interpretation}**:
+- **Interpretation**:
   - The first term (log likelihood) measures how well the model fits the data
   - The second term penalizes complex models
 
-- **\textcolor{blue}{Cons}**:
+- **Cons**:
   - Discard information about uncertainty of posterior estimation
   - MLE assumes flat priors (vs informative and weakly informative priors)
   - Number of parameters is not always a good measure of complexity
     - E.g., in hierarchical models the effective number of params is smaller
 
 #### Bayesian Information Criteria
-- **\textcolor{red}{Bayesian Information Criteria (BIC)}**
+- **Bayesian Information Criteria (BIC)**
   - Like AIC, it assumes flat priors and uses MLE
   - It is not Bayesian
 
-- **\textcolor{blue}{Widely Applicable Information Criteria (WAIC)}**
+- **Widely Applicable Information Criteria (WAIC)**
   - Bayesian version of AIC
   - It has two terms:
     - One that measures how good the fit is
@@ -312,25 +271,25 @@ MSML610: Advanced Machine Learning
 ### Cross-Validation
 
 #### Cross-Validation
-- **\textcolor{red}{Cross-validation}** (CV)
-  - **\textcolor{orange}{Procedure}**
+- **Cross-validation** (CV)
+  - **Procedure**
     - Partition data into $K$ portions of equal size and similar statistics
     - Use $K-1$ partitions to train the model and test on remaining partition
     - Repeat for all $K$ folds
     - Average the results
-  - **\textcolor{darkgreen}{Pros}**
+  - **Pros**
     - Simple and effective solution to use all data to compare models
 
-- **\textcolor{teal}{Leave-one-out cross-validation}** (LOO-CV)
-  - **\textcolor{cyan}{Procedure}**:
+- **Leave-one-out cross-validation** (LOO-CV)
+  - **Procedure**:
     - The model is fit for all data, excluding one observation
     - The model's predictive accuracy is tested on the left out observation
     - Repeat the process for all observations
     - Average the results
-  - **\textcolor{blue}{Cons}**
+  - **Cons**
     - It is very computationally expensive since one needs to refit the model
 
-- How to adapt **\textcolor{violet}{cross-validation to a Bayesian approach}**?
+- How to adapt **cross-validation to a Bayesian approach**?
   - CV and LOO require multiple model fits and fitting a Bayesian model is very
     expensive
   - Yes! There is a way to approximate using a single fit to the data
@@ -346,11 +305,11 @@ MSML610: Advanced Machine Learning
   \begingroup \small
   $$
   ELPD_{LOO-CV} =
-    \red{\sum_{i=1}^n} \log
+    \textcolor{red}{\sum_{i=1}^n} \log
     % Need to avoid the \textcolor{blue}{\texttt{text}} inside \textcolor{blue}{\texttt{\textcolor}}.
     \textcolor{violet}{\int}
-    \teal{p(y_i | \theta)}
-    \blue{p(\theta | y_{-i})}
+    \textcolor{teal}{p(y_i | \theta)}
+    \textcolor{blue}{p(\theta | y_{-i})}
     \textcolor{violet}{d\theta}
   $$
   \endgroup
@@ -369,7 +328,7 @@ MSML610: Advanced Machine Learning
   $$
   PPD
   \defeq \Pr(y_i | data - \{i\})
-  = \textcolor{blue}{\int} \red{p(y_i | \theta)} \green{p(\theta | y_{-i})} \textcolor{blue}{d\theta}
+  = \textcolor{blue}{\int} \textcolor{red}{p(y_i | \theta)} \textcolor{darkgreen}{p(\theta | y_{-i})} \textcolor{blue}{d\theta}
   $$
   - $y_i$: observed data point
   - \textcolor{red}{$p(y_i | \theta)$}: \textcolor{red}{\text{likelihood}} given model parameters $\theta$
@@ -392,7 +351,7 @@ MSML610: Advanced Machine Learning
   \textcolor{blue}{\int p(y_i | \theta_{-i}) p(\theta_{-i} | y_{-i}) d\theta}
   $$
 
-- **\textcolor{red}{\textcolor{black}{\text{Interpretation}}}**
+- **\textcolor{black}{\text{Interpretation}}**
   - It can be used to determine which model generalizes better to new data
   - ELPD measures the predictive accuracy of a Bayesian model on unseen data
   - Train on $y_{-i}$, i.e., all data excluding $y_i$
@@ -409,16 +368,16 @@ MSML610: Advanced Machine Learning
   ELPD_{LOO-CV} \defeq \sum_i \log \int p(y_i | \theta) p(\theta | y_{-i}) d\theta
   $$
 
-- **\textcolor{red}{Problem}**: Need to train N models, one for every data point
+- **Problem**: Need to train N models, one for every data point
 
-- **\textcolor{darkgreen}{Solution}**:
+- **Solution**:
   - Pareto-Smoothed Importance Sampling (PSIS) Leave-One-Out Cross-Validation
     (LOO-CV) estimates without refitting for every point
-  - **\textcolor{blue}{Importance sampling}**:
+  - **Importance sampling**:
     - Use full dataset to approximate posterior distribution when one
       observation is left out
     - Re-weight posterior samples based on importance
-  - **\textcolor{violet}{Pareto-smoothing}**:
+  - **Pareto-smoothing**:
     - Stabilize importance weights, reducing extreme weights' impact
     - E.g., if an observation left out influences the posterior distribution
     - Provide diagnostics to assess reliability of importance weights
@@ -431,7 +390,7 @@ MSML610: Advanced Machine Learning
 
 
 #### Bayesian Model Selection
-- **\textcolor{red}{Bayesian way to compare $k$ models}**
+- **Bayesian way to compare $k$ models**
   - Calculate the evidence of each model $\Pr(Y | M_k)$, i.e., the probability of
     observed data $Y$ given each model $M_k$
 
@@ -440,7 +399,7 @@ MSML610: Advanced Machine Learning
     way
   - In the frequentist approach there are different procedures
 
-- **\textcolor{darkgreen}{Model fitting}**
+- **Model fitting**
   - Consider Bayes theorem for parameters $\theta$ and data $Y$, given model
     $M_k$
     $$
@@ -455,7 +414,7 @@ MSML610: Advanced Machine Learning
     = \argmax_{\theta} \Pr(y|\theta, M_k) \Pr(\theta | M_k)
     $$
 
-- **\textcolor{blue}{Model selection}**
+- **Model selection**
   - To choose the best model among $M_1, ..., M_k$, pick the one that maximizes
     $$
     \argmax_k \Pr(M_k | y) \propto \Pr(y | M_k) \Pr(M_k)
@@ -464,13 +423,13 @@ MSML610: Advanced Machine Learning
 #### Model Averaging
 - What do you do when you have multiple models explaining the data?
 
-  1. **\textcolor{red}{Model selection}**
+  1. **Model selection**
      - Select one model
      - Simple solution
-  2. **\textcolor{darkgreen}{Report all models with their informations}**
+  2. **Report all models with their informations**
      - E.g., standard errors, posterior predictive checks
      - Express advantages and shortcomings of the models
-  3. **\textcolor{blue}{Average all the models}**
+  3. **Average all the models**
      - Build a meta-model using a weighted average of each model
      - Weight prediction by the difference between information criteria (e.g.,
        WAIC, LOO) of the models
@@ -479,7 +438,7 @@ MSML610: Advanced Machine Learning
 ## Bayesian Hypothesis Testing
 
 #### Bayes Factors
-- **\textcolor{red}{Bayes factors}** are ratio of two marginal likelihoods of the data under
+- **Bayes factors** are ratio of two marginal likelihoods of the data under
   competing model hypotheses $M_0$ and $M_1$
   $$
   BF = \frac{\Pr(y|M_0)}{\Pr(y|M_1)}
@@ -496,7 +455,7 @@ MSML610: Advanced Machine Learning
 | >100 | Extreme |
 \endgroup
 
-- **\textcolor{blue}{Intuition}**
+- **Intuition**
   - Act as a scale weighing evidence for one theory over another
 
 #### Assumption of Bayes Factors
@@ -621,4 +580,5 @@ MSML610: Advanced Machine Learning
   - MAP of posterior using Laplace priors for coefficients
   - Because Laplace distribution looks like Gaussian with a sharp peak at zero,
     it provides "variable selection" since it induces sparsity of model
+
 

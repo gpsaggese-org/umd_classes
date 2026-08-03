@@ -277,7 +277,7 @@ can eliminate $do()$ from any identifiable causal query.
     $Y \perp\!\!\!\perp Z \mid X, W$ in $G_{\overline{X}, \underline{Z}}$, then:
     $$
       \Pr(Y \mid do(X), do(Z), W) = \Pr(Y \mid do(X), Z, W)
-      $$ - Intuition: if $Z$ has no back-door path
+      $$ - Intuition: if $Z$ has no backdoor path
     to $Y$ (after removing incoming arrows to $X$ and outgoing from $Z$),
     intervention on $Z$ equals observation of $Z$
   - **Rule 3 — Insertion/Deletion of Actions** - If
@@ -287,11 +287,11 @@ can eliminate $do()$ from any identifiable causal query.
       $$ - Intuition: if $Z$ has no causal
     effect on $Y$ in a modified graph, the intervention $do(Z)$ can be dropped
 
-- **Back-door adjustment as a special case**
+- **Backdoor adjustment as a special case**
 
-  // msml610/lectures_source/Lesson08.3-Do_Calculus.txt:267 Back-door Adjustment
+  // msml610/lectures_source/Lesson08.3-Do_Calculus.txt:267 Backdoor Adjustment
 
-  - A set $Z$ satisfies the _back-door criterion_ relative to $X \to Y$ if:
+  - A set $Z$ satisfies the _backdoor criterion_ relative to $X \to Y$ if:
     - No variable in $Z$ is a descendant of $X$
     - $Z$ blocks every path from $X$ to $Y$ that has an arrow entering $X$
   - When satisfied: $$
@@ -325,20 +325,20 @@ can eliminate $do()$ from any identifiable causal query.
   - Conditioning on a collider (introduces spurious association)
   - Controlling for every available covariate ("throw in the kitchen sink") —
     likely opens collider paths
-  - Forgetting to block all back-door paths (leaves confounding in)
+  - Forgetting to block all backdoor paths (leaves confounding in)
   - Using variables on the causal path as controls (blocks the mediator)
 
-- **Front-door adjustment: when back-door fails**
+- **Frontdoor adjustment: when backdoor fails**
 
-  // msml610/lectures_source/Lesson08.3-Do_Calculus.txt:477 Front-door Adjustment
+  // msml610/lectures_source/Lesson08.3-Do_Calculus.txt:477 Frontdoor Adjustment
 
   - When an unobserved confounder $U$ exists (no set of observables blocks all
-    back-door paths), the front-door criterion may apply
+    backdoor paths), the frontdoor criterion may apply
   - Requires a mediator $M$ such that:
     1. All paths from $X$ to $Y$ go through $M$
     2. No unobserved confounder affects $X$ and $M$
-    3. All back-door paths from $M$ to $Y$ are blocked by $X$
-  - Front-door formula: $$
+    3. All backdoor paths from $M$ to $Y$ are blocked by $X$
+  - Frontdoor formula: $$
     \Pr(Y \mid do(X)) = \sum_m \Pr(M = m \mid X)
     \sum_{x'} \Pr(Y \mid M = m, X = x') \Pr(X = x')
     $$
@@ -461,7 +461,7 @@ two frameworks are mathematically equivalent for many classes of problems.
   - These are mathematically equivalent: $$
     \mathbb{E}[Y(x)] = \mathbb{E}[Y \mid do(X = x)]
     $$
-  - Ignorability in the RCM corresponds to the back-door criterion in DAGs
+  - Ignorability in the RCM corresponds to the backdoor criterion in DAGs
   - SCMs additionally support counterfactual reasoning at the individual level
     (which the RCM does as well via the notation $Y_i(x)$)
 

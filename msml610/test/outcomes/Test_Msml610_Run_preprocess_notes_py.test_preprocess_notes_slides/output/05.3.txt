@@ -5,48 +5,12 @@ fontsize: 10pt
 \let\uline\underline
 \let\ul\underline
 
-
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 05.3: Learn-Validation}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
-
-- Abu-Mostafa et al.: _"Learning From Data"_ (2012)
-
-::::
-:::: {.column width=20%}
-![](msml610/lectures_source/figures/book_covers/Book_cover_Learning_from_Data.jpg){ height=20% }
-::::
-:::
-
 # Learn-Validation Approach
 
 ## Train / Test
 
 #### Estimating Out-Of-Sample Error with One Point
-- Pick a **\textcolor{red}{single out-of-sample point}** $(\vx', y)$
+- Pick a **single out-of-sample point** $(\vx', y)$
 
 - The error of the model $h$ is:
   $$
@@ -57,7 +21,7 @@ MSML610: Advanced Machine Learning
   - Binary error $I[h(\vx) - y]$
   - ...
 
-- The **\textcolor{darkgreen}{error on an out-of-sample point}** is an **\textcolor{blue}{unbiased estimate}** of
+- The **error on an out-of-sample point** is an **unbiased estimate** of
   $E_{out}$, since:
   $$
   \EE[E_{val}(h)] = \EE[e(h(\vx), y)] = E_{out}
@@ -69,12 +33,12 @@ MSML610: Advanced Machine Learning
 - To improve the estimate, use a validation set with $K$ points 
   $(\vx_1, y_1), ... , (\vx_K, y_K)$ drawn IID
 
-- Compute the **\textcolor{red}{error on the validation set}** as:
+- Compute the **error on the validation set** as:
   $$
   E_{val}(h) = \frac{1}{K} \sum_{i=1}^K e(h(\vx_i), y_i)
   $$
 
-- The validation error is an **\textcolor{blue}{unbiased estimate}** of out-of-sample error since:
+- The validation error is an **unbiased estimate** of out-of-sample error since:
   $$
   \EE[E_{val}(h)] = E_{out}(h)
   $$
@@ -94,7 +58,7 @@ MSML610: Advanced Machine Learning
   \endgroup
 
 #### Trade-Off Between Training and Validation Set
-- **\textcolor{red}{Problem}**: you have finite amount of data points $N$
+- **Problem**: you have finite amount of data points $N$
 
 ::: columns
 :::: {.column width=60%}
@@ -115,7 +79,7 @@ MSML610: Advanced Machine Learning
   \\
   \end{aligned}
   $$
-  - If $K$ is too big, you get a **\textcolor{darkgreen}{reliable estimate of a bad number}**!
+  - If $K$ is too big, you get a **reliable estimate of a bad number**!
 
 ::::
 :::: {.column width=35%}
@@ -125,7 +89,7 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-- **\textcolor{blue}{Solution}**:
+- **Solution**:
   - Rule of thumb: 70-30 or 80-20 split between train and validation
 
 #### Error From VC Analysis vs Learn-Validation Approach
@@ -134,11 +98,11 @@ MSML610: Advanced Machine Learning
   E_{out}(h) = E_{in}(h) + \text{generalization error}
   $$
 
-- **\textcolor{red}{VC analysis}**
+- **VC analysis**
   - Estimates generalization error as "overfit penalty" in terms of hypothesis
     set complexity
 
-- **\textcolor{blue}{Learn-validation}**
+- **Learn-validation**
   - Estimates $E_{out}$ directly by holding out data as validation set:
     $$
     E_{val} \approx E_{out}
@@ -152,14 +116,14 @@ MSML610: Advanced Machine Learning
   - Is biased and optimistic
   - Cannot used to assess the learned model
 
-- **\textcolor{red}{Never use}** $D_{val}$ / $D_{test}$ for training or $D_{train}$ for evaluation
+- **Never use** $D_{val}$ / $D_{test}$ for training or $D_{train}$ for evaluation
 
 - After research is done, all available data can be used to learn
 
 ::: columns
 :::: {.column width=60%}
 
-- **\textcolor{blue}{Algorithm}**
+- **Algorithm**
   1. Train with $N - K$ points to learn $g^-$
   2. Use $K$ points to compute $E_{val}[g^-]$ estimating $E_{out}[g^-]$
   3. Once the model form is finalized, use all $N$ data points (including
@@ -180,11 +144,11 @@ MSML610: Advanced Machine Learning
 
 
 #### Learn-Validation Approach: Pros and Cons
-- **\textcolor{red}{Pros}**
+- **Pros**
   - Estimate $E_{out}$ using $E_{val}$
   - Simple to compute, no complexity from VC analysis
 
-- **\textcolor{blue}{Cons}**
+- **Cons**
   - Cannot use all data for learning and validation; need a compromise
   - Learned model and $E_{val}$ depend on the split; different splits can give
     different results
@@ -195,11 +159,11 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=55%}
 
-- **\textcolor{red}{Divide dataset}** into $K$ folds, each with $\frac{N}{K}$ samples
+- **Divide dataset** into $K$ folds, each with $\frac{N}{K}$ samples
   - Each fold should reflect dataset statistics
   - E.g., stratified sampling
 
-- **\textcolor{darkgreen}{Do $K$ iterations}** $i = 1, ..., K$
+- **Do $K$ iterations** $i = 1, ..., K$
 - In $i$-th iteration
   - Train on all folds except $i$ using $\frac{K - 1}{K}N$ points and get
     $g^{(-i)}(\vx)$
@@ -208,7 +172,7 @@ MSML610: Advanced Machine Learning
     E_{val}^{(i)} = E_{val}[g^{(-i)}(\vx)]
     $$
 
-- **\textcolor{blue}{Average}** $K$ error rates and compute bounds:
+- **Average** $K$ error rates and compute bounds:
   $$
   E_{val} = \frac{1}{K} \sum_i E_{val}^{(i)}
   $$
@@ -291,13 +255,13 @@ _5x cross-validation_
 :::
 
 #### Cross-Validation: Pros and Cons
-- **\textcolor{red}{Pros}**
+- **Pros**
   - Efficient data usage
     - All data used for learning and validation
   - Better estimate of $E_{val}$ than separate training/validation sets
   - Folds can be stratified
 
-- **\textcolor{blue}{Cons}**
+- **Cons**
   - Computationally intensive: $K$ learning phases
   - Dependency on fold selection
   - Errors $E_{val}$ are not independent
@@ -305,7 +269,7 @@ _5x cross-validation_
     - Experimentally not completely correlated
 
 #### Repeated Cross-Validation
-- **\textcolor{red}{Repeated Cross-Validation}**
+- **Repeated Cross-Validation**
   - Cross-validation results depend on fold selection
   - To remove this dependency, repeat cross-validation multiple times (e.g., 10)
     and average results
@@ -313,16 +277,16 @@ _5x cross-validation_
     cross-validation"_
 
 #### Leave-One-Out Cross-Validation
-- **\textcolor{red}{Leave-one-out}** (LOO) cross-validation
+- **Leave-one-out** (LOO) cross-validation
   - There are $N$ training sessions
   - Each session trains on $N - 1$ points and validates on 1 point
   - Equivalent to "$N$-fold cross-validation" where $N$ is the number of examples
     in the dataset
 
-- **\textcolor{darkgreen}{Train}**
+- **Train**
   - For $i$-th fold, $N - 1$ samples for training $\implies g^{(-i)} \approx g$
 
-- **\textcolor{blue}{Validate}**
+- **Validate**
   - Estimate the validation error on a single point (bad):
     $$
     E_{val}[g^{(-i)}] = e(g^{(-i)}(\vx_i), y_i) \not\approx E_{out}[g^{(-i)}]
@@ -334,37 +298,37 @@ _5x cross-validation_
     $$
 
 #### Leave-One-Out Cross-Validation: Pros and Cons
-- **\textcolor{red}{Pros}**
+- **Pros**
   - Max data used for training
   - Deterministic procedure
     - No dependency on fold selection
 
-- **\textcolor{blue}{Cons}**
+- **Cons**
   - High computational cost (as many learning phases as data points)
   - Cannot be stratified
   - Higher correlation between cross-validation estimates
 
 #### Bootstrap
-- **\textcolor{red}{Algorithm}**
+- **Algorithm**
   - Pick $N$ samples with replacement from a data set with $N$ instances to
     build training set
   - Pick the elements never chosen to build the test set ("out-of-bag" samples)
   - Training set contains 63.2\% of all the samples, 36.8\% in the test set
 
-- **\textcolor{darkgreen}{Pros}**
+- **Pros**
   - Works for small data sets since it "expands" the data
 
-- **\textcolor{blue}{Cons}**
+- **Cons**
   - Not flexible
   - Smaller percentage of instances are used for training set than 10-fold cross
     validation
 
 #### Bootstrap: Problem
-- **\textcolor{red}{Assumption}**
+- **Assumption**
   - Given $X \sim F$
   - Draw $n$ IID samples $X_i$ from $F$
 
-- **\textcolor{blue}{Goal}**:
+- **Goal**:
   - Consider a sampling statistic $T = g(X_1, ..., X_n)$
     - E.g., mean, median, OLS coefficients, ...
   - You want to:
@@ -391,14 +355,14 @@ _5x cross-validation_
   empirical distribution of $\hat{T}$
 
 #### Bootstrap: Pros
-- **\textcolor{red}{Tremendously useful tool}**
+- **Tremendously useful tool**
   - Fewer assumptions
     - No need for simplifying assumptions for closed formulas
     - Data doesn't need to be Gaussian
   - Generality
     - Applies to any sample statistics, even non-linear ones (e.g., median)
 
-- **\textcolor{blue}{Math $\to$ simulation}**
+- **Math $\to$ simulation**
   - Bootstrap is a non-parametric method
   - Does not rely on large sample sizes, e.g., Central Limit Theorem (CLT) / Law
     Large Numbers (LLN)
@@ -406,22 +370,22 @@ _5x cross-validation_
     asymptotics
 
 #### Bootstrap: Example of Die Rolls
-- **\textcolor{red}{Problem}**
+- **Problem**
   - Compute distribution of sum of rolling a die 50 times
     $$Y = \sum_{i=1}^{50} X_i = g(X_1, ..., X_{50})$$
   - Sample statistics similar to sample mean, but can be anything
 
-- **\textcolor{orange}{Solution}**
-  1. **\textcolor{darkgreen}{By math}**
+- **Solution**
+  1. **By math**
      - If you know PMF of the die, compute distribution using mathematics
      - Theorem of lazy statistician for mean, variance
      - Compute PDF of $Y$ by convolving PDFs
-  2. **\textcolor{teal}{By sampling}** (real or simulated)
+  2. **By sampling** (real or simulated)
      - Roll die 50 times
      - Compute sample statistic
      - Repeat procedure
      - Plot approximate distribution of $Y$
-  3. If only 50 samples of die are known $\to$ **\textcolor{cyan}{bootstrap}**
+  3. If only 50 samples of die are known $\to$ **bootstrap**
 
 #### Bootstrap of the Median: Pseudo-Code
 
@@ -450,7 +414,7 @@ def bootstrap_median(x, n_boot):
   - Statistic $T = g(X_1, ..., X_n)$
   - Compute $\VV_F[T]$ (variance of sample statistics), where $F$ is unknown
 
-- **\textcolor{red}{First approximation}**
+- **First approximation**
   - Only samples from $F$ available
   - Approximate $F$ with $\hat{F}$, as empirical CDF $\hat{F}$ converges to $F$
     $$\VV_F[T] \approx \VV_{\hat{F}}[T]$$
@@ -458,7 +422,7 @@ def bootstrap_median(x, n_boot):
     - Not small
     - Depends on sample size and shape of $F$
 
-- **\textcolor{blue}{Second approximation}**
+- **Second approximation**
   - Exact $\hat{F}$ may lack closed formula for $\VV_{\hat{F}}[T]$
   - Use LLN and simulation to approximate variance:
     $$
