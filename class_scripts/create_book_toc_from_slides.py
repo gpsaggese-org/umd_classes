@@ -8,9 +8,10 @@ Generate comprehensive table of contents for book from lecture slides.
 - Combines them into a single output markdown file.
 
 Usage:
-# TODO(ai_gp): Add description for each command
+# Generate a table of contents with headers up to level 2 (H1-H2 only)
 > create_book_toc_from_slides.py --output book_toc.md --max_level 2
 
+# Generate a table of contents with headers up to level 5 (full depth)
 > create_book_toc_from_slides.py --output book_toc.md --max_level 5
 """
 

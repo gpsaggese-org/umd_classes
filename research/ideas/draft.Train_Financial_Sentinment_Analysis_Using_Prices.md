@@ -25,7 +25,30 @@
   of `ŷ` for *out-of-sample* returns against a human-labeled-sentiment
   baseline (e.g., FinBERT scores) and against a naive momentum baseline
 
+## Attribution: Which News Explains a Large Price Move
+- The mirror image of the labeling problem above: instead of starting from a
+  news item and looking forward at the price, start from a large price move and
+  look backward for the news that explains it
+- Procedure: detect moves exceeding `k` standard deviations, pull the candidate
+  news in a window before the move, and rank candidates by how well they explain
+  it (LLM-scored plausibility, or a learned model over headline features)
+- This yields a labeled set of "market-moving" vs. "ignored" news, which is a
+  much more informative training signal than a raw sentiment label — it directly
+  separates news that matters from news that does not
+- The hard part is that a large fraction of big moves have *no* identifiable
+  news cause (flows, positioning, unwinds), and a system that always returns an
+  explanation will confabulate one — so "no news explains this" must be a
+  first-class output, and the false-attribution rate must be reported
+- Related: [[draft.Measure_ability_to_predict_events]] for the forecasting side,
+  and [[draft.Causal_Analysis_of_Financial_Tradability]] for whether an
+  identified driver is tradable at all
+
 ## Key Examples
+- **Move attribution**: for each daily move over 3 sigma, rank the preceding
+  headlines and check against a hand-labeled subset of known event days
+- **Unexplained moves**: the fraction of large moves with no plausible news
+  cause is itself the result of interest — a baseline that any attribution
+  claim has to beat
 - **Earnings announcements**: label by post-announcement price drift; compare
   against analyst-labeled sentiment of the same announcement text
 - **Macro news**: label by index-level move following a macro release; check
@@ -40,10 +63,17 @@
    for overall market movement (excess return vs. raw return as the label)?
 3. Does this approach transfer across asset classes (equities vs. FX vs.
    crypto), or is it tied to one market's specific news-to-price dynamics?
+4. What fraction of large moves are attributable to identifiable news at all,
+   and how often does an LLM attributor invent a cause for a move that had
+   none?
 
 ## Research Topics
 - Weak/self-supervised labeling from market data
 - Look-ahead bias and leakage control in event-study-style labeling
+- Event-study methodology for move detection (abnormal return vs. raw return,
+  volatility-adjusted thresholds)
+- News-to-move attribution with an explicit "unexplained" class, and measuring
+  the confabulation rate
 - Comparison against existing financial sentiment benchmarks (FinBERT,
   Loughran-McDonald dictionary)
 
@@ -51,6 +81,8 @@
 - [ ] Assemble a news+price dataset with precise timestamps
 - [ ] Define the label (return horizon, excess-return control)
 - [ ] Fine-tune a baseline model and compare against FinBERT-style sentiment
+- [ ] Build the move-detection + attribution pipeline and measure the
+      unexplained-move fraction
 - [ ] Backtest predictive power out-of-sample, checking for leakage
 
 ## References

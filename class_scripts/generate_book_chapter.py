@@ -48,52 +48,16 @@ import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hllm as hllm
 import helpers.hparser as hparser
+import helpers.hprint as hprint
+import dev_scripts_helpers.documentation.preprocess_notes as dshdprno
 import dev_scripts_helpers.dockerize.lib_prettier as dshdlipr
 
 _LOG = logging.getLogger(__name__)
 
-# Default system prompt for the LLM.
-_DEFAULT_SYSTEM_PROMPT = """
-You are a college professor expert of machine learning and big data.
 
-Given the following slide in markdown format, create a detailed commentary
-that explains the content and context of the slide.
-- Use plain language and do not use fancy words
-- Create bullet points for the discussion following the same structure as the
-  original slide
-- The discussion for each slide should contain around 100-150 words
-- Use bold only for items and use italic sparingly to highlight only important
-  points
-- Focus on explaining the concepts, providing context, and highlighting
-  important points
-
-The output should be in markdown format without a heading.
-"""
-
-
-def _extract_title_from_markdown(input_file: str) -> Optional[str]:
-    r"""
-    Extract title from markdown file.
-
-    Looks for patterns like:
-    \text{\blue{Lesson 2.1: Git}}
-
-    :param input_file: path to input markdown file
-    :return: extracted title or None if not found
-    """
-    hdbg.dassert_file_exists(input_file)
-    content = hio.from_file(input_file)
-    # Pattern to match \text{\blue{...}} or \text{...} or similar LaTeX constructs.
-    pattern = r"\\text\{(?:\\blue\{)?([^}]+)\}?"
-    match = re.search(pattern, content)
-    if match:
-        title = match.group(1)
-        # Clean up the title.
-        title = title.strip()
-        _LOG.info("Extracted title: %s", title)
-        return title
-    _LOG.warning("Could not extract title from markdown file")
-    return None
+# #############################################################################
+# PNG processing
+# #############################################################################
 
 
 def _extract_png_from_pdf(
@@ -154,6 +118,66 @@ def _get_png_files_from_directory(png_dir: str) -> List[str]:
     return png_files
 
 
+# #############################################################################
+# Commentary
+# #############################################################################
+
+
+# Default system prompt for the LLM.
+# TODO(gp): Consider improving this.
+_DEFAULT_SYSTEM_PROMPT = """
+You are a college professor expert of machine learning and big data.
+
+Given the following slide in markdown format, create a detailed commentary
+that explains the content and context of the slide.
+- Use plain language and do not use fancy words
+- Create bullet points for the discussion following the same structure as the
+  original slide
+- The discussion for each slide should contain around 100-150 words
+- Use bold only for items and use italic sparingly to highlight only important
+  points
+- Focus on explaining the concepts, providing context, and highlighting
+  important points
+
+The output should be in markdown format without a heading.
+"""
+
+
+def _extract_title_from_markdown(input_file: str) -> Optional[str]:
+    r"""
+    Extract title from markdown file.
+
+    First looks for a `lesson_title` metadata directive (e.g.,
+    `// lesson_title=...`) at the top of the file. If not present, falls
+    back to looking for patterns like:
+    \text{\blue{Lesson 2.1: Git}}
+
+    :param input_file: path to input markdown file
+    :return: extracted title or None if not found
+    """
+    hdbg.dassert_file_exists(input_file)
+    content = hio.from_file(input_file)
+    # Check for a `lesson_title` metadata directive at the top of the file.
+    lines = content.split("\n")
+    metadata, _ = dshdprno.extract_slide_metadata(lines)
+    if "lesson_title" in metadata:
+        title = metadata["lesson_title"].strip()
+        _LOG.info("Extracted title from metadata template: %s", title)
+        return title
+    # Pattern to match \text{\blue{...}} or \text{...} or similar LaTeX constructs.
+    pattern = r"\\text\{(?:\\blue\{)?([^}]+)\}?"
+    match = re.search(pattern, content)
+    if match:
+        title = match.group(1)
+        # Clean up the title.
+        title = title.strip()
+        _LOG.info("Extracted title: %s", title)
+        return title
+    _LOG.warning("Could not extract title from markdown file")
+    return None
+
+
+
 @hcacsimp.simple_cache(cache_type="json")
 def _generate_slide_commentary(
     slide_content: str,
@@ -191,6 +215,7 @@ def _generate_book_chapter(
     *,
     input_png_dir: Optional[str] = None,
     input_pdf_file: Optional[str] = None,
+    output_file: Optional[str] = None,
     dpi: int = 200,
     image_width: str = "80%",
     add_new_page: bool = False,
@@ -202,6 +227,8 @@ def _generate_book_chapter(
     :param output_dir: directory to save output files
     :param input_png_dir: directory containing PNG files (slides*.png)
     :param input_pdf_file: PDF file to extract PNG images from
+    :param output_file: path to the output book chapter markdown file
+        - Default: `{output_dir}/{base_name}.book_chapter.md`
     :param dpi: DPI resolution for PDF extraction
     :param image_width: width of images in output (e.g., "80%", "50%")
     :param add_new_page: if True, add `\newpage` commands before each slide
@@ -272,12 +299,17 @@ def _generate_book_chapter(
         slide_output.append("\\newpage")
         slide_output.append("")
     # Add centered image with specified width and empty alt text.
-    slide_output.append("<center>")
-    slide_output.append("")
-    slide_output.append(f"![]({png_files[0]}){{width={image_width}}}")
-    slide_output.append("")
-    slide_output.append("</center>")
-    slide_output.append("")
+    slide_output.append(
+        hprint.dedent(
+            f"""
+            <center>
+
+            ![]({png_files[0]}){{width={image_width}}}
+
+            </center>
+            """
+        )
+    )
     output_parts.append("\n".join(slide_output))
     # Then process content slides (slides from markdown with corresponding PNGs).
     # Note: png_files[0] is the title slide, so we pair slides[i] with png_files[i+1].
@@ -298,19 +330,29 @@ def _generate_book_chapter(
             slide_output.append("")
         # Add title, image, and commentary.
         # Use original slide title from input markdown with idx/tot format.
-        slide_output.append("<center>")
-        slide_output.append("")
-        slide_output.append(f"# {idx} / {num_slides + 1}: {slide_title}")
-        slide_output.append("")
-        slide_output.append("</center>")
-        slide_output.append("")
+        slide_output.append(
+            hprint.dedent(
+                f"""
+                <center>
+
+                # {idx} / {num_slides + 1}: {slide_title}
+
+                </center>
+                """
+            )
+        )
         # Add centered image with specified width and empty alt text.
-        slide_output.append("<center>")
-        slide_output.append("")
-        slide_output.append(f"![]({png_path}){{width={image_width}}}")
-        slide_output.append("")
-        slide_output.append("</center>")
-        slide_output.append("")
+        slide_output.append(
+            hprint.dedent(
+                f"""
+                <center>
+
+                ![]({png_path}){{width={image_width}}}
+
+                </center>
+                """
+            )
+        )
         # Generate commentary for this slide.
         commentary = _generate_slide_commentary(
             slide_content=slide_content,
@@ -327,12 +369,15 @@ def _generate_book_chapter(
     _LOG.info("Formatting output with prettier")
     full_output = dshdlipr.prettier_on_str(full_output, "md")
     # Write output file.
-    output_file = os.path.join(output_dir, f"{base_name}.book_chapter.md")
+    if output_file is None:
+        output_file = os.path.join(output_dir, f"{base_name}.book_chapter.md")
     _LOG.info("Writing output to: %s", output_file)
     hio.to_file(output_file, full_output)
     _LOG.info("Book chapter generation completed")
 
 
+# #############################################################################
+# CLI
 # #############################################################################
 
 
@@ -366,10 +411,18 @@ def _parse() -> argparse.ArgumentParser:
         help="Output directory to save results",
     )
     parser.add_argument(
+        "--output_file",
+        action="store",
+        help=(
+            "Path to the output book chapter markdown file (default: "
+            "'{output_dir}/{base_name}.book_chapter.md')"
+        ),
+    )
+    parser.add_argument(
         "--dpi",
         action="store",
         type=int,
-        default=200,
+        default=300,
         help="DPI for PDF extraction",
     )
     parser.add_argument(
@@ -398,6 +451,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
         output_dir=args.output_dir,
         input_png_dir=args.input_png_dir,
         input_pdf_file=args.input_pdf_file,
+        output_file=args.output_file,
         dpi=args.dpi,
         image_width=args.image_width,
         add_new_page=args.add_new_page,

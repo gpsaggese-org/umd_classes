@@ -39,6 +39,9 @@ Given \(f: \mathbb{R}^{N} \to \mathbb{R}\), the goal is
 - **Molecular/energy minimization**: NN potentials used to find low-energy
   molecular geometries, replacing expensive physics-based energy
   evaluations with a learned surrogate
+- **Constrained portfolio choice**: worked out separately in
+  [[draft.Mean_Variance_Optimization_with_NN]], as an instance of the amortized
+  variant where the constraint set breaks the closed-form solution
 
 ## Questions
 
@@ -60,6 +63,8 @@ Given \(f: \mathbb{R}^{N} \to \mathbb{R}\), the goal is
   target optimality gap
 - Sensitivity of the amortized approach to distribution shift between
   training instances and test instances
+- Differentiable convex optimization layers (`cvxpylayers`, OptNet) so a solver
+  can sit inside the network and constraints are satisfied by construction
 
 ## References
 
@@ -67,4 +72,6 @@ Given \(f: \mathbb{R}^{N} \to \mathbb{R}\), the goal is
   (2015) — "DNGO"
 - Chen et al., _Learning to Learn without Gradient Descent by Gradient
   Descent_ (2017)
+- Amos, B., & Kolter, J. Z., _OptNet: Differentiable Optimization as a Layer in
+  Neural Networks_ (2017)
 - Derived from `draft.Misc_ML_ideas.md`

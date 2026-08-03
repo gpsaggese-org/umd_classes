@@ -62,6 +62,8 @@
 | `draft.Code_Visualization.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Code_Visualization.md) | draft | - | 20% | - | - |
 | `draft.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.md) | draft | - | 20% | - | - |
 | `draft.Backtesting_Complexity.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Backtesting_Complexity.md) | draft | - | 10% | - | - |
+| `draft.Blog_Cross_Posting_and_Engagement_System.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Blog_Cross_Posting_and_Engagement_System.md) | draft | - | 10% | - | - |
+| `draft.Build_an_LLM_Arena.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Build_an_LLM_Arena.md) | draft | - | 10% | - | - |
 | `draft.Clone_openrouter.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Clone_openrouter.md) | draft | - | 10% | - | - |
 | `draft.Closed_Form_Formula_Discovery.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Closed_Form_Formula_Discovery.md) | draft | - | 10% | - | - |
 | `draft.Codebase_automerge.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Codebase_automerge.md) | draft | - | 10% | - | - |
@@ -72,6 +74,8 @@
 | `draft.Create_a_Small_Large_Language_Model_for_Logic.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Create_a_Small_Large_Language_Model_for_Logic.md) | draft | - | 10% | - | - |
 | `draft.Create_a_Small_Large_Language_Model_for_Python.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Create_a_Small_Large_Language_Model_for_Python.md) | draft | - | 10% | - | - |
 | `draft.Cursor_for_writing_terminal.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Cursor_for_writing_terminal.md) | draft | - | 10% | - | - |
+| `draft.Datasets_for_Training_and_Distilling_LLMs.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Datasets_for_Training_and_Distilling_LLMs.md) | draft | - | 10% | - | - |
+| `draft.Detecting_and_Humanizing_LLM_Text.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Detecting_and_Humanizing_LLM_Text.md) | draft | - | 10% | - | - |
 | `draft.Document_MCP.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Document_MCP.md) | draft | - | 10% | - | - |
 | `draft.Document_and_improve_Blockchain_Python_workflow.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Document_and_improve_Blockchain_Python_workflow.md) | draft | - | 10% | - | - |
 | `draft.Forgetting_Mechanisms.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Forgetting_Mechanisms.md) | draft | - | 10% | - | - |
@@ -81,11 +85,13 @@
 | `draft.Kolmogorov_Complexity_Over_Time.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Kolmogorov_Complexity_Over_Time.md) | draft | - | 10% | - | - |
 | `draft.Learned_Optimizers.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Learned_Optimizers.md) | draft | - | 10% | - | - |
 | `draft.MDL_Extensions_with_Research_Process.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.MDL_Extensions_with_Research_Process.md) | draft | - | 10% | - | - |
+| `draft.Mean_Variance_Optimization_with_NN.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Mean_Variance_Optimization_with_NN.md) | draft | - | 10% | - | - |
 | `draft.Minimizing_N_Dimensional_Functions_with_NN.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Minimizing_N_Dimensional_Functions_with_NN.md) | draft | - | 10% | - | - |
 | `draft.RL_for_auto_EDA.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.RL_for_auto_EDA.md) | draft | - | 10% | - | - |
 | `draft.RL_for_pickleball.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.RL_for_pickleball.md) | draft | - | 10% | - | - |
 | `draft.Solve_TSP_with_LLM.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Solve_TSP_with_LLM.md) | draft | - | 10% | - | - |
 | `draft.Solving_Differential_Equations_with_NN.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Solving_Differential_Equations_with_NN.md) | draft | - | 10% | - | - |
+| `draft.Text_to_Sign_Language_Video.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Text_to_Sign_Language_Video.md) | draft | - | 10% | - | - |
 | `draft.Time_as_a_Feature_in_Learning_Theory.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Time_as_a_Feature_in_Learning_Theory.md) | draft | - | 10% | - | - |
 | `draft.Train_Financial_Sentinment_Analysis_Using_Prices.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Train_Financial_Sentinment_Analysis_Using_Prices.md) | draft | - | 10% | - | - |
 | `draft.Tutorial_claude_agent_sdk.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Tutorial_claude_agent_sdk.md) | draft | - | 10% | - | - |
@@ -95,4 +101,4 @@
 - If the specs are not complete for a task you are interested in, before starting
   the work, ask GP to improve them so that there is clarity on what's the goal
 
-// Last update timestamp: "Aug  3 11:54"
+// Last update timestamp: "Aug  3 12:30"

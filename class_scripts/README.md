@@ -79,22 +79,21 @@ slide quality through automated LLM-powered transformations
 | `slide_reduce.py`                   | Quality       | Reduce and simplify slides using LLM                                 |
 | `slides_utils.py`                   | Utility       | Extract and process slide content                                    |
 
-gen_lecture_video_script.py: orchestrator/wrapper. Calls generate_slide_script.py for the body, then llm_cli.py for intro/outro, concatenates, lints with lint_txt.py. Output: narration script for video, text-only.
-
-generate_slide_script.py: does the actual per-slide LLM work. Groups slides (default 3/group), sends each group to LLM for a spoken-discussion script (~100 words/slide, plain language, transitions between slides). Output: markdown/text script — no images.
 
 // TODO(ai_gp): Merge generate_slide_script.py inside gen_lecture_video_script.py?
-
-generate_book_chapter.py: different target format — pairs each slide's markdown with a corresponding PNG (from a PNG dir or extracted from a PDF via pdf2image), generates per-slide commentary via LLM (explanatory prose, not spoken script), and produces a formatted book chapter (YAML title preamble, centered images + commentary, prettier-formatted). One LLM call per slide (not grouped), and embeds images — the other two are text-only.
+// - gen_lecture_video_script.py: orchestrator/wrapper. Calls generate_slide_script.py for the body, then llm_cli.py for intro/outro, concatenates, lints with lint_txt.py. Output: narration script for video, text-only.
+// - generate_slide_script.py: does the actual per-slide LLM work. Groups slides (default 3/group), sends each group to LLM for a spoken-discussion script (~100 words/slide, plain language, transitions between slides). Output: markdown/text script — no images.
+// - generate_book_chapter.py: different target format — pairs each slide's markdown with a corresponding PNG (from a PNG dir or extracted from a PDF via pdf2image), generates per-slide commentary via LLM (explanatory prose, not spoken script), and produces a formatted book chapter (YAML title preamble, centered images + commentary, prettier-formatted). One LLM call per slide (not grouped), and embeds images — the other two are text-only.
 
 // TODO(ai_gp): Rename generate_book_chapter.py -> generate_lecture_commentary.py
+
 // TODO(ai_gp): Unify the flow from generate_slide_script.py and
 // generate_book_chapter.py since they are very similar
 
 // TODO(ai_gp): Consider merging for_loop_slides.py and process_slides.py since
 // they seem to have the same function or at least overlapping
 
-// TODO(ai_gp): gen_quizzes.py into gen_quizzes.py and gen_recap.py
+// TODO(ai_gp): split gen_quizzes.py into gen_quizzes.py and gen_recap.py
 
 - The scripts under `helpers_root/dev_scripts_helpers/documentation` used by the
   scripts in `class_scripts` are:
