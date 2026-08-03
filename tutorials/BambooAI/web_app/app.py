@@ -2116,7 +2116,9 @@ def sweatstack_remove_data():
 
 if __name__ == "__main__":
     # Simple command line argument for debug mode
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument(
         "--debug", action="store_true", help="Skip thread cleanup"
     )

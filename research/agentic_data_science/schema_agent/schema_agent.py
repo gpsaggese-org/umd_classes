@@ -179,7 +179,7 @@ def _build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="schema_agent",
         description="Data Profiler Agent — statistical + LLM column profiling",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     # --- Inputs ---
     parser.add_argument(

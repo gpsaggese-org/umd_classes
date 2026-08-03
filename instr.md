@@ -1,5 +1,5 @@
-When running gen_lecture_commentary.py book_springer 02.1
-- add an option --image_type to generate files as jpeg instead of png
+import helpers.hllm_cli as hllmcli
+
 
 # Conventions
 - When writing code you must always follow the instructions in

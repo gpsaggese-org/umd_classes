@@ -9,6 +9,7 @@
   --serif: Georgia, "Palatino Linotype", "Book Antiqua", Palatino, serif;
   --sans: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
   --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --page-padding-x: 2rem;
 }
 
 * {
@@ -27,7 +28,7 @@ body {
   background: var(--bg-color);
   max-width: 1100px;
   margin: 0 auto;
-  padding: 5rem 2rem 8rem;
+  padding: 5rem var(--page-padding-x) 8rem;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
@@ -41,14 +42,21 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.25;
   margin-top: 2.5em;
   margin-bottom: 0.6em;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding-left: var(--page-padding-x);
+  padding-right: var(--page-padding-x);
 }
 
 h1 {
-  font-size: 2.4em;
+  font-size: 1.9em;
   text-align: center;
   margin-top: 0;
   margin-bottom: 1.2em;
   letter-spacing: 0.02em;
+  font-weight: bold;
+  color: #00008b;
 }
 
 h2 {
@@ -237,11 +245,14 @@ hr::before {
 /* ---------- Responsive ---------- */
 
 @media (max-width: 600px) {
+  :root {
+    --page-padding-x: 1.2rem;
+  }
   body {
     font-size: 17px;
-    padding: 2.5rem 1.2rem 5rem;
+    padding: 2.5rem var(--page-padding-x) 5rem;
   }
-  h1 { font-size: 1.9em; }
+  h1 { font-size: 1.6em; }
   h2 { font-size: 1.4em; }
 }
 

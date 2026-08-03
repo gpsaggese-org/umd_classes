@@ -23,7 +23,9 @@ def configure_logging(verbosity: int) -> None:
     )
 
 def parse_args():
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument(
         "--verbose",
         "-v",

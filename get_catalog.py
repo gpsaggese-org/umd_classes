@@ -189,7 +189,9 @@ def _parse() -> argparse.ArgumentParser:
 
     :return: ArgumentParser instance
     """
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument(
         "--target",
         type=str,

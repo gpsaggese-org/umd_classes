@@ -741,7 +741,8 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
         description=(
             "Fetch text content from Google Slides presentations and save to `output/`."
             " By default, it reads URLs from `links.txt`."
-        )
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
         "--verbose",

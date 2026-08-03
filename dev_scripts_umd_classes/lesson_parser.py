@@ -27,7 +27,8 @@ def _parse() -> argparse.ArgumentParser:
     :return: argument parser with lesson parsing options
     """
     parser = argparse.ArgumentParser(
-        description="Parse Markdown lesson files and extract slides, headers, and comments"
+        description="Parse Markdown lesson files and extract slides, headers, and comments",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
         "--input_file",
