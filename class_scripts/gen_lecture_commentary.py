@@ -569,6 +569,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     pdf_file_name = f"{out_dir}/{basename}.book_chapter.pdf"
     html_file_name = f"{out_dir}/{basename}.book_chapter.html"
     do_incremental = not args.no_incremental
+    script_dir = os.path.dirname(os.path.abspath(__file__))
     # Step 1: Generate the PDF.
     if do_incremental and os.path.exists(tmp_pdf):
         _LOG.warning("Step 1: Skipping, '%s' already exists", tmp_pdf)
@@ -633,14 +634,13 @@ def _main(parser: argparse.ArgumentParser) -> None:
         _LOG.warning("Step 5: Skipping, '%s' already exists", pdf_file_name)
     else:
         _LOG.info("Step 5: Converting to PDF using pandoc")
-        header_dir = os.path.dirname(os.path.abspath(__file__))
         cmd = (
             f"pandoc {book_chapter_md} -o {pdf_file_name} "
             f"--pdf-engine=xelatex "
             f"-V geometry:margin=1in "
             f"-V fontsize=11pt "
             f"--highlight-style=tango "
-            f"--include-in-header={header_dir}/header-style.tex"
+            f"--include-in-header={script_dir}/header-style.tex"
         )
         hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
     # Step 6: Convert to HTML using pandoc.
@@ -651,6 +651,11 @@ def _main(parser: argparse.ArgumentParser) -> None:
         cmd = (
             f"pandoc {book_chapter_md} -o {html_file_name} "
             f"--standalone "
+            # Inline every locally-referenced image (and other resources) as
+            # a base64 data URI, so the HTML is self-contained and portable
+            # regardless of where it is opened from.
+            f"--embed-resources "
+            f"--css={script_dir}/book-style.css "
             f"--highlight-style=tango"
         )
         hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
