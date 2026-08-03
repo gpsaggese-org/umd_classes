@@ -410,7 +410,7 @@ TOTAL                                                                    4853   
   class_scripts/for_loop_lessons.py
   class_scripts/gen_slides.py
   class_scripts/gen_slides_test_utils.py
-  class_scripts/generate_book_chapter.py
+  class_scripts/generate_lecture_commentary.py
   class_scripts/generate_slide_script.py
   class_scripts/test/test_for_loop_lessons.py
   class_scripts/test/test_for_loop_slides.py
@@ -427,7 +427,7 @@ TOTAL                                                                    4853   
   class_scripts/for_loop_lessons.py
   class_scripts/gen_slides.py
   class_scripts/gen_slides_test_utils.py
-  class_scripts/generate_book_chapter.py
+  class_scripts/generate_lecture_commentary.py
   class_scripts/generate_slide_script.py
   class_scripts/test/test_for_loop_lessons.py
   class_scripts/test/test_for_loop_slides.py
@@ -458,7 +458,7 @@ class_scripts/gen_lecture_video_script.py                   57     57      4    
 class_scripts/gen_quizzes.py                          62     62      8      0     0%
 class_scripts/gen_slides.py                           67     28     16      1    51%
 class_scripts/gen_slides_test_utils.py               259    172     32      1    33%
-class_scripts/generate_book_chapter.py               153    153     24      0     0%
+class_scripts/generate_lecture_commentary.py               153    153     24      0     0%
 class_scripts/generate_class_images.py                92     92     18      0     0%
 class_scripts/generate_slide_script.py                58     58      8      0     0%
 class_scripts/get_lecture_file.py                     20     20      2      0     0%

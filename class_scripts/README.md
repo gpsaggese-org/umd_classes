@@ -66,7 +66,6 @@ slide quality through automated LLM-powered transformations
 | `gen_quizzes.py`                    | Generation    | Generate quizzes (20 MC) or discussion questions (3-6) from lectures |
 | `gen_slides.py`                     | Generation    | Generate lecture slide PDFs from source files                        |
 | `gen_slides_test_utils.py`          | Test          | Helper functions for slide generation testing and validation         |
-| `generate_book_chapter.py`          | Generation    | Generate book chapters from markdown and PDF/PNG images              |
 | `generate_class_images.py`          | Generation    | Generate images using DALL-E from text prompts                       |
 | `generate_slide_script.py`          | Generation    | Generate lecture scripts from slide content with LLM                 |
 | `get_lecture_file.py`               | Utility       | Find and print path to lecture source file                           |
@@ -83,12 +82,13 @@ slide quality through automated LLM-powered transformations
 // TODO(ai_gp): Merge generate_slide_script.py inside gen_lecture_video_script.py?
 // - gen_lecture_video_script.py: orchestrator/wrapper. Calls generate_slide_script.py for the body, then llm_cli.py for intro/outro, concatenates, lints with lint_txt.py. Output: narration script for video, text-only.
 // - generate_slide_script.py: does the actual per-slide LLM work. Groups slides (default 3/group), sends each group to LLM for a spoken-discussion script (~100 words/slide, plain language, transitions between slides). Output: markdown/text script — no images.
-// - generate_book_chapter.py: different target format — pairs each slide's markdown with a corresponding PNG (from a PNG dir or extracted from a PDF via pdf2image), generates per-slide commentary via LLM (explanatory prose, not spoken script), and produces a formatted book chapter (YAML title preamble, centered images + commentary, prettier-formatted). One LLM call per slide (not grouped), and embeds images — the other two are text-only.
+// - gen_lecture_commentary.py: different target format — pairs each slide's markdown with a corresponding PNG (from a PNG dir or extracted from a PDF via pdf2image), generates per-slide commentary via LLM (explanatory prose, not spoken script), and produces a formatted book chapter (YAML title preamble, centered images + commentary, prettier-formatted). One LLM call per slide (not grouped), and embeds images — the other two are text-only.
 
-// TODO(ai_gp): Rename generate_book_chapter.py -> generate_lecture_commentary.py
+// [x] Rename generate_book_chapter.py -> generate_lecture_commentary.py
+// [x] Merge generate_lecture_commentary.py inside gen_lecture_commentary.py
 
 // TODO(ai_gp): Unify the flow from generate_slide_script.py and
-// generate_book_chapter.py since they are very similar
+// gen_lecture_commentary.py since they are very similar
 
 // TODO(ai_gp): Consider merging for_loop_slides.py and process_slides.py since
 // they seem to have the same function or at least overlapping
@@ -113,7 +113,7 @@ slide quality through automated LLM-powered transformations
   - action=`reduce_slide` -> `process_slides.py`
   - action=`check_slide` -> `process_slides.py`
   - action=`improve_slide` (not yet implemented)
-  - action=`generate_book_chapter` -> `gen_lecture_commentary.py`
+  - action=`generate_lecture_commentary` -> `gen_lecture_commentary.py`
   - action=`generate_class_quizzes` -> `gen_quizzes.py`
   - action=`generate_class_recap` -> `gen_quizzes.py`
   - action=`generate_toc` -> `extract_toc_from_txt.py`
@@ -127,7 +127,6 @@ slide quality through automated LLM-powered transformations
     - `lint_txt.py`
   - `gen_lecture_commentary.py`
     - `notes_to_pdf.py`
-    - `generate_book_chapter.py`
   - `slide_check.py`
     - `process_slides.py`
   - `slide_improve.py`
@@ -346,15 +345,16 @@ slide quality through automated LLM-powered transformations
   > generate_slide_script.py --in_file slides.md --out_file script.md --log_level DEBUG
   ```
 
-## `generate_book_chapter.py`
+## `gen_lecture_commentary.py`
 
 ### What It Does
 
-- Processes markdown slides with PNG images or PDF file to create book chapter
-  format
+- Generates a commented PDF ("lecture commentary") from a lecture source file in
+  one step: converts the lecture source to a temporary PDF with `notes_to_pdf.py`,
+  extracts slide images from the PDF and generates per-slide LLM commentary,
+  renders the result to PDF with `pandoc`, and opens it in Skim
 - Extracts title from markdown file (e.g., from `\text{\blue{Lesson 2.1: Git}}`)
   and adds YAML preamble for pandoc metadata
-- Extracts PNG images from PDF automatically when `--input_pdf_file` is provided
 - Validates that the number of slides in markdown matches the number of PNG
   files (expects `num_slides + 1 = num_pngs` to account for title slide)
 - Properly aligns title slide (first PNG) with content slides (remaining PNGs)
@@ -363,47 +363,7 @@ slide quality through automated LLM-powered transformations
   commentary)
 - Content slides (PNG 2+) are paired with corresponding markdown slides, with
   centered headers formatted as "idx / tot: title" and LLM-based commentary
-- Supports optional page breaks via `--add_new_page` flag to insert `\newpage`
-  commands before each slide (disabled by default)
 - Formats output with `prettier` for consistent markdown formatting
-
-### Examples
-
-- Generate book chapter from markdown and PNG directory:
-  ```bash
-  > generate_book_chapter.py --input_file data605/lectures_source/Lesson01.1-Intro.txt --input_png_dir output --output_dir test
-  ```
-
-- Generate book chapter from markdown and PDF file:
-  ```bash
-  > generate_book_chapter.py --input_file data605/lectures_source/Lesson01.1-Intro.txt --input_pdf_file data605/lectures_pdf/Lesson01.1-Intro.pdf --output_dir test
-  ```
-
-- Process with custom image width:
-  ```bash
-  > generate_book_chapter.py --input_file lecture.txt --input_pdf_file lecture.pdf --output_dir ./book_chapters/ --image_width 50%
-  ```
-
-- Generate with page breaks before each slide:
-  ```bash
-  > generate_book_chapter.py --input_file lecture.txt --input_pdf_file lecture.pdf --output_dir ./book_chapters/ --add_new_page
-  ```
-
-- Converting to PDF with pandoc, after generating the book chapter markdown,
-  convert it to PDF using pandoc with custom header styling:
-  ```bash
-  > pandoc test/Lesson01.1-Intro.book_chapter.md -o output.pdf --include-in-header=header-style.tex
-  ```
-
-## `gen_lecture_commentary.py`
-
-### What It Does
-
-- Generates a commented PDF ("lecture commentary") from a lecture source file in
-  one step, wrapping `notes_to_pdf.py`, `generate_book_chapter.py`, and `pandoc`
-- Converts the lecture source to a temporary PDF, extracts slide images and
-  LLM commentary via `generate_book_chapter.py`, renders the result to PDF
-  with `pandoc`, and opens it in Skim
 
 ### Examples
 
@@ -833,7 +793,7 @@ slide quality through automated LLM-powered transformations
 - `reduce_slide`: Apply LLM transformation to reduce slide content
 - `check_slide`: Apply LLM validation to check slide quality
 - `improve_slide`: Not yet implemented — aborts with an error
-- `generate_book_chapter`: Generate book chapter PDF (via
+- `generate_lecture_commentary`: Generate book chapter PDF (via
   `gen_lecture_commentary.py`) from lecture content, written to
   `<class>/book/`
 - `generate_class_quizzes`: Generate multiple choice quizzes from lecture
@@ -945,7 +905,7 @@ slide quality through automated LLM-powered transformations
 
 - Creates slide PDF and corresponding book chapter with pandoc conversion:
   ```bash
-  > for_loop_lessons.py --lectures 01.1 --class data605 --action generate_pdf --action generate_book_chapter
+  > for_loop_lessons.py --lectures 01.1 --class data605 --action generate_pdf --action generate_lecture_commentary
   ```
 
 ## Lecture Commentary Generation
@@ -977,8 +937,8 @@ for reading and study.
 - Generate book chapters for all lessons in a course:
 
 ```bash
-> for_loop_lessons.py --class data605 --action generate_book_chapter
-> for_loop_lessons.py --class msml610 --action generate_book_chapter
+> for_loop_lessons.py --class data605 --action generate_lecture_commentary
+> for_loop_lessons.py --class msml610 --action generate_lecture_commentary
 ```
 
 - This processes all lecture source files and generates:
@@ -990,13 +950,13 @@ for reading and study.
 - Generate book chapters for specific lessons using patterns or ranges:
   ```bash
   # Pattern: all lessons starting with 01
-  > for_loop_lessons.py --class data605 --lectures "01*" --action generate_book_chapter
+  > for_loop_lessons.py --class data605 --lectures "01*" --action generate_lecture_commentary
 
   # Multiple patterns (colon-separated)
-  > for_loop_lessons.py --class msml610 --lectures "01*:02*:03.1" --action generate_book_chapter
+  > for_loop_lessons.py --class msml610 --lectures "01*:02*:03.1" --action generate_lecture_commentary
 
   # Continuous range (inclusive)
-  > for_loop_lessons.py --class data605 --lectures "01.1-03.2" --action generate_book_chapter
+  > for_loop_lessons.py --class data605 --lectures "01.1-03.2" --action generate_lecture_commentary
   ```
 
 ## Assessment Generation
