@@ -327,7 +327,7 @@ def _generate_book_chapter(
     _LOG.info("Formatting output with prettier")
     full_output = dshdlipr.prettier_on_str(full_output, "md")
     # Write output file.
-    output_file = os.path.join(output_dir, f"{base_name}.book_chapter.txt")
+    output_file = os.path.join(output_dir, f"{base_name}.book_chapter.md")
     _LOG.info("Writing output to: %s", output_file)
     hio.to_file(output_file, full_output)
     _LOG.info("Book chapter generation completed")

@@ -22,7 +22,6 @@ import class_scripts.gen_lecture_commentary as clgelcom
 """
 
 import argparse
-import glob
 import logging
 from pathlib import Path
 
@@ -55,23 +54,6 @@ def _parse() -> argparse.ArgumentParser:
     return parser
 
 
-def _find_helpers_root() -> str:
-    """
-    Find the helpers_root directory.
-
-    :return: path to helpers_root/dev_scripts_helpers
-    """
-    # Search for helpers_root directory.
-    pattern = "./helpers_root/dev_scripts_helpers"
-    matches = glob.glob(pattern)
-    hdbg.dassert_eq(
-        len(matches), 1, "Expected exactly one helpers_root directory"
-    )
-    helpers_root = matches[0]
-    _LOG.debug("Found HELPERS_ROOT_DIR=%s", helpers_root)
-    return helpers_root
-
-
 def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
@@ -85,40 +67,41 @@ def _main(parser: argparse.ArgumentParser) -> None:
     dst_name = clcomuut.get_output_name(src_name, ".pdf")
     tmp_pdf = f"tmp.{dst_name}"
     cmd = (
-        f"notes_to_pdf.py --input {input_file} --output {tmp_pdf} "
-        f"--type slides --toc_type remove_headers"
+        "notes_to_pdf.py "
+        f"--input {input_file} "
+        f"--output {tmp_pdf} "
+        "--type slides --toc_type remove_headers"
     )
-    hsystem.system(cmd)
+    hsystem.system(cmd, print_command=True)
     # Step 2: Generate book chapter.
     _LOG.info("Step 2: Generating book chapter")
-    helpers_root = _find_helpers_root()
-    out_dir = f"{args.dir}/book"
+    out_dir = f"{args.dir}/lecture_commentary"
     clcomuut.ensure_dir_exists(out_dir)
     cmd = (
-        f"{helpers_root}/slides/generate_book_chapter.py "
+        "generate_book_chapter.py "
         f"--input_file {input_file} "
         f"--input_pdf_file {tmp_pdf} "
         f"--output_dir {out_dir}"
     )
-    hsystem.system(cmd)
+    hsystem.system(cmd, print_command=True)
     # Step 3: Convert to PDF using pandoc.
     _LOG.info("Step 3: Converting to PDF using pandoc")
     basename = Path(src_name).stem
-    book_chapter_txt = f"{out_dir}/{basename}.book_chapter.txt"
+    book_chapter_md = f"{out_dir}/{basename}.book_chapter.md"
     pdf_file_name = f"{out_dir}/{basename}.book_chapter.pdf"
     cmd = (
-        f"pandoc {book_chapter_txt} -o {pdf_file_name} "
+        f"pandoc {book_chapter_md} -o {pdf_file_name} "
         f"--pdf-engine=xelatex "
         f"-V geometry:margin=1in "
         f"-V fontsize=11pt "
         f"--highlight-style=tango "
-        f"--include-in-header={helpers_root}/slides/header-style.tex"
+        f"--include-in-header={Path(__file__).parent}/header-style.tex"
     )
-    hsystem.system(cmd)
+    hsystem.system(cmd, print_command=True)
     # Step 4: Open the PDF in Skim.
     _LOG.info("Step 4: Opening PDF in Skim")
     cmd = f"open -a /Applications/Skim.app {pdf_file_name}"
-    hsystem.system(cmd)
+    hsystem.system(cmd, print_command=True)
     _LOG.info("Book chapter generated: %s", pdf_file_name)
 
 

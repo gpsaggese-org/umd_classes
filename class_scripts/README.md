@@ -27,6 +27,7 @@ slide quality through automated LLM-powered transformations
   - `lectures_video_script/`: Output directory for generated video script files
   - `lectures_quizzes/`: Output directory for multiple choice quiz files
   - `lectures_recap/`: Output directory for discussion and recap question files
+  - `lectures_commentary/`
   - `book/`: Output directory for "book chapter" PDFs (slides + LLM commentary)
     - E.g., `gen_lecture_commentary.py`
   - `book_source/`: Output dir for the book (`.typ` or `.tex`)
@@ -77,7 +78,6 @@ slide quality through automated LLM-powered transformations
 | `slide_improve.py`                  | Quality       | Improve slides using LLM suggestions                                 |
 | `slide_reduce.py`                   | Quality       | Reduce and simplify slides using LLM                                 |
 | `slides_utils.py`                   | Utility       | Extract and process slide content                                    |
-
 
 gen_lecture_video_script.py: orchestrator/wrapper. Calls generate_slide_script.py for the body, then llm_cli.py for intro/outro, concatenates, lints with lint_txt.py. Output: narration script for video, text-only.
 
@@ -393,15 +393,15 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
 - Converting to PDF with pandoc, after generating the book chapter markdown,
   convert it to PDF using pandoc with custom header styling:
   ```bash
-  > pandoc test/Lesson01.1-Intro.book_chapter.txt -o output.pdf --include-in-header=header-style.tex
+  > pandoc test/Lesson01.1-Intro.book_chapter.md -o output.pdf --include-in-header=header-style.tex
   ```
 
 ## `gen_lecture_commentary.py`
 
 ### What It Does
 
-- Generates a commented PDF ("book chapter") from a lecture source file in one
-  step, wrapping `notes_to_pdf.py`, `generate_book_chapter.py`, and `pandoc`
+- Generates a commented PDF ("lecture commentary") from a lecture source file in
+  one step, wrapping `notes_to_pdf.py`, `generate_book_chapter.py`, and `pandoc`
 - Converts the lecture source to a temporary PDF, extracts slide images and
   LLM commentary via `generate_book_chapter.py`, renders the result to PDF
   with `pandoc`, and opens it in Skim
@@ -983,7 +983,7 @@ for reading and study.
 ```
 
 - This processes all lecture source files and generates:
-  - Markdown book chapter: `<class>/book/Lesson##.#-Topic.book_chapter.txt`
+  - Markdown book chapter: `<class>/book/Lesson##.#-Topic.book_chapter.md`
   - PDF book chapter: `<class>/book/Lesson##.#-Topic.book_chapter.pdf`
 
 ### Generate Commentary for Pattern-Matched Lessons

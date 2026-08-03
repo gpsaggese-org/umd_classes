@@ -56,10 +56,14 @@
 | `draft.Kolmogorov_Complexity_Over_Time.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Kolmogorov_Complexity_Over_Time.md) | draft | - | 10% | - | - |
 | `draft.MDL_Extensions_with_Research_Process.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.MDL_Extensions_with_Research_Process.md) | draft | - | 10% | - | - |
 | `draft.Measure_ability_to_predict_events.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Measure_ability_to_predict_events.md) | draft | - | 10% | - | - |
-| `draft.Misc_ML_ideas.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Misc_ML_ideas.md) | draft | - | 10% | - | - |
+| `draft.Closed_Form_Formula_Discovery.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Closed_Form_Formula_Discovery.md) | draft | - | 10% | - | - |
+| `draft.Fouriered_Learning.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Fouriered_Learning.md) | draft | - | 10% | - | - |
+| `draft.Learned_Optimizers.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Learned_Optimizers.md) | draft | - | 10% | - | - |
+| `draft.Minimizing_N_Dimensional_Functions_with_NN.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Minimizing_N_Dimensional_Functions_with_NN.md) | draft | - | 10% | - | - |
 | `draft.Prompt_fine_tuning.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Prompt_fine_tuning.md) | draft | - | 10% | - | - |
 | `draft.RL_for_auto_EDA.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.RL_for_auto_EDA.md) | draft | - | 10% | - | - |
 | `draft.RL_for_pickleball.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.RL_for_pickleball.md) | draft | - | 10% | - | - |
+| `draft.Solving_Differential_Equations_with_NN.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Solving_Differential_Equations_with_NN.md) | draft | - | 10% | - | - |
 | `draft.Symbolic_regression.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Symbolic_regression.md) | draft | - | 10% | - | - |
 | `draft.Temporal_VC_Dimension.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Temporal_VC_Dimension.md) | draft | - | 10% | - | - |
 | `draft.Time_as_a_Feature_in_Learning_Theory.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Time_as_a_Feature_in_Learning_Theory.md) | draft | - | 10% | - | - |
@@ -69,3 +73,5 @@
 # Note
 - If the specs are not complete for a task you are interested in, before starting
   the work, ask GP to improve them so that there is clarity on what's the goal
+
+// Last update timestamp: "Aug  3 10:54"

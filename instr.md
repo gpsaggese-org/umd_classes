@@ -1,5 +1,11 @@
-Implement phase 4 from plan.md
-And update the tests
+In notes_to_pdf.py add an option --slides_engine auto that
+recognizes the engine to use
+
+If there are metadata then use the engine that is required
+
+// slides_engine=typst
+
+if there is no metadata then use beamer
 
 # Conventions
 - When writing code you must always follow the instructions in
