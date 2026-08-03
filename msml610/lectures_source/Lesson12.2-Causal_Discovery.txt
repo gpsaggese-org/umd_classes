@@ -1,48 +1,13 @@
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L10.2: Causal Discovery
+// slides_engine=typst
+// references=
 
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 10.2: Causal Discovery}}$$**
-\endgroup
-
-\vspace{1cm}
-
-::: columns
-:::: {.column width=75%}
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Causal_AI.jpg){width=1.5cm}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Book_of_why.jpg){width=1.5cm}
-
-::::
-:::
-
-# ##############################################################################
 # The Discovery Problem
-# ##############################################################################
 
 
-## #############################################################################
 ## Inferring Causal Structure from Observational Data
-## #############################################################################
 
 
 * Causal Discovery: Motivation
@@ -132,9 +97,7 @@ digraph Discovery {
 ::::
 :::
 
-## #############################################################################
 ## Identifiability and Causal Sufficiency
-## #############################################################################
 
 
 * Markov Equivalence
@@ -252,9 +215,7 @@ digraph PathCancellation {
 - In theory: Exact cancellations are rare
 - In practice: Near-cancellations in finite samples cause errors
 
-## #############################################################################
 ## Practical Limitations
-## #############################################################################
 
 
 * Practical Challenges for Causal Discovery
@@ -303,14 +264,10 @@ digraph PathCancellation {
   - Score-based search is NP-hard in general
   - Practical implication: exact discovery is infeasible beyond small graphs
 
-# ##############################################################################
 # When to Use Discovery vs Domain Knowledge
-# ##############################################################################
 
 
-## #############################################################################
 ## Discovery as Hypothesis Generation
-## #############################################################################
 
 * Discovery vs Domain Knowledge
 
@@ -345,9 +302,7 @@ digraph PathCancellation {
   - Replace RCTs for treatment-effect estimation
   - Claim causation from purely observational pipelines
 
-## #############################################################################
 ## Combining Discovery with Domain Knowledge
-## #############################################################################
 
 
 * Using Domain Knowledge as Constraints
@@ -403,9 +358,7 @@ digraph Workflow {
 }
 ```
 
-# ##############################################################################
 # Discovery Algorithm Families
-# ##############################################################################
 
 
 * Three Main Algorithm Families
@@ -621,9 +574,7 @@ mindmap
   - Advantage: Strongest causal guarantees; can resolve ambiguities
   - Limitation: Expensive; requires designing good experiments
 
-# ##############################################################################
 # Challenges and Validation
-# ##############################################################################
 
 
 * Validating a Discovered DAG

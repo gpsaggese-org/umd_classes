@@ -4,38 +4,7 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
 
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 01.2: The Foundations of AI}}$$**
-\endgroup
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
-- AIMA (Artificial Intelligence: a Modern Approach), Chap 1
-::::
-:::: {.column width=20%}
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){width=1.5cm}
-::::
-:::
 
 ## The Foundations of AI
 
@@ -56,7 +25,7 @@ mindmap
 
 #### AI and Philosophy (1/2)
 
-- **\black{Can formal rules be used to draw valid conclusions?}**
+- **\textcolor{black}{\text{Can formal rules be used to draw valid conclusions?}}**
   - **Reasoning**
     - Logic studies rules of proper reasoning
     - Aristotle (400 BCE) formulated laws governing the rational mind
@@ -64,7 +33,7 @@ mindmap
   - **Rationalism**
     - Use reasoning to understand the world
 
-- **\black{How does the mind arise from a physical brain?}**
+- **\textcolor{black}{\text{How does the mind arise from a physical brain?}}**
   - **Dualism**
     - Nature follows physical laws
     - Part of the human mind ("the soul") is exempt from physical laws
@@ -76,7 +45,7 @@ mindmap
 
 ::: columns
 :::: {.column width=75%}
-- **\black{What does knowledge come from?}**
+- **\textcolor{black}{\text{What does knowledge come from?}}**
   - **Empiricism**
     - Knowledge acquired via senses
     - E.g., learn that trees are green by looking at them
@@ -93,7 +62,7 @@ mindmap
 ::::
 :::
 
-- **\black{How does knowledge lead to action?}**
+- **\textcolor{black}{\text{How does knowledge lead to action?}}**
   - **Utilitarianism**
     - Actions justified by logic connecting goals and outcomes
   - **Consequentialism**
@@ -105,7 +74,7 @@ mindmap
 
 #### AI and Cognitive Psychology
 
-- **\black{How do humans think and act?}**
+- **\textcolor{black}{\text{How do humans think and act?}}**
   - **Cognitive psychology**
     - Brain is an information-processing device
     - Stimuli translated into internal representation
@@ -121,7 +90,7 @@ mindmap
 
 #### AI and Mathematics
 
-- **\black{What are the formal rules to draw valid conclusions?}**
+- **\textcolor{black}{\text{What are the formal rules to draw valid conclusions?}}**
   - **Formal logic**
     - Logical deduction rules (Boole, 1850)
     - First-order logic includes objects and relations (Frege, 1879)
@@ -130,7 +99,7 @@ mindmap
     - Incompleteness theorem: in any formal theory true statements exist that
       cannot be proved (Godel, 1931)
 
-- **\black{How do we reason with uncertain information?}**
+- **\textcolor{black}{\text{How do we reason with uncertain information?}}**
   - **Probability**
     - Mathematics of uncertainty
     - Cardano, Pascal, Bernoulli, Bayes (1500-1700)
@@ -140,7 +109,7 @@ mindmap
 
 #### AI and Economics (1/2)
 
-- **\black{How to make decisions to maximize payoff given preferences?}**
+- **\textcolor{black}{\text{How to make decisions to maximize payoff given preferences?}}**
   - **Economies**
     - Agents maximize economic well-being (utility)
     - Studies desires and preferences
@@ -149,7 +118,7 @@ mindmap
     - Probability theory + utility theory
     - E.g., investment choices, policy decisions
 
-- **\black{How to make decisions when payoffs are result of several actions?}**
+- **\textcolor{black}{\text{How to make decisions when payoffs are result of several actions?}}**
   - **Operations research**
     - Make rational decisions with payoffs for sequence of actions (Bellman, 1957)
     - E.g., Markov Decision Processes
@@ -161,7 +130,7 @@ mindmap
 
 #### AI and Economics (2/2)
 
-- **\black{How multiple agents with different goals act?}**
+- **\textcolor{black}{\text{How multiple agents with different goals act?}}**
   - **Large economies**
     - Many agents with no mutual impact
     - Ignore other agents' actions
@@ -175,14 +144,14 @@ mindmap
     - E.g., rock-paper-scissors where randomization prevents predictability
 
 #### AI and Linguistics
-- **\black{How can you create systems that understand natural language?}**
+- **\textcolor{black}{\text{How can you create systems that understand natural language?}}**
   - **Computational linguistics** (NLP)
     - Studies sentence structure and meaning
     - Machine translation (e.g., Google Translate)
     - Sentiment analysis in social media
     - Automated customer support chatbots
 
-- **\black{How does language relate to thought?}**
+- **\textcolor{black}{\text{How does language relate to thought?}}**
   - **Knowledge representation**
     - How to represent knowledge for computer reasoning
     - E.g., first order knowledge, knowledge graphs
@@ -190,19 +159,19 @@ mindmap
 #### AI and Neuroscience
 ::: columns
 :::: {.column width=65%}
-- **\textcolor{red}{Brain}**
+- **Brain**
   - Parts handle specific cognitive functions
   - Information processing in the cerebral cortex
   - E.g., frontal lobe injury may impair decision-making
 
-- **\textcolor{darkgreen}{Anatomy of the brain}**
+- **Anatomy of the brain**
   - Composed of ~100 billion neurons
     - Each neuron connects with 10-100k others via synapses
     - Axons enable long-range connections
   - Signals propagate through electrochemical reactions
   - Short-term pathways support long-term connections (learning)
 
-- **\textcolor{blue}{Memory}**
+- **Memory**
   - No theory yet about individual memory storage
   - Current theory: memories reconstructed
 ::::
@@ -213,17 +182,17 @@ mindmap
 :::
 
 #### The Brain Causes the Mind
-- **\textcolor{red}{Simple cells lead to thought and consciousness}**
-  - **\textcolor{darkgreen}{Truly amazing!}**
+- **Simple cells lead to thought and consciousness**
+  - **Truly amazing!**
   - Complex processes emerge
 
 - Supercomputers' complexity rivals the brain
 
-- **\textcolor{blue}{Brain-machine interface}**
+- **Brain-machine interface**
   - Brain adjusts to devices
   - E.g., learn to use prosthetics as limbs
 
-- **\textcolor{violet}{AI singularity}**
+- **AI singularity**
   - Future point when AI surpasses human intelligence
     - AI improves autonomously, leading to rapid growth
     - Recursive self-improvement leads to superintelligence
@@ -233,7 +202,7 @@ mindmap
   - Achieving brain's intelligence level remains unknown
 
 #### AI and Computer Science
-- **\black{What can be computed?}**
+- **\textcolor{black}{\text{What can be computed?}}**
   - **Algorithm**
     - Procedure to solve problems
     - E.g., algorithm for computing GCD (Euclid, 300 BCE)
@@ -247,7 +216,7 @@ mindmap
     - P vs NP
 
 #### AI and Control Theory
-- **\black{How can artifacts operate under their own control?}**
+- **\textcolor{black}{\text{How can artifacts operate under their own control?}}**
   - **Control theory**
     - Study self-regulating feedback control systems
     - E.g., a water regulator that maintains a constant water flow
@@ -261,7 +230,7 @@ mindmap
 ::: columns
 :::: {.column width=55%}
 
-- **\black{How can we build an efficient computer?}**
+- **\textcolor{black}{\text{How can we build an efficient computer?}}**
   - **Electronic computers**
     - Built during World War II
   - **Moore's Law**

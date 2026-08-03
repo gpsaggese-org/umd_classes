@@ -4,32 +4,6 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 12: Probabilistic Reinforcement Learning}}$$**
-\endgroup
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA Chap 17: Making complex decisions
-- AIMA Chap 22: Reinforcement Learning
 
 # Sequential Decision Problems
 
@@ -317,14 +291,14 @@ digraph MDP {
 - **Definition**: The _utility function_ for environment histories (finite or
   infinite) $h$ is expressed as:
   $$
-  U_h([\blue{s_0, a_0}, \green{s_1, a_1}, ..., s_n, ...])
+  U_h([\textcolor{blue}{s_0, a_0}, \textcolor{darkgreen}{s_1, a_1}, ..., s_n, ...])
   $$
 
 - **Definition**: _Finite horizon_ indicates a fixed time $N$ after which nothing
   matters:
   $$
-  U_h([s_0, a_0, s_1, ..., \red{s_N, ...s_{N+k}}])
-  = U_h([s_0, a_0, s_1, ..., \red{s_N}]) \; \forall k > 0
+  U_h([s_0, a_0, s_1, ..., \textcolor{red}{s_N, ...s_{N+k}}])
+  = U_h([s_0, a_0, s_1, ..., \textcolor{red}{s_N}]) \; \forall k > 0
   $$
   - Actions are chosen based on the current state and remaining steps
   - Time matters, so it leads to non-stationary policies

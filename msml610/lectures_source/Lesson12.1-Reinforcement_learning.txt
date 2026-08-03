@@ -1,29 +1,10 @@
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 12: Probabilistic Reinforcement Learning}}$$**
-\endgroup
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA Chap 17: Making complex decisions
-- AIMA Chap 22: Reinforcement Learning
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L12: Probabilistic Reinforcement Learning
+// slides_engine=typst
+// references=
+// - AIMA Chap 17: Making complex decisions
+// - AIMA Chap 22: Reinforcement Learning
 
 # Sequential Decision Problems
 

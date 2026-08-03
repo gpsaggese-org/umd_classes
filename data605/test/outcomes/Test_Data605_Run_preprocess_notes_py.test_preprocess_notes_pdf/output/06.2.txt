@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{06.2: MongoDB Commands}}$$**
+**$$\text{\textcolor{blue}{\text{06.2: MongoDB Commands}}}$$**
 \endgroup
 
 ::: columns

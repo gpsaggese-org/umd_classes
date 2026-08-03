@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{11.2: Technologies Enabling Cloud Computing}}$$**
+**$$\text{\textcolor{blue}{\text{11.2: Technologies Enabling Cloud Computing}}}$$**
 \endgroup
 
 ::: columns

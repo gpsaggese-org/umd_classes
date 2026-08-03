@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{10.1: Parallel and Distributed Systems / DBs}}$$**
+**$$\text{\textcolor{blue}{10.1: Parallel and Distributed Systems / DBs}}$$**
 \endgroup
 
 ::: columns

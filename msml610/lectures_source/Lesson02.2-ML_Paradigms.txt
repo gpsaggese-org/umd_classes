@@ -1,50 +1,17 @@
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L02.2: Machine Learning Paradigms
+// slides_engine=typst
+// references=
+// - Burkov: "The Hundred-Page Machine Learning Book" (2019)
+// - Russell et al.: "Artificial Intelligence: A Modern Approach" (4th ed, 2020)
+// - Hastie et al.: "The Elements of Statistical Learning" (2nd ed, 2009)
 
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 02.2: Machine Learning Paradigms}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=65%}
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- Burkov: _"The Hundred-Page Machine Learning Book"_ (2019)
-
-- Russell et al.: _"Artificial Intelligence: A Modern Approach"_ (4th ed, 2020)
-
-- Hastie et al.: _"The Elements of Statistical Learning"_ (2nd ed, 2009)
-
-::::
-:::: {.column width=40%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/Book_cover_The_Elements_of_Statistical_Learning.jpg){ height=20% }
-::::
-:::
 
 // Model assessment and selection
 // Hastie 7 (p. 238)
 
-# ##############################################################################
 # Machine Learning Paradigms
-# ##############################################################################
 
 ## Major Paradigms
 
@@ -223,9 +190,7 @@ digraph BayesianFlow {
   - E.g., newsfeed ranking adjusting based on user clicks
 - In **healthcare**, optimize treatment plans over time
 
-## #############################################################################
 ## Machine Learning in Practice
-## #############################################################################
 
 * Machine Learning Flow (1/2)
 - **Question**
@@ -356,9 +321,7 @@ digraph BayesianFlow {
     - E.g., in the Netflix prize, Netflix didn't end up implementing the best
       algorithm since it wasn't scalable enough
 
-## #############################################################################
 ## Pipeline Organization
-## #############################################################################
 
 * How Are Machine Learning Systems Organized?
 

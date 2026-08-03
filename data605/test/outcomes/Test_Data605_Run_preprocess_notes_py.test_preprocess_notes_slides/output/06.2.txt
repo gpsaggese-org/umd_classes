@@ -21,20 +21,20 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{06.2: MongoDB Commands}}$$**
+**$$\text{\textcolor{blue}{\text{06.2: MongoDB Commands}}}$$**
 \endgroup
 
 ::: columns
 :::: {.column width=65%}
 \vspace{1cm}
 
-- **Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+- **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
 - **References**:
   - All concepts in slides
   - MongoDB tutorial
   - Web
-    - [\textcolor{blue}{\underline{https://www.mongodb.com/}}](https://www.mongodb.com/)
+    - https://www.mongodb.com/
     - Official docs
     - pymongo
   - Seven Databases in Seven Weeks, 2e
@@ -47,27 +47,27 @@ UMD DATA605 - Big Data Systems
 #### CRUD Operations
 - CRUD = Create, Read, Update, Delete
 
-- **\textcolor{red}{Create}**
+- **Create**
   ```python
   db.collection.insert(<document>)
   db.collection.update(<query>, <update>, {upsert: true})
   ```
   - Upsert = update (if exists) or insert (if it doesn't)
-- **\textcolor{darkgreen}{Read}**
+- **Read**
   ```python
   db.collection.find(<query>, <projection>)
   db.collection.findOne(<query>, <projection>)
   ```
-- **\textcolor{blue}{Update}**
+- **Update**
   ```python
   db.collection.update(<query>, <update>, <options>)
   ```
-- **\textcolor{violet}{Delete}**
+- **Delete**
   ```python
   db.collection.remove(<query>, <justOne>)
   ```
 
-- Details [\textcolor{blue}{\underline{here}}](https://www.mongodb.com/docs/manual/crud/)
+- Details [here](https://www.mongodb.com/docs/manual/crud/)
 
 #### Create Operations
 - \textcolor{blue}{\texttt{db.collection}} specifies the collection (like an SQL table) to store the
@@ -83,7 +83,7 @@ UMD DATA605 - Big Data Systems
     ```python
     db.parts.insert({_id: 10, type: "hammer", quantity: 1})
     ```
-- Update 1 or more records in a collection satisfying **\textcolor{red}{query}**
+- Update 1 or more records in a collection satisfying **query**
   ```python
   db.collection.update(<query>, <update>, {upsert: true})
   ```
@@ -116,7 +116,7 @@ UMD DATA605 - Big Data Systems
 :::columns
 ::::{.column width=40%}
 \footnotesize
-**\textcolor{red}{SQL}**
+**SQL**
 ```sql
 SELECT * FROM users WHERE age>33
 
@@ -139,7 +139,7 @@ SELECT * FROM users
 ::::
 ::::{.column width=40%}
 \footnotesize
-**\textcolor{blue}{Mongo}**
+**Mongo**
 ```python
 db.users.find({age: {$gt: 33}})
 

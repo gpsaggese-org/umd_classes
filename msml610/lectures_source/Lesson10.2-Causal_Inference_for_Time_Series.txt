@@ -1,35 +1,8 @@
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 10.2: Causal Inference for Time Series}}$$**
-\endgroup
-
-\vspace{1cm}
-
-::: columns
-:::: {.column width=65%}
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-::::
-:::: {.column width=40%}
-
-::::
-:::
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L10.2: Causal Inference for Time Series
+// slides_engine=typst
+// references=
 
 # Time Series vs. Cross-Sectional Causality
 

@@ -221,7 +221,7 @@ digraph BayesianFlow {
     specific units
 
 - In practice, rung 2 questions can often be answered from observational data
-  using techniques like back-door adjustment, front-door adjustment, or
+  using techniques like backdoor adjustment, frontdoor adjustment, or
   instrumental variables; rung 3 questions require the full structural causal
   model
 
@@ -319,7 +319,7 @@ digraph BayesianFlow {
   $$
 
 - The **adjustment formula** allows computing interventional effects from
-  observational data when the back-door criterion is satisfied:
+  observational data when the backdoor criterion is satisfied:
   $$\Pr(Y \mid do(X)) = \sum_z \Pr(Y \mid X, Z=z) \Pr(Z=z)$$
 
 ### Why SCMs Are Needed for Counterfactuals
@@ -486,11 +486,11 @@ digraph BayesianFlow {
 - When RCTs are not feasible, counterfactual reasoning combined with causal
   graphs allows treatment effect estimation from observational data
 
-- **Back-door adjustment**: if a set of variables $Z$ blocks all back-door
+- **Backdoor adjustment**: if a set of variables $Z$ blocks all backdoor
   paths from treatment $X$ to outcome $Y$:
   $$\Pr(Y \mid do(X)) = \sum_z \Pr(Y \mid X, Z=z) \Pr(Z=z)$$
 
-- **Front-door adjustment**: if a mediator $M$ transmits all causal influence
+- **Frontdoor adjustment**: if a mediator $M$ transmits all causal influence
   from $X$ to $Y$ and no unobserved confounder affects $X$ and $M$:
   $$\Pr(Y \mid do(X)) = \sum_m \Pr(M \mid X) \sum_{x'} \Pr(Y \mid M, X') \Pr(X')$$
 
@@ -517,7 +517,7 @@ digraph CausalDAG {
 }
 ```
 
-  - The back-door path $Price \leftarrow AdSpend \rightarrow Sales$ creates a
+  - The backdoor path $Price \leftarrow AdSpend \rightarrow Sales$ creates a
     spurious association
   - Conditioning on $AdSpend$ blocks this path and allows estimating the true
     causal effect of price on sales

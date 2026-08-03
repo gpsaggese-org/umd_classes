@@ -1,30 +1,10 @@
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L09.3: Multi-armed Bandits
+// slides_engine=typst
+// references=
 
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 09.3: Multi-armed Bandits}}$$**
-\endgroup
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-# ##############################################################################
 # Introduction
-# ##############################################################################
 
 * What are Multi-Armed Bandits?
 
@@ -267,9 +247,7 @@ digraph ExploitationExploration {
   - Random sampling: $\Omega(\sqrt{T})$ regret
   - Need adaptive exploration that concentrates on promising arms
 
-# ##############################################################################
 # Algorithms
-# ##############################################################################
 
 * Baseline Strategies
 
@@ -562,9 +540,7 @@ digraph OptimismConcept {
   - You have domain knowledge about variance structure (UCB-V)
   - You need best possible asymptotic performance (KL-UCB)
 
-# ##############################################################################
 # Bayesian Approaches
-# ##############################################################################
 
 * Bayesian Bandits
 
