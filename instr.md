@@ -1,29 +1,5 @@
 When running gen_lecture_commentary.py book_springer 02.1
-- Run git add on the md file generated
-- Generalize the --no_incremental for also generating the PNG files
-  and the txt file only when needed
-- When generating the md with the lecture commentary file add a tag like
-  !<-- git_hash=%s timestamp=%s --> to it so that we can find out when
-  it was generated
-  - Create a function in helpers/hgit.py to compute this
-- Generate also an html version of the PDF output in the same directory
-- Add an option --use_figure_border to generate a border around
-  the
-
-  </center>
-  # 2 / 30: Why Traditional ML Falls Short
-  </center>
-  <center>
-  ![](book_springer/lecture_commentary/Lesson02.1_From_Data_Science_To_Decision_Science.png/slides002.png){width=80%}
-  </center>
-
-using a Latex directive like
-
-\begin{center}
-\fbox{\includegraphics[width=0.8\linewidth]{book_springer/lecture_commentary/Lesson02.1_From_Data_Science_To_Decision_Science.png/slides002.png}}
-\end{center}
-
-that includes both the title and the picture
+- add an option --image_type to generate files as jpeg instead of png
 
 # Conventions
 - When writing code you must always follow the instructions in

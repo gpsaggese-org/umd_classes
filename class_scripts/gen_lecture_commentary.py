@@ -1,5 +1,18 @@
 #!/usr/bin/env -S uv run
 
+# /// script
+# dependencies = [
+#   "pandas>=2.0.0",
+#   "openai",
+#   "tqdm",
+#   "pyyaml",
+#   "requests",
+#   "python-dotenv",
+#   "pdf2image",
+#   "pillow",
+# ]
+# ///
+
 r"""
 Generate a PDF with the lecture commentaries from slides lecture source.
 
@@ -41,19 +54,6 @@ Import as:
 import class_scripts.gen_lecture_commentary as clgelcom
 """
 
-# /// script
-# dependencies = [
-#   "pandas>=2.0.0",
-#   "openai",
-#   "tqdm",
-#   "pyyaml",
-#   "requests",
-#   "python-dotenv",
-#   "pdf2image",
-#   "pillow",
-# ]
-# ///
-
 import argparse
 import glob
 import logging
@@ -63,6 +63,7 @@ from typing import List, Optional
 
 import pdf2image  # type: ignore
 import tqdm
+from PIL import ImageOps
 
 import class_scripts.common_utils as clcomuut
 import class_scripts.slides_utils as cscsluti
@@ -73,6 +74,7 @@ import helpers.hdbg as hdbg
 import helpers.hgit as hgit
 import helpers.hio as hio
 import helpers.hllm as hllm
+import helpers.hllm_cli as hllmcli
 import helpers.hparser as hparser
 import helpers.hprint as hprint
 import helpers.hsystem as hsystem
@@ -83,151 +85,139 @@ _LOG = logging.getLogger(__name__)
 # PNG processing
 # #############################################################################
 
+# Map `--image_type` values to the corresponding PIL save format and file
+# extension.
+_IMAGE_TYPE_TO_PIL_INFO = {
+    "png": ("PNG", "png"),
+    "jpg": ("JPEG", "jpg"),
+}
+
+# Border drawn around each extracted slide image.
+_IMAGE_BORDER_WIDTH_PX = 3
+_IMAGE_BORDER_COLOR = "black"
+
+
+def get_image_extension(image_type: str) -> str:
+    """
+    Get the file extension corresponding to an `--image_type` value.
+
+    :param image_type: image type (e.g., "png", "jpg")
+    :return: file extension without the leading dot (e.g., "png", "jpg")
+    """
+    hdbg.dassert_in(
+        image_type,
+        _IMAGE_TYPE_TO_PIL_INFO,
+        "Invalid image type specified",
+    )
+    _, extension = _IMAGE_TYPE_TO_PIL_INFO[image_type]
+    return extension
+
 
 def _extract_png_from_pdf(
     input_pdf_file: str,
     output_png_dir: str,
     *,
     dpi: int = 200,
+    image_type: str = "png",
+    add_border: bool = False,
 ) -> None:
     """
-    Extract PNG images from PDF file using pdf2image.
+    Extract slide images from PDF file using pdf2image.
 
     :param input_pdf_file: path to input PDF file
-    :param output_png_dir: directory to save PNG files
+    :param output_png_dir: directory to save the extracted images
     :param dpi: DPI resolution for output images
+    :param image_type: image format to save (e.g., "png", "jpg")
+    :param add_border: if True, draw a solid border around each extracted
+        image (baked into the pixels, so it shows up in every output format,
+        e.g., PDF and HTML)
     """
     hdbg.dassert_file_exists(input_pdf_file)
-    _LOG.info("Extracting PNG images from PDF: %s", input_pdf_file)
+    hdbg.dassert_in(
+        image_type,
+        _IMAGE_TYPE_TO_PIL_INFO,
+        "Invalid image type specified",
+    )
+    pil_format, extension = _IMAGE_TYPE_TO_PIL_INFO[image_type]
+    _LOG.info("Extracting %s images from PDF: %s", image_type, input_pdf_file)
     # Create output directory.
     hio.create_dir(output_png_dir, incremental=False)
-    _LOG.info("Output PNG directory: %s", output_png_dir)
+    _LOG.info("Output image directory: %s", output_png_dir)
     # Convert PDF pages to images.
     _LOG.info("Converting PDF to images with DPI=%d", dpi)
     images = pdf2image.convert_from_path(input_pdf_file, dpi=dpi)
     num_pages = len(images)
     hdbg.dassert_lt(0, num_pages, "No pages found in PDF file:", input_pdf_file)
     _LOG.info("Found %d pages in PDF", num_pages)
-    # Save each page as a PNG file.
+    # Save each page as an image file.
     for page_num, image in enumerate(
         tqdm.tqdm(images, desc="Extracting pages"), start=1
     ):
         # Format filename with zero-padded page number.
-        output_filename = f"slides{page_num:03d}.png"
+        output_filename = f"slides{page_num:03d}.{extension}"
         output_path = os.path.join(output_png_dir, output_filename)
-        # Save image as PNG.
-        image.save(output_path, "PNG")
+        # JPEG has no alpha channel, so convert away from RGBA before saving.
+        if pil_format == "JPEG" and image.mode != "RGB":
+            image = image.convert("RGB")
+        if add_border:
+            image = ImageOps.expand(
+                image,
+                border=_IMAGE_BORDER_WIDTH_PX,
+                fill=_IMAGE_BORDER_COLOR,
+            )
+        image.save(output_path, pil_format)
         _LOG.debug("Saved: %s", output_filename)
     _LOG.info(
-        "Successfully extracted %d PNG images to %s", num_pages, output_png_dir
+        "Successfully extracted %d %s images to %s",
+        num_pages,
+        image_type,
+        output_png_dir,
     )
 
 
-def _get_png_files_from_directory(png_dir: str) -> List[str]:
+def _get_png_files_from_directory(
+    png_dir: str, *, image_type: str = "png"
+) -> List[str]:
     """
-    Get sorted list of PNG files from directory.
+    Get sorted list of slide image files from directory.
 
-    :param png_dir: directory containing PNG files
-    :return: sorted list of PNG file paths with pattern slides*.png
+    :param png_dir: directory containing the slide image files
+    :param image_type: image format to look for (e.g., "png", "jpg")
+    :return: sorted list of image file paths with pattern slides*.<extension>
     """
     hdbg.dassert_dir_exists(png_dir)
-    # List all PNG files matching the pattern slides*.png.
+    extension = get_image_extension(image_type)
+    # List all image files matching the pattern slides*.<extension>.
     png_files = []
     for filename in os.listdir(png_dir):
-        if filename.startswith("slides") and filename.endswith(".png"):
+        if filename.startswith("slides") and filename.endswith(
+            f".{extension}"
+        ):
             png_files.append(os.path.join(png_dir, filename))
     # Sort files to ensure correct ordering.
     png_files.sort()
-    _LOG.info("Found %d PNG files in directory: %s", len(png_files), png_dir)
+    _LOG.info("Found %d image files in directory: %s", len(png_files), png_dir)
     return png_files
 
 
-def _is_png_dir_populated(png_dir: str) -> bool:
+def _is_png_dir_populated(png_dir: str, *, image_type: str = "png") -> bool:
     """
-    Check whether a PNG directory already contains extracted slide images.
+    Check whether an image directory already contains extracted slide images.
 
-    Used to make `--no_incremental` handling for PNG extraction independent
-    of the markdown artifact: e.g., deleting only the PNG dir triggers
-    re-extraction without forcing a full markdown regeneration.
+    Used to make `--no_incremental` handling for image extraction
+    independent of the markdown artifact: e.g., deleting only the image dir
+    triggers re-extraction without forcing a full markdown regeneration.
 
-    :param png_dir: directory expected to contain `slides*.png` files
-    :return: True if the directory exists and contains at least one PNG file
+    :param png_dir: directory expected to contain `slides*.<extension>` files
+    :param image_type: image format to look for (e.g., "png", "jpg")
+    :return: True if the directory exists and contains at least one image
+        file
     """
+    extension = get_image_extension(image_type)
     is_populated = os.path.isdir(png_dir) and bool(
-        glob.glob(os.path.join(png_dir, "slides*.png"))
+        glob.glob(os.path.join(png_dir, f"slides*.{extension}"))
     )
     return is_populated
-
-
-# #############################################################################
-# Figure formatting
-# #############################################################################
-
-
-def _convert_image_width_to_latex(image_width: str) -> str:
-    """
-    Convert a markdown-style percentage width into a LaTeX linewidth fraction.
-
-    :param image_width: markdown width string (e.g., "80%")
-    :return: LaTeX width fraction (e.g., "0.80\\linewidth")
-    """
-    hdbg.dassert(
-        image_width.endswith("%"),
-        "image_width must end with a percent sign, got '%s'",
-        image_width,
-    )
-    percent = float(image_width[:-1])
-    fraction = percent / 100.0
-    latex_width = f"{fraction:.2f}\\linewidth"
-    return latex_width
-
-
-def _format_bordered_figure_block(
-    png_path: str,
-    image_width: str,
-    *,
-    slide_title: str = "",
-) -> str:
-    r"""
-    Format a slide's image (and optional title) as a bordered LaTeX figure.
-
-    Wraps the title text and image together inside a single `\fbox` so that
-    the border encloses both, per the `--use_figure_border` option. Emitted
-    as a raw LaTeX block (pandoc `{=latex}` fence) since `\fbox` has no
-    portable markdown/HTML equivalent; other pandoc writers (e.g., the HTML
-    output) drop this block entirely.
-
-    :param png_path: path to the slide's PNG image
-    :param image_width: markdown-style width (e.g., "80%")
-    :param slide_title: title text to render above the image inside the
-        border
-        - Empty for the title slide, which has no title text
-    :return: raw LaTeX block with the bordered figure
-    """
-    latex_width = _convert_image_width_to_latex(image_width)
-    # Empty when there is no title (e.g., the title slide): the template line
-    # below then collapses to a harmless blank line inside the LaTeX box.
-    title_line = (
-        # TODO(ai_gp): Use r"""
-        f"\\textbf{{{slide_title}}}\\par\\bigskip" if slide_title else ""
-    )
-    block = hprint.dedent(
-        # TODO(ai_gp): Use r"""
-        f"""
-        ```{{=latex}}
-        \\begin{{center}}
-        \\fbox{{%
-        \\begin{{minipage}}{{{latex_width}}}
-        \\centering
-        {title_line}
-        \\includegraphics[width=\\linewidth]{{{png_path}}}
-        \\end{{minipage}}%
-        }}
-        \\end{{center}}
-        ```
-        """
-    )
-    return block
 
 
 # #############################################################################
@@ -289,11 +279,20 @@ def _extract_title_from_markdown(input_file: str) -> Optional[str]:
     return None
 
 
+# Backends supported by `_generate_slide_commentary()`.
+# - "hllm": `helpers.hllm.get_completion()`, supports passing the slide's
+#   images as multi-modal context
+# - "hllm_cli": `helpers.hllm_cli.apply_llm()`, text-only (no image support)
+_LLM_BACKENDS = ("hllm", "hllm_cli")
+
+
 @hcacsimp.simple_cache(cache_type="json")
 def _generate_slide_commentary(
     slide_content: str,
     system_prompt: str,
     model: str,
+    *,
+    llm_backend: str = "hllm",
 ) -> str:
     """
     Generate commentary for a single slide using LLM.
@@ -301,8 +300,14 @@ def _generate_slide_commentary(
     :param slide_content: markdown content of the slide
     :param system_prompt: system prompt for the LLM
     :param model: LLM model to use
+    :param llm_backend: which LLM backend to use, one of `_LLM_BACKENDS`
+        - "hllm": also feeds the slide's images to the LLM as multi-modal
+          context
+        - "hllm_cli": text-only, since `hllm_cli.apply_llm()` has no image
+          support
     :return: generated commentary text
     """
+    hdbg.dassert_in(llm_backend, _LLM_BACKENDS)
     _LOG.debug("Generating commentary for slide")
     # Process images from slide.
     processed_slides, images_as_base64 = cscsluti.process_slide_images(
@@ -310,13 +315,22 @@ def _generate_slide_commentary(
     )
     user_prompt = processed_slides[0]
     # Get completion from LLM.
-    response = hllm.get_completion(
-        user_prompt=user_prompt,
-        system_prompt=system_prompt,
-        model=model,
-        cache_mode="NORMAL",
-        temperature=0.1,
-    )
+    if llm_backend == "hllm":
+        response = hllm.get_completion(
+            user_prompt=user_prompt,
+            system_prompt=system_prompt,
+            model=model,
+            cache_mode="NORMAL",
+            temperature=0.1,
+            images_as_base64=tuple(images_as_base64),
+        )
+    else:
+        response, _ = hllmcli.apply_llm(
+            user_prompt,
+            system_prompt=system_prompt,
+            model=model,
+            backend="library",
+        )
     return str(response)
 
 
@@ -328,23 +342,25 @@ def _generate_lecture_commentary(
     output_file: str = "",
     image_width: str = "80%",
     add_new_page: bool = False,
-    use_figure_border: bool = False,
+    image_type: str = "png",
+    llm_backend: str = "hllm",
 ) -> None:
     r"""
     Generate book chapter from markdown slides and a directory of slide PNGs.
 
     :param input_file: path to input markdown file with slides
     :param output_dir: directory to save output files
-    :param input_png_dir: directory containing PNG files (slides*.png),
-        already extracted from the corresponding PDF (see
-        `_extract_png_from_pdf()`)
+    :param input_png_dir: directory containing the slide image files
+        (slides*.<extension>), already extracted from the corresponding PDF
+        (see `_extract_png_from_pdf()`)
     :param output_file: path to the output book chapter markdown file
         - Default: `{output_dir}/{base_name}.book_chapter.md`
     :param image_width: width of images in output (e.g., "80%", "50%")
     :param add_new_page: if True, add `\newpage` commands before each slide
-    :param use_figure_border: if True, wrap each slide's title and image
-        together inside a bordered LaTeX box (see
-        `_format_bordered_figure_block()`) instead of plain centered markdown
+    :param image_type: image format of the files in `input_png_dir` (e.g.,
+        "png", "jpg")
+    :param llm_backend: which LLM backend to use to generate commentary, one
+        of `_LLM_BACKENDS` (see `_generate_slide_commentary()`)
     """
     hdbg.dassert_file_exists(input_file)
     hdbg.dassert_dir_exists(input_png_dir)
@@ -367,7 +383,9 @@ def _generate_lecture_commentary(
     num_slides = len(slides)
     _LOG.info("Found %d slides in markdown file", num_slides)
     # Get PNG files from directory.
-    png_files = _get_png_files_from_directory(input_png_dir)
+    png_files = _get_png_files_from_directory(
+        input_png_dir, image_type=image_type
+    )
     num_pngs = len(png_files)
     _LOG.info("Found %d PNG files in directory", num_pngs)
     # Check that slide count matches PNG count.
@@ -395,24 +413,18 @@ def _generate_lecture_commentary(
     if add_new_page:
         slide_output.append("\\newpage")
         slide_output.append("")
-    if use_figure_border:
-        # Border the image (no title text for the title slide).
-        slide_output.append(
-            _format_bordered_figure_block(png_files[0], image_width)
-        )
-    else:
-        # Add centered image with specified width and empty alt text.
-        slide_output.append(
-            hprint.dedent(
-                f"""
-                <center>
+    # Add centered image with specified width and empty alt text.
+    slide_output.append(
+        hprint.dedent(
+            f"""
+            <center>
 
-                ![]({png_files[0]}){{width={image_width}}}
+            ![]({png_files[0]}){{width={image_width}}}
 
-                </center>
-                """
-            )
+            </center>
+            """
         )
+    )
     output_parts.append("\n".join(slide_output))
     # Then process content slides (slides from markdown with corresponding PNGs).
     # Note: png_files[0] is the title slide, so we pair slides[i] with png_files[i+1].
@@ -434,42 +446,35 @@ def _generate_lecture_commentary(
         # Add title, image, and commentary.
         # Use original slide title from input markdown with idx/tot format.
         full_title = f"{idx} / {num_slides + 1}: {slide_title}"
-        if use_figure_border:
-            # Border the title and image together inside a single LaTeX box.
-            slide_output.append(
-                _format_bordered_figure_block(
-                    png_path, image_width, slide_title=full_title
-                )
+        slide_output.append(
+            hprint.dedent(
+                f"""
+                <center>
+
+                # {full_title}
+
+                </center>
+                """
             )
-        else:
-            slide_output.append(
-                hprint.dedent(
-                    f"""
-                    <center>
+        )
+        # Add centered image with specified width and empty alt text.
+        slide_output.append(
+            hprint.dedent(
+                f"""
+                <center>
 
-                    # {full_title}
+                ![]({png_path}){{width={image_width}}}
 
-                    </center>
-                    """
-                )
+                </center>
+                """
             )
-            # Add centered image with specified width and empty alt text.
-            slide_output.append(
-                hprint.dedent(
-                    f"""
-                    <center>
-
-                    ![]({png_path}){{width={image_width}}}
-
-                    </center>
-                    """
-                )
-            )
+        )
         # Generate commentary for this slide.
         commentary = _generate_slide_commentary(
             slide_content=slide_content,
             system_prompt=_DEFAULT_SYSTEM_PROMPT,
             model="",
+            llm_backend=llm_backend,
         )
         slide_output.append(commentary)
         slide_output.append("")
@@ -523,13 +528,21 @@ def _parse() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
-        "--use_figure_border",
-        action="store_true",
+        "--image_type",
+        type=str,
+        choices=["png", "jpg"],
+        default="png",
+        help="Image format to extract slides as",
+    )
+    parser.add_argument(
+        "--llm_backend",
+        type=str,
+        choices=_LLM_BACKENDS,
+        default="hllm",
         help=(
-            "Wrap each slide's title and image together inside a bordered "
-            "LaTeX box (`\\fbox`) instead of plain centered markdown; only "
-            "affects the PDF output, since other pandoc writers (e.g., "
-            "HTML) drop raw LaTeX blocks"
+            "LLM backend to use for slide commentary generation: 'hllm' "
+            "(default) feeds the slide's images to the LLM as multi-modal "
+            "context, 'hllm_cli' is text-only"
         ),
     )
     hparser.add_verbosity_arg(parser)
@@ -550,7 +563,8 @@ def _main(parser: argparse.ArgumentParser) -> None:
     tmp_pdf = f"tmp.{dst_name}"
     out_dir = f"{args.dir}/lecture_commentary"
     basename = os.path.splitext(src_name)[0]
-    png_dir = f"{out_dir}/{basename}.png"
+    image_extension = get_image_extension(args.image_type)
+    png_dir = f"{out_dir}/{basename}.{image_extension}"
     book_chapter_md = f"{out_dir}/{basename}.book_chapter.md"
     pdf_file_name = f"{out_dir}/{basename}.book_chapter.pdf"
     html_file_name = f"{out_dir}/{basename}.book_chapter.html"
@@ -567,22 +581,30 @@ def _main(parser: argparse.ArgumentParser) -> None:
             "--type slides --toc_type remove_headers"
         )
         hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
-    # Step 2: Extract PNG images from the PDF.
+    # Step 2: Extract slide images from the PDF.
     # This is tracked independently from the markdown artifact (Step 3) so
-    # that deleting only the PNG dir triggers re-extraction without forcing a
-    # full markdown/commentary regeneration.
+    # that deleting only the image dir triggers re-extraction without forcing
+    # a full markdown/commentary regeneration.
     clcomuut.ensure_dir_exists(out_dir)
-    if do_incremental and _is_png_dir_populated(png_dir):
+    if do_incremental and _is_png_dir_populated(
+        png_dir, image_type=args.image_type
+    ):
         _LOG.warning("Step 2: Skipping, '%s' already populated", png_dir)
     else:
-        _LOG.info("Step 2: Extracting PNG images from PDF")
+        _LOG.info("Step 2: Extracting %s images from PDF", args.image_type)
         if args.dry_run:
             _LOG.warning(
-                "As per user request, not extracting PNG images for '%s'",
+                "As per user request, not extracting images for '%s'",
                 tmp_pdf,
             )
         else:
-            _extract_png_from_pdf(tmp_pdf, png_dir, dpi=300)
+            _extract_png_from_pdf(
+                tmp_pdf,
+                png_dir,
+                dpi=300,
+                image_type=args.image_type,
+                add_border=True,
+            )
     # Step 3: Generate book chapter.
     if do_incremental and os.path.exists(book_chapter_md):
         _LOG.warning("Step 3: Skipping, '%s' already exists", book_chapter_md)
@@ -599,7 +621,8 @@ def _main(parser: argparse.ArgumentParser) -> None:
                 output_dir=out_dir,
                 input_png_dir=png_dir,
                 output_file=book_chapter_md,
-                use_figure_border=args.use_figure_border,
+                image_type=args.image_type,
+                llm_backend=args.llm_backend,
             )
     # Step 4: Track the generated markdown file in git.
     _LOG.info("Step 4: Adding book chapter markdown to git")
