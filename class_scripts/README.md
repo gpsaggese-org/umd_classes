@@ -1,4 +1,5 @@
 # Summary
+
 A comprehensive suite of command-line tools and scripts for managing university
 courses, generating lecture materials (slides, scripts, quizzes), and improving
 slide quality through automated LLM-powered transformations
@@ -51,6 +52,7 @@ slide quality through automated LLM-powered transformations
 | `count_lecture_pages.py`            | Analysis      | Count pages in lecture PDFs                                          |
 | `count_words.py`                    | Analysis      | Count words in lecture scripts                                       |
 | `extract_png_from_pdf.py`           | Processing    | Extract PDF pages as PNG images with customizable DPI                |
+| `fix_bold_in_slides.sh`             | Quality       | Replace `**Tag**` bold labels with `@Tag@` for canonical slide tags  |
 | `gen_lecture_commentary.py`         | Generation    | Generate book chapters from lecture source material                  |
 | `gen_lecture_video_script.py`       | Generation    | Generate lecture scripts from slides with intro/outro sections       |
 | `gen_quizzes.py`                    | Generation    | Generate quizzes (20 MC) or discussion questions (3-6) from lectures |
@@ -138,13 +140,18 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
   - `get_lecture_file.py`
   - `extract_png_from_pdf.py`
   - `generate_class_images.py`
+  - `fix_bold_in_slides.sh`
 
 # Counting and Analysis Scripts
 
-## `class_scripts/count_lecture_commentary_pages.py`
+## `count_lecture_commentary_pages.py`
+
+### What It Does
 
 - Counts pages in all PDF files in the `{DIR}/book/` directory using macOS
   `mdls` command to extract PDF metadata
+
+### Examples
 
 - Count pages for a specific class:
   ```bash
@@ -155,12 +162,16 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
   Lesson01.4-Data_Models.book_chapter.pdf	14
   ```
 
-## `class_scripts/count_lecture_slides.py`
+## `count_lecture_slides.py`
+
+### What It Does
 
 - Counts slides, headers (at 3 levels), lines, words, and characters in lecture
   source files in `{DIR}/lectures_source/` directory
 - Displays results in a formatted table supporting markdown (default), TSV, and
   CSV output formats
+
+### Examples
 
 - Count lecture slides with default markdown output:
   ```bash
@@ -189,10 +200,14 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
   Lesson01.2-Big_Data.txt,16,0,0,0,309,1282,8845
   ```
 
-## `class_scripts/count_lecture_pages.py`
+## `count_lecture_pages.py`
+
+### What It Does
 
 - Counts pages in all PDF files in the `{DIR}/lectures_pdf/` directory and
   displays page counts for each lecture PDF file
+
+### Examples
 
 - Count pages for lecture PDFs:
   ```bash
@@ -205,10 +220,14 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
   Lesson02.1-Git.pdf	15
   ```
 
-## `class_scripts/count_words.py`
+## `count_words.py`
+
+### What It Does
 
 - Counts words in all files in the `{DIR}/lectures_video_script/` directory to help
   track lecture length and content volume
+
+### Examples
 
 - Count words in lecture scripts:
   ```bash
@@ -223,11 +242,16 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
 
 # Generation Scripts
 
-## `class_scripts/gen_slides.py`
+## `gen_slides.py`
+
+### What It Does
 
 - Generates lecture slide PDFs from source files using `notes_to_pdf.py` to
   convert markdown to PDF
 - Accepts additional options to pass through to `notes_to_pdf.py`
+
+### Examples
+
 - Generate slides with default settings:
   ```bash
   > gen_slides.py data605 01.1
@@ -240,11 +264,16 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
   > gen_slides.py msml610 02.3 --theme dark
   ```
 
-## `class_scripts/gen_lecture_video_script.py`
+## `gen_lecture_video_script.py`
+
+### What It Does
 
 - Generates complete lecture scripts from slides using LLM
 - Automatically creates intro and outro sections, combines all sections, and
   lints the final output
+
+### Examples
+
 - Generate lecture script:
   ```bash
   > gen_lecture_video_script.py data605 01.1
@@ -262,11 +291,16 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
   > gen_lecture_video_script.py msml610 02.3 --force
   ```
 
-## `class_scripts/generate_slide_script.py`
+## `generate_slide_script.py`
+
+### What It Does
 
 - Processes markdown slides and generates presentation scripts using LLM
 - Groups slides for batch processing to optimize LLM API calls
 - Supports limiting slide ranges and customizable grouping strategies
+
+### Examples
+
 - Generate script from markdown slides with default settings:
   ```bash
   > generate_slide_script.py --in_file slides.md --out_file script.md
@@ -284,7 +318,9 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
   > generate_slide_script.py --in_file slides.md --out_file script.md --log_level DEBUG
   ```
 
-## `class_scripts/generate_book_chapter.py`
+## `generate_book_chapter.py`
+
+### What It Does
 
 - Processes markdown slides with PNG images or PDF file to create book chapter
   format
@@ -302,6 +338,8 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
 - Supports optional page breaks via `--add_new_page` flag to insert `\newpage`
   commands before each slide (disabled by default)
 - Formats output with `prettier` for consistent markdown formatting
+
+### Examples
 
 - Generate book chapter from markdown and PNG directory:
   ```bash
@@ -326,7 +364,28 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
   > pandoc test/Lesson01.1-Intro.book_chapter.txt -o output.pdf --include-in-header=header-style.tex
   ```
 
-## `class_scripts/gen_quizzes.py`
+## `gen_lecture_commentary.py`
+
+### What It Does
+
+- Generates a commented PDF ("book chapter") from a lecture source file in one
+  step, wrapping `notes_to_pdf.py`, `generate_book_chapter.py`, and `pandoc`
+- Converts the lecture source to a temporary PDF, extracts slide images and
+  LLM commentary via `generate_book_chapter.py`, renders the result to PDF
+  with `pandoc`, and opens it in Skim
+
+### Examples
+
+- Generate commentary for a single lesson:
+  ```bash
+  > gen_lecture_commentary.py data605 01.1
+  > gen_lecture_commentary.py msml610 02.3
+  ```
+  Output: `<class>/book/Lesson##.#-Topic.book_chapter.{txt,pdf}`
+
+## `gen_quizzes.py`
+
+### What It Does
 
 - Generates questions from lecture content using LLM
 - Supports two modes:
@@ -336,6 +395,9 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
     `{DIR}/lectures_recap/<lesson>.recap.md`
 - Automatically formats output using `lint_txt.py` with prettier (use
   `--no_lint` to skip)
+
+### Examples
+
 - Generate multiple choice quiz:
   ```bash
   > gen_quizzes.py --for_class_quizzes data605 01.1
@@ -361,7 +423,9 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
   > gen_quizzes.py --for_class_quizzes data605 01.1 --model gpt-4
   ```
 
-## `class_scripts/create_book_toc_from_slides.py`
+## `create_book_toc_from_slides.py`
+
+### What It Does
 
 - Extracts and combines table of contents from lecture slides into a structured
   document
@@ -371,6 +435,8 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
 - Parses lesson files from `### Lessons` sections in markdown files from
   `book_map.md`
 - Creates combined TOC with chapter organization and formatted lesson sections
+
+### Examples
 
 - Generate combined TOC to separate file:
   ```bash
@@ -407,12 +473,16 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
   - Introduction (3)
   ```
 
-## `class_scripts/process_slides.py`
+## `process_slides.py`
+
+### What It Does
 
 - Extracts individual slides from markdown files and processes each with LLM
   prompts
 - Supports various actions like slide reduction, text checking, and improvement
 - Provides parallel processing with incremental execution and error recovery
+
+### Examples
 
 - Process slides with LLM transformation:
   ```bash
@@ -442,11 +512,16 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
 
 # Slide Improvement Scripts
 
-## `class_scripts/slide_check.py`
+## `slide_check.py`
+
+### What It Does
 
 - Checks and fixes text in lecture slides using LLM
 - Corrects spelling, grammar, and formatting issues using `process_slides.py`
   with `text_check_fix` action
+
+### Examples
+
 - Check and fix slides:
   ```bash
   > slide_check.py data605 01.1
@@ -464,11 +539,16 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
   > slide_check.py msml610 02.3 --dry-run
   ```
 
-## `class_scripts/slide_improve.py`
+## `slide_improve.py`
+
+### What It Does
 
 - Improves lecture slides using LLM suggestions
 - Enhances clarity, structure, and pedagogical effectiveness using
   `process_slides.py` with `slide_improve` action
+
+### Examples
+
 - Improve slides:
   ```bash
   > slide_improve.py data605 01.1
@@ -486,11 +566,16 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
   > slide_improve.py msml610 02.3 --max-suggestions 5
   ```
 
-## `class_scripts/slide_reduce.py`
+## `slide_reduce.py`
+
+### What It Does
 
 - Reduces and simplifies lecture slides using LLM
 - Removes redundancy and condenses content using `process_slides.py` with
   `slide_reduce` action
+
+### Examples
+
 - Reduce slide content:
   ```bash
   > slide_reduce.py data605 01.1
@@ -508,13 +593,39 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
   > slide_reduce.py msml610 02.3 --target-length 50
   ```
 
+## `fix_bold_in_slides.sh`
+
+### What It Does
+
+- Replaces `**Tag**` bold labels with `@Tag@` for the canonical set of
+  slide/lecture tags (see "### Tags" in `.claude/skills/slides.rules.md`)
+- Edits files in place using `perl -i -pe`
+- Requires at least one file argument
+
+### Examples
+
+- Fix bold tags in a single lecture file:
+  ```bash
+  > fix_bold_in_slides.sh data605/lectures_source/Lesson01.1-Intro.txt
+  ```
+- Fix bold tags across multiple lecture files:
+  ```bash
+  > fix_bold_in_slides.sh data605/lectures_source/Lesson*.txt
+  ```
+
 # Image and PDF Processing Scripts
-## `class_scripts/extract_png_from_pdf.py`
+
+## `extract_png_from_pdf.py`
+
+### What It Does
 
 - Extracts each page of a PDF file as a separate PNG image
 - Numbers output files sequentially (slides001.png, slides002.png, etc.)
 - Supports customizable DPI for image quality control
 - Creates output directory automatically with optional from-scratch mode
+
+### Examples
+
 - Extract all pages from a PDF with default settings:
   ```bash
   > extract_png_from_pdf.py --input_file data605/lectures_pdf/Lesson01.1-Intro.pdf --output_dir output
@@ -536,12 +647,17 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
   > extract_png_from_pdf.py --input_file presentation.pdf --output_dir ./images/ --from_scratch
   ```
 
-## `class_scripts/generate_class_images.py`
+## `generate_class_images.py`
+
+### What It Does
 
 - Generates multiple images using OpenAI's DALL-E 3 API from text prompts
 - Supports both standard and HD quality image generation in 1024x1024 resolution
 - Includes special workload mode for generating predefined image sets for course
   materials
+
+### Examples
+
 - Generate 5 HD quality images from a prompt:
   ```bash
   > generate_class_images.py "A sunset over mountains" --dst_dir ./images
@@ -567,17 +683,28 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
 
 # Test Utilities
 
-## `class_scripts/gen_slides_test_utils.py`
+## `gen_slides_test_utils.py`
 
-- Shared utilities for slide generation testing. Provides helper functions for
-  discovering lessons, testing slide generation, and validating output.
+### What It Does
+
+- Provides shared helper functions for slide generation testing
+- Discovers available lessons, drives slide generation for a given lesson, and
+  validates the resulting output
+- Not an executable; imported by test modules (e.g., `test/test_gen_slides.py`)
+  rather than run directly from the command line
 
 # Utility Scripts
-## `class_scripts/get_lecture_file.py`
+
+## `get_lecture_file.py`
+
+### What It Does
 
 - Finds and prints the path to a lecture source file matching
   `{DIR}/lectures_source/Lesson{LESSON}*`
 - Validates that exactly one matching file exists
+
+### Examples
+
 - Find lecture file:
   ```bash
   > get_lecture_file.py data605 01.1
@@ -587,14 +714,13 @@ generate_book_chapter.py: different target format — pairs each slide's markdow
 
 # Orchestration Scripts
 
-## `class_scripts/for_loop_slides.py`
+## `for_loop_slides.py`
 
-Transforms lecture slides using LLM with specified rules. Reads slides from lesson
-files, applies LLM-based transformations based on a rule prompt, and writes the
-transformed slides back to the file or output.
+### What It Does
 
-**Key features:**
-
+- Transforms lecture slides using LLM with specified rules, reading slides
+  from lesson files and writing the transformed slides back to the file or
+  output
 - Extracts slides from lesson files while preserving file structure
 - Applies LLM transformations using specified rule prompts
 - Processes slides in configurable batches for efficiency
@@ -612,7 +738,7 @@ transformed slides back to the file or output.
   "combined" (default: "individual")
 - `-v/--log_level`: Set logging verbosity (DEBUG, INFO, WARNING, ERROR)
 
-**Usage Examples:**
+### Examples
 
 - Transform slides using a prompt file:
   ```bash
@@ -632,14 +758,13 @@ transformed slides back to the file or output.
       --batch_mode combined --batch_size 3
   ```
 
-## `class_scripts/for_loop_lessons.py`
+## `for_loop_lessons.py`
 
-Orchestrates the generation of multiple outputs from lecture source files for
-educational materials. This is the main entry point for processing lecture
-content into various formats.
+### What It Does
 
-**Key features:**
-
+- Orchestrates the generation of multiple outputs from lecture source files
+  for educational materials; the main entry point for processing lecture
+  content into various formats
 - Converts lecture text source files to PDF slides using `notes_to_pdf.py`
 - Generates reading scripts from lecture materials with transition text
 - Applies LLM-based transformations for slide reduction and quality checking
@@ -685,7 +810,7 @@ content into various formats.
 - `--dry_run`: Print commands without executing them
 - `-v/--log_level`: Set logging verbosity (DEBUG, INFO, WARNING, ERROR)
 
-**Usage Examples:**
+### Examples
 
 - Generate PDF for single lecture:
   ```bash
@@ -727,7 +852,7 @@ content into various formats.
   > for_loop_lessons.py --lectures "01.1" --class data605 --action generate_pdf -v DEBUG
   ```
 
-**Workflow:**
+### Workflow
 
 1. Parse lecture patterns or ranges from command line arguments (e.g., '01*',
    '01.1', '01*:03\*', '01.1-03.2')
@@ -1014,8 +1139,3 @@ for reading and study.
   ```bash
   > for_loop_lessons.py --lectures 01* --class data605 --action generate_pdf --dry_run
   ```
-
-# Invariants
-- All and only scripts in `class_scripts` and `helpers_root/dev_scripts_helpers/documentation`
-  are present
-- Each description of the script is accurate
