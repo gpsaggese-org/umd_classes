@@ -211,6 +211,18 @@ pull requests, and workflows.
 
 ## Common Workflows
 
+- Finding current GitHub issue from the branch
+  ```
+  > git branch --show-current | sed 's/.*Task\([0-9]*\).*/\1/'
+  1292
+  ```
+
+- Finding current GitHub PR
+  ```
+  > gh pr view --json number -q .number
+  1293
+  ```
+
 - Creating a Pull Request
   ```
   > git checkout -b feature/my-feature

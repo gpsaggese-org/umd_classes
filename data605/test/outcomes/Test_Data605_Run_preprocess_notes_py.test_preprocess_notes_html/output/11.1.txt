@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{11.1: Cloud Computing}}$$**
+**$$\text{\textcolor{blue}{\text{11.1: Cloud Computing}}}$$**
 \endgroup
 
 ::: columns

@@ -21,20 +21,20 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{09.3: Python Dask}}$$**
+**$$\text{\textcolor{blue}{\text{09.3: Python Dask}}}$$**
 \endgroup
 
 ::: columns
 :::: {.column width=75%}
-- **Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+- **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
 - **Resources**
   - Web resources:
-    - [\textcolor{blue}{\underline{Dask project}}](https://docs.dask.org/en/stable/)
-    - [\textcolor{blue}{\underline{Dask examples}}](https://examples.dask.org/)
+    - [Dask project](https://docs.dask.org/en/stable/)
+    - [Dask examples](https://examples.dask.org/)
   - Tutorial
-    - [\textcolor{blue}{\underline{Dask\_tutorial}}](https://github.com/gpsaggese-org/umd_classes/blob/master/data605/tutorials/tutorial_dask/Dask_tutorial.ipynb)
-    - [\textcolor{blue}{\underline{Dask\_advanced\_tutorial}}](https://github.com/gpsaggese-org/umd_classes/blob/master/data605/tutorials/tutorial_dask/Dask_advanced_tutorial.ipynb)
+    - [Dask\_tutorial](https://github.com/gpsaggese-org/umd_classes/blob/master/data605/tutorials/tutorial_dask/Dask_tutorial.ipynb)
+    - [Dask\_advanced\_tutorial](https://github.com/gpsaggese-org/umd_classes/blob/master/data605/tutorials/tutorial_dask/Dask_advanced_tutorial.ipynb)
   - Class project
   - Mastery
     - Data science with Python and Dask, 2019
@@ -47,18 +47,18 @@ UMD DATA605 - Big Data Systems
 #### Dataset Size Issues
 ::: columns
 :::: {.column width=75%}
-- **\textcolor{red}{Small datasets (< 1 GB)}**
+- **Small datasets (< 1 GB)**
   - Fits into RAM
   - No disk paging needed
 
-- **\textcolor{darkgreen}{Medium dataset (< 1TB)}**
+- **Medium dataset (< 1TB)**
   - Doesn't fit into RAM
   - Fits into local disk
     - Performance penalty with local disk
   - Need multiple CPU cores
     - Difficult to leverage parallelism with Python/Pandas
 
-- **\textcolor{blue}{Large dataset (> 1TB)}**
+- **Large dataset (> 1TB)**
   - Doesn't fit into RAM
   - Doesn't fit into local disk
   - Need multiple servers
@@ -89,10 +89,10 @@ UMD DATA605 - Big Data Systems
 | Medium datasets | < 1 TB      |
 | Large datasets  | > 1 TB      |
 
-- **\textcolor{red}{The thresholds are fuzzy and changing over time}**
+- **The thresholds are fuzzy and changing over time**
   - Scale computer 10x to get 10x bigger datasets
 
-- **\textcolor{blue}{Problem with scaling datasets}**
+- **Problem with scaling datasets**
   - Long run times
   - Rewriting code for different dataset sizes
   - Plan what and how to do efficiently
@@ -101,7 +101,7 @@ UMD DATA605 - Big Data Systems
 #### Dask
 ::: columns
 :::: {.column width=60%}
-- **\textcolor{red}{Dask is written in Python}**
+- **Dask is written in Python**
   - Scales Numpy, Pandas, sklearn
   - Dask objects wrap library objects (e.g., Pandas DataFrame, numpy array)
   - Parallel parts are "chunks" or "partitions"
@@ -114,12 +114,12 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **\textcolor{darkgreen}{Pros}**
+- **Pros**
   - Use familiar interfaces
   - Write code optimized for parallelism
     - Dask handles heavy lifting
 
-- **\textcolor{blue}{Scaling Dask is easy}**
+- **Scaling Dask is easy**
   - Prototype on local machine, use cluster when needed
   - No code refactoring needed
   - No cluster-specific issues
@@ -135,12 +135,12 @@ UMD DATA605 - Big Data Systems
 #### Scaling Up vs Scaling Out
 ::: columns
 :::: {.column width=70%}
-- **\textcolor{red}{Scaling up}**
+- **Scaling up**
   - Replace equipment with larger, faster options
     - E.g., buy a larger pot, replace knife with food processor
-  - **\textcolor{orange}{Pros}**
+  - **Pros**
     - Better hardware, no code changes needed
-  - **\textcolor{darkgreen}{Cons}**
+  - **Cons**
     - Exceed current machine capacity eventually
     - Cost: more powerful machines are expensive
 ::::
@@ -153,13 +153,13 @@ UMD DATA605 - Big Data Systems
 
 ::: columns
 :::: {.column width=70%}
-- **\textcolor{teal}{Scaling out}**
+- **Scaling out**
   - Divide work between many workers in parallel
     - E.g., buy more pots and hire more cooks
-  - **\textcolor{cyan}{Pros}**
+  - **Pros**
     - Task scheduler organizes computation, assigns workers to tasks
     - Cost-effective, no specialized hardware needed
-  - **\textcolor{blue}{Cons}**
+  - **Cons**
     - Write code to expose parallelism
     - Maintain cluster costs
 ::::
@@ -169,7 +169,7 @@ UMD DATA605 - Big Data Systems
 :::
 
 #### Dask: Computation
-- **\textcolor{red}{Lazy computations}**
+- **Lazy computations**
   - Define transformations on data
   - Define next computation without waiting
   - Operate in chunks to avoid loading entire data in memory
@@ -195,7 +195,7 @@ UMD DATA605 - Big Data Systems
 #### Dask: Data Structures
 ::: columns
 :::: {.column width=75%}
-- **\textcolor{red}{Dask DataFrame}**
+- **Dask DataFrame**
   - Implements Pandas DataFrame
   - Tabular/relational data
 ::::
@@ -208,7 +208,7 @@ UMD DATA605 - Big Data Systems
 
 ::: columns
 :::: {.column width=65%}
-- **\textcolor{darkgreen}{Dask Array}**
+- **Dask Array**
   - Implements numpy ndarray
   - Multidimensional array
 ::::
@@ -221,7 +221,7 @@ UMD DATA605 - Big Data Systems
 
 ::: columns
 :::: {.column width=75%}
-- **\textcolor{blue}{Dask Bag}**
+- **Dask Bag**
   - Coordinates Python lists of objects
   - Parallelize computations on unstructured/semi-structured data
 ::::
@@ -351,7 +351,7 @@ UMD DATA605 - Big Data Systems
 ![](data605/lectures_source/images/lecture_9_2/lec_9_2_slide_15_image_1.png){width=80%}
 
 #### Task Scheduling
-- **\textcolor{red}{Dask task scheduler orchestrates work dynamically}**
+- **Dask task scheduler orchestrates work dynamically**
   - Not static scheduling like a relational DB
   - During computation, Dask dynamically assesses:
     - Completed tasks
@@ -361,7 +361,7 @@ UMD DATA605 - Big Data Systems
 
 ::: columns
 :::: {.column width=50%}
-- **\textcolor{blue}{Dynamic approach handles various issues}**
+- **Dynamic approach handles various issues**
   - Worker failure
     - Re-run tasks
   - Workers completing at different speeds due to:
@@ -378,11 +378,11 @@ UMD DATA605 - Big Data Systems
 :::
 
 #### Dask vs Spark
-- **\textcolor{red}{Pros}**
+- **Pros**
   - Popular framework for large datasets
   - In-memory alternative to MapReduce/Hadoop
 
-- **\textcolor{blue}{Cons}**
+- **Cons**
   - Java library, supports Python via PySpark API
     - Python code runs on JVM
     - Debugging is difficult as execution is outside Python

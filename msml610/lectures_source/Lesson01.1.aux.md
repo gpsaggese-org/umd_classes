@@ -804,3 +804,86 @@
   </g>
 </svg>
 ```
+
+// Lesson03.1-Knowledge_representation.txt
+
+# L03.1_Grounding
+
+```graphviz
+digraph G {
+    rankdir=TB;
+    bgcolor="#f8f9fa";
+
+    node [
+        shape=box,
+        style="rounded,filled",
+        fontsize=20,
+        fontname="Helvetica, Arial",
+        fontcolor=white,
+        margin="0.3,0.2"
+    ];
+
+    edge [
+        fontsize=18,
+        fontname="Helvetica, Arial",
+        fontcolor="#333333",
+        color="#2c3e50",
+        penwidth=2.5,
+        arrowsize=1.5
+    ];
+
+    // Top row - Reality nodes
+    R1 [
+        label="Reality\nObservable Facts",
+        fillcolor="#3498db",
+        penwidth=2.5,
+        color="#000000"
+    ];
+
+    R2 [
+        label="Reality\nInterpreted Truth",
+        fillcolor="#3498db",
+        penwidth=2.5,
+        color="#000000"
+    ];
+
+    // Middle row - Core process
+    Repr1 [
+        label="Representation\nMental Model",
+        fillcolor="#e74c3c",
+        penwidth=2.5,
+        color="#000000"
+    ];
+
+    Reason [
+        label="Reason\nLogical Analysis",
+        fillcolor="#27ae60",
+        penwidth=2.5,
+        color="#000000"
+    ];
+
+    Repr2 [
+        label="Representation\nConclusion",
+        fillcolor="#8e44ad",
+        penwidth=2.5,
+        color="#000000"
+    ];
+
+    // Enforce layout
+    {rank=same; R1; R2}
+    {rank=same; Repr1; Reason; Repr2}
+
+    // Process flow
+    R1 -> Repr1 [label="perceives"];
+    Repr1 -> Reason [label="informs"];
+    Reason -> Repr2 [label="produces"];
+    Repr2 -> R2 [label="validates"];
+
+    // Styling
+    label="Perception & Reasoning Cycle";
+    labelloc=top;
+    labelfontsize=24;
+    labelfontcolor="#1a1a1a";
+    margin="0.3";
+}
+```

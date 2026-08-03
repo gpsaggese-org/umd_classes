@@ -26,7 +26,7 @@ deploying course materials
 
 - `book/`: Compiled book chapters and course book materials
   - Contains individual chapter PDFs with `.book_chapter.pdf` suffix
-  - Contains text versions of chapters (`.book_chapter.txt`)
+  - Contains text versions of chapters (`.book_chapter.md`)
   - Contains PNG image directories for each chapter
 
 - `jupyter_book/`: Jupyter Book configuration and build files

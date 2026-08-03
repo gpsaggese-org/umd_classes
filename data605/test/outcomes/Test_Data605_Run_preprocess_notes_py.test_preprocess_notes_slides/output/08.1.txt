@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{08.1: Cluster Architecture}}$$**
+**$$\text{\textcolor{blue}{\text{08.1: Cluster Architecture}}}$$**
 \endgroup
 
 \vspace{1cm}
@@ -29,7 +29,7 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=75%}
 
-- **Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+- **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
 - **References**:
   - Silbershatz: Chap 10
@@ -48,13 +48,13 @@ UMD DATA605 - Big Data Systems
 _Volume of data in the world_
 ::::
 ::::{.column width=45%}
-- **\textcolor{red}{Big data needs 10k-100k machines}**
+- **Big data needs 10k-100k machines**
 
-- **\textcolor{darkgreen}{Two problems}**
+- **Two problems**
   - Storing big data
   - Processing big data
 
-- **\textcolor{blue}{Need to solve problems together and efficiently}**
+- **Need to solve problems together and efficiently**
   - One slow phase slows entire system
 ::::
 :::
@@ -67,14 +67,14 @@ _Volume of data in the world_
   - 20+ billion pages
   - 5M TBs of content
 
-- **\textcolor{red}{Storing the web}**
+- **Storing the web**
   - Need 1M 5TB hard drives
     - \$100/HDD -> \$100M in total
     - Not bad
   - Wait, one computer reads 300 MB/sec
     - 4,500 years to read web serially!
 
-- **\textcolor{blue}{Processing the web}**
+- **Processing the web**
   - Much larger time / cost needed!
 ::::
 ::::{.column width=40%}
@@ -84,7 +84,7 @@ _Volume of data in the world_
 
 #### How to Store Big Data?
 
-- **\textcolor{red}{Many different solutions to storing big data}**
+- **Many different solutions to storing big data**
   1. _Distributed file systems_
   2. _Sharding across multiple DBs_
   3. _Parallel and distributed DBs_
@@ -92,7 +92,7 @@ _Volume of data in the world_
 
 #### 1) Distributed File Systems
 
-- **\textcolor{red}{Files stored across machines yet single file-system view to clients}**
+- **Files stored across machines yet single file-system view to clients**
   - E.g.,
     - Google File System (GFS)
     - Hadoop File System (HDFS)
@@ -103,22 +103,22 @@ _Volume of data in the world_
     - Blocks partitioned across machines
     - Blocks often replicated
 
-- **\textcolor{blue}{Goals}**
+- **Goals**
   - Store data not fitting on one machine
   - Increase performance
   - Increase reliability/availability/fault tolerance
 
 #### 2) Sharding Across Multiple DBs
 
-- **\textcolor{red}{Sharding}**: Partition records across multiple DBs or machines
+- **Sharding**: Partition records across multiple DBs or machines
   - Shard keys, aka partitioning keys / partition attributes
   - Range partition (e.g., timeseries)
   - Hash partition
 
-- **\textcolor{darkgreen}{Pros}**
+- **Pros**
   - Scale beyond centralized DB for more users, storage, processing speed
 
-- **\textcolor{blue}{Cons}**
+- **Cons**
   - Replication needed for failures
   - Ensuring consistency is challenging
   - Relational DBs struggle with constraints (e.g., foreign key) and
@@ -126,9 +126,9 @@ _Volume of data in the world_
 
 #### 3) Parallel and Distributed DBs
 
-- **\textcolor{red}{Store and process data on multiple machines (cluster)}**
+- **Store and process data on multiple machines (cluster)**
 
-- **\textcolor{darkgreen}{Pros}**
+- **Pros**
   - From programmer viewpoint
     - Traditional relational DB interface
     - Appears as a single-machine DB
@@ -137,17 +137,17 @@ _Volume of data in the world_
     - Frequent failures with 100s of machines
     - Queries can restart on different machines
 
-- **\textcolor{blue}{Cons}**
+- **Cons**
   - Incremental query execution is complex
   - Scalability limits
 
 #### 4) (Parallel) Key-value Stores
 
-- **\textcolor{red}{Problem}**
+- **Problem**
   - Applications store billions of small records
   - Relational DBs lack multi-machine constraints and transactions
 
-- **\textcolor{darkgreen}{Solution}**
+- **Solution**
   - Key-value stores / Document / NoSQL systems
   - E.g.,
     - Redis
@@ -157,12 +157,12 @@ _Volume of data in the world_
     - Azure cloud storage (Microsoft)
     - MongoDB cluster
 
-- **\textcolor{blue}{Pros}**
+- **Pros**
   - Partition data across machines
   - Support replication and consistency
   - Balance workload, add machines
 
-- **\textcolor{violet}{Cons}**
+- **Cons**
   - Sacrifice features for scalability
     - Declarative querying
     - Transactions
@@ -170,7 +170,7 @@ _Volume of data in the world_
 
 #### How to Compute with Big Data?
 
-- **\textcolor{red}{Challenges}**
+- **Challenges**
   - Distribute computation
   - Simplify writing distributed programs
     - Distributed/parallel programming is hard
@@ -180,14 +180,14 @@ _Volume of data in the world_
     - With 1,000 servers, expect 1 failure/day
     - E.g., 1M machines (Google in 2011) $\to$ 1,000 machines fail daily
 
-- **\textcolor{blue}{MapReduce}**
+- **MapReduce**
   - Solve problems for specific computations
   - Elegant way to work with big data
   - Originated as Google's data manipulation model
     - Not an entirely new idea
 
 #### Cluster Architecture
-- **\textcolor{red}{Standard architecture for big data computation}**
+- **Standard architecture for big data computation**
   - Cluster of commodity Linux nodes
   - Commodity network (typically Ethernet) to connect nodes
   - 2011: Google ~1M machines
@@ -200,15 +200,15 @@ _Volume of data in the world_
 
 #### Cluster Architecture: Network Bandwidth
 
-- **\textcolor{red}{Problems}**
+- **Problems**
   - Data on different machines
   - Network data transfer delays
 
-- **\textcolor{darkgreen}{Solutions}**
+- **Solutions**
   - Bring computation to data
   - Store files multiple times for reliability/performance
 
-- **\textcolor{blue}{MapReduce}**
+- **MapReduce**
   - Addresses these problems
   - Storage: distributed file system
     - Google GFS, Hadoop HDFS
@@ -216,15 +216,15 @@ _Volume of data in the world_
 
 #### Storage Infrastructure
 
-- **\textcolor{red}{Problem}**
+- **Problem**
   - Store data persistently and efficiently despite node failures
 
-- **\textcolor{darkgreen}{Typical data usage pattern}**
+- **Typical data usage pattern**
   - Huge files (100s of GB to 1TB)
   - Common operations: reads and appends
   - Rare in-place updates
 
-- **\textcolor{blue}{Solution}**
+- **Solution**
   - Distributed file system
   - Store files across multiple machines
   - Files are:
@@ -235,12 +235,12 @@ _Volume of data in the world_
 
 #### Distributed File System
 
-- **\textcolor{red}{Reliable distributed file system}**
+- **Reliable distributed file system**
   - Data in "chunks" across machines
   - Each chunk replicated on different machines
   - Seamless recovery from disk or machine failure
 
-- **\textcolor{blue}{Bring computation directly to the data}**
+- **Bring computation directly to the data**
   - "Chunk servers" also serve as "compute servers"
 
 - Hadoop and HDFS implement all these ideas

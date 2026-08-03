@@ -4,46 +4,6 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{0.5cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 07.1: Introduction to Probabilistic Programming}}$$**
-\endgroup
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA (Artificial Intelligence: a Modern Approach), Chap 15: Probabilistic
-  programming
-
-- Martin, Bayesian Analysis with Python, 2018 (2e)
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){width=1.5cm}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Bayesian_analysis_with_Python.jpg){width=1.5cm}
-
-::::
-:::
 
 # Concepts
 
@@ -52,13 +12,13 @@ MSML610: Advanced Machine Learning
 
 
 #### EDA vs Inference
-- **\textcolor{red}{Exploratory data analysis}**
+- **Exploratory data analysis**
   - Summarize, interpret, check data
   - Visually inspect the data
   - Compute descriptive statistics
   - Communicate results
 
-- **\textcolor{blue}{Inferential statistics / inference}**
+- **Inferential statistics / inference**
   - Draw insights from a limited set of data
   - Make predictions for future unobserved data points
   - Understand a phenomenon
@@ -66,7 +26,7 @@ MSML610: Advanced Machine Learning
 
 
 #### Good vs Bad Way to Do Statistics
-- **\textcolor{red}{Bad}** ![Smile Emoji](assets/emoji/angry_devil.png){ width=12px }
+- **Bad** ![Smile Emoji](assets/emoji/angry_devil.png){ width=12px }
   - Learn a collection of "statistical recipes"
     - Make assumption / approximate to make math workable
   - Given data and problem
@@ -75,7 +35,7 @@ MSML610: Advanced Machine Learning
   - For machine learning
     - Iterate until you get a "good" fit on out-of-sample data
 
-- **\textcolor{blue}{Good}** ![Smile Emoji](assets/emoji/emoji_smile.png){ width=12px }
+- **Good** ![Smile Emoji](assets/emoji/emoji_smile.png){ width=12px }
   - General approach to statistical inference (Bayesian statistics)
     - Remove limitations from closed analytical form
   - Probabilistic approach unifies (seemingly) disparate methods
@@ -87,55 +47,55 @@ MSML610: Advanced Machine Learning
 
 
 #### Data
-- Data **\textcolor{red}{comes from}**:
+- Data **comes from**:
   - Experiments
   - Simulations
   - Surveys
   - Field observations
 
-- Data is stochastic due to **\textcolor{orange}{uncertainty}**
+- Data is stochastic due to **uncertainty**
   - Ontological: system is intrinsically stochastic
   - Technical: measurement precision is limited or noisy
   - Epistemic: conceptual limitations in understanding
 
-- Collecting data is **\textcolor{darkgreen}{costly}**
+- Collecting data is **costly**
   - Consider questions before collecting data
   - Experiment design is a branch of statistics for data collection
 
-- Data is **\textcolor{teal}{rarely clean and tidy}**
+- Data is **rarely clean and tidy**
 
-- Data needs to be **\textcolor{cyan}{interpreted}** through mental and formal models
+- Data needs to be **interpreted** through mental and formal models
 
 
 #### Models
-- **\textcolor{red}{Models}** are simplified descriptions of a given system/process
+- **Models** are simplified descriptions of a given system/process
   - A more complex model is not always a better one
   - VC dimension made it mathematical precise
     - _"You need at least 10 data points per effective degree of freedom of the
       hypothesis set"_
 
-- **\textcolor{blue}{Goals}**
+- **Goals**
   - Capture the most relevant aspects of the system
   - Ignore minor details
 
 #### Bayes' Theorem: Recap
-- **\black{Bayes' theorem}** posits that for model parameters $\theta$ and data
+- **\textcolor{black}{\text{Bayes' theorem}}** posits that for model parameters $\theta$ and data
   $X$
   $$
   \textcolor{red}{\Pr(\theta | X)}
   = \frac{\textcolor{teal}{\Pr(X | \theta)} \cdot \textcolor{blue}{\Pr(\theta)}}{\textcolor{violet}{\Pr(X)}}
   $$
   where:
-  - **\red{$\Pr(\theta | X)$}**
-    - **\black{Posterior}**: probability for parameters $\theta$ after seeing
+  - **\textcolor{red}{$\Pr(\theta | X)$}**
+    - **\textcolor{black}{\text{Posterior}}**: probability for parameters $\theta$ after seeing
       data $X$
-  - **\teal{$\Pr(X | \theta)$}**
-    - **\black{Likelihood}** (aka "statistical model"): plausibility of data $X$
+  - **\textcolor{teal}{$\Pr(X | \theta)$}**
+    - **\textcolor{black}{\text{Likelihood}}** (aka "statistical model"): plausibility of data $X$
       given parameters $\theta$
-  - **\blue{$\Pr(\theta)$}**
-    - **\black{Prior}**: knowledge about parameter $\theta$ before any data
-  - **\violet{$\Pr(X)$}**
-    - **\black{Evidence}** ("marginal likelihood"): probability of observing
+  - **\textcolor{blue}{$\Pr(\theta)$}**
+    - **\textcolor{black}{\text{Prior}}**: knowledge about parameter $\theta$ before any data
+  - **\textcolor{violet}{$\Pr(X)$}**
+    - **\textcolor{black}{\text{Evidence}}** ("marginal likelihood"): probability of observing
       data $X$
     - "Marginal" as it averages over all possible parameter values
 
@@ -146,15 +106,15 @@ MSML610: Advanced Machine Learning
   $$
 
 #### Bayesian Models
-- **\textcolor{red}{Probability}** measures uncertainty about parameters
+- **Probability** measures uncertainty about parameters
 
-- **\textcolor{darkgreen}{Bayes' theorem}** updates probabilities with new data, reducing uncertainty
+- **Bayes' theorem** updates probabilities with new data, reducing uncertainty
   (hopefully)
   $$
   \Pr(hyp | data) = \frac{\Pr(data | hyp) \Pr(hyp)}{\Pr(data)}
   $$
 
-- **\textcolor{blue}{Bayesian modeling workflow}**
+- **Bayesian modeling workflow**
   1. Design a model using probabilities based on data and assumptions
      - Assumptions on data generation
      - Model can be a crude approximation
@@ -173,19 +133,19 @@ MSML610: Advanced Machine Learning
 ## Analytical Approach
 
 #### Coin Example: Problem
-- **\textcolor{red}{Problem}**:
+- **Problem**:
   - Toss a coin $N$ times
   - Record the number of heads $Y$ and tails $N - Y$
   - Question: _"How biased is the coin?"_
 
-- There is **\textcolor{darkgreen}{true uncertainty}**
+- There is **true uncertainty**
   - An underlying parameter exists, but it is unknown
   - $\theta$ represents the coin bias
     - $0$: always tails
     - $1$: always heads
     - $0.5$: half tails, half heads
 
-- **\textcolor{blue}{Model assumptions}**:
+- **Model assumptions**:
   - Independent Identically Distributed (IID)
     - Independence: coin tosses don't affect each other
     - Identically distributed: coin's bias is constant
@@ -244,7 +204,7 @@ Probability of $k$ heads out of $n$ tosses given bias $p$
 :::
 
 #### Conjugate Prior of a Likelihood
-- **\textcolor{red}{Conjugate prior}** is a prior that, when combined with a likelihood, returns a
+- **Conjugate prior** is a prior that, when combined with a likelihood, returns a
   posterior with the same functional form as the prior
 
   - E.g.,
@@ -254,15 +214,15 @@ Probability of $k$ heads out of $n$ tosses given bias $p$
   | Beta      | Binomial       | Beta          |
   | Normal    | Normal         | Normal        |
 
-- **\textcolor{blue}{Properties}**
+- **Properties**
   - Prior and posterior have the same distribution
   - Posterior has a closed analytical form
     - Update parameters from the prior using data in multiple iterations
   - Ensures tractability of the posterior
 
 #### Coin Example: Analytical Solution
-- The **\red{posterior}** is proportional to **\green{likelihood}** $\times$
-  **\blue{prior}**
+- The **\textcolor{red}{\text{posterior}}** is proportional to **\textcolor{darkgreen}{\text{likelihood}}** $\times$
+  **\textcolor{blue}{\text{prior}}**
   $$\textcolor{red}{\Pr(\theta | y)} \propto \textcolor{darkgreen}{\Pr(y | \theta)} \textcolor{blue}{\Pr(\theta)}$$
 
 - Substituting **\textcolor{darkgreen}{\text{likelihood}}** with a Binomial and **\textcolor{blue}{\text{prior}}** with a
@@ -314,10 +274,10 @@ Probability of $k$ heads out of $n$ tosses given bias $p$
 #### Coin Example: Effect of Priors (2/2)
 ::: columns
 :::: {.column width=40%}
-- **\textcolor{red}{Outcome of Bayesian analysis}**
+- **Outcome of Bayesian analysis**
   - Posterior distribution, not a single value
 
-- **\textcolor{blue}{Spread of posterior}**
+- **Spread of posterior**
   - Proportional to uncertainty
   - Decreases with more data
   - Decreases faster if aligned with prior
@@ -334,11 +294,11 @@ Probability of $k$ heads out of $n$ tosses given bias $p$
 ## Frequentist vs Bayesian
 
 #### Frequentist Approach vs Priors
-- **\textcolor{red}{Detractors of Bayesian approach}** complain that:
+- **Detractors of Bayesian approach** complain that:
   - _"One should let the data speak"_
   - The prior doesn't let the data speak for itself
 
-- ![](assets/emoji/balance_scale.png){ width=14px } **\textcolor{blue}{Counterpoints}** 
+- ![](assets/emoji/balance_scale.png){ width=14px } **Counterpoints** 
   - _"Data doesn't speak, but murmurs"_
     - Data doesn't have meaning per-se
     - Make sense of data only in context of models (e.g., mental models,
@@ -354,39 +314,39 @@ Probability of $k$ heads out of $n$ tosses given bias $p$
 
 #### Advantages of Using Prior
 
-- **\textcolor{red}{Assumptions are clear and explicit}**
+- **Assumptions are clear and explicit**
   - Instead of hidden by frequentist or hacker ML approach
 
-- **\textcolor{orange}{Prior}**
+- **Prior**
   - Encourages deeper analysis of problem and data
   - Forces understanding before seeing data
 
-- Posterior averaged over priors is **\textcolor{darkgreen}{less prone to overfitting}**
+- Posterior averaged over priors is **less prone to overfitting**
 
-- Spread of distribution measures **\textcolor{teal}{uncertainty}**
+- Spread of distribution measures **uncertainty**
 
-- Well-chosen prior simplifies and **\textcolor{cyan}{speeds up inference}**
+- Well-chosen prior simplifies and **speeds up inference**
   - _"When you encounter computational problems, there's often an issue with your
     model"_ (Gelman, 2008)
 
 #### How to Choose Priors
-- **\textcolor{red}{Weakly-informative priors}** (aka "flat", "vague", "diffuse priors")
+- **Weakly-informative priors** (aka "flat", "vague", "diffuse priors")
   - Provide minimal information
     - Coefficient of linear regression centered around 0: $\beta \sim Normal(0, 10)$
 
-- **\textcolor{darkgreen}{Regularizing priors}**
+- **Regularizing priors**
   - Known information about the parameter
     - Parameter is positive: $\sigma \sim HalfCauchy(0, 5)$
     - Parameter close to zero, above/below a number, or in a range
     - $\beta \sim Laplace(0, 1)$ (lasso prior) encourages sparsity
     - $\beta \sim Normal(0, 1)$ discourages extreme values
 
-- **\textcolor{blue}{Informative priors}**
+- **Informative priors**
   - Strong priors from previous knowledge (expert opinion, studies)
     - From experimental data: $\beta_1 \sim Normal(2.5, 0.5^2)$
     - From previous data, about 5% of cases positive: $p \sim Beta(2, 38)$
 
-- **\textcolor{violet}{Prior elicitation}**
+- **Prior elicitation**
   - Compute least informative distribution given constraints
     - Estimate distribution using maximum entropy to satisfy constraints
     - E.g., beta distribution with 90% of mass between 0.1 and 0.7
@@ -394,7 +354,7 @@ Probability of $k$ heads out of $n$ tosses given bias $p$
 #### Communicating the Model of a Bayesian Analysis
 ::: columns
 :::: {.column width=65%}
-1. **\textcolor{red}{Communicate assumptions / hypothesis}**
+1. **Communicate assumptions / hypothesis**
    - Describe priors and probabilistic models
    - E.g., coin-flip distributions:
      \begin{equation*}
@@ -404,7 +364,7 @@ Probability of $k$ heads out of $n$ tosses given bias $p$
        \end{cases}
      \end{equation*}
 
-2. **\textcolor{blue}{Communicate Bayesian analysis result}**
+2. **Communicate Bayesian analysis result**
    - Describe posterior distribution
    - Summarize location and dispersion
    - Mean (or mode, median)
@@ -425,11 +385,11 @@ Kruschke diagram
 
 #### Confidence Intervals vs Credible Intervals
 - People confuse:
-  - **\textcolor{red}{Frequentist confidence intervals}**
-  - **\textcolor{orange}{Bayesian credible intervals}**
+  - **Frequentist confidence intervals**
+  - **Bayesian credible intervals**
 
 - In the frequentist framework, there is a true (unknown) parameter value
-  - A **\textcolor{darkgreen}{confidence interval}** may or may not contain the true parameter value
+  - A **confidence interval** may or may not contain the true parameter value
   - Interpretation of a 95% confidence interval
     - ![](assets/emoji/wrong.png){ width=12px }
       No: _"There is a 95% probability that the true value is in this interval"_
@@ -438,14 +398,14 @@ Kruschke diagram
       value"_
 
 - In the Bayesian framework, parameters are random variables
-  - Interpretation of a 95% **\textcolor{teal}{Bayesian credible interval}**
+  - Interpretation of a 95% **Bayesian credible interval**
     - _"There is a 95% probability that the true parameter lies within this
       interval, given the observed data"_
-    - Bayesian **\textcolor{cyan}{credible interval}** is intuitive
+    - Bayesian **credible interval** is intuitive
 
 #### Confidence Intervals vs Credible Intervals (ELI5)
 
-- **\textcolor{red}{Confidence Interval (Frequentist)}**
+- **Confidence Interval (Frequentist)**
   - Imagine fishing in a lake without seeing the fish
   - You throw your net
   - 95% confidence interval: _"If I threw this net 100 times, about 95 nets
@@ -453,7 +413,7 @@ Kruschke diagram
   - Important: Once the net is thrown, it either caught the fish or not. The 95%
     makes sense across many attempts
 
-- **\textcolor{blue}{Credible Interval (Bayesian)}**
+- **Credible Interval (Bayesian)**
   - Imagine a magical map showing where fish _probably_ are, based on past
     observations
   - 95% credible interval: _"Given my map, there's a 95% chance the fish is
@@ -468,10 +428,10 @@ Kruschke diagram
 ::: columns
 :::: {.column width=60%}
 - Given:
-  - The **\textcolor{red}{"knows"}**
+  - The **"knows"**
     - Model structure (modeled as a graph of probability distributions)
     - Data, observations (modeled as constants)
-  - The **\textcolor{darkgreen}{"unknowns"}**
+  - The **"unknowns"**
     - Model parameters (modeled as probability distributions)
 - Use Bayes' theorem to:
   - Condition unknowns to knowns
@@ -507,16 +467,16 @@ digraph BayesTheorem {
 ::::
 :::
 
-- **\textcolor{blue}{Problem}** 
+- **Problem** 
   - Most probabilistic models are analytically intractable
 
-- **\textcolor{violet}{Solution}**
+- **Solution**
   - Probabilistic programming
     - Specify a probabilistic model using code
     - Solve models using numerical techniques
 
 #### Probabilistic Programming Languages
-- **\textcolor{red}{Steps}**:
+- **Steps**:
   1. Specify models using code
   2. Numerical models solve inference problems without need of user to understand
      how
@@ -526,12 +486,12 @@ digraph BayesTheorem {
        using tensors
      - \textcolor{blue}{\texttt{ArviZ}}: library to interpret probabilistic model results
 
-- **\textcolor{darkgreen}{Pros}**:
+- **Pros**:
   - Compute results without analytical closed form
   - Treat model solving as a black box
   - Focus on model design, evaluation, interpretation
 
-- **\textcolor{blue}{Probabilistic programming languages}**
+- **Probabilistic programming languages**
   - Similar impact as Fortran on scientific computing
   - Build algorithms but ignore computational details
 
@@ -540,7 +500,7 @@ digraph BayesTheorem {
 - It's a synthetic example!
   - Assume you know the true value of $\theta$ (not true in general)
 
-- **\textcolor{red}{Workflow}**
+- **Workflow**
   - Model the prior $\theta$ and the likelihood $Y | \theta$
     \begin{equation*}
       \begin{cases}

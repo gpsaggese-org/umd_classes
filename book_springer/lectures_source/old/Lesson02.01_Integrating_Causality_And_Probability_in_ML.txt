@@ -77,7 +77,7 @@
 //   building causal DAGs; variable types (confounder / mediator / collider);
 //   collider bias; SCM
 // - `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
-//   interventions; counterfactuals; back-door / front-door adjustment;
+//   interventions; counterfactuals; backdoor / frontdoor adjustment;
 //   do-calculus (identifiability)
 // - `msml610/lectures_source/Lesson08.5-Experimentation.txt`
 //   significance traps (peeking, multiple comparisons, SRM); SUTVA / interference

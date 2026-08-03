@@ -4,33 +4,6 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 09.4: gh Filter}}$$**
-\endgroup
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA 14: Probabilistic reasoning over time
-- https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python
-
 
 # gh Filter
 
@@ -118,10 +91,10 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=50%}
 - Assume you know the initial weight and the gain rate
-  - \black{Black line} is the actual weight (i.e., _ground truth_)
-  - \red{Red line} is the _prediction_ from previous day's weight
-  - \green{Green circles} are the _measurements_
-  - \blue{Blue line} is the _estimate_ from the filter
+  - \textcolor{black}{\text{Black line}} is the actual weight (i.e., _ground truth_)
+  - \textcolor{red}{\text{Red line}} is the _prediction_ from previous day's weight
+  - \textcolor{darkgreen}{\text{Green circles}} are the _measurements_
+  - \textcolor{blue}{\text{Blue line}} is the _estimate_ from the filter
     - Always falls between measurement and prediction
 ::::
 :::: {.column width=45%}

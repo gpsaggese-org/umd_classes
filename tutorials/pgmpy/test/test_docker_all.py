@@ -1,1 +1,0 @@
-../../../class_project/project_template/test/test_docker_all.py

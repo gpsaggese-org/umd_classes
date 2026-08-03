@@ -1,0 +1,13 @@
+// type=UMD_slides
+// course_title=AI for coding
+// lesson_title=Coding workflows
+// slides_engine=typst
+// references=
+
+* Managing Code
+
+* Automating PR
+
+* Automating Documentation
+
+* Coding while you sleep

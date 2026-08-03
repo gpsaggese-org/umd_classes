@@ -110,7 +110,7 @@
 - Do-Calculus: A Complete Framework
   - Do-Calculus Fundamentals
   - The Rules of Do-Calculus
-  - Back/Front-door Adjustments and Do-calculus
+  - Back/Frontdoor Adjustments and Do-calculus
   - When Do-Calculus Tells You Estimation Is Impossible
 - Tools and Tutorials
   - TUTORIAL: DoWhy (do-calculus and adjustment methods)

@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{03.3: Docker Compose}}$$**
+**$$\text{\textcolor{blue}{\text{03.3: Docker Compose}}}$$**
 \endgroup
 
 ::: columns

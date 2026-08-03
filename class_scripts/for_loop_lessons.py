@@ -35,7 +35,7 @@ _LOG = logging.getLogger(__name__)
 
 _VALID_ACTIONS = [
     "check_slide",
-    "generate_book_chapter",
+    "generate_lecture_commentary",
     "generate_class_quizzes",
     "generate_class_recap",
     "generate_pdf",
@@ -372,7 +372,7 @@ def _slide_check(
     hsystem.system(cmd_str, suppress_output=False)
 
 
-def _generate_book_chapter(
+def _generate_lecture_commentary(
     class_dir: str,
     source_path: str,
     source_name: str,
@@ -382,7 +382,7 @@ def _generate_book_chapter(
 
     Uses gen_lecture_commentary.py Python script which:
     1. Generates a PDF from the lecture source
-    2. Creates book chapter using generate_book_chapter.py
+    2. Creates book chapter with per-slide LLM commentary
     3. Converts to PDF using pandoc
     4. Opens the resulting PDF
 
@@ -515,7 +515,7 @@ def _process_lecture_file(
     :param source_path: path to source .txt file
     :param source_name: name of source file
     :param actions: list of actions to execute ('generate_pdf', 'generate_script',
-        'reduce_slide', 'check_slide', 'improve_slide', 'generate_book_chapter',
+        'reduce_slide', 'check_slide', 'improve_slide', 'generate_lecture_commentary',
         'generate_class_quizzes', 'generate_class_recap', 'generate_toc')
     :param limit: optional slide range to process
     :return: TOC content if action is 'generate_toc', else None
@@ -536,8 +536,8 @@ def _process_lecture_file(
         elif action == "improve_slide":
             # TODO: Implement _slide_improve function.
             hdbg.dfatal("improve_slide action not yet implemented")
-        elif action == "generate_book_chapter":
-            _generate_book_chapter(class_dir, source_path, source_name)
+        elif action == "generate_lecture_commentary":
+            _generate_lecture_commentary(class_dir, source_path, source_name)
         elif action == "generate_class_quizzes":
             _generate_class_quizzes(class_dir, source_path, source_name)
         elif action == "generate_class_recap":

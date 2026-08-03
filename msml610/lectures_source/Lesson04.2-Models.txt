@@ -1,50 +1,12 @@
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L04.2: Machine Learning Models
+// slides_engine=typst
+// references=
+// - Burkov: _"Machine Learning Engineering"_ (2020)
+// - Hastie et al.: _"The Elements of Statistical Learning"_ (2nd ed, 2009)
 
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 04.2: Machine Learning Models}}$$**
-\endgroup
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- Burkov: _"Machine Learning Engineering"_ (2020)
-
-- Hastie et al.: _"The Elements of Statistical Learning"_ (2nd ed, 2009)
-
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book.jpg){ height=20% }
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_The_Elements_of_Statistical_Learning.jpg){ height=20% }
-
-::::
-:::
-
-
-
-## #############################################################################
 ## Logistic Regression
-## #############################################################################
 
 * Logistic Regression Is a Probabilistic Classifier
 - **Logistic regression** learns:
@@ -348,9 +310,7 @@ MSML610: Advanced Machine Learning
   - Equal digits don't contribute to error
   - Different digits give positive contribution
 
-## #############################################################################
 ## LDA, QDA
-## #############################################################################
 
 * Basic Idea of Parametric Models
 - Assume a model generates data
@@ -501,9 +461,7 @@ MSML610: Advanced Machine Learning
 - If $f_i(\vx)$ is from a multivariate Gaussian distribution with diagonal
   $\mSigma$ (feature independence), you can simplify expressions further
 
-## #############################################################################
 ## Kernel Methods
-## #############################################################################
 
 * Kernel: Definition
 
@@ -653,9 +611,7 @@ MSML610: Advanced Machine Learning
 
 - Kernel trick is more computationally efficient for inner product computation
 
-## #############################################################################
 ## Support Vector Machines (Optional)
-## #############################################################################
 
 * Support Vector Machines (SVM)
 - Arguably one of the most successful classification algorithm, together with

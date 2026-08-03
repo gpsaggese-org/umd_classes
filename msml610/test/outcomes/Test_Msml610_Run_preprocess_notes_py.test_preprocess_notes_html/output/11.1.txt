@@ -4,39 +4,6 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 11.1: Decision-Making with Causal Models}}$$**
-\endgroup
-
-\vspace{1cm}
-
-::: columns
-:::: {.column width=65%}
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-::::
-:::: {.column width=40%}
-
-
-::::
-:::
 
 # Why Prediction Is Not Enough
 
@@ -382,7 +349,7 @@ digraph DecisionLoop {
 
 - **Property**: They are equivalent under:
   - Randomized experiments (no confounders)
-  - Successful back-door or front-door adjustment (i.e., complete knowledge of
+  - Successful backdoor or frontdoor adjustment (i.e., complete knowledge of
     the causal graph + sufficient data)
 
 - **Intervention in an Decision Network**
@@ -451,11 +418,11 @@ digraph PostMutation {
   \EE[Y | do(a)] = \sum_{y} y \cdot \Pr(Y = y | do(A = a))
   $$
 
-- Using back-door adjustment formula, compute interventional distribution
+- Using backdoor adjustment formula, compute interventional distribution
   $$
   \Pr(Y | do(A)) = \sum_{Z} \Pr(Y | A, Z) \Pr(Z)
   $$
-  where $Z$ is a back-door adjustment set
+  where $Z$ is a backdoor adjustment set
 
 - **Example**: drug decision
   - Observational: $\Pr(\text{recovery} | \text{drug}) = 0.78$

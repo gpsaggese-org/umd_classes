@@ -21,14 +21,14 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{06.4: CouchDB}}$$**
+**$$\text{\textcolor{blue}{\text{06.4: CouchDB}}}$$**
 \endgroup
 
 ::: columns
 :::: {.column width=65%}
 \vspace{1cm}
 
-**Instructor**: Dr. GP Saggese - [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+**Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
 
 - **References**:
   - All concepts in slides
@@ -73,7 +73,7 @@ UMD DATA605 - Big Data Systems
 #### Architecture
 ::: columns
 ::::{.column width=50%}
-- Every Couchbase node consists of **\textcolor{red}{different services}**:
+- Every Couchbase node consists of **different services**:
   - Data service
   - Index service
   - Query service
@@ -81,11 +81,11 @@ UMD DATA605 - Big Data Systems
 
 - Services can run on separate nodes
 
-- **\textcolor{darkgreen}{Data replication}**
+- **Data replication**
   - Across nodes
   - Across data centers
 
-- **\textcolor{blue}{Data service}**
+- **Data service**
   - Writes data asynchronously to disk after acknowledging to client
   - Optionally synchronous: ensure data is written to more than one server
     before acknowledging a write
@@ -98,20 +98,20 @@ UMD DATA605 - Big Data Systems
 :::
 
 #### Queries
-- **\textcolor{red}{Can create multiple views over documents}**
+- **Can create multiple views over documents**
   - Views optimized/indexed by Couchbase for fast queries
   - Re-indexed when documents change
   - Perform full-text searches using indexes
 
-- **\textcolor{darkgreen}{Perform well when:}**
+- **Perform well when:**
   - Infrequent changes to document structure
   - Know query types in advance
 
-- **\textcolor{blue}{Query}**
+- **Query**
   - Uses custom query language N1QL ("nickel")
   - Extends SQL to JSON documents
   - Queries over multiple documents using server-side joins
 
-- **\textcolor{violet}{Map-reduce support}**
+- **Map-reduce support**
   - (Map) Define a view with document columns of interest
   - (Reduce) Optionally define aggregate functions over data

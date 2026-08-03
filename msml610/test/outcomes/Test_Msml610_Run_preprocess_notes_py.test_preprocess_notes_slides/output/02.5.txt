@@ -4,61 +4,21 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 02.5: ML Techniques - Model Evaluation}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=65%}
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
-
-- Burkov: _"The Hundred-Page Machine Learning Book"_ (2019)
-
-- Russell et al.: _"Artificial Intelligence: A Modern Approach"_ (4th ed, 2020)
-
-- Hastie et al.: _"The Elements of Statistical Learning"_ (2nd ed, 2009)
-
-::::
-:::: {.column width=40%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/Book_cover_The_Elements_of_Statistical_Learning.jpg){ height=20% }
-::::
-:::
 
 
 ## Performance Metrics
 
 #### How to Make Progress in ML Research
-- In ML there are **\textcolor{red}{many possible directions for research}**, e.g.,
+- In ML there are **many possible directions for research**, e.g.,
   - Different data preprocessing methods
   - Different features
   - Different models
   - Different training algorithms
   - Different evaluation techniques
 
-- **\textcolor{darkgreen}{What to do?}**
+- **What to do?**
 
-- **\textcolor{blue}{Right approach}**
+- **Right approach**
   - Evaluate models systematically using a single number
     - Implement metrics (e.g., accuracy, F1 score) for insight
     - Use cross-validation for model validation
@@ -67,16 +27,16 @@ MSML610: Advanced Machine Learning
     - Conduct A/B testing in real-world
 
 #### How to Measure Classifier's Performance?
-- **\textcolor{red}{Success/hit/win rate (or error/miss rate)}**
+- **Success/hit/win rate (or error/miss rate)**
   - Measures correct predictions proportion
   - Important for overall accuracy
   - E.g., 80 correct out of 100 = 80% success rate
 
-- **\textcolor{darkgreen}{Log probability/cross-entropy error}**
+- **Log probability/cross-entropy error**
   - Evaluates classification with probabilities 0 to 1
   - Lower cross-entropy loss = better performance
 
-- **\textcolor{blue}{Precision/recall/F-score}**
+- **Precision/recall/F-score**
   - Useful for imbalanced data
   - Precision: correctly predicted positives / total predicted positives
     - E.g., 0.75 precision = 75% true positives
@@ -84,19 +44,19 @@ MSML610: Advanced Machine Learning
     - E.g., 0.60 recall = 60% actual positives identified
   - F-score: weighted harmonic mean of precision and recall
 
-- **\textcolor{violet}{Utility function}**
+- **Utility function**
   - Customizes evaluation to prioritize errors and success
     - E.g., true/false positives/negatives
   - E.g., in medical diagnosis, prioritize minimizing false negatives
 
 #### Training vs Test Set
-- Performance on train set $E_{in}$ is an **\textcolor{red}{optimistic estimate}** of $E_{out}$
+- Performance on train set $E_{in}$ is an **optimistic estimate** of $E_{out}$
   - A model can have:
     - 0\% error rate on training data (e.g., memorizing responses for training
       set)
     - 50\% error rate on test set (e.g., answering randomly)
 
-- To **\textcolor{blue}{properly evaluate model performance}**:
+- To **properly evaluate model performance**:
   - Use test set not involved in training
   - Training and test sets should be representative samples
   - E.g., credit risk problem
@@ -105,14 +65,14 @@ MSML610: Advanced Machine Learning
     - Populations have different characteristics
 
 #### Lots of Data Scenario vs Scarce Data Scenario
-- **\textcolor{red}{Lots of data scenario}**
+- **Lots of data scenario**
   - Ideal to have lots of data (ideally infinite)
   - Learn on lots of data
     - $\to$ Fit all degrees of freedom of a complex model
   - Predict on lots of data
     - $\to$ Assess precise out-of-sample performance
 
-- **\textcolor{blue}{Scarce data scenario}**
+- **Scarce data scenario**
   - Often data is scarce
     - E.g., facial recognition datasets with limited annotated data
   - Cannot use all data as a training set
@@ -125,13 +85,13 @@ MSML610: Advanced Machine Learning
 
 
 #### Splitting Data Into Training, Validation, Test Sets
-- Training, validation, and test sets **\textcolor{red}{must be}**:
+- Training, validation, and test sets **must be**:
   - Distinct
   - Representative of the problem
     - E.g., each class in all sets represented according to original data
   - Sized based on data and problem needs
 
-- Ensure sets have the **\textcolor{blue}{same distribution}**:
+- Ensure sets have the **same distribution**:
   - Stratified sampling
     - E.g., each class label proportionally represented in each set
   - Shuffle and sample
@@ -141,17 +101,17 @@ MSML610: Advanced Machine Learning
     - Compare statistics to ensure each set mirrors broader dataset
 
 #### Rule of Thumbs for Data Set Splits
-- If $n$ is **\textcolor{red}{large}** $\to$ use a 60-20-20 split
+- If $n$ is **large** $\to$ use a 60-20-20 split
   - Training: 60%
   - Validation: 20%
   - Test: 20%
 
-- If $n$ is **\textcolor{darkgreen}{medium}** $\to$ use a 60-40 split
+- If $n$ is **medium** $\to$ use a 60-40 split
   - Training: 60%
   - Test: 40%
   - Not possible to learn hyperparameters, so no validation set
 
-- If $n$ is **\textcolor{blue}{small}** $\to$ use cross-validation and report "small data size"
+- If $n$ is **small** $\to$ use cross-validation and report "small data size"
   - Use K-fold cross-validation
   - Be cautious of the increased chance of high accuracy by chance
   - Is machine learning even suitable for this problem?
@@ -168,10 +128,10 @@ MSML610: Advanced Machine Learning
   - Use learning curves
 
 #### In-Sample vs Out-Of-Sample Error Expressions
-- **\textcolor{red}{Goal of ML}**: find a function $h$ that approximates the unknown function $f$,
+- **Goal of ML**: find a function $h$ that approximates the unknown function $f$,
   $h \approx f$ over the space of inputs $\vx \in \calX$ ("script X")
 
-- Usually the **\textcolor{darkgreen}{error is point-wise}**:
+- Usually the **error is point-wise**:
   $$
   e(h(\vx_i), f(\vx_i))
   $$
@@ -180,20 +140,20 @@ MSML610: Advanced Machine Learning
     - 0-1 binary error: $e(\vx) = I[h(\vx) == f(\vx)]$
     - Log probability: $e(\vx) = - \log( \Pr(h(\vx) == f(\vx)) )$
 
-- **\textcolor{blue}{In-sample error}** computed using all points in the training set:
+- **In-sample error** computed using all points in the training set:
 
   $$
   E_{in}{(h)} = \frac{1}{N} \sum_{i=1}^N e(h(\vx_i), f(\vx_i))
   $$
 
-- **\textcolor{violet}{Out-of-sample error}** computed on the entire space of inputs $\calX$:
+- **Out-of-sample error** computed on the entire space of inputs $\calX$:
 
   $$
   E_{out}(h) = \EE_{\vx \in \calX}[e(h(\vx), f(\vx))]
   $$
 
 #### Mean Squared Error (MSE)
-- MSE is the **\textcolor{red}{average squared difference of error}**:
+- MSE is the **average squared difference of error**:
   $$
   \text{MSE}
   \defeq \frac{1}{N} \sum_{i=1}^N (h(\vx_i) - f(\vx_i))^2
@@ -203,11 +163,11 @@ MSML610: Advanced Machine Learning
   - E.g., in house price prediction, determines how close predicted prices are
     to actual prices
 
-- **\textcolor{darkgreen}{Pros:}**
+- **Pros:**
   - Related to Gaussian error
   - Optimization friendly
 
-- **\textcolor{blue}{Cons:}**
+- **Cons:**
   - Doesn't share unit of measure with output
     - Distorts error interpretation
   - Sensitive to outliers
@@ -216,63 +176,63 @@ MSML610: Advanced Machine Learning
       robustness against outliers
 
 #### Root Mean Squared Error (RMSE)
-- RMSE is the **\textcolor{red}{standard deviation of Mean Squared Error (MSE)}**:
+- RMSE is the **standard deviation of Mean Squared Error (MSE)**:
   $$
   \text{RMSE} \defeq \sqrt{\text{MSE}}
   = \sqrt{\frac{1}{N} \sum_{i=1}^N (h(\vx_i) - f(\vx_i))^2}
   $$
 
-- **\textcolor{darkgreen}{Pros:}**
+- **Pros:**
   - Same units as output, allowing intuition of magnitude compared to mean
   - Facilitates comparison between data sets or models since metric is
     normalized to output's scale
 
-- **\textcolor{blue}{Cons:}**
+- **Cons:**
   - Sensitive to outliers, which can excessively affect metric
   - May not be suitable for outliers or skewed distributions
 
 #### Median-Based Metrics
 - Use metrics based on median (i.e., the 0.5 quantile of absolute error):
 
-- **\textcolor{red}{Median absolute deviation}**:
+- **Median absolute deviation**:
 
   $$
   \text{MAD} \defeq \text{median}_i(|h(\vx_i) - f(\vx_i)|)
   $$
 
-- **\textcolor{darkgreen}{Median squared error}**:
+- **Median squared error**:
 
   $$
   \defeq \text{median}_i(|h(\vx_i) - f(\vx_i)|^2)
   $$
 
-- **\textcolor{blue}{Pros:}**
+- **Pros:**
   - Robust to outliers
 
-- **\textcolor{violet}{Cons:}**
+- **Cons:**
   - Difficult to evaluate
 
 #### How to Choose an Error Measure?
 
-- Error measure depends on **\textcolor{red}{application}** and **\textcolor{darkgreen}{"customer"}** should define
+- Error measure depends on **application** and **"customer"** should define
   acceptable error level for their use case, e.g.,
     - Medical applications have low error tolerance
     - Recommendation systems have higher tolerance
 
 - Otherwise, pick error measure that is
-  - **\textcolor{blue}{Plausible}**:
+  - **Plausible**:
     - E.g., squared error for Gaussian noise
-  - **\textcolor{violet}{Friendly}**:
+  - **Friendly**:
     - E.g., measures allowing closed-form solutions simplify calculations
     - Convex optimization-friendly measures ensure algorithms find global
       minimum easily
 
 #### Error Measures: Fingerprint Verification Example
-- In **\textcolor{red}{fingerprint verification}**:
+- In **fingerprint verification**:
   - Recognizing a valid fingerprint $\to$ no error
   - Otherwise $\to$ false positive or false negative
 
-- **\textcolor{blue}{Error weight depends on the application}**
+- **Error weight depends on the application**
 
 \begingroup \scriptsize
 | **Application**  | **False Positive**       | **False Negative** |
@@ -289,11 +249,11 @@ MSML610: Advanced Machine Learning
 ### Precision and Recall
 
 #### Error Metrics for Skewed Classes
-- When **\textcolor{red}{classes are skewed}** (i.e., one class is very rare)
+- When **classes are skewed** (i.e., one class is very rare)
   - Accuracy can be misleading
   - Use metrics like confusion matrix, precision, and recall
 
-- **\textcolor{blue}{Example:}**
+- **Example:**
   - Train a classifier to distinguish tumors as:
     - $y = 1$: malignant
     - $y = 0$: benign
@@ -344,12 +304,12 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-- You can aggregate confusion matrix in **\textcolor{red}{precision}** and **\textcolor{blue}{recall}**
+- You can aggregate confusion matrix in **precision** and **recall**
 
 #### Precision vs Recall: Definition
 - Assume that $y = 1$ encodes the rare event
 
-- **\textcolor{red}{Precision}** measures how often there is a true positive _given that pred =
+- **Precision** measures how often there is a true positive _given that pred =
   1_
   \begingroup \small
   $$
@@ -361,7 +321,7 @@ MSML610: Advanced Machine Learning
   $$
   \endgroup
 
-- **\textcolor{blue}{Recall}** measures how often there is a true positive _given that act = 1_
+- **Recall** measures how often there is a true positive _given that act = 1_
   \begingroup \small
   $$
   \vspace{-0.2cm}
@@ -385,21 +345,21 @@ MSML610: Advanced Machine Learning
       $\frac{20}{(40 + 20)} = \frac{20}{60} = \frac{1}{3}$
 
 #### Precision / Recall as Quality / Quantity
-- **\textcolor{red}{"Increasing precision"}** means when you predict 1, you are more likely to be
+- **"Increasing precision"** means when you predict 1, you are more likely to be
   right
   - A higher precision indicates fewer false positives
     - E.g., in a spam email detection system, "precision is 90%" means 90% of
       the emails marked as spam are actually spam
   - Measures "quality" of prediction
 
-- **\textcolor{blue}{"Increasing recall"}** means you predict more instances when the outcome is 1
+- **"Increasing recall"** means you predict more instances when the outcome is 1
   - A higher recall means fewer false negatives
     - E.g., in a spam email detection system, "recall is 80%" indicates 80% of
       all actual spam emails were correctly identified as spam
   - Measures "quantity" of prediction (coverage)
 
 #### Precision / Recall for Trivial Classifiers
-- A **\textcolor{red}{classifier that outputs always most common class}** has:
+- A **classifier that outputs always most common class** has:
 
   \begingroup \small
   \begin{alignat*}{3}
@@ -416,7 +376,7 @@ MSML610: Advanced Machine Learning
   \end{alignat*}
   \endgroup
 
-- A **\textcolor{blue}{classifier that outputs always rare class}** has:
+- A **classifier that outputs always rare class** has:
   \begingroup \small
   \begin{alignat*}{3}
   \text{recall}
@@ -442,9 +402,9 @@ MSML610: Advanced Machine Learning
 - A trivial classifier has precision or recall close to 0
 
 #### Trading Off Precision and Recall
-- In theory, you want to increase **\textcolor{red}{both precision and recall}**
+- In theory, you want to increase **both precision and recall**
 - In practice, you can modify the threshold of a probabilistic classifier to
-  **\textcolor{blue}{trade off precision and recall}**
+  **trade off precision and recall**
 
 - E.g., use logistic regression to predict cancer:
   - With a threshold $\theta = 0.5$, the classifier has:
@@ -460,11 +420,11 @@ MSML610: Advanced Machine Learning
 
 
 #### Precision-Recall: Pros / Cons
-- **\textcolor{red}{Pros:}**
+- **Pros:**
   - Give insight on the behavior of a classifier (e.g., confusion matrix)
   - Avoid mistaking a trivial classifier for a good classifier
 
-- **\textcolor{blue}{Cons:}**
+- **Cons:**
   - You have two different numbers, thus it is difficult to compare classifiers
     to each other
   - Solutions: F-score, AUC
@@ -476,24 +436,24 @@ MSML610: Advanced Machine Learning
   - Plot the curve on a precision-recall plane ($y =$ precision, $1 - x =$ recall)
   - E.g., changing threshold of logistic regression
 
-- Precision-recall plot can have **\textcolor{red}{different shapes}**, e.g.,
+- Precision-recall plot can have **different shapes**, e.g.,
   - Diagonal (pure luck)
   - Convex up (better than luck)
   - Convex down (worse than luck)
 
-- A curve **\textcolor{blue}{higher}** than another means a better classifier, since for the same
+- A curve **higher** than another means a better classifier, since for the same
   recall you get higher precision
   - Best classifier (precision = recall = 1) is in the top-right corner
 
 
 #### Area Under the Curve
-- AUC is the **\textcolor{red}{area under the precision-recall curve}**
+- AUC is the **area under the precision-recall curve**
   - Provides a robust metric by integrating over all thresholds
   - Higher AUC indicates better class differentiation
   - AUC = 0.5 suggests no discriminative power, like random guessing
   - AUC closer to 1.0 indicates high performance
 
-- **\textcolor{blue}{Pros:}**
+- **Pros:**
   - Single number summarizing classifier behavior, useful for comparing models
   - Does not require selecting a threshold for performance calculation
   - Handles imbalanced datasets effectively
@@ -503,7 +463,7 @@ MSML610: Advanced Machine Learning
     and without a disease
 
 #### F-Score
-- The F-score is defined as the **\textcolor{red}{harmonic mean of precision and recall}**:
+- The F-score is defined as the **harmonic mean of precision and recall**:
 
   $$
   \text{F-score}
@@ -511,7 +471,7 @@ MSML610: Advanced Machine Learning
   = 2 \frac{P \cdot R}{P + R}
   $$
 
-- **\textcolor{blue}{Interpretation:}**
+- **Interpretation:**
   - Trivial classifiers
     - $P = 0$ or $R = 0$ $\implies$ F-score = 0
   - Perfect classifiers
@@ -568,12 +528,12 @@ MSML610: Advanced Machine Learning
 
 
 #### Model Selection as Learning
-- _"Picking the model with smallest $E_{val}$"_ is a **\textcolor{red}{form of learning}**:
+- _"Picking the model with smallest $E_{val}$"_ is a **form of learning**:
   - Hypothesis set: $\{g_1, ... , g_N\}$
   - Training set: $D_{val}$
   - Pick the best model $g_m$
 
-- After model selection, you need to **\textcolor{blue}{assess the true performance}** on
+- After model selection, you need to **assess the true performance** on
   $D_{test}$
   - Experimentally
     $$
@@ -593,17 +553,17 @@ MSML610: Advanced Machine Learning
 ## Aggregation
 
 #### Ensemble Learning: Intuition
-- **\textcolor{red}{Idea}**
+- **Idea**
   - A group of weak learners can form a strong learner
   - Combine multiple models to improve prediction accuracy
 
-- **\textcolor{darkgreen}{Combine outputs of models}** $X_i$ to build a model $X^*$ better than any
+- **Combine outputs of models** $X_i$ to build a model $X^*$ better than any
   $X_i$
   - Utilize diversity in model predictions to improve accuracy
   - Each model contributes its unique perspective, reducing overfitting
   - E.g., like a panel of voting experts
 
-- **\textcolor{blue}{Example}**: in computer vision detecting a face is difficult task (circa 2010)
+- **Example**: in computer vision detecting a face is difficult task (circa 2010)
   - Look for different features:
     - Are there eyes?
     - Is there a nose?
@@ -611,20 +571,20 @@ MSML610: Advanced Machine Learning
   - Each feature is weak by itself, but together they become reliable
 
 #### Ensemble Learning: Different Techniques
-- **\textcolor{red}{Bagging}** (bootstrap + aggregation)
+- **Bagging** (bootstrap + aggregation)
   - Reduces variance by averaging predictions from different models
   - E.g., decision trees + bagging = random forest
     - Creates multiple versions of a decision tree
     - Each tree is trained on a random sample of data
     - Averages predictions to improve accuracy
 
-- **\textcolor{darkgreen}{Boosting}**
+- **Boosting**
   - Reduces bias by focusing on errors made by previous models
   - Sequentially adds models, each correcting its predecessor
   - E.g., \textcolor{blue}{\texttt{adaBoost}} increases weights of incorrectly classified data points to
     learn the next model
 
-- **\textcolor{blue}{Stacking}**
+- **Stacking**
   - Uses a meta-model to combine separate models using weights
   - E.g., a stacking ensemble
     - Uses logistic regression as a meta-model
@@ -632,17 +592,17 @@ MSML610: Advanced Machine Learning
       machines, neural networks)
 
 #### Ensemble Learning: Relation with Statistics
-- **\textcolor{red}{Bagging}**
+- **Bagging**
   - Improves performance by adding randomized variants (mimicking multiple
     training sets)
   - Reduce variance without affecting bias
 
-- **\textcolor{darkgreen}{Boosting}**
+- **Boosting**
   - Use another model to learn the residuals, i.e., difference between predicted
     and true values
   - Related to "forward stagewise additive models"
 
-- **\textcolor{blue}{Stacking}**
+- **Stacking**
   - If we have 3 independent classifiers, each with $\Pr(\text{correct}) = 0.7$
     \begin{alignat*}{2}
     \Pr(\text{majority correct})
@@ -653,11 +613,11 @@ MSML610: Advanced Machine Learning
     \end{alignat*}
 
 #### Ensemble Learning: Pros and Cons
-- **\textcolor{red}{Pros}**
+- **Pros**
   - Hypothesis set $\calH$ is increased by combining hypotheses from different
     models
 
-- **\textcolor{blue}{Cons}**
+- **Cons**
   - More computationally intensive to train and evaluate
   - Loss of interpretability
   - Risk of overfitting (model complexity is increased)
@@ -672,32 +632,32 @@ MSML610: Advanced Machine Learning
     the others don't perform well
 
 #### How to Combine Outputs in Ensemble Learning
-- **\textcolor{red}{Regression}**
+- **Regression**
   - Weighted average of prediction
   - E.g., by accuracy of each model or by a prior
 
-- **\textcolor{darkgreen}{Classification}**
+- **Classification**
   - Weighted vote of predicted classes
   - It needs an odd number of models to break ties
 
-- **\textcolor{blue}{Probabilistic classification}**
+- **Probabilistic classification**
   - Weighted average of class probabilities
 
-- **\textcolor{violet}{Learn a meta-learner}** (i.e., stacking) to combine multiple models
+- **Learn a meta-learner** (i.e., stacking) to combine multiple models
 
 ### Bagging
 
 #### Bagging
 - Bagging stands for "Bootstrap AGGregation"
 
-- **\textcolor{red}{Learning procedure}**
+- **Learning procedure**
   - Several training datasets are extracted randomly by sampling with
     replacement from the original dataset (i.e., bootstrap)
   - Learn multiple models, one for each training set
   - Combine outputs using various methods
   - Result is a better model than a single model
 
-- **\textcolor{blue}{Why bagging works?}**
+- **Why bagging works?**
   - From the bias-variance decomposition view, combining multiple models:
     - Reduces the variance component
     - Without compromising the bias (bagged models are typically unbiased)
@@ -708,16 +668,16 @@ MSML610: Advanced Machine Learning
 - Bagging works best with highly different models, especially non-linear models
   - Introduce randomization in the learning algorithm intentionally
 
-- **\textcolor{red}{Decision Trees}**
+- **Decision Trees**
   - Disable pruning
   - Break ties randomly when selecting the best attribute to split
   - E.g., bagging trees results in random forests
 
-- **\textcolor{darkgreen}{Multilayer Perceptrons}**
+- **Multilayer Perceptrons**
   - Use different initial weights in backpropagation to reach different local
     minima
 
-- **\textcolor{blue}{Nearest Neighbor Classifier}**
+- **Nearest Neighbor Classifier**
   - Use a random subset of features
   - Resampling the training set has limited impact, as it is equivalent to
     changing example weights
@@ -731,7 +691,7 @@ MSML610: Advanced Machine Learning
 - Strong classifiers can be built from weak classifiers
   - E.g., decision stumps = decision trees with one level
 
-- **\textcolor{red}{Why boosting works?}**
+- **Why boosting works?**
   - Boosting implements forward stagewise additive modeling
   - Use another model to learn residuals (difference between predicted and true
     values)
@@ -747,7 +707,7 @@ MSML610: Advanced Machine Learning
 - Assume examples can be weighted in the cost function used to learn
   - Otherwise use resampling
 
-- **\textcolor{red}{Learning procedure}**
+- **Learning procedure**
   - Start with equal weights for all examples
   - Iterate:
     - Learn a classifier based on current weights for examples
@@ -766,7 +726,7 @@ MSML610: Advanced Machine Learning
 - Instead of voting or weighting we can use a meta-learner (level 1) to learn
   how to pick / mix models (level 0)
 
-- **\textcolor{red}{Learning procedure}**
+- **Learning procedure**
   - Learn "level 0" models
   - Learn "level 1" model using hold-out data from learning of level 0 models
     (like in model selection)
