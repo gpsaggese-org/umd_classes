@@ -4,11 +4,17 @@ r"""
 Generate a PDF with the lecture commentaries from slides lecture source.
 
 This script performs multiple steps:
-1. Generate PDF using notes_to_pdf.py
-2. Generate lecture commentary: pair each slide's markdown with a corresponding
-   PNG (extracted from the PDF from step 1) and generate per-slide LLM commentary
-3. Convert to PDF using pandoc
-4. Open the PDF in Skim
+1. Generate PDF of the slides using `notes_to_pdf.py`
+2. Extract PNG images from the generated PDF (tracked independently of step 3
+   for incremental runs: e.g., deleting only the PNG dir re-extracts without
+   forcing a full markdown regeneration)
+3. Generate lecture commentary: pair each slide's markdown with its PNG and
+   generate per-slide LLM commentary, tagging the output with the git
+   hash/timestamp of generation
+4. Add the generated markdown to git
+5. Convert to PDF using pandoc
+6. Convert to HTML using pandoc
+7. Open the PDF in Skim
 
 Usage:
 > gen_lecture_commentary.py data605 01.1
@@ -19,11 +25,12 @@ https://github.com/gpsaggese/gpsaggese.github.io/blob/master/data605/lectures_co
 or
 
 ```
-> ls -1 data605/lectures_commentary/Lesson01.1-Intro.*
-data605/lectures_commentary/Lesson01.1-Intro.book_chapter.pdf
-data605/lectures_commentary/Lesson01.1-Intro.book_chapter.txt
+> ls -1 data605/lecture_commentary/Lesson01.1-Intro.*
+data605/lecture_commentary/Lesson01.1-Intro.book_chapter.html
+data605/lecture_commentary/Lesson01.1-Intro.book_chapter.md
+data605/lecture_commentary/Lesson01.1-Intro.book_chapter.pdf
 
-data605/lectures_commentary/Lesson01.1-Intro.png:
+data605/lecture_commentary/Lesson01.1-Intro.png:
 slides001.png
 slides002.png
 ...
@@ -48,10 +55,11 @@ import class_scripts.gen_lecture_commentary as clgelcom
 # ///
 
 import argparse
+import glob
 import logging
 import os
 import re
-from typing import List, Optional, cast
+from typing import List, Optional
 
 import pdf2image  # type: ignore
 import tqdm
@@ -62,6 +70,7 @@ import dev_scripts_helpers.documentation.preprocess_notes as dshdprno
 import dev_scripts_helpers.dockerize.lib_prettier as dshdlipr
 import helpers.hcache_simple as hcacsimp
 import helpers.hdbg as hdbg
+import helpers.hgit as hgit
 import helpers.hio as hio
 import helpers.hllm as hllm
 import helpers.hparser as hparser
@@ -131,6 +140,94 @@ def _get_png_files_from_directory(png_dir: str) -> List[str]:
     png_files.sort()
     _LOG.info("Found %d PNG files in directory: %s", len(png_files), png_dir)
     return png_files
+
+
+def _is_png_dir_populated(png_dir: str) -> bool:
+    """
+    Check whether a PNG directory already contains extracted slide images.
+
+    Used to make `--no_incremental` handling for PNG extraction independent
+    of the markdown artifact: e.g., deleting only the PNG dir triggers
+    re-extraction without forcing a full markdown regeneration.
+
+    :param png_dir: directory expected to contain `slides*.png` files
+    :return: True if the directory exists and contains at least one PNG file
+    """
+    is_populated = os.path.isdir(png_dir) and bool(
+        glob.glob(os.path.join(png_dir, "slides*.png"))
+    )
+    return is_populated
+
+
+# #############################################################################
+# Figure formatting
+# #############################################################################
+
+
+def _convert_image_width_to_latex(image_width: str) -> str:
+    """
+    Convert a markdown-style percentage width into a LaTeX linewidth fraction.
+
+    :param image_width: markdown width string (e.g., "80%")
+    :return: LaTeX width fraction (e.g., "0.80\\linewidth")
+    """
+    hdbg.dassert(
+        image_width.endswith("%"),
+        "image_width must end with a percent sign, got '%s'",
+        image_width,
+    )
+    percent = float(image_width[:-1])
+    fraction = percent / 100.0
+    latex_width = f"{fraction:.2f}\\linewidth"
+    return latex_width
+
+
+def _format_bordered_figure_block(
+    png_path: str,
+    image_width: str,
+    *,
+    slide_title: str = "",
+) -> str:
+    r"""
+    Format a slide's image (and optional title) as a bordered LaTeX figure.
+
+    Wraps the title text and image together inside a single `\fbox` so that
+    the border encloses both, per the `--use_figure_border` option. Emitted
+    as a raw LaTeX block (pandoc `{=latex}` fence) since `\fbox` has no
+    portable markdown/HTML equivalent; other pandoc writers (e.g., the HTML
+    output) drop this block entirely.
+
+    :param png_path: path to the slide's PNG image
+    :param image_width: markdown-style width (e.g., "80%")
+    :param slide_title: title text to render above the image inside the
+        border
+        - Empty for the title slide, which has no title text
+    :return: raw LaTeX block with the bordered figure
+    """
+    latex_width = _convert_image_width_to_latex(image_width)
+    # Empty when there is no title (e.g., the title slide): the template line
+    # below then collapses to a harmless blank line inside the LaTeX box.
+    title_line = (
+        # TODO(ai_gp): Use r"""
+        f"\\textbf{{{slide_title}}}\\par\\bigskip" if slide_title else ""
+    )
+    block = hprint.dedent(
+        # TODO(ai_gp): Use r"""
+        f"""
+        ```{{=latex}}
+        \\begin{{center}}
+        \\fbox{{%
+        \\begin{{minipage}}{{{latex_width}}}
+        \\centering
+        {title_line}
+        \\includegraphics[width=\\linewidth]{{{png_path}}}
+        \\end{{minipage}}%
+        }}
+        \\end{{center}}
+        ```
+        """
+    )
+    return block
 
 
 # #############################################################################
@@ -226,39 +323,31 @@ def _generate_slide_commentary(
 def _generate_lecture_commentary(
     input_file: str,
     output_dir: str,
+    input_png_dir: str,
     *,
-    input_png_dir: Optional[str] = None,
-    input_pdf_file: Optional[str] = None,
-    output_file: Optional[str] = None,
-    dpi: int = 200,
+    output_file: str = "",
     image_width: str = "80%",
     add_new_page: bool = False,
+    use_figure_border: bool = False,
 ) -> None:
     r"""
-    Generate book chapter from markdown slides and PNG directory or PDF file.
+    Generate book chapter from markdown slides and a directory of slide PNGs.
 
     :param input_file: path to input markdown file with slides
     :param output_dir: directory to save output files
-    :param input_png_dir: directory containing PNG files (slides*.png)
-    :param input_pdf_file: PDF file to extract PNG images from
+    :param input_png_dir: directory containing PNG files (slides*.png),
+        already extracted from the corresponding PDF (see
+        `_extract_png_from_pdf()`)
     :param output_file: path to the output book chapter markdown file
         - Default: `{output_dir}/{base_name}.book_chapter.md`
-    :param dpi: DPI resolution for PDF extraction
     :param image_width: width of images in output (e.g., "80%", "50%")
     :param add_new_page: if True, add `\newpage` commands before each slide
+    :param use_figure_border: if True, wrap each slide's title and image
+        together inside a bordered LaTeX box (see
+        `_format_bordered_figure_block()`) instead of plain centered markdown
     """
     hdbg.dassert_file_exists(input_file)
-    # Validate that exactly one of input_png_dir or input_pdf_file is provided.
-    has_png_dir = input_png_dir is not None
-    has_pdf_file = input_pdf_file is not None
-    hdbg.dassert(
-        has_png_dir or has_pdf_file,
-        "Must provide either --input_png_dir or --input_pdf_file",
-    )
-    hdbg.dassert(
-        not (has_png_dir and has_pdf_file),
-        "Cannot provide both --input_png_dir and --input_pdf_file",
-    )
+    hdbg.dassert_dir_exists(input_png_dir)
     # Create output directory.
     hio.create_dir(output_dir, incremental=True)
     # Extract base name from input file.
@@ -270,16 +359,6 @@ def _generate_lecture_commentary(
     else:
         base_name = input_basename
     _LOG.info("Using base name: %s", base_name)
-    # Handle PDF extraction if needed.
-    if input_pdf_file:
-        # Create PNG directory as {base_name}.png inside output_dir.
-        png_dir_name = f"{base_name}.png"
-        input_png_dir = os.path.join(output_dir, png_dir_name)
-        _LOG.info("Extracting PNG files from PDF to: %s", input_png_dir)
-        _extract_png_from_pdf(input_pdf_file, input_png_dir, dpi=dpi)
-    else:
-        hdbg.dassert_is_not(input_png_dir, None)
-        hdbg.dassert_dir_exists(cast(str, input_png_dir))
     _LOG.info("Reading slides from: %s", input_file)
     # Extract title from markdown file for YAML preamble.
     title = _extract_title_from_markdown(input_file)
@@ -288,7 +367,7 @@ def _generate_lecture_commentary(
     num_slides = len(slides)
     _LOG.info("Found %d slides in markdown file", num_slides)
     # Get PNG files from directory.
-    png_files = _get_png_files_from_directory(cast(str, input_png_dir))
+    png_files = _get_png_files_from_directory(input_png_dir)
     num_pngs = len(png_files)
     _LOG.info("Found %d PNG files in directory", num_pngs)
     # Check that slide count matches PNG count.
@@ -306,24 +385,34 @@ def _generate_lecture_commentary(
     if title:
         yaml_preamble = f'---\ntitle: "{title}"\n---\n'
         output_parts.append(yaml_preamble)
+    # Add a provenance tag with the git hash and timestamp of generation, so
+    # that we can tell from which commit and when this file was generated.
+    generation_tag = hgit.get_generation_tag()
+    output_parts.append(f"<!-- {generation_tag} -->\n")
     # First, handle the title slide (first PNG, no content).
     _LOG.info("Processing title slide (1/%d)", num_slides + 1)
     slide_output = []
     if add_new_page:
         slide_output.append("\\newpage")
         slide_output.append("")
-    # Add centered image with specified width and empty alt text.
-    slide_output.append(
-        hprint.dedent(
-            f"""
-            <center>
-
-            ![]({png_files[0]}){{width={image_width}}}
-
-            </center>
-            """
+    if use_figure_border:
+        # Border the image (no title text for the title slide).
+        slide_output.append(
+            _format_bordered_figure_block(png_files[0], image_width)
         )
-    )
+    else:
+        # Add centered image with specified width and empty alt text.
+        slide_output.append(
+            hprint.dedent(
+                f"""
+                <center>
+
+                ![]({png_files[0]}){{width={image_width}}}
+
+                </center>
+                """
+            )
+        )
     output_parts.append("\n".join(slide_output))
     # Then process content slides (slides from markdown with corresponding PNGs).
     # Note: png_files[0] is the title slide, so we pair slides[i] with png_files[i+1].
@@ -344,29 +433,38 @@ def _generate_lecture_commentary(
             slide_output.append("")
         # Add title, image, and commentary.
         # Use original slide title from input markdown with idx/tot format.
-        slide_output.append(
-            hprint.dedent(
-                f"""
-                <center>
-
-                # {idx} / {num_slides + 1}: {slide_title}
-
-                </center>
-                """
+        full_title = f"{idx} / {num_slides + 1}: {slide_title}"
+        if use_figure_border:
+            # Border the title and image together inside a single LaTeX box.
+            slide_output.append(
+                _format_bordered_figure_block(
+                    png_path, image_width, slide_title=full_title
+                )
             )
-        )
-        # Add centered image with specified width and empty alt text.
-        slide_output.append(
-            hprint.dedent(
-                f"""
-                <center>
+        else:
+            slide_output.append(
+                hprint.dedent(
+                    f"""
+                    <center>
 
-                ![]({png_path}){{width={image_width}}}
+                    # {full_title}
 
-                </center>
-                """
+                    </center>
+                    """
+                )
             )
-        )
+            # Add centered image with specified width and empty alt text.
+            slide_output.append(
+                hprint.dedent(
+                    f"""
+                    <center>
+
+                    ![]({png_path}){{width={image_width}}}
+
+                    </center>
+                    """
+                )
+            )
         # Generate commentary for this slide.
         commentary = _generate_slide_commentary(
             slide_content=slide_content,
@@ -383,7 +481,7 @@ def _generate_lecture_commentary(
     _LOG.info("Formatting output with prettier")
     full_output = dshdlipr.prettier_on_str(full_output, "md")
     # Write output file.
-    if output_file is None:
+    if not output_file:
         output_file = os.path.join(output_dir, f"{base_name}.book_chapter.md")
     _LOG.info("Writing output to: %s", output_file)
     hio.to_file(output_file, full_output)
@@ -424,6 +522,16 @@ def _parse() -> argparse.ArgumentParser:
             "exists)"
         ),
     )
+    parser.add_argument(
+        "--use_figure_border",
+        action="store_true",
+        help=(
+            "Wrap each slide's title and image together inside a bordered "
+            "LaTeX box (`\\fbox`) instead of plain centered markdown; only "
+            "affects the PDF output, since other pandoc writers (e.g., "
+            "HTML) drop raw LaTeX blocks"
+        ),
+    )
     hparser.add_verbosity_arg(parser)
     return parser
 
@@ -442,8 +550,10 @@ def _main(parser: argparse.ArgumentParser) -> None:
     tmp_pdf = f"tmp.{dst_name}"
     out_dir = f"{args.dir}/lecture_commentary"
     basename = os.path.splitext(src_name)[0]
+    png_dir = f"{out_dir}/{basename}.png"
     book_chapter_md = f"{out_dir}/{basename}.book_chapter.md"
     pdf_file_name = f"{out_dir}/{basename}.book_chapter.pdf"
+    html_file_name = f"{out_dir}/{basename}.book_chapter.html"
     do_incremental = not args.no_incremental
     # Step 1: Generate the PDF.
     if do_incremental and os.path.exists(tmp_pdf):
@@ -457,12 +567,27 @@ def _main(parser: argparse.ArgumentParser) -> None:
             "--type slides --toc_type remove_headers"
         )
         hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
-    # Step 2: Generate book chapter.
+    # Step 2: Extract PNG images from the PDF.
+    # This is tracked independently from the markdown artifact (Step 3) so
+    # that deleting only the PNG dir triggers re-extraction without forcing a
+    # full markdown/commentary regeneration.
     clcomuut.ensure_dir_exists(out_dir)
-    if do_incremental and os.path.exists(book_chapter_md):
-        _LOG.warning("Step 2: Skipping, '%s' already exists", book_chapter_md)
+    if do_incremental and _is_png_dir_populated(png_dir):
+        _LOG.warning("Step 2: Skipping, '%s' already populated", png_dir)
     else:
-        _LOG.info("Step 2: Generating book chapter")
+        _LOG.info("Step 2: Extracting PNG images from PDF")
+        if args.dry_run:
+            _LOG.warning(
+                "As per user request, not extracting PNG images for '%s'",
+                tmp_pdf,
+            )
+        else:
+            _extract_png_from_pdf(tmp_pdf, png_dir, dpi=300)
+    # Step 3: Generate book chapter.
+    if do_incremental and os.path.exists(book_chapter_md):
+        _LOG.warning("Step 3: Skipping, '%s' already exists", book_chapter_md)
+    else:
+        _LOG.info("Step 3: Generating book chapter")
         if args.dry_run:
             _LOG.warning(
                 "As per user request, not generating book chapter for '%s'",
@@ -472,15 +597,19 @@ def _main(parser: argparse.ArgumentParser) -> None:
             _generate_lecture_commentary(
                 input_file=input_file,
                 output_dir=out_dir,
-                input_pdf_file=tmp_pdf,
+                input_png_dir=png_dir,
                 output_file=book_chapter_md,
-                dpi=300,
+                use_figure_border=args.use_figure_border,
             )
-    # Step 3: Convert to PDF using pandoc.
+    # Step 4: Track the generated markdown file in git.
+    _LOG.info("Step 4: Adding book chapter markdown to git")
+    cmd = f"git add {book_chapter_md}"
+    hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
+    # Step 5: Convert to PDF using pandoc.
     if do_incremental and os.path.exists(pdf_file_name):
-        _LOG.warning("Step 3: Skipping, '%s' already exists", pdf_file_name)
+        _LOG.warning("Step 5: Skipping, '%s' already exists", pdf_file_name)
     else:
-        _LOG.info("Step 3: Converting to PDF using pandoc")
+        _LOG.info("Step 5: Converting to PDF using pandoc")
         header_dir = os.path.dirname(os.path.abspath(__file__))
         cmd = (
             f"pandoc {book_chapter_md} -o {pdf_file_name} "
@@ -491,8 +620,19 @@ def _main(parser: argparse.ArgumentParser) -> None:
             f"--include-in-header={header_dir}/header-style.tex"
         )
         hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
-    # Step 4: Open the PDF in Skim.
-    _LOG.info("Step 4: Opening PDF in Skim")
+    # Step 6: Convert to HTML using pandoc.
+    if do_incremental and os.path.exists(html_file_name):
+        _LOG.warning("Step 6: Skipping, '%s' already exists", html_file_name)
+    else:
+        _LOG.info("Step 6: Converting to HTML using pandoc")
+        cmd = (
+            f"pandoc {book_chapter_md} -o {html_file_name} "
+            f"--standalone "
+            f"--highlight-style=tango"
+        )
+        hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
+    # Step 7: Open the PDF in Skim.
+    _LOG.info("Step 7: Opening PDF in Skim")
     cmd = f"open -a /Applications/Skim.app {pdf_file_name}"
     hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
     _LOG.info("Book chapter generated: %s", pdf_file_name)

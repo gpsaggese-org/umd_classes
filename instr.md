@@ -1,7 +1,12 @@
 When running gen_lecture_commentary.py book_springer 02.1
 - Run git add on the md file generated
 - Generalize the --no_incremental for also generating the PNG files
-- Generate also an html version of the PDF output
+  and the txt file only when needed
+- When generating the md with the lecture commentary file add a tag like
+  !<-- git_hash=%s timestamp=%s --> to it so that we can find out when
+  it was generated
+  - Create a function in helpers/hgit.py to compute this
+- Generate also an html version of the PDF output in the same directory
 - Add an option --use_figure_border to generate a border around
   the
 
