@@ -1,51 +1,25 @@
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L01.1: AI and Machine Learning
+// slides_engine=typst
+// references=
+// - AIMA (Artificial Intelligence: a Modern Approach), Chap 1
 
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
+// ![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
 
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 01.1: AI and Machine Learning}}$$**
-\endgroup
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-- AIMA (Artificial Intelligence: a Modern Approach), Chap 1
-::::
-:::: {.column width=20%}
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){width=1.5cm}
-::::
-:::
-
-# ##############################################################################
 # AI and Machine Learning
-# ##############################################################################
 
-## #############################################################################
 ## What is AI?
-## #############################################################################
 
 * ML, AI, and Intelligence
-- Machine Learning is a subset of AI
-  - All of it confused with deep learning, large-language models, predictive
-    analytics, ...
 
-- What is artificial intelligence?
-- What is intelligence?
+- @Definition@: **Machine Learning** is a subset of AI
+  - Often confused with deep learning, large-language models, predictive
+    analytics, and other related fields
+
+- **Questions to explore**
+  - What is artificial intelligence?
+  - What is intelligence?
 
 * Human Intelligence
 - We call ourselves "homo sapiens" because intelligence sets us apart from animals
@@ -60,39 +34,42 @@ MSML610: Advanced Machine Learning
     than itself?
 
 * Artificial Intelligence
-- The term "Artificial Intelligence" was coined in 1956
 
-- **AI aims to:**
+- @Definition@: The term _"Artificial Intelligence"_ was coined in 1956
+
+- @Goal@
   - Understand human intelligence
   - Create intelligent entities
   - _"What I cannot create, I do not understand"_ (Feynman, 1988)
 
-- **AI is a technology**
+- @Characteristics@
   - Universal and applicable to any human activity and task
-  - Its impact greater than any previous historical event
+  - Its impact is greater than any previous historical event
   - Currently generates trillions of dollars annually in revenue
   - Presents many unresolved problems
     - E.g., major concepts in physics might be established
 
 * AI Formal Definition
-- AI is defined around **two axes**:
+
+- @Definition@: AI is characterized along **two key axes**
   - Thinking vs. Acting
   - Human vs. Rational (ideal performance)
 
-- Four possible definitions of AI as a machine that can:
+- This yields four possible definitions of AI as a machine that can:
   1. Think humanly
   2. Think rationally
   3. Act humanly
   4. Act rationally
 
-- **Q**: Which one do you think is the best definition?
+- **Question**: Which definition best captures what AI should aim for?
 
-- We will see that building machines that can **"act rationally"** should be
+- **Key insight**: Building machines that **act rationally** should be the
   ultimate goal of AI
 
 * 1. AI as Thinking Humanly
-- To build machines that think like humans we need to **determine how humans
-  think**
+
+- @Problem@: To build machines that think like humans, we need to first
+  **determine how humans think**
 
 - **Pros**
   - Express precise theory of the human mind as a computer program
@@ -102,56 +79,64 @@ MSML610: Advanced Machine Learning
   - Anthropocentric definition
 
 * 2. AI as Thinking Rationally
-- What are the rules of **\black{correct thinking}**?
+
+- @Question@: What are the rules of **correct thinking**?
   - Given correct premises, yield correct conclusions
 
-- **Logic** studies the "laws of thought"
+- @Approach@: **Logic** studies the "laws of thought"
   - Formalize statements about objects and their relations
 
-- **Automatic theorem proving**
+- @Technique@: **Automatic theorem proving**
   - Programs solve problems in logical notation
   - Run indefinitely if no solution exists (related to the halting problem)
 
 * Thinking Rationally: Cons
 
 1. **Formalizing informal knowledge is difficult**
-   - Example: _"A handshake occurs when two people extend, grip, shake hands,
-     then release."_
-   - Formal logic representation: 
-     \begin{align*}
-         &\exists x, y \, ( \text{Person}(x) \land \text{Person}(y) \land x \neq y \land \\
-         &\quad \text{Hand}(x, h_x) \land \text{Hand}(y, h_y) \land \\
-         &\quad \text{MoveToward}(h_x, h_y) \land \text{Contact}(h_x, h_y) \land \\
-         &\quad \text{Shake}(h_x, h_y) \land \\
-         &\quad \text{Release}(h_x, h_y) )
-     \end{align*}
+   - @Example@: _"A handshake occurs when two people extend, grip, shake
+     hands, then release."_
+   - Formal logic representation:
+     $$
+     \exists x, y \, (
+       \text{Person}(x) \land \text{Person}(y) \land x \neq y \land
+       \text{Hand}(x, h_x) \land \text{Hand}(y, h_y) \land
+       \text{MoveToward}(h_x, h_y) \land \text{Contact}(h_x, h_y) \land
+       \text{Shake}(h_x, h_y) \land
+       \text{Release}(h_x, h_y)
+     )
+     $$
+
 2. **Probabilistic nature of knowledge**
-   - Example in medicine: _"Fever, cough, and fatigue could indicate flu,
-     COVID-19, or another illness."_
+   - @Example@: In medicine, _"Fever, cough, and fatigue could indicate
+     flu, COVID-19, or another illness."_
+
 3. **Scalability challenges**
    - Large problems may need heuristics for practical solutions
+
 4. **Intelligence requires more than rational thinking**
    - Importance of agent interaction with the world
    - Problem of the "body"
 
 * 3. AI as Acting Humanly
-- **Agent** is something that perceives and acts to reach a goal
 
-- **Definition**: AI designs **agents that can act like humans**
+- @Definition@: An **agent** is something that perceives and acts to reach a
+  goal
 
-- **Turing test**
+- @Goal@: AI designs **agents that can act like humans**
+
+- @Approach@: **Turing test**
   - _"A computer passes the Turing test if a human cannot tell whether the
     answers to questions came from a person or a computer"_
 
 ::: columns
 :::: {.column width=65%}
-- Passing the (embodied) Turing test requires:
+- @Requirements@: Passing the (embodied) Turing test requires
   1. Natural language processing to communicate
   2. Knowledge representation to store information
   3. Automated reasoning to use stored knowledge and answer questions
   4. Machine learning to detect patterns
-  5. Computer vision and speech recognition to perceive objects and understand
-     speech
+  5. Computer vision and speech recognition to perceive objects and
+     understand speech
   6. Robotics to manipulate objects and move
 ::::
 :::: {.column width=30%}
@@ -164,23 +149,24 @@ MSML610: Advanced Machine Learning
 - **Pros**
   - Operational definition of intelligence
   - Sidestep philosophical vagueness
-    - "What is consciousness?"
-    - "Can a machine think?"
-    - ...
+    - What is consciousness?
+    - Can a machine think?
 
 - **Cons**
-  - **Anthropomorphic** criteria define intelligence in human terms
+  - Intelligence defined by **anthropomorphic** criteria in human terms
     - Multiple forms of non-human intelligence exist
-  - Intelligence in terms of Turing test is **fooling humans** into thinking it's
+  - Intelligence by Turing test means **fooling humans** into thinking it is
     human
-  - E.g., aeronautical engineering is about:
-    - Yes: Focus on wind tunnels and aerodynamics
-    - No: Designing machines that imitate birds
+  - @Example@: Aeronautical engineering is about
+    - Correct: Focus on wind tunnels and aerodynamics
+    - Incorrect: Designing machines that imitate birds
 
 * 4. AI as Acting Rationally
-- **Rational agents**: agents that do the "right thing" given what they know
 
-- Agents that **act rationally** should:
+- @Definition@: **Rational agents** are agents that do the "right thing"
+  given what they know
+
+- @Characteristics@: Agents that **act rationally** should
   1. Operate autonomously
   2. Perceive environment
   3. Persist over a prolonged time period
@@ -188,164 +174,170 @@ MSML610: Advanced Machine Learning
   5. Create and pursue goals
 
 * Acting Rationally as Ultimate Goal of AI
-- Which definition of AI to use?
+
+- @Question@: Which definition of AI best captures what we should build?
   - Acting vs. Thinking
   - Rational vs. Human
 
-- **Acting > Thinking**
+- **Acting is more fundamental than Thinking**
   - Acting rationally is broader than just thinking rationally
 
-- **Rational > Human**
+- **Rational is more objective than Human**
   - Rationality can be mathematically defined
   - Human behavior is shaped by evolutionary conditions
 
-- AI focuses on **agents acting rationally**
+- @Conclusion@: AI should focus on **agents acting rationally**
 
 * Rationally is Not Absolute
 
-- AI wants to build agents that **do the right thing**
-  - What is the right thing?
+- @Problem@: AI aims to build agents that **do the right thing**, but what
+  is the right thing?
 
-- E.g., you leave the house and a branch strikes you
-  - **Q**: Did you act rationally?
+- @Example@: You leave the house and a branch strikes you
+  - Did you act rationally?
   - Probably
 
-- E.g., you cross the street and a car knocks you over
-  - **Q**: Did you act rationally?
-  - It depends, but probably no
+- @Example@: You cross the street and a car knocks you over
+  - Did you act rationally?
+  - It depends, but probably not
 
-- E.g., moral issues with self-driving car 
-  - Swerve and hit a pedestrian to avoid a frontal crash that would kill 2 people
+- @Challenge@: Moral issues with self-driving cars
+  - Should a car swerve and hit a pedestrian to avoid a frontal crash that
+    would kill two people?
 
 * Problems of a Rational Agent
-- **Probabilistic environment**
-  - A rational agent aims for:
+
+- @Challenge@: **Probabilistic environment**
+  - A rational agent aims for
     - The best outcome in a deterministic setup
     - The best expected outcome under uncertainty
 
-- **Best** is determined by the objective function:
+- @Problem@: What does **"best"** mean? It is determined by the objective
+  function
   - E.g., cost function, sum of rewards, loss function, utility
 
-- Omniscience vs **no-regrets**
-  - Best based on available information
+- @Consideration@: **Omniscience vs no-regrets**
+  - Best is based on available information, not perfect knowledge
 
-- Sometimes **no provably correct action** exists
+- @Constraint@: Sometimes **no provably correct action** exists
   - Yet, an action must be taken
 
-- Even **with perfect information** rationality can't be feasible due to:
+- @Limitation@: Even **with perfect information** rationality may not be
+  feasible due to
   - Cost of acquiring all data (e.g., in medicine)
   - Computational demands
 
-- Perfect good enough vs perfect
-  - Acting appropriately ("satisficing")
+- @Solution@: **"Satisficing" (perfect good enough vs perfect)**
+  - Acting appropriately given computational constraints
 
-## #############################################################################
 ## What is Machine Learning?
-## #############################################################################
 
 * Machine Learning: Definitions
-- How to define machine learning?
 
-- _"Machine learning is the field of study that gives computers the ability to
-  learn without being explicitly programmed"_ (Samuel, 1959)
+- @Question@: How should we define machine learning?
 
-- **Machine learning** is about building machines to do **useful things** without
-  being **explicitly programmed**
-  - E.g. a computer learns to play checkers by playing against itself, memorizing
-    positions that lead to winning
+- @Definition@: _"Machine learning is the field of study that gives
+  computers the ability to learn without being explicitly programmed"_
+  (Samuel, 1959)
 
-- _"A computer program is said to learn from experience $E$ with respect to some
-  task $T$ and some performance measure $P$, if $P(T)$ improves with experience
-  $E$"_ (Mitchell, 1998)
+- @Alternative@: **Machine learning** builds machines to do **useful things**
+  without being **explicitly programmed**
+  - @Example@: A computer learns to play checkers by playing against itself,
+    memorizing positions that lead to winning
 
-- E.g.,
+- @Formal@: _"A computer program is said to learn from experience $E$ with
+  respect to some task $T$ and some performance measure $P$, if $P(T)$
+  improves with experience $E$"_ (Mitchell, 1998)
+
+- @Applications@: Common examples include
   - Computer vision
   - Speech recognition
   - Natural language processing
 
 * Limits of ML Compared to Human Intelligence
-- **AI differs from human intelligence**
-  - Machines don't learn like humans (e.g., LLMs)
 
-- **Fragility to input variations**
+- @Problem@: **AI differs from human intelligence**
+  - Machines do not learn like humans (e.g., LLMs)
+
+- @Limitation@: **Fragility to input variations**
   - ML models fail with slight input distortions
     - Adversarial attacks cause misclassification by altering one pixel
-    - A model trained for a video game may fail if the screen is slightly
-      rotated; humans continue effortlessly
+    - A model trained on a video game fails if the screen rotates slightly;
+      humans continue effortlessly
 
-- **Lack of transfer learning**
+- @Limitation@: **Lack of transfer learning**
   - ML systems cannot apply knowledge across domains without retraining
 
-- **Massive data and compute requirements**
+- @Challenge@: **Massive data and compute requirements**
   - ML requires enormous datasets and computational resources
     - A teenager learns to drive in hours
-    - Self-driving systems need billions of compute hours and extensive data
+    - Self-driving systems need billions of compute hours and extensive
+      data
 
-- **Poor common sense and reasoning**
+- @Limitation@: **Poor common sense and reasoning**
   - ML lacks built-in world knowledge and intuitive logic
 
-* Limits of ML Compared to Human Intelligence
+* Limits of ML Compared to Human Intelligence (cont.)
 
-- **Opaque decision-making**
+- @Limitation@: **Opaque decision-making**
   - Many ML models offer little transparency into decision processes
     - Limits trust, interpretability, and accountability in critical
       applications
 
-- **Dependence on narrow objectives**
-  - ML systems excel at optimizing narrow tasks but fail with ambiguous goals
-    - E.g., an algorithm maximizing user engagement may promote harmful
+- @Limitation@: **Dependence on narrow objectives**
+  - ML systems excel at optimizing narrow tasks but fail with ambiguous
+    goals
+    - @Example@: An algorithm maximizing user engagement may promote harmful
       content
 
-- **Susceptibility to bias and data quality**
+- @Limitation@: **Susceptibility to bias and data quality**
   - Models inherit and amplify biases in training data
 
-- **Lack of embodiment and physical interaction**
+- @Limitation@: **Lack of embodiment and physical interaction**
   - Human cognition is grounded in physical and sensory experience
 
 * The 3 Machine Learning Assumptions
 
-- In practice, ML involves solving a practical problem by:
+- @Context@: In practice, ML involves solving a practical problem by
   - Gathering a dataset
   - Building a statistical model from the dataset algorithmically
 
-- The **three assumptions** of machine learning
+- @Definition@: The **three core assumptions** of machine learning
   - A **pattern exists**
   - Pattern cannot be **precisely defined mathematically**
   - **Data is available**
 
-- Which ML assumption is **essential**?
-  - A pattern exists
-    - If no pattern, try learning, measure effectiveness, conclude it doesn't
-      work
-  - Pattern cannot be precisely defined mathematically
-    - If solution is direct, ML not recommended, but may still apply
-  - Data is available
-    - Without data, no progress can be made
-    - **Data is crucial**
+- @Question@: Which assumption is **essential**?
+  - A pattern exists: If no pattern exists, learning fails
+  - Pattern cannot be precisely defined: Even direct solutions can use ML
+  - Data is available: **Without data, no progress is possible**
+    - Data is the most crucial assumption
 
 * AI vs ML vs Deep-Learning
+
 ::: columns
 :::: {.column width=65%}
-- **AI**
+- @Definition@: **AI (Artificial Intelligence)**
   - Machines programmed to reason, learn, and act in a rational way
 
-- **ML**
+- @Definition@: **ML (Machine Learning)**
   - Machines capable of performing tasks without being explicitly programmed
 
-- **AI without ML**:
-  - Example: Rule-based systems (e.g., IBM Deep Blue playing chess)
+- @Example@: **AI without ML**
+  - Rule-based systems (e.g., IBM Deep Blue playing chess)
 
-- **Deep Learning (DL)**
+- @Definition@: **DL (Deep Learning)**
   - ML using neural networks with many layers
 
-- **Large Language Models (LLM)**
-  - Neural networks trained on massive text datasets and RLHS
+- @Definition@: **LLM (Large Language Models)**
+  - Neural networks trained on massive text datasets and reinforcement
+    learning from human feedback
 
 ::::
 :::: {.column width=30%}
 
 ```tikz
-  % Define colors (optional)
+  % Define colors
   \definecolor{AIcolor}{RGB}{255,150,150}    % Light Red
   \definecolor{MLcolor}{RGB}{150,255,150}    % Light Green
   \definecolor{DLcolor}{RGB}{150,255,255}    % Light Teal/Cyan
@@ -371,5 +363,6 @@ MSML610: Advanced Machine Learning
   \draw (1.2,-1.2) circle (0.6);
   \node[above] at (1.2,-1.4) {\textbf{LLMs}};
 ```
+
 ::::
 :::

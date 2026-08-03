@@ -25,14 +25,22 @@
 % Header line
 \renewcommand{\headrulewidth}{0.4pt}
 
-% Header title pulled from Pandoc's title metadata, with fallback if empty
-% Wrapped in AtBeginDocument to ensure title is set by Pandoc before accessing it
+% Header title pulled from Pandoc's title metadata, with fallback if empty.
+% Pandoc's template loads header-includes (this file) before it ever calls
+% \title{...}, so intercept \title directly instead of reading \@title
+% (which raises "No \title given" if \title was never called at all).
 \makeatletter
+\let\HeaderStyle@OrigTitle\title
+\renewcommand{\title}[1]{%
+  \HeaderStyle@OrigTitle{#1}%
+  \gdef\HeaderStyle@Title{#1}%
+}
+\gdef\HeaderStyle@Title{}
 \AtBeginDocument{
-  \ifx\@title\@empty
+  \ifx\HeaderStyle@Title\@empty
     \fancyhead[C]{\textbf{ }} % fallback if no title
   \else
-    \fancyhead[C]{\textbf{\@title}}
+    \fancyhead[C]{\textbf{\HeaderStyle@Title}}
   \fi
 }
 \makeatother

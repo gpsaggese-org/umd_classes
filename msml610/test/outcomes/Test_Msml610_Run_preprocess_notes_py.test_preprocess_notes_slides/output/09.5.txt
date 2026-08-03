@@ -4,33 +4,6 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 09.5: Kalman Filter}}$$**
-\endgroup
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA 14: Probabilistic reasoning over time
-- [\textcolor{blue}{\underline{https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python}}](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python)
-
 
 # Discrete Bayes Filtering
 
@@ -64,14 +37,14 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=45%}
 
-- **\textcolor{red}{Measurements Alone}**
+- **Measurements Alone**
   - Sensor says "door"
   - Three door positions: 0, 1, 8
   - Cannot tell from single measurement which door it is
 ::::
 :::: {.column width=45%}
 
-- **\textcolor{darkgreen}{Predictions Alone}**
+- **Predictions Alone**
   - Dog moves right repeatedly
   - Position drifts over time
   - Uncertainty accumulates; eventually, no idea where the dog is
@@ -80,62 +53,62 @@ MSML610: Advanced Machine Learning
 
 - Both sources of information (prediction and measurements) have limitations,
   but together they work
-  - **\textcolor{blue}{Combine predictions with measurements}**
+  - **Combine predictions with measurements**
     - Prediction: _"Based on movement, dog should be around position 4"_
     - Measurement: _"Sensor says wall"_
     - Check hallway: Position 4 is a wall
     - Agreement increases confidence
-  - **\textcolor{violet}{After several cycles}**
+  - **After several cycles**
     - Only one position consistent with entire history
     - High confidence in dog's location
 
 #### Predict: Loses Information
-- **\textcolor{red}{What it does}**
+- **What it does**
   - _"Dog was at position 3 and moved right 1"_
   - _"So dog is probably at position 4"_
   - _"But could be 3 or 5 due to movement error"_
 
-- **\textcolor{darkgreen}{Effect on belief}**
+- **Effect on belief**
   - Shifts distribution to the right
   - Spreads out probability mass
   - Uncertainty increases
 
-- **\textcolor{blue}{Analogy}**: Blurring a photo
+- **Analogy**: Blurring a photo
   - Sharp image becomes fuzzy
   - Information is lost
 
 #### Update: Gains Information
-- **\textcolor{red}{What it does}**
+- **What it does**
   - _"Sensor says door"_
   - _"Boost probability at all door positions (0, 1, 8)"_
   - _"Reduce probability at wall positions"_
 
-- **\textcolor{darkgreen}{Effect on belief}**
+- **Effect on belief**
   - Concentrates probability on matching positions
   - Peaks emerge in distribution
   - Uncertainty decreases
 
-- **\textcolor{blue}{Analogy}**: Sharpening a photo
+- **Analogy**: Sharpening a photo
   - Fuzzy image becomes clearer
   - Information is gained
 
 #### Bayesian Update Algorithm
 
-- **\textcolor{red}{Start with prior belief}**
+- **Start with prior belief**
   $$Pr(\text{position}) = \text{uniform}$$
   - "Dog could be anywhere"
 
-- **\textcolor{darkgreen}{Get evidence}** (measurement)
+- **Get evidence** (measurement)
   $$Pr(\text{door sensor} | \text{position})$$
   - Likelihood of seeing "door" at each position
 
-- **\textcolor{blue}{Update belief}** using Bayes' rule
+- **Update belief** using Bayes' rule
   $$
   Pr(\text{position} | \text{door sensor})
   = \frac{Pr(\text{door sensor} | \text{position}) \cdot Pr(\text{position})}{Pr(\text{door sensor})}
   $$
 
-- **\textcolor{violet}{Posterior becomes next prior}**
+- **Posterior becomes next prior**
   - Cycle repeats with each new measurement
 
 #### Bayesian Update Algorithm
@@ -181,25 +154,25 @@ digraph BayesianUpdateAlgo {
   - Kalman filter computes adaptive gain $K_t$ from covariance $P_t$
   - Handles multidimensional states and general linear systems
 
-- **\textcolor{red}{State space model}**
+- **State space model**
   - $x_t = A x_{t-1} + w_t$
   - $y_t = C x_t + v_t$
   - All quantities are Gaussian with given mean and covariances
 
-- **\textcolor{darkgreen}{Bayesian interpretation}**
+- **Bayesian interpretation**
   - Prior and likelihood Gaussian $\Rightarrow$ posterior Gaussian
   - Recursively updates mean and covariance
   - Example: radar tracking of aircraft
 
-- **\textcolor{blue}{Orthogonal projection interpretation}**
+- **Orthogonal projection interpretation**
   - Estimate is projection onto span of observations
   - $K_t$ minimizes $\EE[\|x_t - \hat{x}_t\|^2]$
   - Error orthogonal to measurement space (optimal)
 
 #### Kalman Filter: Bayesian Interpretation
-- **\textcolor{red}{Kalman filter}** can be interpreted as based on Bayes theorem and Gaussians
+- **Kalman filter** can be interpreted as based on Bayes theorem and Gaussians
 
-- The **\textcolor{darkgreen}{Bayes theorem}** states:
+- The **Bayes theorem** states:
   $$
   \text{posterior = normalized(prior $\times$ likelihood)}
   $$
@@ -209,7 +182,7 @@ digraph BayesianUpdateAlgo {
     and std dev
   - Updating belief is equivalent to sum and multiplication of Gaussians
 
-- **\textcolor{blue}{Algorithm}**
+- **Algorithm**
   \begingroup \scriptsize
   ```python
   # Create prior (using current estimate and system model).
@@ -242,7 +215,7 @@ digraph BayesianUpdateAlgo {
   \right.
   $$
 
-- **\textcolor{red}{Interpretation:}**
+- **Interpretation:**
   - The mean is the sum of the mean (by linearity)
   - The variance always increases
 
@@ -265,7 +238,7 @@ digraph BayesianUpdateAlgo {
   \right.
   $$
 
-- **\textcolor{red}{Interpretation:}**
+- **Interpretation:**
   - Reduce variance by incorporating more information
   - If one Gaussian $X$ is narrower (more accurate), result leans towards
     $X$
@@ -286,13 +259,13 @@ digraph BayesianUpdateAlgo {
   | $R$ | Measurement noise |
   \endgroup
 
-- **\textcolor{red}{Initialization}**
+- **Initialization**
   - Initialize state of filter: $x = x_0$
   - Initialize belief in the state: $P = P_0$
 
 #### Kalman Pseudo-Algorithm
 
-- **\textcolor{red}{Predict stage}**
+- **Predict stage**
   \begingroup \small
   ```python
   def predict(posterior, movement):
@@ -310,7 +283,7 @@ digraph BayesianUpdateAlgo {
 
 #### Kalman Pseudo-Algorithm
 
-- **\textcolor{red}{Update stage}**
+- **Update stage**
   \begingroup \small
   ```python
   def update(prior, measurement):
@@ -362,14 +335,14 @@ digraph BayesianUpdateAlgo {
   - E.g., position and velocity of a dog (probably correlated)
   - E.g., height and weight of an adult (correlated)
 
-- **\textcolor{red}{Variance}** is a measure of how a population varies, e.g.,
+- **Variance** is a measure of how a population varies, e.g.,
   - Variance = 0 means constant
   - Large variance means lots of variation
 
-- **\textcolor{darkgreen}{Covariance}** are correlated variances
+- **Covariance** are correlated variances
   - E.g., height and weight are generally positively correlated
 
-- **\textcolor{blue}{Covariance matrix}**
+- **Covariance matrix**
   - The diagonal contains the variance for each variable
   - The off-diagonal elements contain the covariance between $i$ and $j$
     variables
@@ -395,7 +368,7 @@ digraph BayesianUpdateAlgo {
   \mSigma &= \mSigma_1 (\mSigma_1 + \mSigma_2)^{-1} \mSigma_2 \\
   \end{aligned}
   $$
-- **\textcolor{red}{Note}**: this is a generalization of the 1-d case to multivariate
+- **Note**: this is a generalization of the 1-d case to multivariate
 
   $$
   \begin{aligned}
@@ -448,7 +421,7 @@ digraph BayesianUpdateAlgo {
   - observed variables: directly measured by a sensor
   - hidden variables: inferred from the observed variables
 
-- **\textcolor{red}{Example: airplane}**
+- **Example: airplane**
   - You are tracking a plane moving in a direction (1-d problem)
   - At time 1, you are fairly certain about the position $x=0$, but you don't
     know the velocity
@@ -468,7 +441,7 @@ digraph BayesianUpdateAlgo {
   - The posterior is $\hat{\vx}_{t|t}$, since you know all the information at
     time $t$, i.e., the measurement
 
-- **\textcolor{red}{A simpler notation:}**
+- **A simpler notation:**
   - Indicate the "prior" version of the variables (i.e., after the system
     update) with an overline (E.g., $\overline{x}$, $\overline{\vx}$,
     $\overline{\vX}$)
@@ -577,15 +550,15 @@ digraph BayesianUpdateAlgo {
 
 #### Algorithm
 
-**\textcolor{red}{Initialization}**
+**Initialization**
 - Initialize the state of the filter
 - Initialize our belief in the state
 
-**\textcolor{darkgreen}{Predict}**
+**Predict**
 - Use process model to predict state at the next time step
 - Adjust belief to account for the uncertainty in prediction    
 
-**\textcolor{blue}{Update}**
+**Update**
 - Get a measurement and associated belief about its accuracy
 - Compute residual between estimated state and measurement
 - Compute scaling factor based on whether the measurement or prediction is more
@@ -641,7 +614,7 @@ set of first-order differential equations
 ## Non-Linear Filtering
 
 #### Optimality
-- The Kalman filter is optimal (in a least square sense) under **\textcolor{red}{assumptions}**
+- The Kalman filter is optimal (in a least square sense) under **assumptions**
   that
   - Everything is linear
   - Process and sensor noise is Gaussian
@@ -651,7 +624,7 @@ set of first-order differential equations
   - The Kalman filter is a mathematical model of the world
   - The output is only as accurate as the model of the world
 
-- **\textcolor{red}{The world is non-linear:}**
+- **The world is non-linear:**
   - System model can be non-linear:
     - Many physical systems are described by non-linear differential equations
     - E.g., a ball flying through air is affected by drag
@@ -686,7 +659,7 @@ set of first-order differential equations
   - Particle Filter
 
 #### Extended Kalman Filter EKF
-- **\textcolor{red}{Core idea}**: linearize nonlinear functions around current estimate
+- **Core idea**: linearize nonlinear functions around current estimate
   - First order Taylor expansion of $f$ and $h$
 - Replace nonlinear system by local linear model
   - Jacobians: $F_t = \frac{\partial f}{\partial x}$, $H_t = \frac{\partial h}{\partial x}$
@@ -702,7 +675,7 @@ set of first-order differential equations
   - Can diverge for strong nonlinearities
 
 #### Unscented Kalman Filter UKF
-- **\textcolor{red}{Core idea}**: avoid linearization, approximate distribution instead
+- **Core idea**: avoid linearization, approximate distribution instead
 - Represent Gaussian by deterministic sigma points
   - Choose $2n+1$ points capturing mean and covariance
 - Propagate sigma points through nonlinear functions
@@ -728,7 +701,7 @@ set of first-order differential equations
     covariance estimate
   - Called "unscented" since "it doesn't stink."
 
-- **\textcolor{red}{Intuition}**
+- **Intuition**
   - Given a PDF $C$ with mean $\vmu$ and covariance $\mSigma$
   - Encode mean and covariance in a set of points (sigma points) that represent
     a discrete PMF $D$ with the same mean $\vmu$ and covariance $\mSigma$
@@ -761,7 +734,7 @@ set of first-order differential equations
   - Note that selecting the sigma points has not a single solution
 
 #### Particle Filter PF
-- **\textcolor{red}{Core idea}**: represent posterior by weighted samples
+- **Core idea**: represent posterior by weighted samples
   - $\{x_t^{(i)}, w_t^{(i)}\}_{i=1}^N$
 - Sequential Monte Carlo approximation of Bayesian filter
 - Steps
@@ -786,7 +759,7 @@ set of first-order differential equations
   - Pass them through the non-linear function $\phi$
   - Approximate the result (e.g., compute mean and variance)
 
-- **\textcolor{red}{Problem}**:
+- **Problem**:
   - "How many points are needed to build an accurate output distribution"?
   - Even if $n$=500,000 points are enough for 1 dimension, for $k$ dimensions
     you might need $n^k$ points (curse of dimensionality)

@@ -798,8 +798,8 @@ MSML610: Advanced Machine Learning \endgroup
   \EE[Y | T=1] - \EE[Y | T=0] = \EE[Y^{1} - Y^{0}] \defeq \text{ATE}
   \] where \(Y^{1}, Y^{0}\) are potential outcomes
 \item
-  \textbf{\textcolor{blue}{No back-door adjustment needed}} --- the
-  design closes all back-door paths
+  \textbf{\textcolor{blue}{No backdoor adjustment needed}} --- the
+  design closes all backdoor paths
 \end{itemize}
 \end{frame}
 

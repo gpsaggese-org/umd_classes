@@ -4,47 +4,6 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 07.5: Bayesian Model Comparison}}$$**
-\endgroup
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA (Artificial Intelligence: a Modern Approach)
-  - Chap 15: Probabilistic programming
-
-- Martin, Bayesian Analysis with Python, 2018 (2e)
-
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){width=1.5cm}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Bayesian_analysis_with_Python.jpg){width=1.5cm}
-
-::::
-:::
 
 # Bayesian Model Comparison
 
@@ -346,11 +305,11 @@ MSML610: Advanced Machine Learning
   \begingroup \small
   $$
   ELPD_{LOO-CV} =
-    \red{\sum_{i=1}^n} \log
+    \textcolor{red}{\sum_{i=1}^n} \log
     % Need to avoid the \textcolor{blue}{\texttt{text}} inside \textcolor{blue}{\texttt{\textcolor}}.
     \textcolor{violet}{\int}
-    \teal{p(y_i | \theta)}
-    \blue{p(\theta | y_{-i})}
+    \textcolor{teal}{p(y_i | \theta)}
+    \textcolor{blue}{p(\theta | y_{-i})}
     \textcolor{violet}{d\theta}
   $$
   \endgroup
@@ -369,7 +328,7 @@ MSML610: Advanced Machine Learning
   $$
   PPD
   \defeq \Pr(y_i | data - \{i\})
-  = \textcolor{blue}{\int} \red{p(y_i | \theta)} \green{p(\theta | y_{-i})} \textcolor{blue}{d\theta}
+  = \textcolor{blue}{\int} \textcolor{red}{p(y_i | \theta)} \textcolor{darkgreen}{p(\theta | y_{-i})} \textcolor{blue}{d\theta}
   $$
   - $y_i$: observed data point
   - \textcolor{red}{$p(y_i | \theta)$}: \textcolor{red}{\text{likelihood}} given model parameters $\theta$

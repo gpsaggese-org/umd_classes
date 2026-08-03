@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{12.1: Graph Data Management}}$$**
+**$$\text{\textcolor{blue}{\text{12.1: Graph Data Management}}}$$**
 \endgroup
 
 ::: columns

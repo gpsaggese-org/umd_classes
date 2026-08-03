@@ -21,12 +21,12 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{02.1: Git}}$$**
+**$$\text{\textcolor{blue}{\text{02.1: Git}}}$$**
 \endgroup
 
 \vspace{1cm}
 
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
 ::: columns
 :::: {.column width=75%}
@@ -40,18 +40,18 @@ UMD DATA605 - Big Data Systems
 #### Bash / Linux: Resources
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{How Linux works}**
+- **How Linux works**
   - Processes
   - File ownership and permissions
   - Virtual memory
   - How to administer a Linux box as root
 
-- **\textcolor{darkgreen}{Easy}**
-  - [\textcolor{blue}{\underline{Command-Line for Beginners}}](https://ubuntu.com/tutorials/command-line-for-beginners)
+- **Easy**
+  - [Command-Line for Beginners](https://ubuntu.com/tutorials/command-line-for-beginners)
   - E.g., \textcolor{blue}{\texttt{find}}, \textcolor{blue}{\texttt{xargs}}, \textcolor{blue}{\texttt{chmod}}, \textcolor{blue}{\texttt{chown}}, symbolic, and hard links
 
-- **\textcolor{blue}{Mastery}**
-  - [\textcolor{blue}{\underline{The Linux Command Line}}](https://linuxcommand.org/tlcl.php)
+- **Mastery**
+  - [The Linux Command Line](https://linuxcommand.org/tlcl.php)
 ::::
 :::: {.column width=40%}
 
@@ -65,20 +65,20 @@ UMD DATA605 - Big Data Systems
 - Concepts in the slides
 
 - Tutorial:
-  [\textcolor{blue}{\underline{Tutorial Git}}](https://github.com/gpsaggese/umd\_classes/tree/master/data605/tutorials/tutorial\_git)
+  [Tutorial Git](https://github.com/gpsaggese/umd\_classes/tree/master/data605/tutorials/tutorial\_git)
 
 - We will use Git during the project
 
 - Mastery:
-  [\textcolor{blue}{\underline{Pro Git}}](https://git-scm.com/book/en/v2) (free)
+  [Pro Git](https://git-scm.com/book/en/v2) (free)
 
 - Web resources:
-  - [\textcolor{blue}{\underline{https://githowto.com}}](https://githowto.com)
-  - [\textcolor{blue}{\underline{dangitgit.com}}](https://dangitgit.com) (without swearing)
-  - [\textcolor{blue}{\underline{Oh Sh*t, Git!?!}}](https://ohshitgit.com/) (with swearing)
+  - [https://githowto.com](https://githowto.com)
+  - [dangitgit.com](https://dangitgit.com) (without swearing)
+  - [Oh Sh*t, Git!?!](https://ohshitgit.com/) (with swearing)
 
 - Playgrounds
-  - [\textcolor{blue}{\underline{https://learngitbranching.js.org}}](https://learngitbranching.js.org)
+  - [https://learngitbranching.js.org](https://learngitbranching.js.org)
 
 :::: 
 :::: {.column width=40%}
@@ -90,26 +90,26 @@ UMD DATA605 - Big Data Systems
 
 #### Version Control Systems (1/2)
 
-- A **\textcolor{red}{Version Control System}** (VCS) is a system that allows to:
+- A **Version Control System** (VCS) is a system that allows to:
   - Record changes to files
   - Recall specific versions later (like a "file time-machine")
   - Compare changes to files over time
   - Track *who* changed *what* and *when* and *why*
 
-- **\textcolor{darkgreen}{Simplest "VCS"}**
+- **Simplest "VCS"**
   - Make a copy of a dir and add
     - \textcolor{blue}{\texttt{\_v1}} (bad); or
     - a timestamp \textcolor{blue}{\texttt{\_20220101}} (better)
-  - **\textcolor{blue}{Cons}**: It kind of works for one person, but doesn't scale
+  - **Cons**: It kind of works for one person, but doesn't scale
 
 #### Version Control Systems (2/2)
 
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Centralized VCS}**
+- **Centralized VCS**
   - E.g., \textcolor{blue}{\texttt{Perforce}}, \textcolor{blue}{\texttt{Subversion}}
   - A server stores the code, clients connect to it
-  - **\textcolor{darkgreen}{Cons}**: If the server is down, nobody can work
+  - **Cons**: If the server is down, nobody can work
 ::::
 :::: {.column width=40%}
 
@@ -122,11 +122,11 @@ UMD DATA605 - Big Data Systems
 
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{blue}{Distributed VCS}**
+- **Distributed VCS**
   - E.g., \textcolor{blue}{\texttt{Git}}, \textcolor{blue}{\texttt{Mercurial}}, \textcolor{blue}{\texttt{Bazaar}}, \textcolor{blue}{\texttt{Dart}}
   - Each client has the entire history of the repo locally
   - Each node is both a client and a server
-  - **\textcolor{violet}{Cons}**: complex
+  - **Cons**: complex
 ::::
 :::: {.column width=40%}
 ![](data605/lectures_source/images/lecture_2/lec_2_slide_6_image_2.png)
@@ -135,11 +135,11 @@ UMD DATA605 - Big Data Systems
 
 #### VCS: How to Track Data
 - Consider a directory with project files inside
-- **\textcolor{red}{How do you track changes to the data?}**
+- **How do you track changes to the data?**
 
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{darkgreen}{Delta-based VCS}**
+- **Delta-based VCS**
   - E.g., \textcolor{blue}{\texttt{Subversion}}
   - Store the data in terms of patches (changes of files over time)
   - Can reconstruct the state of the repo by applying the patches
@@ -155,7 +155,7 @@ UMD DATA605 - Big Data Systems
 
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{blue}{Stream of snapshots VCS}**
+- **Stream of snapshots VCS**
   - E.g., \textcolor{blue}{\texttt{Git}}
   - Store data in terms of snapshots of a filesystem
   - Take a "picture" of what files look like
@@ -170,14 +170,14 @@ UMD DATA605 - Big Data Systems
 :::
 
 #### Git
-- **\textcolor{red}{Almost everything is local for Git}**
+- **Almost everything is local for Git**
   - History stored locally in each node
   - Diff-ing files done locally
     - Centralized VCS requires server access
   - Commit to local copy
     - Upload changes with network connection
 
-- **\textcolor{darkgreen}{Almost everything is undoable in Git}**
+- **Almost everything is undoable in Git**
   - No data corruption
     - Everything checksummed
   - Nothing lost
@@ -185,7 +185,7 @@ UMD DATA605 - Big Data Systems
     - Commit (at least locally) or stash
     - Know how to do it to avoid "git hell"
 
-- **\textcolor{blue}{Git is a mini key-value store with a VCS built on top}**
+- **Git is a mini key-value store with a VCS built on top**
   - Exactly true
   - Two layers:
     - "porcelain": key-value store for file-system
@@ -196,11 +196,11 @@ UMD DATA605 - Big Data Systems
 :::: {.column width=55%}
 
 - There are 3 main sections of a Git project
-  - **\textcolor{red}{Working tree}** (aka checkout)
+  - **Working tree** (aka checkout)
     - Version of code on the filesystem for use and modification
-  - **\textcolor{darkgreen}{Staging area}** (aka cache, index)
+  - **Staging area** (aka cache, index)
     - File in \textcolor{blue}{\texttt{.git}} storing info for the next commit
-  - **\textcolor{blue}{Git directory}** (aka .git)
+  - **Git directory** (aka .git)
     - Stores metadata and objects (like a DB)
     - The repo itself with all history
     - Cloning gets you the project's \textcolor{blue}{\texttt{.git}}
@@ -217,10 +217,10 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=55%}
 - Each file can be in 4 states from Git point-of-view
-  - **\textcolor{red}{Untracked}**: files not under Git version control
-  - **\textcolor{darkgreen}{Modified}**: changed files, not committed yet
-  - **\textcolor{blue}{Staged}**: marked modified files for next commit
-  - **\textcolor{violet}{Committed}**: data stored in local DB
+  - **Untracked**: files not under Git version control
+  - **Modified**: changed files, not committed yet
+  - **Staged**: marked modified files for next commit
+  - **Committed**: data stored in local DB
 ::::
 :::: {.column width=40%}
 
@@ -230,10 +230,10 @@ UMD DATA605 - Big Data Systems
 :::
 
 #### Git Tutorial
-- **\textcolor{red}{Git tutorial on class repo}**
+- **Git tutorial on class repo**
   - Follow the \textcolor{blue}{\texttt{README}}
 
-- **\textcolor{orange}{How to use a tutorial}**
+- **How to use a tutorial**
   - Type commands one-by-one
     - Avoid copy-paste
   - Observe results
@@ -244,13 +244,13 @@ UMD DATA605 - Big Data Systems
   - Learn command line before GUI
     - GUIs hide details and you become dependent on it
 
-- Go through **\textcolor{darkgreen}{recommended Git book}** and try all examples
+- Go through **recommended Git book** and try all examples
   - Use online tutorials
 
-- Build your own **\textcolor{teal}{cheat sheet}**
+- Build your own **cheat sheet**
   - Reuse others' cheat sheets only if familiar
 
-- Achieve **\textcolor{cyan}{mastery of basic tools}**
+- Achieve **mastery of basic tools**
   - Bash, Git, editor
   - Python, Pandas
   - ...
@@ -260,13 +260,13 @@ UMD DATA605 - Big Data Systems
 - Check out a project (\textcolor{blue}{\texttt{git clone}}) or start from scratch (\textcolor{blue}{\texttt{git init}})
   - Only once per Git project client
 
-- **\textcolor{red}{Daily routine}**
+- **Daily routine**
   - Modify files in working tree (\textcolor{blue}{\texttt{vi ...}})
   - Add files (\textcolor{blue}{\texttt{git add ...}})
   - Stage changes for next commit (\textcolor{blue}{\texttt{git add -u ...}})
   - Commit changes to \textcolor{blue}{\texttt{.git}} (\textcolor{blue}{\texttt{git commit}})
 
-- **\textcolor{blue}{Use a branch to group commits together}**
+- **Use a branch to group commits together**
   - Isolate code from changes in \textcolor{blue}{\texttt{master}}
   - Merge \textcolor{blue}{\texttt{master}} into branch
   - Isolate \textcolor{blue}{\texttt{master}} from changes
@@ -274,7 +274,7 @@ UMD DATA605 - Big Data Systems
   - Merge PR into upstream
 
 #### Git Remote
-- **\textcolor{red}{Remote repos}**: versions of the project hosted online
+- **Remote repos**: versions of the project hosted online
   - Manage remote repos to collaborate
   - Push/pull changes
   - \textcolor{blue}{\texttt{git remote -v}}: show remotes
@@ -286,7 +286,7 @@ UMD DATA605 - Big Data Systems
 - Multiple forks of the same repo with different policies
   - E.g., read-only, read-write
 
-- If someone pushed to remote, you **\textcolor{blue}{can't push changes immediately}**:
+- If someone pushed to remote, you **can't push changes immediately**:
   - Fetch changes
   - Merge changes to your branch
   - Resolve conflicts, if needed
@@ -294,7 +294,7 @@ UMD DATA605 - Big Data Systems
   - Push changes to remote
 
 #### Git Tagging
-- Git allows marking points in history with a **\textcolor{red}{tag}**
+- Git allows marking points in history with a **tag**
   - E.g., release points
   - Check out a tag
 
@@ -306,12 +306,12 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=55%}
 
-- **\textcolor{red}{Understand Git only if you understand its data model}**
+- **Understand Git only if you understand its data model**
   - Git is a key-value store with a VCS interface
   - Key = hash of a file
   - Value = content of a file
 
-- **\textcolor{blue}{Git objects}**
+- **Git objects**
   - Commits: pointers to the tree and commit metadata
   - Trees: directories and mapping between files and blobs
   - Blobs: content of files
@@ -340,7 +340,7 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=65%}
 - GitHub acquired by MSFT for $7.5 billion
-- **\textcolor{red}{GitHub: largest host for Git repositories}**
+- **GitHub: largest host for Git repositories**
   - Git hosting (100M+ open source projects)
   - Pull Requests (PRs), forks
   - Issue tracking
@@ -349,7 +349,7 @@ UMD DATA605 - Big Data Systems
   - Wiki
   - Actions (CI/CD)
 
-- **\textcolor{blue}{"Forking a project"}**
+- **"Forking a project"**
   - Open-source communities
     - Negative connotation
     - Modify and create a competing project

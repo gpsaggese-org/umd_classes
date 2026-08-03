@@ -1,0 +1,957 @@
+# Agentic AI MOOC, Fall 2025
+
+https://agenticai-learning.org/f25
+
+- LLM Agents Overview
+  - Sep 15
+  - Yann Dubois (OpenAI)
+  - Slides: https://agenticai-learning.org/slides/lecture1.pdf
+  - Recording: https://www.youtube.com/watch?v=r1qZpYAmqmg
+  - Quiz: https://docs.google.com/forms/d/e/1FAIpQLSeiynequI8mmo_5Ab4dUd4mtMOLkLMnxDA9MgLKQ7PBxlMMbQ/viewform?usp=header
+  - Papers
+    - KIMI K2: Open Agentic Intelligence: https://agenticai-learning.org/slides/d11.pdf
+    - DeepSeek-V3 Technical Report: https://agenticai-learning.org/slides/d22.pdf
+
+- Evolution of system designs from an AI engineer perspective
+  - Sep 22
+  - Yangqing Jia (NVIDIA)
+  - Slides: https://agenticai-learning.org/slides/Yangqing.pdf
+  - Recording: https://www.youtube.com/watch?v=xqRAS6rAouo&list=PLS01nW3RtgoqGkm4UeqNeZLccW-OGc1fJ&index=3
+  - Quiz: https://docs.google.com/forms/d/e/1FAIpQLSenZmQiSucrpI8m0QeicoKklE_lMOzBq30EZmpBH2YRDl0taA/viewform?usp=header
+
+- Post-Training Verifiable Agents
+  - Sep 29
+  - Jiantao Jiao (NVIDIA)
+  - Slides: https://agenticai-learning.org/slides/AgenticAI_Jiantao%20Jiao.pdf
+  - Recording: https://www.youtube.com/watch?v=3l0Zxus34es&list=PLS01nW3RtgoqGkm4UeqNeZLccW-OGc1fJ&index=3
+  - Quiz: https://docs.google.com/forms/d/e/1FAIpQLScrjWZDojsLSNdr-apFiWHAXif2S3XfxYqK_6wHe8g09HF18g/viewform?usp=header
+  - Papers
+    - Introducing SWE-bench Verified: https://openai.com/index/introducing-swe-bench-verified/
+    - BrowseComp: a benchmark for browsing agents: https://openai.com/index/browsecomp/
+
+- Agent Evaluation & Project Overview
+  - Oct 6
+  - Slides: https://agenticai-learning.org/slides/LLM%20Agent%20Evaluations%20&%20Project%20Overview.pdf
+  - Recording: https://www.youtube.com/watch?v=VfOA2a0dj4w
+  - Quiz: https://docs.google.com/forms/d/e/1FAIpQLScgqNNcutc2LZIt13EV8hPDawKCjaHQ4PwiQiNAqO9tZuXZHg/viewform?usp=dialog
+  - Papers
+    - Survey on Evaluation of LLM-based Agents: https://arxiv.org/pdf/2503.16416
+
+- Some Challenges and Lessons from Training Agentic Models
+  - Oct 13
+  - Weizhu Chen (Microsoft)
+  - Slides: https://agenticai-learning.org/slides/weizhu.pdf
+  - Recording: https://www.youtube.com/watch?v=xNxrBHZPDvM
+  - Quiz: https://docs.google.com/forms/d/e/1FAIpQLSeH9RQHdmdtbjm_8RXGSL7ugG2pYrcs3_lQ8pRRCWDgtXAR1Q/viewform?usp=header
+
+- Multi-Agent AI
+  - Oct 20
+  - Noam Brown (OpenAI)
+  - Slides: https://agenticai-learning.org/slides/multiagent_berkeley_2025.pptx.pdf
+  - Recording: https://www.youtube.com/watch?v=SrLcGdVOb9w
+  - Quiz: https://docs.google.com/forms/d/e/1FAIpQLSem-7qgISIIkoLVuzD603QabP_n-XCYhqiSyVTQsEToJddREA/viewform?usp=sharing&ouid=117939989110736026903
+
+- Predictable Noise in LLM
+  - Oct 27
+  - Sida Wang (Meta)
+  - Slides: https://agenticai-learning.org/slides/PredEval.pdf
+  - Recording: https://www.youtube.com/watch?v=HV8pugcFVO0
+  - Quiz: https://docs.google.com/forms/d/e/1FAIpQLSfjCb94-jkVBHFYv9IAG8P0EebUh68H_ZVPZvSOj1Gz2d_faw/viewform?usp=dialog
+  - Papers
+    - Adding Error Bars to Evals: A Statistical Approach to Language Model Evaluations: https://arxiv.org/pdf/2411.00640
+
+- AI Agents to Automate Scientific Discoveries
+  - Nov 3
+  - James Zou (Stanford)
+  - Recording: https://www.youtube.com/watch?v=yqPIsTTdUkc
+  - Quiz: https://docs.google.com/forms/d/e/1FAIpQLSfsWd3Xo4J8uKzLrnXmcVE203nLupRTewcle3ptv_ivG3zplw/viewform?usp=publish-editor
+  - Papers
+    - The Virtual Lab of AI agents designs new SARS-CoV-2 nanobodies: https://www.nature.com/articles/s41586-025-09442-9
+    - Paper2Agent: Reimagining Research Papers As Interactive and Reliable AI Agents: https://arxiv.org/abs/2509.06917
+
+- Practical Lessons from Deploying Real-World AI Agents
+  - Nov 10
+  - Clay Bavor (Sierra)
+  - Slides: https://agenticai-learning.org/slides/Practical_Lessons_AI_Agents.pdf
+  - Recording: https://www.youtube.com/watch?v=sfJM4LaiYsM
+  - Quiz: https://docs.google.com/forms/d/e/1FAIpQLSeRba3SSvxPDO6qjVokw5ttiyBcm_QKcKeujiRV4DA_rmbywg/viewform?usp=publish-editor
+  - Papers
+    - τ2-Bench: Evaluating Conversational Agents in a Dual-Control Environment: https://arxiv.org/pdf/2506.07982
+    - Voice Sims: test agents in real world conditions before they talk to customers: https://sierra.ai/blog/voice-sims-test-agents-in-real-world-conditions-before-they-talk-to-your-customers
+
+- Multi-Agent Systems in the Era of LLMs
+  - Nov 17
+  - Oriol Vinyals (Google DeepMind)
+  - Recording: https://www.youtube.com/watch?v=ntjOxjZMaac&t=2s
+  - Quiz: https://docs.google.com/forms/d/e/1FAIpQLSdOYlx_09_shYNe1y_OfrK3JxROw_yNzmpSCkJGRlSZJsfojw/viewform?usp=publish-editor
+
+- No lecture — Thanksgiving week
+  - Nov 24
+
+- Autonomous Agents: Embodiment, Interaction, and Learning
+  - Dec 1 (2:00-3:30pm PT)
+  - Peter Stone (UT Austin / Sony AI)
+  - Recording: https://www.youtube.com/watch?v=iDhzzugMOLA
+  - Quiz: https://docs.google.com/forms/d/e/1FAIpQLSfcjUhPX4pGVJr27e9mtreu7qIbdVY9a2tK3Qnx75DFsDxoBg/viewform?usp=publish-editor
+  - Papers
+    - Outracing Champion Gran Turismo Drivers with Deep Reinforcement Learning: https://www.cs.utexas.edu/~pstone/Papers/bib2html/b2hd-nature22.html
+    - SLAC: Simulation-Pretrained Latent Action Space for Whole-Body Real-World RL: https://www.cs.utexas.edu/~pstone/Papers/bib2html/b2hd-jiaheng_hu_2025.html
+
+- Agentic AI Safety & Security
+  - Dec 8 (11:30am-1:30pm PT)
+  - Dawn Song (UC Berkeley)
+  - Recording: https://www.youtube.com/watch?v=CvZDJxd4LKM
+  - Quiz: https://docs.google.com/forms/d/e/1FAIpQLSf--a4K4Qwoql0anNNfZLXSFDt1lEIj2fHOqUkxF2F5B3UjFg/viewform?usp=publish-editor
+
+# Advanced Large Language Model Agents MOOC, Spring 2025
+
+https://agenticai-learning.org/sp25
+
+- Inference-Time Techniques for LLM Reasoning
+  - Jan 27
+  - Xinyun Chen (Google DeepMind)
+  - Intro: https://rdi.berkeley.edu/llm-agents-mooc/slides/llm-agents-berkeley-intro-sp25.pdf
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/inference_time_techniques_lecture_sp25.pdf
+  - Recording: https://www.youtube.com/live/g0Dwtf3BH-0
+  - Quiz: https://forms.gle/c6Zz5kGPUzkNTQiq9
+  - Papers
+    - Large Language Models as Optimizers: https://arxiv.org/abs/2309.03409
+    - Large Language Models Cannot Self-Correct Reasoning Yet: https://arxiv.org/abs/2310.01798
+    - Teaching Large Language Models to Self-Debug: https://arxiv.org/abs/2304.05128
+
+- Learning to reason with LLMs
+  - Feb 3
+  - Jason Weston (Meta)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/Jason-Weston-Reasoning-Alignment-Berkeley-Talk.pdf
+  - Recording: https://www.youtube.com/live/_MNlLhU33H0
+  - Quiz: https://forms.gle/BSmjwfzAtq5hP4GQ8
+  - Papers
+    - Direct Preference Optimization: Your Language Model is Secretly a Reward Model: https://arxiv.org/abs/2305.18290
+    - Iterative Reasoning Preference Optimization: https://arxiv.org/abs/2404.19733
+    - Chain-of-Verification Reduces Hallucination in Large Language Models: https://arxiv.org/abs/2309.11495
+
+- On Reasoning, Memory, and Planning of Language Agents
+  - Feb 10
+  - Yu Su (Ohio State University)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/language_agents_YuSu_Berkeley.pdf
+  - Recording: https://www.youtube.com/live/zvI4UN2_i-w
+  - Quiz: https://forms.gle/D6QogFcZ7xMNFzvo9
+  - Papers
+    - Grokked Transformers are Implicit Reasoners: A Mechanistic Journey to the Edge of Generalization: https://arxiv.org/abs/2405.15071
+    - HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language Models: https://arxiv.org/abs/2405.14831
+    - Is Your LLM Secretly a World Model of the Internet? Model-Based Planning for Web Agents: https://arxiv.org/abs/2411.06559
+
+- No Class - Presidents' Day
+  - Feb 17
+
+- Open Training Recipes for Reasoning in Language Models
+  - Feb 24
+  - Hanna Hajishirzi (University of Washington)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/OLMo-Tulu-Reasoning-Hanna.pdf
+  - Recording: https://www.youtube.com/live/cMiu3A7YBks
+  - Quiz: https://forms.gle/WV9v2NkphN38pzoU8
+  - Papers
+    - Tulu 3: Pushing Frontiers in Open Language Model Post-Training: https://arxiv.org/abs/2411.15124
+    - Unpacking DPO and PPO: Disentangling Best Practices for Learning from Preference Feedback: https://arxiv.org/abs/2406.09279
+    - OpenScholar: Synthesizing Scientific Literature with Retrieval-augmented LMs: https://arxiv.org/abs/2411.14199
+
+- Coding Agents and AI for Vulnerability Detection
+  - Mar 3
+  - Charles Sutton (Google DeepMind)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/Code%20Agents%20and%20AI%20for%20Vulnerability%20Detection.pdf
+  - Recording: https://www.youtube.com/live/JCk6qJtaCSU
+  - Quiz: https://forms.gle/ZCn8FZDas1VU6GrG7
+  - Papers
+    - Interactive Tools Substantially Assist LM Agents in Finding Security Vulnerabilities: https://arxiv.org/abs/2409.16165
+    - From Naptime to Big Sleep: Using Large Language Models To Catch Vulnerabilities In Real-World Code: https://googleprojectzero.blogspot.com/2024/10/from-naptime-to-big-sleep.html
+
+- Multimodal Autonomous AI Agents
+  - Mar 10
+  - Ruslan Salakhutdinov (CMU/Meta)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/ruslan-multimodal.pdf
+  - Recording: https://www.youtube.com/live/RPINOYM12RU
+  - Quiz: https://forms.gle/tpoXSkTZKChXr67q9
+  - Papers
+    - Mind2Web: Towards a Generalist Agent for the Web: https://arxiv.org/abs/2306.06070
+    - WebArena: A Realistic Web Environment for Building Autonomous Agents: https://arxiv.org/abs/2307.13854
+    - VisualWebArena: Evaluating Multimodal Agents on Realistic Visual Web Tasks: https://jykoh.com/vwa
+    - Tree Search for Language Model Agents: https://jykoh.com/search-agents
+
+- Multimodal Agents – From Perception to Action
+  - Mar 17
+  - Caiming Xiong (Salesforce AI Research)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/Multimodal_Agent_caiming.pdf
+  - Recording: https://www.youtube.com/live/n__Tim8K2IY
+  - Quiz: https://forms.gle/WksK2qeXsZp8iY7YA
+  - Papers
+    - OSWORLD: Benchmarking Multimodal Agents for Open-Ended Tasks in Real Computer Environments: https://arxiv.org/pdf/2404.07972
+    - AGUVIS: Unified Pure Vision Agents For Autonomous GUI Interaction: https://arxiv.org/pdf/2412.04454
+
+- No Class - Spring Recess
+  - Mar 24
+
+- AlphaProof: when reinforcement learning meets formal mathematics
+  - Mar 31 (10am-noon PT)
+  - Thomas Hubert (Google DeepMind)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/alphaproof.pdf
+  - Recording: https://www.youtube.com/live/3gaEMscOMAU
+  - Quiz: https://forms.gle/yzLSNHxNRgULpyoe9
+  - Papers
+    - AI achieves silver-medal standard solving International Mathematical Olympiad problems: https://deepmind.google/discover/blog/ai-solves-imo-problems-at-silver-medal-level/
+    - Mastering Chess and Shogi by Self-Play with a General Reinforcement Learning Algorithm: https://arxiv.org/pdf/1712.01815
+    - The Future of Mathematics?: https://www.youtube.com/watch?v=Dp-mQ3HxgDE
+    - Building the Mathematical Library of the Future: https://www.quantamagazine.org/building-the-mathematical-library-of-the-future-20201001/
+
+- Language models for autoformalization and theorem proving
+  - Apr 7
+  - Kaiyu Yang (Meta FAIR)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/mathverification.pdf
+  - Recording: https://www.youtube.com/live/cLhWEyMQ4mQ
+  - Quiz: https://forms.gle/oXmRWhwYN9vPp6AV7
+  - Papers
+    - LeanDojo: Theorem Proving with Retrieval-Augmented Language Models: https://arxiv.org/abs/2306.15626
+    - Autoformalization with Large Language Models: https://arxiv.org/abs/2205.12615
+    - Autoformalizing Euclidean Geometry: https://arxiv.org/abs/2405.17216
+
+- Bridging Informal and Formal Mathematical Reasoning
+  - Apr 14
+  - Sean Welleck (CMU)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/welleck2025_berkeley_bridging.pdf
+  - Recording: https://www.youtube.com/live/Gy5Nm17l9oo
+  - Quiz: https://forms.gle/jumLYzywCcG2Vy6v9
+  - Papers
+    - Draft, Sketch, and Prove: Guiding Formal Theorem Provers with Informal Proofs: https://arxiv.org/abs/2210.12283
+    - miniCTX: Neural Theorem Proving with Long-Contexts: https://www.arxiv.org/pdf/2408.03350
+    - Lean-STaR: Learning to Interleave Thinking and Proving: https://arxiv.org/abs/2407.10040
+    - ImProver: Agent-Based Automated Proof Optimization: https://arxiv.org/abs/2410.04753
+
+- Abstraction and Discovery with Large Language Model Agents
+  - Apr 21 (10am-noon PT)
+  - Swarat Chaudhuri (UT Austin)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/swarat.pdf
+  - Recording: https://www.youtube.com/live/IHc0TEMrEdY
+  - Quiz: https://forms.gle/k3t47MnBxUZDUnXt9
+  - Papers
+    - An In-Context Learning Agent for Formal Theorem-Proving: https://arxiv.org/abs/2310.04353
+    - Symbolic Regression with a Learned Concept Library: https://arxiv.org/abs/2409.09359
+
+- Towards building safe and secure agentic AI
+  - Apr 28
+  - Dawn Song (UC Berkeley)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/dawn-agentic-ai.pdf
+  - Recording: https://www.youtube.com/live/ti6yPE2VPZc
+  - Quiz: https://forms.gle/dkuUHdYmbKTd1KNu7
+  - Papers
+    - Privtrans: Automatically Partitioning Programs for Privilege Separation: https://dawnsong.io/papers/privtrans.pdf
+    - DataSentinel: A Game-Theoretic Detection of Prompt Injection Attacks: https://arxiv.org/abs/2504.11358
+    - AgentPoison: Red-teaming LLM Agents via Poisoning Memory or Knowledge Bases: https://arxiv.org/abs/2407.12784
+    - Progent: Programmable Privilege Control for LLM Agents: https://arxiv.org/html/2504.11703v1
+
+# Large Language Model Agents MOOC, Fall 2024
+
+https://agenticai-learning.org/f24
+
+- LLM Reasoning
+  - Sept 9
+  - Denny Zhou (Google DeepMind)
+  - Intro: https://rdi.berkeley.edu/llm-agents-mooc/slides/intro.pdf
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/llm-reasoning.pdf
+  - Recording: https://www.youtube.com/live/QL-FS_Zcmyo
+  - Quiz: https://forms.gle/1pb6nkwZPyUqvFPe6
+  - Papers
+    - Chain-of-Thought Reasoning Without Prompting: https://arxiv.org/abs/2402.10200
+    - Large Language Models Cannot Self-Correct Reasoning Yet: https://arxiv.org/abs/2310.01798
+    - Premise Order Matters in Reasoning with Large Language Models: https://arxiv.org/abs/2402.08939
+    - Chain-of-Thought Empowers Transformers to Solve Inherently Serial Problems: https://arxiv.org/abs/2402.12875
+
+- LLM agents: brief history and overview
+  - Sept 16
+  - Shunyu Yao (OpenAI)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/llm_agent_history.pdf
+  - Recording: https://www.youtube.com/watch?v=RM6ZArd2nVc
+  - Quiz: https://forms.gle/t9ictrAjxTrWd9tr6
+  - Papers
+    - WebShop: Towards Scalable Real-World Web Interaction with Grounded Language Agents: https://arxiv.org/abs/2207.01206
+    - ReAct: Synergizing Reasoning and Acting in Language Models: https://arxiv.org/abs/2210.03629
+
+- Agentic AI Frameworks & AutoGen / Building a Multimodal Knowledge Assistant
+  - Sept 23
+  - Chi Wang (AutoGen-AI), Jerry Liu (LlamaIndex)
+  - Chi's Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/autogen.pdf
+  - Jerry's Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/MKA.pdf
+  - Recording: https://www.youtube.com/live/OOdtmCMSOo4
+  - Quiz: https://forms.gle/osuDEXRmDHJvLi1T7
+  - Papers
+    - AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation: https://arxiv.org/abs/2308.08155
+    - StateFlow: Enhancing LLM Task-Solving through State-Driven Workflows: https://arxiv.org/abs/2403.11322
+
+- Enterprise trends for generative AI, and key components of building successful agents/applications
+  - Sept 30
+  - Burak Gokturk (Google)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/Burak_slides.pdf
+  - Recording: https://www.youtube.com/live/Sy1psHS3w3I
+  - Quiz: https://forms.gle/gcoo9HWGdF3xVAPGA
+  - Papers
+    - Google Cloud expands grounding capabilities on Vertex AI: https://cloud.google.com/blog/products/ai-machine-learning/rag-and-grounding-on-vertex-ai?e=48754805
+    - The Needle In a Haystack Test: Evaluating the performance of RAG systems: https://towardsdatascience.com/the-needle-in-a-haystack-test-a94974c1ad38
+    - The AI detective: The Needle in a Haystack test and how Gemini 1.5 Pro solves it: https://cloud.google.com/blog/products/ai-machine-learning/the-needle-in-the-haystack-test-and-how-gemini-pro-solves-it?e=48754805
+
+- Compound AI Systems & the DSPy Framework
+  - Oct 7
+  - Omar Khattab (Databricks)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/dspy_lec.pdf
+  - Recording: https://www.youtube.com/live/JEMYuzrKLUw
+  - Quiz: https://forms.gle/tXzmfgTsdYW5XjLL6
+  - Papers
+    - Optimizing Instructions and Demonstrations for Multi-Stage Language Model Programs: https://arxiv.org/abs/2406.11695
+    - Fine-Tuning and Prompt Optimization: Two Great Steps that Work Better Together: https://arxiv.org/abs/2407.10930
+
+- Agents for Software Development
+  - Oct 14
+  - Graham Neubig (Carnegie Mellon University)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/neubig24softwareagents.pdf
+  - Recording: https://www.youtube.com/live/f9L9Fkq-8K4
+  - Quiz: https://forms.gle/v4AD4vFYCjdK9qeDA
+  - Papers
+    - SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering: https://arxiv.org/abs/2405.15793
+    - OpenHands: An Open Platform for AI Software Developers as Generalist Agents: https://arxiv.org/abs/2407.16741
+
+- AI Agents for Enterprise Workflows
+  - Oct 21
+  - Nicolas Chapados (ServiceNow)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/agentworkflows.pdf
+  - Recording: https://www.youtube.com/live/-yf-e-9FvOc
+  - Quiz: https://forms.gle/VWpd1q23PBFptVCe8
+  - Papers
+    - WorkArena: How Capable Are Web Agents at Solving Common Knowledge Work Tasks?: https://arxiv.org/abs/2403.07718
+    - WorkArena++: Towards Compositional Planning and Reasoning-based Common Knowledge Work Tasks: https://arxiv.org/abs/2407.05291
+    - TapeAgents: a Holistic Framework for Agent Development and Optimization: https://rdi.berkeley.edu/llm-agents-mooc/assets/tapeagents.pdf
+
+- Towards a unified framework of Neural and Symbolic Decision Making
+  - Oct 28
+  - Yuandong Tian (Meta AI (FAIR))
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/102824-yuandongtian.pdf
+  - Recording: https://www.youtube.com/live/wm9-7VBpdEo
+  - Quiz: https://forms.gle/MLZy2czaMtJYhTSD7
+  - Papers
+    - Beyond A*: Better Planning with Transformers via Search Dynamics Bootstrapping: https://arxiv.org/abs/2402.14083
+    - Dualformer: Controllable Fast and Slow Thinking by Learning with Randomized Reasoning Traces: https://arxiv.org/abs/2410.09918v1
+    - Composing Global Optimizers to Reasoning Tasks via Algebraic Objects in Neural Nets: https://arxiv.org/abs/2410.01779
+    - SurCo: Learning Linear Surrogates For Combinatorial Nonlinear Optimization Problems: https://arxiv.org/abs/2210.12547
+
+- Project GR00T: A Blueprint for Generalist Robotics
+  - Nov 4
+  - Jim Fan (NVIDIA)
+  - Slides: https://rdi.berkeley.edu/llm-agents/assets/jimfangr00t.pdf
+  - Recording: https://www.youtube.com/live/Qhxr0uVT2zs
+  - Quiz: https://forms.gle/SsvzxWugqJD2VB2FA
+  - Papers
+    - Voyager: An Open-Ended Embodied Agent with Large Language Models: https://voyager.minedojo.org/
+    - Eureka: Human-Level Reward Design via Coding Large Language Models: https://eureka-research.github.io/
+    - DrEureka: Language Model Guided Sim-To-Real Transfer: https://eureka-research.github.io/dr-eureka/
+
+- No Class - Veterans Day
+  - Nov 11
+
+- Open-Source and Science in the Era of Foundation Models
+  - Nov 18
+  - Percy Liang (Stanford University)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/percyliang.pdf
+  - Recording: https://www.youtube.com/live/f3KKx9LWntQ
+  - Quiz: https://forms.gle/VMu6XGEWHhW1xvij6
+  - Papers
+    - Cybench: A Framework for Evaluating Cybersecurity Capabilities and Risks of Language Models: https://arxiv.org/abs/2408.08926
+
+- Measuring Agent capabilities and Anthropic's RSP
+  - Nov 25
+  - Ben Mann (Anthropic)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/antrsp.pdf
+  - Recording: https://www.youtube.com/live/6y2AnWol7oo
+  - Quiz: https://forms.gle/QU9EyEyeWP5sjPAu7
+  - Papers
+    - Announcing our updated Responsible Scaling Policy: https://www.anthropic.com/news/announcing-our-updated-responsible-scaling-policy
+    - Developing a computer use model: https://www.anthropic.com/news/developing-computer-use
+
+- Towards Building Safe & Trustworthy AI Agents and A Path for Science‑ and Evidence‑based AI Policy
+  - Dec 2
+  - Dawn Song (UC Berkeley)
+  - Slides: https://rdi.berkeley.edu/llm-agents/assets/dawn-agent-safety.pdf
+  - Recording: https://www.youtube.com/live/QAgR4uQ15rc
+  - Quiz: https://forms.gle/EHwL4Jb3LZzNDw7w7
+  - Papers
+    - A Path for Science‑ and Evidence‑based AI Policy: https://understanding-ai-safety.org/
+    - DecodingTrust: A Comprehensive Assessment of Trustworthiness in GPT Models: https://arxiv.org/abs//2306.11698
+    - Representation Engineering: A Top-Down Approach to AI Transparency: https://arxiv.org/abs/2310.01405
+    - Extracting Training Data from Large Language Models: https://www.usenix.org/system/files/sec21-carlini-extracting.pdf
+    - The Secret Sharer: Evaluating and Testing Unintended Memorization in Neural Networks: https://www.usenix.org/system/files/sec19-carlini.pdf
+
+# CS294/194-196: Agentic AI, Fall 2025
+
+https://rdi.berkeley.edu/agentic-ai/f25
+
+- Introduction
+  - Sep 8
+  - Dawn Song (UC Berkeley)
+  - Slides: https://rdi.berkeley.edu/agentic-ai/slides/introduction_25.pdf
+
+- LLM Agents Overview
+  - Sep 15
+  - Yann Dubois (OpenAI)
+  - Slides: https://rdi.berkeley.edu/agentic-ai/slides/lecture1.pdf
+  - Recording: https://www.youtube.com/watch?v=r1qZpYAmqmg
+  - Papers
+    - KIMI K2: Open Agentic Intelligence: https://rdi.berkeley.edu/agentic-ai/slides/d11.pdf
+    - DeepSeek-V3 Technical Report: https://rdi.berkeley.edu/agentic-ai/slides/d22.pdf
+
+- Evolution of system designs from an AI engineer perspective
+  - Sep 22
+  - Yangqing Jia (NVIDIA)
+  - Slides: https://rdi.berkeley.edu/agentic-ai/slides/Yangqing.pdf
+  - Recording: https://www.youtube.com/watch?v=xqRAS6rAouo&list=PLS01nW3RtgoqGkm4UeqNeZLccW-OGc1fJ&index=2
+
+- Post-Training Verifiable Agents
+  - Sep 29
+  - Jiantao Jiao (NVIDIA)
+  - Slides: https://rdi.berkeley.edu/agentic-ai/slides/AgenticAI_Jiantao%20Jiao.pdf
+  - Recording: https://www.youtube.com/watch?v=3l0Zxus34es&list=PLS01nW3RtgoqGkm4UeqNeZLccW-OGc1fJ&index=3
+  - Papers
+    - Introducing SWE-bench Verified: https://openai.com/index/introducing-swe-bench-verified/
+    - BrowseComp: a benchmark for browsing agents: https://openai.com/index/browsecomp/
+
+- Agent Evaluation & Project Overview
+  - Oct 6
+  - Slides: https://rdi.berkeley.edu/agentic-ai/slides/LLM%20Agent%20Evaluations%20&%20Project%20Overview.pdf
+  - Recording: https://www.youtube.com/watch?v=VfOA2a0dj4w
+  - Papers
+    - Survey on Evaluation of LLM-based Agents: https://arxiv.org/pdf/2503.16416
+
+- Some Challenges and Lessons from Training Agentic Models
+  - Oct 13
+  - Weizhu Chen (Microsoft)
+  - Slides: https://rdi.berkeley.edu/agentic-ai/slides/weizhu.pdf
+  - Recording: https://www.youtube.com/watch?v=xNxrBHZPDvM
+
+- Multi-Agent AI
+  - Oct 20
+  - Noam Brown (OpenAI)
+  - Slides: https://rdi.berkeley.edu/agentic-ai/slides/multiagent_berkeley_2025.pptx.pdf
+  - Recording: https://www.youtube.com/watch?v=SrLcGdVOb9w
+
+- Predictable Noise in LLM
+  - Oct 27
+  - Sida Wang (Meta)
+  - Slides: https://rdi.berkeley.edu/agentic-ai/slides/PredEval.pdf
+  - Recording: https://www.youtube.com/watch?v=HV8pugcFVO0
+  - Papers
+    - Adding Error Bars to Evals: A Statistical Approach to Language Model Evaluations: https://arxiv.org/pdf/2411.00640
+
+- AI Agents to Automate Scientific Discoveries
+  - Nov 3
+  - James Zou (Stanford)
+  - Recording: https://www.youtube.com/watch?v=yqPIsTTdUkc
+  - Papers
+    - The Virtual Lab of AI agents designs new SARS-CoV-2 nanobodies: https://www.nature.com/articles/s41586-025-09442-9
+    - Paper2Agent: Reimagining Research Papers As Interactive and Reliable AI Agents: https://arxiv.org/abs/2509.06917
+
+- Practical Lessons from Deploying Real-World AI Agents
+  - Nov 10
+  - Clay Bavor (Sierra)
+  - Slides: https://rdi.berkeley.edu/agentic-ai/slides/Practical_Lessons_AI_Agents.pdf
+  - Recording: https://www.youtube.com/watch?v=sfJM4LaiYsM
+  - Papers
+    - τ2-Bench: Evaluating Conversational Agents in a Dual-Control Environment: https://arxiv.org/pdf/2506.07982
+    - Voice Sims: test agents in real world conditions before they talk to customers: https://sierra.ai/blog/voice-sims-test-agents-in-real-world-conditions-before-they-talk-to-your-customers
+
+- Multi-Agent Systems in the Era of LLMs
+  - Nov 17
+  - Oriol Vinyals (Google DeepMind)
+  - Recording: https://www.youtube.com/watch?v=ntjOxjZMaac&t=2s
+
+- No lecture — Thanksgiving week
+  - Nov 24
+
+- Autonomous Agents: Embodiment, Interaction, and Learning
+  - Dec 1 (2:00-3:30pm PT)
+  - Peter Stone (UT Austin / Sony AI)
+  - Recording: https://www.youtube.com/watch?v=iDhzzugMOLA
+  - Papers
+    - Outracing Champion Gran Turismo Drivers with Deep Reinforcement Learning: https://www.cs.utexas.edu/~pstone/Papers/bib2html/b2hd-nature22.html
+    - SLAC: Simulation-Pretrained Latent Action Space for Whole-Body Real-World RL: https://www.cs.utexas.edu/~pstone/Papers/bib2html/b2hd-jiaheng_hu_2025.html
+
+- Agentic AI Safety & Security
+  - Dec 8 (11:30am-1:30pm PT)
+  - Dawn Song (UC Berkeley)
+  - Livestream: https://youtube.com/live/CvZDJxd4LKM?feature=share
+
+# CS 294/194-280: Advanced Large Language Model Agents, Spring 2025
+
+https://rdi.berkeley.edu/adv-llm-agents/sp25
+
+- Inference-Time Techniques for LLM Reasoning
+  - Jan 27
+  - Xinyun Chen (Google DeepMind)
+  - Intro: https://rdi.berkeley.edu/adv-llm-agents/slides/llm-agents-berkeley-intro-sp25.pdf
+  - Slides: https://rdi.berkeley.edu/adv-llm-agents/slides/inference_time_techniques_lecture_sp25.pdf
+  - Recording: https://www.youtube.com/live/g0Dwtf3BH-0
+  - Papers (optional this week)
+    - Large Language Models as Optimizers: https://arxiv.org/abs/2309.03409
+    - Large Language Models Cannot Self-Correct Reasoning Yet: https://arxiv.org/abs/2310.01798
+    - Teaching Large Language Models to Self-Debug: https://arxiv.org/abs/2304.05128
+
+- Learning to reason with LLMs
+  - Feb 3
+  - Jason Weston (Meta)
+  - Slides: https://rdi.berkeley.edu/adv-llm-agents/slides/Jason-Weston-Reasoning-Alignment-Berkeley-Talk.pdf
+  - Recording: https://www.youtube.com/live/_MNlLhU33H0
+  - Papers
+    - Direct Preference Optimization: Your Language Model is Secretly a Reward Model: https://arxiv.org/abs/2305.18290
+    - Iterative Reasoning Preference Optimization: https://arxiv.org/abs/2404.19733
+    - Chain-of-Verification Reduces Hallucination in Large Language Models: https://arxiv.org/abs/2309.11495
+
+- On Reasoning, Memory, and Planning of Language Agents
+  - Feb 10
+  - Yu Su (Ohio State University)
+  - Slides: https://rdi.berkeley.edu/adv-llm-agents/slides/language_agents_YuSu_Berkeley.pdf
+  - Recording: https://www.youtube.com/live/zvI4UN2_i-w
+  - Papers
+    - Grokked Transformers are Implicit Reasoners: A Mechanistic Journey to the Edge of Generalization: https://arxiv.org/abs/2405.15071
+    - HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language Models: https://arxiv.org/abs/2405.14831
+    - Is Your LLM Secretly a World Model of the Internet? Model-Based Planning for Web Agents: https://arxiv.org/abs/2411.06559
+
+- No Class - Presidents' Day
+  - Feb 17
+
+- Open Training Recipes for Reasoning in Language Models
+  - Feb 24
+  - Hanna Hajishirzi (University of Washington)
+  - Slides: https://rdi.berkeley.edu/adv-llm-agents/slides/OLMo-Tulu-Reasoning-Hanna.pdf
+  - Recording: https://www.youtube.com/live/cMiu3A7YBks
+  - Papers
+    - Tulu 3: Pushing Frontiers in Open Language Model Post-Training: https://arxiv.org/abs/2411.15124
+    - Unpacking DPO and PPO: Disentangling Best Practices for Learning from Preference Feedback: https://arxiv.org/abs/2406.09279
+    - OpenScholar: Synthesizing Scientific Literature with Retrieval-augmented LMs: https://arxiv.org/abs/2411.14199
+
+- Coding Agents and AI for Vulnerability Detection
+  - Mar 3
+  - Charles Sutton (Google DeepMind)
+  - Slides: https://rdi.berkeley.edu/adv-llm-agents/slides/Code%20Agents%20and%20AI%20for%20Vulnerability%20Detection.pdf
+  - Recording: https://www.youtube.com/live/JCk6qJtaCSU
+  - Papers
+    - Interactive Tools Substantially Assist LM Agents in Finding Security Vulnerabilities: https://arxiv.org/abs/2409.16165
+    - From Naptime to Big Sleep: Using Large Language Models To Catch Vulnerabilities In Real-World Code: https://googleprojectzero.blogspot.com/2024/10/from-naptime-to-big-sleep.html
+
+- Multimodal Autonomous AI Agents
+  - Mar 10
+  - Ruslan Salakhutdinov (CMU/Meta)
+  - Slides: https://rdi.berkeley.edu/adv-llm-agents/slides/ruslan-multimodal.pdf
+  - Recording: https://www.youtube.com/live/RPINOYM12RU
+  - Papers
+    - Mind2Web: Towards a Generalist Agent for the Web: https://arxiv.org/abs/2306.06070
+    - WebArena: A Realistic Web Environment for Building Autonomous Agents: https://arxiv.org/abs/2307.13854
+    - VisualWebArena: Evaluating Multimodal Agents on Realistic Visual Web Tasks: https://jykoh.com/vwa
+    - Tree Search for Language Model Agents: https://jykoh.com/search-agents
+
+- Multimodal Agents – From Perception to Action
+  - Mar 17
+  - Caiming Xiong (Salesforce AI Research)
+  - Slides: https://rdi.berkeley.edu/adv-llm-agents/slides/Multimodal_Agent_caiming.pdf
+  - Recording: https://www.youtube.com/live/n__Tim8K2IY
+  - Papers
+    - OSWORLD: Benchmarking Multimodal Agents for Open-Ended Tasks in Real Computer Environments: https://arxiv.org/pdf/2404.07972
+    - AGUVIS: Unified Pure Vision Agents For Autonomous GUI Interaction: https://arxiv.org/pdf/2412.04454
+
+- No Class - Spring Recess
+  - Mar 24
+
+- AlphaProof: when reinforcement learning meets formal mathematics
+  - Mar 31 (10am-noon PT)
+  - Thomas Hubert (Google DeepMind)
+  - Slides: https://rdi.berkeley.edu/adv-llm-agents/slides/alphaproof.pdf
+  - Recording: https://www.youtube.com/live/3gaEMscOMAU
+  - Papers
+    - AI achieves silver-medal standard solving International Mathematical Olympiad problems: https://deepmind.google/discover/blog/ai-solves-imo-problems-at-silver-medal-level/
+    - Mastering Chess and Shogi by Self-Play with a General Reinforcement Learning Algorithm: https://arxiv.org/pdf/1712.01815
+    - The Future of Mathematics?: https://www.youtube.com/watch?v=Dp-mQ3HxgDE
+    - Building the Mathematical Library of the Future: https://www.quantamagazine.org/building-the-mathematical-library-of-the-future-20201001/
+
+- Language models for autoformalization and theorem proving
+  - Apr 7
+  - Kaiyu Yang (Meta FAIR)
+  - Slides: https://rdi.berkeley.edu/adv-llm-agents/slides/mathverification.pdf
+  - Recording: https://www.youtube.com/live/cLhWEyMQ4mQ
+  - Papers
+    - LeanDojo: Theorem Proving with Retrieval-Augmented Language Models: https://arxiv.org/abs/2306.15626
+    - Autoformalization with Large Language Models: https://arxiv.org/abs/2205.12615
+    - Autoformalizing Euclidean Geometry: https://arxiv.org/abs/2405.17216
+
+- Advanced topics in theorem proving
+  - Apr 14
+  - Sean Welleck (CMU)
+  - Slides: https://rdi.berkeley.edu/adv-llm-agents/slides/welleck2025_berkeley_bridging.pdf
+  - Recording: https://www.youtube.com/live/Gy5Nm17l9oo
+  - Papers
+    - Draft, Sketch, and Prove: Guiding Formal Theorem Provers with Informal Proofs: https://arxiv.org/abs/2210.12283
+    - miniCTX: Neural Theorem Proving with Long-Contexts: https://www.arxiv.org/pdf/2408.03350
+    - Lean-STaR: Learning to Interleave Thinking and Proving: https://arxiv.org/abs/2407.10040
+    - ImProver: Agent-Based Automated Proof Optimization: https://arxiv.org/abs/2410.04753
+
+- Abstraction and Discovery with Large Language Model Agents
+  - Apr 21 (10am-noon PT)
+  - Swarat Chaudhuri (UT Austin)
+  - Slides: https://rdi.berkeley.edu/adv-llm-agents/slides/swarat.pdf
+  - Recording: https://www.youtube.com/live/IHc0TEMrEdY
+  - Papers
+    - An In-Context Learning Agent for Formal Theorem-Proving: https://arxiv.org/abs/2310.04353
+    - Symbolic Regression with a Learned Concept Library: https://arxiv.org/abs/2409.09359
+
+- Towards building safe and secure agentic AI
+  - Apr 28
+  - Dawn Song (UC Berkeley)
+  - Slides: https://rdi.berkeley.edu/adv-llm-agents/slides/dawn-agentic-ai.pdf
+  - Recording: https://www.youtube.com/live/ti6yPE2VPZc
+  - Papers
+    - Privtrans: Automatically Partitioning Programs for Privilege Separation: https://dawnsong.io/papers/privtrans.pdf
+    - DataSentinel: A Game-Theoretic Detection of Prompt Injection Attacks: https://arxiv.org/abs/2504.11358
+    - AgentPoison: Red-teaming LLM Agents via Poisoning Memory or Knowledge Bases: https://arxiv.org/abs/2407.12784
+    - Progent: Programmable Privilege Control for LLM Agents: https://arxiv.org/html/2504.11703v1
+
+# CS 294/194-196: Large Language Model Agents, Fall 2024
+
+https://rdi.berkeley.edu/llm-agents/f24
+
+- LLM Reasoning
+  - Sept 9
+  - Denny Zhou (Google DeepMind)
+  - Intro: https://rdi.berkeley.edu/llm-agents/assets/intro.pdf
+  - Slides: https://rdi.berkeley.edu/llm-agents/assets/llm-reasoning.pdf
+  - Original Recording: https://bcourses.berkeley.edu/courses/1535641/external_tools/90481
+  - Recording: https://www.youtube.com/watch?v=QL-FS_Zcmyo
+  - Papers (optional this week)
+    - Chain-of-Thought Reasoning Without Prompting: https://arxiv.org/abs/2402.10200
+    - Large Language Models Cannot Self-Correct Reasoning Yet: https://arxiv.org/abs/2310.01798
+    - Premise Order Matters in Reasoning with Large Language Models: https://arxiv.org/abs/2402.08939
+    - Chain-of-Thought Empowers Transformers to Solve Inherently Serial Problems: https://arxiv.org/abs/2402.12875
+
+- LLM agents: brief history and overview
+  - Sept 16
+  - Shunyu Yao (OpenAI)
+  - Slides: https://rdi.berkeley.edu/llm-agents/assets/llm_agent_history.pdf
+  - Original Recording: https://bcourses.berkeley.edu/courses/1535641/external_tools/90481
+  - Recording: https://www.youtube.com/watch?v=RM6ZArd2nVc
+  - Papers
+    - WebShop: Towards Scalable Real-World Web Interaction with Grounded Language Agents: https://arxiv.org/abs/2207.01206
+    - ReAct: Synergizing Reasoning and Acting in Language Models: https://arxiv.org/abs/2210.03629
+
+- Agentic AI Frameworks & AutoGen / Building a Multimodal Knowledge Assistant
+  - Sept 23
+  - Chi Wang (AutoGen-AI), Jerry Liu (LlamaIndex)
+  - Chi's Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/autogen.pdf
+  - Jerry's Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/MKA.pdf
+  - Original Recording: https://bcourses.berkeley.edu/courses/1535641/external_tools/90481
+  - Recording: https://www.youtube.com/watch?v=OOdtmCMSOo4
+  - Papers
+    - AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation: https://arxiv.org/abs/2308.08155
+    - StateFlow: Enhancing LLM Task-Solving through State-Driven Workflows: https://arxiv.org/abs/2403.11322
+
+- Enterprise trends for generative AI, and key components of building successful agents/applications
+  - Sept 30
+  - Burak Gokturk (Google)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/Burak_slides.pdf
+  - Original Recording: https://bcourses.berkeley.edu/courses/1535641/external_tools/90481
+  - Recording: https://www.youtube.com/live/Sy1psHS3w3I
+  - Papers
+    - Google Cloud expands grounding capabilities on Vertex AI: https://cloud.google.com/blog/products/ai-machine-learning/rag-and-grounding-on-vertex-ai?e=48754805
+    - The Needle In a Haystack Test: Evaluating the performance of RAG systems: https://towardsdatascience.com/the-needle-in-a-haystack-test-a94974c1ad38
+    - The AI detective: The Needle in a Haystack test and how Gemini 1.5 Pro solves it: https://cloud.google.com/blog/products/ai-machine-learning/the-needle-in-the-haystack-test-and-how-gemini-pro-solves-it?e=48754805
+
+- Compound AI Systems & the DSPy Framework
+  - Oct 7
+  - Omar Khattab (Databricks)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/dspy_lec.pdf
+  - Original Recording: https://bcourses.berkeley.edu/courses/1535641/external_tools/90481
+  - Recording: https://www.youtube.com/live/JEMYuzrKLUw
+  - Papers
+    - Optimizing Instructions and Demonstrations for Multi-Stage Language Model Programs: https://arxiv.org/abs/2406.11695
+    - Fine-Tuning and Prompt Optimization: Two Great Steps that Work Better Together: https://arxiv.org/abs/2407.10930
+
+- Agents for Software Development
+  - Oct 14
+  - Graham Neubig (Carnegie Mellon University)
+  - Slides: https://rdi.berkeley.edu/llm-agents-mooc/slides/neubig24softwareagents.pdf
+  - Original Recording: https://bcourses.berkeley.edu/courses/1535641/external_tools/90481
+  - Recording: https://www.youtube.com/live/f9L9Fkq-8K4
+  - Papers
+    - SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering: https://arxiv.org/abs/2405.15793
+    - OpenHands: An Open Platform for AI Software Developers as Generalist Agents: https://arxiv.org/abs/2407.16741
+
+- AI Agents for Enterprise Workflows
+  - Oct 21
+  - Nicolas Chapados (ServiceNow)
+  - Slides: https://rdi.berkeley.edu/llm-agents/assets/agentworkflows.pdf
+  - Original Recording: https://bcourses.berkeley.edu/courses/1535641/external_tools/90481
+  - Recording: https://www.youtube.com/live/-yf-e-9FvOc
+  - Papers
+    - WorkArena: How Capable Are Web Agents at Solving Common Knowledge Work Tasks?: https://arxiv.org/abs/2403.07718
+    - WorkArena++: Towards Compositional Planning and Reasoning-based Common Knowledge Work Tasks: https://arxiv.org/abs/2407.05291
+    - TapeAgents: a Holistic Framework for Agent Development and Optimization: https://rdi.berkeley.edu/llm-agents-mooc/assets/tapeagents.pdf
+
+- Towards a unified framework of Neural and Symbolic Decision Making
+  - Oct 28
+  - Yuandong Tian (Meta AI (FAIR))
+  - Slides: https://rdi.berkeley.edu/llm-agents/assets/102824-yuandongtian.pdf
+  - Original Recording: https://bcourses.berkeley.edu/courses/1535641/external_tools/90481
+  - Recording: https://www.youtube.com/live/wm9-7VBpdEo
+  - Papers
+    - Beyond A*: Better Planning with Transformers via Search Dynamics Bootstrapping: https://arxiv.org/abs/2402.14083
+    - Dualformer: Controllable Fast and Slow Thinking by Learning with Randomized Reasoning Traces: https://arxiv.org/abs/2410.09918v1
+    - Composing Global Optimizers to Reasoning Tasks via Algebraic Objects in Neural Nets: https://arxiv.org/abs/2410.01779
+    - SurCo: Learning Linear Surrogates For Combinatorial Nonlinear Optimization Problems: https://arxiv.org/abs/2210.12547
+
+- Project GR00T: A Blueprint for Generalist Robotics
+  - Nov 4
+  - Jim Fan (NVIDIA)
+  - Slides: https://rdi.berkeley.edu/llm-agents/assets/jimfangr00t.pdf
+  - Original Recording: https://bcourses.berkeley.edu/courses/1535641/external_tools/90481
+  - Recording: https://www.youtube.com/live/Qhxr0uVT2zs
+  - Papers
+    - Voyager: An Open-Ended Embodied Agent with Large Language Models: https://voyager.minedojo.org/
+    - Eureka: Human-Level Reward Design via Coding Large Language Models: https://eureka-research.github.io/
+    - DrEureka: Language Model Guided Sim-To-Real Transfer: https://eureka-research.github.io/dr-eureka/
+
+- No Class - Veterans Day
+  - Nov 11
+
+- Open-Source and Science in the Era of Foundation Models
+  - Nov 18
+  - Percy Liang (Stanford University)
+  - Slides: https://rdi.berkeley.edu/llm-agents/assets/percyliang.pdf
+  - Original Recording: https://bcourses.berkeley.edu/courses/1535641/external_tools/90481
+  - Recording: https://www.youtube.com/live/f3KKx9LWntQ
+  - Papers
+    - Cybench: A Framework for Evaluating Cybersecurity Capabilities and Risks of Language Models: https://arxiv.org/abs/2408.08926
+
+- Measuring Agent capabilities and Anthropic's RSP
+  - Nov 25
+  - Ben Mann (Anthropic)
+  - Slides: https://rdi.berkeley.edu/llm-agents/assets/antrsp.pdf
+  - Original Recording: https://bcourses.berkeley.edu/courses/1535641/external_tools/90481
+  - Recording: https://www.youtube.com/live/6y2AnWol7oo
+  - Papers
+    - Announcing our updated Responsible Scaling Policy: https://www.anthropic.com/news/announcing-our-updated-responsible-scaling-policy
+    - Developing a computer use model: https://www.anthropic.com/news/developing-computer-use
+
+- Towards Building Safe & Trustworthy AI Agents and A Path for Science‑ and Evidence‑based AI Policy
+  - Dec 2
+  - Dawn Song (UC Berkeley)
+  - Slides: https://rdi.berkeley.edu/llm-agents/assets/dawn-agent-safety.pdf
+  - Recording: https://www.youtube.com/live/QAgR4uQ15rc
+  - Papers (optional this week)
+    - A Path for Science‑ and Evidence‑based AI Policy: https://understanding-ai-safety.org/
+    - DecodingTrust: A Comprehensive Assessment of Trustworthiness in GPT Models: https://arxiv.org/abs//2306.11698
+    - Representation Engineering: A Top-Down Approach to AI Transparency: https://arxiv.org/abs/2310.01405
+    - Extracting Training Data from Large Language Models: https://www.usenix.org/system/files/sec21-carlini-extracting.pdf
+    - The Secret Sharer: Evaluating and Testing Unintended Memorization in Neural Networks: https://www.usenix.org/system/files/sec19-carlini.pdf
+
+# CS 294/194-267: Understanding Large Language Models: Foundations and Safety, Spring 2024
+
+https://rdi.berkeley.edu/understanding_llms/s24
+
+- Intro & transformer, LLM foundations
+  - Jan 19
+  - Łukasz Kaiser (Member of Technical Staff, OpenAI)
+  - Slides (Intro): https://rdi.berkeley.edu/understanding_llms/assets/intro-cs294-267-s24.pptx.pdf
+  - Slides: https://rdi.berkeley.edu/understanding_llms/assets/jan19.pdf
+  - Papers
+    - Attention Is All You Need: https://arxiv.org/abs/1706.03762
+    - Chain-of-Thought Prompting: https://arxiv.org/abs/2201.11903
+    - (Optional) Neural GPUs: https://arxiv.org/abs/1511.08228
+    - (Optional) GPT becoming a Turing machine: https://arxiv.org/abs/2303.14310
+
+- AI safety primer and representation engineering
+  - Jan 23
+  - Dan Hendrycks (Director, Center for AI Safety)
+  - Slides: https://rdi.berkeley.edu/understanding_llms/assets/jan23.pdf
+  - Slides (representation engineering): https://rdi.berkeley.edu/understanding_llms/assets/jan23_1.pdf
+  - Recording: https://www.youtube.com/watch?v=xN-kBA1JgYM&list=PLJ66BAXN6D8H_gRQJGjmbnS5qCWoxJNfe&index=2
+  - Papers
+    - Unsolved Problems in ML Safety: https://arxiv.org/abs/2109.13916
+    - Representation Engineering: https://arxiv.org/abs/2310.01405
+    - (Optional) Catastrophic AI Risks: https://arxiv.org/abs/2306.12001
+
+- Interpretability and model editing
+  - Jan 30
+  - David Bau (Assistant Professor, Northeastern University)
+  - Slides: https://rdi.berkeley.edu/understanding_llms/assets/jan30.pdf
+  - Recording: https://www.youtube.com/watch?v=8QPVKpzyZdY&list=PLJ66BAXN6D8H_gRQJGjmbnS5qCWoxJNfe&index=1
+  - Papers
+    - Locating and Editing Factual Associations in GPT: https://arxiv.org/abs/2202.05262
+    - Function Vectors in LLMs: https://arxiv.org/abs/2310.15213
+    - (Optional) Visualizing and Understanding CNNs: https://arxiv.org/abs/1311.2901
+    - (Optional) Linear Classifier Probes: https://arxiv.org/abs/1610.01644
+    - (Optional) In-context Learning and Induction Heads: https://arxiv.org/abs/2209.11895
+
+- Inside-out interpretability: training dynamics in multi-layer transformer
+  - Feb 6
+  - Yuandong Tian (Research Scientist and Senior Manager, Meta AI Research)
+  - Slides: https://rdi.berkeley.edu/understanding_llms/assets/feb6.pdf
+  - Recording: https://www.youtube.com/watch?v=cdnOFPIINFQ&list=PLJ66BAXN6D8H_gRQJGjmbnS5qCWoxJNfe&index=8
+  - Papers
+    - Scan and Snap: https://arxiv.org/abs/2305.16380
+    - JoMA: https://arxiv.org/abs/2310.00535
+    - (Optional) StreamingLLM: https://arxiv.org/abs/2309.17453
+    - (Optional) Deja Vu: https://proceedings.mlr.press/v202/liu23am.html
+    - (Optional) H2O: https://arxiv.org/abs/2306.14048
+
+- Models within models: how do LLMs represent the world?
+  - Feb 13
+  - Martin Wattenberg (Professor, Harvard University)
+  - Slides: https://rdi.berkeley.edu/understanding_llms/assets/feb13.pdf
+  - Recording: https://www.youtube.com/watch?v=P_FmwO-wVK8&list=PLJ66BAXN6D8H_gRQJGjmbnS5qCWoxJNfe&index=6
+  - Papers
+    - Emergent World Representations: https://arxiv.org/abs/2210.13382
+    - The System Model and the User Model: https://arxiv.org/abs/2305.02469
+    - (Optional) Probing Classifiers: https://arxiv.org/abs/2102.12452
+    - (Optional) Climbing towards NLU: https://aclanthology.org/2020.acl-main.463/
+    - (Optional) Can LMs Encode Perceptual Structure without Grounding?: https://aclanthology.org/2021.conll-1.9/
+
+- Benchmarks and evals, safety vs. capabilities, machine ethics
+  - Feb 20
+  - Dan Hendrycks (Director, Center for AI Safety), Bo Li (Associate Professor, University of Chicago)
+  - Slides: https://rdi.berkeley.edu/understanding_llms/assets/feb20.pdf
+  - Recording: https://www.youtube.com/watch?v=03YVCOO8-y4&list=PLJ66BAXN6D8H_gRQJGjmbnS5qCWoxJNfe&index=4
+  - Papers
+    - DecodingTrust: A Comprehensive Assessment of Trustworthiness in GPT Models: https://arxiv.org/abs/2306.11698
+    - Do the Rewards Justify the Means? Measuring Trade-Offs Between Rewards and Ethical Behavior in the MACHIAVELLI Benchmark: https://arxiv.org/abs/2304.03279
+
+- Memorization in language models
+  - Feb 27
+  - Eric Wallace (UC Berkeley)
+  - Slides: https://rdi.berkeley.edu/understanding_llms/assets/feb27.pdf
+  - Recording: https://www.youtube.com/watch?v=dXTfY7tgb-o&list=PLJ66BAXN6D8H_gRQJGjmbnS5qCWoxJNfe&index=5
+  - Papers
+    - (Optional) Extracting Training Data from Large Language Models: https://arxiv.org/abs/2012.07805
+    - (Optional) Scalable Extraction of Training Data from (Production) Language Models: https://arxiv.org/abs/2311.17035
+
+- Watermarking and AI safety
+  - Mar 5
+  - Boaz Barak (Professor, Harvard University)
+  - Papers
+    - (Optional) Watermarking in the sand: https://www.harvard.edu/kempner-institute/2023/11/09/watermarking-in-the-sand/
+    - (Optional) Thoughts on AI safety: https://windowsontheory.org/2023/04/12/thoughts-on-ai-safety/
+
+- Using AI to understand AI
+  - Mar 12
+  - Jacob Steinhardt (Assistant Professor, UC Berkeley)
+  - Slides: https://rdi.berkeley.edu/understanding_llms/assets/mar12.pdf
+  - Recording: https://www.youtube.com/watch?v=4DRkfFIEaLs&list=PLJ66BAXN6D8H_gRQJGjmbnS5qCWoxJNfe&index=3
+  - Papers
+    - Interpreting CLIP's Image Representation via Text-Based Decomposition: https://arxiv.org/abs/2310.05916
+    - Mass-Producing Failures of Multimodal Systems with Language Models: https://arxiv.org/abs/2306.12105
+    - (Optional) Describing Differences between Text Distributions with Natural Language: https://arxiv.org/abs/2201.12323
+
+- The security of LLMs
+  - Mar 19
+  - Nicholas Carlini (Research Scientist, Google DeepMind)
+  - Slides: https://rdi.berkeley.edu/understanding_llms/assets/mar19.pdf
+  - Recording: https://www.youtube.com/watch?v=_EbntLk5QTk&list=PLJ66BAXN6D8H_gRQJGjmbnS5qCWoxJNfe&index=7
+  - Papers
+    - Universal and Transferable Adversarial Attacks on Aligned Language Models: https://arxiv.org/abs/2307.15043
+    - (Optional) Poisoning Web-Scale Training Datasets is Practical: https://arxiv.org/abs/2302.10149
+    - (Optional) Stealing Part of a Production Language Model: https://arxiv.org/abs/2403.06634
+
+- Spring recess
+  - Mar 26
+
+- No lecture
+  - Apr 2
+
+- Towards safer AI through mechanistic interpretability and formal verification
+  - Apr 9
+  - Max Tegmark (Professor, MIT)
+  - Papers
+    - Opening the AI black box: program synthesis via mechanistic interpretability: https://arxiv.org/abs/2402.05110
+
+- Deep Learning for Mathematical Reasoning
+  - Apr 16
+  - Christian Szegedy (Co-founder, xAI)
+  - Slides: https://rdi.berkeley.edu/understanding_llms/assets/apr16.pdf
+  - Papers
+    - Autoformalization with Large Language Models: https://arxiv.org/abs/2205.12615
+    - (Optional) Draft, Sketch, and Prove: Guiding Formal Theorem Provers with Informal Proofs: https://arxiv.org/abs/2210.12283
+    - (Optional) Magnushammer: A Transformer-Based Approach to Premise Selection: https://arxiv.org/abs/2303.04488
+
+# CS294-196/CS194-196: Responsible GenAI and Decentralized Intelligence, Fall 2023
+
+https://rdi.berkeley.edu/responsible-genai/f23
+
+- Future of Decentralization, AI, and Computing Summit
+  - Aug 27
+  - https://rdi.berkeley.edu/events/sbcberkeley
+
+- No class
+  - Aug 29
+
+- Intro & Foundations of LLM
+  - Sep 5
+  - Eric Wallace (UC Berkeley)
+  - Slides (Intro): https://rdi.berkeley.edu/responsible-genai/assets/intro-cs294-196-f23.pptx.pdf
+  - Slides: https://rdi.berkeley.edu/responsible-genai/assets/CS294-Lecture-1.pdf
+
+- Infrastructure Layer I: Training and Inference, Performance Optimization, Scalability
+  - Sep 12
+  - Jonathan Frankle (MosaicML)
+  - Slides: https://rdi.berkeley.edu/responsible-genai/assets/CS294-Lecture-2.pdf
+
+- Infrastructure Layer II: Retrieval, Vector Databases, Search
+  - Sep 19
+  - Jerry Liu (LlamaIndex)
+  - Slides: https://rdi.berkeley.edu/responsible-genai/assets/CS294-Lecture-3.pdf
+  - Slides (2): https://rdi.berkeley.edu/responsible-genai/assets/CS294-Lecture-3_1.pdf
+
+- App Development Layer: Prompt Engineering, Chains, Tools
+  - Sep 26
+  - Omar Khattab (Stanford)
+  - Slides: https://rdi.berkeley.edu/responsible-genai/assets/CS294-Lecture-4.pdf
+
+- Application Domains I: Security, Education
+  - Oct 3
+  - Leo Meyerovich (Graphistry)
+  - Slides: https://rdi.berkeley.edu/responsible-genai/assets/CS294-Lecture-5.pdf
+
+- Application Domains II: Software Engineering/Code Generation, Data Science
+  - Oct 10
+  - Xinyun Chen (Google Brain)
+  - Slides: https://rdi.berkeley.edu/responsible-genai/assets/LLM_codegen_lecture.pdf
+
+- Trustworthiness: Privacy, Hallucinations, Adversarial Attacks
+  - Oct 17
+  - Nicholas Carlini (Google DeepMind)
+  - Slides: https://rdi.berkeley.edu/responsible-genai/assets/berkeley_llm_security.pdf
+
+- Applying Lessons from AI to Robot Learning
+  - Oct 24
+  - Karol Hausman (Google DeepMind & Stanford), Quan Vuong (Google DeepMind Robotics)
+  - Slides: https://rdi.berkeley.edu/responsible-genai/assets/oct_24.pdf
+
+- Decentralized Training and Inference, Open-Source Models
+  - Oct 31
+  - Ce Zhang (Professor at University of Chicago)
+
+- Proving humanness in the age of AI
+  - Nov 7
+  - Alex Blania (Tools for Humanity)
+
+- Ethics and Fairness, Safety, Alignment
+  - Nov 14
+  - Jacob Steinhardt (UC Berkeley), Andrew Critch (Encultured AI)
+
+- Edge compute; Federated learning; Open source data
+  - Nov 21
+  - Tianqi Chen (CMU)
+
+- Project Demos
+  - Nov 28
+
+# CS188: Introduction to Artificial Intelligence, Spring 2022
+
+https://inst.eecs.berkeley.edu/~cs188/sp22/

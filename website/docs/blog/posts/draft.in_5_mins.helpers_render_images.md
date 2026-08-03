@@ -88,7 +88,7 @@ commenting out the original source and inserting the resulting figures
 - Tests:
   [`dev_scripts_helpers/documentation/test/test_render_images.py`](https://github.com/causify-ai/helpers/blob/master/dev_scripts_helpers/documentation/test/test_render_images.py)
 - Documentation:
-  [`docs/tools/documentation_toolchain/all.render_images.explanation.md`](https://github.com/causify-ai/helpers/blob/master/docs/tools/documentation_toolchain/all.render_images.explanation.md)
+  [`dev_scripts_helpers/documentation/render_images.README.md`](https://github.com/causify-ai/helpers/blob/master/dev_scripts_helpers/documentation/render_images.README.md)
 
 ## How It Works
 

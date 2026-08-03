@@ -103,7 +103,7 @@ digraph BayesianFlow {
     data alone, without running an experiment
   - If it is **not identifiable**, no amount of observational data will suffice,
     and we need experimental data or additional assumptions
-  - The tools for identification (back-door criterion, front-door criterion,
+  - The tools for identification (backdoor criterion, frontdoor criterion,
     instrumental variables, do-calculus) form the core toolkit of this chapter
 
 - **Randomized Controlled Trials (RCTs)** are the gold standard for
@@ -145,7 +145,7 @@ digraph BayesianFlow {
 
 - When RCTs are not feasible, we need methods to identify causal effects from
   **observational data** alone
-  - This is where the back-door criterion, front-door criterion, instrumental
+  - This is where the backdoor criterion, frontdoor criterion, instrumental
     variables, and do-calculus come in
 
 ## Backdoor and Frontdoor Criteria
@@ -154,7 +154,7 @@ digraph BayesianFlow {
 
 // msml610/lectures_source/Lesson08.3-Do_Calculus.txt:353 "Chains, Forks, and Colliders"
 
-- Before understanding the back-door and front-door criteria, we need to
+- Before understanding the backdoor and frontdoor criteria, we need to
   understand the three fundamental building blocks of causal graphs
 
 - **Chain**: $X \rightarrow M \rightarrow Y$
@@ -240,17 +240,17 @@ digraph ColliderExample {
 // msml610/lectures_source/Lesson08.3-Do_Calculus.txt:269 "Back-Door Paths: Example"
 // msml610/lectures_source/Lesson08.3-Do_Calculus.txt:316 "The Back-Door Adjustment"
 
-- A **back-door path** is any path from $X$ to $Y$ that starts with an arrow
+- A **backdoor path** is any path from $X$ to $Y$ that starts with an arrow
   **into** $X$
   - These paths create spurious associations between $X$ and $Y$
   - They make $X$ and $Y$ look related even when changing $X$ would not change $Y$
 
-- **Back-door criterion**: A set of variables $Z$ satisfies the criterion relative
+- **Backdoor criterion**: A set of variables $Z$ satisfies the criterion relative
   to $(X, Y)$ if:
   1. No variable in $Z$ is a **descendant** of $X$
-  2. $Z$ **blocks every** back-door path from $X$ to $Y$
+  2. $Z$ **blocks every** backdoor path from $X$ to $Y$
 
-- When the back-door criterion is satisfied, the **adjustment formula** holds:
+- When the backdoor criterion is satisfied, the **adjustment formula** holds:
   $$\Pr(Y \mid do(X)) = \sum_z \Pr(Y \mid X, Z = z) \Pr(Z = z)$$
 
 - This result is profound: it allows us to compute an **interventional** quantity
@@ -264,7 +264,7 @@ digraph ColliderExample {
   - A company wants to understand the causal effect of Price on Sales
   - Advertising spend (AdSpend) is a **confounder**: it affects both the price
     the company can set and sales directly
-  - The back-door path is $Price \leftarrow AdSpend \rightarrow Sales$
+  - The backdoor path is $Price \leftarrow AdSpend \rightarrow Sales$
 
 \begin{center}
   \includegraphics[width=0.5\textwidth]{msml610/lectures_source/figures/L08.3_Lesson09-Price_Quantity.png}
@@ -294,13 +294,13 @@ digraph CausalDAG {
     **control for AdSpend** using one of:
     1. Including AdSpend as a covariate in regression
     2. Designing an experiment holding AdSpend constant or randomized
-    3. Using the back-door criterion
+    3. Using the backdoor criterion
 
 ### Common Mistakes with the Back-Door Criterion
 
 // msml610/lectures_source/Lesson08.3-Do_Calculus.txt:443 "Common Mistakes"
 
-- Before the back-door criterion, the standard approach was to "condition on
+- Before the backdoor criterion, the standard approach was to "condition on
   everything available"
   - **This is incorrect** and can introduce bias rather than remove it
 
@@ -308,7 +308,7 @@ digraph CausalDAG {
   - **Conditioning on a descendant of $X$**: can bias the estimate
   - **Controlling for too many variables**: can open collider paths and introduce
     spurious associations
-  - **Forgetting to block all back-door paths**: leaves residual confounding
+  - **Forgetting to block all backdoor paths**: leaves residual confounding
   - **Conditioning on a mediator**: blocks the causal pathway you are trying to
     measure (the chain case)
   - **Ignoring unobserved confounders**: can make the causal effect
@@ -322,14 +322,14 @@ digraph CausalDAG {
 
 // msml610/lectures_source/Lesson08.3-Do_Calculus.txt:464 "When Back-Door Adjustment Fails"
 
-- The back-door criterion is simple but **not universally applicable**
+- The backdoor criterion is simple but **not universally applicable**
   - No set of observable variables may satisfy the criterion (e.g., when there
     are unobserved or unknown confounders)
   - You need to know a good approximation of the true causal graph, and it is
     very easy to omit variables
 
-- **Alternatives** when back-door adjustment fails:
-  - **Front-door criterion**: uses mediators to identify the effect
+- **Alternatives** when backdoor adjustment fails:
+  - **Frontdoor criterion**: uses mediators to identify the effect
   - **Instrumental variables**: uses external sources of variation
   - **Do-calculus**: provides a complete set of symbolic transformation rules
 
@@ -337,7 +337,7 @@ digraph CausalDAG {
 
 // msml610/lectures_source/Lesson08.3-Do_Calculus.txt:479 "Front-Door Adjustment in Causal Inference"
 
-- The **front-door criterion** identifies causal effects even in the presence of
+- The **frontdoor criterion** identifies causal effects even in the presence of
   unobserved confounders
   - It applies when a **mediator variable** $M$ transmits all causal influence
     from treatment $X$ to outcome $Y$
@@ -365,12 +365,12 @@ digraph FrontDoor {
 }
 ```
 
-- **Hypotheses** for the front-door criterion:
+- **Hypotheses** for the frontdoor criterion:
   1. All directed paths from $X$ to $Y$ go through $M$
   2. No unobserved confounder affects both $X$ and $M$
-  3. All back-door paths from $M$ to $Y$ are blocked by $X$
+  3. All backdoor paths from $M$ to $Y$ are blocked by $X$
 
-- **The front-door adjustment formula**:
+- **The frontdoor adjustment formula**:
   $$P(Y \mid do(X)) = \sum_m P(M \mid X) \sum_{x'} P(Y \mid M, X') P(X')$$
   - _Intuition_: decompose the causal effect into two observable pieces: "How $X$
     causes $M$" and "How $M$ causes $Y$"
@@ -449,12 +449,12 @@ digraph CerealAds {
 
 // msml610/lectures_source/Lesson08.3-Do_Calculus.txt:644 "When Front-Door Works"
 
-  - **Is the front-door criterion verified?**
+  - **Is the frontdoor criterion verified?**
     - All influence of ads on buying goes through nagging ($X \to M \to Y$)
     - No hidden confounders affect both ads and nagging (TV schedule is random,
       not linked to parents' breakfast attitudes)
     - All confounding between nagging and buying is blocked by controlling for ads
-  - **Yes, the front-door criterion is verified**
+  - **Yes, the frontdoor criterion is verified**
 
   - Instead of running an experiment, we can just observe:
     1. How often ads make kids nag: $\Pr(M \mid X)$
@@ -494,14 +494,14 @@ digraph CerealAds {
 - These rules allow the systematic reduction of do-expressions into purely
   observational terms, whenever the causal graph permits
 
-// msml610/lectures_source/Lesson08.3-Do_Calculus.txt:735 "Back/Front-door Adjustments and Do-calculus"
+// msml610/lectures_source/Lesson08.3-Do_Calculus.txt:735 "Back/Frontdoor Adjustments and Do-calculus"
 
-- The **back-door** and **front-door** criteria are **special cases** of
+- The **backdoor** and **frontdoor** criteria are **special cases** of
   do-calculus
   - They are simpler, graphical shortcuts that can be derived using the three
     rules of do-calculus
   - Do-calculus is more general: it can identify causal effects in situations
-    where neither the back-door nor the front-door criterion applies
+    where neither the backdoor nor the frontdoor criterion applies
   - Pearl proved that do-calculus is **complete**: if a causal effect can be
     identified from a given graph, do-calculus will find the expression
 
@@ -684,7 +684,7 @@ digraph IV {
 **References**
 
 - Judea Pearl, _Causality: Models, Reasoning, and Inference_ (2nd ed., 2009) -
-  the definitive treatment of do-calculus, back-door and front-door criteria
+  the definitive treatment of do-calculus, backdoor and frontdoor criteria
 - Judea Pearl, Madelyn Glymour, and Nicholas Jewell, _Causal Inference in
   Statistics: A Primer_ (2016) - accessible introduction to causal identification
 - Judea Pearl and Dana Mackenzie, _The Book of Why_ (2018) - popular exposition

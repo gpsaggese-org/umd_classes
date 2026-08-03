@@ -4,62 +4,20 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{0.5cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 07.3: Hierarchical Models}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA (Artificial Intelligence: a Modern Approach)
-  - Chap 15: Probabilistic programming
-
-- Martin, Bayesian Analysis with Python, 2018 (2e)
-
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){width=1.5cm}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Bayesian_analysis_with_Python.jpg){width=1.5cm}
-
-::::
-:::
-
 
 # Hierarchical Models
 
 #### Hierarchical Models
 - Aka "multilevel", "nested", "mixed-effects" models
 
-- **\textcolor{red}{Key observation}**: data points share structure, but also have variations
-  - **\textcolor{orange}{Group data}**
+- **Key observation**: data points share structure, but also have variations
+  - **Group data**
     - E.g., sales in cities: each city is a market, with common trends
-  - **\textcolor{darkgreen}{Hierarchical structure}**
+  - **Hierarchical structure**
     - E.g., students in a school: each student is different, with common factors
-  - **\textcolor{teal}{Repeated measurements on same objects}**
+  - **Repeated measurements on same objects**
 
-- **\textcolor{cyan}{Idea}**: ![](assets/emoji/lightbulb.png){ width=14px }
+- **Idea**: ![](assets/emoji/lightbulb.png){ width=14px }
   - Model shares information between groups, but allows differences
   - Parameters of prior distributions have a prior distribution
     - Aka "hyper-priors" (!)
@@ -67,7 +25,7 @@ MSML610: Advanced Machine Learning
 - You can't do this with frequentist approach, only Bayesian approach
 
 #### Hierarchical Models: Examples
-- Many data problems lend themselves to **\textcolor{red}{hierarchical descriptions}**
+- Many data problems lend themselves to **hierarchical descriptions**
 
 - E.g.,
   - Medical research:
@@ -79,11 +37,11 @@ MSML610: Advanced Machine Learning
     - Categorize consumers by age, gender, income, education
 
 #### Unpooled, Pooled, Hierarchical Models
-- **\textcolor{red}{Pooled}**
+- **Pooled**
   - Groups have the same priors
-- **\textcolor{darkgreen}{Unpooled}**
+- **Unpooled**
   - Groups have different priors
-- **\textcolor{blue}{Hierarchical}**
+- **Hierarchical**
   - Groups have different priors which come from a common prior
 
 ![](msml610/lectures_source/figures/L07.3.Pooled_unpooled_hierarchical_models.png){ width=80% }
@@ -91,11 +49,11 @@ MSML610: Advanced Machine Learning
 
 
 #### Hierarchical Models: Chemical Shift
-- **\textcolor{red}{Proteins}** are made of 20 amino acids
+- **Proteins** are made of 20 amino acids
   - Study proteins with nuclear magnetic resonance
   - Measure "chemical shift"
 
-- **\textcolor{blue}{Data}** looks like:
+- **Data** looks like:
 
 ::: columns
 :::: {.column width=40%}
@@ -114,20 +72,20 @@ MSML610: Advanced Machine Learning
 #### Hierarchical Models: Chemical Shift
 - Given experimental measures of chemical shifts vs theoretical values, evaluate
   model using different styles
-  1. **\textcolor{red}{Pooled}**
+  1. **Pooled**
      - Compute difference between estimates and measures, fit Gaussian
      - More accurate estimates / lose amino acid info
-  2. **\textcolor{darkgreen}{Unpooled}**
+  2. **Unpooled**
      - Fit 20 Gaussians for 20 amino acids
      - Detailed analysis / less accuracy
-  3. **\textcolor{blue}{Hierarchical}**
+  3. **Hierarchical**
      - Model groups assuming common population
 
 #### Chemical Shift: Unpooled Model
 
 ::: columns
 :::: {.column width=40%}
-- **\textcolor{red}{Model each group independently}**
+- **Model each group independently**
   - Use same model structure to compare groups
 ::::
 :::: {.column width=55%}
@@ -138,11 +96,11 @@ MSML610: Advanced Machine Learning
 #### Chemical Shift: Hierarchical Model
 ::: columns
 :::: {.column width=40%}
-- **\textcolor{red}{Add two hyperpriors on $\mu$}**
+- **Add two hyperpriors on $\mu$**
   - Mean of $\mu$
   - Standard deviation of $\mu$
 
-- **\textcolor{blue}{Assume same variance $\sigma$ for all groups}**
+- **Assume same variance $\sigma$ for all groups**
   - Modeling choice
   - Option to add hyperpriors for $\sigma$
 
@@ -161,10 +119,10 @@ MSML610: Advanced Machine Learning
   - Each model has 4 estimated variables
 
 - Plot 94% credible intervals
-  - **\blue{Blue}**: hierarchical
-  - **\orange{Orange}**: non-hierarchical
-  - **\black{Black}** vertical line: global mean (hierarchical model)
-  - **\blue{Blue}** means pulled towards mean compared to **\orange{orange}**
+  - **\textcolor{blue}{\text{Blue}}**: hierarchical
+  - **\textcolor{orange}{\text{Orange}}**: non-hierarchical
+  - **\textcolor{black}{\text{Black}}** vertical line: global mean (hierarchical model)
+  - **\textcolor{blue}{\text{Blue}}** means pulled towards mean compared to **\textcolor{orange}{\text{orange}}**
 
 - **Shrinkage occurs**
 ::::
@@ -176,7 +134,7 @@ MSML610: Advanced Machine Learning
 #### Shrinkage
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Hierarchical models shrink parameters towards a common mean}**
+- **Hierarchical models shrink parameters towards a common mean**
   - Groups share information through the hyper-prior
   - Model groups as neither independent nor a single group
   - Less responsive to extreme values in individual groups
@@ -186,17 +144,17 @@ MSML610: Advanced Machine Learning
 ![](msml610/lectures_source/figures/L07.3.Shrinkage.png)
 ::::
 :::
-- **\textcolor{darkgreen}{Amount of shrinkage}** depends on data:
+- **Amount of shrinkage** depends on data:
   - Groups with more data influence estimates more
   - Similar groups reinforce common estimation
   - Global optimization
-- **\textcolor{blue}{Result}**: inference is more stable
+- **Result**: inference is more stable
 
 #### You Need to Know When to Stop
-- You can create **\textcolor{red}{hierarchical models with as many levels}** as you want
-  - **\textcolor{darkgreen}{Pros}**:
+- You can create **hierarchical models with as many levels** as you want
+  - **Pros**:
     - Leverage data structure
-  - **\textcolor{blue}{Cons}**
+  - **Cons**
     - Don't improve inference quality
     - Complicate interpretation
 
@@ -205,4 +163,4 @@ MSML610: Advanced Machine Learning
 
 #### Tutorial
 
-- [\textcolor{blue}{\underline{Hierarchical Models}}](https://github.com/gpsaggese/umd_classes/blob/master/msml610/tutorials/notebooks/Lesson07.03_Hierarchical_Models.ipynb)
+- [Hierarchical Models](https://github.com/gpsaggese/umd_classes/blob/master/msml610/tutorials/notebooks/Lesson07.03_Hierarchical_Models.ipynb)

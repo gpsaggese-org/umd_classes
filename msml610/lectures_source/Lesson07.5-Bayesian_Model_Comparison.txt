@@ -1,48 +1,13 @@
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L07.5: Bayesian Model Comparison
+// slides_engine=typst
+// references=
+// - AIMA (Artificial Intelligence: a Modern Approach)
+// - Chap 15: Probabilistic programming
+// - Martin, Bayesian Analysis with Python, 2018 (2e)
 
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 07.5: Bayesian Model Comparison}}$$**
-\endgroup
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA (Artificial Intelligence: a Modern Approach)
-  - Chap 15: Probabilistic programming
-
-- Martin, Bayesian Analysis with Python, 2018 (2e)
-
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){width=1.5cm}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Bayesian_analysis_with_Python.jpg){width=1.5cm}
-
-::::
-:::
-
-# ##############################################################################
 # Bayesian Model Comparison
-# ##############################################################################
 
 * Models as Maps of the Real World
 - Typically you need to compare models to understand which one is **"better"**
@@ -59,9 +24,7 @@ MSML610: Advanced Machine Learning
 
 // ## 5.1., Posterior predictive checks
 
-### ############################################################################
 ### Posterior Predictive Checks
-### ############################################################################
 
 * Posterior Predictive Checks
 
@@ -180,9 +143,7 @@ MSML610: Advanced Machine Learning
 
 // ## 5.2, The balance between simplicity and accuracy
 
-## #############################################################################
 ## The Balance Between Simplicity and Accuracy
-## #############################################################################
 
 * Occam's Razor
 - _"If you have **equivalent** explanations for the same phenomenon, you should
@@ -232,9 +193,7 @@ MSML610: Advanced Machine Learning
   - Aim for a model that "fits the data right," avoiding overfitting or
     underfitting
 
-## #############################################################################
 ## Measures of Predictive Accuracy
-## #############################################################################
 
 * Accuracy Measures
 - **In-sample accuracy** is measured on the data used to fit a model
@@ -248,9 +207,7 @@ MSML610: Advanced Machine Learning
 
 // ### 5.3.1, Information criteria
 
-### ############################################################################
 ### Information Criteria
-### ############################################################################
 
 * Information Criteria: Intuition
 - **Information criteria** compare models in terms of fitting the data taking
@@ -342,9 +299,7 @@ MSML610: Advanced Machine Learning
 
 // ### 5.3.2, Cross-validation
 
-### ############################################################################
 ### Cross-Validation
-### ############################################################################
 
 * Cross-Validation
 - **Cross-validation** (CV)
@@ -662,9 +617,7 @@ MSML610: Advanced Machine Learning
 * Using Sequential Monte Carlo to Compute Bayes Factors
 - TODO
 
-### ############################################################################
 ### Bayes Factors and Information Criteria
-### ############################################################################
 
 *
 - If we take the log of Bayes factors, we turn ratio of marginal likelihood into
@@ -679,9 +632,7 @@ MSML610: Advanced Machine Learning
 
 //## 5.8, Regularizing priors
 
-## #############################################################################
 ## Regularizing Priors
-## #############################################################################
 
 * Priors and Regularization
 - Using weakly/informative priors is a way of pushing a model to prevent

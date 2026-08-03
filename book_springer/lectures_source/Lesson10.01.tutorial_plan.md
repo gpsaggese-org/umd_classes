@@ -1,6 +1,6 @@
 # Tutorial Plan: Decision-Making Algorithms (Lesson 10.01)
 
-// From book.springer/lectures_source/Lesson10.01_Taxonomy_of_Decision_Problems.txt
+// From book.springer/lectures_source/Lesson10.1_Taxonomy_of_Decision_Problems.txt
 
 - This plan covers the algorithms listed in the lecture
 
@@ -12,7 +12,7 @@
 
 ```
 - Read the algorithms in
-  book.springer/lectures_source/Lesson10.01_Taxonomy_of_Decision_Problems.txt
+  book.springer/lectures_source/Lesson10.1_Taxonomy_of_Decision_Problems.txt
 
 - Come up with a plan for each of the algorithms to
   - Have the description of a simple Python example of a problem explaining the

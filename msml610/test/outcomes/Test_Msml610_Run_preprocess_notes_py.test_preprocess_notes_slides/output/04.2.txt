@@ -5,68 +5,25 @@ fontsize: 10pt
 \let\uline\underline
 \let\ul\underline
 
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 04.2: Machine Learning Models}}$$**
-\endgroup
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
-
-- Burkov: _"Machine Learning Engineering"_ (2020)
-
-- Hastie et al.: _"The Elements of Statistical Learning"_ (2nd ed, 2009)
-
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book.jpg){ height=20% }
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_The_Elements_of_Statistical_Learning.jpg){ height=20% }
-
-::::
-:::
-
-
-
 ## Logistic Regression
 
 #### Logistic Regression Is a Probabilistic Classifier
-- **\textcolor{red}{Logistic regression}** learns:
+- **Logistic regression** learns:
   - The probability of each class $\Pr(y | \vx)$ given input $\vx$
   - Instead of predicting class $y$ directly
 
-- **\textcolor{darkgreen}{Parametric approach}**: assume $\Pr(y | \vx; \vw)$ has a known functional
+- **Parametric approach**: assume $\Pr(y | \vx; \vw)$ has a known functional
   form
   $$
   \Pr(y=1|\vx; \vw) = \text{logit}(\vw^T \vx)
   $$
 
-- **\textcolor{blue}{Optimize parameters}** $\vw$ using maximum likelihood
+- **Optimize parameters** $\vw$ using maximum likelihood
   $$
   \vw^* = \argmax_{\vw} \Pr(\calD; \vw)
   $$
 
-- **\textcolor{violet}{Predict}** by outputting class with highest probability
+- **Predict** by outputting class with highest probability
   $$
   h_{\vw}(\vx) =
   \begin{cases}
@@ -93,7 +50,7 @@ MSML610: Advanced Machine Learning
 
 #### Logistic Function
 - Aka "sigmoid"
-- **\textcolor{red}{Logistic function}** $\text{logit}(s)$ is defined as
+- **Logistic function** $\text{logit}(s)$ is defined as
   $$
   \text{logit}(s) \defeq \frac{e^s}{1 + e^s} = \frac{1}{1 + e^{-s}}
   $$
@@ -104,18 +61,18 @@ MSML610: Advanced Machine Learning
 
 
 #### Logistic Regression vs Linear Classifier
-- **\textcolor{red}{Functional form is similar}**
-  - **\textcolor{orange}{Logistic regression}**: $h(\vw) = \text{logit}(\vw^T \vx$)
-  - **\textcolor{darkgreen}{Linear classifier}** (perceptron): $h(\vw) = \sign(\vw^T \vx)$
+- **Functional form is similar**
+  - **Logistic regression**: $h(\vw) = \text{logit}(\vw^T \vx$)
+  - **Linear classifier** (perceptron): $h(\vw) = \sign(\vw^T \vx)$
 
-- **\textcolor{teal}{Difference}** in probabilistic interpretation and fitting method
+- **Difference** in probabilistic interpretation and fitting method
   - Logistic regression** lacks samples of probability function to interpolate
     - Uses realizations of random variable
     - Seeks model parameters maximizing data likelihood
-  - **\textcolor{cyan}{Linear classification}** assumes class value is linear function of inputs
+  - **Linear classification** assumes class value is linear function of inputs
 
 #### Error for Probabilistic Binary Classifiers
-- For probabilistic binary classification, use **\textcolor{red}{log-probability error}** as
+- For probabilistic binary classification, use **log-probability error** as
   point-wise error
   $$
   e(h(\vx), y) \defeq -\log(\Pr(y = h(\vx)| \vx; \vw))
@@ -131,7 +88,7 @@ MSML610: Advanced Machine Learning
 
 
 #### One-Liner Error for Probabilistic Binary Classifiers
-- **\textcolor{red}{Point-wise error}** for example $(\vx, y)$ for probabilistic binary
+- **Point-wise error** for example $(\vx, y)$ for probabilistic binary
   classifiers is defined as:
   \begingroup \small
   \begin{alignat*}{2}
@@ -177,7 +134,7 @@ MSML610: Advanced Machine Learning
   e(h(\vx), y) = -y \log(\Pr(y=1|\vx) - (1 - y) \log(1 - \Pr(y=1|\vx))
   $$
 
-- Simplify further **\textcolor{red}{with logit function}**:
+- Simplify further **with logit function**:
   \begin{alignat*}{3}
   e(h(\vx), y)
   & \defeq - \log \Pr(h(\vx)=y)
@@ -198,39 +155,39 @@ MSML610: Advanced Machine Learning
   \end{alignat*}
   \vspace{-1cm}
 
-- Point-wise error for logistic regression equals **\textcolor{blue}{cross-entropy error}**
+- Point-wise error for logistic regression equals **cross-entropy error**
 
 #### Cross-Entropy Error
-- **\textcolor{red}{Point-wise error for logistic regression}** has expression:
+- **Point-wise error for logistic regression** has expression:
   $$
   e(h(\vx), y) = \log(1 + \exp(- y \cdot \vw^T \vx))
   $$
-  - It is called **\textcolor{darkgreen}{cross-entropy error}**
+  - It is called **cross-entropy error**
   - Note: no $-$ before $\log(\cdot)$ but before $y \cdot \vw^T \vx$
 
-- Cross-entropy error **\textcolor{blue}{generalizes 0-1 error}**
+- Cross-entropy error **generalizes 0-1 error**
   - If $\vw^T \vx$ agrees with $y$ in sign and $|\vw^T \vx|$ is large $\implies$
     error goes to 0
   - If they disagree in sign $\implies$ error goes towards $\infty$
 
-- Define **\textcolor{violet}{in-sample error on training set}** as average of point-wise errors:
+- Define **in-sample error on training set** as average of point-wise errors:
   $$
   E_{in} \defeq \frac{1}{N} \sum_n e(h(\vx_n), y_n)
   $$
 
 #### Fitting Logistic Regression
-- A plausible error measure of a hypothesis is based on **\textcolor{red}{likelihood of data}**
+- A plausible error measure of a hypothesis is based on **likelihood of data**
   $$
   \Pr(\calD | h = f)
   $$
   - _"How likely is the data $\calD$ under the assumption that $h = f$?"_
   - _"How likely is that the data $\calD$ was generated by $h$?"_
 
-- **\textcolor{darkgreen}{Maximize likelihood}** $\calD$ generated from logistic regression
+- **Maximize likelihood** $\calD$ generated from logistic regression
   $$\Pr(y = 1| \vx; \vw)$$
 
-- It can be proved that this is equivalent to **\textcolor{blue}{minimizing in-sample error}** on
-  training set **\textcolor{violet}{using cross-entropy error}**
+- It can be proved that this is equivalent to **minimizing in-sample error** on
+  training set **using cross-entropy error**
 
 #### Fitting Logistic Regression (Optional)
 - Find $\vw$ that maximizes likelihood for data set
@@ -312,15 +269,15 @@ MSML610: Advanced Machine Learning
 #### One-Vs-All Multi-Class Classification
 - Aka "one-vs-rest" classifier
 
-- **\textcolor{red}{Problem}**: you have $n$ classes $c_1, ... , c_n$ to distinguish given $\vx$
+- **Problem**: you have $n$ classes $c_1, ... , c_n$ to distinguish given $\vx$
 
-- **\textcolor{darkgreen}{Learn}**
+- **Learn**
   - Create $n$ binary classification problems where we classify $c_i$ vs
     $c_{-i}$ (everything but $i$)
   - Learn $n$ classifiers with optimal $\vw_i$, each estimating
     $\Pr(y=i | \vx; \vw_i)$
 
-- **\textcolor{blue}{Predict}**
+- **Predict**
   - Evaluate the $n$ classifiers
   - Pick the class $y = i$ with the maximum $\Pr(y = i | \vx)$
 
@@ -357,35 +314,35 @@ MSML610: Advanced Machine Learning
   - Known functional form
   - Parametrized with unknown parameters to estimate
 
-- **\textcolor{red}{Pros}**
+- **Pros**
   - Utilize data structure
   - Easy to fit: few parameters
   - Accurate predictions if assumptions correct
 
-- **\textcolor{blue}{Cons}**
+- **Cons**
   - Strong data assumptions
   - Low accuracy if assumptions incorrect
 
 #### Linear and Quadratic Discriminant Analysis
 - Aka LDA and QDA
 
-- **\textcolor{red}{Parametric models}**
+- **Parametric models**
   - Assume each class generating process is multivariate Gaussian
   - Classifiers with linear and quadratic decision surface
 
-- **\textcolor{darkgreen}{Pros}**
+- **Pros**
   - Closed-form solutions easy to compute (sample mean and covariance)
   - Inherently multiclass
   - No hyperparams to tune
 
-- **\textcolor{blue}{Cons}**
+- **Cons**
   - Strong assumptions about the data
 
 #### LDA / QDA: Model Form
 - Both LDA and QDA assume class generating process
-  $f_k(\vx; \vv{\mu_k}, \mat{\Sigma_k})$ is **\textcolor{red}{multivariate Gaussian}**
+  $f_k(\vx; \vv{\mu_k}, \mat{\Sigma_k})$ is **multivariate Gaussian**
 
-- **\textcolor{darkgreen}{Linear discriminant analysis (LDA)}** model:
+- **Linear discriminant analysis (LDA)** model:
   $$
   f_k(\vx; \vv{\mu_k}, \mat{\Sigma_k})
   \sim \calN(\vv{\mu_k}, \mSigma))
@@ -394,19 +351,19 @@ MSML610: Advanced Machine Learning
   - Covariance matrix $\mSigma$ same for all $k$ classes
   - Classes separated by linear decision boundaries
 
-- **\textcolor{blue}{Quadratic discriminant analysis (QDA)}** model:
+- **Quadratic discriminant analysis (QDA)** model:
   - Classes $k$ have different covariance matrix $\mat{\Sigma_k}$
   - Classes separated by quadratic boundaries
 
 #### Bayes Theorem for LDA / QDA
 - Consider a classification setup with multi-class output $Y \in \{1, ..., K\}$
 
-- Build a **\textcolor{red}{parametric model for the conditional distribution}**:
+- Build a **parametric model for the conditional distribution**:
   $$
   \Pr(Y = k | X = \vx)
   $$
 
-- Use **\textcolor{darkgreen}{Bayes theorem}**:
+- Use **Bayes theorem**:
   $$
   \Pr(Y = k | X = \vx) = \frac{\Pr(X = \vx | Y = k) \cdot \Pr(Y = k)}{\Pr(X = \vx)}
   $$
@@ -415,7 +372,7 @@ MSML610: Advanced Machine Learning
   - $\Pr(Y = k) = \pi_k$: probability of each class (prior)
   - $\Pr(X = \vx)$: probability of each input
 
-- **\textcolor{blue}{Estimate probabilities}** from data
+- **Estimate probabilities** from data
 
 #### LDA / QDA: Boundary Decision (Optional)
 - Consider the ratio between the probabilities of $Y = k$ vs $Y = j$:
@@ -451,9 +408,9 @@ MSML610: Advanced Machine Learning
   r = \log \frac{f_k(\vx)}{f_j(\vx)} + \log \frac{\pi_k}{\pi_j}
   $$
 
-- **\textcolor{red}{Second term}** independent of $\vx$ so you can ignore it
+- **Second term** independent of $\vx$ so you can ignore it
 
-- **\textcolor{blue}{First term}** proportional to:
+- **First term** proportional to:
   $$
   (\vx - \vv{\mu_k})^T \mSigma^{-1} (\vx - \vv{\mu_k}) -
   (\vx - \vv{\mu_j})^T \mSigma^{-1} (\vx - \vv{\mu_j})
@@ -509,7 +466,7 @@ MSML610: Advanced Machine Learning
   - E.g., transform features in space $\calX$ non-linearly into
     higher-dimensional space $\calZ$
 
-- **\textcolor{red}{Kernel of transformation}** $\Phi$ yields inner product of two points
+- **Kernel of transformation** $\Phi$ yields inner product of two points
   $\vx, \vx' \in \calX$ in transformed space $\calZ$
   $$
   K_{\Phi}(\vx, \vx')
@@ -550,7 +507,7 @@ MSML610: Advanced Machine Learning
 
 #### Gaussian Kernel
 - Aka "exponential kernel" or "Radial Basis Function" (RBF) kernel
-- A **\textcolor{red}{Gaussian kernel}** has the form:
+- A **Gaussian kernel** has the form:
   $$
   K(\vx, \vx')
   = \exp(- \gamma \|\vx - \vx'\|^2)
@@ -559,7 +516,7 @@ MSML610: Advanced Machine Learning
 - It can be shown to be an inner product in an infinite dimension $\calZ$
 
 #### Kernel as Way to Measure Similarity
-- **\textcolor{red}{Intuition}**: The Gaussian kernel
+- **Intuition**: The Gaussian kernel
   $$
   K(\vx, \vx')
   = \exp(- \gamma \|\vx - \vx'\|^2)
@@ -580,7 +537,7 @@ MSML610: Advanced Machine Learning
   $$
   K_{\Phi}(\vx, \vx') = \vx^T \vx'
   $$
-  - A **\textcolor{red}{linear kernel}** means using no kernel
+  - A **linear kernel** means using no kernel
   - It is just a "pass-through"
 
 #### Polynomial Kernel
@@ -589,12 +546,12 @@ MSML610: Advanced Machine Learning
   $$
   K_{\Phi}(\vx, \vx') = (k + \vx^T \vx')^d
   $$
-- It is called **\textcolor{red}{polynomial}** since if you expand the dot product you get a
+- It is called **polynomial** since if you expand the dot product you get a
   polynomial
 - It can be proved that this is always a kernel
 
 #### Kernel: Identifying a Function as a Kernel
-- **\textcolor{red}{Problem}**:
+- **Problem**:
   - You have a certain function $K(\vx, \vx')$ and you want to show that $K(\cdot)$
     is an inner product in the form for some function $\Phi(\cdot)$
     $$
@@ -610,7 +567,7 @@ MSML610: Advanced Machine Learning
 #### Kernel: Example of Identifying a Kernel
 - Let's show that:
   $$K(\vx, \vx') = (k + \vx^T \vx')^d$$
-  is a **\textcolor{red}{kernel}** for any $n, k, d$
+  is a **kernel** for any $n, k, d$
 
 - According to the definition you need to show that there is always a transform
   $\Phi$:
@@ -619,7 +576,7 @@ MSML610: Advanced Machine Learning
   $$
   with $q \gg d$, such that $K_{\Phi} = (k + \vx^T \vx')^d$
 
-- **\textcolor{blue}{Example}**
+- **Example**
   - $\calX = \bbR^2$, $K(\vx, \vx') = (1 + \vx^T \vx')^2 = (1 + x_1 x'_1 + x_2 x'_2)^2$
   - Compute the full expression in terms of the coordinates:
     $$
@@ -632,18 +589,18 @@ MSML610: Advanced Machine Learning
   - This is a particular case of the polynomial kernel
 
 #### A Kernel Is a Computational Shortcut
-- In literature, the **\textcolor{red}{kernel trick}** is a **\textcolor{darkgreen}{computational shortcut}** for the dot
+- In literature, the **kernel trick** is a **computational shortcut** for the dot
   product of transformed vectors
 
 - Compare 2 ways to compute the inner product of transformed vectors for a
   polynomial kernel
-  1. **\textcolor{blue}{Using definition}**: compute images of vectors, then inner product in
+  1. **Using definition**: compute images of vectors, then inner product in
      transformed space:
      $$
      (1, x_1, x_2, \sqrt{2} x_1 x_2, x_1^2, x_2^2, ...)^T \cdot (1, x'_1, ...)
      $$
      - Requires combinatorial powers and a large dot product
-  2. **\textcolor{violet}{Kernel trick}**: use kernel function for dot product in transformed space
+  2. **Kernel trick**: use kernel function for dot product in transformed space
      $$
      (k + \vx^T \vx')^d
      $$
@@ -657,10 +614,10 @@ MSML610: Advanced Machine Learning
 - Arguably one of the most successful classification algorithm, together with
   neural networks and random forests
 
-- **\textcolor{red}{Idea}**: find a separating hyperplane that maximizes the distance from the
+- **Idea**: find a separating hyperplane that maximizes the distance from the
   class points (aka "margin")
 
-- **\textcolor{blue}{All the rage in 2005-2015}**
+- **All the rage in 2005-2015**
   - Robust classifier handling outliers automatically
   - Strong theoretical justification of out-of-bound error
   - Strong link with VC dimension
@@ -677,7 +634,7 @@ MSML610: Advanced Machine Learning
 
 ::: columns
 :::: {.column width=50%}
-- Why **\textcolor{red}{large margin}** classifier is good?
+- Why **large margin** classifier is good?
 
 - Given a linearly separable data set, the optimal separating line maximizes the
   margin:
@@ -782,10 +739,10 @@ MSML610: Advanced Machine Learning
   - $\valpha$ is the column vector $(\alpha_1, \ldots , \alpha_N)$
 
 #### Solving Dual Formulation of SVM Problem (1/2)
-- **\textcolor{red}{Solving convex problem}** for $\alpha$
+- **Solving convex problem** for $\alpha$
   - Feeding this problem to a QP solver, you get the optimal vector $\valpha$
 
-- **\textcolor{blue}{Compute hyperplane}** $\vw$
+- **Compute hyperplane** $\vw$
 
   - From $\valpha$ recover the plane $\vw$ from the equation:
     $\vw = \sum_{i=1}^N \alpha_i y_i \vx_i$
@@ -821,7 +778,7 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-- **\textcolor{red}{Compute}** $b$
+- **Compute** $b$
   - Once $\vw$ is known, you can use any support vector to compute $b$:
     $$
     y_i (\vw^T \vx_i + b) = 1
@@ -879,7 +836,7 @@ MSML610: Advanced Machine Learning
 :::
 
 #### SVM in Higher Dimensional Space
-- **\textcolor{red}{Pros}**
+- **Pros**
   - You don't pay the price in terms of complexity of optimization problem
     - Number of unknowns is still $N$ (different than a linear problem)
   - You don't pay the price in terms of increased generalization bounds
@@ -887,7 +844,7 @@ MSML610: Advanced Machine Learning
     - This is because each hypothesis $h$ can be complex but the cardinality of
       the hypothesis set $\calH$ is the same
 
-- **\textcolor{blue}{Cons}**
+- **Cons**
   - You pay a price to compute $\Phi(\vx_i)^T \Phi(\vx_j)$, since $\Phi$ could be
     very complex
     - The kernel trick will remove this extra complexity by doing
@@ -897,7 +854,7 @@ MSML610: Advanced Machine Learning
 - The trivial approach is:
   - Transform vectors with $\Phi(\cdot)$
   - Apply all SVM machinery to the transformed vectors
-  - **\textcolor{red}{Cons}**: $\Phi$ might be very complex, e.g., potentially exponential number
+  - **Cons**: $\Phi$ might be very complex, e.g., potentially exponential number
     of terms
 
 - You can express the SVM problem formulation and the prediction in terms of a
@@ -962,13 +919,13 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=50%}
 
-- In general there are different types of **\textcolor{red}{non-linearly separable data sets}**
+- In general there are different types of **non-linearly separable data sets**
 
-- **\textcolor{darkgreen}{Slightly non-separable}**
+- **Slightly non-separable**
   - Few points crossing the boundary
   - $\implies$ use soft margin SVMs
 
-- **\textcolor{blue}{Seriously non-separable}**
+- **Seriously non-separable**
   - E.g., the class inside the circle
   - $\implies$ use non-linear kernels
 
@@ -1038,14 +995,14 @@ MSML610: Advanced Machine Learning
 
 #### Classes of Support Vectors for Soft Margin SVM
 - There are 3 classes of points:
-  - **\textcolor{red}{Margin support vectors}**: they are exactly on the margin and define it
+  - **Margin support vectors**: they are exactly on the margin and define it
     - In primal form: $y_i (\vw^T \vx_i + b) = 1 \iff \xi_i = 0$
     - In dual form: $0 < \alpha_i < C$
-  - **\textcolor{darkgreen}{Non-margin support vectors}**: they are inside the margin and classified
+  - **Non-margin support vectors**: they are inside the margin and classified
     correctly or not
     - In primal form: $y_i (\vw^T \vx_i + b) < 1 \iff \xi_i > 0$
     - In dual form: $\alpha_i = C$
-  - **\textcolor{blue}{Non-support vectors}**, i.e., interior points:
+  - **Non-support vectors**, i.e., interior points:
     - In primal form: $y_i (\vw^T \vx_i + b) > 1$
     - In dual form: $\alpha_i = 0$
 
@@ -1074,3 +1031,4 @@ MSML610: Advanced Machine Learning
   - For a new example $\vx$ compute $\vw_i^T \vx + b_i$ for all the models
   - Pick the model that gives the largest positive value
     - I.e., more confident about its class vs the rest of the classes
+

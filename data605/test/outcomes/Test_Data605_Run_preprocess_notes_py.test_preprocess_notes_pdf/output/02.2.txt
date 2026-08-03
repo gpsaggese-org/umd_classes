@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{02.2: Git Branching}}$$**
+**$$\text{\textcolor{blue}{\text{02.2: Git Branching}}}$$**
 \endgroup
 
 \vspace{1cm}

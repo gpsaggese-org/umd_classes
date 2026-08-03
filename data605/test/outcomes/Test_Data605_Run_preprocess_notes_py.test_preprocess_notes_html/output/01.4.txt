@@ -21,7 +21,7 @@ UMD DATA605: Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{01.4: Data Models}}$$**
+**$$\text{\textcolor{blue}{\text{01.4: Data Models}}}$$**
 \endgroup
 
 \vspace{1cm}
