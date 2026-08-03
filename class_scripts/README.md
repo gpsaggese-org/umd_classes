@@ -19,19 +19,18 @@ slide quality through automated LLM-powered transformations
 
 - Each course/book directory that the scripts read from and write to (e.g.,
   `data605/`, `msml610/`) contains a subset of the following dirs:
-  - `lectures_source/`: Input directory containing `Lesson*.txt` files
-  - `lectures/`: Output directory for generated PDF slides
+  - `lectures_source/`: directory containing `Lesson*.txt` files
+  - `lectures/`: directory for generated PDF slides
     - E.g., `gen_slides.py`, `for_loop_lessons.py --action generate_pdf`
-  - `lectures_tex/`: Output directory for generated `.tex` slide sources
+  - `lectures_tex/`: directory for generated `.tex` slide sources
     - E.g., `for_loop_lessons.py --action generate_tex`
-  - `lectures_video_script/`: Output directory for generated video script files
-  - `lectures_quizzes/`: Output directory for multiple choice quiz files
-  - `lectures_recap/`: Output directory for discussion and recap question files
-  - `lectures_commentary/`
-  - `book/`: Output directory for "book chapter" PDFs (slides + LLM commentary)
+  - `lectures_video_script/`: directory for generated video script files
+  - `lectures_quizzes/`: directory for multiple choice quiz files
+  - `lectures_recap/`: directory for discussion and recap question files
+  - `lectures_commentary/`: directory with the md, pdf, and html files
+  - `book/`: directory for the book chapters in PDFs
     - E.g., `gen_lecture_commentary.py`
-  - `book_source/`: Output dir for the book (`.typ` or `.tex`)
-  - `book_pdf/`: Output dir for the compiled PDF of the book
+  - `book_source/`: directory for the book source as `.typ` or `.tex`
   - `tutorial/`: Dir with the Jupyter notebook tutorials for each source
   - `test/`: unit tests for the scripts in this directory (one `test_<module>.py`
     per source module)

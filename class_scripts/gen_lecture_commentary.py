@@ -2,14 +2,15 @@
 
 # /// script
 # dependencies = [
-#   "pandas>=2.0.0",
+#   "llm",
 #   "openai",
-#   "tqdm",
-#   "pyyaml",
-#   "requests",
-#   "python-dotenv",
+#   "pandas>=2.0.0",
 #   "pdf2image",
 #   "pillow",
+#   "python-dotenv",
+#   "pyyaml",
+#   "requests",
+#   "tqdm",
 # ]
 # ///
 
@@ -38,12 +39,12 @@ https://github.com/gpsaggese/gpsaggese.github.io/blob/master/data605/lectures_co
 or
 
 ```
-> ls -1 data605/lecture_commentary/Lesson01.1-Intro.*
-data605/lecture_commentary/Lesson01.1-Intro.book_chapter.html
-data605/lecture_commentary/Lesson01.1-Intro.book_chapter.md
-data605/lecture_commentary/Lesson01.1-Intro.book_chapter.pdf
+> ls -1 data605/lectures_commentary/Lesson01.1-Intro.*
+data605/lectures_commentary/Lesson01.1-Intro.book_chapter.html
+data605/lectures_commentary/Lesson01.1-Intro.book_chapter.md
+data605/lectures_commentary/Lesson01.1-Intro.book_chapter.pdf
 
-data605/lecture_commentary/Lesson01.1-Intro.png:
+data605/lectures_commentary/Lesson01.1-Intro.png:
 slides001.png
 slides002.png
 ...
@@ -65,7 +66,7 @@ import pdf2image  # type: ignore
 import tqdm
 from PIL import ImageOps
 
-import class_scripts.common_utils as clcomuut
+import class_scripts.common_utils as csccouti
 import class_scripts.slides_utils as cscsluti
 import dev_scripts_helpers.documentation.preprocess_notes as dshdprno
 import dev_scripts_helpers.dockerize.lib_prettier as dshdlipr
@@ -73,8 +74,6 @@ import helpers.hcache_simple as hcacsimp
 import helpers.hdbg as hdbg
 import helpers.hgit as hgit
 import helpers.hio as hio
-import helpers.hllm as hllm
-import helpers.hllm_cli as hllmcli
 import helpers.hparser as hparser
 import helpers.hprint as hprint
 import helpers.hsystem as hsystem
@@ -116,9 +115,9 @@ def get_image_extension(image_type: str) -> str:
 def _extract_png_from_pdf(
     input_pdf_file: str,
     output_png_dir: str,
+    image_type: str,
     *,
     dpi: int = 200,
-    image_type: str = "png",
     add_border: bool = False,
 ) -> None:
     """
@@ -175,9 +174,7 @@ def _extract_png_from_pdf(
     )
 
 
-def _get_png_files_from_directory(
-    png_dir: str, *, image_type: str = "png"
-) -> List[str]:
+def _get_png_files_from_directory(png_dir: str, image_type: str) -> List[str]:
     """
     Get sorted list of slide image files from directory.
 
@@ -190,9 +187,7 @@ def _get_png_files_from_directory(
     # List all image files matching the pattern slides*.<extension>.
     png_files = []
     for filename in os.listdir(png_dir):
-        if filename.startswith("slides") and filename.endswith(
-            f".{extension}"
-        ):
+        if filename.startswith("slides") and filename.endswith(f".{extension}"):
             png_files.append(os.path.join(png_dir, filename))
     # Sort files to ensure correct ordering.
     png_files.sort()
@@ -200,7 +195,7 @@ def _get_png_files_from_directory(
     return png_files
 
 
-def _is_png_dir_populated(png_dir: str, *, image_type: str = "png") -> bool:
+def _is_png_dir_populated(png_dir: str, image_type: str) -> bool:
     """
     Check whether an image directory already contains extracted slide images.
 
@@ -291,8 +286,7 @@ def _generate_slide_commentary(
     slide_content: str,
     system_prompt: str,
     model: str,
-    *,
-    llm_backend: str = "hllm",
+    llm_backend: str,
 ) -> str:
     """
     Generate commentary for a single slide using LLM.
@@ -316,6 +310,8 @@ def _generate_slide_commentary(
     user_prompt = processed_slides[0]
     # Get completion from LLM.
     if llm_backend == "hllm":
+        import helpers.hllm as hllm
+
         response = hllm.get_completion(
             user_prompt=user_prompt,
             system_prompt=system_prompt,
@@ -325,6 +321,8 @@ def _generate_slide_commentary(
             images_as_base64=tuple(images_as_base64),
         )
     else:
+        import helpers.hllm_cli as hllmcli
+
         response, _ = hllmcli.apply_llm(
             user_prompt,
             system_prompt=system_prompt,
@@ -338,12 +336,12 @@ def _generate_lecture_commentary(
     input_file: str,
     output_dir: str,
     input_png_dir: str,
+    image_type: str,
+    llm_backend: str,
     *,
     output_file: str = "",
     image_width: str = "80%",
     add_new_page: bool = False,
-    image_type: str = "png",
-    llm_backend: str = "hllm",
 ) -> None:
     r"""
     Generate book chapter from markdown slides and a directory of slide PNGs.
@@ -383,9 +381,7 @@ def _generate_lecture_commentary(
     num_slides = len(slides)
     _LOG.info("Found %d slides in markdown file", num_slides)
     # Get PNG files from directory.
-    png_files = _get_png_files_from_directory(
-        input_png_dir, image_type=image_type
-    )
+    png_files = _get_png_files_from_directory(input_png_dir, image_type)
     num_pngs = len(png_files)
     _LOG.info("Found %d PNG files in directory", num_pngs)
     # Check that slide count matches PNG count.
@@ -471,10 +467,7 @@ def _generate_lecture_commentary(
         )
         # Generate commentary for this slide.
         commentary = _generate_slide_commentary(
-            slide_content=slide_content,
-            system_prompt=_DEFAULT_SYSTEM_PROMPT,
-            model="",
-            llm_backend=llm_backend,
+            slide_content, _DEFAULT_SYSTEM_PROMPT, "", llm_backend
         )
         slide_output.append(commentary)
         slide_output.append("")
@@ -553,15 +546,15 @@ def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
     # Validate arguments.
-    clcomuut.validate_dir_lesson_args(args.dir, args.lesson)
+    csccouti.validate_dir_lesson_args(args.dir, args.lesson)
     # Get source name.
-    src_name = clcomuut.get_source_name(args.dir, args.lesson)
+    src_name = csccouti.get_source_name(args.dir, args.lesson)
     input_file = f"{args.dir}/lectures_source/{src_name}"
     # Precompute the paths of all intermediate/output files, so that we can
     # skip steps whose output already exists (unless --no_incremental).
-    dst_name = clcomuut.get_output_name(src_name, ".pdf")
+    dst_name = csccouti.get_output_name(src_name, ".pdf")
     tmp_pdf = f"tmp.{dst_name}"
-    out_dir = f"{args.dir}/lecture_commentary"
+    out_dir = f"{args.dir}/lectures_commentary"
     basename = os.path.splitext(src_name)[0]
     image_extension = get_image_extension(args.image_type)
     png_dir = f"{out_dir}/{basename}.{image_extension}"
@@ -586,10 +579,8 @@ def _main(parser: argparse.ArgumentParser) -> None:
     # This is tracked independently from the markdown artifact (Step 3) so
     # that deleting only the image dir triggers re-extraction without forcing
     # a full markdown/commentary regeneration.
-    clcomuut.ensure_dir_exists(out_dir)
-    if do_incremental and _is_png_dir_populated(
-        png_dir, image_type=args.image_type
-    ):
+    csccouti.ensure_dir_exists(out_dir)
+    if do_incremental and _is_png_dir_populated(png_dir, args.image_type):
         _LOG.warning("Step 2: Skipping, '%s' already populated", png_dir)
     else:
         _LOG.info("Step 2: Extracting %s images from PDF", args.image_type)
@@ -602,8 +593,8 @@ def _main(parser: argparse.ArgumentParser) -> None:
             _extract_png_from_pdf(
                 tmp_pdf,
                 png_dir,
+                args.image_type,
                 dpi=300,
-                image_type=args.image_type,
                 add_border=True,
             )
     # Step 3: Generate book chapter.
@@ -618,12 +609,12 @@ def _main(parser: argparse.ArgumentParser) -> None:
             )
         else:
             _generate_lecture_commentary(
-                input_file=input_file,
-                output_dir=out_dir,
-                input_png_dir=png_dir,
+                input_file,
+                out_dir,
+                png_dir,
+                args.image_type,
+                args.llm_backend,
                 output_file=book_chapter_md,
-                image_type=args.image_type,
-                llm_backend=args.llm_backend,
             )
     # Step 4: Track the generated markdown file in git.
     _LOG.info("Step 4: Adding book chapter markdown to git")
