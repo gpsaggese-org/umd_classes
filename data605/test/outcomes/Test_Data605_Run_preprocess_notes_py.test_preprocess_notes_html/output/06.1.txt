@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{06.1: MongoDB}}$$**
+**$$\text{\textcolor{blue}{\text{06.1: MongoDB}}}$$**
 \endgroup
 
 \vspace{1cm}

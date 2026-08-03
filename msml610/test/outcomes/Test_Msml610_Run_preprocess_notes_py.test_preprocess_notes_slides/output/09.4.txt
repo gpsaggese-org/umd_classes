@@ -4,87 +4,60 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 09.4: gh Filter}}$$**
-\endgroup
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA 14: Probabilistic reasoning over time
-- [\textcolor{blue}{\underline{https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python}}](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python)
-
 
 # gh Filter
 
 #### Tracking Objects
-- Many problems can be formulated as **\textcolor{red}{tracking objects}**
+- Many problems can be formulated as **tracking objects**
 
-- **\textcolor{darkgreen}{Examples}**
+- **Examples**
   - Navigation of aircraft, drones, autonomous cars
   - Robotics: arm kinematics to predict the position of joints
   - Sensor fusion: merge multiple sensor readings
   - Finance: predict economic variables
   - Computer vision: track moving objects across video
 
-- **\textcolor{blue}{Kalman filter}**
+- **Kalman filter**
   - Used for state estimation in dynamic systems with noisy, uncertain
     measurements
   - Track state over time using model to make predictions and observations
 
 #### Some Guiding Principles
-- **\textcolor{red}{The world is noisy}**
+- **The world is noisy**
   - E.g., a car might swerve around a pothole or brake for a pedestrian
   - E.g., wind or ice might change the car's path
 
-- **\textcolor{orange}{Sensors are noisy}**
+- **Sensors are noisy**
   - E.g., a kitchen scale gives different readings for the same object
 
-- **\textcolor{darkgreen}{Knowledge is uncertain}**
+- **Knowledge is uncertain**
   - E.g., you alter beliefs on how things work based on evidence and its strength
 
-- **\textcolor{teal}{Combine past information and system knowledge}** to estimate future
+- **Combine past information and system knowledge** to estimate future
   information
   - E.g., if a car moves at speed $X$ at time $t$, the speed at time $t+1$ is
     $\approx X$
 
-- **\textcolor{cyan}{Data (even if noisy) > guess}**
+- **Data (even if noisy) > guess**
   - Never discard information, no matter how poor it is
   - E.g., two sensors, even if one is less accurate, are better than one
 
 #### Example of Estimating Body Weight
-- **\textcolor{red}{Goal}**: estimate your weight over time while going to the gym
+- **Goal**: estimate your weight over time while going to the gym
 
 - Two possible approaches
-  1. **\textcolor{darkgreen}{Predict your weight}**
+  1. **Predict your weight**
      - Track calorie intake
      - Track energy expense
      - Compute expected weight gain
      - _Cons_: Difficult to track food intake and exercise accurately
-  2. **\textcolor{blue}{Measure your weight}**
+  2. **Measure your weight**
      - Use a scale
      - _Cons_: Scale is noisy, water weight fluctuates, different clothes
 
 ::: columns
 :::: {.column width=50%}
-- **\textcolor{violet}{Problem}**: Prediction doesn't match measurements
+- **Problem**: Prediction doesn't match measurements
   - E.g., at time $t$:
     - Estimate $\hat{x}_{t|t-1} = 159$ based on calorie intake and energy
       expended
@@ -97,7 +70,7 @@ MSML610: Advanced Machine Learning
 :::
 
 #### Example of Estimating Body Weight
-- **\textcolor{red}{What's the real weight?}**
+- **What's the real weight?**
   - You need to blend prediction and measurement
   $$
   \text{estimate = 0.6} \times \text{prediction} + (1 - 0.6) \times \text{measurement}
@@ -106,7 +79,7 @@ MSML610: Advanced Machine Learning
     than the measurement
   - The prediction is always between the prediction and the measurement
 
-- **\textcolor{blue}{Algorithm}**
+- **Algorithm**
   1. Start with an initial guess
      - Assume it's correct for now
   2. Predict the next weight based on the model
@@ -118,10 +91,10 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=50%}
 - Assume you know the initial weight and the gain rate
-  - \black{Black line} is the actual weight (i.e., _ground truth_)
-  - \red{Red line} is the _prediction_ from previous day's weight
-  - \green{Green circles} are the _measurements_
-  - \blue{Blue line} is the _estimate_ from the filter
+  - \textcolor{black}{\text{Black line}} is the actual weight (i.e., _ground truth_)
+  - \textcolor{red}{\text{Red line}} is the _prediction_ from previous day's weight
+  - \textcolor{darkgreen}{\text{Green circles}} are the _measurements_
+  - \textcolor{blue}{\text{Blue line}} is the _estimate_ from the filter
     - Always falls between measurement and prediction
 ::::
 :::: {.column width=45%}
@@ -145,11 +118,11 @@ MSML610: Advanced Machine Learning
 
 ::: columns
 :::: {.column width=50%}
-- Two **\textcolor{red}{problems}**
+- Two **problems**
   - The filter needs a correct guess of the weight change rate
   - The rate of change can vary over time
 
-- **\textcolor{blue}{Solution}**: estimate the rate of change from measurements
+- **Solution**: estimate the rate of change from measurements
   - "Data is better than a guess, even if it's noisy"
   - Refine the estimate of the gain rate:
     $$
@@ -165,7 +138,7 @@ MSML610: Advanced Machine Learning
 :::
 
 #### g-h Filter
-- The previous algorithm is called **\textcolor{red}{g-h filter}**
+- The previous algorithm is called **g-h filter**
   - $g$: scaling used to blend predicted state and measurement
   - $h$: scaling used to update the parameter of the system model based on the
     measurements
@@ -183,13 +156,13 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=55%}
 
-1. **\textcolor{red}{Initialization}**
+1. **Initialization**
    - Initialize state of the filter
    - Initialize belief in the state
-2. **\textcolor{darkgreen}{Predict}**
+2. **Predict**
    - Use system model to predict state at next time step
    - Adjust belief to account for uncertainty in prediction
-3. **\textcolor{blue}{Update}**
+3. **Update**
    - Get measurement and associated belief about its accuracy
    - Use as estimate of the next state a point between estimated state and
      measurement
@@ -273,18 +246,18 @@ digraph BayesianFlow {
   - Smaller $\to$ Smoother, slower rate adaptation
   - Larger $\to$ Faster rate adjustment
 
-- **\textcolor{red}{Note}**: Incorrect initial state is similar to a changing state
+- **Note**: Incorrect initial state is similar to a changing state
 
 #### Control Theory Nomenclature
 ::: columns
 :::: {.column width=50%}
 - State space models developed in control theory $\to$ different nomenclature
 
-- **\textcolor{red}{System}**: object to estimate/track
+- **System**: object to estimate/track
 
-- **\textcolor{orange}{Filter}**: algorithm to estimate system state
+- **Filter**: algorithm to estimate system state
 
-- **\textcolor{darkgreen}{State of the system}** \textcolor{blue}{\texttt{x}}: current values of interest
+- **State of the system** \textcolor{blue}{\texttt{x}}: current values of interest
   - Part of the state might be hidden
 ::::
 :::: {.column width=45%}
@@ -336,16 +309,16 @@ digraph StateEstimation {
 ::::
 :::
 
-- **\textcolor{teal}{Measurement}** \textcolor{blue}{\texttt{z}}: measured value of system
+- **Measurement** \textcolor{blue}{\texttt{z}}: measured value of system
   - Observable, can be inaccurate
 
-- **\textcolor{cyan}{State estimate}** \textcolor{blue}{\texttt{x\_est}}: filter estimate of state
+- **State estimate** \textcolor{blue}{\texttt{x\_est}}: filter estimate of state
 
-- **\textcolor{blue}{System model}**: mathematical model of system
+- **System model**: mathematical model of system
   - Typically has error
 
-- **\textcolor{violet}{System propagation}**: predict step using system model to form new state
+- **System propagation**: predict step using system model to form new state
   estimate \textcolor{blue}{\texttt{x\_pred}}
   - Estimate is imperfect
 
-- **\textcolor{magenta}{Measurement update}**: update step
+- **Measurement update**: update step

@@ -952,14 +952,14 @@
         - What is a Randomized Controlled Trial?
         - Randomized Controlled Trial: Example
         - Randomized Controlled Trial: Limits
-  - Back-door Adjustment
+  - Backdoor Adjustment
         - Back-Door Paths: Example
         - The Back-Door Adjustment
         - Back-Door Criterion: Overview
         - Chains, Forks, and Colliders
         - Common Mistakes
         - When Back-Door Adjustment Fails
-  - Front-door Adjustment
+  - Frontdoor Adjustment
         - Front-Door Adjustment in Causal Inference
         - Cereal and Ads: Example
         - Cereal and Ads: Solutions
@@ -968,7 +968,7 @@
   - Do-Calculus
         - Do-Calculus
         - The Rules of Do-Calculus
-        - Back/Front-door Adjustments and Do-calculus
+        - Back/Frontdoor Adjustments and Do-calculus
 
 # Lesson08.4.txt
 

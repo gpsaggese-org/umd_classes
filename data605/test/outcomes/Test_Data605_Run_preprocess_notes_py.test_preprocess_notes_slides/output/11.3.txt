@@ -21,12 +21,12 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{11.3: AWS Overview}}$$**
+**$$\text{\textcolor{blue}{\text{11.3: AWS Overview}}}$$**
 \endgroup
 
 ::: columns
 :::: {.column width=75%}
-- **Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+- **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
 - **References**:
   - Some basic info in the slides
@@ -40,19 +40,19 @@ UMD DATA605 - Big Data Systems
 :::
 
 #### Amazon Web Services (AWS)
-- **\textcolor{red}{AWS is a platform offering complete cloud solutions}**
+- **AWS is a platform offering complete cloud solutions**
   - Computing (e.g., EC2)
   - Storage (e.g., S3)
   - Networking
 
-- **\textcolor{darkgreen}{Offers different levels of abstraction}**
+- **Offers different levels of abstraction**
   - IaaS, PaaS, SaaS
   - From virtual hardware to applications, e.g.,
     - Host websites
     - Run enterprise software
     - Run machine learning applications
 
-- **\textcolor{blue}{Control services in different ways}**
+- **Control services in different ways**
   - Web interface (console)
   - CLI: \textcolor{blue}{\texttt{aws}} command
   - Language libraries, SDKs (e.g., Python \textcolor{blue}{\texttt{boto3}})
@@ -84,7 +84,7 @@ _Beef Jezos_
 :::
 
 #### Types of Cloud Computing
-- Cloud computing enables a **\textcolor{red}{shared pool of configurable computing resources}**
+- Cloud computing enables a **shared pool of configurable computing resources**
   - E.g., servers, storage, networks, applications, services
   - Accessible from anywhere
   - Convenient
@@ -99,14 +99,14 @@ _Beef Jezos_
 #### AWS vs Google Cloud vs Microsoft Azure
 ::: columns
 :::: {.column width=60%}
-- **\textcolor{red}{Similarities:}**
+- **Similarities:**
   - Worldwide infrastructure
   - Provide IaaS (computing, networking, storage)
     - AWS EC2 / Google Compute Engine / Azure VMs
     - AWS S3 / Google Cloud Storage / Azure Blob Storage
   - Pay-as-you-go pricing model
 
-- **\textcolor{blue}{Differences:}**
+- **Differences:**
   - AWS
     - Market leader, mature, powerful
     - Utilizes open source technologies
@@ -126,11 +126,11 @@ _Beef Jezos_
 #### From On-premise to AWS: 1/3
 - Aka "Cloud-transformation"
 
-- **\textcolor{red}{Example}**: move a medium-sized e-commerce site _from on-premise to the cloud_
+- **Example**: move a medium-sized e-commerce site _from on-premise to the cloud_
 
 ::: columns
 :::: {.column width=45%}
-- **\textcolor{blue}{No-cloud}**
+- **No-cloud**
   - _Web-server_: handles customer requests
   - _DB_: stores product info and orders
   - _Static content_ (e.g., JPEG images)
@@ -149,7 +149,7 @@ _Beef Jezos_
 
 ::: columns
 :::: {.column width=45%}
-- **\textcolor{red}{Move to cloud}**
+- **Move to cloud**
   - Keep the same architecture
   - Move components to cloud
 
@@ -162,7 +162,7 @@ _Beef Jezos_
 #### From On-premise to AWS: 3/3
 ::: columns
 :::: {.column width=45%}
-- **\textcolor{red}{Design for the cloud}**
+- **Design for the cloud**
   - DNS
   - Database
   - Object store (S3)
@@ -179,13 +179,13 @@ _Beef Jezos_
 #### Capacity Scaling
 ::: columns
 :::: {.column width=50%}
-- **\textcolor{red}{No need to plan for capacity}**
+- **No need to plan for capacity**
   - Do not predict capacity
   - Schedule capacity on-the-fly
   - No concern for rack space, switches, power supplies
   - Add more VMs (1 to 1000) and storage (GB to PB) as needed
 
-- **\textcolor{darkgreen}{Handle seasonal traffic by scaling up/down}**
+- **Handle seasonal traffic by scaling up/down**
   - Day vs night
   - Weekday vs weekend
   - Holidays
@@ -198,14 +198,14 @@ _Beef Jezos_
 ::::
 :::
 
-- **\textcolor{blue}{Worldwide presence}**
+- **Worldwide presence**
   - AWS has many data centers
   - Deploy applications close to customers
 
 #### Pay-per-use
 ::: columns
 :::: {.column width=50%}
-- **\textcolor{red}{AWS bill}**
+- **AWS bill**
   - Similar to an electric bill
   - Services billed based on usage:
     - Hours of virtual server (rounded up)
@@ -218,7 +218,7 @@ _Beef Jezos_
 ::::
 :::
 
-- **\textcolor{blue}{Free tier}**
+- **Free tier**
   - Use some AWS services free for 12 months after signing up
   - Experiment with services
     - E.g., EC2, S3
@@ -228,7 +228,7 @@ _Beef Jezos_
 #### Pay-per-use
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Advantages}**
+- **Advantages**
   - No upfront investments or commitment
   - Lower project startup cost
   - Easier to divide the system into smaller parts
@@ -247,20 +247,20 @@ _Beef Jezos_
 #### Interacting with AWS
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{GUI (Management Console)}**
+- **GUI (Management Console)**
   - Start interacting with services easily
   - Set up cloud infrastructure for development and testing
 
-- **\textcolor{darkgreen}{Command-line tool (CLI)}**
+- **Command-line tool (CLI)**
   - Manage and access AWS services
   - Automate recurring tasks
 
-- **\textcolor{blue}{SDKs}**
+- **SDKs**
   - Use libraries in any language to interact with AWS
   - Integrate applications with AWS
   - E.g., \textcolor{blue}{\texttt{boto3}} for Python
 
-- **\textcolor{violet}{Blueprints}**
+- **Blueprints**
   - Describe your system with all services and dependencies
   - Describe the system, not how to build it
 ::::
@@ -276,18 +276,18 @@ _Beef Jezos_
 #### Accounts and Users
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Users}**
+- **Users**
   - One root AWS account
   - Attach multiple users to an account
     - Different privileges
     - Isolate workloads
 
-- **\textcolor{darkgreen}{Be safe}**
+- **Be safe**
   - Never use root account to develop
   - Always use 2FA
   - Avoid costly mistakes
 
-- **\textcolor{blue}{Key pair}**
+- **Key pair**
   - Create a key pair to access a virtual server
   - Public key (stored in AWS and on virtual servers)
   - Private key is your secret
@@ -302,12 +302,12 @@ _Beef Jezos_
 #### Create User Account
 ::: columns
 :::: {.column width=40%}
-- **\textcolor{red}{Create a new user}**
+- **Create a new user**
   - Do not use the AWS root account for development
   - IAM: Identity and Access Management
   - Access key ID + secret access key
 
-- **\textcolor{blue}{Access control}**
+- **Access control**
   - Enable programmatic access
   - Enable console access
   - Limit user actions through policies
@@ -323,15 +323,15 @@ _Beef Jezos_
 #### AWS VMs
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{With virtualization}**
+- **With virtualization**
   - Multiple VMs run on the same hardware
   - Start and stop VMs on-demand
 
-- **\textcolor{darkgreen}{Physical server}**
+- **Physical server**
   - Aka "host machine", "bare metal"
   - Consists of CPUs, memory, networking interfaces, storage
 
-- **\textcolor{blue}{Hypervisor}**
+- **Hypervisor**
   - Software + CPU hardware
   - Isolates guests
   - Schedules hardware requests
@@ -342,7 +342,7 @@ _Beef Jezos_
     - Hardware-assisted virtualization
     - Performance close to bare metal
 
-- **\textcolor{violet}{Virtual servers}**
+- **Virtual servers**
   - Isolated on the same hardware
 ::::
 :::: {.column width=40%}
@@ -379,16 +379,16 @@ _Beef Jezos_
 #### Starting an EC2 Instance
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Select OS}**
+- **Select OS**
   - Amazon Machine Image (AMI)
   - Contains OS + pre-installed software
   - Saves time installing OS, packages, software
 
-- **\textcolor{darkgreen}{Choose instance parameters}**
+- **Choose instance parameters**
   - E.g., \textcolor{blue}{\texttt{t2.micro}}
   - More info later
 
-- **\textcolor{blue}{Configure instance}**
+- **Configure instance**
   - Network, shutdown behavior, termination protection, monitoring
 
 ::::
@@ -406,9 +406,9 @@ _Beef Jezos_
 #### AWS Instance Type
 ::: columns
 :::: {.column width=50%}
-- **\textcolor{red}{Instance type}** describes the computing power
+- **Instance type** describes the computing power
 
-- **\textcolor{blue}{Instance family}**
+- **Instance family**
   - \textcolor{blue}{\texttt{T}}: cheap, baseline
   - \textcolor{blue}{\texttt{M}}: general purpose
   - \textcolor{blue}{\texttt{C}}: compute optimized
@@ -418,7 +418,7 @@ _Beef Jezos_
   - \textcolor{blue}{\texttt{F}}: with FPGAs
   - \textcolor{blue}{\texttt{P, G, CG}}: with GPUs
 
-- [\textcolor{blue}{\underline{AWS EC2 list}}](https://aws.amazon.com/ec2/instance-types)
+- [AWS EC2 list](https://aws.amazon.com/ec2/instance-types)
 ::::
 :::: {.column width=45%}
 
@@ -450,7 +450,7 @@ _Beef Jezos_
   - Cheapest: $37 USD/year
   - Most expensive: $1.91M USD/year (500 CPUs and 24TB of memory)
 
-- [\textcolor{blue}{\underline{Alternative sites}}](https://instances.vantage.sh) tracking prices
+- [Alternative sites](https://instances.vantage.sh) tracking prices
 
 #### Starting an EC2 Instance
 ::: columns
@@ -495,10 +495,10 @@ _Beef Jezos_
   ```
 
 #### States of a VM
-- **\textcolor{red}{Start}**
+- **Start**
   - Start stopped VM
 
-- **\textcolor{darkgreen}{Stop}**
+- **Stop**
   - Stopped VM not billed
   - Network HDD persists and incurs charges
   - Local disk does not persist
@@ -507,13 +507,13 @@ _Beef Jezos_
 ::: columns
 :::: {.column width=45%}
 
-- **\textcolor{blue}{Reboot}**
+- **Reboot**
   - Network HDD persists
   - Local disk does not persist
   - Software remains installed
   - VM restarts on a different host
 
-- **\textcolor{violet}{Terminate}**
+- **Terminate**
   - Delete: cannot restart
   - Network HDD persists
   - Local disk wiped out
@@ -525,20 +525,20 @@ _Beef Jezos_
 :::
 
 #### Moving / Upgrading EC2 Instances
-- **\textcolor{red}{Scale up / down}**
+- **Scale up / down**
   - Increase VM size for more computing power
   - Stop VM
   - Change instance type (e.g., \textcolor{blue}{\texttt{m3.large}})
   - Start VM
   - IP addresses change
 
-- **\textcolor{darkgreen}{AWS regions}**
+- **AWS regions**
   - Regions are collections of data centers
   - Regions are independent
   - No automatic data transfer across regions
   - Some services (e.g., IAM, CDN, DNS) are global
 
-- **\textcolor{blue}{Why move across AWS regions}**
+- **Why move across AWS regions**
   - Proximity to users
   - Compliance
     - Data storage and processing permissions
@@ -549,22 +549,22 @@ _Beef Jezos_
     - Vary by region
 
 #### Optimizing Costs
-- **\textcolor{red}{On-demand instances}**
+- **On-demand instances**
   - Maximum flexibility, no restrictions
   - Start and stop VMs anytime
   - Pay by hour
 
-- **\textcolor{darkgreen}{EC2 / Compute saving plans}**
+- **EC2 / Compute saving plans**
   - 1 yr vs 3 yrs
   - Commit to a certain number of hours
   - Payment options: all, partial, no upfront
   - Discount: up to 3x cheaper than on-demand
   - Useful for dev servers
 
-- **\textcolor{blue}{Capacity reservation}**
+- **Capacity reservation**
   - Access machines even in peak hours
 
-- **\textcolor{violet}{Spot instances}**
+- **Spot instances**
   - Bid for unused capacity
   - Price based on supply/demand
   - Discount: up to 10x cheaper than on-demand
@@ -575,21 +575,21 @@ _Beef Jezos_
   - Analyze data daily
   - Generate reports from a database
 
-1. **\textcolor{red}{Allocate machines on demand}**
+1. **Allocate machines on demand**
    - AWS bills VMs per minute
    - Pay only when running jobs
 
-2. **\textcolor{darkgreen}{AWS Batch}**
+2. **AWS Batch**
    - Offers spare capacity at a discount
    - Runs when capacity is available, saving 50%
 
-3. **\textcolor{blue}{AWS Lambda}**
+3. **AWS Lambda**
    - Serverless
 
 #### Programming the Infrastructure
 ::: columns
 :::: {.column width=45%}
-- On AWS everything can be **\textcolor{red}{controlled via an API}**
+- On AWS everything can be **controlled via an API**
   - Start a VM
   - Create 1TB of storage
   - Start a Hadoop cluster
@@ -607,20 +607,20 @@ _Beef Jezos_
 :::: {.column width=50%}
 ![](data605/lectures_source/images/lecture_11_2/lec_11_2_slide_26_image_1.png)
 
-- **\textcolor{blue}{Jeff Bezos 2002 API mandate}**
+- **Jeff Bezos 2002 API mandate**
   - An email worth $100B/yr
 ::::
 :::
 
 #### Infrastructure-as-Code
-- Use high-level **\textcolor{red}{programming language to control IT systems}**
+- Use high-level **programming language to control IT systems**
 
-- Apply **\textcolor{darkgreen}{software development principles to infrastructure}**
+- Apply **software development principles to infrastructure**
   - Code repository
   - Automated tests
   - Continuous integration
 
-- **\textcolor{blue}{DevOps (SRE in Google parlance)}**
+- **DevOps (SRE in Google parlance)**
   - Mix developers and operations in the same team
   - Use software to bring development and operations closer
   - Switch roles to experience each other's challenges
@@ -632,17 +632,17 @@ _Beef Jezos_
 #### Infrastructure-as-Code: Advantages
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Save time}**
+- **Save time**
   - Reuse scripts or blueprints
   - Automate tasks
   - Copy-paste vs. click-click-click
-- **\textcolor{orange}{Fewer mistakes}**
+- **Fewer mistakes**
   - Push-button flow
 
-- **\textcolor{darkgreen}{Consistency of actions}**
+- **Consistency of actions**
   - Multiple deployments per day
 
-- **\textcolor{teal}{Deployment pipeline}**
+- **Deployment pipeline**
   - Commit changes to source code
   - Build application from source
   - Automatic tests (e.g., integration tests)
@@ -650,7 +650,7 @@ _Beef Jezos_
   - Run acceptance tests in isolation
   - Propagate changes to production
 
-- **\textcolor{cyan}{Scripts as detailed documentation}**
+- **Scripts as detailed documentation**
   - Explains what and how, not why
 ::::
 :::: {.column width=40%}
@@ -661,13 +661,13 @@ _Beef Jezos_
 :::
 
 #### AWS Command Line Interface (CLI)
-- Provides a **\textcolor{red}{unified interface}** to all AWS services
+- Provides a **unified interface** to all AWS services
   - Output is in JSON format
   ```bash
   > apt-get install awscli
   ```
 
-- **\textcolor{darkgreen}{Authenticate}**
+- **Authenticate**
   ```bash
   > aws configure
   ```
@@ -678,7 +678,7 @@ _Beef Jezos_
   - Default region name
     - E.g., \textcolor{blue}{\texttt{us-east-1}}
 
-- **\textcolor{blue}{Execute command}**
+- **Execute command**
   ```bash
   > aws <service> <action> --key value
   ```
@@ -686,16 +686,16 @@ _Beef Jezos_
 #### Software Development Kit (SDK)
 ::: columns
 :::: {.column width=60%}
-- **\textcolor{red}{SDK is a library for calling AWS API}** from your programming language
+- **SDK is a library for calling AWS API** from your programming language
   - E.g., Python, Go, C++, JavaScript
 
-- **\textcolor{darkgreen}{Pros}**: it handles
+- **Pros**: it handles
   - Authentication
   - Retry on error
   - HTTPS communication
   - XML / JSON de-/serialization
 
-- **\textcolor{blue}{Cons}**
+- **Cons**
   - Imperative approach
   - Dealing with dependencies
 
@@ -707,15 +707,15 @@ _Beef Jezos_
 :::
 
 #### AWS CloudFormation
-- **\textcolor{red}{Use templates to describe infrastructure}**
+- **Use templates to describe infrastructure**
   - E.g., JSON, YAML
 
-- **\textcolor{darkgreen}{Declarative vs imperative approach}**
+- **Declarative vs imperative approach**
   - Declare the system, not the steps to build it
 
-- **\textcolor{blue}{AWS Stacks}** processes CloudFormation templates
+- **AWS Stacks** processes CloudFormation templates
 
-- **\textcolor{violet}{Pros}**
+- **Pros**
   - Consistent infrastructure description
   - Handles dependencies
   - Customizable
@@ -730,20 +730,20 @@ _Beef Jezos_
 #### Securing Your System
 ::: columns
 :::: {.column width=50%}
-- **\textcolor{red}{Always install software updates}**
+- **Always install software updates**
   - Fix security vulnerabilities promptly
 
-- **\textcolor{darkgreen}{Restrict access to AWS account}**
+- **Restrict access to AWS account**
   - Use separate AWS accounts for individuals and scripts
   - Apply "least privilege": grant only necessary permissions
 
-- **\textcolor{blue}{Restrict network traffic}**
+- **Restrict network traffic**
   - Open essential ports
     - E.g., 80 for HTTP, 443 for HTTPS
   - Close others
   - Encrypt traffic and data
 
-- **\textcolor{violet}{Create a private network}**
+- **Create a private network**
   - Use subnets not reachable from the Internet
 ::::
 :::: {.column width=45%}
@@ -753,13 +753,13 @@ _Beef Jezos_
 :::
 
 #### AWS Shared-responsibility Principle
-- **\textcolor{red}{AWS is responsible for}**:
+- **AWS is responsible for**:
   - Protecting the network by monitoring Internet access
   - Preventing DDoS attacks
   - Ensuring the physical security of data centers
   - Decommissioning storage devices after end of life
 
-- **\textcolor{blue}{You are responsible for}**:
+- **You are responsible for**:
   - Restricting access using IAM
   - Encrypting network traffic (e.g., HTTPS)
   - Configuring firewalls and VPNs

@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{02.1: Git}}$$**
+**$$\text{\textcolor{blue}{\text{02.1: Git}}}$$**
 \endgroup
 
 \vspace{1cm}

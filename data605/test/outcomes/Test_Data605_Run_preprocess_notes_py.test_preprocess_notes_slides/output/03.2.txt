@@ -21,14 +21,14 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{03.2: Docker}}$$**
+**$$\text{\textcolor{blue}{\text{03.2: Docker}}}$$**
 \endgroup
 
 ::: columns
 :::: {.column width=75%}
 \vspace{1cm}
 
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
 ::::
 :::: {.column width=20%}
@@ -37,7 +37,7 @@ UMD DATA605 - Big Data Systems
 :::
 
 #### Containerizing an App
-- **\textcolor{red}{Containerizing an app}** means creating a container with your app inside
+- **Containerizing an app** means creating a container with your app inside
 
 - Develop application code with dependencies
   - Install dependencies
@@ -55,9 +55,9 @@ UMD DATA605 - Big Data Systems
 - Distribute app as a container (no installation required)
 
 #### Building a Container
-- **\textcolor{red}{Dockerfile}**
+- **Dockerfile**
   - Describe how to create a container
-- **\textcolor{blue}{Build context}**
+- **Build context**
   - \textcolor{blue}{\texttt{docker build -t web:latest .}} where \textcolor{blue}{\texttt{.}} is the build context
   - Send directory containing the application to Docker engine to build the
     application
@@ -164,4 +164,4 @@ CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
   \endgroup
 
 #### Docker Tutorial
-- [\textcolor{blue}{\underline{Docker tutorial}}](https://github.com/gpsaggese/umd_classes/blob/main/data605/tutorials/tutorial_docker/tutorial_docker.md)
+- [Docker tutorial](https://github.com/gpsaggese/umd_classes/blob/main/data605/tutorials/tutorial_docker/tutorial_docker.md)

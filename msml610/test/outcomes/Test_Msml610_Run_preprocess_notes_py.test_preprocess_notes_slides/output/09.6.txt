@@ -4,33 +4,6 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 09.5: Kalman Filter}}$$**
-\endgroup
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA 14: Probabilistic reasoning over time
-- [\textcolor{blue}{\underline{https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python}}](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python)
-
 
 # Dynamic Bayesian networks
 
@@ -79,12 +52,12 @@ MSML610: Advanced Machine Learning
   - DBN variables can mix discrete/continuous and non-Gaussian
   - Allow arbitrary conditional dependencies among variables
 
-- **\textcolor{red}{Pros of DBNs}**
+- **Pros of DBNs**
   - DBNs are applicable to broader domains including:
     - Fault diagnosis in networks
     - Complex system monitoring
 
-- **\textcolor{blue}{Pros of Kalman filters:}**
+- **Pros of Kalman filters:**
   - Optimal for linear systems with Gaussian noise
   - Support exact inference, DBNs often require approximate methods
 
@@ -99,27 +72,27 @@ MSML610: Advanced Machine Learning
   - Inter-slice links
 
 #### DBN Example: Tracking a Robot (1/3)
-- **\textcolor{red}{Problem:}**
+- **Problem:**
   - Tracking a robot moving randomly on a line $X$ over time
 
-- **\textcolor{orange}{Initial model:}**
+- **Initial model:**
   - Position $X_t$ and velocity $\dot{X_t}$ as state variables
   - Update via Newton's laws
   - Easy to generalize for 2d or 3d by using a $\vX_t$
 
-- **\textcolor{darkgreen}{Issue:}**
+- **Issue:**
   - Velocity changes over time
   - Battery exhaustion affects velocity systematically
   - Effect depends on cumulative energy use
   - Violates the Markov property (future depends on full history)
 
-- **\textcolor{teal}{Solution:}**
+- **Solution:**
   - Include battery level $Battery_t$ in the state $X_t$
   - Restores the Markov assumption
   - Allows motion prediction considering energy constraints
   - Enables coherent reasoning about motion and power consumption over time
 
-- **\textcolor{cyan}{New requirement for state:}**
+- **New requirement for state:**
   - $S_t = (X_t, \dot{X}_t, \text{BatteryLevel}_t)$
   - $E_t = (\text{GPS}_t, \text{BMeter}_t)$
 
@@ -184,11 +157,11 @@ digraph BayesianFlow {
 ::: columns
 :::: {.column width=40%}
 
-- **\textcolor{red}{Replicate for Multiple Time Slices}**:
+- **Replicate for Multiple Time Slices**:
    - Create slices for $t = 0, 1, 2, \ldots$ with the above variables and
      dependencies
    - Group each time slice vertically or horizontally for clarity
-- **\textcolor{blue}{Unrolling}**:
+- **Unrolling**:
    - Visualize the full DBN by unrolling these slices over the desired number of
      time steps (e.g., three slices for $t = 0, 1, 2$)
 ::::

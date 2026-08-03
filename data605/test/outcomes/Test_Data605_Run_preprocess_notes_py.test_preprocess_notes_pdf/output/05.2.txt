@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{05.2: Database Taxonomy}}$$**
+**$$\text{\textcolor{blue}{\text{05.2: Database Taxonomy}}}$$**
 \endgroup
 
 ::: columns

@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{06.1: MongoDB}}$$**
+**$$\text{\textcolor{blue}{\text{06.1: MongoDB}}}$$**
 \endgroup
 
 \vspace{1cm}
@@ -29,13 +29,13 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=75%}
 
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
 - **References**:
   - All concepts in slides
   - MongoDB tutorial
   - Web
-    - [\textcolor{blue}{\underline{https://www.mongodb.com/}}](https://www.mongodb.com/)
+    - https://www.mongodb.com/
     - Official docs
   - Seven Databases in Seven Weeks, 2e
 ::::
@@ -47,7 +47,7 @@ UMD DATA605 - Big Data Systems
 #### Key-Value Store vs Document DBs
 ::: columns
 :::: {.column width=60%}
-- **\textcolor{red}{Key-value stores}**
+- **Key-value stores**
   - Function as a map or dictionary
     - Examples: HBase, Redis
   - Primarily retrieve values using keys
@@ -55,7 +55,7 @@ UMD DATA605 - Big Data Systems
   - Store uninterpreted values (e.g., binary blobs) linked to keys
   - Use a single namespace for all key-value pairs
 
-- **\textcolor{blue}{Document DBs}**
+- **Document DBs**
   - Group key-value pairs into _documents_
     - Examples: MongoDB, CouchDB
   - Documents formatted in JSON, XML, or BSON (binary JSON)
@@ -73,7 +73,7 @@ UMD DATA605 - Big Data Systems
 #### MongoDB
 :::columns
 :::: {.column width=70%}
-- **\textcolor{red}{Developed by MongoDB Inc}**
+- **Developed by MongoDB Inc**
   - Founded in 2007
   - Based on DoubleClick's experience with large-scale data
   - Mongo comes from "hu-mongo-us"
@@ -83,8 +83,8 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **\textcolor{darkgreen}{Highly popular NoSQL database}**
-- **\textcolor{blue}{Document-oriented NoSQL DB}**
+- **Highly popular NoSQL database**
+- **Document-oriented NoSQL DB**
   - Schema-less
     - No Data Definition Language (DDL) like SQL
     - Stores maps with any keys and values
@@ -94,15 +94,15 @@ UMD DATA605 - Big Data Systems
   - Values in BSON format
     - Based on JSON (B for Binary)
 
-- **\textcolor{violet}{High-performance}**
+- **High-performance**
   - Developed in C++
   - Supports APIs (drivers) in various languages
     - Examples: JavaScript, Python, Ruby, Java, Scala, C++, etc
 
 #### MongoDB: Example of Document
-- **\textcolor{red}{A document is a JSON data structure}**
+- **A document is a JSON data structure**
 
-- It corresponds to **\textcolor{blue}{a row in a relational DB}**
+- It corresponds to **a row in a relational DB**
   - Without schema
   - Primary key is \textcolor{blue}{\texttt{\_id}}
   - Values can be nested to an arbitrary depth
@@ -111,46 +111,46 @@ UMD DATA605 - Big Data Systems
 ![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_7_image_1.png){width=80%}
 
 #### MongoDB: Functionalities
-- **\textcolor{red}{Design goals}**
+- **Design goals**
   - Performance
   - Availability/scalability
   - Rich data storage (not rich querying!)
 
-- **\textcolor{orange}{Dynamic schema}**
+- **Dynamic schema**
   - No DDL
   - Secondary indexes
   - Query language via API
 
-- **\textcolor{darkgreen}{Several levels of data consistency}**
+- **Several levels of data consistency**
   - Atomic writes and fully-consistent reads (document level)
 
-- **\textcolor{teal}{No joins nor transactions across multiple documents}**
+- **No joins nor transactions across multiple documents**
   - Distributed queries easy and fast
 
-- **\textcolor{cyan}{High availability through replica sets}**
+- **High availability through replica sets**
   - Primary replication with automated failover
 
-- **\textcolor{blue}{Built-in sharding}**
+- **Built-in sharding**
   - Horizontal scaling via automated range-based partitioning
   - Reads and writes distributed over shards
 
 #### MongoDB: Hierarchical Objects
 :::columns
 ::::{.column width=50%}
-- A Mongo **\textcolor{red}{instance}** has:
+- A Mongo **instance** has:
   - Zero or more "databases"
   - Mongo instance ~ Postgres instance
 
-- A Mongo **\textcolor{darkgreen}{database}** has:
+- A Mongo **database** has:
   - Zero or more "collections"
     - Mongo collection ~ Postgres tables
   - Mongo database ~ Postgres database
 
-- A Mongo **\textcolor{blue}{collection}** has:
+- A Mongo **collection** has:
   - Zero or more "documents"
     - Mongo document ~ Postgres rows
 
-- A Mongo **\textcolor{violet}{document}** has:
+- A Mongo **document** has:
   - One or more "fields"
     - Always has a primary key \textcolor{blue}{\texttt{\_id}}
     - Mongo field ~ Postgres columns
@@ -179,7 +179,7 @@ UMD DATA605 - Big Data Systems
 \endgroup
 
 #### Relational vs Document DB: Workflows
-- **\textcolor{red}{Relational DBs}**
+- **Relational DBs**
   - E.g., PostgreSQL
   - Know what to store
     - Tabular data
@@ -187,7 +187,7 @@ UMD DATA605 - Big Data Systems
   - Complexity at insertion time
     - Decide data representation (schema)
 
-- **\textcolor{blue}{Document DBs}**
+- **Document DBs**
   - E.g., MongoDB
   - No assumptions on storage
     - E.g., irregular JSON data
@@ -200,12 +200,12 @@ UMD DATA605 - Big Data Systems
 #### Why Use MongoDB?
 ::: columns
 :::: {.column width=45%}
-- **\textcolor{red}{Simple and powerful to query}**
+- **Simple and powerful to query**
 
-- **\textcolor{darkgreen}{Fast}**
+- **Fast**
   - 2-10x faster than PostgreSQL
 
-- **\textcolor{blue}{Data model suitable for most web applications}**
+- **Data model suitable for most web applications**
   - Semi-structured data
   - Quickly evolving systems
 
@@ -221,7 +221,7 @@ UMD DATA605 - Big Data Systems
 :::columns
 ::::{.column width=45%}
 
-- **\textcolor{red}{Documents}** are field-value pairs
+- **Documents** are field-value pairs
   - _Field names_: strings
   - _Values_: any BSON type
     - Arrays of documents
@@ -237,7 +237,7 @@ UMD DATA605 - Big Data Systems
 
 :::columns
 ::::{.column width=45%}
-- **\textcolor{blue}{Examples}**:
+- **Examples**:
   - \textcolor{blue}{\texttt{\_id}}: \textcolor{blue}{\texttt{ObjectId}}
   - \textcolor{blue}{\texttt{name}}: document with fields \textcolor{blue}{\texttt{first}} and \textcolor{blue}{\texttt{last}}
   - \textcolor{blue}{\texttt{birth}} and \textcolor{blue}{\texttt{death}}: date type
@@ -251,16 +251,16 @@ UMD DATA605 - Big Data Systems
 :::
 
 #### MongoDB: Data Model
-- **\textcolor{red}{Documents can be nested}**
+- **Documents can be nested**
   - Embedded sub-document
 
 :::columns
 ::::{.column width=45%}
-- **\textcolor{darkgreen}{Denormalized data models}**
+- **Denormalized data models**
   - Store related information in the same record
   - Avoids the need for a join operation
 
-- **\textcolor{blue}{Normalized data models}**
+- **Normalized data models**
   - Eliminate duplication
   - Represent many-to-many relationships
 ::::
@@ -273,14 +273,14 @@ UMD DATA605 - Big Data Systems
 #### Schema Free
 - MongoDB does not need pre-defined data schema
 
-- Every **\textcolor{red}{document}** in a **\textcolor{blue}{collection}** can have different fields and values
+- Every **document** in a **collection** can have different fields and values
   - No need for \textcolor{blue}{\texttt{NULL}} values / union of fields like in relational DBs
 
 - E.g., heterogeneous data instances
 ![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_15_image_1.png){width=80%}
 
 #### JSON Format
-- **\textcolor{red}{JSON = JavaScript Object Notation}**
+- **JSON = JavaScript Object Notation**
   - Data is stored in field/value pairs
   - A field/value pair consists of:
     - A field name (always a string)
@@ -319,14 +319,14 @@ UMD DATA605 - Big Data Systems
   \endgroup
 
 #### BSON Format 
-- **\textcolor{red}{Binary-encoded serialization of JSON-like documents}**
-  - [\textcolor{blue}{\underline{https://bsonspec.org}}](https://bsonspec.org)
+- **Binary-encoded serialization of JSON-like documents**
+  - https://bsonspec.org
   - Similar to Protocol Buffers, but more schema-less
 
-- **\textcolor{darkgreen}{Optimized for random access}**
+- **Optimized for random access**
   - Prefixes elements in a BSON document with a length field
 
-- **\textcolor{blue}{MongoDB understands BSON objects, even nested ones}**
+- **MongoDB understands BSON objects, even nested ones**
   - Builds indexes and matches objects against query expressions for BSON keys
 
 #### ObjectID
@@ -352,14 +352,14 @@ UMD DATA605 - Big Data Systems
   - Due to MongoDB's distributed nature
 
 - Details
-  [\textcolor{blue}{\underline{here}}](https://www.mongodb.com/docs/manual/reference/bson-types/#objectid)
+  [here](https://www.mongodb.com/docs/manual/reference/bson-types/#objectid)
 
 #### Indexes
-- **\textcolor{red}{Primary index}**
+- **Primary index**
   - Automatically created on the \textcolor{blue}{\texttt{\_id}} field
   - B+ tree indexes
 
-- **\textcolor{blue}{Secondary index}**
+- **Secondary index**
   - Improve query performance
   - Can enforce unique values for a field
 
@@ -372,4 +372,4 @@ UMD DATA605 - Big Data Systems
 
 - Rejects records with duplicate keys if the index is unique and sparse
 
-- Details [\textcolor{blue}{\underline{here}}](https://www.mongodb.com/docs/manual/indexes/)
+- Details [here](https://www.mongodb.com/docs/manual/indexes/)

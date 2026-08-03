@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{04.2: SQL}}$$**
+**$$\text{\textcolor{blue}{\text{04.2: SQL}}}$$**
 \endgroup
 
 ::: columns

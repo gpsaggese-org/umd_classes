@@ -5,42 +5,6 @@ fontsize: 10pt
 \let\uline\underline
 \let\ul\underline
 
-
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 05.2: Overfitting}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
-
-- Abu-Mostafa et al.: _"Learning From Data"_ (2012)
-
-::::
-:::: {.column width=20%}
-![](msml610/lectures_source/figures/book_covers/Book_cover_Learning_from_Data.jpg){ height=20% }
-::::
-:::
-
 # Overfitting
 
 
@@ -49,13 +13,13 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=50%}
 
-- **\textcolor{red}{Overfitting}** occurs when the model fits the data more than what is warranted
+- **Overfitting** occurs when the model fits the data more than what is warranted
 
 - Surpass point where $E_{out}$ is minimal (optimal fit)
   - Model complexity too high for data/noise
   - Noise in training set mistaken for signal
 
-- **\textcolor{blue}{Fitting noise instead of signal}** is not useless but harmful
+- **Fitting noise instead of signal** is not useless but harmful
   - Model infers in-sample pattern that, when extrapolated out-of-sample,
     deviates from target function $\implies$ poor generalization
 
@@ -94,7 +58,7 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=55%}
 
-- The opposite of overfitting is **\textcolor{red}{optimal fit}**
+- The opposite of overfitting is **optimal fit**
   - Train a model with proper complexity for the data
 
 - The optimal fit:
@@ -102,7 +66,7 @@ MSML610: Advanced Machine Learning
   - Does not imply generalization error $E_{out} - E_{in}$ is minimal
     - E.g., no training implies generalization error equal to 0
 
-- The **\textcolor{blue}{generalization error}** is the additional error $E_{out} - E_{in}$ when
+- The **generalization error** is the additional error $E_{out} - E_{in}$ when
   going from in-sample to out-of-sample
 
 ::::
@@ -116,7 +80,7 @@ MSML610: Advanced Machine Learning
 #### Overfitting: Diamond Price Example
 - Predict diamond price as a function of carat size (regression problem)
 
-- **\textcolor{red}{True relationship}**
+- **True relationship**
   $$
   \text{price} \sim (\text{carat size})^2 + \varepsilon
   $$
@@ -127,7 +91,7 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=50%}
 
-- **\textcolor{blue}{Fit with:}**
+- **Fit with:**
   - _Line_
     - Underfit
     - High bias (large error)
@@ -169,11 +133,11 @@ MSML610: Advanced Machine Learning
 #### VC Analysis vs Bias-Variance Analysis
 - Both VC analysis and bias-variance analysis are concerned with the hypothesis
   set $\calH$
-  - **\textcolor{red}{VC analysis}**:
+  - **VC analysis**:
     $$
     E_{out} \le E_{in} + \Omega(\calH)
     $$
-  - **\textcolor{blue}{Bias-variance analysis}**
+  - **Bias-variance analysis**
     $$
     E_{out} = \text{bias + variance}
     $$
@@ -182,24 +146,24 @@ MSML610: Advanced Machine Learning
 ![](msml610/lectures_source/figures/L05.2.VC_analysis_vs_Bias_Variance_analysis.png){ width=80% }
 
 #### Hypothesis Set and Bias-Variance Analysis
-- **\textcolor{red}{Learning}** consists in finding $g \in \calH$ such that $g \approx f$ where
+- **Learning** consists in finding $g \in \calH$ such that $g \approx f$ where
   $f$ is an unknown function
 
-- The **\textcolor{blue}{tradeoff in learning}** is between:
+- The **tradeoff in learning** is between:
   - Bias vs variance
   - Overfitting vs underfitting
   - More complex vs less complex $\calH$ / $h$
   - Approximation (in-sample) vs generalization (out-of-sample)
 
 #### Decomposing Error in Bias-Variance (1/4)
-- **\textcolor{red}{Problem}**
+- **Problem**
   - Regression set-up: target is a real-valued function
   - Hypothesis set $\calH = \{ h_1(\vx), h_2(\vx), ... h_n(\vx) \}$
   - Training data $\calD$ with $N$ examples
   - Squared error $E_out = \EE[(g(\vx) - f(\vx))^2]$
   - Choose the best function $g \in \calH$ that approximates unknown $f$
 
-- **\textcolor{blue}{Question}**
+- **Question**
   - What is the out-of-sample error $E_{out}(g)$ as function of $\calH$ for a
     training set of $N$ examples?
 
@@ -300,7 +264,7 @@ MSML610: Advanced Machine Learning
 
 
 #### Interpretation of Average Hypothesis
-- The **\textcolor{red}{average hypothesis}** over all training sets
+- The **average hypothesis** over all training sets
   $$
   \overline{g}(\vx) \defeq \EE_D [ g^{(D)} (\vx) ]
   $$
@@ -308,7 +272,7 @@ MSML610: Advanced Machine Learning
   samples
   - Note: $\overline{g}$ is not necessarily $\in \calH$
 
-- In fact it's like **\textcolor{blue}{ensemble learning}**:
+- In fact it's like **ensemble learning**:
   - Consider all the possible data sets $D$ with $N$ samples
   - Learn $g$ from each $D$
   - Average all the hypotheses
@@ -322,7 +286,7 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=60%}
 
-- **\textcolor{red}{Bias term}**
+- **Bias term**
   $$
   \text{bias}^2 = \EE_{\vx} [ ( \overline{g}(\vx) - f(\vx) ) ^ 2 ]
   $$
@@ -331,7 +295,7 @@ MSML610: Advanced Machine Learning
     - I.e., the ability of $\calH$ to approximate the target with infinite
       training sets
 
-- **\textcolor{blue}{Variance term}**
+- **Variance term**
   $$
   \text{variance} = \EE_{\vx} \EE_D [ ( g^{(D)}(\vx) - \overline{g}(\vx) ) ^ 2]
   $$
@@ -354,7 +318,7 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=60%}
 
-- If hypothesis set **\textcolor{red}{has a single function}**: $\calH = \{ h \ne f \}$
+- If hypothesis set **has a single function**: $\calH = \{ h \ne f \}$
   - Large bias
     - $h$ might be far from $f$
   - Variance = 0
@@ -372,7 +336,7 @@ MSML610: Advanced Machine Learning
 
 \vspace{1cm}
 
-- If hypothesis set **\textcolor{blue}{has many functions}**:
+- If hypothesis set **has many functions**:
   $\calH = \{ \text{many hypotheses } h \}$
   - Bias can be 0
     - E.g., if $f \in \calH$
@@ -389,16 +353,16 @@ MSML610: Advanced Machine Learning
 
 
 #### Bias-Variance Trade-Off: Numerical Example
-- **\textcolor{red}{Machine learning problem}**:
+- **Machine learning problem**:
   - Target function $f(x) = \sin(\pi x), x \in [-1, 1]$
   - Noiseless target
   - You have $f(\vx)$ for $N = 2$ points
 
-- **\textcolor{darkgreen}{Two hypotheses sets}** $\calH$:
+- **Two hypotheses sets** $\calH$:
   - Constant model: $\calH_0: h(x) = b$
   - Linear model: $\calH_1: h(x) = ax + b$
 
-- **\textcolor{blue}{Which model is best}**?
+- **Which model is best**?
   - Depends on the perspective!
   - Best for _approximation_: minimal error approximating the sinusoid
   - Best for _learning_: learn the unknown function with minimal error from 2
@@ -406,7 +370,7 @@ MSML610: Advanced Machine Learning
 
 #### Bias-Variance Trade-Off: Numerical Example
 
-- **\textcolor{red}{Approximation}**
+- **Approximation**
   - $E_{out}(g_0) = 0.5$
     - $g_0$ is a constant and approximates the sinusoid poorly (higher bias)
   - $E_{out}(g_1) = 0.2$
@@ -415,7 +379,7 @@ MSML610: Advanced Machine Learning
 
 ::: columns
 :::: {.column width=60%}
-- **\textcolor{blue}{Learning}**
+- **Learning**
   - Algorithm:
     - Pick 2 points as training set $D$
     - Learn $g$ from $D$
@@ -440,12 +404,12 @@ MSML610: Advanced Machine Learning
 :::
 
 #### Bias-Variance Curves
-- **\textcolor{red}{Bias-variance curves}** are plots of $E_{out}$ increasing the complexity of
+- **Bias-variance curves** are plots of $E_{out}$ increasing the complexity of
   the model
 
 ::: columns
 :::: {.column width=50%}
-- Typical **\textcolor{blue}{shape}** of bias-variance curves
+- Typical **shape** of bias-variance curves
   - $E_{in}$ and $E_{out}$ start from the same point
   - $E_{in}$
     - Is decreasing with increasing model complexity
@@ -469,7 +433,7 @@ MSML610: Advanced Machine Learning
 
 #### Bias-Variance Curves and Regularization
 
-- Use **\textcolor{red}{model with regularization}** to learn at the same time:
+- Use **model with regularization** to learn at the same time:
   - Model coefficients $\vw$
   - Model "complexity" (e.g., VC dimension)
 
@@ -512,7 +476,7 @@ MSML610: Advanced Machine Learning
 - Training epochs for neural network
 
 #### Bias-Variance Decomposition with a Noisy Target
-- Extend bias-variance decomposition to **\textcolor{red}{a noisy target}**
+- Extend bias-variance decomposition to **a noisy target**
   $$
   y = f(\vx; \vw) + \varepsilon = \vw^T \vx + \varepsilon
   $$
@@ -535,17 +499,17 @@ MSML610: Advanced Machine Learning
   $$
 
 - The out-of-sample error is the sum of 3 contributions
-  1. **\textcolor{darkgreen}{Variance}**: from the set of hypotheses to the centroid of the hypothesis
+  1. **Variance**: from the set of hypotheses to the centroid of the hypothesis
      set
-  2. **\textcolor{blue}{Bias}**: from the centroid of the hypothesis set to the noiseless function
-  3. **\textcolor{violet}{Noise}**: from the noiseless function to the real function
+  2. **Bias**: from the centroid of the hypothesis set to the noiseless function
+  3. **Noise**: from the noiseless function to the real function
 
 #### Bias as Deterministic Noise
 ::: columns
 :::: {.column width=65%}
-- The bias term can be interpreted as **\textcolor{red}{deterministic noise}**
+- The bias term can be interpreted as **deterministic noise**
 
-- **\textcolor{blue}{Bias}** is the part of the target function that hypothesis set cannot capture:
+- **Bias** is the part of the target function that hypothesis set cannot capture:
   $$
   h^*(\vx) - f(\vx)
   $$
@@ -565,12 +529,12 @@ MSML610: Advanced Machine Learning
 :::
 
 #### Deterministic vs Stochastic Noise in Practice
-- **\textcolor{red}{Deterministic noise:}**
+- **Deterministic noise:**
   - Fixed for a particular $\vx$
   - Depends on $\calH$
   - Independent of $\varepsilon$ or $D$
 
-- **\textcolor{blue}{Stochastic noise:}**
+- **Stochastic noise:**
   - Not fixed for $\vx$
   - Independent of $D$ or $\calH$
 
@@ -582,14 +546,14 @@ MSML610: Advanced Machine Learning
 #### Deterministic vs Stochastic Noise Example
 ::: columns
 :::: {.column width=70%}
-- **\textcolor{red}{Two targets}**:
+- **Two targets**:
   - Noisy low-order target (10th order polynomial)
   - Noiseless high-order target (50th order polynomial)
 
-- **\textcolor{darkgreen}{Training set}**
+- **Training set**
   - Generate $N=15$ data points
 
-- **\textcolor{blue}{Two models}**
+- **Two models**
   - ${\calH}_{2}$ low-order hypothesis (2nd order polynomial)
   - ${\calH}_{10}$ high-order hypothesis (10th order polynomial)
 
@@ -622,11 +586,11 @@ MSML610: Advanced Machine Learning
   - $\downarrow E_{in}$ (more degrees of freedom), $\uparrow\uparrow E_{out}$
     (fits noise)
 
-- **\textcolor{red}{Wrong approach}**
+- **Wrong approach**
   - Target is 10th order polynomial
   - Use 10-order hypothesis to fit target perfectly
 
-- **\textcolor{blue}{Right approach}**
+- **Right approach**
   - Consider number of data points, i.e., 15 points
   - Rule of thumb from VC analysis
     $$
@@ -650,9 +614,9 @@ MSML610: Advanced Machine Learning
 
 #### Amount of Data and Model Complexity
 - One must match the _model complexity_ to
-  - **\textcolor{red}{Data resources}**
-  - **\textcolor{darkgreen}{Signal to noise ratio}**
-  - **\textcolor{blue}{Not target complexity}**
+  - **Data resources**
+  - **Signal to noise ratio**
+  - **Not target complexity**
 
 - The rule of thumb is:
   $$
@@ -664,7 +628,7 @@ MSML610: Advanced Machine Learning
 
 #### Overfitting as a Function of Data Resources, Model Complexity, Noise
 
-- You can measure overfitting in terms of **\textcolor{red}{generalization error}**
+- You can measure overfitting in terms of **generalization error**
   $\frac{E_{out} - E_{in}}{E_{out}}$
 
   - $\uparrow$ data resources $N \implies \downarrow$ overfitting
@@ -675,9 +639,9 @@ MSML610: Advanced Machine Learning
 # Learning Curves
 
 #### Learning Curves vs Bias-Variance Curves
-- **\textcolor{red}{Learning curves}** are the dual of the bias-variance curves
+- **Learning curves** are the dual of the bias-variance curves
 
-- For **\textcolor{darkgreen}{bias-variance curves}**
+- For **bias-variance curves**
   $$
   E_{in}, E_{out} = f(d_{VC} \vert N)
   $$
@@ -689,7 +653,7 @@ MSML610: Advanced Machine Learning
 
 ::: columns
 :::: {.column width=55%}
-- For **\textcolor{blue}{learning curves}**
+- For **learning curves**
   $$
   E_{in}, E_{out} = f(N \vert d_{VC})
   $$
@@ -728,17 +692,17 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=60%}
 
-- **\textcolor{red}{Small $N$}**
+- **Small $N$**
   - $E_{in}$ is small (even 0)
   - The model is likely overfitted, memorizing and generalizing poorly
   - $E_{out}$ is large
 
-- **\textcolor{darkgreen}{Increasing $N$}**
+- **Increasing $N$**
   - $E_{in} \uparrow$ as the model cannot fit all data
   - $E_{out} \downarrow$ as the model fits better and generalizes better
   - Generalization error $E_{out} - E_{in} \downarrow$
 
-- **\textcolor{blue}{$N \to \infty$}**
+- **$N \to \infty$**
   - $E_{in}$ reaches a maximum (irreducible error)
   - $E_{out}$ reaches a minimum
   - $E_{out} - E_{in}$ depends on the complexity of the model
@@ -756,13 +720,13 @@ MSML610: Advanced Machine Learning
 :::: {.column width=60%}
 - From the learning curve you can see the two regimes:
 
-  - **\textcolor{red}{High-variance regime}** for small $N$
+  - **High-variance regime** for small $N$
     - $E_{in}$ is small
     - Small data set $D$ $\implies$ high dependency on $D$
 
   - More data helps reduce gap between $E_{in}$ and $E_{out}$
 
-  - **\textcolor{blue}{High-bias regime}** for large $N$
+  - **High-bias regime** for large $N$
     - $E_{in}$ is large; flattens for large $N$
     - Best model fitted; more data won't help
     - $E_{out}$ can be close to $E_{in}$ (good generalization) or not
@@ -774,4 +738,5 @@ MSML610: Advanced Machine Learning
 ![](msml610/lectures_source/figures/L05.2.Irreducible_Error2.png)
 ::::
 :::
+
 

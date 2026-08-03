@@ -21,12 +21,12 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{11.1: Cloud Computing}}$$**
+**$$\text{\textcolor{blue}{\text{11.1: Cloud Computing}}}$$**
 \endgroup
 
 ::: columns
 :::: {.column width=75%}
-- **Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+- **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
 ::::
 :::: {.column width=20%}
@@ -36,7 +36,7 @@ UMD DATA605 - Big Data Systems
 #### Cloud Computing
 ::: columns
 :::: {.column width=60%}
-- **\textcolor{red}{Computing as "service" instead of "product"}**
+- **Computing as "service" instead of "product"**
   - Storage and computing in the cloud
   - Edge devices (e.g., phones, laptops, tablets) interact with the cloud
 ::::
@@ -45,7 +45,7 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **\textcolor{blue}{Advantages of cloud computing}**
+- **Advantages of cloud computing**
   - Device agnostic: seamless computation across devices
   - On demand
   - Efficiency / scalability
@@ -56,11 +56,11 @@ UMD DATA605 - Big Data Systems
     - Computing as a commodity (like electricity)
 
 #### Buying Infrastructure
-- **\textcolor{red}{To buy or to rent}** computers and infrastructure?
+- **To buy or to rent** computers and infrastructure?
   - Trade-off between time and money
   - Very difficult to decide objectively
 
-- **\textcolor{blue}{Buying / building infrastructure}**
+- **Buying / building infrastructure**
   - Requires time and capital investments (Capex)
     - Especially at the beginning without revenues
     - Smooth cash flow (constant $/mo) is better than a lumpy one (big one-time
@@ -75,7 +75,7 @@ UMD DATA605 - Big Data Systems
     - Install, update, maintain software stack
 
 #### Renting Infrastructure
-- **\textcolor{red}{Renting infrastructure}** (i.e., cloud computing)
+- **Renting infrastructure** (i.e., cloud computing)
   - Pay for what you use
     - Low initial capital investment
   - Ready systems with a click
@@ -85,7 +85,7 @@ UMD DATA605 - Big Data Systems
 #### Cloud Computing
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Ideas of cloud computing around for a long time}**
+- **Ideas of cloud computing around for a long time**
   - Mainframes + thin clients (1960s)
   - Personal computers (1980s)
   - Grid computing for supercomputers (1990s)
@@ -93,9 +93,9 @@ UMD DATA605 - Big Data Systems
   - Client-server model (Web 1.0 and Web 2.0)
   - Cloud computing (2010s)
 
-- **\textcolor{darkgreen}{Now, it finally works}**
+- **Now, it finally works**
 
-- **\textcolor{blue}{Why now?}**
+- **Why now?**
   - A convergence of key technologies
     - OS virtualization
     - Large data centers
@@ -117,18 +117,18 @@ UMD DATA605 - Big Data Systems
   networking
   - Users install and maintain the operating system and applications
 
-- **\textcolor{red}{Examples}**
+- **Examples**
   - AWS EC2
   - Google Compute Engine
   - Microsoft Azure Virtual Machines
   - IBM Cloud Infrastructure
 
-- **\textcolor{darkgreen}{Benefits}**
+- **Benefits**
   - Flexibility in managing resources
   - Scalability to meet demand
   - Cost-effective, pay for what you use
 
-- **\textcolor{blue}{Use Cases}**
+- **Use Cases**
   - Hosting websites and applications
   - Data analysis and processing
   - Development and testing environments
@@ -142,18 +142,18 @@ UMD DATA605 - Big Data Systems
 #### Platform-as-a-Service
 ::: columns
 :::: {.column width=70%}
-- **\textcolor{red}{Problem}**: assembling your own software stack requires work
+- **Problem**: assembling your own software stack requires work
   - Install
   - Configure
   - Manage dependencies (e.g., incompatible versions)
 
-- **\textcolor{darkgreen}{Solution}**: get a pre-built software stack
+- **Solution**: get a pre-built software stack
   - Software stack as a virtualization solution (e.g., VMware or Docker)
     - Pre-installed OS
     - Libraries
     - Application software
 
-- **\textcolor{blue}{Business model built around this}**
+- **Business model built around this**
   - E.g.,
     - Google App Engine
     - Managed Hadoop
@@ -171,7 +171,7 @@ UMD DATA605 - Big Data Systems
 #### Software-as-a-Service (SaaS)
 ::: columns
 :::: {.column width=70%}
-- **\textcolor{red}{Cloud provides the application}**
+- **Cloud provides the application**
   - No need to install on your machine
   - Use directly from the cloud
   - Examples include:
@@ -179,7 +179,7 @@ UMD DATA605 - Big Data Systems
     - _Salesforce_: Manage customer relationships online
     - Any app running in a browser: Google Docs or Microsoft 365
 
-- **\textcolor{blue}{Benefits}**
+- **Benefits**
   - Accessibility from any device with internet connectivity
   - Automatic updates and maintenance by the provider
   - Scalability for growing user needs
@@ -191,7 +191,7 @@ UMD DATA605 - Big Data Systems
 :::
 
 #### X-as-a-Service
-- After 2010, business model of **\textcolor{red}{X-as-a-Service (XaaS)}**
+- After 2010, business model of **X-as-a-Service (XaaS)**
   - Mobility-as-a-Service (e.g., Uber)
   - Gaming-as-a-Service (e.g., Google Stadia)
   - Storage-as-a-Service (e.g., S3, Google Drive)
@@ -203,11 +203,11 @@ UMD DATA605 - Big Data Systems
 #### Cloud Deployment Models
 ::: columns
 :::: {.column width=50%}
-- **\textcolor{red}{Private}**
+- **Private**
   - Internal cloud hosted on organizational premises
   - E.g., company's data center running virtualized services
 
-- **\textcolor{orange}{Public }**
+- **Public **
   - External cloud hosted by third-party providers
   - E.g., AWS, Azure, GCP offering compute and storage to clients
 ::::
@@ -216,14 +216,14 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **\textcolor{darkgreen}{Hybrid cloud}**
+- **Hybrid cloud**
   - Combines private and public environments to optimize cost, security, and
     scalability
   - Sensitive workloads stay internal
   - Scalable tasks move to the public cloud
 
-- **\textcolor{teal}{On-premises resources}**
+- **On-premises resources**
   - E.g., corporate servers in a building
 
-- **\textcolor{cyan}{Off-premises resources}**
+- **Off-premises resources**
   - E.g., cloud provider's distributed data centers

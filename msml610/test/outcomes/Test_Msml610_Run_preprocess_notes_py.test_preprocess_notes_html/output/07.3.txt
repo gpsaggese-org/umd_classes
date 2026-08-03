@@ -4,48 +4,6 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{0.5cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 07.3: Hierarchical Models}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA (Artificial Intelligence: a Modern Approach)
-  - Chap 15: Probabilistic programming
-
-- Martin, Bayesian Analysis with Python, 2018 (2e)
-
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){width=1.5cm}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Bayesian_analysis_with_Python.jpg){width=1.5cm}
-
-::::
-:::
-
 
 # Hierarchical Models
 
@@ -161,10 +119,10 @@ MSML610: Advanced Machine Learning
   - Each model has 4 estimated variables
 
 - Plot 94% credible intervals
-  - **\blue{Blue}**: hierarchical
-  - **\orange{Orange}**: non-hierarchical
-  - **\black{Black}** vertical line: global mean (hierarchical model)
-  - **\blue{Blue}** means pulled towards mean compared to **\orange{orange}**
+  - **\textcolor{blue}{\text{Blue}}**: hierarchical
+  - **\textcolor{orange}{\text{Orange}}**: non-hierarchical
+  - **\textcolor{black}{\text{Black}}** vertical line: global mean (hierarchical model)
+  - **\textcolor{blue}{\text{Blue}}** means pulled towards mean compared to **\textcolor{orange}{\text{orange}}**
 
 - **Shrinkage occurs**
 ::::

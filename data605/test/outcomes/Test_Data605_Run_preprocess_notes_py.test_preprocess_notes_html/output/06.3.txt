@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{06.3: MongoDB Config}}$$**
+**$$\text{\textcolor{blue}{\text{06.3: MongoDB Config}}}$$**
 \endgroup
 
 ::: columns

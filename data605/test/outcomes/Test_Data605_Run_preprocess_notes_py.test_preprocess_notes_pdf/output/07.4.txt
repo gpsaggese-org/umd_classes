@@ -21,7 +21,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{07.4: Big Data Architectures}}$$**
+**$$\text{\textcolor{blue}{\text{07.4: Big Data Architectures}}}$$**
 \endgroup
 
 ::: columns

@@ -4,36 +4,13 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 09.2: Hidden Markov Models}}$$**
-\endgroup
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-**References**:
 
 # HMMs
 
 
 #### Algorithms for Specific Models
 
-- **\textcolor{red}{General temporal probabilistic reasoning}** makes minimal assumptions:
+- **General temporal probabilistic reasoning** makes minimal assumptions:
   - Markov property for transitions
   - Markov property for sensor model
   - No constraints on:
@@ -41,11 +18,11 @@ MSML610: Advanced Machine Learning
     - Nature of state and evidence variables (discrete or continuous)
 
 - Improve efficiency and accuracy by exploiting specific model structures:
-  - **\textcolor{darkgreen}{Hidden Markov Models (HMMs)}**:
+  - **Hidden Markov Models (HMMs)**:
     - State is a single discrete variable
     - Transition and observation models are discrete probability tables
     - Enables fast algorithms like Viterbi, forward-backward, etc
-  - **\textcolor{blue}{Kalman Filters}**:
+  - **Kalman Filters**:
     - State variables are continuous and normally distributed
     - Linear Gaussian models for transitions and observations
     - Allows exact, efficient updates using matrix operations
@@ -55,24 +32,24 @@ MSML610: Advanced Machine Learning
 
 #### Hidden Markov Model: Formulation
 
-- **\textcolor{red}{Hidden Markov Model (HMM)}**: Temporal model with simplified structure for
+- **Hidden Markov Model (HMM)**: Temporal model with simplified structure for
   efficiency
-  - **\textcolor{orange}{State model}**:
+  - **State model**:
     - System state at time $t$ is a discrete random variable
       $X_t \in \{1, \dots, S\}$
     - E.g., in umbrella world, $X_t = Rain_t$ with states {$Rain$, $Sunny$}
     - Can combine multiple variables into one "mega-state" variable
-  - **\textcolor{darkgreen}{Transition model}** $\Pr(X_t | X_{t-1})$:
+  - **Transition model** $\Pr(X_t | X_{t-1})$:
     - Transition matrix $\vT$ of size $S \times S$
     - Entry $T_{ij} = \Pr(X_t = j | X_{t-1} = i)$: probability of transitioning
       from state $i$ to $j$
-  - **\textcolor{teal}{Sensor model}**:
+  - **Sensor model**:
     - Defined as $\Pr(E_t | X_t = i)$ for each state $i$
     - Representable as a vector or diagonal matrix $\vO$
     - No assumptions about number or type (discrete/continuous) of observation
       variables
 
-- **\textcolor{cyan}{Benefit}**
+- **Benefit**
   - Enables efficient algorithms like forward, backward, and Viterbi
 
 #### Hidden Markov Model: Example
@@ -150,56 +127,56 @@ MSML610: Advanced Machine Learning
 #### Hidden Markov Model: Applications
 - HMMs model systems with hidden states producing observable outputs
 
-- **\textcolor{red}{Audio / speech}**
+- **Audio / speech**
   - Speech recognition: map audio to phonemes, words
   - Speaker identification: model vocal traits to recognize a speaker
   - Music generation and transcription
 
-- **\textcolor{darkgreen}{Biology / genomics}**
+- **Biology / genomics**
   - Gene prediction: find DNA regions
   - Protein structure prediction
 
-- **\textcolor{blue}{Finance / economics}**
+- **Finance / economics**
   - Market regime detection: bull/bear markets, volatility regimes
   - Credit scoring: observe purchases, estimate financial health (hidden variable)
 
 #### Hidden Markov Model: Applications
-- **\textcolor{red}{Security / anomaly detection}**
+- **Security / anomaly detection**
   - User behavior modeling: detect anomalous login patterns or usage
   - Intrusion detection: model normal traffic to spot attacks
   - Fraud detection: identify unusual transactions
 
-- **\textcolor{darkgreen}{NLP}**
+- **NLP**
   - Part-of-speech tagging: map words to syntactic roles
   - Named entity recognition: identify entities, people, places
 
-- **\textcolor{blue}{Operations and process monitoring}**
+- **Operations and process monitoring**
   - Predictive maintenance: model machine health from sensor readings
   - Process monitoring: detect deviation from normal operations
   - Customer behavior modeling: understand customer intent
 
-- **\textcolor{violet}{Environmental monitoring}**
+- **Environmental monitoring**
   - Weather prediction: infer atmospheric state from observed variables
 
 #### Hidden Markov Model: Limitations
-- **\textcolor{red}{Short memory}**
+- **Short memory**
   - Markov assumption: current state depends only on previous state
   - Inefficient for long-range dependencies
 
-- **\textcolor{orange}{Predefined, fixed number of states}**
+- **Predefined, fixed number of states**
   - Mis-estimating states leads to underfitting or overfitting
 
-- **\textcolor{darkgreen}{Stationarity assumption}**
+- **Stationarity assumption**
   - Transition and sensor probabilities constant over time
 
-- **\textcolor{teal}{Use atomic representation}**
+- **Use atomic representation**
   - States are labels with no internal structure
   - Hard to interpret with many states or unclear state meanings
 
-- **\textcolor{cyan}{Training}** is computationally expensive for large datasets
+- **Training** is computationally expensive for large datasets
   - Struggles with sparse data
 
-- **\textcolor{blue}{Alternatives}**
+- **Alternatives**
   - Bayesian networks using factored representation
   - Deep learning handles complex temporal dependencies and long-term
     relationships
@@ -208,24 +185,24 @@ MSML610: Advanced Machine Learning
 
 #### Markov Random Fields
 
-- A **\textcolor{red}{Markov Random Field}** is a probabilistic graphical model
+- A **Markov Random Field** is a probabilistic graphical model
   - Represents a joint distribution using an undirected graph
     - Nodes = random variables
     - Edges = relationships (dependencies) between variables
 
-  - Key idea: **\textcolor{orange}{Markov property}**
+  - Key idea: **Markov property**
     - Each variable is conditionally independent of non-neighbors given its
       neighbors
 
-  - Model **\textcolor{darkgreen}{spatial and contextual dependencies}**
+  - Model **spatial and contextual dependencies**
     - Capture local interactions that combine into a global structure
 
-- **\textcolor{teal}{Example}**: Image de-noising
+- **Example**: Image de-noising
   - Each pixel tends to have similar intensity to its neighbors
   - Noise introduces local inconsistencies
   - MRF models smoothness while respecting observed data
 
-- **\textcolor{cyan}{Example}**: Social networks
+- **Example**: Social networks
   - Friends influence each other's behavior
   - Dependencies exist only among connected individuals
 
@@ -235,13 +212,13 @@ MSML610: Advanced Machine Learning
 - $Pr(X) = \frac{1}{Z} \prod_{C \in \mathcal{C}} \psi_C(X_C)$
 - $X$: set of all random variables in the model
 - $\mathcal{C}$: set of cliques in the graph (fully connected subset of nodes)
-- $\psi_C(X_C)$: **\textcolor{red}{potential function}** for clique $C$
+- $\psi_C(X_C)$: **potential function** for clique $C$
   - Assigns a positive score to each possible configuration of variables in $C$
   - Clique potentials $\psi_C$ encode preferences or constraints
   - Intuition: measures "compatibility" of values
   - High $\psi_C$ = compatible configuration
   - Low $\psi_C$ = unlikely configuration
-- $Z$: **\textcolor{blue}{partition function}**
+- $Z$: **partition function**
   - Ensures probabilities sum to $1$
   - Usually very hard to compute for large graphs
 
@@ -277,7 +254,7 @@ graph MRF {
 
 
 #### Markov Logic Networks: Intuition
-- **\textcolor{red}{Intuition}**:
+- **Intuition**:
   - Logic rules are often _soft_ (have exceptions) rather than _absolute_ (true
     or false)
 - Example: Social network friendships
@@ -299,7 +276,7 @@ graph MRF {
 - Main challenge: inference and learning are computationally expensive
 
 #### Markov Logic Networks: Basics
-- A **\textcolor{red}{Markov Logic Network}** (MLN) combines:
+- A **Markov Logic Network** (MLN) combines:
   - First-order logic (expressing knowledge with rules and quantifiers)
   - Markov Random Fields (modeling uncertainty with probabilities)
 
@@ -310,18 +287,18 @@ graph MRF {
     - Higher $w_i$ = formula more important in shaping the probability
       distribution
 
-- **\textcolor{orange}{Semantics}**:
+- **Semantics**:
   - An MLN defines a probability distribution over _possible worlds_
   - A world = a complete assignment of truth values to all ground atoms
   - If a world satisfies many high-weight formulas, it becomes _more probable_
 
-- **\textcolor{darkgreen}{Joint distribution}**:
+- **Joint distribution**:
   - $\Pr(X=x) = \frac{1}{Z} \exp\left(\sum_i w_i n_i(x)\right)$
-  - $n_i(x)$ = number of **\textcolor{teal}{true groundings}** of formula $F_i$ in world $x$
+  - $n_i(x)$ = number of **true groundings** of formula $F_i$ in world $x$
     - Example: If $F_i$ = "Friends(x,y) → Similar(x,y)" and in world $x$ this
       holds for 7 pairs $(x,y)$ out of 10, then $n_i(x)=7$
 
-- **\textcolor{cyan}{Special cases}**:
+- **Special cases**:
   - If all weights $w_i \to \infty$: only worlds where all formulas are satisfied
     have nonzero probability $\to$ recovers _classical logic_
   - If all weights are finite: allows some violations but assigns them lower
@@ -341,9 +318,9 @@ graph MRF {
   - Works by iteratively improving parameter estimates
   - Alternates between estimating missing data and optimizing parameters
 - Two main steps:
-  - **\textcolor{red}{E-step (Expectation)}**: Estimate distribution over hidden variables using
+  - **E-step (Expectation)**: Estimate distribution over hidden variables using
     current parameters
-  - **\textcolor{blue}{M-step (Maximization)}**: Update parameters to maximize expected
+  - **M-step (Maximization)**: Update parameters to maximize expected
     log-likelihood from the E-step
 - Used in diverse settings:
   - Unsupervised clustering (e.g., Gaussian Mixture Models)
@@ -356,11 +333,11 @@ graph MRF {
 #### EM Algorithm: Mechanics and Example in Gaussian Mixture Models
 
 - Goal: Recover parameters of Gaussian components from unlabeled data
-- **\textcolor{red}{E-step}**:
+- **E-step**:
   - Compute $p_{ij} = P(C=i \mid x_j)$ using Bayes' rule
   - $p_{ij} \propto P(x_j \mid C=i) P(C=i)$
   - Calculate effective count: $n_i = \sum_j p_{ij}$
-- **\textcolor{blue}{M-step}**:
+- **M-step**:
   - Update means: $\mu_i \leftarrow \sum_j p_{ij} x_j / n_i$
   - Update covariances:
     $\Sigma_i \leftarrow \sum_j p_{ij} (x_j - \mu_i)(x_j - \mu_i)^T / n_i$
@@ -377,92 +354,92 @@ graph MRF {
 
 #### Introduction to the Expectation–Maximization (EM) Algorithm
 
-- **\textcolor{red}{Purpose of EM Algorithm}**
+- **Purpose of EM Algorithm**
   - Iterative method for finding maximum likelihood or maximum a posteriori
     (MAP) estimates in statistical models with latent variables
   - Particularly useful when data is incomplete or has missing values
-- **\textcolor{orange}{Key Concepts}**
-  - **\textcolor{darkgreen}{Observed Data ($\mathbf{X}$)}**: The data we can directly observe
-  - **\textcolor{teal}{Latent Variables ($\mathbf{Z}$)}**: Hidden or unobserved variables that
+- **Key Concepts**
+  - **Observed Data ($\mathbf{X}$)**: The data we can directly observe
+  - **Latent Variables ($\mathbf{Z}$)**: Hidden or unobserved variables that
     influence the observed data
-  - **\textcolor{cyan}{Parameters ($\boldsymbol{\theta}$)}**: Unknown parameters to be estimated
-- **\textcolor{blue}{Challenge Addressed}**
+  - **Parameters ($\boldsymbol{\theta}$)**: Unknown parameters to be estimated
+- **Challenge Addressed**
   - Direct maximization of the likelihood function
     $p(\mathbf{X}|\boldsymbol{\theta})$ is often intractable due to the presence
     of latent variables
-- **\textcolor{violet}{EM Algorithm Overview}**
+- **EM Algorithm Overview**
   - Alternates between estimating the expected value of the log-likelihood
     (E-step) and maximizing this expectation (M-step)
-- **\textcolor{magenta}{Applications}**
+- **Applications**
   - Widely used in clustering (e.g., Gaussian Mixture Models), natural language
     processing, and image reconstruction
 
 #### The EM Algorithm: Step-By-Step
 
-- **\textcolor{red}{Initialization}**
+- **Initialization**
   - Start with initial guesses for the parameters $\boldsymbol{\theta}^{(0)}$
-- **\textcolor{darkgreen}{E-Step (Expectation Step)}**
+- **E-Step (Expectation Step)**
   - Compute the expected value of the log-likelihood function, with respect to
     the conditional distribution of the latent variables given the observed data
     and current parameter estimates:
     - $Q(\boldsymbol{\theta}|\boldsymbol{\theta}^{(t)}) = \mathbb{E}_{\mathbf{Z}|\mathbf{X},\boldsymbol{\theta}^{(t)}}[\log p(\mathbf{X}, \mathbf{Z}|\boldsymbol{\theta})]$
-- **\textcolor{blue}{M-Step (Maximization Step)}**
+- **M-Step (Maximization Step)**
   - Maximize the expected log-likelihood found in the E-step to update the
     parameters:
     - $\boldsymbol{\theta}^{(t+1)} = \arg\max_{\boldsymbol{\theta}} Q(\boldsymbol{\theta}|\boldsymbol{\theta}^{(t)})$
-- **\textcolor{violet}{Iteration}**
+- **Iteration**
   - Repeat E and M steps until convergence, i.e., until the parameters stabilize
     or the increase in likelihood is below a threshold
 
 #### Mathematical Foundation of EM
 
-- **\textcolor{red}{Likelihood with Latent Variables}**
+- **Likelihood with Latent Variables**
   - The marginal likelihood of the observed data is:
     - $p(\mathbf{X}|\boldsymbol{\theta}) = \int p(\mathbf{X}, \mathbf{Z}|\boldsymbol{\theta}) d\mathbf{Z}$
-- **\textcolor{darkgreen}{Intractability}**
+- **Intractability**
   - The integral is often difficult to compute due to the complexity introduced
     by the latent variables
-- **\textcolor{blue}{EM Solution}**
+- **EM Solution**
   - EM circumvents this by iteratively applying the E and M steps to find
     parameter estimates that locally maximize the likelihood
-- **\textcolor{violet}{Convergence}**
+- **Convergence**
   - Each iteration of EM is guaranteed to increase the likelihood function,
     ensuring convergence to a local maximum
 
 #### Example: Gaussian Mixture Models (GMM)
 
-- **\textcolor{red}{Problem Setup}**
+- **Problem Setup**
   - Data is assumed to be generated from a mixture of Gaussian distributions,
     each with its own mean and covariance
-- **\textcolor{orange}{Latent Variables}**
+- **Latent Variables**
   - Each data point is associated with a latent variable indicating the Gaussian
     component from which it was generated
-- **\textcolor{darkgreen}{E-Step in GMM}**
+- **E-Step in GMM**
   - Compute the posterior probabilities (responsibilities) that each data point
     belongs to each Gaussian component
-- **\textcolor{teal}{M-Step in GMM}**
+- **M-Step in GMM**
   - Update the parameters (means, covariances, and mixing coefficients) of each
     Gaussian component using the responsibilities computed in the E-step
-- **\textcolor{cyan}{Iteration}**
+- **Iteration**
   - Repeat E and M steps until the parameters converge
 
 #### Properties and Limitations of EM
 
-- **\textcolor{red}{Advantages}**
+- **Advantages**
   - Can handle missing or incomplete data effectively
   - Provides a framework for parameter estimation in complex models
-- **\textcolor{orange}{Limitations}**
+- **Limitations**
   - Converges to a local maximum, which may not be the global maximum
   - Sensitive to initial parameter estimates; poor initialization can lead to
     suboptimal solutions
-- **\textcolor{darkgreen}{Extensions and Variants}**
-  - **\textcolor{teal}{Variational Bayes}**: Provides a fully Bayesian approach by estimating
+- **Extensions and Variants**
+  - **Variational Bayes**: Provides a fully Bayesian approach by estimating
     distributions over parameters
-  - **\textcolor{cyan}{Generalized EM (GEM)}**: Relaxes the requirement of fully maximizing the
+  - **Generalized EM (GEM)**: Relaxes the requirement of fully maximizing the
     expected log-likelihood in the M-step
-  - **\textcolor{blue}{Expectation Conditional Maximization (ECM)}**: Breaks the M-step into
+  - **Expectation Conditional Maximization (ECM)**: Breaks the M-step into
     several conditional maximization steps
-- **\textcolor{violet}{Practical Considerations}**
+- **Practical Considerations**
   - Multiple runs with different initializations can help in finding better
     solutions
   - Monitoring the increase in likelihood can help in determining convergence

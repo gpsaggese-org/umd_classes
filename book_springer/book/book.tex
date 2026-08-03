@@ -20,8 +20,10 @@
 \usepackage{multicol}        % used for the two-column index
 \usepackage[bottom]{footmisc}% places footnotes at page bottom
 
-\usepackage{newtxtext}       % 
+\usepackage{newtxtext}       %
 \usepackage[varvw]{newtxmath}       % selects Times Roman as basic font
+
+\input{latex_abbrevs.tex}  % custom abbreviations and mathematical notation
 
 \makeindex             % used for the subject index
                        % please use the style svind.ist with
@@ -31,33 +33,35 @@
 
 \begin{document}
 
-\author{Author name(s)}
-\title{Book title}
-\subtitle{-- Subtitle (monograph-type) --}
+\author{Giacinto Paolo (GP) Saggese}
+\title{From Data to Decisions: Building Decision Systems with Probabilistic Causal Reasoning}
+%\subtitle{-- Subtitle (monograph-type) --}
 \maketitle
 
 \frontmatter%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\include{dedication}
-\include{foreword}
-\include{preface}
-\include{acknow}
-\include{ethics}
+%\include{dedication}
+%\include{foreword}
+%\include{preface}
+%\include{acknow}
+%\include{ethics}
 
 \tableofcontents
 
-\include{acronym}
+%\include{acronym}
 
 \mainmatter%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\include{part}
-\include{Lesson02.01_From_Data_Science_To_Decision_Science}
-\include{chapter}
-\include{appendix}
+%\include{part}
+\include{Lesson02.01_From_Data_Science_To_Decision_Science.tex}
+%\include{Lesson02.02_Integrating_Causality_And_Probability_in_ML.tex}
+\include{Lesson04.01_Knowledge_Representation.tex}
+%\include{chapter}
+%\include{appendix}
 
 \backmatter%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\include{glossary}
-\include{solutions}
-\printindex
+%\include{glossary}
+%\include{solutions}
+%\printindex
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
