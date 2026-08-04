@@ -1,7 +1,3 @@
----
-title: "Lesson 2.1: Git"
----
-
 <center>
 
 ![](data605/lectures_commentary/Lesson02.1-Git.png/slides001.png){width=80%}

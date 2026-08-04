@@ -1,9 +1,3 @@
----
-title: "Lesson 1.2: Introduction to Big Data"
----
-
-\newpage
-
 <center>
 
 ![](data605/lectures_commentary/Lesson01.2-Big_Data.png/slides001.png){width=80%}

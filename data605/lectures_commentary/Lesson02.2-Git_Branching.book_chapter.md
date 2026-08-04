@@ -1,9 +1,3 @@
----
-title: "Lesson 2.1: Git"
----
-
-\newpage
-
 <center>
 
 ![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides001.png){width=80%}

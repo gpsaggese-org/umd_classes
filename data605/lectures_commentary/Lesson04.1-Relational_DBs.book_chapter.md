@@ -1,7 +1,3 @@
----
-title: "Lesson 4.1: Relational DBs"
----
-
 <center>
 
 ![](data605/lectures_commentary/Lesson04.1-Relational_DBs.png/slides001.png){width=80%}

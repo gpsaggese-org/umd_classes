@@ -1,9 +1,3 @@
----
-title: "Lesson 1.4: Data Models"
----
-
-\newpage
-
 <center>
 
 ![](data605/lectures_commentary/Lesson01.4-Data_Models.png/slides001.png){width=80%}

@@ -1,7 +1,3 @@
----
-title: "Lesson 3.2: Docker"
----
-
 <center>
 
 ![](data605/lectures_commentary/Lesson03.2-Docker.png/slides001.png){width=80%}

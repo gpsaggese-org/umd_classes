@@ -1,9 +1,3 @@
----
-title: "Lesson 1.3: Is Data Science Just Hype?"
----
-
-\newpage
-
 <center>
 
 ![](data605/lectures_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides001.png){width=80%}

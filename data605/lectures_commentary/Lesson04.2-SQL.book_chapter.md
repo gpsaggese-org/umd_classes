@@ -1,7 +1,3 @@
----
-title: "Lesson 4.2: SQL"
----
-
 <center>
 
 ![](data605/lectures_commentary/Lesson04.2-SQL.png/slides001.png){width=80%}

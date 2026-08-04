@@ -1,9 +1,3 @@
----
-title: "Lesson 1.1: Introduction"
----
-
-\newpage
-
 <center>
 
 ![](data605/lectures_commentary/Lesson01.1-Intro.png/slides001.png){width=80%}

@@ -1,7 +1,3 @@
----
-title: "Lesson 5.3: Apache HBase"
----
-
 <center>
 
 ![](data605/lectures_commentary/Lesson05.3-Apache_HBase.png/slides001.png){width=80%}

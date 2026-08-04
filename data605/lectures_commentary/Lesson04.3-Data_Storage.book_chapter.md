@@ -1,7 +1,3 @@
----
-title: "Lesson 4.3: Data Storage"
----
-
 <center>
 
 ![](data605/lectures_commentary/Lesson04.3-Data_Storage.png/slides001.png){width=80%}

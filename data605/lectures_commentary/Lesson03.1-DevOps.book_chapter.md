@@ -1,9 +1,3 @@
----
-title: "Lesson 3.1: DevOps"
----
-
-\newpage
-
 <center>
 
 ![](data605/lectures_commentary/Lesson03.1-DevOps.png/slides001.png){width=80%}

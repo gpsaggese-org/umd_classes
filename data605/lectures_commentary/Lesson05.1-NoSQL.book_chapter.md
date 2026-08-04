@@ -1,7 +1,3 @@
----
-title: "Lesson 5.1: NoSQL Databases"
----
-
 <center>
 
 ![](data605/lectures_commentary/Lesson05.1-NoSQL.png/slides001.png){width=80%}

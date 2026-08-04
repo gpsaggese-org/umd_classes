@@ -1,9 +1,3 @@
----
-title: "Lesson 2.2: Data Pipelines"
----
-
-\newpage
-
 <center>
 
 ![](data605/lectures_commentary/Lesson02.3-Data_Pipelines.png/slides001.png){width=80%}

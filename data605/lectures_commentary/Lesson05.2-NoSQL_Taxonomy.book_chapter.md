@@ -1,7 +1,3 @@
----
-title: "Lesson 5.2: Database Taxonomy"
----
-
 <center>
 
 ![](data605/lectures_commentary/Lesson05.2-NoSQL_Taxonomy.png/slides001.png){width=80%}
