@@ -351,13 +351,13 @@ class Test_generate_tex(hunitest.TestCase):
         :param limit: optional limit parameter
         """
         # Run test.
-        with hunteuti.capture_system_calls() as invocations:
+        with hunteuti.capture_sys_calls() as sys_calls:
             csfolole._generate_tex(
                 class_dir, source_path, source_name, limit=limit
             )
         # Check outputs.
-        self.assertEqual(len(invocations), 1)
-        cmd_str = invocations[0]["args"][0]
+        self.assertEqual(len(sys_calls), 1)
+        cmd_str = sys_calls[0]["args"][0]
         self.check_string(cmd_str, purify_text=True)
 
     def test1(self) -> None:
@@ -387,14 +387,37 @@ class Test_generate_tex(hunitest.TestCase):
         hio.to_file(source_path, "Test content")
         limit = "1:3"
         # Run test.
-        with hunteuti.capture_system_calls() as invocations:
+        with hunteuti.capture_sys_calls() as sys_calls:
             csfolole._generate_tex(
                 class_dir, source_path, source_name, limit=limit
             )
             # Check outputs.
-            self.assertEqual(len(invocations), 1)
-            cmd_str = invocations[0]["args"][0]
+            self.assertEqual(len(sys_calls), 1)
+            cmd_str = sys_calls[0]["args"][0]
             self.assertIn(f"--filter_by_slides {limit}", cmd_str)
+
+    def test3(self) -> None:
+        """
+        Test `_generate_tex()` with `cmd_opts` appends the extra options to
+        the invoked command.
+        """
+        # Prepare inputs.
+        class_dir, scratch_dir = _create_test_structure(
+            self, "data605", "lectures_tex"
+        )
+        source_path = os.path.join(scratch_dir, "Lesson01.1-Intro.txt")
+        source_name = "Lesson01.1-Intro.txt"
+        hio.to_file(source_path, "Test content")
+        cmd_opts = "--no_incremental --open_pdf"
+        # Run test.
+        with hunteuti.capture_sys_calls() as sys_calls:
+            csfolole._generate_tex(
+                class_dir, source_path, source_name, cmd_opts=cmd_opts
+            )
+        # Check outputs.
+        self.assertEqual(len(sys_calls), 1)
+        cmd_str = sys_calls[0]["args"][0]
+        self.assertIn(cmd_opts, cmd_str)
 
 
 # #############################################################################
@@ -419,12 +442,12 @@ class Test_generate_pdf(hunitest.TestCase):
         source_name = "Lesson01.1-Intro.txt"
         hio.to_file(source_path, "Test content")
         # Run test.
-        with hunteuti.capture_system_calls() as invocations:
+        with hunteuti.capture_sys_calls() as sys_calls:
             csfolole._generate_pdf(
                 class_dir, source_path, source_name, skip_action="open"
             )
         # Check outputs.
-        actual_str = pprint.pformat(invocations)
+        actual_str = pprint.pformat(sys_calls)
         expected_str = hprint.dedent("""
             [{'args': ('notes_to_pdf.py --input '
                        '$GIT_ROOT/class_scripts/test/outcomes/Test_generate_pdf.test1/tmp.scratch/Lesson01.1-Intro.txt '
@@ -450,12 +473,12 @@ class Test_generate_pdf(hunitest.TestCase):
         hio.to_file(source_path, "Test content")
         limit = "1:5"
         # Run test.
-        with hunteuti.capture_system_calls() as invocations:
+        with hunteuti.capture_sys_calls() as sys_calls:
             csfolole._generate_pdf(
                 class_dir, source_path, source_name, limit=limit
             )
         # Check outputs.
-        actual_str = pprint.pformat(invocations)
+        actual_str = pprint.pformat(sys_calls)
         expected_str = hprint.dedent("""
             [{'args': ('notes_to_pdf.py --input '
                        '$GIT_ROOT/class_scripts/test/outcomes/Test_generate_pdf.test2/tmp.scratch/Lesson01.1-Intro.txt '
@@ -467,6 +490,29 @@ class Test_generate_pdf(hunitest.TestCase):
               'kwargs': {'suppress_output': False}}]
             """)
         self.assert_equal(actual_str, expected_str, purify_text=True)
+
+    def test3(self) -> None:
+        """
+        Test `_generate_pdf()` with `cmd_opts` appends the extra options to
+        the invoked command.
+        """
+        # Prepare inputs.
+        class_dir, scratch_dir = _create_test_structure(
+            self, "msml610", "lectures"
+        )
+        source_path = os.path.join(scratch_dir, "Lesson01.1-Intro.txt")
+        source_name = "Lesson01.1-Intro.txt"
+        hio.to_file(source_path, "Test content")
+        cmd_opts = "--no_incremental --open_pdf"
+        # Run test.
+        with hunteuti.capture_sys_calls() as sys_calls:
+            csfolole._generate_pdf(
+                class_dir, source_path, source_name, cmd_opts=cmd_opts
+            )
+        # Check outputs.
+        self.assertEqual(len(sys_calls), 1)
+        cmd_str = sys_calls[0]["args"][0]
+        self.assertIn(cmd_opts, cmd_str)
 
 
 # #############################################################################
@@ -512,10 +558,10 @@ class Test_generate_toc(hunitest.TestCase):
         source_name = "Lesson02.1-Advanced.txt"
         hio.to_file(source_path, "# Title\n## Content")
         # Capture system calls.
-        with hunteuti.capture_system_calls() as invocations:
+        with hunteuti.capture_sys_calls() as sys_calls:
             csfolole._generate_toc(source_path, source_name)
         # Check outputs.
-        actual_str = pprint.pformat(invocations)
+        actual_str = pprint.pformat(sys_calls)
         expected_str = hprint.dedent("""
             [{'args': ('extract_toc_from_txt.py -i '
                        '$GIT_ROOT/class_scripts/test/outcomes/Test_generate_toc.test2/tmp.scratch/Lesson02.1-Advanced.txt '
@@ -524,6 +570,59 @@ class Test_generate_toc(hunitest.TestCase):
               'kwargs': {'suppress_output': True}}]
             """)
         self.assert_equal(actual_str, expected_str, purify_text=True)
+
+
+# #############################################################################
+# Test_generate_lecture_commentary
+# #############################################################################
+
+
+class Test_generate_lecture_commentary(hunitest.TestCase):
+    """
+    Test `_generate_lecture_commentary()` function.
+    """
+
+    def test1(self) -> None:
+        """
+        Test `_generate_lecture_commentary()` with basic inputs generates the
+        correct `gen_lecture_commentary.py` command.
+        """
+        # Prepare inputs.
+        class_dir = "data605"
+        source_path = "data605/lectures_source/Lesson01.1-Intro.txt"
+        source_name = "Lesson01.1-Intro.txt"
+        # Run test.
+        with hunteuti.capture_sys_calls() as sys_calls:
+            csfolole._generate_lecture_commentary(
+                class_dir, source_path, source_name
+            )
+        # Check outputs.
+        self.assertEqual(len(sys_calls), 1)
+        cmd_str = sys_calls[0]["args"][0]
+        self.assertEqual(cmd_str, "gen_lecture_commentary.py data605 01.1")
+
+    def test2(self) -> None:
+        """
+        Test `_generate_lecture_commentary()` with `cmd_opts` appends the
+        extra options to the invoked `gen_lecture_commentary.py` command.
+        """
+        # Prepare inputs.
+        class_dir = "data605"
+        source_path = "data605/lectures_source/Lesson01.1-Intro.txt"
+        source_name = "Lesson01.1-Intro.txt"
+        cmd_opts = "--no_incremental --open_pdf"
+        # Run test.
+        with hunteuti.capture_sys_calls() as sys_calls:
+            csfolole._generate_lecture_commentary(
+                class_dir, source_path, source_name, cmd_opts=cmd_opts
+            )
+        # Check outputs.
+        self.assertEqual(len(sys_calls), 1)
+        cmd_str = sys_calls[0]["args"][0]
+        self.assertEqual(
+            cmd_str,
+            "gen_lecture_commentary.py data605 01.1 --no_incremental --open_pdf",
+        )
 
 
 # #############################################################################
@@ -808,12 +907,12 @@ class Test_process_lecture_file_with_generate_toc(hunitest.TestCase):
         hio.to_file(source_path, "# Title")
         actions = ["generate_pdf"]
         # Capture system calls.
-        with hunteuti.capture_system_calls() as invocations:
+        with hunteuti.capture_sys_calls() as sys_calls:
             result = csfolole._process_lecture_file(
                 class_dir, source_path, source_name, actions
             )
         # Check outputs.
-        actual_str = pprint.pformat(invocations)
+        actual_str = pprint.pformat(sys_calls)
         expected_str = hprint.dedent("""
             [{'args': ('notes_to_pdf.py --input '
                        '$GIT_ROOT/class_scripts/test/outcomes/Test_process_lecture_file_with_generate_toc.test2/tmp.scratch/Lesson01.1-Intro.txt '
@@ -825,3 +924,31 @@ class Test_process_lecture_file_with_generate_toc(hunitest.TestCase):
               'kwargs': {'suppress_output': False}}]
             """)
         self.assert_equal(actual_str, expected_str, purify_text=True)
+
+    def test3(self) -> None:
+        """
+        Test `_process_lecture_file()` passes `cmd_opts` through to the
+        underlying command.
+        """
+        # Prepare inputs.
+        class_dir, scratch_dir = _create_test_structure(
+            self, "msml610", "lectures"
+        )
+        source_path = os.path.join(scratch_dir, "Lesson01.1-Intro.txt")
+        source_name = "Lesson01.1-Intro.txt"
+        hio.to_file(source_path, "# Title")
+        actions = ["generate_pdf"]
+        cmd_opts = "--no_incremental"
+        # Capture system calls.
+        with hunteuti.capture_sys_calls() as sys_calls:
+            csfolole._process_lecture_file(
+                class_dir,
+                source_path,
+                source_name,
+                actions,
+                cmd_opts=cmd_opts,
+            )
+        # Check outputs.
+        self.assertEqual(len(sys_calls), 1)
+        cmd_str = sys_calls[0]["args"][0]
+        self.assertIn(cmd_opts, cmd_str)

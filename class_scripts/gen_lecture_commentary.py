@@ -1,14 +1,35 @@
 #!/usr/bin/env -S uv run
 
+# /// script
+# dependencies = [
+#   "llm",
+#   "openai",
+#   "pandas>=2.0.0",
+#   "pdf2image",
+#   "pillow",
+#   "python-dotenv",
+#   "pyyaml",
+#   "requests",
+#   "tqdm",
+# ]
+# ///
+
 r"""
 Generate a PDF with the lecture commentaries from slides lecture source.
 
 This script performs multiple steps:
-1. Generate PDF using notes_to_pdf.py
-2. Generate lecture commentary: pair each slide's markdown with a corresponding
-   PNG (extracted from the PDF from step 1) and generate per-slide LLM commentary
-3. Convert to PDF using pandoc
-4. Open the PDF in Skim
+1. Generate PDF of the slides using `notes_to_pdf.py`
+2. Extract PNG images from the generated PDF (tracked independently of step 3
+   for incremental runs: e.g., deleting only the PNG dir re-extracts without
+   forcing a full markdown regeneration)
+3. Generate lecture commentary: pair each slide's markdown with its PNG and
+   generate per-slide LLM commentary, tagging the output with the git
+   hash/timestamp of generation
+4. Add the generated markdown to git
+5. Convert to PDF using pandoc
+6. Convert to HTML using pandoc
+7. Open the PDF in Skim (if `--open_pdf` is specified)
+8. Open the HTML file in the default browser (if `--open_html` is specified)
 
 Usage:
 > gen_lecture_commentary.py data605 01.1
@@ -20,8 +41,9 @@ or
 
 ```
 > ls -1 data605/lectures_commentary/Lesson01.1-Intro.*
+data605/lectures_commentary/Lesson01.1-Intro.book_chapter.html
+data605/lectures_commentary/Lesson01.1-Intro.book_chapter.md
 data605/lectures_commentary/Lesson01.1-Intro.book_chapter.pdf
-data605/lectures_commentary/Lesson01.1-Intro.book_chapter.txt
 
 data605/lectures_commentary/Lesson01.1-Intro.png:
 slides001.png
@@ -34,38 +56,28 @@ Import as:
 import class_scripts.gen_lecture_commentary as clgelcom
 """
 
-# /// script
-# dependencies = [
-#   "pandas>=2.0.0",
-#   "openai",
-#   "tqdm",
-#   "pyyaml",
-#   "requests",
-#   "python-dotenv",
-#   "pdf2image",
-#   "pillow",
-# ]
-# ///
-
 import argparse
+import glob
 import logging
 import os
 import re
-from typing import List, Optional, cast
+from typing import List, Optional
 
 import pdf2image  # type: ignore
 import tqdm
+from PIL import ImageOps
 
-import class_scripts.common_utils as clcomuut
+import class_scripts.common_utils as csccouti
 import class_scripts.slides_utils as cscsluti
 import dev_scripts_helpers.documentation.preprocess_notes as dshdprno
 import dev_scripts_helpers.dockerize.lib_prettier as dshdlipr
 import helpers.hcache_simple as hcacsimp
 import helpers.hdbg as hdbg
+import helpers.hgit as hgit
 import helpers.hio as hio
-import helpers.hllm as hllm
 import helpers.hparser as hparser
 import helpers.hprint as hprint
+import helpers.hretry as hretry
 import helpers.hsystem as hsystem
 
 _LOG = logging.getLogger(__name__)
@@ -74,63 +86,135 @@ _LOG = logging.getLogger(__name__)
 # PNG processing
 # #############################################################################
 
+# Map `--image_type` values to the corresponding PIL save format and file
+# extension.
+_IMAGE_TYPE_TO_PIL_INFO = {
+    "png": ("PNG", "png"),
+    "jpg": ("JPEG", "jpg"),
+}
+
+# Border drawn around each extracted slide image.
+_IMAGE_BORDER_WIDTH_PX = 3
+_IMAGE_BORDER_COLOR = "black"
+
+
+def get_image_extension(image_type: str) -> str:
+    """
+    Get the file extension corresponding to an `--image_type` value.
+
+    :param image_type: image type (e.g., "png", "jpg")
+    :return: file extension without the leading dot (e.g., "png", "jpg")
+    """
+    hdbg.dassert_in(
+        image_type,
+        _IMAGE_TYPE_TO_PIL_INFO,
+        "Invalid image type specified",
+    )
+    _, extension = _IMAGE_TYPE_TO_PIL_INFO[image_type]
+    return extension
+
 
 def _extract_png_from_pdf(
     input_pdf_file: str,
     output_png_dir: str,
+    image_type: str,
     *,
-    dpi: int = 200,
+    dpi: int = 300,
+    add_border: bool = False,
 ) -> None:
     """
-    Extract PNG images from PDF file using pdf2image.
+    Extract slide images from PDF file using pdf2image.
 
     :param input_pdf_file: path to input PDF file
-    :param output_png_dir: directory to save PNG files
+    :param output_png_dir: directory to save the extracted images
     :param dpi: DPI resolution for output images
+    :param image_type: image format to save (e.g., "png", "jpg")
+    :param add_border: if True, draw a solid border around each extracted
+        image (baked into the pixels, so it shows up in every output format,
+        e.g., PDF and HTML)
     """
     hdbg.dassert_file_exists(input_pdf_file)
-    _LOG.info("Extracting PNG images from PDF: %s", input_pdf_file)
+    hdbg.dassert_in(
+        image_type,
+        _IMAGE_TYPE_TO_PIL_INFO,
+        "Invalid image type specified",
+    )
+    pil_format, extension = _IMAGE_TYPE_TO_PIL_INFO[image_type]
+    _LOG.info("Extracting %s images from PDF: %s", image_type, input_pdf_file)
     # Create output directory.
     hio.create_dir(output_png_dir, incremental=False)
-    _LOG.info("Output PNG directory: %s", output_png_dir)
+    _LOG.info("Output image directory: %s", output_png_dir)
     # Convert PDF pages to images.
     _LOG.info("Converting PDF to images with DPI=%d", dpi)
     images = pdf2image.convert_from_path(input_pdf_file, dpi=dpi)
     num_pages = len(images)
     hdbg.dassert_lt(0, num_pages, "No pages found in PDF file:", input_pdf_file)
     _LOG.info("Found %d pages in PDF", num_pages)
-    # Save each page as a PNG file.
+    # Save each page as an image file.
     for page_num, image in enumerate(
         tqdm.tqdm(images, desc="Extracting pages"), start=1
     ):
         # Format filename with zero-padded page number.
-        output_filename = f"slides{page_num:03d}.png"
+        output_filename = f"slides{page_num:03d}.{extension}"
         output_path = os.path.join(output_png_dir, output_filename)
-        # Save image as PNG.
-        image.save(output_path, "PNG")
+        # JPEG has no alpha channel, so convert away from RGBA before saving.
+        if pil_format == "JPEG" and image.mode != "RGB":
+            image = image.convert("RGB")
+        if add_border:
+            image = ImageOps.expand(
+                image,
+                border=_IMAGE_BORDER_WIDTH_PX,
+                fill=_IMAGE_BORDER_COLOR,
+            )
+        image.save(output_path, pil_format)
         _LOG.debug("Saved: %s", output_filename)
     _LOG.info(
-        "Successfully extracted %d PNG images to %s", num_pages, output_png_dir
+        "Successfully extracted %d %s images to %s",
+        num_pages,
+        image_type,
+        output_png_dir,
     )
 
 
-def _get_png_files_from_directory(png_dir: str) -> List[str]:
+def _get_png_files_from_directory(png_dir: str, image_type: str) -> List[str]:
     """
-    Get sorted list of PNG files from directory.
+    Get sorted list of slide image files from directory.
 
-    :param png_dir: directory containing PNG files
-    :return: sorted list of PNG file paths with pattern slides*.png
+    :param png_dir: directory containing the slide image files
+    :param image_type: image format to look for (e.g., "png", "jpg")
+    :return: sorted list of image file paths with pattern slides*.<extension>
     """
     hdbg.dassert_dir_exists(png_dir)
-    # List all PNG files matching the pattern slides*.png.
+    extension = get_image_extension(image_type)
+    # List all image files matching the pattern slides*.<extension>.
     png_files = []
     for filename in os.listdir(png_dir):
-        if filename.startswith("slides") and filename.endswith(".png"):
+        if filename.startswith("slides") and filename.endswith(f".{extension}"):
             png_files.append(os.path.join(png_dir, filename))
     # Sort files to ensure correct ordering.
     png_files.sort()
-    _LOG.info("Found %d PNG files in directory: %s", len(png_files), png_dir)
+    _LOG.info("Found %d image files in directory: %s", len(png_files), png_dir)
     return png_files
+
+
+def _is_png_dir_populated(png_dir: str, image_type: str) -> bool:
+    """
+    Check whether an image directory already contains extracted slide images.
+
+    Used to make `--no_incremental` handling for image extraction
+    independent of the markdown artifact: e.g., deleting only the image dir
+    triggers re-extraction without forcing a full markdown regeneration.
+
+    :param png_dir: directory expected to contain `slides*.<extension>` files
+    :param image_type: image format to look for (e.g., "png", "jpg")
+    :return: True if the directory exists and contains at least one image
+        file
+    """
+    extension = get_image_extension(image_type)
+    is_populated = os.path.isdir(png_dir) and bool(
+        glob.glob(os.path.join(png_dir, f"slides*.{extension}"))
+    )
+    return is_populated
 
 
 # #############################################################################
@@ -192,11 +276,19 @@ def _extract_title_from_markdown(input_file: str) -> Optional[str]:
     return None
 
 
+# Backends supported by `_generate_slide_commentary()`.
+# - "hllm": `helpers.hllm.get_completion()`, supports passing the slide's
+#   images as multi-modal context
+# - "hllm_cli": `helpers.hllm_cli.apply_llm()`, text-only (no image support)
+_LLM_BACKENDS = ("hllm", "hllm_cli")
+
+
 @hcacsimp.simple_cache(cache_type="json")
 def _generate_slide_commentary(
     slide_content: str,
     system_prompt: str,
     model: str,
+    llm_backend: str,
 ) -> str:
     """
     Generate commentary for a single slide using LLM.
@@ -204,8 +296,14 @@ def _generate_slide_commentary(
     :param slide_content: markdown content of the slide
     :param system_prompt: system prompt for the LLM
     :param model: LLM model to use
+    :param llm_backend: which LLM backend to use, one of `_LLM_BACKENDS`
+        - "hllm": also feeds the slide's images to the LLM as multi-modal
+          context
+        - "hllm_cli": text-only, since `hllm_cli.apply_llm()` has no image
+          support
     :return: generated commentary text
     """
+    hdbg.dassert_in(llm_backend, _LLM_BACKENDS)
     _LOG.debug("Generating commentary for slide")
     # Process images from slide.
     processed_slides, images_as_base64 = cscsluti.process_slide_images(
@@ -213,52 +311,59 @@ def _generate_slide_commentary(
     )
     user_prompt = processed_slides[0]
     # Get completion from LLM.
-    response = hllm.get_completion(
-        user_prompt=user_prompt,
-        system_prompt=system_prompt,
-        model=model,
-        cache_mode="NORMAL",
-        temperature=0.1,
-    )
+    if llm_backend == "hllm":
+        import helpers.hllm as hllm
+
+        response = hllm.get_completion(
+            user_prompt=user_prompt,
+            system_prompt=system_prompt,
+            model=model,
+            cache_mode="NORMAL",
+            temperature=0.1,
+            images_as_base64=tuple(images_as_base64),
+        )
+    else:
+        import helpers.hllm_cli as hllmcli
+
+        response, _ = hllmcli.apply_llm(
+            user_prompt,
+            system_prompt=system_prompt,
+            model=model,
+            backend="library",
+        )
     return str(response)
 
 
 def _generate_lecture_commentary(
     input_file: str,
     output_dir: str,
+    input_png_dir: str,
+    image_type: str,
+    llm_backend: str,
     *,
-    input_png_dir: Optional[str] = None,
-    input_pdf_file: Optional[str] = None,
-    output_file: Optional[str] = None,
-    dpi: int = 200,
+    output_file: str = "",
     image_width: str = "80%",
     add_new_page: bool = False,
 ) -> None:
     r"""
-    Generate book chapter from markdown slides and PNG directory or PDF file.
+    Generate book chapter from markdown slides and a directory of slide PNGs.
 
     :param input_file: path to input markdown file with slides
     :param output_dir: directory to save output files
-    :param input_png_dir: directory containing PNG files (slides*.png)
-    :param input_pdf_file: PDF file to extract PNG images from
+    :param input_png_dir: directory containing the slide image files
+        (slides*.<extension>), already extracted from the corresponding PDF
+        (see `_extract_png_from_pdf()`)
     :param output_file: path to the output book chapter markdown file
         - Default: `{output_dir}/{base_name}.book_chapter.md`
-    :param dpi: DPI resolution for PDF extraction
     :param image_width: width of images in output (e.g., "80%", "50%")
     :param add_new_page: if True, add `\newpage` commands before each slide
+    :param image_type: image format of the files in `input_png_dir` (e.g.,
+        "png", "jpg")
+    :param llm_backend: which LLM backend to use to generate commentary, one
+        of `_LLM_BACKENDS` (see `_generate_slide_commentary()`)
     """
     hdbg.dassert_file_exists(input_file)
-    # Validate that exactly one of input_png_dir or input_pdf_file is provided.
-    has_png_dir = input_png_dir is not None
-    has_pdf_file = input_pdf_file is not None
-    hdbg.dassert(
-        has_png_dir or has_pdf_file,
-        "Must provide either --input_png_dir or --input_pdf_file",
-    )
-    hdbg.dassert(
-        not (has_png_dir and has_pdf_file),
-        "Cannot provide both --input_png_dir and --input_pdf_file",
-    )
+    hdbg.dassert_dir_exists(input_png_dir)
     # Create output directory.
     hio.create_dir(output_dir, incremental=True)
     # Extract base name from input file.
@@ -270,16 +375,6 @@ def _generate_lecture_commentary(
     else:
         base_name = input_basename
     _LOG.info("Using base name: %s", base_name)
-    # Handle PDF extraction if needed.
-    if input_pdf_file:
-        # Create PNG directory as {base_name}.png inside output_dir.
-        png_dir_name = f"{base_name}.png"
-        input_png_dir = os.path.join(output_dir, png_dir_name)
-        _LOG.info("Extracting PNG files from PDF to: %s", input_png_dir)
-        _extract_png_from_pdf(input_pdf_file, input_png_dir, dpi=dpi)
-    else:
-        hdbg.dassert_is_not(input_png_dir, None)
-        hdbg.dassert_dir_exists(cast(str, input_png_dir))
     _LOG.info("Reading slides from: %s", input_file)
     # Extract title from markdown file for YAML preamble.
     title = _extract_title_from_markdown(input_file)
@@ -288,7 +383,7 @@ def _generate_lecture_commentary(
     num_slides = len(slides)
     _LOG.info("Found %d slides in markdown file", num_slides)
     # Get PNG files from directory.
-    png_files = _get_png_files_from_directory(cast(str, input_png_dir))
+    png_files = _get_png_files_from_directory(input_png_dir, image_type)
     num_pngs = len(png_files)
     _LOG.info("Found %d PNG files in directory", num_pngs)
     # Check that slide count matches PNG count.
@@ -306,6 +401,10 @@ def _generate_lecture_commentary(
     if title:
         yaml_preamble = f'---\ntitle: "{title}"\n---\n'
         output_parts.append(yaml_preamble)
+    # Add a provenance tag with the git hash and timestamp of generation, so
+    # that we can tell from which commit and when this file was generated.
+    generation_tag = hgit.get_generation_tag()
+    output_parts.append(f"<!-- {generation_tag} -->\n")
     # First, handle the title slide (first PNG, no content).
     _LOG.info("Processing title slide (1/%d)", num_slides + 1)
     slide_output = []
@@ -344,12 +443,13 @@ def _generate_lecture_commentary(
             slide_output.append("")
         # Add title, image, and commentary.
         # Use original slide title from input markdown with idx/tot format.
+        full_title = f"{idx} / {num_slides + 1}: {slide_title}"
         slide_output.append(
             hprint.dedent(
                 f"""
                 <center>
 
-                # {idx} / {num_slides + 1}: {slide_title}
+                # {full_title}
 
                 </center>
                 """
@@ -369,9 +469,7 @@ def _generate_lecture_commentary(
         )
         # Generate commentary for this slide.
         commentary = _generate_slide_commentary(
-            slide_content=slide_content,
-            system_prompt=_DEFAULT_SYSTEM_PROMPT,
-            model="",
+            slide_content, _DEFAULT_SYSTEM_PROMPT, "", llm_backend
         )
         slide_output.append(commentary)
         slide_output.append("")
@@ -383,7 +481,7 @@ def _generate_lecture_commentary(
     _LOG.info("Formatting output with prettier")
     full_output = dshdlipr.prettier_on_str(full_output, "md")
     # Write output file.
-    if output_file is None:
+    if not output_file:
         output_file = os.path.join(output_dir, f"{base_name}.book_chapter.md")
     _LOG.info("Writing output to: %s", output_file)
     hio.to_file(output_file, full_output)
@@ -398,7 +496,7 @@ def _generate_lecture_commentary(
 def _parse() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter,
+        formatter_class=hparser.CustomHelpFormatter,
     )
     parser.add_argument(
         "dir",
@@ -424,27 +522,86 @@ def _parse() -> argparse.ArgumentParser:
             "exists)"
         ),
     )
+    parser.add_argument(
+        "--image_type",
+        type=str,
+        choices=["png", "jpg"],
+        default="png",
+        help="Image format to extract slides as",
+    )
+    parser.add_argument(
+        "--llm_backend",
+        type=str,
+        choices=_LLM_BACKENDS,
+        default="hllm",
+        help=(
+            "LLM backend to use for slide commentary generation: 'hllm' "
+            "(default) feeds the slide's images to the LLM as multi-modal "
+            "context, 'hllm_cli' is text-only"
+        ),
+    )
+    parser.add_argument(
+        "--open_pdf",
+        action="store_true",
+        help="Open the generated PDF in Skim",
+    )
+    parser.add_argument(
+        "--open_html",
+        action="store_true",
+        help="Open the generated HTML file in the default browser",
+    )
     hparser.add_verbosity_arg(parser)
     return parser
+
+
+# Number of times to retry `git add` before giving up.
+_GIT_ADD_NUM_ATTEMPTS = 5
+# Delay between `git add` retries, in seconds.
+_GIT_ADD_RETRY_DELAY_IN_SEC = 2
+
+
+@hretry.sync_retry(
+    num_attempts=_GIT_ADD_NUM_ATTEMPTS,
+    exceptions=(RuntimeError,),
+    retry_delay_in_sec=_GIT_ADD_RETRY_DELAY_IN_SEC,
+)
+def _git_add_with_retry(file_name: str, *, dry_run: bool) -> None:
+    """
+    Run `git add` on `file_name`, retrying on failure.
+
+    This is needed because concurrent Git commands (e.g., another
+    `gen_lecture_commentary.py` process, or an IDE) can hold
+    `.git/index.lock`, causing `git add` to fail with "Unable to create
+    '.git/index.lock': File exists.".
+
+    :param file_name: path of the file to add
+    :param dry_run: print the command without executing it
+    """
+    cmd = f"git add {file_name}"
+    hsystem.system(cmd, print_command=True, dry_run=dry_run)
 
 
 def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
     # Validate arguments.
-    clcomuut.validate_dir_lesson_args(args.dir, args.lesson)
+    csccouti.validate_dir_lesson_args(args.dir, args.lesson)
     # Get source name.
-    src_name = clcomuut.get_source_name(args.dir, args.lesson)
+    src_name = csccouti.get_source_name(args.dir, args.lesson)
     input_file = f"{args.dir}/lectures_source/{src_name}"
     # Precompute the paths of all intermediate/output files, so that we can
     # skip steps whose output already exists (unless --no_incremental).
-    dst_name = clcomuut.get_output_name(src_name, ".pdf")
+    dst_name = csccouti.get_output_name(src_name, ".pdf")
     tmp_pdf = f"tmp.{dst_name}"
-    out_dir = f"{args.dir}/lecture_commentary"
+    out_dir = f"{args.dir}/lectures_commentary"
     basename = os.path.splitext(src_name)[0]
+    image_extension = get_image_extension(args.image_type)
+    png_dir = f"{out_dir}/{basename}.{image_extension}"
     book_chapter_md = f"{out_dir}/{basename}.book_chapter.md"
     pdf_file_name = f"{out_dir}/{basename}.book_chapter.pdf"
+    html_file_name = f"{out_dir}/{basename}.book_chapter.html"
     do_incremental = not args.no_incremental
+    script_dir = os.path.dirname(os.path.abspath(__file__))
     # Step 1: Generate the PDF.
     if do_incremental and os.path.exists(tmp_pdf):
         _LOG.warning("Step 1: Skipping, '%s' already exists", tmp_pdf)
@@ -457,12 +614,33 @@ def _main(parser: argparse.ArgumentParser) -> None:
             "--type slides --toc_type remove_headers"
         )
         hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
-    # Step 2: Generate book chapter.
-    clcomuut.ensure_dir_exists(out_dir)
-    if do_incremental and os.path.exists(book_chapter_md):
-        _LOG.warning("Step 2: Skipping, '%s' already exists", book_chapter_md)
+    # Step 2: Extract slide images from the PDF.
+    # This is tracked independently from the markdown artifact (Step 3) so
+    # that deleting only the image dir triggers re-extraction without forcing
+    # a full markdown/commentary regeneration.
+    csccouti.ensure_dir_exists(out_dir)
+    if do_incremental and _is_png_dir_populated(png_dir, args.image_type):
+        _LOG.warning("Step 2: Skipping, '%s' already populated", png_dir)
     else:
-        _LOG.info("Step 2: Generating book chapter")
+        _LOG.info("Step 2: Extracting %s images from PDF", args.image_type)
+        if args.dry_run:
+            _LOG.warning(
+                "As per user request, not extracting images for '%s'",
+                tmp_pdf,
+            )
+        else:
+            _extract_png_from_pdf(
+                tmp_pdf,
+                png_dir,
+                args.image_type,
+                dpi=200,
+                add_border=True,
+            )
+    # Step 3: Generate book chapter.
+    if do_incremental and os.path.exists(book_chapter_md):
+        _LOG.warning("Step 3: Skipping, '%s' already exists", book_chapter_md)
+    else:
+        _LOG.info("Step 3: Generating book chapter")
         if args.dry_run:
             _LOG.warning(
                 "As per user request, not generating book chapter for '%s'",
@@ -470,31 +648,68 @@ def _main(parser: argparse.ArgumentParser) -> None:
             )
         else:
             _generate_lecture_commentary(
-                input_file=input_file,
-                output_dir=out_dir,
-                input_pdf_file=tmp_pdf,
+                input_file,
+                out_dir,
+                png_dir,
+                args.image_type,
+                args.llm_backend,
                 output_file=book_chapter_md,
-                dpi=300,
             )
-    # Step 3: Convert to PDF using pandoc.
+    # Step 4: Track the generated markdown file in git.
+    _LOG.info("Step 4: Adding book chapter markdown to git")
+    _git_add_with_retry(book_chapter_md, dry_run=args.dry_run)
+    # Step 5: Convert to PDF using pandoc.
     if do_incremental and os.path.exists(pdf_file_name):
-        _LOG.warning("Step 3: Skipping, '%s' already exists", pdf_file_name)
+        _LOG.warning("Step 5: Skipping, '%s' already exists", pdf_file_name)
     else:
-        _LOG.info("Step 3: Converting to PDF using pandoc")
-        header_dir = os.path.dirname(os.path.abspath(__file__))
+        _LOG.info("Step 5: Converting to PDF using pandoc")
+        # The book chapter markdown uses LaTeX macros (e.g., `\vmu`) defined
+        # in `latex_abbrevs.sty`, so it needs to be included in the header
+        # too, otherwise xelatex fails with "Undefined control sequence".
+        latex_abbrevs_file = os.path.join(
+            hgit.find_file("dev_scripts_helpers"),
+            "documentation",
+            "latex_abbrevs.sty",
+        )
+        hdbg.dassert_file_exists(latex_abbrevs_file)
         cmd = (
             f"pandoc {book_chapter_md} -o {pdf_file_name} "
             f"--pdf-engine=xelatex "
             f"-V geometry:margin=1in "
             f"-V fontsize=11pt "
             f"--highlight-style=tango "
-            f"--include-in-header={header_dir}/header-style.tex"
+            f"--include-in-header={latex_abbrevs_file} "
+            f"--include-in-header={script_dir}/header-style.tex"
         )
         hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
-    # Step 4: Open the PDF in Skim.
-    _LOG.info("Step 4: Opening PDF in Skim")
-    cmd = f"open -a /Applications/Skim.app {pdf_file_name}"
-    hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
+    # Step 6: Convert to HTML using pandoc.
+    if do_incremental and os.path.exists(html_file_name):
+        _LOG.warning("Step 6: Skipping, '%s' already exists", html_file_name)
+    else:
+        _LOG.info("Step 6: Converting to HTML using pandoc")
+        cmd = (
+            f"pandoc {book_chapter_md} -o {html_file_name} "
+            f"--standalone "
+            # Inline every locally-referenced image (and other resources) as
+            # a base64 data URI, so the HTML is self-contained and portable
+            # regardless of where it is opened from.
+            f"--embed-resources "
+            f"--css={script_dir}/book-style.css "
+            f"--highlight-style=tango"
+        )
+        hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
+    _LOG.info("PDF file: %s", pdf_file_name)
+    _LOG.info("HTML file: %s", html_file_name)
+    # Step 7: Open the PDF in Skim.
+    if args.open_pdf:
+        _LOG.info("Step 7: Opening PDF in Skim")
+        cmd = f"open -a /Applications/Skim.app {pdf_file_name}"
+        hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
+    # Step 8: Open the HTML file in the default browser.
+    if args.open_html:
+        _LOG.info("Step 8: Opening HTML file in default browser")
+        cmd = f"open {html_file_name}"
+        hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
     _LOG.info("Book chapter generated: %s", pdf_file_name)
 
 

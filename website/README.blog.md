@@ -37,6 +37,8 @@
 - 2026-02-13: `website/docs/blog/posts/in_30_mins.ripgrep.md`
 - 2026-02-06: `website/docs/blog/posts/Welcome_to_Our_Blog.md`
 
+Total: 22 published blogs
+
 # Draft Blogs
 
 ## High-priority
@@ -154,51 +156,63 @@ python.invoke.txt
 
 | File | Words | Ready % | Comment |
 |------|-------|---------|---------|
-| `draft.pidev_vs_claude_code_comparison.md` | 1930 | 100% | Ready to publish |
-| `draft.how_to.Coding_Agents.md` | 1873 | 100% | Ready to publish |
-| `draft.Ax_Multi_Objective_Optimization_On_Marketing_Campaigns.md` | 1713 | 100% | Ready to publish |
-| `draft.Intro_to_Bayesian_Optimization.md` | 1553 | 100% | Ready to publish |
-| `draft.how_to.Convert_PDF_to_Markdown.md` | 1544 | 100% | Ready to publish |
-| `draft.in_30_mins.pi_dev.md` | 1537 | 100% | Ready to publish |
-| `draft.in_10_mins.helpers_hllm.md` | 1477 | 100% | Ready to publish |
-| `draft.in_5_mins.helpers_render_images.md` | 1086 | 100% | Ready to publish |
-| `draft.Claude_Paid_Plans.md` | 1015 | 100% | Ready to publish |
-| `draft.how_to.Use_Local_LLMs_On_Mac.md` | 925 | 100% | Ready to publish |
-| `draft.how_to.Claude_skills.md` | 917 | 100% | Ready to publish |
-| `draft.how_to.Apple_Container.md` | 660 | 100% | Ready to publish |
-| `draft.in_60_mins.GluonTS.md` | 2564 | 90% | Review and final edits |
-| `draft.how_to.Compress_LLM_in_out_tokens.md` | 2084 | 90% | Fix TODOs/FIXMEs |
-| `draft.how_to.Use_Claude_Code.md` | 1872 | 90% | Fix TODOs/FIXMEs |
-| `draft.in_30_mins.helpers_caching.md` | 1599 | 90% | Fix TODOs/FIXMEs |
-| `draft.in_30_mins.helpers_hllm_decorator.md` | 1525 | 90% | Fix TODOs/FIXMEs |
-| `draft.in_15_mins.helpers_hunit_test.md` | 1488 | 90% | Fix TODOs/FIXMEs |
-| `draft.TIL.Apple_container_running_notebook.md` | 714 | 90% | Fix TODOs/FIXMEs |
-| `draft.how_to.latex_vs_typst_for_typsetting.md` | 483 | 80% | Good structure, minor polish |
-| `draft.Writing_Books_For_Humans_and_AI.md` | 470 | 80% | Good structure, minor polish |
-| `draft.how_to.Use_typst_for_slides.md` | 345 | 80% | Good structure, minor polish |
-| `draft.hiring_is_broken.md` | 250 | 80% | Good structure, minor polish |
-| `draft.how_to.Codebase_local_kg.md` | 246 | 80% | Good structure, minor polish |
-| `draft.how_to.Produce_professional_images.md` | 229 | 80% | Good structure, minor polish |
-| `draft.My_AI_Policy.md` | 120 | 80% | Good structure, minor polish |
-| `draft.GWS.md` | 118 | 80% | Good structure, minor polish |
-| `draft.how_to.Github_Copilot_Review.md` | 110 | 80% | Good structure, minor polish |
-| `draft.debug.md` | 109 | 80% | Good structure, minor polish |
-| `draft.how_to.VS_Code_Quick_Fix.md` | 105 | 80% | Good structure, minor polish |
-| `draft.in_5_mins.helpers_cc.md` | 341 | 70% | Fix TODOs/FIXMEs |
-| `draft.how_to.Use_Claude_Code_Workflows.md` | 286 | 70% | Fix TODOs/FIXMEs |
-| `draft.how_to.Claude_Artifacts.md` | 225 | 70% | Fix TODOs/FIXMEs |
-| `draft.how_to.Create_Hook_To_Run_Ruff_In_Claude_Code.md` | 82 | 50% | Structure OK, expand content |
-| `draft.how_to.format_markdown.md` | 81 | 50% | Structure OK, expand content |
-| `draft.LLM_issues.md` | 76 | 50% | Structure OK, expand content |
-| `draft.Reducing_hllm_cli_import_time.md` | 61 | 50% | Structure OK, expand content |
-| `draft.carrer_advice.md` | 58 | 50% | Structure OK, expand content |
-| `draft.how_to.VS_Code_and_containers.md` | 58 | 50% | Structure OK, expand content |
-| `draft.how_to.AI_Coding_Assistant.md` | 53 | 50% | Structure OK, expand content |
-| `draft.hermes.md` | 29 | 50% | Structure OK, expand content |
-| `draft.in_30_mins.helpers_typesetting_system.md` | 29 | 50% | Structure OK, expand content |
-| `draft.blog_template.md` | 22 | 50% | Structure OK, expand content |
-| `draft.how_to.Use_tiny_docker_template.md` | 20 | 50% | Structure OK, expand content |
-| `draft.how_to.Claude_Code_and_tmux.md` | 19 | 50% | Structure OK, expand content |
+| `website/docs/blog/posts/draft.Ax_Multi_Objective_Optimization_On_Marketing_Campaigns.md` | 1713 | 75% | Nearly complete |
+| `website/docs/blog/posts/draft.Claude_Paid_Plans.md` | 1015 | 75% | Nearly complete |
+| `website/docs/blog/posts/draft.Intro_to_Bayesian_Optimization.md` | 1553 | 75% | Nearly complete |
+| `website/docs/blog/posts/draft.how_to.Coding_Agents.md` | 1873 | 75% | Nearly complete |
+| `website/docs/blog/posts/draft.how_to.Convert_PDF_to_Markdown.md` | 1544 | 75% | Nearly complete |
+| `website/docs/blog/posts/draft.in_10_mins.helpers_hllm.md` | 1477 | 75% | Nearly complete |
+| `website/docs/blog/posts/draft.in_15_mins.helpers_hunit_test.md` | 1488 | 75% | Nearly complete |
+| `website/docs/blog/posts/draft.in_30_mins.pi_dev.md` | 1537 | 75% | Nearly complete |
+| `website/docs/blog/posts/draft.in_5_mins.helpers_render_images.md` | 1086 | 75% | Nearly complete |
+| `website/docs/blog/posts/draft.in_60_mins.GluonTS.md` | 2564 | 75% | Nearly complete |
+| `website/docs/blog/posts/draft.pidev_vs_claude_code_comparison.md` | 1930 | 75% | Nearly complete |
+| `website/docs/blog/posts/draft.article.2026.Ribeiro_et_al.Why_Should_I_Trust_You.md` | 629 | 60% | Needs final polish |
+| `website/docs/blog/posts/draft.how_to.Apple_Container.md` | 660 | 60% | Needs final polish |
+| `website/docs/blog/posts/draft.how_to.Claude_skills.md` | 917 | 60% | Needs final polish |
+| `website/docs/blog/posts/draft.how_to.Use_Local_LLMs_On_Mac.md` | 925 | 60% | Needs final polish |
+| `website/docs/blog/posts/draft.shortcuts.GitHub_CLI.md` | 902 | 60% | Needs final polish |
+| `website/docs/blog/posts/draft.how_to.Automate_Coding_with_LLM.md` | 1748 | 55% | Remove TODO/WIP marks |
+| `website/docs/blog/posts/draft.how_to.Compress_LLM_in_out_tokens.md` | 2084 | 55% | Remove TODO/WIP marks |
+| `website/docs/blog/posts/draft.how_to.Read_other_people_code.md` | 1235 | 55% | Remove TODO/WIP marks |
+| `website/docs/blog/posts/draft.how_to.Use_Claude_Code.md` | 1872 | 55% | Remove TODO/WIP marks |
+| `website/docs/blog/posts/draft.in_30_mins.helpers_caching.md` | 1599 | 55% | Remove TODO/WIP marks |
+| `website/docs/blog/posts/draft.in_30_mins.helpers_hllm_decorator.md` | 1525 | 55% | Remove TODO/WIP marks |
+| `website/docs/blog/posts/draft.TIL.Apple_container_running_notebook.md` | 714 | 40% | Remove TODO/WIP marks |
+| `website/docs/blog/posts/draft.Writing_Books_For_Humans_and_AI.md` | 470 | 40% | Needs refinement |
+| `website/docs/blog/posts/draft.how_to.latex_vs_typst_for_typsetting.md` | 483 | 40% | Needs refinement |
+| `website/docs/blog/posts/draft.how_to.Use_typst_for_slides.md` | 345 | 30% | Add structure |
+| `website/docs/blog/posts/draft.GWS.md` | 118 | 20% | Needs more detail |
+| `website/docs/blog/posts/draft.debug.md` | 109 | 20% | Needs more detail |
+| `website/docs/blog/posts/draft.how_to.Claude_Artifacts.md` | 225 | 20% | Needs more detail |
+| `website/docs/blog/posts/draft.how_to.Github_Copilot_Review.md` | 110 | 20% | Needs more detail |
+| `website/docs/blog/posts/draft.how_to.Produce_professional_images.md` | 229 | 20% | Needs more detail |
+| `website/docs/blog/posts/draft.in_5_mins.helpers_cc.md` | 341 | 20% | Remove TODO/WIP marks |
+| `website/docs/blog/posts/draft.LLM_issues.md` | 76 | 10% | Add structure |
+| `website/docs/blog/posts/draft.My_AI_Policy.md` | 120 | 10% | Add structure |
+| `website/docs/blog/posts/draft.Reducing_hllm_cli_import_time.md` | 61 | 10% | Add structure |
+| `website/docs/blog/posts/draft.blog_template.md` | 22 | 10% | Add structure |
+| `website/docs/blog/posts/draft.carrer_advice.md` | 58 | 10% | Add structure |
+| `website/docs/blog/posts/draft.hermes.md` | 29 | 10% | Add structure |
+| `website/docs/blog/posts/draft.hiring_is_broken.md` | 250 | 10% | Add structure |
+| `website/docs/blog/posts/draft.how_to.AI_Coding_Assistant.md` | 53 | 10% | Add structure |
+| `website/docs/blog/posts/draft.how_to.Apply_Coding_AI_to_ML_Data_Science.md` | 267 | 10% | Add structure |
+| `website/docs/blog/posts/draft.how_to.Claude_Code_and_tmux.md` | 19 | 10% | Add structure |
+| `website/docs/blog/posts/draft.how_to.Claude_powerups.md` | 203 | 10% | Add structure |
+| `website/docs/blog/posts/draft.how_to.Codebase_local_kg.md` | 246 | 10% | Add structure |
+| `website/docs/blog/posts/draft.how_to.Conventional_Commits.md` | 31 | 10% | Add structure |
+| `website/docs/blog/posts/draft.how_to.Create_Hook_To_Run_Ruff_In_Claude_Code.md` | 82 | 10% | Add structure |
+| `website/docs/blog/posts/draft.how_to.Merge_PRs.md` | 47 | 10% | Add structure |
+| `website/docs/blog/posts/draft.how_to.Use_Claude_Code_Workflows.md` | 286 | 10% | Remove TODO/WIP marks |
+| `website/docs/blog/posts/draft.how_to.Use_tiny_docker_template.md` | 20 | 10% | Add structure |
+| `website/docs/blog/posts/draft.how_to.VS_Code_Quick_Fix.md` | 105 | 10% | Add structure |
+| `website/docs/blog/posts/draft.how_to.VS_Code_and_containers.md` | 58 | 10% | Add structure |
+| `website/docs/blog/posts/draft.how_to.branch_copy.md` | 4 | 10% | Add structure |
+| `website/docs/blog/posts/draft.how_to.format_markdown.md` | 81 | 10% | Add structure |
+| `website/docs/blog/posts/draft.ideas.Deterministic_skills.md` | 91 | 10% | Add structure |
+| `website/docs/blog/posts/draft.in_30_mins.helpers_typesetting_system.md` | 29 | 10% | Add structure |
+
+Total: 56 draft blogs
 
 # Publishing Checklist
 
@@ -230,7 +244,7 @@ python.invoke.txt
   > cc -p "/blog.add_links $FILE"
   ```
 
-- To format use
+- To lint the text use
   ```
   > website/format_blog.sh <FILE>
   ```

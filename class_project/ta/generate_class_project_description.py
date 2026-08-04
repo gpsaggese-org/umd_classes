@@ -191,7 +191,7 @@ def _parse() -> argparse.ArgumentParser:
     :return: the argument parser
     """
     parser = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+        description=__doc__, formatter_class=hparser.CustomHelpFormatter
     )
     parser.add_argument(
         "--input",

@@ -19,24 +19,23 @@ slide quality through automated LLM-powered transformations
 
 - Each course/book directory that the scripts read from and write to (e.g.,
   `data605/`, `msml610/`) contains a subset of the following dirs:
-  - `lectures_source/`: Input directory containing `Lesson*.txt` files
-  - `lectures/`: Output directory for generated PDF slides
+  - `lectures_source/`: directory containing `Lesson*.txt` files
+  - `lectures/`: directory for generated PDF slides
     - E.g., `gen_slides.py`, `for_loop_lessons.py --action generate_pdf`
-  - `lectures_tex/`: Output directory for generated `.tex` slide sources
+  - `lectures_tex/`: directory for generated `.tex` slide sources
     - E.g., `for_loop_lessons.py --action generate_tex`
-  - `lectures_video_script/`: Output directory for generated video script files
-  - `lectures_quizzes/`: Output directory for multiple choice quiz files
-  - `lectures_recap/`: Output directory for discussion and recap question files
-  - `lectures_commentary/`
-  - `book/`: Output directory for "book chapter" PDFs (slides + LLM commentary)
+  - `lectures_video_script/`: directory for generated video script files
+  - `lectures_quizzes/`: directory for multiple choice quiz files
+  - `lectures_recap/`: directory for discussion and recap question files
+  - `lectures_commentary/`: directory with the md, pdf, and html files
+  - `book/`: directory for the book chapters in PDFs
     - E.g., `gen_lecture_commentary.py`
-  - `book_source/`: Output dir for the book (`.typ` or `.tex`)
-  - `book_pdf/`: Output dir for the compiled PDF of the book
+  - `book_source/`: directory for the book source as `.typ` or `.tex`
   - `tutorial/`: Dir with the Jupyter notebook tutorials for each source
   - `test/`: unit tests for the scripts in this directory (one `test_<module>.py`
     per source module)
 
-// TODO(ai_gp): Make sure all dirs have this layout
+// TODO(ai_gp2): Make sure all dirs have this layout
 
 ## Description of Files
 - The scripts implement the functionalities from the following class:
@@ -50,59 +49,42 @@ slide quality through automated LLM-powered transformations
 
 - The scripts under `class_scripts` are
 
-// TODO(ai_gp): Put Goal first and order by goal
+| Goal          | Script                              | Function                                                                     |
+| :------------ | :---------------------------------- | :---------------------------------------------------------------------------- |
+| Analysis      | `count_lecture_commentary_pages.py` | Count pages in book PDFs                                                     |
+| Analysis      | `count_lecture_pages.py`            | Count pages in lecture PDFs                                                  |
+| Analysis      | `count_lecture_slides.py`           | Count slides, headers, lines, words, and characters in source files          |
+| Analysis      | `count_words.py`                    | Count words in lecture scripts                                               |
+| Generation    | `create_book_toc_from_slides.py`    | Extract table of contents from lecture slides                                |
+| Generation    | `gen_lecture_commentary.py`         | Generate book chapters from lecture source material                          |
+| Generation    | `gen_lecture_video_script.py`       | Generate lecture scripts from slides with intro/outro sections               |
+| Generation    | `gen_quizzes.py`                    | Generate quizzes (20 MC) or discussion questions (3-6) from lectures         |
+| Generation    | `gen_slides.py`                     | Generate lecture slide PDFs from source files                                |
+| Generation    | `generate_class_images.py`          | Generate images using DALL-E from text prompts                               |
+| Generation    | `generate_slide_script.py`          | Generate lecture scripts from slide content with LLM                         |
+| Generation    | `publish_class_links.py`            | Generate an HTML page linking to each lesson's slides, commentary, and recap |
+| Quality       | `fix_bold_in_slides.sh`             | Replace `**Tag**` bold labels with `@Tag@` for canonical slide tags          |
+| Quality       | `slide_check.py`                    | Check and fix text in lecture slides (spelling, grammar)                     |
+| Quality       | `slide_improve.py`                  | Improve slides using LLM suggestions                                         |
+| Quality       | `slide_reduce.py`                   | Reduce and simplify slides using LLM                                         |
+| Processing    | `extract_png_from_pdf.py`           | Extract PDF pages as PNG images with customizable DPI                        |
+| Processing    | `process_slides.py`                 | Process slides with LLM transformations (reduce, check, improve)             |
+| Test          | `gen_slides_test_utils.py`          | Helper functions for slide generation testing and validation                 |
+| Utility       | `common_utils.py`                   | Argument validation, file finding, directory management                      |
+| Utility       | `get_lecture_file.py`               | Find and print path to lecture source file                                   |
+| Utility       | `slides_utils.py`                   | Extract and process slide content                                            |
+| Orchestration | `for_loop_lessons.py`               | Main orchestrator for processing a set of lectures                           |
+| Orchestration | `for_loop_slides.py`                | Transform slides of a lectures using LLM                                     |
 
-| Script                              | Goal          | Function                                                             |
-| :---------------------------------- | :------------ | :------------------------------------------------------------------- |
-| `common_utils.py`                   | Utility       | Argument validation, file finding, directory management              |
-| `count_lecture_commentary_pages.py` | Analysis      | Count pages in book PDFs                                             |
-| `count_lecture_slides.py`           | Analysis      | Count slides, headers, lines, words, and characters in source files  |
-| `count_lecture_pages.py`            | Analysis      | Count pages in lecture PDFs                                          |
-| `count_words.py`                    | Analysis      | Count words in lecture scripts                                       |
-| `extract_png_from_pdf.py`           | Processing    | Extract PDF pages as PNG images with customizable DPI                |
-| `fix_bold_in_slides.sh`             | Quality       | Replace `**Tag**` bold labels with `@Tag@` for canonical slide tags  |
-| `gen_lecture_commentary.py`         | Generation    | Generate book chapters from lecture source material                  |
-| `gen_lecture_video_script.py`       | Generation    | Generate lecture scripts from slides with intro/outro sections       |
-| `gen_quizzes.py`                    | Generation    | Generate quizzes (20 MC) or discussion questions (3-6) from lectures |
-| `gen_slides.py`                     | Generation    | Generate lecture slide PDFs from source files                        |
-| `gen_slides_test_utils.py`          | Test          | Helper functions for slide generation testing and validation         |
-| `generate_class_images.py`          | Generation    | Generate images using DALL-E from text prompts                       |
-| `generate_slide_script.py`          | Generation    | Generate lecture scripts from slide content with LLM                 |
-| `get_lecture_file.py`               | Utility       | Find and print path to lecture source file                           |
-| `create_book_toc_from_slides.py`    | Generation    | Extract table of contents from lecture slides                        |
-| `for_loop_lessons.py`               | Orchestration | Main orchestrator for processing a set of lectures                   |
-| `for_loop_slides.py`                | Orchestration | Transform slides of a lectures using LLM                             |
-| `process_slides.py`                 | Processing    | Process slides with LLM transformations (reduce, check, improve)     |
-| `slide_check.py`                    | Quality       | Check and fix text in lecture slides (spelling, grammar)             |
-| `slide_improve.py`                  | Quality       | Improve slides using LLM suggestions                                 |
-| `slide_reduce.py`                   | Quality       | Reduce and simplify slides using LLM                                 |
-| `slides_utils.py`                   | Utility       | Extract and process slide content                                    |
-
-
-// TODO(ai_gp): Merge generate_slide_script.py inside gen_lecture_video_script.py?
-// - gen_lecture_video_script.py: orchestrator/wrapper. Calls generate_slide_script.py for the body, then llm_cli.py for intro/outro, concatenates, lints with lint_txt.py. Output: narration script for video, text-only.
-// - generate_slide_script.py: does the actual per-slide LLM work. Groups slides (default 3/group), sends each group to LLM for a spoken-discussion script (~100 words/slide, plain language, transitions between slides). Output: markdown/text script — no images.
-// - gen_lecture_commentary.py: different target format — pairs each slide's markdown with a corresponding PNG (from a PNG dir or extracted from a PDF via pdf2image), generates per-slide commentary via LLM (explanatory prose, not spoken script), and produces a formatted book chapter (YAML title preamble, centered images + commentary, prettier-formatted). One LLM call per slide (not grouped), and embeds images — the other two are text-only.
-
-// [x] Rename generate_book_chapter.py -> generate_lecture_commentary.py
-// [x] Merge generate_lecture_commentary.py inside gen_lecture_commentary.py
-
-// TODO(ai_gp): Unify the flow from generate_slide_script.py and
-// gen_lecture_commentary.py since they are very similar
-
-// TODO(ai_gp): Consider merging for_loop_slides.py and process_slides.py since
-// they seem to have the same function or at least overlapping
-
-// TODO(ai_gp): split gen_quizzes.py into gen_quizzes.py and gen_recap.py
-
-- The scripts under `helpers_root/dev_scripts_helpers/documentation` used by the
-  scripts in `class_scripts` are:
+- The scripts under `helpers_root/dev_scripts_helpers/` used by the scripts in
+  `class_scripts` are:
 
 | Script                | Description                                                            |
 | :-------------------- | :--------------------------------------------------------------------- |
 | `concatenate_pdfs.py` | Combines multiple PDF files into one (creates full book from chapters) |
 | `lint_txt.py`         | Lints and formats text using prettier; used for quiz output            |
 | `notes_to_pdf.py`     | Converts markdown to PDF (slides, documents); used by gen_slides.py    |
+| `to_github.py`        | Converts a local file path to its GitHub URL; used by publish_class_links.py |
 
 ## Script Dependency Hierarchy
 
@@ -136,6 +118,8 @@ slide quality through automated LLM-powered transformations
   - `gen_quizzes.py`
     - `llm_cli.py`
     - `lint_txt.py`
+  - `publish_class_links.py`
+    - `to_github.py`
 
 - **Standalone Analysis/Utility Scripts** (no dependencies on other scripts)
   - `count_lecture_pages.py`
@@ -471,6 +455,37 @@ slide quality through automated LLM-powered transformations
   // msml610/lectures_source/Lesson08.2-Causal_Models.txt
   
   - Introduction (3)
+  ```
+
+## `publish_class_links.py`
+
+### What It Does
+
+- Scans `{DIR}/lectures_source/` for lesson files and generates an HTML page
+  linking each lesson to its generated artifacts:
+  - Slides PDF: `{DIR}/lectures_pdf/{LESSON}.pdf`
+  - Lecture commentary: `{DIR}/lectures_commentary/{LESSON}.book_chapter.html`
+    and `.book_chapter.pdf`
+  - Lesson recap: `{DIR}/lectures_recap/{LESSON}.recap.md`
+- Each existing artifact is linked to its GitHub URL (via `to_github.py`)
+  instead of a local path, so the page works when shared outside a local
+  checkout
+  - `--use_master` links to the `master` branch instead of the current branch
+- By default stops with an error as soon as an artifact is missing
+  - `--do_not_fail_on_warnings` logs missing artifacts as warnings instead and
+    lists the lesson without the missing link
+
+### Examples
+
+- Generate the links page for a class, failing on the first missing artifact:
+  ```bash
+  > publish_class_links.py --dir data605 --out_file data605/class_links.html
+  ```
+
+- Generate the links page while tolerating missing artifacts, linking to
+  `master`:
+  ```bash
+  > publish_class_links.py --dir msml610 --out_file /tmp/links.html --do_not_fail_on_warnings --use_master
   ```
 
 ## `process_slides.py`
@@ -823,6 +838,10 @@ slide quality through automated LLM-powered transformations
   - Can specify multiple: `--action generate_pdf --action generate_script`
 - `--limit`: Optional slide range to process (e.g., '1:3')
   - Only works when processing a single lecture file
+- `--cmd_opts`: Extra options string passed through verbatim to the invoked
+  commands (e.g., `gen_lecture_commentary.py`, `notes_to_pdf.py`,
+  `process_slides.py`), to control their behavior from inside the loop
+  - E.g., `--cmd_opts="--no_incremental --open_pdf"`
 - `--dry_run`: Print commands without executing them
 - `-v/--log_level`: Set logging verbosity (DEBUG, INFO, WARNING, ERROR)
 
@@ -944,6 +963,17 @@ for reading and study.
 - This processes all lecture source files and generates:
   - Markdown book chapter: `<class>/book/Lesson##.#-Topic.book_chapter.md`
   - PDF book chapter: `<class>/book/Lesson##.#-Topic.book_chapter.pdf`
+
+### Generate Commentary for All Lessons, Controlling `gen_lecture_commentary.py` Behavior
+
+- Use `--cmd_opts` to pass extra flags through to the underlying
+  `gen_lecture_commentary.py` invocation for every lesson in the loop, e.g.,
+  force regeneration and open each PDF as it's produced:
+  ```bash
+  > for_loop_lessons.py --class data605 \
+      --action generate_lecture_commentary \
+      --cmd_opts="--no_incremental --image_type jpg"
+  ```
 
 ### Generate Commentary for Pattern-Matched Lessons
 

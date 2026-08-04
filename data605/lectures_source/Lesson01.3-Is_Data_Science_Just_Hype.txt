@@ -26,11 +26,11 @@ UMD DATA605: Big Data Systems
 * Is Data Science Just Hype?
 ::: columns
 :::: {.column width=50%}
-- **Big data (or data science) is everywhere**
+- @Big data (or data science) is everywhere@
   - _"Any process where interesting information is inferred from data"_
 - Data scientist called the "sexiest job" of the 21st century
   - The term has becoming very muddled at this point
-- **Is it all hype?**
+- @Is it all hype?@
 ::::
 :::: {.column width=45%}
 ![](data605/lectures_source/images/lecture_1/lec_1_slide_28_image_1.png)
@@ -38,13 +38,13 @@ UMD DATA605: Big Data Systems
 :::
 
 * Is Data Science Just Hype?
-- **No**
+- @No@
   - Extract insights and knowledge from data
   - Big data techniques revolutionize many domains
     - E.g., education, food supply, disease epidemics
-- **But**
+- @But@
   - Similar to what statisticians have done for years
-- **What is different?**
+- @What is different?@
   - More data is digitally available
   - Easy-to-use programming frameworks (e.g., Hadoop) simplify analysis
   - Cloud computing (e.g., AWS) reduces costs
@@ -76,7 +76,7 @@ UMD DATA605: Big Data Systems
 ![](data605/lectures_source/images/lecture_1/lec_1_slide_33_image_1.png)
 
 * Key Shifts Before/After Big-Data
-- **Datasets: small, curated, clean** $\to$ **large, uncurated, messy**
+- @Datasets: small, curated, clean@ $\to$ @large, uncurated, messy@
   - Before:
     - Statistics based on small, carefully collected random samples
     - Costly and careful planning for experiments
@@ -86,13 +86,13 @@ UMD DATA605: Big Data Systems
     - Feed into algorithms
     - Strong signal overcomes noise
 
-- **Causation $\to$ Correlation**
+- @Causation $\to$ Correlation@
   - Goal: determine cause and effect
   - Causation hard to determine $\to$ focus on correlation
     - Correlation is sometimes sufficient
     - E.g., diapers and beer bought together
 
-- **"Data-fication"**
+- @"Data-fication"@
   - = converting abstract concepts into data
   - E.g., "sitting posture" data-fied by sensors in your seat
   - Preferences data-fied into likes
@@ -103,7 +103,7 @@ UMD DATA605: Big Data Systems
 - Nate Silver and the 2012 Elections
   - Predicted 49/50 states in 2008 US elections
   - Predicted 50/50 states in 2012 US elections
-- **Reasons for accuracy**
+- @Reasons for accuracy@
   - Multiple data sources
   - Historical accuracy incorporation
   - Statistical models
@@ -118,15 +118,15 @@ UMD DATA605: Big Data Systems
 :::
 
 * Examples: Google Flu Trends
-- 5% to 20% of the US population gets the flu annually; **40k deaths**
+- 5% to 20% of the US population gets the flu annually; @40k deaths@
   - Early warnings help in prevention and control
-- **Google Flu Trends**
+- @Google Flu Trends@
   - Provided early flu outbreak alerts via search query analysis
     - Analyzed 45 search terms
     - Used IP to determine location
   - Predicted regional flu outbreaks 1-2 weeks before CDC
   - Operated from 2008 to 2015
-- **Caveat: accuracy issues**
+- @Caveat: accuracy issues@
   - Claimed 97% accuracy
   - Lower out-of-sample accuracy (overshot CDC data by 30%)
   - People search about flu without confirmed diagnosis
@@ -162,23 +162,23 @@ UMD DATA605: Big Data Systems
 :::
 
 * What a Data Scientist Should Know
-- **Data grappling skills** $\leftarrow DATA605$
+- @Data grappling skills@ $\leftarrow DATA605$
   - Move and manipulate data with programming
   - Scripting languages (e.g., Python)
   - Data storage tools: relational databases, key-value stores
   - Programming frameworks: SQL, Hadoop, Spark
 
-- **Data visualization experience**
+- @Data visualization experience@
   - Draw informative data visuals
   - Tools: `D3.js`, plotting libraries
   - Know what to draw
 
-- **Knowledge of statistics**
+- @Knowledge of statistics@
   - Error-bars, confidence intervals
   - Python libraries, Matlab, R
 
-- **Experience with forecasting and prediction**
+- @Experience with forecasting and prediction@
   - Basic machine learning techniques
 
-- **Communication skills** $\leftarrow DATA605$
+- @Communication skills@ $\leftarrow DATA605$
   - Tell the story, communicate findings

@@ -33,18 +33,18 @@ UMD DATA605 - Big Data Systems
 ## Data Streams
 
 * Data Streams: Motivation
-- Big Data is generated as a **continuous, unbounded stream**
+- Big Data is generated as a @continuous, unbounded stream@
 
-- Applications generate data at **high velocity**
+- Applications generate data at @high velocity@
   - Financial transactions and market feeds
   - Sensor instrumentation, RFID, IoT telemetry
   - Network and system monitoring
   - Continuous media (video, audio)
 
-- A **data stream** is a time-ordered sequence of events
+- A @data stream@ is a time-ordered sequence of events
   - Stream processing treats streams as first-class computational objects
 
-- **Requirements**
+- @Requirements@
   - Ingest and handle high-throughput event streams
   - Low-latency, near-real-time operations (e.g., time-series analytics)
   - Efficient dissemination of relevant subsets to consumers
@@ -69,9 +69,9 @@ UMD DATA605 - Big Data Systems
 * Why Not Using Standard Solutions?
 ::: columns
 :::: {.column width=55%}
-- **Example**
+- @Example@
   - "_Report moving average of XYZ over the last hour every 10 minutes_"
-- **Solution**
+- @Solution@
   - Insert arriving items into a relational table
   - Re-run query repeatedly
 ::::
@@ -86,7 +86,7 @@ UMD DATA605 - Big Data Systems
 
 :::columns
 ::::{.column width=55%}
-- **Problems**
+- @Problems@
   - Re-executes full query, not leveraging incremental updates
   - Many streaming computations are recursive
   - Complex computations may not be easily expressed incrementally
@@ -101,13 +101,13 @@ UMD DATA605 - Big Data Systems
 ## Streaming Concepts
 
 * Pub-Sub Systems: Motivation
-- Modern distributed systems use **small, independent components**
+- Modern distributed systems use @small, independent components@
   - E.g., serverless architectures, microservices (e.g., Uber)
   - Easier evolution, isolation, scalability
 
 :::columns
 ::::{.column width=65%}
-- **Publish-subscribe (pub-sub) systems**
+- @Publish-subscribe (pub-sub) systems@
   - Aka "message queues", "message brokers"
   - Connect producers and consumers for event distribution
   - Topics cluster related messages
@@ -122,13 +122,13 @@ UMD DATA605 - Big Data Systems
 * Pub-Sub Systems: Architecture
 ::: columns
 :::: {.column width=45%}
-- **Publishers**
+- @Publishers@
   - Send messages or events
 
-- **Subscribers**
+- @Subscribers@
   - Consume messages
 
-- **Message Broker**
+- @Message Broker@
   - The message broker routes event flow between publishers and subscribers,
     based on topics and subscriptions
 ::::
@@ -137,7 +137,7 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Design Parameters**
+- @Design Parameters@
   - Event distribution model (topics, filters)
   - Push vs. pull consumption
   - Subscriber interest patterns
@@ -147,11 +147,11 @@ UMD DATA605 - Big Data Systems
     - Exactly-once
 
 * Delivery Semantics: At-most once
-- **At-most once**: _message may be lost, not redelivered_
+- @At-most once@: _message may be lost, not redelivered_
 
 ![](data605/lectures_source/images/lecture_12_1/lec_12_1_slide_7_image_1.png)
 
-- **Pros**
+- @Pros@
   - Small implementation overhead, high-performance
   - Easy to implement: "fire-and-forget"
 
@@ -159,17 +159,17 @@ UMD DATA605 - Big Data Systems
   - E.g., monitoring metrics of a website
 
 * Delivery Semantics: At-least once
-- **At-least once**: messages are retried until acknowledged
+- @At-least once@: messages are retried until acknowledged
 
 ![](data605/lectures_source/images/lecture_12_1/lec_12_1_slide_7_image_2.png)
 
-- **Pros**
+- @Pros@
   - Ensures no loss, but duplicates are possible
-- **Cons**
+- @Cons@
   - Requires idempotent operations or deduplication
 
 * Delivery Semantics: Exactly once
-- **Exactly once**: each message is processed once globally
+- @Exactly once@: each message is processed once globally
 
 ![](data605/lectures_source/images/lecture_12_1/lec_12_1_slide_7_image_3.png)
 
@@ -184,10 +184,10 @@ UMD DATA605 - Big Data Systems
 :::columns
 ::::{.column width=50%}
 - In both streaming and pub-sub architectures
-  - **Event time**
+  - @Event time@
     - Time when each record is generated
 
-  - **Processing time**
+  - @Processing time@
     - Time when each record is received
     - Ingestion vs processing time: when events are received vs processed
 ::::
@@ -196,7 +196,7 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Problems with events**
+- @Problems with events@
   - Events may arrive late or out of order
   - Determining how long to wait for stragglers is difficult
   - Systems set bounds on lateness
@@ -209,12 +209,12 @@ UMD DATA605 - Big Data Systems
   - E.g., Apex, Beam, Flink, Kafka, Spark, Storm, NiFi
   - Built simultaneously at different companies, then open-sourced
 
-- **Different workloads**
+- @Different workloads@
   - Real-time analytics, continuous computation
   - Streaming ML, ETL pipelines
   - Messaging and log aggregation
 
-- **Differences arise in**
+- @Differences arise in@
   - Batch vs. streaming orientation
   - Delivery semantics
   - Compute vs. pub-sub roles
@@ -232,12 +232,12 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Horizontal scalability**: add machines to handle increasing data
+- @Horizontal scalability@: add machines to handle increasing data
 
 :::columns
 ::::{.column width=50%}
 
-- **Directed acyclic graph (DAG)**:
+- @Directed acyclic graph (DAG)@:
   - Spouts as data sources (as source nodes)
   - Bolts as processing units (as nodes)
   - Data streams (as edges)
@@ -248,12 +248,12 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Fault tolerance**:
+- @Fault tolerance@:
   - At-least-once processing
   - Automatic task restarts
   - Workload redistribution
 
-- **Suitable for**
+- @Suitable for@
   - Complex data processing workflows
   - With multiple stages and parallelism
 
@@ -272,14 +272,14 @@ UMD DATA605 - Big Data Systems
 
 :::columns
 ::::{.column width=60%}
-- **Core components**
+- @Core components@
   - Producers
   - Brokers
   - Consumers
   - Topics
   - Partitions
 
-- **Delivery**: at-least-once, at-most-once, exactly-once
+- @Delivery@: at-least-once, at-most-once, exactly-once
 
 - High throughput, low latency
   - Persistent, replicated log storage
@@ -322,12 +322,12 @@ UMD DATA605 - Big Data Systems
 ## Processing Styles
 
 * Record-at-a-time Processing
-- **Designed to handle infinite data streams**
+- @Designed to handle infinite data streams@
   - Implemented in Apache Kafka
 
 :::columns
 ::::{.column width=50%}
-- **Distributed processing over multiple nodes**
+- @Distributed processing over multiple nodes@
   - Nodes organized in a DAG
   - Each node continuously:
     - Receives a single record
@@ -339,11 +339,11 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Pros**
+- @Pros@
   - Achieves extremely low latency
     - E.g., sub-millisecond response times
 
-- **Cons**
+- @Cons@
   - Poor fault tolerance
     - Requires extra nodes or redundant paths for failover
   - Sensitive to stragglers
@@ -352,7 +352,7 @@ UMD DATA605 - Big Data Systems
 * Micro-Batch Stream Processing
 :::columns
 ::::{.column width=50%}
-- Break continuous stream into **small batches** (e.g., 1-second windows)
+- Break continuous stream into @small batches@ (e.g., 1-second windows)
   - Implemented in Spark Streaming (aka "DStreams")
 ::::
 ::::{.column width=45%}
@@ -360,7 +360,7 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Pros**
+- @Pros@
   - Recover from failures and stragglers with task scheduling
     - Schedule the same task multiple times
   - Deterministic tasks
@@ -368,7 +368,7 @@ UMD DATA605 - Big Data Systems
     - Consistent API: same semantics as RDDs
     - Fault-tolerance
 
-- **Cons**
+- @Cons@
   - Higher latency
     - E.g., seconds
 
@@ -402,15 +402,15 @@ UMD DATA605 - Big Data Systems
 * Triggering Modes
 - Indicate when to process newly available streaming data
 
-- **Default**
+- @Default@
   - Process micro-batch after previous completes
-- **Trigger interval**
+- @Trigger interval@
   - Specify fixed interval for each micro-batch
   - E.g., "every 10 minutes"
-- **Once**
+- @Once@
   - Wait for external trigger
   - E.g., "at end of day"
-- **Continuous (experimental)**
+- @Continuous (experimental)@
   - Process data continuously
   - Not all operations available
   - Lower latency
@@ -420,15 +420,15 @@ UMD DATA605 - Big Data Systems
   - Each time the result table updates, write to an external file system
     - E.g., HDFS, AWS S3, or a database (e.g., MySQL, Cassandra)
 
-- **Append mode**
+- @Append mode@
   - Append new rows since the last trigger
   - Use when existing rows don't change
 
-- **Update mode**
+- @Update mode@
   - Write updated rows since the last trigger
   - Update in place
 
-- **Complete mode**
+- @Complete mode@
   - Write the entire updated result table
   - General but expensive
 
