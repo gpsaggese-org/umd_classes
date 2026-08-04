@@ -9,7 +9,7 @@ categories:
   - Causal AI
 ---
 
-TL;DR: Connect Claude Code to Gmail in minutes using MCP — no passwords in
+TL;DR: Connect Claude Code to Gmail in minutes using MCP: no passwords in
 prompts, no custom backend, just clean OAuth and Smithery.
 
 <!-- more -->

@@ -1,0 +1,270 @@
+:root {
+  --text-color: #2b2b2b;
+  --heading-color: #1a1a1a;
+  --muted-color: #6b6b6b;
+  --link-color: #8b1e1e;
+  --border-color: #e0dcd4;
+  --bg-color: #fdfcfa;
+  --code-bg: #f4f2ee;
+  --serif: Georgia, "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  --sans: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --page-padding-x: 2rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg-color);
+}
+
+body {
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.7;
+  color: var(--text-color);
+  background: var(--bg-color);
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 5rem var(--page-padding-x) 8rem;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Headings ---------- */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--serif);
+  color: var(--heading-color);
+  font-weight: normal;
+  line-height: 1.25;
+  margin-top: 2.5em;
+  margin-bottom: 0.6em;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding-left: var(--page-padding-x);
+  padding-right: var(--page-padding-x);
+}
+
+h1 {
+  font-size: 1.9em;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 1.2em;
+  letter-spacing: 0.02em;
+  font-weight: bold;
+  color: #00008b;
+}
+
+h2 {
+  font-size: 1.6em;
+  padding-bottom: 0.3em;
+}
+
+h3 {
+  font-size: 1.25em;
+  font-style: italic;
+}
+
+h4, h5, h6 {
+  font-size: 1.05em;
+  font-family: var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted-color);
+}
+
+/* ---------- Body text ---------- */
+
+p {
+  margin: 0 0 0.7em;
+  text-align: justify;
+  hyphens: auto;
+}
+
+p:first-of-type,
+h1 + p,
+h2 + p,
+h3 + p {
+  text-indent: 0;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(139, 30, 30, 0.35);
+}
+
+a:hover {
+  border-bottom-color: var(--link-color);
+}
+
+strong { color: var(--heading-color); }
+em { font-style: italic; }
+
+/* ---------- Blockquotes ---------- */
+
+blockquote {
+  margin: 1.8em 0;
+  padding: 0.2em 1.5em;
+  border-left: 3px solid var(--border-color);
+  color: var(--muted-color);
+  font-style: italic;
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Lists ---------- */
+
+ul, ol {
+  margin: 0 0 1.3em;
+  padding-left: 1.6em;
+}
+
+li {
+  margin-bottom: 0.4em;
+}
+
+/* ---------- Code ---------- */
+
+code {
+  font-family: var(--mono);
+  font-size: 0.85em;
+  background: var(--code-bg);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+}
+
+pre {
+  background: var(--code-bg);
+  padding: 1em 1.2em;
+  overflow-x: auto;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  margin: 1.5em 0;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+/* ---------- Images & figures ---------- */
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 2em auto;
+}
+
+figure {
+  margin: 2em 0;
+  text-align: center;
+}
+
+figcaption {
+  font-family: var(--sans);
+  font-size: 0.85em;
+  color: var(--muted-color);
+  margin-top: 0.6em;
+}
+
+/* ---------- Tables ---------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2em 0;
+  font-size: 0.95em;
+}
+
+th, td {
+  padding: 0.6em 0.9em;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+}
+
+th {
+  font-family: var(--sans);
+  text-transform: uppercase;
+  font-size: 0.8em;
+  letter-spacing: 0.04em;
+  color: var(--muted-color);
+}
+
+/* ---------- Horizontal rule (scene breaks) ---------- */
+
+hr {
+  border: none;
+  text-align: center;
+  margin: 3em 0;
+}
+
+hr::before {
+  content: "â§";
+  color: var(--muted-color);
+  font-size: 1.3em;
+}
+
+/* ---------- Footnotes ---------- */
+
+.footnotes {
+  margin-top: 4em;
+  padding-top: 1.5em;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9em;
+  color: var(--muted-color);
+}
+
+/* ---------- Table of contents ---------- */
+
+#TOC, nav#TOC {
+  font-family: var(--sans);
+  background: var(--code-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 1.5em 2em;
+  margin: 2em 0 3em;
+}
+
+#TOC ul {
+  list-style: none;
+  padding-left: 1em;
+}
+
+#TOC a {
+  border-bottom: none;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 600px) {
+  :root {
+    --page-padding-x: 1.2rem;
+  }
+  body {
+    font-size: 17px;
+    padding: 2.5rem var(--page-padding-x) 5rem;
+  }
+  h1 { font-size: 1.6em; }
+  h2 { font-size: 1.4em; }
+}
+
+/* ---------- Print ---------- */
+
+@media print {
+  body {
+    max-width: none;
+    padding: 0;
+  }
+  a {
+    color: var(--text-color);
+    border-bottom: none;
+  }
+}

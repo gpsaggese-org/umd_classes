@@ -10,10 +10,10 @@ categories:
     - LLM
 ---
 
-- TL;DR: `llm_cli` is a lightweight CLI tool that applies LLM transformations to
-  text and code files. Use it to refactor code, improve docs, apply linting
-  rules, or run custom prompts on file chunks — all from shell without leaving
-  editor
+TL;DR: `llm_cli` is a lightweight CLI tool that applies LLM transformations to
+text and code files. Use it to refactor code, improve docs, apply linting
+rules, or run custom prompts on file chunks, all from shell without leaving
+editor.
 
 <!-- more -->
 

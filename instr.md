@@ -1,24 +1,19 @@
-When running gen_lecture_commentary.py book_springer 02.1
-- Run git add on the md file generated
-- Generalize the --no_incremental for also generating the PNG files
-- Generate also an html version of the PDF output
-- Add an option --use_figure_border to generate a border around
-  the
+In linters2/cc_lint.py 
 
-  </center>
-  # 2 / 30: Why Traditional ML Falls Short
-  </center>
-  <center>
-  ![](book_springer/lecture_commentary/Lesson02.1_From_Data_Science_To_Decision_Science.png/slides002.png){width=80%}
-  </center>
+1) Add a switch --add_todos so that instead of modifying the file
+the action is to add comments in the right place like
+```
+# TODO(ai_gp): Do this and that (link to the rule)
 
-using a Latex directive like
+E.g.,
+# TODO(ai_gp): Do this and that (testing.rules.md:1081:## Use Context Manager Syntax for Multiple Mocks)
+```
 
-\begin{center}
-\fbox{\includegraphics[width=0.8\linewidth]{book_springer/lecture_commentary/Lesson02.1_From_Data_Science_To_Decision_Science.png/slides002.png}}
-\end{center}
+2) Rename the current --mode one_shot to --one_shot_with_cc
 
-that includes both the title and the picture
+3) Add another --mode one_shot to make a single call to the PromptSequencer
+   (in practice this is equivalent to the --one_shot_with_cc, but instead of
+   calling cc through a system call, uses the PromptSequencer)
 
 # Conventions
 - When writing code you must always follow the instructions in
