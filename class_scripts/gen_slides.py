@@ -168,6 +168,13 @@ def _main(parser: argparse.ArgumentParser) -> None:
     quoted_parts = [shlex.quote(part) for part in cmd_parts]
     cmd = " ".join(quoted_parts)
     if args.daemon:
+        # `notes_to_pdf.py`'s default actions don't include "open", so build
+        # once upfront and open the PDF; then hand off to its own `--daemon`
+        # watch loop, which regenerates on change without reopening the viewer
+        # (it skips "open" on watch runs since the viewer auto-reloads).
+        initial_cmd = cmd + " --enable=open"
+        _LOG.info("%s", hprint.color_highlight(f"> {initial_cmd}", "green"))
+        hsystem.system(initial_cmd, suppress_output=False)
         cmd += " --daemon"
     # Execute the command.
     _LOG.info("%s", hprint.color_highlight(f"> {cmd}", "green"))
