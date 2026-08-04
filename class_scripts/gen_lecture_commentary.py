@@ -117,7 +117,7 @@ def _extract_png_from_pdf(
     output_png_dir: str,
     image_type: str,
     *,
-    dpi: int = 200,
+    dpi: int = 300,
     add_border: bool = False,
 ) -> None:
     """
