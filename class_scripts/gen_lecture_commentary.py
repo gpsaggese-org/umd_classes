@@ -77,6 +77,7 @@ import helpers.hgit as hgit
 import helpers.hio as hio
 import helpers.hparser as hparser
 import helpers.hprint as hprint
+import helpers.hretry as hretry
 import helpers.hsystem as hsystem
 
 _LOG = logging.getLogger(__name__)
@@ -553,6 +554,33 @@ def _parse() -> argparse.ArgumentParser:
     return parser
 
 
+# Number of times to retry `git add` before giving up.
+_GIT_ADD_NUM_ATTEMPTS = 5
+# Delay between `git add` retries, in seconds.
+_GIT_ADD_RETRY_DELAY_IN_SEC = 2
+
+
+@hretry.sync_retry(
+    num_attempts=_GIT_ADD_NUM_ATTEMPTS,
+    exceptions=(RuntimeError,),
+    retry_delay_in_sec=_GIT_ADD_RETRY_DELAY_IN_SEC,
+)
+def _git_add_with_retry(file_name: str, *, dry_run: bool) -> None:
+    """
+    Run `git add` on `file_name`, retrying on failure.
+
+    This is needed because concurrent Git commands (e.g., another
+    `gen_lecture_commentary.py` process, or an IDE) can hold
+    `.git/index.lock`, causing `git add` to fail with "Unable to create
+    '.git/index.lock': File exists.".
+
+    :param file_name: path of the file to add
+    :param dry_run: print the command without executing it
+    """
+    cmd = f"git add {file_name}"
+    hsystem.system(cmd, print_command=True, dry_run=dry_run)
+
+
 def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
@@ -629,19 +657,28 @@ def _main(parser: argparse.ArgumentParser) -> None:
             )
     # Step 4: Track the generated markdown file in git.
     _LOG.info("Step 4: Adding book chapter markdown to git")
-    cmd = f"git add {book_chapter_md}"
-    hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
+    _git_add_with_retry(book_chapter_md, dry_run=args.dry_run)
     # Step 5: Convert to PDF using pandoc.
     if do_incremental and os.path.exists(pdf_file_name):
         _LOG.warning("Step 5: Skipping, '%s' already exists", pdf_file_name)
     else:
         _LOG.info("Step 5: Converting to PDF using pandoc")
+        # The book chapter markdown uses LaTeX macros (e.g., `\vmu`) defined
+        # in `latex_abbrevs.sty`, so it needs to be included in the header
+        # too, otherwise xelatex fails with "Undefined control sequence".
+        latex_abbrevs_file = os.path.join(
+            hgit.find_file("dev_scripts_helpers"),
+            "documentation",
+            "latex_abbrevs.sty",
+        )
+        hdbg.dassert_file_exists(latex_abbrevs_file)
         cmd = (
             f"pandoc {book_chapter_md} -o {pdf_file_name} "
             f"--pdf-engine=xelatex "
             f"-V geometry:margin=1in "
             f"-V fontsize=11pt "
             f"--highlight-style=tango "
+            f"--include-in-header={latex_abbrevs_file} "
             f"--include-in-header={script_dir}/header-style.tex"
         )
         hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
