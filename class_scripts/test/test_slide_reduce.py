@@ -113,11 +113,11 @@ class Test_main(hunitest.TestCase):
             ]
         )
         # Run test.
-        with hunteuti.capture_system_calls() as invocations:
+        with hunteuti.capture_sys_calls() as sys_calls:
             with mock.patch("sys.argv", ["slide_reduce.py"] + arg_list):
                 clslredu._main(clslredu._parse())
         # Check outputs.
-        actual_str = pprint.pformat(invocations)
+        actual_str = pprint.pformat(sys_calls)
         self.assert_equal(actual_str, expected_str)
 
     def test2(self) -> None:
@@ -147,9 +147,9 @@ class Test_main(hunitest.TestCase):
             ]
         )
         # Run test.
-        with hunteuti.capture_system_calls() as invocations:
+        with hunteuti.capture_sys_calls() as sys_calls:
             with mock.patch("sys.argv", ["slide_reduce.py"] + arg_list):
                 clslredu._main(clslredu._parse())
         # Check outputs.
-        actual_str = pprint.pformat(invocations)
+        actual_str = pprint.pformat(sys_calls)
         self.assert_equal(actual_str, expected_str)

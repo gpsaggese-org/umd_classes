@@ -11,7 +11,7 @@ Usage:
 
 Import as:
 
-import research.agentic_data_science.schema_agent.schema_agent as radsasag
+import research.agentic_data_science.schema_agent.schema_agent as radssasag
 """
 
 import argparse
@@ -22,12 +22,13 @@ import typing
 
 import dotenv
 import pandas as pd
-import research.agentic_data_science.schema_agent.schema_agent_hllmcli as radsasah
+import research.agentic_data_science.schema_agent.schema_agent_hllmcli as radssasah
 import schema_agent_loader as radsasal
 import schema_agent_report as radsasar
 import schema_agent_stats as radsasas
 
 import helpers.hlogging as hloggin
+import helpers.hparser as hparser
 
 # =============================================================================
 # Configuration & Logging
@@ -123,7 +124,9 @@ def run_pipeline(
     # --- LLM scope ---
     # Use the concatenated DataFrame to decide which columns to send.
     combined_df = pd.concat(list(tag_to_df.values()), axis=0, ignore_index=True)
-    columns_for_llm = radsasah._select_columns_for_llm(combined_df, scope=llm_scope)
+    columns_for_llm = radssasah._select_columns_for_llm(
+        combined_df, scope=llm_scope
+    )
     _LOG.info(
         "LLM will profile %d / %d columns (scope=%s).",
         len(columns_for_llm),
@@ -133,14 +136,14 @@ def run_pipeline(
 
     # --- LLM call ---
     if use_langchain:
-        prompt_text = radsasah.build_llm_prompt(
+        prompt_text = radssasah.build_llm_prompt(
             stats, columns_to_include=columns_for_llm
         )
-        semantic_insights = radsasah.get_llm_semantic_insights_langchain(
+        semantic_insights = radssasah.get_llm_semantic_insights_langchain(
             prompt_text, model=model
         )
     else:
-        semantic_insights = radsasah.generate_hypotheses_via_cli(
+        semantic_insights = radssasah.generate_hypotheses_via_cli(
             stats,
             model=model,
             columns_to_include=columns_for_llm,
@@ -179,7 +182,7 @@ def _build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="schema_agent",
         description="Data Profiler Agent — statistical + LLM column profiling",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        formatter_class=hparser.CustomHelpFormatter,
     )
     # --- Inputs ---
     parser.add_argument(

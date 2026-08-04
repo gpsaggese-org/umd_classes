@@ -214,7 +214,6 @@ enabling access to models from multiple providers through a single API.
     - **Key conflicts**: Unset `ANTHROPIC_API_KEY` when using OpenRouter since it
       can conflict with `ANTHROPIC_AUTH_TOKEN`
 
-# Using cc
+## Using cc
 - This repository also ships a `cc` wrapper script that automates the environment
   variable setup for OpenRouter
-- See [The `cc` Convenience Wrapper](draft.in_5_mins.helpers_cc.md))
