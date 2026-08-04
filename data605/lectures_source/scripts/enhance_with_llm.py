@@ -15,6 +15,8 @@ from typing import List, Tuple
 import google.generativeai as genai
 from tqdm import tqdm
 
+import helpers.hparser as hparser
+
 
 def configure_logging(verbosity: int) -> None:
     level = logging.INFO
@@ -32,7 +34,7 @@ def configure_logging(verbosity: int) -> None:
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+        description=__doc__, formatter_class=hparser.CustomHelpFormatter
     )
     parser.add_argument(
         "--verbose",

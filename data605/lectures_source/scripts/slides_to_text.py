@@ -13,6 +13,8 @@ from typing import List, Optional
 import json
 import time
 
+import helpers.hparser as hparser
+
 # Google API imports
 try:
     from google.oauth2.credentials import Credentials
@@ -865,7 +867,7 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
             "Fetch text content from Google Slides presentations and save to `output/`."
             " By default, it reads URLs from `links.txt`."
         ),
-        formatter_class=argparse.RawDescriptionHelpFormatter,
+        formatter_class=hparser.CustomHelpFormatter,
     )
     parser.add_argument(
         "--verbose",

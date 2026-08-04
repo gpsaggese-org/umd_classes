@@ -32,6 +32,8 @@ from flask import (
 from dotenv import load_dotenv
 from werkzeug.datastructures import FileStorage
 
+import helpers.hparser as hparser
+
 # Temporary hardcoded user identifier
 USER_ID = "demo_user"
 
@@ -2143,7 +2145,7 @@ def sweatstack_remove_data():
 if __name__ == "__main__":
     # Simple command line argument for debug mode
     parser = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+        description=__doc__, formatter_class=hparser.CustomHelpFormatter
     )
     parser.add_argument(
         "--debug", action="store_true", help="Skip thread cleanup"

@@ -28,6 +28,7 @@ import schema_agent_report as radsasar
 import schema_agent_stats as radsasas
 
 import helpers.hlogging as hloggin
+import helpers.hparser as hparser
 
 # =============================================================================
 # Configuration & Logging
@@ -181,7 +182,7 @@ def _build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="schema_agent",
         description="Data Profiler Agent — statistical + LLM column profiling",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
+        formatter_class=hparser.CustomHelpFormatter,
     )
     # --- Inputs ---
     parser.add_argument(
