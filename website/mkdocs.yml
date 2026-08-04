@@ -7,10 +7,7 @@ strict: true
 
 theme:
   name: material
-  analytics:
-    provider: google
-    property: G-QMS5WDYD0N
-  custom_dir: overrides
+  custom_dir: docs/overrides
   logo: assets/logo.png  # Custom logo in header
   favicon: assets/favicon.png  # Custom favicon in browser tab
   generator: false  # Remove "Made with Material for MkDocs" from footer
@@ -66,11 +63,16 @@ plugins:
           kwds:
             case: preserve
       categories_allowed:
+        - "AI Coding"
         - "AI Research"
+        - "AI Tools"
         - "Causal AI"
         - "Data Science"
         - "Deep Learning"
+        - "Developer Tools"
+        - "LLM"
         - "Machine Learning"
+        - "Productivity"
         - "Python"
         - "Software Engineering"
         - "Startup"
@@ -89,6 +91,7 @@ nav:
   - Publications: 05_publications.md
   - Research: 06_research.md
   - Coding: 07_coding.md
+  - Screwups: 08_screw_ups.md
   - Blog: blog/index.md
 
 markdown_extensions:

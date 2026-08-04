@@ -3,7 +3,7 @@ Utility functions for L05_02_01_bias_variance notebook.
 
 Import as:
 
-import L05_02_01_bias_variance_utils as mtl00bvut
+import msml610.tutorials.L05_statistical_learning.L05_02_01_bias_variance_utils as mtlsll00bvu
 """
 
 import logging
@@ -15,9 +15,9 @@ import numpy as np
 from IPython.display import clear_output, display
 
 try:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 except ImportError:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 
 _LOG = logging.getLogger(__name__)
 
@@ -437,7 +437,7 @@ def cell2_learning_once() -> None:
     output = ipywidgets.Output()
 
     # Create widgets - seed must be first as per conventions.
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="Random seed",
         min_val=0,
@@ -446,7 +446,7 @@ def cell2_learning_once() -> None:
         initial_value=42,
         is_float=False,
     )
-    n_samples_slider, n_samples_box = mtumsuti.build_widget_control(
+    n_samples_slider, n_samples_box = htutori.build_widget_control(
         name="N_samples",
         description="Number of training samples",
         min_val=2,
@@ -534,7 +534,7 @@ Out-of-sample Error (E_out):
   Constant: {e_out_const:.4f}
   Linear:   {e_out_linear:.4f}
 """
-            mtumsuti.add_fitted_text_box(ax3, comment_text)
+            htutori.add_fitted_text_box(ax3, comment_text)
             plt.tight_layout()
             plt.show()
 
@@ -572,7 +572,7 @@ def cell3_learning_bias_variance() -> None:
     output = ipywidgets.Output()
 
     # Create widgets - seed must be first as per conventions.
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="Random seed",
         min_val=0,
@@ -581,7 +581,7 @@ def cell3_learning_bias_variance() -> None:
         initial_value=42,
         is_float=False,
     )
-    n_samples_slider, n_samples_box = mtumsuti.build_widget_control(
+    n_samples_slider, n_samples_box = htutori.build_widget_control(
         name="N_samples",
         description="Number of training samples per experiment",
         min_val=2,
@@ -590,7 +590,7 @@ def cell3_learning_bias_variance() -> None:
         initial_value=2,
         is_float=False,
     )
-    n_experiments_slider, n_experiments_box = mtumsuti.build_widget_control(
+    n_experiments_slider, n_experiments_box = htutori.build_widget_control(
         name="N_experiments",
         description="Number of experiments",
         min_val=5,
@@ -718,7 +718,7 @@ Average Out-of-sample Error:
   Constant: {avg_e_out_const:.4f}
   Linear:   {avg_e_out_linear:.4f}
 """
-            mtumsuti.add_fitted_text_box(ax3, comment_text)
+            htutori.add_fitted_text_box(ax3, comment_text)
             plt.tight_layout()
             plt.show()
 
@@ -765,7 +765,7 @@ def cell4_learning_plots() -> None:
     output = ipywidgets.Output()
 
     # Create widgets - seed must be first as per conventions.
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="Random seed (fixed)",
         min_val=0,
@@ -774,7 +774,7 @@ def cell4_learning_plots() -> None:
         initial_value=42,
         is_float=False,
     )
-    n_experiments_slider, n_experiments_box = mtumsuti.build_widget_control(
+    n_experiments_slider, n_experiments_box = htutori.build_widget_control(
         name="N_experiments",
         description="Number of experiments",
         min_val=20,
@@ -783,7 +783,7 @@ def cell4_learning_plots() -> None:
         initial_value=100,
         is_float=False,
     )
-    max_n_samples_slider, max_n_samples_box = mtumsuti.build_widget_control(
+    max_n_samples_slider, max_n_samples_box = htutori.build_widget_control(
         name="max_N_samples",
         description="Maximum N_samples",
         min_val=5,
@@ -932,7 +932,7 @@ At N={max_n_samples}:
   Bias²:    {final_bias_linear:.4f}
   Variance: {final_var_linear:.4f}
 """
-            mtumsuti.add_fitted_text_box(ax3, comment_text)
+            htutori.add_fitted_text_box(ax3, comment_text)
             plt.tight_layout()
             plt.show()
 
@@ -977,7 +977,7 @@ def cell5_learning_with_noise() -> None:
     output = ipywidgets.Output()
 
     # Create widgets - seed must be first as per conventions.
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="Random seed",
         min_val=0,
@@ -986,7 +986,7 @@ def cell5_learning_with_noise() -> None:
         initial_value=42,
         is_float=False,
     )
-    n_samples_slider, n_samples_box = mtumsuti.build_widget_control(
+    n_samples_slider, n_samples_box = htutori.build_widget_control(
         name="N_samples",
         description="Number of training samples per experiment",
         min_val=2,
@@ -995,7 +995,7 @@ def cell5_learning_with_noise() -> None:
         initial_value=2,
         is_float=False,
     )
-    n_experiments_slider, n_experiments_box = mtumsuti.build_widget_control(
+    n_experiments_slider, n_experiments_box = htutori.build_widget_control(
         name="N_experiments",
         description="Number of experiments",
         min_val=5,
@@ -1004,7 +1004,7 @@ def cell5_learning_with_noise() -> None:
         initial_value=100,
         is_float=False,
     )
-    noise_slider, noise_box = mtumsuti.build_widget_control(
+    noise_slider, noise_box = htutori.build_widget_control(
         name="noise_std",
         description="Noise standard deviation",
         min_val=0.0,
@@ -1171,7 +1171,7 @@ Average Out-of-sample Error:
   Constant: {avg_e_out_const:.4f}
   Linear:   {avg_e_out_linear:.4f}
 """
-            mtumsuti.add_fitted_text_box(ax3, comment_text)
+            htutori.add_fitted_text_box(ax3, comment_text)
             plt.tight_layout()
             plt.show()
 
@@ -1220,7 +1220,7 @@ def cell6_learning_plots_with_noise() -> None:
     output = ipywidgets.Output()
 
     # Create widgets - seed must be first as per conventions.
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="Random seed (fixed)",
         min_val=0,
@@ -1233,7 +1233,7 @@ def cell6_learning_plots_with_noise() -> None:
     # Uses exponents 4-10 for base 2: gives values 16, 32, 64, 128, 256, 512, 1024
     # Initial exponent 6 gives initial value of 64
     n_experiments_exp_slider, n_experiments_box = (
-        mtumsuti.build_log_widget_control(
+        htutori.build_log_widget_control(
             name="log(N_experiments)",
             description="Number of experiments",
             min_exp=4,
@@ -1245,7 +1245,7 @@ def cell6_learning_plots_with_noise() -> None:
     # Create logarithmic widget for N_samples.
     # Uses exponents 1-8 for base 2: gives values 2, 4, 8, 16, 32, 64, 128, 256
     # Initial exponent 4 gives initial value of 16
-    n_samples_exp_slider, n_samples_box = mtumsuti.build_log_widget_control(
+    n_samples_exp_slider, n_samples_box = htutori.build_log_widget_control(
         name="log(N_samples)",
         description="Number of samples",
         min_exp=1,
@@ -1253,7 +1253,7 @@ def cell6_learning_plots_with_noise() -> None:
         initial_exp=4,
         base=2,
     )
-    noise_slider, noise_box = mtumsuti.build_widget_control(
+    noise_slider, noise_box = htutori.build_widget_control(
         name="noise_std",
         description="Noise standard deviation",
         min_val=0.0,
@@ -1407,7 +1407,7 @@ At N={n_samples}:
   Bias²:    {final_bias_linear:.4f}
   Variance: {final_var_linear:.4f}
 """
-            mtumsuti.add_fitted_text_box(ax3, comment_text)
+            htutori.add_fitted_text_box(ax3, comment_text)
             plt.tight_layout()
             plt.show()
 

@@ -1,0 +1,8 @@
+matplotlib
+numpy
+pandas
+seaborn
+
+causalnex==0.12.1
+#torch
+pygraphviz

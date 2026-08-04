@@ -1,0 +1,394 @@
+---
+fontsize: 10pt
+---
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+::: columns
+:::: {.column width=15%}
+![](data605/lectures_source/images/UMD_Logo.png)
+::::
+:::: {.column width=75%}
+
+\vspace{0.4cm}
+\begingroup \large
+UMD DATA605 - Big Data Systems
+\endgroup
+::::
+:::
+
+\vspace{1cm}
+
+\begingroup \Large
+**$$\text{\textcolor{blue}{\text{12.1: Graph Data Management}}}$$**
+\endgroup
+
+::: columns
+:::: {.column width=75%}
+- **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
+
+::::
+:::: {.column width=20%}
+::::
+:::
+
+#### Graphs: Background
+:::columns
+::::{.column width=50%}
+- A **graph** represents entities and their connections
+  - _Entities_ are vertices (nodes)
+  - _Connections_ are edges (links, arcs, relationships)
+
+- **Applications of graphs in many fields**
+  - Social networks
+  - Biological networks
+  - Information networks
+  - Infrastructure networks
+  - ...
+::::
+::::{.column width=45%}
+
+
+\centering
+\small
+
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_5_image_1.png)
+_An undirected, unweighted graph_
+
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_5_image_2.png)
+_A directed, edge-weighted graph_
+::::
+:::
+
+#### Graph Data Structures: Motivation
+:::columns
+::::{.column width=45%}
+
+- **Graph data**:
+  - Increasing volumes of data
+  - Increasing interest in querying and reasoning
+
+- **Sectors**
+  - Healthcare
+  - Finance
+  - Logistics
+
+- **Example applications**
+  - Fraud detection
+  - Recommendation systems
+  - Network analysis
+::::
+::::{.column width=25%}
+\center
+\small
+
+![](data605/lectures_source/images/lecture_12_2/big_data_graph1.png)
+_Protein-protein interaction network_
+
+![](data605/lectures_source/images/lecture_12_2/big_data_graph2.png)
+_Supreme court citation network_
+::::
+::::{.column width=25%}
+\center
+\small
+
+![](data605/lectures_source/images/lecture_12_2/big_data_graph3.png)
+_Stock trading network_
+
+![](data605/lectures_source/images/lecture_12_2/big_data_graph4.png)
+_Social networks_
+::::
+:::
+
+#### Graph Data Structures: Motivation
+:::columns
+::::{.column width=50%}
+- **Traditional tools** (e.g., relational DBs, NoSQL DBs) struggle with:
+  - Storing and querying graph data
+  - Processing graph-structured queries
+
+- **Dedicated solutions** to:
+  - Storing: Neo4j
+  - Processing: Google Pregel, Apache Giraph, Spark GraphX
+::::
+::::{.column width=50%}
+\center
+\small
+
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_7_image_1.png)
+_Global virtual trade network_
+
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_7_image_2.png)
+_Federal funds networks_
+::::
+:::
+
+#### Knowledge Graphs
+- **Representation of knowledge in the form of graphs**
+  - Capture entities, relationships, properties
+  - Provide structured view of real-world information
+  - E.g., Google Knowledge Graph, DBpedia, Wikidata
+  - E.g., RDF or Property Graph models
+
+- **Applications**
+  - Enable machine understanding of complex domains
+  - Support semantic search, recommendation, analytics
+  - Used in industries for data integration, knowledge discovery, AI
+    applications
+
+- **Ontologies**
+  - Provide formal and structure representation of knowledge
+    - E.g., type of things and how they relate to each other
+    - Like "meaning and rules" to interpret data into a knowledge graph
+  - Promote interoperability across knowledge bases
+
+#### Graph Data Models: RDF
+:::columns
+::::{.column width=55%}
+- **Resource Description Framework**
+  - RDF uses triples: subject-predicate-object
+  - Connects "subject" and "object" through "predicate"
+  - E.g., "TomCruise-acted-TopGun"
+
+- **Used to represent knowledge bases**
+  - Queried through SPARQL
+::::
+::::{.column width=40%}
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_11_image_1.png)
+::::
+:::
+
+- **Pros**
+  - Standardization
+    - W3C standard to model data
+    - Subject and object can be URIs in semantic web
+  - Interoperability
+    - Merge RDF data stores
+  - Extensibility
+    - Add new nodes and relationships
+    - Support ontologies
+
+#### Graph Data Models: Property Graph
+- Directed graph with nodes and edges having key-values _properties_
+  - Similar expressive power to RDFs
+
+:::columns
+::::{.column width=45%}
+- **No universal standard**
+  - Less "schema"
+  - Harder to interoperate
+
+- **Examples of query languages**
+  - Cypher for Neo4j
+  - Gremlin for Apache TinkerPop
+::::
+::::{.column width=50%}
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_12_image_1.png)
+::::
+:::
+
+#### Graph Data Models: XML
+- Common data model for flexible data representation
+  - Directed labeled tree
+  - Popular for non-tabular data exchange
+
+:::columns
+::::{.column width=40%}
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_13_image_1.png)
+::::
+::::{.column width=45%}
+\small
+```xml
+<movies>
+  <movie>
+  <title>Top Gun</title>
+  <actors>
+    <actor>
+     <name>Tom Cruise</name>
+     <born>7/3/1962</born>
+    </actor>
+   <actor>
+     ...
+   </actor>
+  </actors>
+  </movie>
+```
+::::
+:::
+
+#### Comparison
+
+```latex
+\usepackage{float}
+\usepackage{caption}
+\renewcommand{\familydefault}{\sfdefault}
+
+\begin{document}
+
+\small
+\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+\textbf{Feature} & \textbf{RDF} & \textbf{Property Graph} & \textbf{XML} \\
+\hline
+\textbf{Core data model} & Triples: (subject, predicate, object) & Nodes and edges with properties & Hierarchical tree of elements \\
+\hline
+\textbf{How facts are stored} & Fact is a separate triple & Properties on nodes/edges & Nested tags with attributes \\
+\hline
+\textbf{Attributes} & Modeled as triples & Key--value pairs & Attributes or child elements \\
+\hline
+\textbf{Semantics} & Formal (RDF, RDFS, OWL) & No built-in semantics & No built-in semantics \\
+\hline
+\textbf{Ontology support} & Native, standardized & Optional & None (only schema) \\
+\hline
+\textbf{Reasoning \& inference} & Built-in (e.g., OWL) & Usually not supported & Not supported \\
+\hline
+\textbf{Data integration} & Excellent for heterogeneous data & Manual mapping & Hard across schemas \\
+\hline
+\textbf{Query language} & SPARQL & Cypher, Gremlin, GQL & XPath, XQuery \\
+\hline
+\textbf{Query style} & Pattern matching & Traversals & Tree navigation \\
+\hline
+\textbf{Schema} & Optional, supported & Labels, constraints & XSD, DTD \\
+\hline
+\textbf{Standards} & W3C standards & Vendor-specific & W3C standards \\
+\hline
+\textbf{Interoperability} & Very high & Limited & High for documents \\
+\hline
+\textbf{Traversal performance} & Moderate & Very fast & Poor \\
+\hline
+\textbf{Use cases} & Linked data, KBs & Fraud, recommendations & Docs, configs, data exchange \\
+\hline
+\textbf{Examples} & Wikidata, DBpedia & Neo4j, Neptune & SOAP, RSS, Office \\
+\hline
+\end{tabular}
+
+\end{document}
+```
+
+#### Storing Graph Data
+- **File systems**
+  - Simple
+  - No transactions, ACID compliance
+  - Minimal functionality (build analysis/querying on top)
+
+- **Relational databases**
+  - Mature technology
+  - SQL, transactions, ACID compliance, toolchains
+  - Minimal functionality for graph data
+
+- **NoSQL key-value stores**
+  - Handle large datasets efficiently in a distributed fashion
+  - Minimal native functionality for graph data
+
+- **Graph databases**
+  - Efficiently support complex queries/tasks (e.g., graph traversals)
+  - Less mature than RDBMSs
+  - Often lack declarative language like SQL
+    - Write custom programs
+
+#### Graph Databases
+- Many specialized graph DB systems
+  - E.g., Neo4j, Titan, OrientDB, AllegroGraph
+
+- Key distinctions from relational / NoSQL databases
+  - Store graph structure with pointers
+    - Avoid joins
+    - Simplify graph traversals
+  - Manage and query graph-structured data
+    - Write queries and graph algorithms (reachability, shortest paths)
+  - Support graph query languages: SPARQL, Cypher, Gremlin
+  - Declarative interfaces
+  - Provide programmatic API for arbitrary graph algorithms
+
+#### Query Languages for Graph Databases
+
+```latex
+\usepackage{float}
+\usepackage{caption}
+\renewcommand{\familydefault}{\sfdefault}
+
+\begin{document}
+
+\small
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Feature} & \textbf{Cypher} & \textbf{Gremlin} & \textbf{SPARQL} \\
+\hline
+\textbf{Data Model} & Property Graph & Property Graph & RDF Triple \\
+\hline
+\textbf{Query Style} & Declarative & Imperative & Declarative \\
+\hline
+\textbf{Syntax Example} & SQL-like & Functional API & Triple patterns \\
+\hline
+\textbf{Best For} & Pattern matching & Complex traversals & Semantic data \\
+\hline
+\textbf{Standardization} & Neo4j-specific (OpenCypher) & Apache TinkerPop & W3C Standard \\
+\hline
+\textbf{Backend Support} & Mainly Neo4j & Multi-platform (TinkerPop) & RDF stores \\
+\hline
+\textbf{Learning Curve} & Low & High & Medium \\
+\hline
+\textbf{Use Cases} & Social graphs, fraud detection & Distributed graph processing & Linked data, knowledge graphs \\
+\hline
+\end{tabular}
+\end{document}
+```
+
+#### Query Languages: Cypher
+- **Purpose-Built for Property Graphs**
+  - Nodes and relationships with key-value properties
+- **Declarative Syntax**
+  - Express *what* to retrieve, not *how*
+- **Optimized for Pattern Matching**
+  - Easily finds subgraph structures (e.g., friends of friends)
+  - Limited in Graph Analytics
+  - Not ideal for reachability, shortest paths, or centrality
+- **Neo4j Native**
+
+- Example:
+  - _Find the names of people who know someone named "Alice"_
+    \small
+    ```sql
+    MATCH (person)-[:KNOWS]->(friend {name: "Alice"})
+      RETURN person.name
+    ```
+
+#### Query Languages: Gremlin
+- **Supports Multiple Models**
+  - Compatible with both Property Graphs and RDF
+- **Imperative Style**
+  - Describes *how* to traverse the graph step by step
+- **Traversal-Based Semantics**
+  - Expresses computation as a flow of operations across vertices and edges
+
+- Example:
+  - _Find the names of people who know someone named "Alice"_
+    \small
+    ```python
+    g.V().hasLabel('Person')
+      .where(out('KNOWS').has('name', 'Alice'))
+      .values('name')
+    ```
+
+#### Query Languages: SPARQL
+- **SQL-Like Syntax**
+  - Familiar structure: \textcolor{blue}{\texttt{SELECT}}, \textcolor{blue}{\texttt{WHERE}}, \textcolor{blue}{\texttt{FILTER}}, etc.
+- **Built for RDF Data**
+  - Queries triples: subject–predicate–object
+- **W3C Standard**
+  - Core to Semantic Web and Linked Data applications
+
+- Example:
+  - _Find the names of people who know someone named "Alice"_
+    \small
+    ```sql
+    PREFIX foaf: <...>
+
+    SELECT ?personName
+    WHERE {
+      ?person foaf:knows ?friend .
+      ?friend foaf:name "Alice" .
+      ?person foaf:name ?personName .
+    }
+    ```

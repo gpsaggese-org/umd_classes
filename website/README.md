@@ -47,7 +47,8 @@ The built site will be in the `site/` directory.
 
 - Or use the convenience scripts:
   ```bash
-  > ./test.sh      # Run local server
+  > ./test.sh      # Run local server (including drafts)
+  > ./preview.sh   # Preview GitHub Pages
   > ./publish.sh   # Deploy to GitHub Pages
   ```
 
@@ -102,7 +103,7 @@ located in `docs/blog/posts/`.
 
 #### Formatting Guidelines
 
-- Follow the formatting rules in `/Users/saggese/src/umd_classes1/helpers_root/docs/ai_prompts/blog.format_rules.md`
+- Follow the formatting rules in `/Users/saggese/src/umd_classes1/helpers_root/docs/ai_prompts/blog.format.md`
 
 - Key formatting rules:
   - Always include `<!-- more -->` tag after TL;DR to separate excerpt

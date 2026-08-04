@@ -1,0 +1,112 @@
+# Integrating Causality and Uncertainty in Machine Learning
+
+### The Problem
+- **Prediction vs. decision are different mathematical problems**:
+  - Traditional ML learns $\Pr(Y | X)$ to answer _"what will happen?"_
+  - It is optimized for predictive accuracy, not for _"what should we do?"_ and
+    decision quality
+- **Correlation encodes confounding as causation**:
+  - A hidden common cause makes $X$ and $Y$ correlate spuriously
+  - $\Pr(Y | X) \neq \Pr(Y | do(X))$, so acting on correlations backfires
+- **No interventions or counterfactuals**: correlation models cannot answer
+  - _"if we change $X$, what happens to $Y$?"_
+  - _"what would have happened otherwise?"_
+- **Selection bias and the missing-counterfactual problem**:
+  - Data reflects only decisions actually made — approved loans, never rejected
+    ones
+  - A problem present _before_ modeling starts, distinct from confounding
+- **Simpson's paradox and policy reversals**:
+  - Aggregate trends reverse by subgroup
+  - A model correct overall can be wrong — or harmful — for every segment
+- **Heterogeneous treatment effects**: average effects mask sub-group reversals
+- **Interference / spillovers (SUTVA violation)**:
+  - One unit's action changes another's outcome — marketplaces, pricing
+    equilibria, social networks
+  - Standard ML assumes independent units; business rarely obliges
+- **Collider bias / Berkson's paradox**: conditioning on a common effect induces
+  a spurious association — a concrete failure mode alongside Simpson's
+- **Ignoring domain knowledge / mechanism**: pure ML discards known structure,
+  with no principled way to inject constraints or priors
+
+### Toward a Solution (Causal Modeling)
+- **The ladder of causation**: observation, intervention, and counterfactual
+  reasoning as distinct rungs
+- **Building causal DAGs**: variable identification, temporal structure, and
+  domain knowledge
+- **Causal variable types**: confounders, mediators, colliders, and their
+  adjustment rules
+- **Identifiability and causal assumptions**: backdoor, frontdoor, and
+  instrumental-variable conditions
+- **Intervention design**: choosing levers, targets, scales, and timing
+- **Data collection strategy** aligned with causal identification requirements
+- **Assumptions are not free**: causal estimates are biased when identification
+  assumptions (ignorability, positivity) are unmet
+- **Causal models as the foundation** for utility-maximizing decisions
+
+### The Problem
+- **No uncertainty quantification**: most problems are "small data" problems, yet
+  models emit point estimates as if they were certain
+- **Overfitting and statistical significance traps**:
+  - Peeking, multiple comparisons, and novelty effects
+  - Not only in a single run, but from burning the test set
+  - Without assumptions (priors), nothing limits the fit
+- **Epistemic vs. aleatoric uncertainty conflated**: no "known-unknowns", so the
+  model is confidently wrong off-distribution — exactly where decisions bite
+- **No abstention or deferral**: cannot say _"I don't know"_ and route the case
+  to a human
+
+### Toward a Solution (Probabilistic ML)
+- **Posteriors over effects, not point estimates**: priors encode assumptions and
+  regularize the "small data" regime
+- **Probabilistic toolkit** (developed in Part II): Gaussian processes,
+  variational inference, and normalizing flows
+- **Decision readiness under uncertainty**: knowing when causal claims are safe to
+  act on
+
+// ### Lessons
+// - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
+//   correlation ≠ causation; ladder of causation; prediction → decision;
+//   feedback loops; distribution shift; cost of ignoring causality
+// - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
+//   prediction vs decision; Simpson's paradox / policy reversal; aleatoric vs
+//   epistemic uncertainty
+// - `msml610/lectures_source/Lesson08.4.txt`
+//   potential outcomes; SUTVA / interference; selection bias; collider;
+//   confounding bias; CATE / heterogeneous effects
+// - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
+//   building causal DAGs; variable types (confounder / mediator / collider);
+//   collider bias; SCM
+// - `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
+//   interventions; counterfactuals; backdoor / frontdoor adjustment;
+//   do-calculus (identifiability)
+// - `msml610/lectures_source/Lesson08.5-Experimentation.txt`
+//   significance traps (peeking, multiple comparisons, SRM); SUTVA / interference
+// - `msml610/lectures_source/Lesson02.6-ML_Techniques_How_To_Do_Research.txt`
+//   data snooping; burning the test set; sampling bias
+// - `msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt`
+//   variational inference; normalizing flows; Bayesian NNs; calibration;
+//   conformal prediction
+//
+// ### Related books
+// - [B002] Pearl et al., "The Book of Why", 2018
+// - [B001] Agrawal et al., "Prediction Machines", 2018
+// - [B039] Hurwitz & Thompson, "Causal Artificial Intelligence", 2024
+// - [B050] Hernán & Robins, "Causal Inference: What If", 2020
+// - [B042] Pearl et al., "Causal Inference in Statistics: A Primer", 2016
+// - [B008] Peters et al., "Elements of Causal Inference", 2017
+// - [B003] Huyen, "Designing Machine Learning Systems", 2022
+// - [B048] Bishop, "Pattern Recognition and Machine Learning", 2006
+//
+// ### Related papers
+// - [P005] Pearl, "Simpson's Paradox, Confounding, and Collapsibility", 1999
+//   https://bayes.cs.ucla.edu/BOOK-2K
+// - [P009] Pearl, "The Seven Pillars of Causal Reasoning with Reflections on
+//   Machine Learning", 2021
+//   https://cacm.acm.org/research/seven-pillars-of-causal-reasoning-with-reflections-on-machine-learning/
+// - [P007] Zhang et al., "A Survey on Causal Inference", 2020
+//   https://arxiv.org/pdf/2002.05209.pdf
+// - [P063] Rubin, "Estimating Causal Effects of Treatments in Randomized and
+//   Nonrandomized Studies", 1974 https://doi.org/10.1037/h0037350
+// - [P069] Lakshminarayanan et al., "Simple and Scalable Predictive Uncertainty
+//   Estimation Using Deep Ensembles", 2017 https://arxiv.org/abs/1706.04599
+

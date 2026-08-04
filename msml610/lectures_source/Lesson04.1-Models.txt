@@ -1,48 +1,12 @@
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L04.1: Machine Learning Models
+// slides_engine=typst
+// references=
+// - Burkov: _"Machine Learning Engineering"_ (2020)
+// - Hastie et al.: _"The Elements of Statistical Learning"_ (2nd ed, 2009)
 
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 04.1: Machine Learning Models}}$$**
-\endgroup
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- Burkov: _"Machine Learning Engineering"_ (2020)
-
-- Hastie et al.: _"The Elements of Statistical Learning"_ (2nd ed, 2009)
-
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book.jpg){ height=20% }
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_The_Elements_of_Statistical_Learning.jpg){ height=20% }
-
-::::
-:::
-
-## #############################################################################
 ## Naive Bayes Model
-## #############################################################################
 
 * Naive Bayes Model
 - **Problem**: predict classes $H_1, ..., H_n$ using evidence $\vE$:
@@ -241,9 +205,7 @@ MSML610: Advanced Machine Learning
     $$
   - Blends prior of equiprobable feature values with MLE estimates
 
-## #############################################################################
 ## Decision Trees
-## #############################################################################
 
 // AIMA 19.3 Learning Decision Trees
 
@@ -598,9 +560,7 @@ MSML610: Advanced Machine Learning
 
 - Use **number of trees and max depth per tree** to control space size
 
-## #############################################################################
 ## Random Forests
-## #############################################################################
 
 * From Decision Trees to Random Forests
 - Decision trees are **high capacity models**:
@@ -656,9 +616,7 @@ MSML610: Advanced Machine Learning
   - Loss of interpretability
   - Overfitting (cross-validation is needed)
 
-## #############################################################################
 ## Linear Models
-## #############################################################################
 
 * Linear Regression Model
 - **Data set**
@@ -766,9 +724,7 @@ MSML610: Advanced Machine Learning
   - In $\calX$ if $\Phi$ is invertible; or
   - By classifying any $\vx \in \calX$ in $\calZ$
 
-## #############################################################################
 ## Perceptron
-## #############################################################################
 
 * Example of Classification Problems
 - **Binary classification problem**

@@ -1,0 +1,2400 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{\textbf{#1}}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+\usepackage{listings}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{10 mm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+\newcommand{\black}[1]{\textcolor{black}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\brown}[1]{\textcolor{brown}{#1}}
+\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
+\newcommand{\gray}[1]{\textcolor{gray}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\olive}[1]{\textcolor{olive}{#1}}
+\newcommand{\orange}[1]{\textcolor{orange}{#1}}
+\newcommand{\purple}[1]{\textcolor{purple}{#1}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\teal}[1]{\textcolor{teal}{#1}}
+\newcommand{\violet}[1]{\textcolor{violet}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+\begin{columns}[T]
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/UMD_Logo.png}}
+\end{column}
+
+\begin{column}{0.75\linewidth}
+\vspace{0.4cm}
+\begingroup \large
+
+MSML610: Advanced Machine Learning \endgroup
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begingroup \Large
+
+\textbf{\[\text{\blue{Lesson 09.5: Kalman Filter}}\]} \endgroup
+\vspace{1cm}
+
+\textbf{Instructor}: Dr.~GP Saggese,
+\href{gsaggese@umd.edu}{\textcolor{blue}{\underline{gsaggese@umd.edu}}}
+
+\textbf{References}:
+
+\begin{itemize}
+\tightlist
+\item
+  AIMA 14: Probabilistic reasoning over time
+\item
+  \href{https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python}{\textcolor{blue}{\underline{https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python}}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content}
+\begin{itemize}
+\tightlist
+\item
+  \emph{\textbf{\textcolor{red}{Discrete Bayes Filtering}}}
+\item
+  Unidimensional Kalman Filters
+\item
+  Multivariate Kalman Filters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Modeling
+  \item
+    Non-Linear Filtering
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Tutorial}
+\protect\phantomsection\label{tutorial}
+\begin{itemize}
+\tightlist
+\item
+  \textcolor{blue}{\texttt{L09\_05\_01\_discrete\_bayes\_dog.ipynb}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{A Discrete Bayesian 1-D Dog}
+\protect\phantomsection\label{a-discrete-bayesian-1-d-dog}
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  Dog with sensor
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Wanders around offices and halls
+  \end{itemize}
+\item
+  10 positions in hallway with doors, numbered 0 to 9
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Circular hallway: position 0 follows position 9
+  \item
+    Door positions: 0, 1, 8
+  \end{itemize}
+\item
+  Sensor reports if dog is in front of door or hall and its movement
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Sensor may have noise
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/bichon_pic.jpg}
+(Nuvolo)
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  Can we find out where the dog is from consecutive measurements?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{You Cannot Trust Either Source Alone}
+\protect\phantomsection\label{you-cannot-trust-either-source-alone}
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Measurements Alone}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Sensor says ``door''
+  \item
+    Three door positions: 0, 1, 8
+  \item
+    Cannot tell from single measurement which door it is
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{darkgreen}{Predictions Alone}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Dog moves right repeatedly
+  \item
+    Position drifts over time
+  \item
+    Uncertainty accumulates; eventually, no idea where the dog is
+  \end{itemize}
+\end{itemize}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  Both sources of information (prediction and measurements) have
+  limitations, but together they work
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{blue}{Combine predictions with measurements}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Prediction: \emph{``Based on movement, dog should be around
+      position 4''}
+    \item
+      Measurement: \emph{``Sensor says wall''}
+    \item
+      Check hallway: Position 4 is a wall
+    \item
+      Agreement increases confidence
+    \end{itemize}
+  \item
+    \textbf{\textcolor{violet}{After several cycles}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Only one position consistent with entire history
+    \item
+      High confidence in dog's location
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Predict: Loses Information}
+\protect\phantomsection\label{predict-loses-information}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{What it does}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``Dog was at position 3 and moved right 1''}
+  \item
+    \emph{``So dog is probably at position 4''}
+  \item
+    \emph{``But could be 3 or 5 due to movement error''}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Effect on belief}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Shifts distribution to the right
+  \item
+    Spreads out probability mass
+  \item
+    Uncertainty increases
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Analogy}}: Blurring a photo
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Sharp image becomes fuzzy
+  \item
+    Information is lost
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Update: Gains Information}
+\protect\phantomsection\label{update-gains-information}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{What it does}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``Sensor says door''}
+  \item
+    \emph{``Boost probability at all door positions (0, 1, 8)''}
+  \item
+    \emph{``Reduce probability at wall positions''}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Effect on belief}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Concentrates probability on matching positions
+  \item
+    Peaks emerge in distribution
+  \item
+    Uncertainty decreases
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Analogy}}: Sharpening a photo
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Fuzzy image becomes clearer
+  \item
+    Information is gained
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bayesian Update Algorithm}
+\protect\phantomsection\label{bayesian-update-algorithm}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Start with prior belief}}
+  \[Pr(\text{position}) = \text{uniform}\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    ``Dog could be anywhere''
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Get evidence}} (measurement)
+  \[Pr(\text{door sensor} | \text{position})\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Likelihood of seeing ``door'' at each position
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Update belief}} using Bayes' rule \[
+  Pr(\text{position} | \text{door sensor})
+  = \frac{Pr(\text{door sensor} | \text{position}) \cdot Pr(\text{position})}{Pr(\text{door sensor})}
+  \]
+\item
+  \textbf{\textcolor{violet}{Posterior becomes next prior}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Cycle repeats with each new measurement
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bayesian Update Algorithm}
+\protect\phantomsection\label{bayesian-update-algorithm-1}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.1.png}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-1}
+\begin{itemize}
+\tightlist
+\item
+  Discrete Bayes Filtering
+\item
+  \emph{\textbf{\textcolor{red}{Unidimensional Kalman Filters}}}
+\item
+  Multivariate Kalman Filters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Modeling
+  \item
+    Non-Linear Filtering
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Tutorial}
+\protect\phantomsection\label{tutorial-1}
+\begin{itemize}
+\tightlist
+\item
+  \textcolor{blue}{\texttt{L09\_05\_02\_univariate\_kalman\_filter.ipynb}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Kalman Filter: Interpretations}
+\protect\phantomsection\label{kalman-filter-interpretations}
+\begin{itemize}
+\tightlist
+\item
+  Extension of \(g\)--\(h\) filters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(g\)--\(h\) uses fixed gains \(g,h\) for position and velocity
+  \item
+    Kalman filter computes adaptive gain \(K_t\) from covariance \(P_t\)
+  \item
+    Handles multidimensional states and general linear systems
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{State space model}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(x_t = A x_{t-1} + w_t\)
+  \item
+    \(y_t = C x_t + v_t\)
+  \item
+    All quantities are Gaussian with given mean and covariances
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Bayesian interpretation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Prior and likelihood Gaussian \(\Rightarrow\) posterior Gaussian
+  \item
+    Recursively updates mean and covariance
+  \item
+    Example: radar tracking of aircraft
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Orthogonal projection interpretation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Estimate is projection onto span of observations
+  \item
+    \(K_t\) minimizes \(\EE[\|x_t - \hat{x}_t\|^2]\)
+  \item
+    Error orthogonal to measurement space (optimal)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Kalman Filter: Bayesian Interpretation}
+\protect\phantomsection\label{kalman-filter-bayesian-interpretation}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Kalman filter}} can be interpreted as based on
+  Bayes theorem and Gaussians
+\item
+  The \textbf{\textcolor{darkgreen}{Bayes theorem}} states: \[
+  \text{posterior = normalized(prior $\times$ likelihood)}
+  \]
+\item
+  If the \emph{prior} and the \emph{likelihood} are Gaussian the
+  \emph{posterior} is also Gaussian (conjugate prior)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Everything can be represented as Gaussians \(\to\) encode PDF in
+    terms of mean and std dev
+  \item
+    Updating belief is equivalent to sum and multiplication of Gaussians
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Algorithm}} \begingroup \scriptsize
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create prior (using current estimate and system model).}
+\NormalTok{prior }\OperatorTok{=}\NormalTok{ predict(x, process\_model)}
+
+\CommentTok{\# Create likelihood (using measurement).}
+\NormalTok{likelihood }\OperatorTok{=}\NormalTok{ gaussian(z, sensor\_var)}
+
+\CommentTok{\# Update belief using prior and likelihood}
+\NormalTok{posterior }\OperatorTok{=}\NormalTok{ update(prior, likelihood)}
+\end{Highlighting}
+\end{Shaded}
+
+  \endgroup
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Sum of Gaussians}
+\protect\phantomsection\label{sum-of-gaussians}
+\begin{itemize}
+\item
+  Given two independent Gaussians \(X\) and \(Y\) \[
+  \begin{aligned}
+  & X \sim Normal(\mu_1, \sigma_1^2) \\
+  & Y \sim Normal(\mu_2, \sigma_2^2) \\
+  \end{aligned}
+  \]
+\item
+  The sum \(Z = X + Y\) is \(Normal(\mu, \sigma^2)\) with: \[
+  \left\{
+  \begin{aligned}
+  & \mu = \mu_1 + \mu_2 \\
+  & \sigma^2 = \sigma_1^2 + \sigma_2^2 \\
+  \end{aligned}
+  \right.
+  \]
+\item
+  \textbf{\textcolor{red}{Interpretation:}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The mean is the sum of the mean (by linearity)
+  \item
+    The variance always increases
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Product of Gaussians}
+\protect\phantomsection\label{product-of-gaussians}
+\begin{itemize}
+\item
+  Given two independent Gaussians \(X\) and \(Y\) \[
+  \begin{aligned}
+  & X \sim Normal(\mu_1, \sigma_1^2) \\
+  & Y \sim Normal(\mu_2, \sigma_2^2) \\
+  \end{aligned}
+  \]
+\item
+  The product \(Z = X \cdot Y\) is \(Normal(\mu, \sigma^2)\) with: \[
+  \left\{
+  \begin{aligned}
+  & \mu = \frac{\mu_1 \sigma_2^2 + \mu_2 \sigma_1^2}{\sigma_1^2 + \sigma_2^2} \\
+  & \sigma^2 = \frac{\sigma_1^2 \sigma_2^2}{\sigma_1^2 + \sigma_2^2} \\
+  \end{aligned}
+  \right.
+  \]
+\item
+  \textbf{\textcolor{red}{Interpretation:}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Reduce variance by incorporating more information
+  \item
+    If one Gaussian \(X\) is narrower (more accurate), result leans
+    towards \(X\)
+  \item
+    If two Gaussians are similar (measures corroborate), result becomes
+    more certain
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Kalman Filter: Classical Representation}
+\protect\phantomsection\label{kalman-filter-classical-representation}
+\begin{itemize}
+\item
+  Typical symbols used in Kalman literature:
+
+  \begingroup \small
+
+  {\def\LTcaptype{none} % do not increment counter
+  \begin{longtable}[]{@{}ll@{}}
+  \toprule\noalign{}
+  \textbf{Symbol} & \textbf{Meaning} \\
+  \midrule\noalign{}
+  \endhead
+  \(x\) & State \\
+  \(P\) & Variance of state (uncertainty, belief) \\
+  \(f()\) & System model \\
+  \(Q\) & System model error \\
+  \(z\) & Measurement \\
+  \(R\) & Measurement noise \\
+  \bottomrule\noalign{}
+  \end{longtable}
+  }
+
+  \endgroup
+\item
+  \textbf{\textcolor{red}{Initialization}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Initialize state of filter: \(x = x_0\)
+  \item
+    Initialize belief in the state: \(P = P_0\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Kalman Pseudo-Algorithm}
+\protect\phantomsection\label{kalman-pseudo-algorithm}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Predict stage}} \begingroup \small
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ predict(posterior, movement):}
+  \CommentTok{\# Prior belief about state (mean x, variance P).}
+\NormalTok{  x, P }\OperatorTok{=}\NormalTok{ posterior}
+  \CommentTok{\# System model: movement (mean dx) and its uncertainty Q.}
+\NormalTok{  dx, Q }\OperatorTok{=}\NormalTok{ movement}
+  \CommentTok{\# Use system model to predict next state: x = f(x)}
+\NormalTok{  x }\OperatorTok{=}\NormalTok{ x }\OperatorTok{+}\NormalTok{ dx}
+  \CommentTok{\# Adjust belief to account for uncertainty in prediction.}
+\NormalTok{  P }\OperatorTok{=}\NormalTok{ P }\OperatorTok{+}\NormalTok{ Q}
+  \ControlFlowTok{return}\NormalTok{ gaussian(x, P)}
+\end{Highlighting}
+\end{Shaded}
+
+  \endgroup
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Kalman Pseudo-Algorithm}
+\protect\phantomsection\label{kalman-pseudo-algorithm-1}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Update stage}} \begingroup \small
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ update(prior, measurement):}
+  \CommentTok{\# Prior belief about state (mean x, variance P)}
+\NormalTok{  x, P }\OperatorTok{=}\NormalTok{ prior}
+  \CommentTok{\# Measurement z and belief about its accuracy R.}
+\NormalTok{  z, R }\OperatorTok{=}\NormalTok{ measurement}
+  \CommentTok{\# Compute residual between estimated state and measurement.}
+\NormalTok{  y }\OperatorTok{=}\NormalTok{ z }\OperatorTok{{-}}\NormalTok{ x}
+  \CommentTok{\# Compute Kalman gain K from prediction uncertainty P and}
+  \CommentTok{\# measurement noise R.}
+\NormalTok{  K }\OperatorTok{=}\NormalTok{ P }\OperatorTok{/}\NormalTok{ (P }\OperatorTok{+}\NormalTok{ R)}
+  \CommentTok{\# Update state estimate.}
+\NormalTok{  x }\OperatorTok{=}\NormalTok{ x }\OperatorTok{+}\NormalTok{ K }\OperatorTok{*}\NormalTok{ y}
+  \CommentTok{\# Update belief (uncertainty).}
+\NormalTok{  P }\OperatorTok{=}\NormalTok{ (}\DecValTok{1} \OperatorTok{{-}}\NormalTok{ K) }\OperatorTok{*}\NormalTok{ P}
+  \ControlFlowTok{return}\NormalTok{ gaussian(x, P)}
+\end{Highlighting}
+\end{Shaded}
+
+  \endgroup
+\item
+  The Bayesian update is not apparent and it's replaced by Kalman Gain
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Kalman Gain}
+\protect\phantomsection\label{kalman-gain}
+\begin{itemize}
+\item
+  Assume that:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Prior prediction \(x \sim Normal(\mu_x,\sigma_x^2)\)
+  \item
+    Measurement \(z \sim Normal(\mu_z,\sigma_z^2)\)
+  \end{itemize}
+\item
+  The mean of the posterior (using the multiplication expression) is: \[
+  \mu
+  = \frac{\sigma_x^2 \mu_z + \sigma_z^2 \mu_x}{\sigma_x^2 + \sigma_z^2}
+  = \frac{\sigma_x^2}{\sigma_x^2 + \sigma_z^2} \mu_z +
+    \frac{\sigma_z^2}{\sigma_x^2 + \sigma_z^2} \mu_x
+  = K \mu_z + (1 - K) \mu_x
+  \]
+\item
+  The Kalman Gain \(K=\dfrac{\sigma_x^2}{\sigma_x^2+\sigma_z^2}\):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Is the scaling term that mixes the prediction and the measurement
+  \item
+    Depends on the ratio of uncertainty of prior and measurement
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-2}
+\begin{itemize}
+\tightlist
+\item
+  Discrete Bayes Filtering
+\item
+  Unidimensional Kalman Filters
+\item
+  \emph{\textbf{\textcolor{red}{Multivariate Kalman Filters}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Modeling
+  \item
+    Non-Linear Filtering
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Tutorial}
+\protect\phantomsection\label{tutorial-2}
+\begin{itemize}
+\tightlist
+\item
+  \textcolor{blue}{\texttt{L09\_05\_03\_multivariate\_kalman\_filter.ipynb}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Multivariate State}
+\protect\phantomsection\label{multivariate-state}
+\begin{itemize}
+\tightlist
+\item
+  Often the state variable is multivariate, e.g.,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., position and velocity of a dog (probably correlated)
+  \item
+    E.g., height and weight of an adult (correlated)
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Variance}} is a measure of how a population
+  varies, e.g.,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Variance = 0 means constant
+  \item
+    Large variance means lots of variation
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Covariance}} are correlated variances
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., height and weight are generally positively correlated
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Covariance matrix}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The diagonal contains the variance for each variable
+  \item
+    The off-diagonal elements contain the covariance between \(i\) and
+    \(j\) variables
+  \item
+    The covariance matrix is symmetric
+  \end{itemize}
+\item
+  Correlation allows prediction
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., ``as winter comes you predict you will spend more on heating
+    your house''
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Multivariate Gaussian}
+\protect\phantomsection\label{multivariate-gaussian}
+\begin{itemize}
+\tightlist
+\item
+  The marginal of a multivariate Gaussian is 1-d Gaussian
+\item
+  Consider a contour plot (i.e., the intersection of a 2-d Gaussian
+  \(z = f(x, y)\) with a plane \(z = c\))
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The contour plot is always an ellipses
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Multiplying Two Multivariate Gaussians}
+\protect\phantomsection\label{multiplying-two-multivariate-gaussians}
+\begin{itemize}
+\item
+  Given two multivariate Gaussians \(\sim Normal(\vmu_i, \mSigma_i)\)
+\item
+  The product of the Gaussians is still Gaussian
+  \(\sim Normal(\vmu, \mSigma)\) \[
+  \begin{aligned}
+  \vmu &= \mSigma_2 (\mSigma_1 + \mSigma_2)^{-1} \vmu_1 +
+    \mSigma_1 (\mSigma_1 + \mSigma_2)^{-1} \vmu_2 \\
+  \mSigma &= \mSigma_1 (\mSigma_1 + \mSigma_2)^{-1} \mSigma_2 \\
+  \end{aligned}
+  \]
+\item
+  \textbf{\textcolor{red}{Note}}: this is a generalization of the 1-d
+  case to multivariate
+
+  \[
+  \begin{aligned}
+  & \mu = \frac{\mu_1 \sigma_2^2 + \mu_2 \sigma_1^2}{\sigma_1^2 + \sigma_2^2} \\
+  & \sigma^2 = \frac{\sigma_1^2 \sigma_2^2}{\sigma_1^2 + \sigma_2^2} \\
+  \end{aligned}
+  \]
+
+  replacing:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\sigma^2\) with covariance matrix \(\mSigma\)
+  \item
+    Division with matrix inversion
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Core Insight: Power Comes from Correlated Structure}
+\protect\phantomsection\label{core-insight-power-comes-from-correlated-structure}
+\begin{itemize}
+\tightlist
+\item
+  Real physical systems couple variables through dynamics
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Position evolves according to \(x_{t+1} = x_t + \dot{x}_t \Delta t\)
+  \item
+    A change in \(\dot{x}\) necessarily changes future \(x\)
+  \end{itemize}
+\item
+  Correlation constrains what combinations are plausible
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Large velocity with small position change is unlikely
+  \item
+    Bayesian update favors consistent \((x, \dot{x})\) pairs
+  \end{itemize}
+\item
+  No correlation means no information gain
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If velocity comes from a different aircraft, combining it with
+    position adds nothing
+  \item
+    Mathematically, zero covariance implies no reduction in uncertainty
+  \end{itemize}
+\item
+  Hidden but correlated variables create extra constraints
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Velocity is not measured, yet strongly linked to position
+  \item
+    Each measurement of \(x\) indirectly informs \(\dot{x}\)
+  \end{itemize}
+\item
+  Uncertainty shrinks because we intersect constraints
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Measurement constrains \(x\)
+  \item
+    Dynamics constrain relationship between \(x\) and \(\dot{x}\)
+  \item
+    Posterior covariance reflects both constraints
+  \item
+    Multivariate filter exploits structure of motion
+  \item
+    Structure converts noisy data into strong predictions
+  \end{itemize}
+\item
+  Repeated updates amplify the effect
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Each cycle tightens the \((x, \dot{x})\) relationship
+  \item
+    Velocity estimate stabilizes
+  \item
+    Position variance becomes much smaller than measurement variance
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Multivariate Filtering}
+\protect\phantomsection\label{multivariate-filtering}
+\begin{itemize}
+\tightlist
+\item
+  Covariance structure helps improve the estimate, e.g.,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You know an airplane direction can't change quickly
+  \item
+    Knowing an approximate value for the velocity helps constrain
+    possible next positions
+  \end{itemize}
+\item
+  State variables can either be:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    observed variables: directly measured by a sensor
+  \item
+    hidden variables: inferred from the observed variables
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Example: airplane}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You are tracking a plane moving in a direction (1-d problem)
+  \item
+    At time 1, you are fairly certain about the position \(x=0\), but
+    you don't know the velocity
+
+    \begin{itemize}
+    \tightlist
+    \item
+      You plot position and velocity on an x-y plane
+    \item
+      The covariance matrix between position and velocity is narrow and
+      tall
+    \item
+      It is narrow on the x-axis since you know that the position is
+      around \(x=0\)
+    \item
+      It is tall on the y-axis because of your lack of knowledge about
+      velocity
+    \end{itemize}
+  \item
+    After 1 sec, you get a position update of \(x=5\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      You can infer that the velocity is 5/s
+    \item
+      The covariance matrix is then stretched diagonally
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Notation}
+\protect\phantomsection\label{notation}
+\begin{itemize}
+\tightlist
+\item
+  A Bayesian notation \(a | b\) means \emph{``\(a\) given the evidence
+  of \(b\)''}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The prior is \(\hat{\vx}_{t|t-1}\), since you know only the
+    information at time \(t-1\), i.e., the previous state
+  \item
+    The posterior is \(\hat{\vx}_{t|t}\), since you know all the
+    information at time \(t\), i.e., the measurement
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{A simpler notation:}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Indicate the ``prior'' version of the variables (i.e., after the
+    system update) with an overline (E.g., \(\overline{x}\),
+    \(\overline{\vx}\), \(\overline{\vX}\))
+  \item
+    Omit the indices \(t + 1\) and \(t\) and use an assignment notation
+    (representing ``update in place'' of a variable): \[
+    x = x + 1
+    \] instead of the mathematical notation using a different variable
+    for each time step: \[
+    x_{t+1} = x_t + 1
+    \]
+  \item
+    With this notation:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      The prior is \(\overline{x} = \hat{x}_{t|t-1}\)
+    \item
+      The posterior is \(x = \hat{x}_{t|t}\)
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Multivariate Kalman Filter}
+\protect\phantomsection\label{multivariate-kalman-filter}
+\begin{itemize}
+\tightlist
+\item
+  With the previous notation:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    State update: \(\overline{\vx} = \mF \vx + \mB \vu\)
+  \item
+    State uncertainty: \(\overline{\mP} = \mF \mP \mF^T + \mQ\)
+  \item
+    Residual: \(\vy = \vz - \mH \overline{\vx}\)
+  \item
+    Kalman gain:
+    \(\mK = \overline{\mP} \mH^T (\mH \overline{\mP} \mH^T + \mR)^{-1}\)
+  \item
+    Updated state: \(\vx = \overline{\vx} + \mK \vy\)
+  \item
+    Update state uncertainty: \(\mP = (\mI - \mK \mH) \overline{\mP}\)
+  \end{itemize}
+\item
+  Where
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\vx\) and \(\mP\) are the state mean and covariance
+  \item
+    \(\mF\) is the state transition function
+  \item
+    \(\mQ\) is the system error (i.e., the noise in the model
+    assessment)
+  \item
+    \(\mB\) and \(\vu\) model the control inputs to the system
+  \item
+    \(\mH\) is the measurement function
+  \item
+    \(\vz\) and \(\mR\) are the measurement mean and covariance
+  \item
+    \(\vy\) is the residual
+  \item
+    \(\mK\) is the Kalman gain
+  \end{itemize}
+\item
+  Use the system model to predict the next state
+
+  \begin{itemize}
+  \tightlist
+  \item
+    When we multiply \(\mF\) to \(\vx\) we get the prior (i.e., the
+    state before seeing any measurement)
+  \end{itemize}
+\item
+  Form an estimate between the prior and the measurement
+\end{itemize}
+\end{frame}
+
+\begin{frame}{From Univariate to Multivariate Kalman Filter}
+\protect\phantomsection\label{from-univariate-to-multivariate-kalman-filter}
+\begin{itemize}
+\tightlist
+\item
+  Let's compare
+\end{itemize}
+
+\begingroup \scriptsize
+\begin{tabular}{|c|c|c|c|}
+\hline
+  \textbf{Definition} &
+  \textbf{Univariate (Bayesian)} &
+  \textbf{Univariate (Kalman)} &
+  \textbf{Multivariate (Kalman)} \\
+\hline
+\hline
+  State update &
+  $\overline{\mu} = \mu + \mu_{f}$ &
+  $\overline{x} = x + dx$ &
+  $\overline{\vx} = \mF \vx + \mB \vu$ \\
+
+\hline
+  State uncertainty &
+  $\overline{\sigma}^2 = \sigma^2 + \sigma_f^2$ &
+  $\overline{P} = P + Q$ &
+  $\overline{\mP} = \mF \mP \mF^T + \mQ$ \\
+
+\hline
+  Residual &
+  &
+  $y = z - \overline{x}$ &
+  $\vy = \vz - \mH \overline{\vx}$ \\
+
+\hline
+  Kalman gain &
+  &
+  $K = \frac{\overline{P}}{\overline{P} + R}$ &
+  $\mK = \overline{\mP} \mH^T (\mH \overline{\mP} \mH^T + \mR)^{-1}$ \\
+
+\hline
+  Updated state &
+  $\hat{\mu}
+  = \frac{\overline{\sigma}^2 \mu_z + \sigma_z^2 \overline{\mu}}
+    {\overline{\sigma}^2 + \sigma_z^2}$ &
+  $x = \overline{x} + K y$ &
+  $\vx = \overline{\vx} + \mK \vy$ \\
+
+\hline
+  Upd. state uncertainty &
+  $\sigma^2
+  = \frac{\overline{\sigma}^2 \sigma_z^2}{\overline{\sigma}^2 + \sigma_z^2}$ &
+  $P = (1 - K) \overline{P}$ &
+  $\mP = (\mI - \mK \mH) \overline{\mP}$ \\
+\hline
+\end{tabular}
+\endgroup
+\end{frame}
+
+\begin{frame}{Designing a Kalman filter}
+\protect\phantomsection\label{designing-a-kalman-filter}
+\begin{itemize}
+\tightlist
+\item
+  The designer of the model needs to design:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The form of the state \(\vx\) and \(\mP\)
+  \item
+    The system model \(\mF\) and \(\mQ\)
+  \item
+    The measurement \(\vz\) and \(\mR\)
+  \item
+    The measurement function \(\mH\)
+  \item
+    The control inputs \(\mB\) and \(\vu\) if there are control inputs
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Algorithm}
+\protect\phantomsection\label{algorithm}
+\textbf{\textcolor{red}{Initialization}} - Initialize the state of the
+filter - Initialize our belief in the state
+
+\textbf{\textcolor{darkgreen}{Predict}} - Use process model to predict
+state at the next time step - Adjust belief to account for the
+uncertainty in prediction
+
+\textbf{\textcolor{blue}{Update}} - Get a measurement and associated
+belief about its accuracy - Compute residual between estimated state and
+measurement - Compute scaling factor based on whether the measurement or
+prediction is more accurate - Set state between the prediction and
+measurement based on scaling factor - Update belief in the state based
+on how certain we are in the measurement
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-3}
+\begin{itemize}
+\tightlist
+\item
+  Discrete Bayes Filtering
+\item
+  Unidimensional Kalman Filters
+\item
+  Multivariate Kalman Filters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{\textbf{\textcolor{red}{Modeling}}}
+  \item
+    Non-Linear Filtering
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{State Space Systems}
+\protect\phantomsection\label{state-space-systems}
+\begin{itemize}
+\item
+  A dynamic system is a system whose state (position, temperature)
+  evolves over time
+\item
+  Many dynamic system can be described as differential equations, since
+  calculus is the math of changing values
+\item
+  It is possible to convert a set of higher order differential equations
+  into a set of first-order differential equations
+  \[\dot{\vx}=\mA\vx+\mB\vu+\vw\] where
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\mA\) is the system dynamics matrix
+  \item
+    \(u\) are control inputs (e.g., pressing accelerator)
+  \item
+    \(\vw\) is noise
+  \end{itemize}
+\item
+  We are interested in finding a (recursive) equation that finds the
+  value of \(\vx_k = \vx (t_k)\) from the previous (discrete) state
+  \(\vx_{k-1}\) \[\vx_k=\mF\vx_{k-1}+\mB_k\vu_k\] where
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\mF\) is the state transition matrix (aka ``fundamental matrix'')
+  \end{itemize}
+\item
+  State space methods because we express the solution of the
+  differential equations in terms of system state
+\item
+  There are methods for finding the state transition matrix
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Compute the matrix exponential \(e^{\mA} t\) (many different ways to
+    do it, despite numerical difficulties)
+  \item
+    Linear Time Invariant theory (if time invariant): use inverse
+    Laplace transform
+  \item
+    Numerical solutions
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Designing the Process Noise Matrix}
+\protect\phantomsection\label{designing-the-process-noise-matrix}
+\begin{itemize}
+\tightlist
+\item
+  Designing the matrix \(\mQ\) is very difficult
+
+  \begin{itemize}
+  \tightlist
+  \item
+    When you model a given process, you ignore certain effects and then
+    you need to estimate the error
+  \end{itemize}
+\item
+  E.g., model a thrown baseball
+
+  \begin{itemize}
+  \tightlist
+  \item
+    There are unknown factors (e.g., ball rotation, spin decay, drag,
+    effects of wind and air density)
+  \end{itemize}
+\item
+  If \(\mQ\) is too small, the filter is overconfident in the prediction
+  model
+\item
+  If \(\mQ\) is too large, the filter is unduly influenced by the noise
+  in the measurements
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-4}
+\begin{itemize}
+\tightlist
+\item
+  Discrete Bayes Filtering
+\item
+  Unidimensional Kalman Filters
+\item
+  Multivariate Kalman Filters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Modeling
+  \item
+    \emph{\textbf{\textcolor{red}{Non-Linear Filtering}}}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Optimality}
+\protect\phantomsection\label{optimality}
+\begin{itemize}
+\tightlist
+\item
+  The Kalman filter is optimal (in a least square sense) under
+  \textbf{\textcolor{red}{assumptions}} that
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Everything is linear
+  \item
+    Process and sensor noise is Gaussian
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The World Is Non-Linear}
+\protect\phantomsection\label{the-world-is-non-linear}
+\begin{itemize}
+\tightlist
+\item
+  The Kalman filter uses linear equations and can only handle linear
+  problems
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The Kalman filter is a mathematical model of the world
+  \item
+    The output is only as accurate as the model of the world
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{The world is non-linear:}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    System model can be non-linear:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Many physical systems are described by non-linear differential
+      equations
+    \item
+      E.g., a ball flying through air is affected by drag
+    \end{itemize}
+  \item
+    Measurements can be non-linear:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      To measure the height on a plane, you can measure the distance of
+      the plane from the radar. Given the Pythagorean theorem, you get:
+      \[
+      x = \sqrt{\text{dist}^2 - \text{height}^2}
+      \]
+    \end{itemize}
+  \item
+    A Gaussian through a almost linear f(x) becomes quickly non-Gaussian
+    (bimodal, skewed, etc)
+  \end{itemize}
+\item
+  Rarely does a physical system have equations that can be solved
+  analytically
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Nonlinear Kalman Filtering Overview}
+\protect\phantomsection\label{nonlinear-kalman-filtering-overview}
+\begin{itemize}
+\tightlist
+\item
+  Goal: estimate hidden state \(x_t\) of nonlinear dynamical system
+
+  \begin{itemize}
+  \tightlist
+  \item
+    State dynamics: \(x_t = f(x_{t-1}, u_{t-1}) + w_t\)
+  \item
+    Measurement model: \(y_t = h(x_t) + v_t\) where
+  \item
+    \(f(\cdot)\) and \(h(\cdot)\) nonlinear
+  \end{itemize}
+\item
+  Noise often assumed Gaussian:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(w_t \sim \mathcal{N}(0, \mQ)\)
+  \item
+    \(v_t \sim \mathcal{N}(0, \mR)\)
+  \end{itemize}
+\item
+  Exact Bayesian filter requires propagating full probability density
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Generally intractable
+  \end{itemize}
+\item
+  Nonlinear Kalman filters approximate the posterior
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Maintain tractable representation of mean and covariance
+  \end{itemize}
+\item
+  Different approaches
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Extended Kalman Filter (EKF)
+  \item
+    Unscented Kalman Filter (UKF)
+  \item
+    Particle Filter
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Extended Kalman Filter EKF}
+\protect\phantomsection\label{extended-kalman-filter-ekf}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Core idea}}: linearize nonlinear functions
+  around current estimate
+
+  \begin{itemize}
+  \tightlist
+  \item
+    First order Taylor expansion of \(f\) and \(h\)
+  \end{itemize}
+\item
+  Replace nonlinear system by local linear model
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Jacobians: \(F_t = \frac{\partial f}{\partial x}\),
+    \(H_t = \frac{\partial h}{\partial x}\)
+  \end{itemize}
+\item
+  Apply standard Kalman filter equations to linearized model
+\item
+  Intuition
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Approximate nonlinear curve by tangent line at estimate
+  \item
+    Assume distribution remains approximately Gaussian
+  \end{itemize}
+\item
+  Pros
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simple and computationally efficient
+  \item
+    Use the linear Kalman machinery
+  \end{itemize}
+\item
+  Cons
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Accuracy depends on quality of linearization
+  \item
+    Can diverge for strong nonlinearities
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Unscented Kalman Filter UKF}
+\protect\phantomsection\label{unscented-kalman-filter-ukf}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Core idea}}: avoid linearization, approximate
+  distribution instead
+\item
+  Represent Gaussian by deterministic sigma points
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Choose \(2n+1\) points capturing mean and covariance
+  \end{itemize}
+\item
+  Propagate sigma points through nonlinear functions
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(x_t^{(i)} = f(x_{t-1}^{(i)})\)
+  \end{itemize}
+\item
+  Recompute mean and covariance from transformed points
+\item
+  Intuition
+
+  \begin{itemize}
+  \tightlist
+  \item
+    More accurate to approximate distribution than function
+  \item
+    Captures second order nonlinear effects
+  \end{itemize}
+\item
+  Pros
+
+  \begin{itemize}
+  \tightlist
+  \item
+    No Jacobians required
+  \item
+    Higher accuracy than EKF for strong nonlinearities
+  \item
+    It is superior to EKF in almost every way
+  \end{itemize}
+\item
+  Cons
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Slightly higher computational cost
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Unscented Transform}
+\protect\phantomsection\label{unscented-transform}
+\begin{itemize}
+\tightlist
+\item
+  Unscented transform estimates the result of applying a non-linear
+  transformation to a probability distribution characterized by a finite
+  number of moments (e.g., mean and covariance)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., compute the non-linear transform of a distribution, given mean
+    and covariance estimate
+  \item
+    Called ``unscented'' since ``it doesn't stink.''
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Intuition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Given a PDF \(C\) with mean \(\vmu\) and covariance \(\mSigma\)
+  \item
+    Encode mean and covariance in a set of points (sigma points) that
+    represent a discrete PMF \(D\) with the same mean \(\vmu\) and
+    covariance \(\mSigma\)
+  \item
+    Propagate the discrete PMF \(D\) by applying the non-linear function
+    \(\phi\) to each point of the PMF
+  \item
+    The mean and covariance of \(\phi(D)\) approximate the mean and
+    covariance of \(\phi(C)\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Unscented Transform: 1D Case}
+\protect\phantomsection\label{unscented-transform-1d-case}
+\begin{itemize}
+\tightlist
+\item
+  The idea is that we need 3 sigma points for a 1-d Gaussian
+
+  \begin{itemize}
+  \tightlist
+  \item
+    One point for the mean
+  \item
+    Two points around the mean
+  \end{itemize}
+\item
+  Each point has a weight
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Unscented Transform: Sigma Points}
+\protect\phantomsection\label{unscented-transform-sigma-points}
+\begin{itemize}
+\item
+  Consider a distribution \(F\) and a non-linearity \(\phi\)
+\item
+  There are algorithms to generate points and weights (given the mean
+  and covariance of \(F\)) to evaluate mean and covariance of \(F\)
+  transformed through \(\phi\)
+\item
+  In \(n\) dimensions, we need \(2n + 1\) points \(\vx_i\) and weights
+  \(w_i^m, w_i^c\) \[
+  \begin{aligned}
+  \sum_i w_i^m &= 1 \\
+  \sum_i w_i^c &= 1 \\
+  \mu(\phi) &= \sum_i w_i^m \phi(\vx_i) \\
+  \Sigma(\phi) &= \sum_i w_i^c (\phi(\vx_i) - \mu(\phi))(\phi(\vx_i) - \mu(\phi))^T \\
+  \end{aligned}
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Note that selecting the sigma points has not a single solution
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Particle Filter PF}
+\protect\phantomsection\label{particle-filter-pf}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Core idea}}: represent posterior by weighted
+  samples
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\{x_t^{(i)}, w_t^{(i)}\}_{i=1}^N\)
+  \end{itemize}
+\item
+  Sequential Monte Carlo approximation of Bayesian filter
+\item
+  Steps
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Sample from proposal distribution
+  \item
+    Weight by likelihood \(p(y_t | x_t^{(i)})\)
+  \item
+    Resample to avoid weight degeneracy
+  \end{itemize}
+\item
+  Intuition
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Approximate arbitrary distribution, not restricted to Gaussian
+  \item
+    Works for multimodal and highly nonlinear systems
+  \end{itemize}
+\item
+  Pros
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Very flexible
+  \item
+    Handles non-Gaussian noise
+  \end{itemize}
+\item
+  Cons
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Computationally expensive
+  \item
+    Particle degeneracy problem
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Intuition of Sampling Techniques}
+\protect\phantomsection\label{intuition-of-sampling-techniques}
+\begin{itemize}
+\item
+  Assume you have a distribution \(X\) and a non-linearity \(\phi\)
+\item
+  For every measurement:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Generate many points from \(X\)
+  \item
+    Pass them through the non-linear function \(\phi\)
+  \item
+    Approximate the result (e.g., compute mean and variance)
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Problem}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    ``How many points are needed to build an accurate output
+    distribution''?
+  \item
+    Even if \(n\)=500,000 points are enough for 1 dimension, for \(k\)
+    dimensions you might need \(n^k\) points (curse of dimensionality)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Generic particle filter algorithm}
+\protect\phantomsection\label{generic-particle-filter-algorithm}
+\begin{enumerate}
+\tightlist
+\item
+  Randomly generate particle
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Particles have all state variable that needs to be estimated (e.g.,
+  position, velocity)
+\item
+  Each particle has a weight representing the probability that it
+  represents the actual state of the system
+\end{itemize}
+
+\begin{enumerate}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Predict next state of the particles
+\item
+  Update weighting
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Update the weighting of the particles based on the measurements
+\item
+  Particles that match closely the measurements are weighted higher
+\end{itemize}
+
+\begin{enumerate}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Resample
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Discard highly improbable particle
+\end{itemize}
+
+\begin{enumerate}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  Compute estimate
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Compute weighted mean and covariance of the particles to get an
+  estimate of the state and uncertainty
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Degeneracy Problem in Sequential Importance Sampling
+(SIS)}
+\protect\phantomsection\label{degeneracy-problem-in-sequential-importance-sampling-sis}
+\begin{itemize}
+\tightlist
+\item
+  Intuition: weights collapse onto very few particles
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Most particles receive extremely small weights after measurement
+    update
+  \item
+    Only a handful meaningfully contribute to the state estimate
+  \end{itemize}
+\item
+  Why this happens
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Initial particles are uniformly distributed
+  \item
+    Measurement likelihood sharply favors particles near the true state
+  \end{itemize}
+\item
+  Particles with near-zero weight
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Contribute almost nothing to expectations
+  \item
+    Do not help represent the true distribution
+  \end{itemize}
+\item
+  Geometric intuition
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Posterior mass concentrated in small region of state space
+  \item
+    Most particles lie in low-probability regions
+  \end{itemize}
+\item
+  Consequence
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Effective sample size becomes very small
+  \item
+    Example: \(5000\) particles but only \(3\) with significant weight
+  \end{itemize}
+\item
+  Interpretation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The approximation of the posterior is poor despite large \(N\)
+  \item
+    Computational resources are wasted on useless particles
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Resampling: Core Idea}
+\protect\phantomsection\label{resampling-core-idea}
+\begin{itemize}
+\tightlist
+\item
+  Goal: focus computational effort on high-probability regions
+\item
+  Strategy
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Discard particles with very small weights
+  \item
+    Duplicate particles with high weights
+  \end{itemize}
+\item
+  Effect
+
+  \begin{itemize}
+  \tightlist
+  \item
+    New particle set better approximates posterior
+  \item
+    Majority of particles lie in meaningful regions
+  \end{itemize}
+\item
+  Role of prediction noise
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Slight dispersion after duplication
+  \item
+    Prevents particles from collapsing to identical copies
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\end{document}
