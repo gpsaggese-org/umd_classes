@@ -1,25 +1,19 @@
-Create a script called class_scripts/publish_class_links.py
+In linters2/cc_lint.py 
 
---dir class/book (e.g., data605)
---out_file ...html
+1) Add a switch --add_todos so that instead of modifying the file
+the action is to add comments in the right place like
+```
+# TODO(ai_gp): Do this and that (link to the rule)
 
-that creates an html page with links for each lesson in DIR 
-(e.g., ~/src/umd_classes2/data605/lectures_source/Lesson01.1-Intro.txt)
+E.g.,
+# TODO(ai_gp): Do this and that (testing.rules.md:1081:## Use Context Manager Syntax for Multiple Mocks)
+```
 
-to
-1) Their PDF
-~/src/umd_classes2/data605/lectures_pdf/Lesson01.1-Intro.pdf
+2) Rename the current --mode one_shot to --one_shot_with_cc
 
-2) The lectures commentary (html and pdf)
-
-~/src/umd_classes2/data605/lectures_commentary/Lesson01.1-Intro.book_chapter.html
-~/src/umd_classes2/data605/lectures_commentary/Lesson01.1-Intro.book_chapter.pdf
-
-3) Lesson recap
-data605/lectures_recap/Lesson01.1-Intro.recap.md
-
-If there are missing files, report an error and break unless
-the option --do_not_fail_on_warnings is specified
+3) Add another --mode one_shot to make a single call to the PromptSequencer
+   (in practice this is equivalent to the --one_shot_with_cc, but instead of
+   calling cc through a system call, uses the PromptSequencer)
 
 # Conventions
 - When writing code you must always follow the instructions in

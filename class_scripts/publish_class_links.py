@@ -5,22 +5,31 @@ Generate an HTML page with links to lesson materials for a class or book.
 
 For each lesson source file found in `{DIR}/lectures_source/`, builds an HTML
 page linking to that lesson's generated artifacts:
-- Slides PDF: `{DIR}/lectures_pdf/{LESSON}.pdf`
-- Lecture commentary: `{DIR}/lectures_commentary/{LESSON}.book_chapter.html`
-  and `{DIR}/lectures_commentary/{LESSON}.book_chapter.pdf`
-- Lesson recap: `{DIR}/lectures_recap/{LESSON}.recap.md`
+- Slides PDF:
+    - `{DIR}/lectures_pdf/{LESSON}.pdf`
+- Lecture commentary:
+    - `{DIR}/lectures_commentary/{LESSON}.book_chapter.html`
+    - `{DIR}/lectures_commentary/{LESSON}.book_chapter.pdf`
+- Lesson recap:
+    - `{DIR}/lectures_recap/{LESSON}.recap.md`
 
 Each existing artifact is linked to its GitHub URL (via `to_github.py`) so the
-page works when shared outside of a local checkout. Pass `--use_master` to
-link to the `master` branch instead of the current branch.
+page works when shared outside of a local checkout.
 
 By default the script stops with an error as soon as an expected artifact is
 missing. Pass `--do_not_fail_on_warnings` to instead log a warning, list the
 lesson without the missing link, and keep going.
 
 Usage:
+# Generate the links page for a class, failing on the first missing artifact.
 > publish_class_links.py --dir data605 --out_file data605/class_links.html
+
+# Generate the links page while tolerating missing artifacts, linking to the
+# `master` branch instead of the current branch.
 > publish_class_links.py --dir msml610 --out_file /tmp/links.html --do_not_fail_on_warnings --use_master
+
+# Generate the links page and open it in the default browser.
+> publish_class_links.py --dir data605 --out_file data605/class_links.html --open_html
 
 Import as:
 
@@ -35,9 +44,11 @@ from typing import List, NamedTuple
 
 import dev_scripts_helpers.github.to_github as dshgtogi
 import helpers.hdbg as hdbg
+import helpers.hgit as hgit
 import helpers.hio as hio
 import helpers.hparser as hparser
 import helpers.hprint as hprint
+import helpers.hsystem as hsystem
 
 _LOG = logging.getLogger(__name__)
 
@@ -53,16 +64,7 @@ _LECTURES_RECAP_SUBDIR = "lectures_recap"
 _LABEL_SLIDES_PDF = "Slides (PDF)"
 _LABEL_COMMENTARY_HTML = "Commentary (HTML)"
 _LABEL_COMMENTARY_PDF = "Commentary (PDF)"
-_LABEL_RECAP = "Recap"
-
-# GitHub serves `.html` files as raw source rather than rendering them, so
-# route commentary links through htmlpreview.github.io to render in-browser.
-_HTMLPREVIEW_PREFIX = "https://htmlpreview.github.io/?"
-
-# Stylesheet embedded (not linked) into the generated page so it stays
-# self-contained and portable regardless of where it is opened from.
-_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-_CSS_FILE_PATH = os.path.join(_SCRIPT_DIR, "link-page-style.css")
+_LABEL_RECAP = "Recap (TXT)"
 
 
 # #############################################################################
@@ -92,6 +94,21 @@ class LessonPage(NamedTuple):
 # #############################################################################
 # Helper functions
 # #############################################################################
+
+
+def _get_short_label(label: str) -> str:
+    """
+    Strip the trailing "(TYPE)" qualifier from an artifact label.
+
+    The full label (e.g., `Commentary (HTML)`) is used in the table header,
+    where the artifact type needs to be called out; the short label (e.g.,
+    `Commentary`) is used in the table cells, which are already grouped by
+    column.
+
+    :param label: full artifact label
+    :return: label without a trailing "(TYPE)" qualifier
+    """
+    return label.split(" (")[0]
 
 
 def _find_lesson_names(dir_: str) -> List[str]:
@@ -167,13 +184,11 @@ def _get_lesson_artifacts(
         if not exists:
             # Report the missing artifact: stop unless the caller asked to
             # only warn and keep going.
-            hdbg.dassert_file_exists(
-                file_path,
-                "Missing '%s' for lesson '%s'",
-                label,
-                lesson_name,
-                only_warning=do_not_fail_on_warnings,
-            )
+            msg = f"Lesson '{lesson_name}': missing '{label}' at '{file_path}'"
+            if do_not_fail_on_warnings:
+                _LOG.warning(msg)
+            else:
+                raise FileNotFoundError(msg)
         artifacts.append(LessonArtifact(label, file_path, exists))
     return artifacts
 
@@ -201,12 +216,16 @@ def _generate_html_page(
     :return: HTML page content
     """
     course_name = os.path.basename(dir_.rstrip("/"))
-    css_content = hio.from_file(_CSS_FILE_PATH)
+    # Stylesheet embedded (not linked) into the generated page so it stays
+    # self-contained and portable regardless of where it is opened from.
+    css_file_path = hgit.find_file_in_git_tree("link-page-style.css")
+    css_content = hio.from_file(css_file_path)
     # Build one table row per lesson.
     rows = []
     for lesson in lessons:
         cells = [f"    <td>{lesson.lesson_name}</td>"]
         for artifact in lesson.artifacts:
+            short_label = _get_short_label(artifact.label)
             if artifact.exists:
                 href = dshgtogi._get_github_url(
                     file_path=artifact.file_path, use_master=use_master
@@ -214,10 +233,11 @@ def _generate_html_page(
                 if artifact.label == _LABEL_COMMENTARY_HTML:
                     # GitHub serves `.html` files as raw source rather than
                     # rendering them: preview via htmlpreview.github.io.
-                    href = f"{_HTMLPREVIEW_PREFIX}{href}"
-                cell = f'    <td><a href="{href}">{artifact.label}</a></td>'
+                    htmlpreview_prefix = "https://htmlpreview.github.io/?"
+                    href = f"{htmlpreview_prefix}{href}"
+                cell = f'    <td><a href="{href}">{short_label}</a></td>'
             else:
-                cell = f'    <td class="missing">{artifact.label}</td>'
+                cell = f'    <td class="missing">{short_label}</td>'
             cells.append(cell)
         cells_str = "\n".join(cells)
         rows.append(f"  <tr>\n{cells_str}\n  </tr>")
@@ -237,10 +257,10 @@ def _generate_html_page(
     <table>
     <tr>
       <th>Lesson</th>
-      <th>Slides</th>
-      <th>Commentary (HTML)</th>
-      <th>Commentary (PDF)</th>
-      <th>Recap</th>
+      <th>{_LABEL_SLIDES_PDF}</th>
+      <th>{_LABEL_COMMENTARY_HTML}</th>
+      <th>{_LABEL_COMMENTARY_PDF}</th>
+      <th>{_LABEL_RECAP}</th>
     </tr>
     {rows_str}
     </table>
@@ -289,6 +309,11 @@ def _parse() -> argparse.ArgumentParser:
             "when building the GitHub URLs for lesson artifacts"
         ),
     )
+    parser.add_argument(
+        "--open_html",
+        action="store_true",
+        help="Open the generated HTML file in the default browser",
+    )
     hparser.add_verbosity_arg(parser)
     return parser
 
@@ -313,6 +338,9 @@ def _main(parser: argparse.ArgumentParser) -> None:
     html = _generate_html_page(dir_, lessons, use_master=args.use_master)
     hio.to_file(out_file, html)
     _LOG.info("Wrote HTML page to '%s'", out_file)
+    if args.open_html:
+        cmd = f"open {out_file}"
+        hsystem.system(cmd, print_command=True)
 
 
 if __name__ == "__main__":

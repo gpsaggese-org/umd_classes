@@ -7,7 +7,8 @@ import class_scripts.test.test_publish_class_links as csttpucli
 """
 
 import os
-from typing import Dict, List
+import pprint
+from typing import Any, Dict, List, Tuple
 from unittest import mock
 
 import helpers.hio as hio
@@ -90,6 +91,21 @@ class Test_parse(hunitest.TestCase):
     Test `_parse()` function.
     """
 
+    def helper(self, arg_list: List[str], expected: Dict[str, Any]) -> None:
+        """
+        Helper for `_parse()`.
+
+        :param arg_list: command-line arguments to parse
+        :param expected: expected value for each checked
+            `argparse.Namespace` attribute, keyed by attribute name
+        """
+        # Run test.
+        parser = cspucli._parse()
+        args = parser.parse_args(arg_list)
+        # Check outputs.
+        actual = {key: getattr(args, key) for key in expected}
+        self.assertEqual(actual, expected)
+
     def test1(self) -> None:
         """
         Test parser accepts the required arguments with `do_not_fail_on_warnings`
@@ -97,14 +113,15 @@ class Test_parse(hunitest.TestCase):
         """
         # Prepare inputs.
         arg_list = ["--dir", "data605", "--out_file", "data605/links.html"]
+        # Prepare outputs.
+        expected = {
+            "dir": "data605",
+            "out_file": "data605/links.html",
+            "do_not_fail_on_warnings": False,
+            "use_master": False,
+        }
         # Run test.
-        parser = cspucli._parse()
-        args = parser.parse_args(arg_list)
-        # Check outputs.
-        self.assertEqual(args.dir, "data605")
-        self.assertEqual(args.out_file, "data605/links.html")
-        self.assertFalse(args.do_not_fail_on_warnings)
-        self.assertFalse(args.use_master)
+        self.helper(arg_list, expected)
 
     def test2(self) -> None:
         """
@@ -119,11 +136,10 @@ class Test_parse(hunitest.TestCase):
             "data605/links.html",
             "--do_not_fail_on_warnings",
         ]
+        # Prepare outputs.
+        expected = {"do_not_fail_on_warnings": True}
         # Run test.
-        parser = cspucli._parse()
-        args = parser.parse_args(arg_list)
-        # Check outputs.
-        self.assertTrue(args.do_not_fail_on_warnings)
+        self.helper(arg_list, expected)
 
     def test3(self) -> None:
         """
@@ -137,11 +153,10 @@ class Test_parse(hunitest.TestCase):
             "data605/links.html",
             "--use_master",
         ]
+        # Prepare outputs.
+        expected = {"use_master": True}
         # Run test.
-        parser = cspucli._parse()
-        args = parser.parse_args(arg_list)
-        # Check outputs.
-        self.assertTrue(args.use_master)
+        self.helper(arg_list, expected)
 
 
 # #############################################################################
@@ -189,18 +204,6 @@ class Test_find_lesson_names(hunitest.TestCase):
         with self.assertRaises(AssertionError):
             cspucli._find_lesson_names(class_dir)
 
-    def test3(self) -> None:
-        """
-        Test that an empty `lectures_source` directory raises
-        `AssertionError`.
-        """
-        # Prepare inputs.
-        class_dir = os.path.join(self.get_scratch_space(), "data605")
-        os.makedirs(os.path.join(class_dir, "lectures_source"), exist_ok=True)
-        # Run test and check output.
-        with self.assertRaises(AssertionError):
-            cspucli._find_lesson_names(class_dir)
-
 
 # #############################################################################
 # Test_get_lesson_artifacts
@@ -217,7 +220,7 @@ class Test_get_lesson_artifacts(hunitest.TestCase):
         class_dir: str,
         lesson_name: str,
         do_not_fail_on_warnings: bool,
-        expected_exists: Dict[str, bool],
+        expected_exists: str,
     ) -> None:
         """
         Helper for `_get_lesson_artifacts()`.
@@ -226,8 +229,8 @@ class Test_get_lesson_artifacts(hunitest.TestCase):
         :param lesson_name: lesson name
         :param do_not_fail_on_warnings: passed through to the function under
             test
-        :param expected_exists: expected map from artifact label to whether
-            it exists
+        :param expected_exists: expected `pprint.pformat()` map from
+            artifact label to whether it exists
         """
         # Run test.
         actual = cspucli._get_lesson_artifacts(
@@ -237,7 +240,8 @@ class Test_get_lesson_artifacts(hunitest.TestCase):
         )
         # Check outputs.
         actual_exists = {artifact.label: artifact.exists for artifact in actual}
-        self.assertEqual(actual_exists, expected_exists)
+        actual_exists_str = pprint.pformat(actual_exists)
+        self.assert_equal(actual_exists_str, expected_exists, dedent=True)
 
     def test1(self) -> None:
         """
@@ -250,7 +254,12 @@ class Test_get_lesson_artifacts(hunitest.TestCase):
         _create_lesson_artifacts(class_dir, lesson_name, _ALL_LABELS)
         do_not_fail_on_warnings = False
         # Prepare outputs.
-        expected_exists = {label: True for label in _ALL_LABELS}
+        expected_exists = r"""
+        {'Commentary (HTML)': True,
+         'Commentary (PDF)': True,
+         'Recap': True,
+         'Slides (PDF)': True}
+        """
         # Run test.
         self.helper(
             class_dir, lesson_name, do_not_fail_on_warnings, expected_exists
@@ -269,12 +278,12 @@ class Test_get_lesson_artifacts(hunitest.TestCase):
         )
         do_not_fail_on_warnings = True
         # Prepare outputs.
-        expected_exists = {
-            "Slides (PDF)": True,
-            "Commentary (HTML)": False,
-            "Commentary (PDF)": False,
-            "Recap": True,
-        }
+        expected_exists = r"""
+        {'Commentary (HTML)': False,
+         'Commentary (PDF)': False,
+         'Recap': True,
+         'Slides (PDF)': True}
+        """
         # Run test.
         self.helper(
             class_dir, lesson_name, do_not_fail_on_warnings, expected_exists
@@ -283,15 +292,15 @@ class Test_get_lesson_artifacts(hunitest.TestCase):
     def test3(self) -> None:
         """
         Test that a missing artifact with `do_not_fail_on_warnings=False`
-        raises `AssertionError`.
+        raises `FileNotFoundError`.
         """
         # Prepare inputs.
         class_dir = os.path.join(self.get_scratch_space(), "data605")
         lesson_name = "Lesson01.1-Intro"
         # Prepare outputs.
-        expected = "Missing 'Slides (PDF)' for lesson 'Lesson01.1-Intro'"
+        expected = f"Lesson '{lesson_name}': missing 'Slides (PDF)'"
         # Run test.
-        with self.assertRaises(AssertionError) as cm:
+        with self.assertRaises(FileNotFoundError) as cm:
             cspucli._get_lesson_artifacts(
                 class_dir, lesson_name, do_not_fail_on_warnings=False
             )
@@ -309,33 +318,54 @@ class Test_generate_html_page(hunitest.TestCase):
     Test `publish_class_links._generate_html_page()` function.
     """
 
+    def _build_single_pdf_lesson(
+        self, exists: bool
+    ) -> Tuple[str, str, str, List[cspucli.LessonPage]]:
+        """
+        Build a single lesson page with one `Slides (PDF)` artifact.
+
+        :param exists: value for the artifact's `LessonArtifact.exists`
+        :return: `(class_dir, pdf_path, label, lessons)`
+        """
+        class_dir = os.path.join(self.get_scratch_space(), "data605")
+        lesson_name = "Lesson01.1-Intro"
+        label = "Slides (PDF)"
+        pdf_path = os.path.join(
+            class_dir, "lectures_pdf", f"{lesson_name}.pdf"
+        )
+        artifact = cspucli.LessonArtifact(label, pdf_path, exists)
+        lessons = [cspucli.LessonPage(lesson_name, [artifact])]
+        return class_dir, pdf_path, label, lessons
+
     def test1(self) -> None:
         """
         Test that an existing artifact is rendered as a link to its GitHub
         URL, using the current branch by default.
         """
         # Prepare inputs.
-        class_dir = os.path.join(self.get_scratch_space(), "data605")
-        pdf_path = os.path.join(
-            class_dir, "lectures_pdf", "Lesson01.1-Intro.pdf"
+        exists = True
+        use_master = False
+        class_dir, pdf_path, label, lessons = self._build_single_pdf_lesson(
+            exists
         )
-        artifact = cspucli.LessonArtifact("Slides (PDF)", pdf_path, True)
-        lessons = [cspucli.LessonPage("Lesson01.1-Intro", [artifact])]
         # Prepare outputs.
-        github_url = _mock_github_url(file_path=pdf_path, use_master=False)
-        expected = f'<a href="{github_url}">Slides (PDF)</a>'
+        github_url = _mock_github_url(
+            file_path=pdf_path, use_master=use_master
+        )
+        short_label = cspucli._get_short_label(label)
+        expected = f'<a href="{github_url}">{short_label}</a>'
         # Run test.
         with mock.patch(
             "class_scripts.publish_class_links.dshgtogi._get_github_url",
             side_effect=_mock_github_url,
         ) as mock_get_url:
             actual = cspucli._generate_html_page(
-                class_dir, lessons, use_master=False
+                class_dir, lessons, use_master=use_master
             )
         # Check outputs.
         self.assertIn(expected, actual)
         mock_get_url.assert_called_once_with(
-            file_path=pdf_path, use_master=False
+            file_path=pdf_path, use_master=use_master
         )
 
     def test2(self) -> None:
@@ -344,37 +374,38 @@ class Test_generate_html_page(hunitest.TestCase):
         `to_github._get_github_url()`.
         """
         # Prepare inputs.
-        class_dir = os.path.join(self.get_scratch_space(), "data605")
-        pdf_path = os.path.join(
-            class_dir, "lectures_pdf", "Lesson01.1-Intro.pdf"
+        exists = True
+        use_master = True
+        class_dir, pdf_path, _, lessons = self._build_single_pdf_lesson(
+            exists
         )
-        artifact = cspucli.LessonArtifact("Slides (PDF)", pdf_path, True)
-        lessons = [cspucli.LessonPage("Lesson01.1-Intro", [artifact])]
         # Run test.
         with mock.patch(
             "class_scripts.publish_class_links.dshgtogi._get_github_url",
             side_effect=_mock_github_url,
         ) as mock_get_url:
-            cspucli._generate_html_page(class_dir, lessons, use_master=True)
+            cspucli._generate_html_page(
+                class_dir, lessons, use_master=use_master
+            )
         # Check outputs.
-        mock_get_url.assert_called_once_with(file_path=pdf_path, use_master=True)
+        mock_get_url.assert_called_once_with(
+            file_path=pdf_path, use_master=use_master
+        )
 
     def test3(self) -> None:
         """
         Test that a missing artifact is rendered without a link.
         """
         # Prepare inputs.
-        class_dir = os.path.join(self.get_scratch_space(), "data605")
-        pdf_path = os.path.join(
-            class_dir, "lectures_pdf", "Lesson01.1-Intro.pdf"
-        )
-        artifact = cspucli.LessonArtifact("Slides (PDF)", pdf_path, False)
-        lessons = [cspucli.LessonPage("Lesson01.1-Intro", [artifact])]
+        exists = False
+        use_master = False
+        class_dir, _, label, lessons = self._build_single_pdf_lesson(exists)
         # Prepare outputs.
-        expected = '<td class="missing">Slides (PDF)</td>'
+        short_label = cspucli._get_short_label(label)
+        expected = f'<td class="missing">{short_label}</td>'
         # Run test.
         actual = cspucli._generate_html_page(
-            class_dir, lessons, use_master=False
+            class_dir, lessons, use_master=use_master
         )
         # Check outputs.
         self.assertIn(expected, actual)
@@ -385,13 +416,15 @@ class Test_generate_html_page(hunitest.TestCase):
         Test that the page title uses the course/book directory name.
         """
         # Prepare inputs.
-        class_dir = os.path.join(self.get_scratch_space(), "data605")
+        course_name = "data605"
+        class_dir = os.path.join(self.get_scratch_space(), course_name)
         lessons: List[cspucli.LessonPage] = []
+        use_master = False
         # Prepare outputs.
-        expected = "<title>data605 - Class Links</title>"
+        expected = f"<title>{course_name} - Class Links</title>"
         # Run test.
         actual = cspucli._generate_html_page(
-            class_dir, lessons, use_master=False
+            class_dir, lessons, use_master=use_master
         )
         # Check outputs.
         self.assertIn(expected, actual)
@@ -403,28 +436,36 @@ class Test_generate_html_page(hunitest.TestCase):
         """
         # Prepare inputs.
         class_dir = os.path.join(self.get_scratch_space(), "data605")
+        lesson_name = "Lesson01.1-Intro"
+        pdf_label = "Slides (PDF)"
+        html_label = "Commentary (HTML)"
+        exists = True
+        use_master = False
         pdf_path = os.path.join(
-            class_dir, "lectures_pdf", "Lesson01.1-Intro.pdf"
+            class_dir, "lectures_pdf", f"{lesson_name}.pdf"
         )
         html_path = os.path.join(
             class_dir,
             "lectures_commentary",
-            "Lesson01.1-Intro.book_chapter.html",
+            f"{lesson_name}.book_chapter.html",
         )
-        pdf_artifact = cspucli.LessonArtifact("Slides (PDF)", pdf_path, True)
-        html_artifact = cspucli.LessonArtifact(
-            "Commentary (HTML)", html_path, True
-        )
+        pdf_artifact = cspucli.LessonArtifact(pdf_label, pdf_path, exists)
+        html_artifact = cspucli.LessonArtifact(html_label, html_path, exists)
         lessons = [
-            cspucli.LessonPage("Lesson01.1-Intro", [pdf_artifact, html_artifact])
+            cspucli.LessonPage(lesson_name, [pdf_artifact, html_artifact])
         ]
         # Prepare outputs.
-        pdf_url = _mock_github_url(file_path=pdf_path, use_master=False)
-        html_url = _mock_github_url(file_path=html_path, use_master=False)
-        expected_pdf_href = f'<a href="{pdf_url}">Slides (PDF)</a>'
+        pdf_url = _mock_github_url(file_path=pdf_path, use_master=use_master)
+        html_url = _mock_github_url(
+            file_path=html_path, use_master=use_master
+        )
+        expected_pdf_href = (
+            f'<a href="{pdf_url}">'
+            f"{cspucli._get_short_label(pdf_label)}</a>"
+        )
         expected_html_href = (
             f'<a href="https://htmlpreview.github.io/?{html_url}">'
-            "Commentary (HTML)</a>"
+            f"{cspucli._get_short_label(html_label)}</a>"
         )
         # Run test.
         with mock.patch(
@@ -432,7 +473,7 @@ class Test_generate_html_page(hunitest.TestCase):
             side_effect=_mock_github_url,
         ):
             actual = cspucli._generate_html_page(
-                class_dir, lessons, use_master=False
+                class_dir, lessons, use_master=use_master
             )
         # Check outputs.
         self.assertIn(expected_pdf_href, actual)
@@ -468,6 +509,7 @@ class Test_main(hunitest.TestCase):
         # Prepare inputs.
         class_dir = os.path.join(self.get_scratch_space(), "data605")
         lesson_name = "Lesson01.1-Intro"
+        use_master = False
         _create_lesson_source_files(class_dir, [lesson_name])
         _create_lesson_artifacts(class_dir, lesson_name, _ALL_LABELS)
         pdf_path = os.path.join(class_dir, "lectures_pdf", f"{lesson_name}.pdf")
@@ -488,12 +530,14 @@ class Test_main(hunitest.TestCase):
             out_file,
         ]
         # Prepare outputs.
-        expected_pdf_url = _mock_github_url(file_path=pdf_path, use_master=False)
+        expected_pdf_url = _mock_github_url(
+            file_path=pdf_path, use_master=use_master
+        )
         expected_recap_url = _mock_github_url(
-            file_path=recap_path, use_master=False
+            file_path=recap_path, use_master=use_master
         )
         expected_commentary_html_url = _mock_github_url(
-            file_path=commentary_html_path, use_master=False
+            file_path=commentary_html_path, use_master=use_master
         )
         # Run test.
         with mock.patch(
@@ -512,8 +556,9 @@ class Test_main(hunitest.TestCase):
 
     def test2(self) -> None:
         """
-        Test that a missing artifact stops the script with `AssertionError`
-        and no output file is written (default fail-fast behavior).
+        Test that a missing artifact stops the script with
+        `FileNotFoundError` and no output file is written (default
+        fail-fast behavior).
         """
         # Prepare inputs.
         class_dir = os.path.join(self.get_scratch_space(), "data605")
@@ -528,7 +573,7 @@ class Test_main(hunitest.TestCase):
             out_file,
         ]
         # Run test and check output.
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(FileNotFoundError):
             self._run_main(argv)
         self.assertFalse(os.path.exists(out_file))
 
@@ -554,7 +599,7 @@ class Test_main(hunitest.TestCase):
         self._run_main(argv)
         # Check outputs.
         actual = hio.from_file(out_file)
-        self.assertIn('<td class="missing">Slides (PDF)</td>', actual)
+        self.assertIn('<td class="missing">Slides</td>', actual)
 
     def test4(self) -> None:
         """

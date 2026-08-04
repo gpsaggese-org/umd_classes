@@ -35,7 +35,7 @@ slide quality through automated LLM-powered transformations
   - `test/`: unit tests for the scripts in this directory (one `test_<module>.py`
     per source module)
 
-// TODO(ai_gp): Make sure all dirs have this layout
+// TODO(ai_gp2): Make sure all dirs have this layout
 
 ## Description of Files
 - The scripts implement the functionalities from the following class:
@@ -49,34 +49,32 @@ slide quality through automated LLM-powered transformations
 
 - The scripts under `class_scripts` are
 
-// TODO(ai_gp): Put Goal first and order by goal
-
-| Script                              | Goal          | Function                                                             |
-| :---------------------------------- | :------------ | :------------------------------------------------------------------- |
-| `common_utils.py`                   | Utility       | Argument validation, file finding, directory management              |
-| `count_lecture_commentary_pages.py` | Analysis      | Count pages in book PDFs                                             |
-| `count_lecture_slides.py`           | Analysis      | Count slides, headers, lines, words, and characters in source files  |
-| `count_lecture_pages.py`            | Analysis      | Count pages in lecture PDFs                                          |
-| `count_words.py`                    | Analysis      | Count words in lecture scripts                                       |
-| `extract_png_from_pdf.py`           | Processing    | Extract PDF pages as PNG images with customizable DPI                |
-| `fix_bold_in_slides.sh`             | Quality       | Replace `**Tag**` bold labels with `@Tag@` for canonical slide tags  |
-| `gen_lecture_commentary.py`         | Generation    | Generate book chapters from lecture source material                  |
-| `gen_lecture_video_script.py`       | Generation    | Generate lecture scripts from slides with intro/outro sections       |
-| `gen_quizzes.py`                    | Generation    | Generate quizzes (20 MC) or discussion questions (3-6) from lectures |
-| `gen_slides.py`                     | Generation    | Generate lecture slide PDFs from source files                        |
-| `gen_slides_test_utils.py`          | Test          | Helper functions for slide generation testing and validation         |
-| `generate_class_images.py`          | Generation    | Generate images using DALL-E from text prompts                       |
-| `generate_slide_script.py`          | Generation    | Generate lecture scripts from slide content with LLM                 |
-| `get_lecture_file.py`               | Utility       | Find and print path to lecture source file                           |
-| `create_book_toc_from_slides.py`    | Generation    | Extract table of contents from lecture slides                        |
-| `publish_class_links.py`            | Generation    | Generate an HTML page linking to each lesson's slides, commentary, and recap |
-| `for_loop_lessons.py`               | Orchestration | Main orchestrator for processing a set of lectures                   |
-| `for_loop_slides.py`                | Orchestration | Transform slides of a lectures using LLM                             |
-| `process_slides.py`                 | Processing    | Process slides with LLM transformations (reduce, check, improve)     |
-| `slide_check.py`                    | Quality       | Check and fix text in lecture slides (spelling, grammar)             |
-| `slide_improve.py`                  | Quality       | Improve slides using LLM suggestions                                 |
-| `slide_reduce.py`                   | Quality       | Reduce and simplify slides using LLM                                 |
-| `slides_utils.py`                   | Utility       | Extract and process slide content                                    |
+| Goal          | Script                              | Function                                                                     |
+| :------------ | :---------------------------------- | :---------------------------------------------------------------------------- |
+| Analysis      | `count_lecture_commentary_pages.py` | Count pages in book PDFs                                                     |
+| Analysis      | `count_lecture_pages.py`            | Count pages in lecture PDFs                                                  |
+| Analysis      | `count_lecture_slides.py`           | Count slides, headers, lines, words, and characters in source files          |
+| Analysis      | `count_words.py`                    | Count words in lecture scripts                                               |
+| Generation    | `create_book_toc_from_slides.py`    | Extract table of contents from lecture slides                                |
+| Generation    | `gen_lecture_commentary.py`         | Generate book chapters from lecture source material                          |
+| Generation    | `gen_lecture_video_script.py`       | Generate lecture scripts from slides with intro/outro sections               |
+| Generation    | `gen_quizzes.py`                    | Generate quizzes (20 MC) or discussion questions (3-6) from lectures         |
+| Generation    | `gen_slides.py`                     | Generate lecture slide PDFs from source files                                |
+| Generation    | `generate_class_images.py`          | Generate images using DALL-E from text prompts                               |
+| Generation    | `generate_slide_script.py`          | Generate lecture scripts from slide content with LLM                         |
+| Generation    | `publish_class_links.py`            | Generate an HTML page linking to each lesson's slides, commentary, and recap |
+| Quality       | `fix_bold_in_slides.sh`             | Replace `**Tag**` bold labels with `@Tag@` for canonical slide tags          |
+| Quality       | `slide_check.py`                    | Check and fix text in lecture slides (spelling, grammar)                     |
+| Quality       | `slide_improve.py`                  | Improve slides using LLM suggestions                                         |
+| Quality       | `slide_reduce.py`                   | Reduce and simplify slides using LLM                                         |
+| Processing    | `extract_png_from_pdf.py`           | Extract PDF pages as PNG images with customizable DPI                        |
+| Processing    | `process_slides.py`                 | Process slides with LLM transformations (reduce, check, improve)             |
+| Test          | `gen_slides_test_utils.py`          | Helper functions for slide generation testing and validation                 |
+| Utility       | `common_utils.py`                   | Argument validation, file finding, directory management                      |
+| Utility       | `get_lecture_file.py`               | Find and print path to lecture source file                                   |
+| Utility       | `slides_utils.py`                   | Extract and process slide content                                            |
+| Orchestration | `for_loop_lessons.py`               | Main orchestrator for processing a set of lectures                           |
+| Orchestration | `for_loop_slides.py`                | Transform slides of a lectures using LLM                                     |
 
 - The scripts under `helpers_root/dev_scripts_helpers/` used by the scripts in
   `class_scripts` are:
