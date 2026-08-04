@@ -69,6 +69,7 @@ slide quality through automated LLM-powered transformations
 | `generate_slide_script.py`          | Generation    | Generate lecture scripts from slide content with LLM                 |
 | `get_lecture_file.py`               | Utility       | Find and print path to lecture source file                           |
 | `create_book_toc_from_slides.py`    | Generation    | Extract table of contents from lecture slides                        |
+| `publish_class_links.py`            | Generation    | Generate an HTML page linking to each lesson's slides, commentary, and recap |
 | `for_loop_lessons.py`               | Orchestration | Main orchestrator for processing a set of lectures                   |
 | `for_loop_slides.py`                | Orchestration | Transform slides of a lectures using LLM                             |
 | `process_slides.py`                 | Processing    | Process slides with LLM transformations (reduce, check, improve)     |
@@ -77,14 +78,15 @@ slide quality through automated LLM-powered transformations
 | `slide_reduce.py`                   | Quality       | Reduce and simplify slides using LLM                                 |
 | `slides_utils.py`                   | Utility       | Extract and process slide content                                    |
 
-- The scripts under `helpers_root/dev_scripts_helpers/documentation` used by the
-  scripts in `class_scripts` are:
+- The scripts under `helpers_root/dev_scripts_helpers/` used by the scripts in
+  `class_scripts` are:
 
 | Script                | Description                                                            |
 | :-------------------- | :--------------------------------------------------------------------- |
 | `concatenate_pdfs.py` | Combines multiple PDF files into one (creates full book from chapters) |
 | `lint_txt.py`         | Lints and formats text using prettier; used for quiz output            |
 | `notes_to_pdf.py`     | Converts markdown to PDF (slides, documents); used by gen_slides.py    |
+| `to_github.py`        | Converts a local file path to its GitHub URL; used by publish_class_links.py |
 
 ## Script Dependency Hierarchy
 
@@ -118,6 +120,8 @@ slide quality through automated LLM-powered transformations
   - `gen_quizzes.py`
     - `llm_cli.py`
     - `lint_txt.py`
+  - `publish_class_links.py`
+    - `to_github.py`
 
 - **Standalone Analysis/Utility Scripts** (no dependencies on other scripts)
   - `count_lecture_pages.py`
@@ -453,6 +457,37 @@ slide quality through automated LLM-powered transformations
   // msml610/lectures_source/Lesson08.2-Causal_Models.txt
   
   - Introduction (3)
+  ```
+
+## `publish_class_links.py`
+
+### What It Does
+
+- Scans `{DIR}/lectures_source/` for lesson files and generates an HTML page
+  linking each lesson to its generated artifacts:
+  - Slides PDF: `{DIR}/lectures_pdf/{LESSON}.pdf`
+  - Lecture commentary: `{DIR}/lectures_commentary/{LESSON}.book_chapter.html`
+    and `.book_chapter.pdf`
+  - Lesson recap: `{DIR}/lectures_recap/{LESSON}.recap.md`
+- Each existing artifact is linked to its GitHub URL (via `to_github.py`)
+  instead of a local path, so the page works when shared outside a local
+  checkout
+  - `--use_master` links to the `master` branch instead of the current branch
+- By default stops with an error as soon as an artifact is missing
+  - `--do_not_fail_on_warnings` logs missing artifacts as warnings instead and
+    lists the lesson without the missing link
+
+### Examples
+
+- Generate the links page for a class, failing on the first missing artifact:
+  ```bash
+  > publish_class_links.py --dir data605 --out_file data605/class_links.html
+  ```
+
+- Generate the links page while tolerating missing artifacts, linking to
+  `master`:
+  ```bash
+  > publish_class_links.py --dir msml610 --out_file /tmp/links.html --do_not_fail_on_warnings --use_master
   ```
 
 ## `process_slides.py`
@@ -805,6 +840,10 @@ slide quality through automated LLM-powered transformations
   - Can specify multiple: `--action generate_pdf --action generate_script`
 - `--limit`: Optional slide range to process (e.g., '1:3')
   - Only works when processing a single lecture file
+- `--cmd_opts`: Extra options string passed through verbatim to the invoked
+  commands (e.g., `gen_lecture_commentary.py`, `notes_to_pdf.py`,
+  `process_slides.py`), to control their behavior from inside the loop
+  - E.g., `--cmd_opts="--no_incremental --open_pdf"`
 - `--dry_run`: Print commands without executing them
 - `-v/--log_level`: Set logging verbosity (DEBUG, INFO, WARNING, ERROR)
 
@@ -926,6 +965,17 @@ for reading and study.
 - This processes all lecture source files and generates:
   - Markdown book chapter: `<class>/book/Lesson##.#-Topic.book_chapter.md`
   - PDF book chapter: `<class>/book/Lesson##.#-Topic.book_chapter.pdf`
+
+### Generate Commentary for All Lessons, Controlling `gen_lecture_commentary.py` Behavior
+
+- Use `--cmd_opts` to pass extra flags through to the underlying
+  `gen_lecture_commentary.py` invocation for every lesson in the loop, e.g.,
+  force regeneration and open each PDF as it's produced:
+  ```bash
+  > for_loop_lessons.py --class data605 \
+      --action generate_lecture_commentary \
+      --cmd_opts="--no_incremental --image_type jpg"
+  ```
 
 ### Generate Commentary for Pattern-Matched Lessons
 

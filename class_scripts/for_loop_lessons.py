@@ -661,6 +661,15 @@ def _parse() -> argparse.ArgumentParser:
         help="Slide range to process when single lecture specified (e.g., '1:3')",
     )
     parser.add_argument(
+        "--cmd_opts",
+        action="store",
+        help=(
+            "Extra options string passed through verbatim to the invoked "
+            "commands (e.g., gen_lecture_commentary.py), to control their "
+            "behavior from inside the loop"
+        ),
+    )
+    parser.add_argument(
         "--class",
         dest="class_name",
         action="store",
@@ -726,7 +735,12 @@ def _main(parser: argparse.ArgumentParser) -> None:
         files, desc="Processing lectures", unit="file"
     ):
         result = _process_lecture_file(
-            args.class_name, source_path, source_name, actions, limit=args.limit
+            args.class_name,
+            source_path,
+            source_name,
+            actions,
+            limit=args.limit,
+            cmd_opts=args.cmd_opts,
         )
         if "generate_toc" in actions and result is not None:
             toc_results.append(result)
