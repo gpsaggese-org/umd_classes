@@ -6,9 +6,8 @@ authors:
 date: 2026-07-12
 description: "A comprehensive guide to using LLM scripts and decorators for automating code review, refactoring, and transformation tasks."
 categories:
-  - Automation
   - LLM
-  - Development Tools
+  - Developer Tools
 ---
 
 TL;DR: Stop copying code to ChatGPT. Use `llm_cli.py` for text transformation, `llm_transform.py` for code review, `@llm` decorator for typed function stubs, and `lint_cc.py` to batch-apply style rules.

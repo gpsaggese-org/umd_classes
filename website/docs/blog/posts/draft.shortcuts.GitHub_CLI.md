@@ -1,3 +1,14 @@
+---
+title: "GitHub CLI Shortcuts"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-07-15
+description: A guide to useful GitHub CLI commands
+categories:
+  - Developer Tools
+---
+
 # GitHub CLI Shortcuts
 
 A guide to the most useful GitHub CLI commands for managing repositories, issues,
