@@ -21,6 +21,7 @@ import logging
 import class_scripts.common_utils as clcomuut
 import helpers.hdbg as hdbg
 import helpers.hparser as hparser
+import helpers.hprint as hprint
 import helpers.hsystem as hsystem
 
 _LOG = logging.getLogger(__name__)
@@ -72,7 +73,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     if args.extra_opts:
         cmd_parts.extend(args.extra_opts)
     cmd = " ".join(cmd_parts)
-    _LOG.info("Running command: %s", cmd)
+    _LOG.info("%s", hprint.color_highlight(f"> {cmd}", "green"))
     # Execute the command.
     hsystem.system(cmd)
 

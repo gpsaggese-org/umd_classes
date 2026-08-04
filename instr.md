@@ -1,19 +1,35 @@
-In linters2/cc_lint.py 
-
-1) Add a switch --add_todos so that instead of modifying the file
-the action is to add comments in the right place like
+- Create an end-to-end test for notes_to_pdf.py converting this snippet of
+  markdown to typst
+- Reuse the existing functions in the test
 ```
-# TODO(ai_gp): Do this and that (link to the rule)
-
-E.g.,
-# TODO(ai_gp): Do this and that (testing.rules.md:1081:## Use Context Manager Syntax for Multiple Mocks)
+* Bayes' Theorem: Recap
+- @Definition@: **Bayes' theorem** posits that for model parameters $\theta$ and
+  data $X$
+  $$
+  \red{\Pr(\theta | X)}
+  = \frac{\teal{\Pr(X | \theta)} \cdot \blue{\Pr(\theta)}}{\violet{\Pr(X)}}
+  $$
+  where:
+  - $\red{\Pr(\theta | X)}$
+    - **Posterior**: probability for parameters $\theta$ after seeing
+      data $X$
+  - $\teal{\Pr(X | \theta)}$
+    - **Likelihood** (aka "statistical model"): plausibility of data
+      $X$ given parameters $\theta$
+  - $\blue{\Pr(\theta)}$
+    - **Prior**: knowledge about parameter $\theta$ before any data
+  - $\violet{\Pr(X)}$
+    - **Evidence** ("marginal likelihood"): probability of observing data $X$
+    - "Marginal" as it averages over all possible parameter values
+  - In other words:
+    $$
+    \red{Posterior}
+    = \frac{\teal{Likelihood} \cdot \blue{Prior}}{\violet{Evidence}}
+    $$
 ```
 
-2) Rename the current --mode one_shot to --one_shot_with_cc
-
-3) Add another --mode one_shot to make a single call to the PromptSequencer
-   (in practice this is equivalent to the --one_shot_with_cc, but instead of
-   calling cc through a system call, uses the PromptSequencer)
+- Check if this is rendered correctly through the pipeline and if not understand
+  why
 
 # Conventions
 - When writing code you must always follow the instructions in

@@ -22,6 +22,7 @@ from typing import Tuple
 import class_scripts.common_utils as csccouti
 import helpers.hdbg as hdbg
 import helpers.hparser as hparser
+import helpers.hprint as hprint
 import helpers.hsystem as hsystem
 
 _LOG = logging.getLogger(__name__)
@@ -169,7 +170,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     if args.daemon:
         cmd += " --daemon"
     # Execute the command.
-    _LOG.info("Running command: '%s'", cmd)
+    _LOG.info("%s", hprint.color_highlight(f"> {cmd}", "green"))
     hsystem.system(cmd, suppress_output=False)
 
 
