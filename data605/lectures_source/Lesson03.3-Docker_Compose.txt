@@ -34,7 +34,7 @@ UMD DATA605 - Big Data Systems
 :::
 
 * Docker Compose
-- **Manage multi-container apps running on a single node**
+- @Manage multi-container apps running on a single node@
   - Describe app in a single _declarative_ YAML file
     - Avoid long Docker command scripts
   - Compose interacts with Docker API to achieve the requested state
@@ -43,7 +43,7 @@ UMD DATA605 - Big Data Systems
     - Microservices: Web front-end, Ordering, Back-end DB
   - In 2020, Docker Compose became an open standard for "code-to-cloud" process
 
-- **Manage multi-container apps running on multiple hosts**
+- @Manage multi-container apps running on multiple hosts@
   - Docker Stacks / Swarm
   - Kubernetes
 
@@ -53,7 +53,7 @@ UMD DATA605 - Big Data Systems
 - Default name for a Compose file is `docker-compose.yml`
   - Specify `-f` for custom filenames
 
-- **Top-level keys**:
+- @Top-level keys@:
   - `version`:
     - Mandatory first line for API version
     - Use latest version, typically 3 or higher
@@ -65,8 +65,8 @@ UMD DATA605 - Big Data Systems
   - `volumes`:
     - Create new volumes
 
-- **Key in services** describes a "service" in terms of container
-  - **Inner keys** specify Docker run command params
+- @Key in services@ describes a "service" in terms of container
+  - @Inner keys@ specify Docker run command params
 ::::
 ::::{.column width=35%}
 \footnotesize

@@ -199,14 +199,14 @@ class Test__process_slide_with_llm_transform(hunitest.TestCase):
             "helpers.hgit.find_file_in_git_tree",
             return_value=llm_transform_script,
         ):
-            with hunteuti.capture_system_calls() as invocations:
+            with hunteuti.capture_sys_calls() as sys_calls:
                 actual = csprsl._process_slide_with_llm_transform(
                     slide_content, action
                 )
         # Check outputs.
         self.assert_equal(actual, expected_output)
         self.assert_equal(hio.from_file(tmp_in_path), slide_content)
-        actual_str = pprint.pformat(invocations)
+        actual_str = pprint.pformat(sys_calls)
         self.assert_equal(actual_str, expected_str)
 
 
@@ -247,7 +247,7 @@ class Test__process_single_slide(hunitest.TestCase):
             "helpers.hgit.find_file_in_git_tree",
             return_value=llm_transform_script,
         ):
-            with hunteuti.capture_system_calls():
+            with hunteuti.capture_sys_calls():
                 actual = csprsl._process_single_slide(
                     slide_title,
                     slide_content,
@@ -317,7 +317,7 @@ class Test__process_slides(hunitest.TestCase):
             "helpers.hgit.find_file_in_git_tree",
             return_value=llm_transform_script,
         ):
-            with hunteuti.capture_system_calls():
+            with hunteuti.capture_sys_calls():
                 actual = csprsl._process_slides(
                     slides, action, use_llm_transform=True
                 )
@@ -349,7 +349,7 @@ class Test__process_slides(hunitest.TestCase):
             "helpers.hgit.find_file_in_git_tree",
             return_value=llm_transform_script,
         ):
-            with hunteuti.capture_system_calls():
+            with hunteuti.capture_sys_calls():
                 actual = csprsl._process_slides(
                     slides,
                     action,
@@ -475,7 +475,7 @@ class Test_main(hunitest.TestCase):
             "helpers.hgit.find_file_in_git_tree",
             return_value=llm_transform_script,
         ):
-            with hunteuti.capture_system_calls():
+            with hunteuti.capture_sys_calls():
                 with mock.patch("sys.argv", arg_list):
                     csprsl._main(csprsl._parse())
         # Check outputs.

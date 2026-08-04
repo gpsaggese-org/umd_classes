@@ -244,7 +244,7 @@ def _parse() -> argparse.ArgumentParser:
     Parse command line arguments.
     """
     parser = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.RawTextHelpFormatter
+        description=__doc__, formatter_class=hparser.CustomHelpFormatter
     )
     parser.add_argument(
         "--in_file",

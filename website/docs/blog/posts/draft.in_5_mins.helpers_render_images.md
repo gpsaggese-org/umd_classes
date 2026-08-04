@@ -7,7 +7,6 @@ date: 2026-06-13
 categories:
     - Python
     - Developer Tools
-    - Documentation
 ---
 
 TL;DR: `render_images.py` converts diagram code blocks (PlantUML, Mermaid, TikZ,

@@ -172,8 +172,11 @@
 | msml610/lectures_source/Lesson08.3-Causal_AI_in_business.txt               | yes   | 80%          | 80%          |           |                  |                   |
 | msml610/lectures_source/Lesson08.4-Causal_networks.txt                     | yes   | 80%          | 80%          |           |                  |                   |
 | msml610/lectures_source/Lesson08.5-Do_calculus.txt                         | yes   | 70%          | 70%          |           |                  |                   |
-| msml610/lectures_source/Lesson08.6-Causal_inference.txt                    | .     |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson08.7-Causal_experiments.txt                  |       |              |              |           |                  |                   |
+| msml610/lectures_source/Lesson08.6-Causal_inference.txt                    | yes   | 70%          | 70%          |           |                  |                   |
+| msml610/lectures_source/Lesson08.7-Causal_experiments.txt                  | yes   | 70%          | 70%          |           |                  |                   |
+| msml610/lectures_source/Lesson08.8.Causal_Linear_Regression.txt            | yes   | 70%          | 70%          |           |                  |                   |
+| msml610/lectures_source/Lesson08.9-Effect_heterogeneity_and_Metalearners.txt | yes   | 70%          | 70%          |           |                  |                   |
+| msml610/lectures_source/Lesson08.X-Causal_inference.txt                    |       |              |              |           |                  |
 | msml610/lectures_source/Lesson09.1-Reasoning_over_time.txt                 |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson09.2-Hidden_Markov_Models.txt                |       |              |              |           |                  |                   |
 | msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt                 |       |              |              |           |                  |                   |
@@ -193,7 +196,7 @@
 - [ ] `/slides.lint_incrementally`
 - [ ] `/slides.add_bold_and_italic`
 
-## Book.springer Tutorials
+## `book_springer` Tutorials
 
 > find book_springer/tutorials -name *.ipynb
 ```

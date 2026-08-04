@@ -24,23 +24,23 @@ UMD DATA605: Big Data Systems
 **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
 * Invariants of a Class Lecture
-- **Invariants of a class lecture**
+- @Invariants of a class lecture@
   - Focus on intuition
   - Interactive Jupyter notebook tutorials
     - Tutorials done at home
     - Videos added over time
 
-- **Class flow**
+- @Class flow@
   - Alternate between slides, whiteboard, tutorials
 
-- **Labs**
+- @Labs@
   - Review complete class project examples
   - Collaborate on class project
 
 * Books of the Class
 ::: columns
 :::: {.column width=50%}
-- **Slides**
+- @Slides@
   - Are extracted from books, technical articles, Internet
   - Aim to be self-sufficient
 
@@ -58,18 +58,18 @@ UMD DATA605: Big Data Systems
 * Learning Outcomes
 ::: columns
 :::: {.column width=65%}
-- **Model and reason about data**
-- **Process and manipulate data**
+- @Model and reason about data@
+- @Process and manipulate data@
   - E.g., Python, Pandas
-- **Introduce a variety of data models**
+- @Introduce a variety of data models@
   - E.g., relational, NoSQL, graph DBs
   - Decide appropriate data model for different applications
-- **Use data management systems**
+- @Use data management systems@
   - E.g., PostgreSQL, MongoDB, HBase
   - Decide appropriate system for scenarios
-- **Build data processing pipelines**
+- @Build data processing pipelines@
   - E.g., Docker, Airflow
-- **Build a big-data system end-to-end**
+- @Build a big-data system end-to-end@
   - Class project
   - Contribute to an open-source project
 ::::
@@ -88,17 +88,17 @@ UMD DATA605: Big Data Systems
 :::
 
 * Tools We Will Learn To Use
-- **Programming languages**
+- @Programming languages@
   - Python
 
-- **Development tools**
+- @Development tools@
   - Bash/Linux OS
   - Git: data model, branching
   - GitHub: Pull Requests (PR), issues
   - Jupyter notebooks
   - Docker
 
-- **Big data tools**
+- @Big data tools@
   - Extract-Transform-Load (ETL) pipelines
   - Relational DBs (PostgreSQL)
   - NoSQL DBs (HBase, MongoDB, Couchbase, Redis)
@@ -107,7 +107,7 @@ UMD DATA605: Big Data Systems
   - Workflow manager (Airflow)
   - Cloud services (AWS)
 
-- **Tutorials** for tools used in the class projects
+- @Tutorials@ for tools used in the class projects
 
 * Todos
 - Study slides and materials
@@ -128,24 +128,24 @@ UMD DATA605: Big Data Systems
   - Still attend class, when possible
 
 * Grading
-- **Quizzes**
+- @Quizzes@
   - 40% of grade
   - Multi-choice on previous 2 lessons
   - 20 questions in 20 minutes
   - 4-5 quizzes to encourage study during semester
 
-- **Final Project**
+- @Final Project@
   - 60% of grade
   - Comprehensive application of course concepts
   - Big data project in Python from a list of topics
   - Individual or group
 
 * Class Projects
-- **Project** is _"Build $X$ with $Y$"_, where
+- @Project@ is _"Build $X$ with $Y$"_, where
   - $X$ is a "use case"
   - $Y$ is a "technology"
 
-- **Activities**
+- @Activities@
   - Study and describe technology $Y$
   - Implement use case $X$ using technology $Y$
   - Create Jupyter notebooks to demo your project
@@ -154,17 +154,17 @@ UMD DATA605: Big Data Systems
   - Present your project in a video
   - In-class labs + reviews
 
-- **You choose from list** of $X$ and $Y$, e.g.,
+- @You choose from list@ of $X$ and $Y$, e.g.,
   - Data engineering
   - Emerging technologies (e.g., large language models)
   - ...
 
-- **Each project**:
+- @Each project@:
   - Individual or group ($n < 4$)
   - Varying difficulty levels
 
 * Soft Skills to Succeed in the Workplace
-- **Goal**: model class project for workplace preparation
+- @Goal@: model class project for workplace preparation
   - Work in a team
   - Design software architecture (OOP, Agile, Design Patterns)
   - Comment your code
@@ -182,14 +182,14 @@ UMD DATA605: Big Data Systems
 ::: columns
 :::: {.column width=65%}
 
-- **GP Saggese**
+- @GP Saggese@
   - 2001-2006, PhD / Postdoc at the University of Illinois at Urbana-Champaign
   - [LinkedIn](https://www.linkedin.com/in/gpsaggese/)
   - [gsaggese@umd.edu](gsaggese@umd.edu)
-- **University of Maryland**:
+- @University of Maryland@:
   - 2023-, Lecturer for UMD DATA605: Big Data Systems
   - 2025-, Lecturer for UMD MSML610: Advanced Machine Learning
-- **In the real-world**
+- @In the real-world@
   - Research scientist at NVIDIA, Synopys, Teza, Engineers' Gate
   - 3x AI and fin-tech startup founder (ZeroSoft, June, Causify AI)
   - 20+ academic papers, 2 US patents

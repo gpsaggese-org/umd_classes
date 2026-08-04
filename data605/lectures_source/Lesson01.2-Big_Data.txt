@@ -24,18 +24,18 @@ UMD DATA605: Big Data Systems
 **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
 * Data Science
-- **Promises of data science**
+- @Promises of data science@
   - Give a competitive advantages
   - Make better strategic and tactical business decisions
   - Optimize business processes
 
-- **Data science is not new**, it was called:
+- @Data science is not new@, it was called:
   - Operation research (~1970-80s)
   - Decision support, business intelligence (~1990s)
   - Predictive analytics (Early 2010s)
   - ...
 
-- **What has changed**
+- @What has changed@
   - Now learning and applying data science is _easy_
     - No need for hiring a consulting company
   - Tools are _open-source_
@@ -47,7 +47,7 @@ UMD DATA605: Big Data Systems
 * Motivation: Data Overload
 - _"Data science is the number one catalyst for economic growth"_
   (McKinsey, 2013)
-- **Explosion of data in every domain**
+- @Explosion of data in every domain@
   - Sensing devices/networks monitor processes 24/7
     - E.g., temperature of your room, your vital signs, pollution in the air
   - Sophisticated smart-phones
@@ -57,36 +57,36 @@ UMD DATA605: Big Data Systems
     - E.g., power supply, toasters
   - Datafication turns all aspects of life into data
     - E.g., what you like/enjoy turned into a stream of your "likes"
-- **Challenges**
+- @Challenges@
   - How to handle the increasing amount data?
   - How to extract actionable insights and scientific knowledge from data?
 
 * Scale of Data Size
 ::: columns
 :::: {.column width=45%}
-- **Megabyte** = $2^{20} \approx 10^6$ bytes
+- @Megabyte@ = $2^{20} \approx 10^6$ bytes
   - Typical English book
-- **Gigabyte** = $2^{30}$ bytes = 1,000 MB
+- @Gigabyte@ = $2^{30}$ bytes = 1,000 MB
   - 1/2 hour of video
   - Wikipedia (compressed, no media) is 22GB
-- **Terabyte** = 1 million MB
+- @Terabyte@ = 1 million MB
   - Human genome: ~1 TB
   - 100,000 photos
   - \$50 for 1TB HDD, \$23/mo on AWS S3
-- **Petabyte** = 1000 TB
+- @Petabyte@ = 1000 TB
   - 13 years of HD video
   - \$250k/year on AWS S3
 ::::
 :::: {.column width=50%}
-- **Exabyte** = 1M TB
+- @Exabyte@ = 1M TB
   - Global yearly Internet traffic in 2004
-- **Zettabyte** = 1B TB = $10^{21}$ bytes
+- @Zettabyte@ = 1B TB = $10^{21}$ bytes
   - Global yearly Internet traffic in 2016
   - Fill 20% of Manhattan, New York with data centers
-- **Yottabytes** = $10^{24}$ bytes
+- @Yottabytes@ = $10^{24}$ bytes
   - Yottabyte costs \$100T
   - Fill Delaware and Rhode Island with a million data centers
-- **Brontobytes** = $10^{27}$ bytes
+- @Brontobytes@ = $10^{27}$ bytes
 ::::
 :::
 * Constants Everybody Should Know
@@ -103,14 +103,14 @@ UMD DATA605: Big Data Systems
 ![](data605/lectures_source/images/lecture_1/lec_1_slide_14_image_1.png)
 
 * Big Data Applications: Marketing
-- **Personalized marketing**
+- @Personalized marketing@
   - Target each consumer individually
   - E.g., Amazon personalizes suggestions using:
     - Shopping history
     - Search, click, browse activity
     - Other consumers and trends
     - Reviews (NLP and sentiment analysis)
-- **Brands want to understand customer-product relationships**
+- @Brands want to understand customer-product relationships@
   - Use sentiment analysis from:
     - Social media, online reviews, blogs, surveys
   - Positive, negative, neutral sentiment
@@ -120,11 +120,11 @@ UMD DATA605: Big Data Systems
 * Big Data Applications: Advertisement
 ::: columns
 :::: {.column width=50%}
-- **Mobile advertisement**
+- @Mobile advertisement@
   - Mobile phones are ubiquitous
   - 80% of world population has one
   - 6.5 billion smartphones
-- **Integrate online and offline databases**, e.g.,
+- @Integrate online and offline databases@, e.g.,
   - GPS location
   - Search history
   - Credit card transactions
@@ -142,22 +142,22 @@ UMD DATA605: Big Data Systems
   - _"I feel like Google is following me"_
 
 * Big Data Applications: Medicine
-- **Personalized medicine**
+- @Personalized medicine@
   - Patients receive treatment tailored to them for efficacy
   - Genetics
   - Daily activities
   - Environment
   - Habits
-- **Biomedical data**
-- **Genome sequencing**
-- **Health tech**
+- @Biomedical data@
+- @Genome sequencing@
+- @Health tech@
   - Personal health trackers (e.g., smart rings, phones)
 
 * Big Data Applications: Smart Cities
-- **Smart cities**
+- @Smart cities@
   - Interconnected mesh of sensors
   - E.g., traffic sensors, camera networks, satellites
-- **Goals**
+- @Goals@
   - Monitor air pollution
   - Minimize traffic congestion
   - Optimal urban services
@@ -166,13 +166,13 @@ UMD DATA605: Big Data Systems
 * Goal of Data Science
 ::: columns
 :::: {.column width=50%}
-- **Goal**: from data to wisdom
+- @Goal@: from data to wisdom
   - Data (raw bytes)
   - Information (organized, structured)
   - Knowledge (learning)
   - Wisdom (understanding)
-- **Insights enable decisions and actions**
-- Combine streams of big data to **generate new data**
+- @Insights enable decisions and actions@
+- Combine streams of big data to @generate new data@
   - New data can be "big data" itself
 ::::
 :::: {.column width=45%}
@@ -185,18 +185,18 @@ UMD DATA605: Big Data Systems
 
 ::: columns
 :::: {.column width=50%}
-- **Volume**
+- @Volume@
   - Vast amount of data is generated
-- **Variety**
+- @Variety@
   - Different forms
-- **Velocity**
+- @Velocity@
   - Speed of data generation
-- **Veracity**
+- @Veracity@
   - Biases, noise, abnormality in data
   - Uncertainty, trustworthiness
-- **Valence**
+- @Valence@
   - Connectedness of data in the form of graphs
-- **Value**
+- @Value@
   - Data must be valuable
   - Benefit an organization
 ::::
@@ -206,7 +206,7 @@ UMD DATA605: Big Data Systems
 :::
 
 * The Six V's of Big Data
-- **Volume**
+- @Volume@
   - Exponentially increasing data
   - 2.5 exabytes (1m TB) generated daily
     - 90% of data generated in last 2 years
@@ -216,7 +216,7 @@ UMD DATA605: Big Data Systems
   - Meta: 4PB data/day (2022)
   - Walmart: 2.5PB unstructured data/hour (2022)
 
-- **Variety**
+- @Variety@
   - Different data forms
     - Structured (e.g., spreadsheets, relational data)
     - Semi-structured (e.g., text, sales receipts, class notes)
@@ -224,13 +224,13 @@ UMD DATA605: Big Data Systems
   - Different formats (e.g., binary, CSV, XML, JSON)
 
 * The Six V's of Big Data
-- **Velocity**
+- @Velocity@
   - Speed of data generation
     - E.g., sensors generate data streams
   - Process data off-line or in real-time
   - Real-time analytics: consume data as fast as generated
 
-- **Veracity**
+- @Veracity@
   - Relates to data quality
   - How to remove noise and bad data?
   - How to fill in missing values?
@@ -241,41 +241,41 @@ UMD DATA605: Big Data Systems
 ::: columns
 :::: {.column width=40%}
 - Distinguish Big Data by source
-  - **Machines**
-  - **People**
-  - **Organizations**
+  - @Machines@
+  - @People@
+  - @Organizations@
 ::::
 :::: {.column width=55%}
 ![](data605/lectures_source/images/lecture_1/lec_1_slide_24_image_1.png)
 ::::
 :::
 * Sources of Big Data: Machines
-- **Machines generate data**
+- @Machines generate data@
   - Real-time sensors (e.g., sensors on Boeing 787)
   - Cars
   - Website tracking
   - Personal health trackers
   - Scientific experiments
-- **Pros**
+- @Pros@
   - Highly structured
-- **Cons**
+- @Cons@
   - Difficult to move, computed in-place or centralized
   - Streaming, not batch
 
 * Sources of Big Data: People
 ::: columns
 :::: {.column width=60%}
-- **People and their activities generate data**
+- @People and their activities generate data@
   - Social media (Instagram, Twitter, LinkedIn)
   - Video sharing (YouTube, TikTok)
   - Blogging, website comments
   - Internet searches
   - Text messages (SMS, Whatsapp, Signal, Telegram)
   - Personal documents (Google Docs, emails)
-- **Pros**
+- @Pros@
   - Enable personalization
   - Valuable for business intelligence
-- **Cons**
+- @Cons@
   - Semi-structured or unstructured data
     - Text, images, movies
   - Requires investment to extract value
@@ -289,16 +289,16 @@ UMD DATA605: Big Data Systems
 :::
 
 * Sources of Big Data: Organizations
-- **Organizations generate data**
+- @Organizations generate data@
   - Commercial transactions
   - Credit cards
   - E-commerce
   - Banking
   - Medical records
   - Website clicks
-- **Pros**
+- @Pros@
   - Highly structured
-- **Cons**
+- @Cons@
   - Store every event to predict future
     - Miss opportunities
   - Stored in "data silos" with different models
