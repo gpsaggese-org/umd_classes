@@ -48,14 +48,14 @@ UMD DATA605 - Big Data Systems
 :::
 
 * Data as a Product
-- **Many services today "sell" data**
+- @Many services today "sell" data@
   - Services are typically powered by data and machine learning, e.g.,
     - Personalized search engine (Google)
     - Sentiment analysis on user-generated data (Facebook)
     - E-commerce + recommendation engine (Amazon)
     - Streaming data (Netflix, Spotify)
 
-- **Several steps are required to generate data products**
+- @Several steps are required to generate data products@
   - Data ingestion
   - Data pre-processing
     - Cleaning, tokenization, feature computation
@@ -76,9 +76,9 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=55%}
 
-- **Data pipelines**
+- @Data pipelines@
   - Processes that move and transform data
-  - **Goal**: derive new value from data through analytics, reporting, machine
+  - @Goal@: derive new value from data through analytics, reporting, machine
     learning
 
 ::::
@@ -91,33 +91,33 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Data needs to be**:
+- @Data needs to be@:
   - Collected
   - Pre-processed / cleaned
   - Validated
   - Processed
   - Combined
 
-- **Data ingestion**
+- @Data ingestion@
   - Simplest data pipeline
   - Extract data (e.g., from REST API)
   - Load data into DB (e.g., SQL table)
 
 * Roles in Building Data Pipelines
-- **Data engineers**
+- @Data engineers@
   - Build and maintain data pipelines
   - Tools:
     - Python / Java / Go / No-code
     - SQL / NoSQL stores
     - Hadoop / MapReduce / Spark
     - Cloud computing
-- **Data scientists**
+- @Data scientists@
   - Build predictive models
   - Tools:
     - Python / R / Julia
     - Hadoop / MapReduce / Spark
     - Cloud computing
-- **Data analysts**
+- @Data analysts@
   - E.g., marketing, MBAs, sales, ...
   - Build metrics and dashboards
   - Tools:
@@ -127,32 +127,32 @@ UMD DATA605 - Big Data Systems
 
 * Practical problems in Data Pipeline Organization
 
-- **Who is responsible for the data?**
+- @Who is responsible for the data?@
 
-- **Issues with scaling**
+- @Issues with scaling@
   - Performance
   - Memory
   - Disk
 
-- **Build-vs-buy**
+- @Build-vs-buy@
   - Which tools?
   - Open-source vs proprietary?
 
-- **Architecture**
+- @Architecture@
   - Who is in charge of it?
   - Conventions
   - Documentation
 
-- **Service level agreement (SLA)**
+- @Service level agreement (SLA)@
 
-- **Talk to stakeholders on a regular basis**
+- @Talk to stakeholders on a regular basis@
 
 * Data Ingestion
 ::: columns
 :::: {.column width=55%}
-- **Data ingestion**
+- @Data ingestion@
   - = extract data from one source and load it into another store
-- **Data sources / sinks**
+- @Data sources / sinks@
   - DBs
     - E.g., Postgres, MongoDB
   - REST API
@@ -161,7 +161,7 @@ UMD DATA605 - Big Data Systems
     - E.g., CSV files, Parquet files
   - Data warehouses
   - Data lakes
-- **Source ownership**
+- @Source ownership@
   - An organization can use 10-1000s of data sources
   - Internal
     - E.g., DB storing shopping carts for a e-commerce site
@@ -178,14 +178,14 @@ UMD DATA605 - Big Data Systems
 * Data Pipeline Paradigms
 ::: columns
 :::: {.column width=55%}
-- There are **several styles of building data pipelines**
+- There are @several styles of building data pipelines@
 
-- **Multiple phases**
+- @Multiple phases@
   - Extract
   - Load
   - Transform
 
-- **Phases arranged in different ways** depending on philosophy about data /
+- @Phases arranged in different ways@ depending on philosophy about data /
   roles
   - ETL
   - ELT
@@ -199,33 +199,33 @@ UMD DATA605 - Big Data Systems
 :::
 
 * ETL Paradigm: Phases
-- **Extract**
+- @Extract@
   - Gather data from various data sources, e.g.,
     - Internal / external data warehouse
     - REST API
     - Data downloading from API
     - Web scraping
 
-- **Transform**
+- @Transform@
   - Raw data is combined and formatted to become useful for analysis step
 
-- **Load**
+- @Load@
   - Move data into the final destination, e.g.,
     - Data warehouse
     - Data lake
 
-- **Data ingestion pipeline = E + L**
+- @Data ingestion pipeline = E + L@
   - Move data from one point to another
   - Format the data
   - Make a copy
   - Have different tools to operate on the data
 
 * ETL Paradigm: Example
-- **Extract**
+- @Extract@
   - Buy-vs-build data ingestion tools
     - Vendor lock-in
 
-- **Transform**
+- @Transform@
   - Data conversion (e.g., parsing timestamp)
   - Create new columns from multiple source columns
     - E.g., year, month, day $\to$ `yyyy/mm/dd`
@@ -233,15 +233,15 @@ UMD DATA605 - Big Data Systems
     - Try not to filter, better to add tags / mark data
   - Anonymize data
 
-- **Load**
+- @Load@
   - Organize data in a format optimized for data analysis
     - E.g., load data in relational DB
   - Finally data modeling
 
 * Workflow Orchestration
-- Companies have **many data pipelines** (10-1000s) 
+- Companies have @many data pipelines@ (10-1000s) 
 
-- **Orchestration tools**, e.g.,
+- @Orchestration tools@, e.g.,
   - Apache Airflow (from AirBnB)
   - Luigi (from Spotify)
   - AWS Glue
@@ -250,7 +250,7 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=65%}
 
-- **Schedule and manage** flow of tasks according to their dependencies
+- @Schedule and manage@ flow of tasks according to their dependencies
   - Pipeline and jobs are represented through DAGs
 
 - Monitor, retry, and send alarms
@@ -265,18 +265,18 @@ UMD DATA605 - Big Data Systems
 :::
 
 * ELT Paradigm
-- **ETL** has been the standard approach for long time
+- @ETL@ has been the standard approach for long time
   - Extract $\to$ Transform $\to$ Load
-  - **Cons**
+  - @Cons@
     - Need to understand the data at ingestion time
     - Need to know how the data will be used
 
 ::: columns
 :::: {.column width=55%}
 
-- Today **ELT** is becoming the pattern of choice
+- Today @ELT@ is becoming the pattern of choice
   - Extract $\to$ Load $\to$ Transform
-  - **Pro**:
+  - @Pro@:
     - No need to know how the data will be used
     - Separate data engineers and data scientists / analysts
     - Data engineers focus on data ingestion (E + L)
@@ -290,7 +290,7 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- ETL $\to$ ELT **enabled by new technologies**
+- ETL $\to$ ELT @enabled by new technologies@
   - Large storage to save all the raw data (cloud computing)
   - Distributed data storage and querying (e.g., HDFS)
   - Columnar DBs
@@ -299,7 +299,7 @@ UMD DATA605 - Big Data Systems
 * Row-based vs Columnar DBs
 ::: columns
 :::: {.column width=45%}
-- **Row-based DBs**
+- @Row-based DBs@
   - E.g., MySQL, Postgres
   - Optimized for reading / writing rows
   - Read / write small amounts of data frequently
@@ -315,7 +315,7 @@ UMD DATA605 - Big Data Systems
 
 ::: columns
 :::: {.column width=45%}
-- **Columnar DBs**
+- @Columnar DBs@
   - E.g., Amazon Redshift, Snowflake
   - Read / write large amounts of data infrequently
   - Analytics requires a few columns
@@ -328,14 +328,14 @@ UMD DATA605 - Big Data Systems
 :::
 
 * EtLT
-- **ETL**
+- @ETL@
   - Extract $\to$ Transform $\to$ Load
 
-- **ELT**
+- @ELT@
   - Extract $\to$ Load $\to$ Transform
   - Transformation / data modeling ("T") according to business logic
 
-- **EtLT**
+- @EtLT@
   - Sometimes transformations with limited scope ("t") are needed
     - De-duplicate records
     - Parse URLs into individual components
@@ -345,20 +345,20 @@ UMD DATA605 - Big Data Systems
 * Structure in Data (or Lack Thereof)
 ::: columns
 :::: {.column width=55%}
-- **Structured data**: there is a schema
+- @Structured data@: there is a schema
   - Relational DB
   - CSV
   - DataFrame
   - Parquet
 
-- **Semi-structured**: subsets of data have different schema
+- @Semi-structured@: subsets of data have different schema
   - Logs
   - HTML pages
   - XML
   - Nested JSON
   - NoSQL data
 
-- **Unstructured**: no schema
+- @Unstructured@: no schema
   - Text
   - Pictures
   - Movies
@@ -373,7 +373,7 @@ UMD DATA605 - Big Data Systems
 * Data Cleaning
 ::: columns
 :::: {.column width=55%}
-- **Data cleanliness**
+- @Data cleanliness@
   - Quality of source data varies greatly
   - Data is typically messy
     - Duplicated records
@@ -381,13 +381,13 @@ UMD DATA605 - Big Data Systems
     - Inconsistent formats (e.g., phone with / without dashes)
     - Mislabeled or unlabeled data
 
-- **When to clean it?**
+- @When to clean it?@
   - As soon as possible!
   - As late as possible!
   - In different stages
   - $\to$ Pipeline style: ETL vs ELT vs EtLT
 
-- **Heuristics when dealing with data**
+- @Heuristics when dealing with data@
   - Hope for the best, assume the worst
   - Validate data early and often
   - Don't trust anything
@@ -403,11 +403,11 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=75%}
 - There are two classes of data workloads
-- **OLTP**
+- @OLTP@
   - On-Line Transactional Processing
   - Execute large numbers of transactions by a large number of processes in
     real-time
-  - **Lots of concurrent small read / write transactions**
+  - @Lots of concurrent small read / write transactions@
   - E.g., online banking, e-commerce, travel reservations
 ::::
 :::: {.column width=20%}
@@ -419,10 +419,10 @@ UMD DATA605 - Big Data Systems
 
 ::: columns
 :::: {.column width=75%}
-- **OLAP**
+- @OLAP@
   - On-Line Analytical Processing
   - Perform multi-dimensional analysis on large volumes of data
-  - **Few large read or write transactions**
+  - @Few large read or write transactions@
   - E.g., data mining, business intelligence
 ::::
 :::: {.column width=20%}
@@ -451,7 +451,7 @@ UMD DATA605 - Big Data Systems
 * Data Warehouse vs Data Lake
 ::: columns
 :::: {.column width=55%}
-- **Data warehouse**
+- @Data warehouse@
   - = DB storing data from different systems in a structured way
   - Corresponds to ETL data pipeline style
   - E.g., a large Postgres instance with many DBs and tables
@@ -470,7 +470,7 @@ UMD DATA605 - Big Data Systems
 
 ::: columns
 :::: {.column width=55%}
-- **Data lake**
+- @Data lake@
   - Data stored semi-structured or unstructured
   - Corresponds to ELT data pipeline style
   - E.g., AWS S3 bucket storing blog posts, flat files, JSON objects, images
@@ -483,10 +483,10 @@ UMD DATA605 - Big Data Systems
 :::
 
 * Data Lake: Pros and Cons
-- **Data lake**
+- @Data lake@
   - Stores semi-structured or unstructured data
 
-- **Pros**
+- @Pros@
   - Cheaper cloud storage
   - Easier changes to types or properties
     - E.g., JSON documents
@@ -494,30 +494,30 @@ UMD DATA605 - Big Data Systems
     - Initially unsure how to access and use data
     - Want to explore raw data
 
-- **Cons**
+- @Cons@
   - Not optimized for querying like structured data warehouse
     - Tools query data lake similar to SQL
     - E.g., AWS Athena, Redshift Spectrum
 
 * Advantages of Cloud Computing
-- **Ease of building and deploying:**
+- @Ease of building and deploying:@
   - Data pipelines
   - Data warehouses
   - Data lakes
 
-- **Managed services**
+- @Managed services@
   - No need for admin and deploy
   - Highly scalable DBs
     - E.g., Amazon Redshift, Google BigQuery, Snowflake
 
-- **Rent-vs-buy**
+- @Rent-vs-buy@
   - Easy to scale up and out
   - Easy to upgrade
   - Better cash-flow
 
-- **Cost of storage and compute is continuously dropping**
+- @Cost of storage and compute is continuously dropping@
   - Economies of scale
 
-- **Cons**
+- @Cons@
   - The flexibility has a cost (2x-3x more expensive than owning)
   - Vendor lock-in

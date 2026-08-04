@@ -24,15 +24,15 @@ UMD DATA605: Big Data Systems
 **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
 * Data Models
-- **Data modeling**
+- @Data modeling@
   - Represents and captures structure and properties of real-world entities
-  - Abstraction: real-world $\to$ **representation**
+  - Abstraction: real-world $\to$ @representation@
 
-- **Data model**
+- @Data model@
   - Describes how data is _represented_ (e.g., relational, key-value) and _accessed_ (e.g., insert operations, query)
   - Schema in a DB describes a specific data collection using a data model
 
-- **Why need data model?**
+- @Why need data model?@
   - Know data structure to write general-purpose code
   - Share data across programs, organizations, systems
   - Integrate information from multiple sources
@@ -42,15 +42,15 @@ UMD DATA605: Big Data Systems
 ::: columns
 :::: {.column width=50%}
 
-- **Physical layer**
+- @Physical layer@
   - How is the data physically stored
   - How to represent complex data structures (e.g., B-trees for indexing)
-- **Logical layer**
+- @Logical layer@
   - Entities
   - Attributes
   - Type of information stored
   - Relationships among the above
-- **Views**
+- @Views@
   - Restrict information flow
   - Security and/or ease-of-use
 
@@ -67,18 +67,18 @@ UMD DATA605: Big Data Systems
 ::: columns
 :::: {.column width=50%}
 
-- **Modeling constructs**
+- @Modeling constructs@
   - Concepts to represent data structure
   - E.g.,
     - Entity types
     - Entity attributes
     - Relationships between entities
     - Relationships between attributes
-- **Integrity constraints**
+- @Integrity constraints@
   - Ensure data integrity
     - Avoid errors and inconsistencies
     - E.g., field can't be empty, must be an integer
-- **Manipulation constructs**
+- @Manipulation constructs@
   - E.g., insert, update, delete data
 
 ::::
@@ -90,11 +90,11 @@ UMD DATA605: Big Data Systems
 :::
 
 * Data Independence
-- **Logical data independence**
+- @Logical data independence@
   - Change data representation without altering programs
   - E.g., API abstracting backend
 
-- **Physical data independence**
+- @Physical data independence@
   - Change data layout on disk without altering programs
     - Index data
     - Partition/distribute/replicate data
@@ -102,7 +102,7 @@ UMD DATA605: Big Data Systems
     - Sort data
 
 * Examples of Data Models
-- **Some examples of data models**
+- @Some examples of data models@
   - Relational model (SQL)
   - Entity-relationship (ER) model
   - XML
@@ -110,7 +110,7 @@ UMD DATA605: Big Data Systems
   - Object-relational
   - RDF
   - Property graph
-- **Serialization formats** as data models
+- @Serialization formats@ as data models
   - CSV
   - Parquet
   - JSON
@@ -119,44 +119,44 @@ UMD DATA605: Big Data Systems
   - Python Pickle
 
 * Good Data Models
-- **Good data model** should be:
+- @Good data model@ should be:
   - Expressive
     - Capture real-world data
   - Easy to use
   - Perform well
 
-- **Trade-off between characteristics**
+- @Trade-off between characteristics@
   - E.g., more powerful models
     - Represent more datasets
     - Harder to use/query
     - Less efficient (e.g., more memory, time)
 
-- **Evolution of data models** captures data structure
+- @Evolution of data models@ captures data structure
   - Structured data $\to$ Relational DBs
   - Semi-structured web data $\to$ XML, JSON
   - Unstructured data $\to$ NoSQL DBs
 
 * A Brief History of Databases (Early 1960s)
-- **1960s: Early beginning**
+- @1960s: Early beginning@
   - Computers become attractive technology
   - Enterprises adopt computers
   - Applications use own data stores
     - Each application has its own format
     - Data unavailable to other programs
 
-- **Database**: term for "shared data banks" by multiple applications
+- @Database@: term for "shared data banks" by multiple applications
   - Define data format
   - Store as "data dictionary" (schema)
   - Implement "database management" software to access data
 
-- **Issues**
+- @Issues@
   - How to write data dictionaries?
   - How to access data?
   - Who controls the data?
     - E.g., integrity, security, privacy concerns
 
 * A Brief History of Databases (1960s)
-- **1960s, Hierarchical and Network Model**
+- @1960s, Hierarchical and Network Model@
   - Connect records of different types
   - Example: connect accounts with customers
   - Network model aimed for generality and flexibility
@@ -167,7 +167,7 @@ UMD DATA605: Big Data Systems
   - Used by over 95% of top Fortune 1000 companies
   - Processes 50 billion transactions daily, manages 15 million GBs of data
 
-- **Cons**
+- @Cons@
   - Exposed too much internal data (structures/pointers)
   - Leaky abstraction
 
@@ -175,13 +175,13 @@ UMD DATA605: Big Data Systems
 
 ::: columns
 :::: {.column width=50%}
-- **Relational model**
+- @Relational model@
   - Data as tuples in relations
   - SQL
 
 \vspace{1cm}
 
-- **Hierarchical model**
+- @Hierarchical model@
   - Tree-like structure
     - One parent, many children
     - Connected through links
@@ -189,7 +189,7 @@ UMD DATA605: Big Data Systems
 
 \vspace{1cm}
 
-- **Network model**
+- @Network model@
   - Graph organization
     - Multiple parents and children
   - Graph DBs resurgence in 2010s
@@ -205,7 +205,7 @@ UMD DATA605: Big Data Systems
 :::
 
 * A Brief History of Databases (1970s)
-- **1970s: Relational model**
+- @1970s: Relational model@
   - Set theory, first-order predicate logic
     - Ted Codd developed the Relational Model
   - Elegant, formal model
@@ -217,11 +217,11 @@ UMD DATA605: Big Data Systems
     - Reason about data and relations
     - Remove redundancies
 
-- **Influential projects**
+- @Influential projects@
   - INGRES (UC Berkeley), System R (IBM)
   - Ignored IMS compatibility
 
-- **Debates**:
+- @Debates@:
   - Relational Model vs Network Model proponents
 
 * Entity-Relationship Model
@@ -229,12 +229,12 @@ UMD DATA605: Big Data Systems
 ::: columns
 :::: {.column width=50%}
 
-- **Entity-Relationship Model**
+- @Entity-Relationship Model@
   - Proposed in 1976 by Peter Chen
 
 - Describes knowledge as:
-  - **Entities**: Physical or logical objects, "Nouns"
-  - **Relationships**: Connections between entities, "Verbs"
+  - @Entities@: Physical or logical objects, "Nouns"
+  - @Relationships@: Connections between entities, "Verbs"
 
 - Map ER model to relational DB
   - Entities, relationships $\to$ tables
@@ -251,12 +251,12 @@ UMD DATA605: Big Data Systems
 :::
 
 * A Brief History of Databases (1980s)
-- **1980s: Relational model acceptance**
+- @1980s: Relational model acceptance@
   - SQL standard due to IBM's backing
   - Enhanced relational model
     - Set-valued attributes, aggregation
 
-- **Late 80's**
+- @Late 80's@
   - Object-oriented DBs
     - Store objects, not tables
     - Overcome _impedance mismatch_ between languages and databases
@@ -269,27 +269,27 @@ UMD DATA605: Big Data Systems
 - OOP is a data model
   - Object behavior described through data (fields) and code (methods)
 
-- **Composition**
+- @Composition@
   - `has-a` relationships
   - E.g., `Employee` class has an `Address` class
-- **Inheritance**
+- @Inheritance@
   - `is-a` relationships
   - E.g., `Employee` class derives from `Person` class
 
-- **Polymorphism**
+- @Polymorphism@
   - Code executed depends on the class of the object
   - One interface, many implementations
   - E.g., `draw()` method on a `Circle` vs `Square` object, both descending from
     `Shape` class
 
-- **Encapsulation**
+- @Encapsulation@
   - E.g., private vs public fields/members
   - Prevents external code from accessing inner workings of an object
 
 * A Brief History of Databases (1990s)
 ::: columns
 :::: {.column width=50%}
-- **Late 90's-today**
+- @Late 90's-today@
 - Web/Internet emerges
 - XML: eXtensible Markup Language
   - For _semi-structured_ data
@@ -330,7 +330,7 @@ UMD DATA605: Big Data Systems
 ::: columns
 :::: {.column width=40%}
 - Aka RDF
-- **(subject, predicate, object) triple**
+- @(subject, predicate, object) triple@
 
 - Example of RDF triple
   - `Subject`=sky
@@ -340,7 +340,7 @@ UMD DATA605: Big Data Systems
 - Maps to a labeled, directed multi-graph
   - More general than a tree
 
-- **Stored in**:
+- @Stored in@:
   - Relational DBs
   - Dedicated "triple-stores" DBs
 ::::
@@ -354,11 +354,11 @@ UMD DATA605: Big Data Systems
 
 ::: columns
 :::: {.column width=40%}
-- **Graph**:
+- @Graph@:
   - Vertices and edges
   - Properties for each edge and vertex
 
-- **Stored in**:
+- @Stored in@:
   - Relational DBs
   - Graph DBs
 ::::
