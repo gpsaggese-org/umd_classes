@@ -28,7 +28,8 @@ This script performs multiple steps:
 4. Add the generated markdown to git
 5. Convert to PDF using pandoc
 6. Convert to HTML using pandoc
-7. Open the PDF in Skim
+7. Open the PDF in Skim (if `--open_pdf` is specified)
+8. Open the HTML file in the default browser (if `--open_html` is specified)
 
 Usage:
 > gen_lecture_commentary.py data605 01.1
@@ -538,6 +539,16 @@ def _parse() -> argparse.ArgumentParser:
             "context, 'hllm_cli' is text-only"
         ),
     )
+    parser.add_argument(
+        "--open_pdf",
+        action="store_true",
+        help="Open the generated PDF in Skim",
+    )
+    parser.add_argument(
+        "--open_html",
+        action="store_true",
+        help="Open the generated HTML file in the default browser",
+    )
     hparser.add_verbosity_arg(parser)
     return parser
 
@@ -594,7 +605,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
                 tmp_pdf,
                 png_dir,
                 args.image_type,
-                dpi=300,
+                dpi=200,
                 add_border=True,
             )
     # Step 3: Generate book chapter.
@@ -650,10 +661,18 @@ def _main(parser: argparse.ArgumentParser) -> None:
             f"--highlight-style=tango"
         )
         hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
+    _LOG.info("PDF file: %s", pdf_file_name)
+    _LOG.info("HTML file: %s", html_file_name)
     # Step 7: Open the PDF in Skim.
-    _LOG.info("Step 7: Opening PDF in Skim")
-    cmd = f"open -a /Applications/Skim.app {pdf_file_name}"
-    hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
+    if args.open_pdf:
+        _LOG.info("Step 7: Opening PDF in Skim")
+        cmd = f"open -a /Applications/Skim.app {pdf_file_name}"
+        hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
+    # Step 8: Open the HTML file in the default browser.
+    if args.open_html:
+        _LOG.info("Step 8: Opening HTML file in default browser")
+        cmd = f"open {html_file_name}"
+        hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
     _LOG.info("Book chapter generated: %s", pdf_file_name)
 
 

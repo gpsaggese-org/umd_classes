@@ -34,7 +34,7 @@ UMD DATA605 - Big Data Systems
 :::
 
 * Containerizing an App
-- **Containerizing an app** means creating a container with your app inside
+- @Containerizing an app@ means creating a container with your app inside
 
 - Develop application code with dependencies
   - Install dependencies
@@ -52,9 +52,9 @@ UMD DATA605 - Big Data Systems
 - Distribute app as a container (no installation required)
 
 * Building a Container
-- **Dockerfile**
+- @Dockerfile@
   - Describe how to create a container
-- **Build context**
+- @Build context@
   - `docker build -t web:latest .` where `.` is the build context
   - Send directory containing the application to Docker engine to build the
     application

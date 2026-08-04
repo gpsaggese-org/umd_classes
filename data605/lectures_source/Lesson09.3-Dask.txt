@@ -25,7 +25,7 @@ UMD DATA605 - Big Data Systems
 :::: {.column width=75%}
 - **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
-- **Resources**
+- @Resources@
   - Web resources:
     - [Dask project](https://docs.dask.org/en/stable/)
     - [Dask examples](https://examples.dask.org/)
@@ -44,18 +44,18 @@ UMD DATA605 - Big Data Systems
 * Dataset Size Issues
 ::: columns
 :::: {.column width=75%}
-- **Small datasets (< 1 GB)**
+- @Small datasets (< 1 GB)@
   - Fits into RAM
   - No disk paging needed
 
-- **Medium dataset (< 1TB)**
+- @Medium dataset (< 1TB)@
   - Doesn't fit into RAM
   - Fits into local disk
     - Performance penalty with local disk
   - Need multiple CPU cores
     - Difficult to leverage parallelism with Python/Pandas
 
-- **Large dataset (> 1TB)**
+- @Large dataset (> 1TB)@
   - Doesn't fit into RAM
   - Doesn't fit into local disk
   - Need multiple servers
@@ -80,16 +80,16 @@ UMD DATA605 - Big Data Systems
 
 * Dataset Size Issues
 
-| **Category**    | **Size**    |
+| @Category@    | @Size@    |
 |-----------------|-------------|
 | Small datasets  | < 1 GB      |
 | Medium datasets | < 1 TB      |
 | Large datasets  | > 1 TB      |
 
-- **The thresholds are fuzzy and changing over time**
+- @The thresholds are fuzzy and changing over time@
   - Scale computer 10x to get 10x bigger datasets
 
-- **Problem with scaling datasets**
+- @Problem with scaling datasets@
   - Long run times
   - Rewriting code for different dataset sizes
   - Plan what and how to do efficiently
@@ -98,7 +98,7 @@ UMD DATA605 - Big Data Systems
 * Dask
 ::: columns
 :::: {.column width=60%}
-- **Dask is written in Python**
+- @Dask is written in Python@
   - Scales Numpy, Pandas, sklearn
   - Dask objects wrap library objects (e.g., Pandas DataFrame, numpy array)
   - Parallel parts are "chunks" or "partitions"
@@ -111,12 +111,12 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Pros**
+- @Pros@
   - Use familiar interfaces
   - Write code optimized for parallelism
     - Dask handles heavy lifting
 
-- **Scaling Dask is easy**
+- @Scaling Dask is easy@
   - Prototype on local machine, use cluster when needed
   - No code refactoring needed
   - No cluster-specific issues
@@ -132,12 +132,12 @@ UMD DATA605 - Big Data Systems
 * Scaling Up vs Scaling Out
 ::: columns
 :::: {.column width=70%}
-- **Scaling up**
+- @Scaling up@
   - Replace equipment with larger, faster options
     - E.g., buy a larger pot, replace knife with food processor
-  - **Pros**
+  - @Pros@
     - Better hardware, no code changes needed
-  - **Cons**
+  - @Cons@
     - Exceed current machine capacity eventually
     - Cost: more powerful machines are expensive
 ::::
@@ -150,13 +150,13 @@ UMD DATA605 - Big Data Systems
 
 ::: columns
 :::: {.column width=70%}
-- **Scaling out**
+- @Scaling out@
   - Divide work between many workers in parallel
     - E.g., buy more pots and hire more cooks
-  - **Pros**
+  - @Pros@
     - Task scheduler organizes computation, assigns workers to tasks
     - Cost-effective, no specialized hardware needed
-  - **Cons**
+  - @Cons@
     - Write code to expose parallelism
     - Maintain cluster costs
 ::::
@@ -166,7 +166,7 @@ UMD DATA605 - Big Data Systems
 :::
 
 * Dask: Computation
-- **Lazy computations**
+- @Lazy computations@
   - Define transformations on data
   - Define next computation without waiting
   - Operate in chunks to avoid loading entire data in memory
@@ -192,7 +192,7 @@ UMD DATA605 - Big Data Systems
 * Dask: Data Structures
 ::: columns
 :::: {.column width=75%}
-- **Dask DataFrame**
+- @Dask DataFrame@
   - Implements Pandas DataFrame
   - Tabular/relational data
 ::::
@@ -205,7 +205,7 @@ UMD DATA605 - Big Data Systems
 
 ::: columns
 :::: {.column width=65%}
-- **Dask Array**
+- @Dask Array@
   - Implements numpy ndarray
   - Multidimensional array
 ::::
@@ -218,7 +218,7 @@ UMD DATA605 - Big Data Systems
 
 ::: columns
 :::: {.column width=75%}
-- **Dask Bag**
+- @Dask Bag@
   - Coordinates Python lists of objects
   - Parallelize computations on unstructured/semi-structured data
 ::::
@@ -348,7 +348,7 @@ UMD DATA605 - Big Data Systems
 ![](data605/lectures_source/images/lecture_9_2/lec_9_2_slide_15_image_1.png){width=80%}
 
 * Task Scheduling
-- **Dask task scheduler orchestrates work dynamically**
+- @Dask task scheduler orchestrates work dynamically@
   - Not static scheduling like a relational DB
   - During computation, Dask dynamically assesses:
     - Completed tasks
@@ -358,7 +358,7 @@ UMD DATA605 - Big Data Systems
 
 ::: columns
 :::: {.column width=50%}
-- **Dynamic approach handles various issues**
+- @Dynamic approach handles various issues@
   - Worker failure
     - Re-run tasks
   - Workers completing at different speeds due to:
@@ -375,11 +375,11 @@ UMD DATA605 - Big Data Systems
 :::
 
 * Dask vs Spark
-- **Pros**
+- @Pros@
   - Popular framework for large datasets
   - In-memory alternative to MapReduce/Hadoop
 
-- **Cons**
+- @Cons@
   - Java library, supports Python via PySpark API
     - Python code runs on JVM
     - Debugging is difficult as execution is outside Python
