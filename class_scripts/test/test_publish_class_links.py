@@ -357,9 +357,7 @@ class Test_generate_html_page(hunitest.TestCase):
         ) as mock_get_url:
             cspucli._generate_html_page(class_dir, lessons, use_master=True)
         # Check outputs.
-        mock_get_url.assert_called_once_with(
-            file_path=pdf_path, use_master=True
-        )
+        mock_get_url.assert_called_once_with(file_path=pdf_path, use_master=True)
 
     def test3(self) -> None:
         """
@@ -398,6 +396,48 @@ class Test_generate_html_page(hunitest.TestCase):
         # Check outputs.
         self.assertIn(expected, actual)
 
+    def test5(self) -> None:
+        """
+        Test that the `Commentary (HTML)` link is routed through
+        htmlpreview.github.io, while other artifact links are not.
+        """
+        # Prepare inputs.
+        class_dir = os.path.join(self.get_scratch_space(), "data605")
+        pdf_path = os.path.join(
+            class_dir, "lectures_pdf", "Lesson01.1-Intro.pdf"
+        )
+        html_path = os.path.join(
+            class_dir,
+            "lectures_commentary",
+            "Lesson01.1-Intro.book_chapter.html",
+        )
+        pdf_artifact = cspucli.LessonArtifact("Slides (PDF)", pdf_path, True)
+        html_artifact = cspucli.LessonArtifact(
+            "Commentary (HTML)", html_path, True
+        )
+        lessons = [
+            cspucli.LessonPage("Lesson01.1-Intro", [pdf_artifact, html_artifact])
+        ]
+        # Prepare outputs.
+        pdf_url = _mock_github_url(file_path=pdf_path, use_master=False)
+        html_url = _mock_github_url(file_path=html_path, use_master=False)
+        expected_pdf_href = f'<a href="{pdf_url}">Slides (PDF)</a>'
+        expected_html_href = (
+            f'<a href="https://htmlpreview.github.io/?{html_url}">'
+            "Commentary (HTML)</a>"
+        )
+        # Run test.
+        with mock.patch(
+            "class_scripts.publish_class_links.dshgtogi._get_github_url",
+            side_effect=_mock_github_url,
+        ):
+            actual = cspucli._generate_html_page(
+                class_dir, lessons, use_master=False
+            )
+        # Check outputs.
+        self.assertIn(expected_pdf_href, actual)
+        self.assertIn(expected_html_href, actual)
+
 
 # #############################################################################
 # Test_main
@@ -434,6 +474,11 @@ class Test_main(hunitest.TestCase):
         recap_path = os.path.join(
             class_dir, "lectures_recap", f"{lesson_name}.recap.md"
         )
+        commentary_html_path = os.path.join(
+            class_dir,
+            "lectures_commentary",
+            f"{lesson_name}.book_chapter.html",
+        )
         out_file = os.path.join(class_dir, "class_links.html")
         argv = [
             "publish_class_links.py",
@@ -447,6 +492,9 @@ class Test_main(hunitest.TestCase):
         expected_recap_url = _mock_github_url(
             file_path=recap_path, use_master=False
         )
+        expected_commentary_html_url = _mock_github_url(
+            file_path=commentary_html_path, use_master=False
+        )
         # Run test.
         with mock.patch(
             "class_scripts.publish_class_links.dshgtogi._get_github_url",
@@ -456,6 +504,10 @@ class Test_main(hunitest.TestCase):
         # Check outputs.
         actual = hio.from_file(out_file)
         self.assertIn(f'href="{expected_pdf_url}"', actual)
+        self.assertIn(
+            f'href="https://htmlpreview.github.io/?{expected_commentary_html_url}"',
+            actual,
+        )
         self.assertIn(f'href="{expected_recap_url}"', actual)
 
     def test2(self) -> None:

@@ -50,6 +50,20 @@ _LECTURES_PDF_SUBDIR = "lectures_pdf"
 _LECTURES_COMMENTARY_SUBDIR = "lectures_commentary"
 _LECTURES_RECAP_SUBDIR = "lectures_recap"
 
+_LABEL_SLIDES_PDF = "Slides (PDF)"
+_LABEL_COMMENTARY_HTML = "Commentary (HTML)"
+_LABEL_COMMENTARY_PDF = "Commentary (PDF)"
+_LABEL_RECAP = "Recap"
+
+# GitHub serves `.html` files as raw source rather than rendering them, so
+# route commentary links through htmlpreview.github.io to render in-browser.
+_HTMLPREVIEW_PREFIX = "https://htmlpreview.github.io/?"
+
+# Stylesheet embedded (not linked) into the generated page so it stays
+# self-contained and portable regardless of where it is opened from.
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+_CSS_FILE_PATH = os.path.join(_SCRIPT_DIR, "link-page-style.css")
+
 
 # #############################################################################
 # LessonArtifact
@@ -121,11 +135,11 @@ def _get_lesson_artifacts(
     """
     artifact_specs = [
         (
-            "Slides (PDF)",
+            _LABEL_SLIDES_PDF,
             os.path.join(dir_, _LECTURES_PDF_SUBDIR, f"{lesson_name}.pdf"),
         ),
         (
-            "Commentary (HTML)",
+            _LABEL_COMMENTARY_HTML,
             os.path.join(
                 dir_,
                 _LECTURES_COMMENTARY_SUBDIR,
@@ -133,7 +147,7 @@ def _get_lesson_artifacts(
             ),
         ),
         (
-            "Commentary (PDF)",
+            _LABEL_COMMENTARY_PDF,
             os.path.join(
                 dir_,
                 _LECTURES_COMMENTARY_SUBDIR,
@@ -141,7 +155,7 @@ def _get_lesson_artifacts(
             ),
         ),
         (
-            "Recap",
+            _LABEL_RECAP,
             os.path.join(
                 dir_, _LECTURES_RECAP_SUBDIR, f"{lesson_name}.recap.md"
             ),
@@ -177,7 +191,8 @@ def _generate_html_page(
 
     Each existing artifact is linked to its GitHub URL (via
     `to_github.py`'s `_get_github_url()`) so that the page works when
-    shared outside of a local checkout.
+    shared outside of a local checkout. The stylesheet from
+    `link-page-style.css` is embedded (not linked) for the same reason.
 
     :param dir_: course/book directory, used for the page title
     :param lessons: one `LessonPage` per lesson, in display order
@@ -186,6 +201,7 @@ def _generate_html_page(
     :return: HTML page content
     """
     course_name = os.path.basename(dir_.rstrip("/"))
+    css_content = hio.from_file(_CSS_FILE_PATH)
     # Build one table row per lesson.
     rows = []
     for lesson in lessons:
@@ -195,6 +211,10 @@ def _generate_html_page(
                 href = dshgtogi._get_github_url(
                     file_path=artifact.file_path, use_master=use_master
                 )
+                if artifact.label == _LABEL_COMMENTARY_HTML:
+                    # GitHub serves `.html` files as raw source rather than
+                    # rendering them: preview via htmlpreview.github.io.
+                    href = f"{_HTMLPREVIEW_PREFIX}{href}"
                 cell = f'    <td><a href="{href}">{artifact.label}</a></td>'
             else:
                 cell = f'    <td class="missing">{artifact.label}</td>'
@@ -209,11 +229,7 @@ def _generate_html_page(
     <meta charset="utf-8">
     <title>{course_name} - Class Links</title>
     <style>
-      body {{ font-family: sans-serif; margin: 2em; }}
-      table {{ border-collapse: collapse; width: 100%; }}
-      th, td {{ border: 1px solid #ccc; padding: 0.5em; text-align: left; }}
-      th {{ background-color: #f0f0f0; }}
-      td.missing {{ color: #999; font-style: italic; }}
+    {css_content}
     </style>
     </head>
     <body>
