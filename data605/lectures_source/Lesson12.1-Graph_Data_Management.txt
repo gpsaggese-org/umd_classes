@@ -218,12 +218,6 @@ _Federal funds networks_
 * Comparison
 
 ```latex
-\usepackage{float}
-\usepackage{caption}
-\renewcommand{\familydefault}{\sfdefault}
-
-\begin{document}
-
 \small
 \begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{4cm}|}
 \hline
@@ -260,8 +254,6 @@ _Federal funds networks_
 \textbf{Examples} & Wikidata, DBpedia & Neo4j, Neptune & SOAP, RSS, Office \\
 \hline
 \end{tabular}
-
-\end{document}
 ```
 
 * Storing Graph Data
@@ -302,12 +294,6 @@ _Federal funds networks_
 * Query Languages for Graph Databases
 
 ```latex
-\usepackage{float}
-\usepackage{caption}
-\renewcommand{\familydefault}{\sfdefault}
-
-\begin{document}
-
 \small
 \begin{tabular}{|l|c|c|c|}
 \hline
@@ -330,7 +316,6 @@ _Federal funds networks_
 \textbf{Use Cases} & Social graphs, fraud detection & Distributed graph processing & Linked data, knowledge graphs \\
 \hline
 \end{tabular}
-\end{document}
 ```
 
 * Query Languages: Cypher
