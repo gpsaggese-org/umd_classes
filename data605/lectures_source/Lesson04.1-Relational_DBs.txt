@@ -183,24 +183,25 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=75%}
 - Marital status
-  - Married(person1\_ssn, person2\_ssn, date\_married, date\_divorced)
+  - Married(`person1_ssn`, `person2_ssn`, `date_married`, `date_divorced`)
 
 - Bank account
-  - Account(cust\_ssn, account\_number, cust\_name, balance, cust\_address)
+  - Account(`cust_ssn`, `account_number`, `cust_name`, `balance`,
+  `cust_address`)
 
 - Research assistantship at UMD
-  - RA(student\_id, project\_id, supervisor\_id, appt\_time, appt\_start\_date,
-    appt\_end\_date)
+  - RA(`student_id`, `project_id`, `supervisor_id`, `appt_time`,
+    `appt_start_date`, `appt_end_date`)
 
 - Information typically found on Wikipedia
-  - Person(Name, Born, Died, Citizenship, Education, ...)
+  - Person(`name`, `born`, `died`, `citizenship`, `education`, ...)
 
 - Info about US President on Wikipedia
-  - President(name, start\_date, end\_date, vice\_president, preceded\_by,
-    succeeded\_by)
+  - President(`name`, `start_date`, `end_date`, `vice_president`, `preceded_by`,
+    `succeeded_by`)
 
 - Tour de France: historical rider participation information
-  - Rider(Name, Born, Team-name, Coach, Sponsor, Year)
+  - Rider(`name`, `born`, `team_name`, `coach`, `sponsor`, `year`)
 ::::
 :::: {.column width=25%}
 ![](data605/lectures_source/images/lecture_4_1/lec_4_1_slide_8_image_1.png)
@@ -211,6 +212,7 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=75%}
 - Marital status
+<<<<<<< HEAD
   - Married(@person1\_ssn, person2\_ssn, date\_married@, date\_divorced)
 
 - Bank account
@@ -229,6 +231,27 @@ UMD DATA605 - Big Data Systems
 
 - Tour de France: historical rider participation information
   - Rider(@Name, Born, Team-name,@ Coach, Sponsor, @Year@)
+=======
+  - Married(**`person1_ssn`, `person2_ssn`, `date_married`**, `date_divorced`)
+
+- Bank account
+  - Account(`cust_ssn`, **`account_number`**, `cust_name`, `balance`,
+  `cust_address`)
+
+- Research assistantship at UMD
+  - RA(**`student_id`, `project_id`**, `supervisor_id`, `appt_time`,
+    `appt_start_date`, `appt_end_date`)
+
+- Information typically found on Wikipedia
+  - Person(**`name`, `born`, `died`, `citizenship`**, `education`, ...)
+
+- Info about US President on Wikipedia
+  - President(**`name`, `start_date`**, `end_date`, `vice_president`, `preceded_by`,
+    `succeeded_by`)
+
+- Tour de France: historical rider participation information
+  - Rider(**`name`, `born`, `team_name`**, `coach`, `sponsor`, **`year`**)
+>>>>>>> master
 ::::
 :::: {.column width=25%}
 ![](data605/lectures_source/images/lecture_4_1/lec_4_1_slide_9_image_1.png)

@@ -30,7 +30,11 @@ def _parse() -> argparse.ArgumentParser:
     :return: argument parser with lesson parsing options
     """
     parser = argparse.ArgumentParser(
+<<<<<<< HEAD
         description=__doc__,
+=======
+        description="Parse Markdown lesson files and extract slides, headers, and comments",
+>>>>>>> master
         formatter_class=hparser.CustomHelpFormatter,
     )
     parser.add_argument(
