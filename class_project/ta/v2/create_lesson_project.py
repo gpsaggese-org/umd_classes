@@ -186,11 +186,15 @@ def _main(parser: argparse.ArgumentParser) -> None:
     cutil.check_llm_available()
     # Execute selected actions.
     actions = hselacti.select_actions(args, _VALID_ACTIONS, _DEFAULT_ACTIONS)
+    print(hselacti.actions_to_string(actions, _VALID_ACTIONS, add_frame=True))
     # Validate that --level is provided if create_project action is requested.
     if "create_project" in actions and not args.level:
         hdbg.dfatal("--level argument is required for create_project action")
-    for action in actions:
-        _LOG.info("Executing action: %s", action)
+    while actions:
+        action = actions[0]
+        to_execute, actions = hselacti.mark_action(action, actions)
+        if not to_execute:
+            continue
         if action == "create_project":
             # For create_project action, use output_file instead of output_dir.
             output_file = args.output_file
@@ -202,7 +206,10 @@ def _main(parser: argparse.ArgumentParser) -> None:
                 args.in_file, output_file, args.level, args.packages_file
             )
         else:
-            hdbg.dfatal("Invalid action: %s", action)
+            raise ValueError(f"Invalid action='{action}'")
+    hdbg.dassert_eq(
+        len(actions), 0, "There are unprocessed actions: %s", str(actions)
+    )
 
 
 if __name__ == "__main__":
