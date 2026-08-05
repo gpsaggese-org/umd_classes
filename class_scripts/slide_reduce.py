@@ -6,8 +6,12 @@ Reduce lecture slides using LLM.
 This script reduces lecture slides using process_slides.py with the
 slide_reduce action.
 
-Usage:
+# Usage Example
+
+- Reduce the slides for data605 lesson 01.1 using an LLM transform:
 > slide_reduce.py data605 01.1
+
+- Reduce the slides for msml610 lesson 02.3 using an LLM transform:
 > slide_reduce.py msml610 02.3
 
 Import as:

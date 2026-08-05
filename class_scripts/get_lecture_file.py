@@ -6,8 +6,12 @@ Find and print the path to a lecture file.
 This script finds exactly one lecture file matching the pattern:
 {DIR}/lectures_source/Lesson{LESSON}*
 
-Usage:
+# Usage Example
+
+- Find the lecture file for lesson 01.1 in the data605 course:
 > get_lecture_file.py data605 01.1
+
+- Find the lecture file for lesson 02.3 in the msml610 course:
 > get_lecture_file.py msml610 02.3
 
 Import as:

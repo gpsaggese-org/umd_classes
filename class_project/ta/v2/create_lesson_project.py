@@ -7,8 +7,12 @@ The script processes markdown files and can perform these actions:
 1. create_project: Generate project descriptions for each section with Python packages
 2. find_packages: Find 5 Python packages related to the lesson content
 
-Examples:
+# Usage Example
+
+- Generate project descriptions with medium difficulty level from lesson content:
 > create_lesson_project.py --in_file input.md --action create_project --level medium --output_file output.md
+
+- Find Python packages related to the lesson content:
 > create_lesson_project.py --in_file input.md --action find_packages --output_file packages.md
 """
 

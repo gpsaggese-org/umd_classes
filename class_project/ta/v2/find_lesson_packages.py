@@ -5,7 +5,9 @@ Script to find Python packages related to lesson content.
 
 The script processes markdown files to find 5 Python packages related to the lesson content.
 
-Example:
+# Usage Example
+
+- Find Python packages related to the lesson content in a markdown file:
 > find_lesson_packages.py --in_file input.md --output_file packages.md
 """
 

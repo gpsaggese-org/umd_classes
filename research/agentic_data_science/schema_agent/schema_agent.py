@@ -3,11 +3,19 @@ Data Profiler Agent — modular implementation.
 
 Main pipeline and CLI orchestration for end-to-end data profiling.
 
-Usage:
-    python schema_agent.py data.csv
-    python schema_agent.py data.csv --model gpt-4o-mini --llm-scope nulls
-    python schema_agent.py data.csv --metrics mean std min max --output-json out.json
-    python schema_agent.py data.csv data2.csv --tags sales inventory
+# Usage Example
+
+- Profile a single CSV file with default settings:
+> schema_agent.py data.csv
+
+- Profile a CSV file with a specific model, sending only high-null columns to the LLM:
+> schema_agent.py data.csv --model gpt-4o-mini --llm-scope nulls
+
+- Profile a CSV file with custom metrics and write the JSON report to a specific path:
+> schema_agent.py data.csv --metrics mean std min max --output-json out.json
+
+- Profile multiple tagged CSV files:
+> schema_agent.py data.csv data2.csv --tags sales inventory
 
 Import as:
 
@@ -181,7 +189,7 @@ def run_pipeline(
 def _build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="schema_agent",
-        description="Data Profiler Agent — statistical + LLM column profiling",
+        description=__doc__,
         formatter_class=hparser.CustomHelpFormatter,
     )
     # --- Inputs ---

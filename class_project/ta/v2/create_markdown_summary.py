@@ -6,17 +6,18 @@ Create a summary of a markdown file that preserves the header structure.
 The script processes markdown files and generates summaries using LLM while maintaining
 the original header hierarchy.
 
-Examples:
-# Summarize content under level 2 headers
+# Usage Example
+
+- Summarize content under level 2 headers:
 > create_markdown_summary.py --in_file input.md --action summarize --out_file output.md --max_level 2
 
-# Summarize using llm library instead of command line llm tool
+- Summarize using llm library instead of command line llm tool:
 > create_markdown_summary.py --in_file input.md --action summarize --out_file output.md --max_level 2 --use_library
 
-# Preview which chunks will be summarized (save to file)
+- Preview which chunks will be summarized (save to file):
 > create_markdown_summary.py --in_file input.md --action preview_chunks --out_file preview.md --max_level 2
 
-# Check that output file has same structure as input
+- Check that output file has same structure as input:
 > create_markdown_summary.py --in_file input.md --action check_output --out_file output.md --max_level 2
 
 Import as:

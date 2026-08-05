@@ -12,9 +12,15 @@ following workflow:
 
 The output files are generated in the specified output directory.
 
-Examples:
+# Usage Example
+
+- Generate summaries and projects for all lesson files in a directory:
 > create_all_class_projects.py --input_dir ~/src/umd_msml6101/msml610/lectures_source --output_dir ~/output
+
+- Generate only summaries for lesson files in the current directory:
 > create_all_class_projects.py --input_dir . --output_dir ./results --action generate_summary
+
+- Process only lesson files 1 through 5 (1-indexed):
 > create_all_class_projects.py --input_dir ~/lectures --output_dir ~/output --limit 1:5
 
 Import as:

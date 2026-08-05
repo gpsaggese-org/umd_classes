@@ -20,15 +20,15 @@ By default the script stops with an error as soon as an expected artifact is
 missing. Pass `--do_not_fail_on_warnings` to instead log a warning, list the
 lesson without the missing link, and keep going.
 
-Usage:
-# Generate the links page for a class, failing on the first missing artifact.
+# Usage Example
+
+- Generate the links page for a class, failing on the first missing artifact:
 > publish_class_links.py --dir data605 --out_file data605/class_links.html
 
-# Generate the links page while tolerating missing artifacts, linking to the
-# `master` branch instead of the current branch.
+- Generate the links page while tolerating missing artifacts, linking to the `master` branch instead of the current branch:
 > publish_class_links.py --dir msml610 --out_file /tmp/links.html --do_not_fail_on_warnings --use_master
 
-# Generate the links page and open it in the default browser.
+- Generate the links page and open it in the default browser:
 > publish_class_links.py --dir data605 --out_file data605/class_links.html --open_html
 
 Import as:

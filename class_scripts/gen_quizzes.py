@@ -14,9 +14,15 @@ This script generates questions from lecture content using `llm_cli.py`.
 - By default, the output file is automatically formatted using `lint_txt.py`
   with prettier. Use --no_lint to skip formatting.
 
-Usage:
+# Usage Example
+
+- Generate multiple-choice quizzes for DATA605 lesson 01.1:
 > gen_quizzes.py --for_class_quizzes data605 01.1
+
+- Generate discussion/review questions for MSML610 lesson 02.3:
 > gen_quizzes.py --for_class_recap msml610 02.3
+
+- Generate discussion/review questions for DATA605 lesson 01.2 without auto-formatting the output:
 > gen_quizzes.py --for_class_recap data605 01.2 --no_lint
 
 Import as:

@@ -6,8 +6,12 @@ Check and fix text in lecture slides.
 This script checks and fixes text in lecture slides using process_slides.py
 with the text_check_fix action.
 
-Usage:
+# Usage Example
+
+- Check and fix text in DATA605 lesson 01.1 slides:
 > slide_check.py data605 01.1
+
+- Check and fix text in MSML610 lesson 02.3 slides:
 > slide_check.py msml610 02.3
 
 Import as:

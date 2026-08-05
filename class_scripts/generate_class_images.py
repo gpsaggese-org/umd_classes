@@ -6,15 +6,16 @@ Generate multiple images using OpenAI's DALL-E API from the same prompt.
 This script generates 5 images from a single prompt using OpenAI's image
 generation API.  It supports both standard and HD quality modes.
 
-Examples:
-# Generate standard quality images
-> dev_scripts_helpers/generate_images.py "A sunset over mountains" --dst_dir ./images --low_res
+# Usage Example
 
-# Generate HD quality images
-> dev_scripts_helpers/generate_images.py "A sunset over mountains" --dst_dir ./images
+- Generate standard quality images:
+> generate_class_images.py "A sunset over mountains" --dst_dir ./images --low_res
 
-# Generate with custom image count
-> dev_scripts_helpers/generate_images.py "A cat wearing a hat" --dst_dir ./images --count 3
+- Generate HD quality images:
+> generate_class_images.py "A sunset over mountains" --dst_dir ./images
+
+- Generate with custom image count:
+> generate_class_images.py "A cat wearing a hat" --dst_dir ./images --count 3
 """
 
 import argparse

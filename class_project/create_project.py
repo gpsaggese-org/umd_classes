@@ -3,7 +3,9 @@
 """
 Create a project / tutorial to a specified destination directory.
 
-# Create a project in a target directory
+# Usage Example
+
+- Create a project in a target directory:
 > create_project.py --dst_dir /path/to/destination
 """
 

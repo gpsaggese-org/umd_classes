@@ -10,8 +10,12 @@ This script performs multiple steps:
 4. Combine intro, script, and outro
 5. Lint the final script
 
-Usage:
+# Usage Example
+
+- Generate the lecture video script for DATA605 lesson 01.1:
 > gen_lecture_video_script.py data605 01.1
+
+- Generate the lecture video script for MSML610 lesson 02.3:
 > gen_lecture_video_script.py msml610 02.3
 
 Import as:

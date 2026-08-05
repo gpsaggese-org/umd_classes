@@ -6,8 +6,12 @@ Improve lecture slides using LLM.
 This script improves lecture slides using process_slides.py with the
 slide_improve action.
 
-Usage:
+# Usage Example
+
+- Improve DATA605 lesson 01.1 slides using LLM:
 > slide_improve.py data605 01.1
+
+- Improve MSML610 lesson 02.3 slides using LLM:
 > slide_improve.py msml610 02.3
 
 Import as:

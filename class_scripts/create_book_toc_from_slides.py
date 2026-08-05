@@ -7,11 +7,12 @@ Generate comprehensive table of contents for book from lecture slides.
 - Extracts the table of contents from each lesson file
 - Combines them into a single output markdown file.
 
-Usage:
-# Generate a table of contents with headers up to level 2 (H1-H2 only)
+# Usage Example
+
+- Generate a table of contents with headers up to level 2 (H1-H2 only):
 > create_book_toc_from_slides.py --output book_toc.md --max_level 2
 
-# Generate a table of contents with headers up to level 5 (full depth)
+- Generate a table of contents with headers up to level 5 (full depth):
 > create_book_toc_from_slides.py --output book_toc.md --max_level 5
 """
 
