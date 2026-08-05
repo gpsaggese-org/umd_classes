@@ -1,29 +1,43 @@
-In linters2/cc_lint.py 
+For all the Python scripts importing 
 
-1) Add a switch --add_todos so that instead of modifying the file
-the action is to add comments in the right place like
-```
-# TODO(ai_gp): Do this and that (link to the rule)
+import helpers.hselect_action
 
-E.g.,
-# TODO(ai_gp): Do this and that (testing.rules.md:1081:## Use Context Manager Syntax for Multiple Mocks)
-```
+use the following pattern for processing the actions
 
-2) Rename the current --mode one_shot to --one_shot_with_cc
+_VALID_ACTIONS = ["download", "process", "upload", "cleanup"]
+_DEFAULT_ACTIONS = ["download", "process", "upload"]
 
-3) Add another --mode one_shot to make a single call to the PromptSequencer
-   (in practice this is equivalent to the --one_shot_with_cc, but instead of
-   calling cc through a system call, uses the PromptSequencer)
+def _parse() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(...)
+    # Define valid and default actions.
+    hselacti.add_action_arg(parser, VALID_ACTIONS, _DEFAULT_ACTIONS)
+    hparser.add_verbosity_arg(parser)
+    return parser
 
-# Conventions
-- When writing code you must always follow the instructions in
-  `.claude/skills/coding.rules.md`
-- When writing testing code you must always follow the instructions in
-  `.claude/skills/testing.rules.md`
+def _main(args: argparse.Namespace) -> None:
+    # Select which actions to execute.
+    actions = hselacti.select_actions(
+        args,
+        valid_actions=VALID_ACTIONS,
+        default_actions=_DEFAULT_ACTIONS,
+    )
+    print(hselacti.actions_to_string(actions, VALID_ACTIONS, add_frame=True))
+    # Execute selected actions.
+    while actions:
+        action = actions[0]
+        to_execute, actions = hselacti.mark_action(action, actions)
+        if not to_execute:
+          continue
+        if action == "download":
+            data = _download()
+        elif action == "process":
+            data = _process(...)
+        elif action == "upload":
+            _upload(...)
+        elif action == "cleanup":
+            _cleanup()
+        else:
+            raise ValueError(f"Invalid action='{action}'")
+     hdbg.dassert_eq(len(actions), 0,
+       "There are unprocessed actions: %s", str(actions))
 
-# Create a plan, if needed
-- If the task is not perfectly clear
-  - You MUST not perform it
-  - Ask for clarifications
-  - Create a `plan.md` in the same directory with 5 bullet points explaining what
-    the plan is
