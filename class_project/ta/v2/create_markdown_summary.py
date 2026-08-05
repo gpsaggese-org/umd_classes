@@ -15,10 +15,10 @@ the original header hierarchy.
 > create_markdown_summary.py --in_file input.md --action summarize --out_file output.md --max_level 2 --use_library
 
 - Preview which chunks will be summarized (save to file):
-> create_markdown_summary.py --in_file input.md --action preview_chunks --out_file preview.md --max_level 2
+> create_markdown_summary.py --in_file input.md --clear_actions --action preview_chunks --out_file preview.md --max_level 2
 
 - Check that output file has same structure as input:
-> create_markdown_summary.py --in_file input.md --action check_output --out_file output.md --max_level 2
+> create_markdown_summary.py --in_file input.md --clear_actions --action check_output --out_file output.md --max_level 2
 
 Import as:
 

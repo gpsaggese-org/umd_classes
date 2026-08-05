@@ -182,7 +182,8 @@ def _main(parser: argparse.ArgumentParser) -> None:
         # once upfront and open the PDF; then hand off to its own `--daemon`
         # watch loop, which regenerates on change without reopening the viewer
         # (it skips "open" on watch runs since the viewer auto-reloads).
-        initial_cmd = cmd + " --enable=open"
+        # TODO(ai_gp): Rename the action open -> open_pdf
+        initial_cmd = cmd + " --action=open"
         _LOG.info("%s", hprint.color_highlight(f"> {initial_cmd}", "green"))
         hsystem.system(initial_cmd, suppress_output=False)
         cmd += " --daemon"

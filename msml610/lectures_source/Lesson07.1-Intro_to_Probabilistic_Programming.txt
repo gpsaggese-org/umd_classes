@@ -150,9 +150,9 @@
 
 - @Remark@: there is **true uncertainty**
   - An underlying parameter (the coin bias $\theta$ ) exists, but it is unknown
-    - $0$: always tails
-    - $1$: always heads
-    - $0.5$: half tails, half heads
+    - $\theta = 0$: always tails
+    - $\theta = 1$: always heads
+    - $\theta = 0.5$: half tails, half heads
 
 - @Assumptions@:
   - Independent Identically Distributed (IID)
@@ -169,11 +169,12 @@
 ::: columns
 :::: {.column width=40%}
 - @Definition@: probability of $k$ heads out of $n$ tosses given bias $p$
-
-\begin{align*}
-  & X \sim Binomial(n, p) \\
-  & \Pr(k) = \frac{n!}{k! (n - k)!} p^k (1 - p)^{n-k} \\
-\end{align*}
+  $$
+  \begin{align*}
+    & X \sim Binomial(n, p) \\
+    & \Pr(k) = \frac{n!}{k! (n - k)!} p^k (1 - p)^{n-k} \\
+  \end{align*}
+  $$
 
 ::::
 :::: {.column width=55%}
