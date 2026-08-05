@@ -486,8 +486,13 @@ def _main(parser: argparse.ArgumentParser) -> None:
         args.out_file = f"{base_name}.summary.txt"
     # Get selected actions.
     actions = hselacti.select_actions(args, _VALID_ACTIONS, _DEFAULT_ACTIONS)
+    print(hselacti.actions_to_string(actions, _VALID_ACTIONS, add_frame=True))
     # Process each action.
-    for action in actions:
+    while actions:
+        action = actions[0]
+        to_execute, actions = hselacti.mark_action(action, actions)
+        if not to_execute:
+            continue
         if action == "summarize":
             _action_summarize(
                 args.in_file,
@@ -501,7 +506,10 @@ def _main(parser: argparse.ArgumentParser) -> None:
         elif action == "check_output":
             _action_check_output(args.in_file, args.out_file, args.max_level)
         else:
-            hdbg.dfatal("Invalid action: %s", action)
+            raise ValueError(f"Invalid action='{action}'")
+    hdbg.dassert_eq(
+        len(actions), 0, "There are unprocessed actions: %s", str(actions)
+    )
 
 
 if __name__ == "__main__":
