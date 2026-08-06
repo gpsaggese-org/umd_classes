@@ -407,12 +407,14 @@ PDF varying $\alpha, \beta$
   1. **Communicate assumptions and hypothesis**
      - Describe priors and probabilistic models
      - E.g., coin-flip distributions:
+       $$
        \begin{equation*}
          \begin{cases}
          \theta \sim \Beta(\alpha, \beta) \\
          y \sim Binomial(n=1, p=\theta) \\
          \end{cases}
        \end{equation*}
+       $$
   2. **Communicate Bayesian analysis result**
      - Describe posterior distribution
      - Summarize location and dispersion
@@ -596,8 +598,8 @@ digraph BayesTheorem {
 - @Procedure@
   1. Compute single KDE for all chains
   2. Rank plot to check results
-     - Histograms should look uniform, exploring different (and all)
-       posterior regions
+     - Histograms should look uniform, exploring different (and all) posterior
+       regions
   3. Plot single KDE with all statistics
 
 ::::

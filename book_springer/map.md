@@ -113,83 +113,83 @@
 
 // https://docs.google.com/spreadsheets/d/1dU3crReWWLcSG8jI4jTvA4430-yMkqvdOEXEIbmktPQ/edit?gid=831837256#gid=831837256
 
-| Chap                                                    | Slides                                                                     | TOC complete | Mat complete | Criticize | Slides finalized | Tutorial complete | Book complete |
-| ------------------------------------------------------- | -------------------------------------------------------------------------- | ------------ | ------------ | --------- | ---------------- | ----------------- | ------------- |
-|                                                         |                                                                            |              |              |           |                  |                   |               |
-| **Motivation**                                          |                                                                            |              |              |           |                  |                   |               |
-| 01. Why Decisions, Not Predictions                      | Lesson01.01_From_Data_Science_To_Decision_Science.txt                      | 50%          |              |           |                  |                   |               |
-| 02. The Cost of Ignoring Causality                      | Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt                |              |              |           |                  |                   |               |
-| **Advanced Modeling Theory & Tools**                    |                                                                            |              |              |           |                  |                   |               |
-| 04. Knowledge Representation                            | MSML610 Slides                                                             |              |              |           |                  |                   |               |
-| 05. Probalistic ML                                      | MSML610 Slides                                                             |              |              |           |                  |                   |               |
-| 06. Causal ML                                           | MSML610 Slides                                                             |              |              |           |                  |                   |               |
-| **Data**                                                |                                                                            |              |              |           |                  |                   |               |
-| 07. Building Causal Knowledge                           | MSML610 Slides                                                             |              |              |           |                  |                   |               |
-| 08. Causal data pipelines                               | MSML610 Slides                                                             |              |              |           |                  |                   |               |
-| **Decision-Making Theory & Tools**                      |                                                                            |              |              |           |                  |                   |               |
-| 09. Decision Theory Foundations                         | MSML610 Slides                                                             |              |              |           |                  |                   |               |
-| 10. Taxonomy of Decision-Making Problems and Algorithms | Lesson10.1_Taxonomy_of_Decision_Problems.txt                              |              |              |           |                  |                   |               |
-| 11. Simple Decisions                                    | Lesson11.1_Simple_Decisions.txt                                           |              |              |           |                  |                   |               |
-| 12. Complex Decisions                                   | Lesson12.1_Complex_Decisions.txt                                          |              |              |           |                  |                   |               |
-| 13. Agentic Causal Reasoning                            | Maybe remove                                                               |              |              |           |                  |                   |               |
-| **Implementation, Deployment, & Governance**            |                                                                            |              |              |           |                  |                   |               |
-| 14. Building Stakeholder Alignment                      |                                                                            |              |              |           |                  |                   |               |
-| 15. Deployment, Monitoring, and Adaptation              | Lesson15.1_Deployment_Monitoring_And_Adaptation.txt                       |              |              |           |                  |                   |               |
-| 16. Trust, Explainability, Fairness, and Governance     |                                                                            |              |              |           |                  |                   |               |
+| Chap                                        | Slides                                                       | Slides       | Criticize | Tutorial | Book |
+| --------------------------------------------| -------------------------------------------------------------| ------------ | --------- | ---------| -----|
+|                                             |                                                              |              |           |          |      |
+| **Motivation**                              |                                                              |              |           |          |      |
+| 01. Why Decisions, Not Predictions          | Lesson01.01_From_Data_Science_To_Decision_Science.txt        | 50%          |           |          |      |
+| 02. The Cost of Ignoring Causality          | Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt  |              |           |          |      |
+| **Advanced Modeling Theory & Tools**        |                                                              |              |           |          |      |
+| 04. Knowledge Representation                | MSML610 Slides                                               |              |           |          |      |
+| 05. Probalistic ML                          | MSML610 Slides                                               |              |           |          |      |
+| 06. Causal ML                               | MSML610 Slides                                               |              |           |          |      |
+| **Data**                                    |                                                              |              |           |          |      |
+| 07. Building Causal Knowledge               | MSML610 Slides                                               |              |           |          |      |
+| 08. Causal data pipelines                   | MSML610 Slides                                               |              |           |          |      |
+| **Decision-Making Theory & Tools**          |                                                              |              |           |          |      |
+| 09. Decision Theory Foundations             | MSML610 Slides                                               |              |           |          |      |
+| 10. Taxonomy of Decision-Making Problems    | Lesson10.1_Taxonomy_of_Decision_Problems.txt                 |              |           |          |      |
+| 11. Simple Decisions                        | Lesson11.1_Simple_Decisions.txt                              |              |           |          |      |
+| 12. Complex Decisions                       | Lesson12.1_Complex_Decisions.txt                             |              |           |          |      |
+| 13. Agentic Causal Reasoning                | Maybe remove                                                 |              |           |          |      |
+| **Implementation, Deployment, & Governance**|                                                              |              |           |          |      |
+| 14. Building Stakeholder Alignment          |                                                              |              |           |          |      |
+| 15. Deployment, Monitoring, and Adaptation  | Lesson15.1_Deployment_Monitoring_And_Adaptation.txt          |              |           |          |      |
+| 16. Trust, Explainability, Fairness, and Governance |                                                      |              |           |          |      |
 
-| Slides                                                                     | Typst | TOC complete | Mat complete | Criticize | Slides complete  | Tutorial complete |
-| -------------------------------------------------------------------------- | ----- | ------------ | ------------ | --------- | ---------------- | ----------------- |
-|                                                                            |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson00-Class.txt                                 | yes   |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson01.1-AI_and_Machine_Learning.txt             |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson01.1.aux.md                                  |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson01.2-The_Foundations_of_AI.txt               |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson01.3-Brief_History_of_AI.txt                 |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson02.1-A_Map_of_Machine_Learning.txt           |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson02.2-ML_Paradigms.txt                        |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.txt      |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson02.4-ML_Techniques_Model_Learning.txt        |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson02.5-ML_Techniques_Model_Evaluation.txt      |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson02.6-ML_Techniques_How_To_Do_Research.txt    |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson03.1-Knowledge_representation.txt            | yes   | 70%          | 80%          | 50%       |                  |                   |
-| msml610/lectures_source/Lesson03.2-Propositional_and_first_order_logic.txt | yes   | 80%          | 80%          | -         |                  |                   |
-| msml610/lectures_source/Lesson03.3-Non_classical_logics.txt                | yes   | 80%          | 80%          | -         |                  |                   |
-| msml610/lectures_source/Lesson04.1-Models.txt                              |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson04.2-Models.txt                              |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson04.3-Models.txt                              |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson05.1-Learning_Theory.txt                     |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson05.2-Overfitting.txt                         |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson05.3-Learn_Validation.txt                    |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt                   | yes   | 80%          | 80%          |           |                  |                   |
-| msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt             | yes   | 80%          | 80%          |           |                  |                   |
-| msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt  |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt           |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt                 |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt           |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt           |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt                     | yes   | 80%          | 80%          |           |                  |                   |
-| msml610/lectures_source/Lesson08.2-Causal_AI_concepts.txt                  | yes   | 80%          | 80%          |           |                  |                   |
-| msml610/lectures_source/Lesson08.3-Causal_AI_in_business.txt               | yes   | 80%          | 80%          |           |                  |                   |
-| msml610/lectures_source/Lesson08.4-Causal_networks.txt                     | yes   | 80%          | 80%          |           |                  |                   |
-| msml610/lectures_source/Lesson08.5-Do_calculus.txt                         | yes   | 70%          | 70%          |           |                  |                   |
-| msml610/lectures_source/Lesson08.6-Causal_inference.txt                    | yes   | 70%          | 70%          |           |                  |                   |
-| msml610/lectures_source/Lesson08.7-Causal_experiments.txt                  | yes   | 70%          | 70%          |           |                  |                   |
-| msml610/lectures_source/Lesson08.8.Causal_Linear_Regression.txt            | yes   | 70%          | 70%          |           |                  |                   |
-| msml610/lectures_source/Lesson08.9-Effect_heterogeneity_and_Metalearners.txt | yes   | 70%          | 70%          |           |                  |                   |
-| msml610/lectures_source/Lesson08.X-Causal_inference.txt                    |       |              |              |           |                  |
-| msml610/lectures_source/Lesson09.1-Reasoning_over_time.txt                 |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson09.2-Hidden_Markov_Models.txt                |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt                 |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson09.4-gh_Filter.txt                           |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson09.5-Kalman_Filter.txt                       |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson09.6-Dynamic_Bayesian_Networks.txt           |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson10.1-Timeseries_forecasting.txt              |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.txt    |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt  |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt         |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt              |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson12.2-Causal_Discovery.txt                    |       |              |              |           |                  |                   |
-| msml610/lectures_source/Lesson13.1-Explainability.txt                      |       |              |              |           |                  |                   |
+| Slides                                                                     | Typst | Slides | Criticize | Tutorial |
+| -------------------------------------------------------------------------- | ----- | -------| --------- | ---------|
+|                                                                            |       |        |           |          |
+| msml610/lectures_source/Lesson00-Class.txt                                 | yes   |        |           |          |
+| msml610/lectures_source/Lesson01.1-AI_and_Machine_Learning.txt             |       |        |           |          |
+| msml610/lectures_source/Lesson01.1.aux.md                                  |       |        |           |          |
+| msml610/lectures_source/Lesson01.2-The_Foundations_of_AI.txt               |       |        |           |          |
+| msml610/lectures_source/Lesson01.3-Brief_History_of_AI.txt                 |       |        |           |          |
+| msml610/lectures_source/Lesson02.1-A_Map_of_Machine_Learning.txt           |       |        |           |          |
+| msml610/lectures_source/Lesson02.2-ML_Paradigms.txt                        |       |        |           |          |
+| msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.txt      |       |        |           |          |
+| msml610/lectures_source/Lesson02.4-ML_Techniques_Model_Learning.txt        |       |        |           |          |
+| msml610/lectures_source/Lesson02.5-ML_Techniques_Model_Evaluation.txt      |       |        |           |          |
+| msml610/lectures_source/Lesson02.6-ML_Techniques_How_To_Do_Research.txt    |       |        |           |          |
+| msml610/lectures_source/Lesson03.1-Knowledge_representation.txt            | yes   | 80%    | 50%       |          |
+| msml610/lectures_source/Lesson03.2-Propositional_and_first_order_logic.txt | yes   | 80%    | -         |          |
+| msml610/lectures_source/Lesson03.3-Non_classical_logics.txt                | yes   | 80%    | -         |          |
+| msml610/lectures_source/Lesson04.1-Models.txt                              |       |        |           |          |
+| msml610/lectures_source/Lesson04.2-Models.txt                              |       |        |           |          |
+| msml610/lectures_source/Lesson04.3-Models.txt                              |       |        |           |          |
+| msml610/lectures_source/Lesson05.1-Learning_Theory.txt                     |       |        |           | 70%      |
+| msml610/lectures_source/Lesson05.2-Overfitting.txt                         |       |        |           | 70%      |
+| msml610/lectures_source/Lesson05.3-Learn_Validation.txt                    |       |        |           | -        |
+| msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt                   | yes   | 80%    |           | 70%      |
+| msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt             | yes   | 80%    |           | 70%      |
+| msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt  | yes   | 80%    |           | 70%      |
+| msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt           |       |        |           | 70%      |
+| msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt                 |       |        |           | 70%      |
+| msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt           |       |        |           | 70%      |
+| msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt           |       |        |           | 70%      |
+| msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt                     | yes   | 80%    |           |          |
+| msml610/lectures_source/Lesson08.2-Causal_AI_concepts.txt                  | yes   | 80%    |           |          |
+| msml610/lectures_source/Lesson08.3-Causal_AI_in_business.txt               | yes   | 80%    |           |          |
+| msml610/lectures_source/Lesson08.4-Causal_networks.txt                     | yes   | 80%    |           | 60%      |
+| msml610/lectures_source/Lesson08.5-Do_calculus.txt                         | yes   | 70%    |           | 60%      |
+| msml610/lectures_source/Lesson08.6-Causal_inference.txt                    | yes   | 70%    |           | 60%      |
+| msml610/lectures_source/Lesson08.7-Causal_experiments.txt                  | yes   | 70%    |           | 60%      |
+| msml610/lectures_source/Lesson08.8.Causal_Linear_Regression.txt            | yes   | 70%    |           | 60%      |
+| msml610/lectures_source/Lesson08.9-Effect_heterogeneity_and_Metalearners.txt | yes   | 70%  |           | 60%      |
+| msml610/lectures_source/Lesson08.X-Causal_inference.txt                    
+| msml610/lectures_source/Lesson09.1-Reasoning_over_time.txt                 
+| msml610/lectures_source/Lesson09.2-Hidden_Markov_Models.txt                
+| msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt                 |       | 10%    |           | 10%      |
+| msml610/lectures_source/Lesson09.4-gh_Filter.txt                           |       | 70%    |           | 60%      |
+| msml610/lectures_source/Lesson09.5-Kalman_Filter.txt                       |       | 70%    |           | 60%      |
+| msml610/lectures_source/Lesson09.6-Dynamic_Bayesian_Networks.txt           
+| msml610/lectures_source/Lesson10.1-Timeseries_forecasting.txt              
+| msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.txt    
+| msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt  
+| msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt         
+| msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt              
+| msml610/lectures_source/Lesson12.2-Causal_Discovery.txt                    | ?     | 70%    |           | 60%      |
+| msml610/lectures_source/Lesson13.1-Explainability.txt                      | ?     | 70%    |           | different dir |
 
 - [ ] Apply `msml610/lectures_source/prompt.convert_to_typst.md` to all the files
   in `msml610/lectures_source/Lesson*`
