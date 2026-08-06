@@ -1,0 +1,1924 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{\textbf{#1}}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+\usepackage{listings}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{10 mm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+\newcommand{\black}[1]{\textcolor{black}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\brown}[1]{\textcolor{brown}{#1}}
+\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
+\newcommand{\gray}[1]{\textcolor{gray}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\olive}[1]{\textcolor{olive}{#1}}
+\newcommand{\orange}[1]{\textcolor{orange}{#1}}
+\newcommand{\purple}[1]{\textcolor{purple}{#1}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\teal}[1]{\textcolor{teal}{#1}}
+\newcommand{\violet}[1]{\textcolor{violet}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+\begin{columns}[T]
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/UMD_Logo.png}}
+\end{column}
+
+\begin{column}{0.75\linewidth}
+\vspace{0.4cm}
+\begingroup \large
+
+UMD DATA605 - Big Data Systems \endgroup
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begingroup \Large
+
+\textbf{\[\text{\textcolor{blue}{\text{04.2: SQL}}}\]} \endgroup
+
+\begin{columns}[T]
+\begin{column}{0.75\linewidth}
+\vspace{1cm}
+
+\textbf{Instructor}: Dr.~GP Saggese, \url{gsaggese@umd.edu}
+\end{column}
+
+\begin{column}{0.2\linewidth}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{SQL Overview}
+\protect\phantomsection\label{sql-overview}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Relational algebra}}: mathematical language to
+  manipulate \emph{relations}
+\item
+  \textbf{\textcolor{darkgreen}{SQL}}: language to describe and
+  transform data in a relational DB
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Originally Sequel
+  \item
+    Changed to Structured Query Language
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{SQL statements grouped by goal}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Data definition language (DDL)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Define schema (tables, attributes, indices)
+    \item
+      Specify integrity constraints (primary key, foreign key, not null)
+    \end{itemize}
+  \item
+    Data modification language (DML)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Modify data in tables
+    \item
+      Insert, Update, Delete
+    \end{itemize}
+  \item
+    Query data (DQL)
+  \item
+    Control transactions
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Specify beginning and end, control isolation level
+    \end{itemize}
+  \item
+    Define views
+  \item
+    Authorization
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Specify access and security constraints
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{SQL Overview}
+\protect\phantomsection\label{sql-overview-1}
+\begin{itemize}
+\item
+  Data description language (DDL)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{CREATE} \KeywordTok{TABLE} \OperatorTok{\textless{}}\NormalTok{name}\OperatorTok{\textgreater{}}\NormalTok{ (}\OperatorTok{\textless{}}\NormalTok{field}\OperatorTok{\textgreater{}} \OperatorTok{\textless{}}\KeywordTok{domain}\OperatorTok{\textgreater{}}\NormalTok{, }\OperatorTok{..}\NormalTok{. )}
+\end{Highlighting}
+\end{Shaded}
+\item
+  Data modification language (DML)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{INSERT} \KeywordTok{INTO} \OperatorTok{\textless{}}\NormalTok{name}\OperatorTok{\textgreater{}}\NormalTok{ (}\OperatorTok{\textless{}}\NormalTok{field names}\OperatorTok{\textgreater{}}\NormalTok{) }\KeywordTok{VALUES}\NormalTok{ (}\OperatorTok{\textless{}}\NormalTok{field }\KeywordTok{values}\OperatorTok{\textgreater{}}\NormalTok{)}
+\KeywordTok{DELETE} \KeywordTok{FROM} \OperatorTok{\textless{}}\NormalTok{name}\OperatorTok{\textgreater{}} \KeywordTok{WHERE} \OperatorTok{\textless{}}\NormalTok{condition}\OperatorTok{\textgreater{}}
+\KeywordTok{UPDATE} \OperatorTok{\textless{}}\NormalTok{name}\OperatorTok{\textgreater{}} \KeywordTok{SET} \OperatorTok{\textless{}}\NormalTok{field name}\OperatorTok{\textgreater{}} \OperatorTok{=} \OperatorTok{\textless{}}\FunctionTok{value}\OperatorTok{\textgreater{}} \KeywordTok{WHERE} \OperatorTok{\textless{}}\NormalTok{condition}\OperatorTok{\textgreater{}}
+\end{Highlighting}
+\end{Shaded}
+\item
+  Query language
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{SELECT} \OperatorTok{\textless{}}\NormalTok{fields}\OperatorTok{\textgreater{}} \KeywordTok{FROM} \OperatorTok{\textless{}}\NormalTok{name}\OperatorTok{\textgreater{}} \KeywordTok{WHERE} \OperatorTok{\textless{}}\NormalTok{condition}\OperatorTok{\textgreater{}}
+\end{Highlighting}
+\end{Shaded}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Create Table}
+\protect\phantomsection\label{create-table}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{Shaded}
+\begin{Highlighting}[]
+  \KeywordTok{CREATE} \KeywordTok{TABLE}\NormalTok{ r}
+\NormalTok{   (A\_1 D\_1,}
+\NormalTok{   A\_2 D\_2,}
+   \OperatorTok{..}\NormalTok{.,}
+\NormalTok{   A\_n D\_n,}
+\NormalTok{   IntegrityConstraint\_1,}
+\NormalTok{   IntegrityConstraint\_n);}
+\end{Highlighting}
+\end{Shaded}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+where:
+
+\begin{itemize}
+\tightlist
+\item
+  \textcolor{blue}{\texttt{r}} is name of \emph{table} (aka
+  \emph{relation})
+\item
+  \textcolor{blue}{\texttt{A\_i}} name of \emph{attribute} (aka
+  \emph{field}, \emph{column})
+\item
+  \textcolor{blue}{\texttt{D\_i}} domain of attribute
+  \textcolor{blue}{\texttt{A\_i}}
+\end{itemize}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Constraints}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    SQL prevents changes violating integrity constraints
+  \item
+    Primary key
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Must be non-null and unique
+    \item
+      \textcolor{blue}{\texttt{PRIMARY KEY (A\_j1, A\_j2, ..., A\_jn)}}
+    \end{itemize}
+  \item
+    Foreign key
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Attribute values must match primary key values in relation s
+    \item
+      \textcolor{blue}{\texttt{FOREIGN KEY (A\_k1, A\_k2, ..., A\_kn) REFERENCES s}}
+    \end{itemize}
+  \item
+    Not null
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Null value not allowed for attribute
+    \item
+      A\_i D\_i NOT NULL
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Select}
+\protect\phantomsection\label{select}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{SELECT}\NormalTok{ A\_1, A\_2, }\OperatorTok{..}\NormalTok{., A\_n}
+    \KeywordTok{FROM}\NormalTok{ r\_1, r\_2, }\OperatorTok{..}\NormalTok{., r\_m}
+    \KeywordTok{WHERE}\NormalTok{ P;}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  \textcolor{blue}{\texttt{SELECT}}: select the attributes to list
+  (i.e., projection)
+\item
+  \textcolor{blue}{\texttt{FROM}}: list of tables to be accessed
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Define a Cartesian product of the tables
+  \item
+    The query is going to be optimized to avoid to enumerate tuples that
+    will be eliminated
+  \end{itemize}
+\item
+  \textcolor{blue}{\texttt{WHERE}}: predicate involving attributes of
+  the relations in the \textcolor{blue}{\texttt{FROM}} clause (i.e.,
+  selection)
+\item
+  In \textcolor{blue}{\texttt{SELECT}} or
+  \textcolor{blue}{\texttt{WHERE}} clauses, might need to use the table
+  names as prefix to qualify the attribute name
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., \textcolor{blue}{\texttt{instructor.ID}} vs
+    \textcolor{blue}{\texttt{teaches.ID}}
+  \end{itemize}
+\item
+  A \textcolor{blue}{\texttt{SELECT}} statement can be expressed in
+  terms of relational algebra
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Cartesian product \(\to\) selection \(\to\) projection
+  \item
+    Difference: SQL allows duplicate values, relational algebra works
+    with mathematical sets
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Null Values}
+\protect\phantomsection\label{null-values}
+\begin{itemize}
+\tightlist
+\item
+  An arithmetic operation with \textcolor{blue}{\texttt{NULL}} yields
+  \textcolor{blue}{\texttt{NULL}}
+\item
+  Comparison with NULL
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textcolor{blue}{\texttt{1 < NULL}}
+  \item
+    \textcolor{blue}{\texttt{NOT(1 < NULL)}}
+  \item
+    SQL yields \textcolor{blue}{\texttt{UNKNOWN}} when comparing with
+    \textcolor{blue}{\texttt{NULL}} value
+  \item
+    There are 3 logical values: \textcolor{blue}{\texttt{True}},
+    \textcolor{blue}{\texttt{False}}, \textcolor{blue}{\texttt{Unknown}}
+  \end{itemize}
+\item
+  Boolean operators
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Can be extended according to common sense, e.g.,
+  \item
+    \textcolor{blue}{\texttt{True AND UNKNOWN = UNKNOWN}}
+  \item
+    \textcolor{blue}{\texttt{False AND Unknown = False}}
+  \end{itemize}
+\item
+  In a \textcolor{blue}{\texttt{WHERE}} clause, if the result is
+  \textcolor{blue}{\texttt{UNKNOWN}} it's not included
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Group by Query}
+\protect\phantomsection\label{group-by-query}
+\begin{columns}[T]
+\begin{column}{0.65\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  The attributes in \textcolor{blue}{\texttt{GROUP BY}} are used to form
+  groups
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Tuples with the same value on all attributes are placed in one group
+  \end{itemize}
+\item
+  Any attribute that is not in the \textcolor{blue}{\texttt{GROUP BY}}
+  can appear in the \textcolor{blue}{\texttt{SELECT}} clause only as
+  argument of aggregate function
+\end{itemize}
+
+\vspace{0.25cm}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{SELECT}\NormalTok{ dept\_name, }\FunctionTok{AVG}\NormalTok{(salary)}
+        \KeywordTok{FROM}\NormalTok{ instructor}
+        \KeywordTok{GROUP} \KeywordTok{BY}\NormalTok{ dept\_name;}
+\end{Highlighting}
+\end{Shaded}
+
+\vspace{0.25cm}
+
+\begin{verbatim}
+    -- Error.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{SELECT}\NormalTok{ dept\_name, salary}
+        \KeywordTok{FROM}\NormalTok{ instructor}
+        \KeywordTok{GROUP} \KeywordTok{BY}\NormalTok{ dept\_name;}
+\end{Highlighting}
+\end{Shaded}
+
+\vspace{0.25cm}
+
+\begin{itemize}
+\tightlist
+\item
+  \textcolor{blue}{\texttt{salary}} is not in
+  \textcolor{blue}{\texttt{GROUP BY}} so it must be in an aggregate
+  function
+\end{itemize}
+\end{column}
+
+\begin{column}{0.35\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_4_1/lec_4_1_slide_20_image_1.png}}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_4_1/lec_4_1_slide_20_image_2.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Having}
+\protect\phantomsection\label{having}
+\begin{itemize}
+\item
+  State a condition that applies to groups instead of tuples (like
+  WHERE)
+\item
+  Any attribute in the HAVING clause must appear in the GROUP BY clause
+\item
+  E.g., find departments with avg salary of instructors \textgreater{}
+  42k
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{SELECT}\NormalTok{ dept\_name, }\FunctionTok{AVG}\NormalTok{(salary) }\KeywordTok{AS}\NormalTok{ avg\_salary}
+        \KeywordTok{FROM}\NormalTok{ instructor}
+        \KeywordTok{GROUP} \KeywordTok{BY}\NormalTok{ dept\_name}
+        \KeywordTok{HAVING} \FunctionTok{AVG}\NormalTok{(salary) }\OperatorTok{\textgreater{}} \DecValTok{42000}\NormalTok{;}
+\end{Highlighting}
+\end{Shaded}
+\end{itemize}
+
+\vspace{0.5cm}
+
+\begin{itemize}
+\tightlist
+\item
+  How does it work
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textcolor{blue}{\texttt{FROM}} is evaluated to create a relation
+  \item
+    (optional) \textcolor{blue}{\texttt{WHERE}} is used to filter
+  \item
+    \textcolor{blue}{\texttt{GROUP BY}} collects tuples into groups
+  \item
+    (optional) \textcolor{blue}{\texttt{HAVING}} is applied to each
+    group and groups are filtered
+  \item
+    \textcolor{blue}{\texttt{SELECT}} generates tuples of the results,
+    applying aggregate functions to get a single result for each group
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Nested Subqueries}
+\protect\phantomsection\label{nested-subqueries}
+\begin{itemize}
+\tightlist
+\item
+  SQL allows using the result of a query in another query
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use a subquery returning one attribute (scalar subquery) where a
+    value is used
+  \item
+    Use the result of a query for set membership in the WHERE clause
+  \item
+    Use the result of a query in a FROM clause :::columns ::::\{.column
+    width=60\%\}\\
+  \end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{SELECT}\NormalTok{ tmp.dept\_name, tmp.avg\_salary}
+\KeywordTok{FROM}\NormalTok{ (}
+  \KeywordTok{SELECT}\NormalTok{ dept\_name,}
+      \FunctionTok{AVG}\NormalTok{(salary) }\KeywordTok{AS}\NormalTok{ avg\_salary}
+  \KeywordTok{FROM}\NormalTok{ instructor}
+  \KeywordTok{GROUP} \KeywordTok{BY}\NormalTok{ dept\_name) }\KeywordTok{AS}\NormalTok{ tmp}
+\KeywordTok{WHERE}\NormalTok{ avg\_salary }\OperatorTok{\textgreater{}} \DecValTok{42000}
+\end{Highlighting}
+\end{Shaded}
+
+  :::: ::::\{.column width=40\%\}\\
+  \pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_4_1/lec_4_1_slide_22_image_1.png}}
+  :::: :::
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{With}
+\protect\phantomsection\label{with}
+\begin{itemize}
+\item
+  \textcolor{blue}{\texttt{WITH}} clause allows to define a temporary
+  relation containing the results of a subquery
+\item
+  It can be equivalent to a nested subqueries, but clearer
+\item
+  E.g., find department with the maximum budget :::columns ::::\{.column
+  width=80\%\}\\
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{WITH}\NormalTok{ max\_budget(}\FunctionTok{value}\NormalTok{) }\KeywordTok{as}\NormalTok{ (}
+  \KeywordTok{SELECT} \FunctionTok{MAX}\NormalTok{(budget) }\KeywordTok{FROM}\NormalTok{ department)}
+  \KeywordTok{SELECT}\NormalTok{ department.dept\_name, budget}
+    \KeywordTok{FROM}\NormalTok{ department, max\_budget}
+    \KeywordTok{WHERE}\NormalTok{ department.budget }\OperatorTok{=}\NormalTok{ max\_budget.}\FunctionTok{value}
+\end{Highlighting}
+\end{Shaded}
+
+:::: ::::\{.column width=20\%\}\\
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_4_1/lec_4_1_slide_23_image_1.png}}
+:::: :::
+\end{frame}
+
+\begin{frame}[fragile]{Insert}
+\protect\phantomsection\label{insert}
+\begin{itemize}
+\tightlist
+\item
+  To insert data into a relation we can specify tuples to insert
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Tuples \begingroup \footnotesize
+  \end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{INSERT} \KeywordTok{INTO}\NormalTok{ course }\KeywordTok{VALUES}\NormalTok{ (}\StringTok{\textquotesingle{}DATA{-}605\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Big data systems\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Comp. Sci.\textquotesingle{}}\NormalTok{, }\DecValTok{3}\NormalTok{)}
+    \KeywordTok{INSERT} \KeywordTok{INTO}\NormalTok{ course(course\_id, title, dept\_name, credits)}
+        \KeywordTok{VALUES}\NormalTok{ (}\StringTok{\textquotesingle{}DATA{-}605\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Big data systems\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Comp. Sci.\textquotesingle{}}\NormalTok{, }\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+  \endgroup
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Query whose results is a set of tuples
+  \end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{INSERT} \KeywordTok{INTO}\NormalTok{ instructor}
+\NormalTok{        (}\KeywordTok{SELECT} \KeywordTok{ID}\NormalTok{, name, dept\_name, }\DecValTok{18000}
+        \KeywordTok{FROM}\NormalTok{ student}
+        \KeywordTok{WHERE}\NormalTok{ dept\_name }\OperatorTok{=} \StringTok{\textquotesingle{}Music\textquotesingle{}} \KeywordTok{AND}\NormalTok{ tot\_cred }\OperatorTok{\textgreater{}} \DecValTok{144}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+  \begin{itemize}
+  \item
+    Nested queries are evaluated and then inserted so this doesn't
+    create infinite loops
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \KeywordTok{INSERT} \KeywordTok{INTO}\NormalTok{ student (}\KeywordTok{SELECT} \OperatorTok{*} \KeywordTok{FROM}\NormalTok{ student)}
+\end{Highlighting}
+\end{Shaded}
+  \item
+    Many DB have bulk loader utilities to insert a large set of tuples
+    into a relation, reading from formatted text files This is much
+    faster than INSERT statements
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Update}
+\protect\phantomsection\label{update}
+\begin{itemize}
+\item
+  SQL can change a value in a tuple without changing all the other
+  values
+\item
+  E.g., increase salary of all instructors by 5\%
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{UPDATE}\NormalTok{ instructor }\KeywordTok{SET}\NormalTok{ salary }\OperatorTok{=}\NormalTok{ salary }\OperatorTok{*} \FloatTok{1.05}
+\end{Highlighting}
+\end{Shaded}
+\item
+  E.g., conditionally
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{UPDATE}\NormalTok{ instructor }\KeywordTok{SET}\NormalTok{ salary }\OperatorTok{=}\NormalTok{ salary }\OperatorTok{*} \FloatTok{1.05}
+    \KeywordTok{WHERE}\NormalTok{ salary }\OperatorTok{\textless{}} \DecValTok{70000}
+\end{Highlighting}
+\end{Shaded}
+\item
+  Nesting is allowed
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{UPDATE}\NormalTok{ instructor }\KeywordTok{SET}\NormalTok{ salary }\OperatorTok{=}\NormalTok{ salary }\OperatorTok{*} \FloatTok{1.05}
+    \KeywordTok{WHERE}\NormalTok{ salary }\OperatorTok{\textless{}}\NormalTok{ (}\KeywordTok{SELECT} \FunctionTok{AVG}\NormalTok{(salary) }\KeywordTok{FROM}\NormalTok{ instructor)}
+\end{Highlighting}
+\end{Shaded}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Delete}
+\protect\phantomsection\label{delete}
+\begin{itemize}
+\item
+  One can delete tuples using a query returning entire rows of a table
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{DELETE} \KeywordTok{FROM}\NormalTok{ r }\KeywordTok{WHERE}\NormalTok{ p}
+\end{Highlighting}
+\end{Shaded}
+
+  where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    r is a relation
+  \item
+    P is a predicate
+  \end{itemize}
+\item
+  Remove all tuples (but not the table)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{DELETE} \KeywordTok{FROM}\NormalTok{ instructor}
+\end{Highlighting}
+\end{Shaded}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{SQL Tutorial}
+\protect\phantomsection\label{sql-tutorial}
+\begin{columns}[T]
+\begin{column}{0.6\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  SQL tutorial dir
+\item
+  Readme** **
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Explains how to run the tutorial
+  \end{itemize}
+\item
+  Three notebooks in tutorial\_university
+\item
+  \textbf{\textcolor{red}{How to learn from a tutorial }}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Reset the notebook
+  \item
+    Execute each cell one at the time
+  \item
+    Ideally create a new file and retype (!) everything
+  \item
+    Understand what each cell does
+  \item
+    Look at the output
+  \item
+    Change the code
+  \item
+    Play with it
+  \item
+    Build your mental model
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_4_1/lec_4_1_slide_27_image_1.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content}
+\begin{itemize}
+\tightlist
+\item
+  \emph{\textbf{\textcolor{red}{Movie Database Example (Optional)}}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Example Schema for SQL Queries}
+\protect\phantomsection\label{example-schema-for-sql-queries}
+\footnotesize
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Movie(title, year, length, inColor, studioName, producerC\textbackslash{}\#)}
+\NormalTok{StarsIn(movieTitle, movieYear, starName)}
+\NormalTok{MovieStar(name, address, gender, birthdate)}
+\NormalTok{MovieExec(name, address, cert\textbackslash{}\#, netWorth)}
+\NormalTok{Studio(name, address, presC\textbackslash{}\#)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{data605/lectures_source/images/lecture_4_1/lec_4_1_slide_29_image_1.png}
+\end{frame}
+
+\begin{frame}[fragile]{SQL: Data Definition}
+\protect\phantomsection\label{sql-data-definition}
+\begin{itemize}
+\tightlist
+\item
+  CREATE TABLE
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{CREATE} \KeywordTok{TABLE}\NormalTok{ movieExec (}
+\NormalTok{        name }\DataTypeTok{char}\NormalTok{(}\DecValTok{30}\NormalTok{),}
+\NormalTok{        address }\DataTypeTok{char}\NormalTok{(}\DecValTok{100}\NormalTok{),}
+\NormalTok{        cert\# }\DataTypeTok{integer} \KeywordTok{primary} \KeywordTok{key}\NormalTok{,}
+\NormalTok{        networth }\DataTypeTok{integer}\NormalTok{);}
+
+    \KeywordTok{CREATE} \KeywordTok{TABLE}\NormalTok{ movie (}
+\NormalTok{        title }\DataTypeTok{char}\NormalTok{(}\DecValTok{100}\NormalTok{),}
+        \DataTypeTok{year} \DataTypeTok{integer}\NormalTok{,}
+        \FunctionTok{length} \DataTypeTok{integer}\NormalTok{,}
+\NormalTok{        inColor }\DataTypeTok{smallint}\NormalTok{,}
+\NormalTok{        studioName }\DataTypeTok{char}\NormalTok{(}\DecValTok{20}\NormalTok{),}
+\NormalTok{        producerC\# }\DataTypeTok{integer} \KeywordTok{references}
+\NormalTok{            movieExec(cert\#) );}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Must define movieExec before movie. Why?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{SQL: Data Manipulation}
+\protect\phantomsection\label{sql-data-manipulation}
+\begin{itemize}
+\item
+  INSERT
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{INSERT} \KeywordTok{INTO}\NormalTok{ StarsIn }\KeywordTok{values}\NormalTok{(}\StringTok{\textquotesingle{}King Kong\textquotesingle{}}\NormalTok{, }\DecValTok{2005}\NormalTok{, }\StringTok{\textquotesingle{}Naomi Watts\textquotesingle{}}\NormalTok{);}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{INSERT} \KeywordTok{INTO}\NormalTok{ StarsIn(starName, movieTitle, movieYear)}
+        \KeywordTok{values}\NormalTok{(}\StringTok{\textquotesingle{}Naomi Watts\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}King Kong\textquotesingle{}}\NormalTok{, }\DecValTok{2005}\NormalTok{);}
+\end{Highlighting}
+\end{Shaded}
+\item
+  DELETE
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{DELETE} \KeywordTok{FROM}\NormalTok{ movies }\KeywordTok{WHERE}\NormalTok{ movieYear }\OperatorTok{\textless{}} \DecValTok{1980}\NormalTok{;}
+\end{Highlighting}
+\end{Shaded}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Syntax is fine, but this command will be rejected. Why?
+  \end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{DELETE} \KeywordTok{FROM}\NormalTok{ movies}
+        \KeywordTok{WHERE} \FunctionTok{length} \OperatorTok{\textless{}}\NormalTok{ (}\KeywordTok{SELECT} \FunctionTok{avg}\NormalTok{(}\FunctionTok{length}\NormalTok{) }\KeywordTok{FROM}\NormalTok{ movies);}
+\end{Highlighting}
+\end{Shaded}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Problem: as we delete tuples, the average length changes
+  \item
+    Solution:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      First, compute avg length and find all tuples to delete
+    \item
+      Next, delete all tuples found above (without recomputing avg or
+      retesting the tuples)
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{SQL: Data Manipulation}
+\protect\phantomsection\label{sql-data-manipulation-1}
+\begin{itemize}
+\tightlist
+\item
+  UPDATE
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Increase all movieExec netWorth's over 100,000 USD by 6\%, all other
+    accounts receive 5\%
+  \item
+    Write two update statements:
+  \end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{UPDATE}\NormalTok{ movieExec }\KeywordTok{SET}\NormalTok{ netWorth }\OperatorTok{=}\NormalTok{ netWorth }\OperatorTok{*} \FloatTok{1.06}
+        \KeywordTok{WHERE}\NormalTok{ netWorth }\OperatorTok{\textgreater{}} \DecValTok{100000}\NormalTok{;}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{UPDATE}\NormalTok{ movieExec }\KeywordTok{SET}\NormalTok{ netWorth }\OperatorTok{=}\NormalTok{ netWorth }\OperatorTok{*} \FloatTok{1.05}
+        \KeywordTok{WHERE}\NormalTok{ netWorth }\OperatorTok{\textless{}=} \DecValTok{100000}\NormalTok{;}
+\end{Highlighting}
+\end{Shaded}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The order is important
+  \item
+    Can be done better using the case statement
+  \end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{UPDATE}\NormalTok{ movieExec }\KeywordTok{SET}\NormalTok{ netWorth }\OperatorTok{=}
+        \ControlFlowTok{CASE}
+            \ControlFlowTok{WHEN}\NormalTok{ netWorth }\OperatorTok{\textgreater{}} \DecValTok{100000} \ControlFlowTok{THEN}\NormalTok{ netWorth }\OperatorTok{*} \FloatTok{1.06}
+            \ControlFlowTok{WHEN}\NormalTok{ netWorth }\OperatorTok{\textless{}=} \DecValTok{100000} \ControlFlowTok{THEN}\NormalTok{ netWorth }\OperatorTok{*} \FloatTok{1.05}
+        \ControlFlowTok{END}\NormalTok{;}
+\end{Highlighting}
+\end{Shaded}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{SQL Single Table Queries}
+\protect\phantomsection\label{sql-single-table-queries}
+\begin{itemize}
+\item
+  Movies produced by Disney in 1990: note the \emph{rename}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{SELECT}\NormalTok{ m.title, m.}\DataTypeTok{year}
+        \KeywordTok{FROM}\NormalTok{ movie m}
+        \KeywordTok{WHERE}\NormalTok{ m.studioname }\OperatorTok{=} \StringTok{\textquotesingle{}disney\textquotesingle{}} \KeywordTok{AND}\NormalTok{ m.}\DataTypeTok{year} \OperatorTok{=} \DecValTok{1990}\NormalTok{;}
+\end{Highlighting}
+\end{Shaded}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The SELECT clause can contain expressions
+  \end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{SELECT}\NormalTok{ title }\OperatorTok{||} \StringTok{\textquotesingle{} (\textquotesingle{}} \OperatorTok{||} \FunctionTok{to\_char}\NormalTok{(}\DataTypeTok{year}\NormalTok{) }\OperatorTok{||} \StringTok{\textquotesingle{})\textquotesingle{}} \KeywordTok{AS}\NormalTok{ titleyear}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{SELECT} \DecValTok{2014} \OperatorTok{{-}} \DataTypeTok{year}
+\end{Highlighting}
+\end{Shaded}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The WHERE clause support a large number of different predicates and
+    combinations thereof
+  \end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \DataTypeTok{year} \KeywordTok{BETWEEN} \DecValTok{1990} \KeywordTok{and} \DecValTok{1995}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{    title }\KeywordTok{LIKE} \StringTok{\textquotesingle{}star wars\%\textquotesingle{}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{    title }\KeywordTok{LIKE} \StringTok{\textquotesingle{}star wars \_\textquotesingle{}}
+\end{Highlighting}
+\end{Shaded}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Single Table Queries}
+\protect\phantomsection\label{single-table-queries}
+\begin{itemize}
+\item
+  Find distinct movies sorted by title
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{SELECT} \KeywordTok{DISTINCT}\NormalTok{ title}
+        \KeywordTok{FROM}\NormalTok{ movie}
+        \KeywordTok{WHERE}\NormalTok{ studioname }\OperatorTok{=} \StringTok{\textquotesingle{}disney\textquotesingle{}} \KeywordTok{AND} \DataTypeTok{year} \OperatorTok{=} \DecValTok{1990}
+        \KeywordTok{ORDER} \KeywordTok{by}\NormalTok{ title;}
+\end{Highlighting}
+\end{Shaded}
+\item
+  Average length of a movie
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{SELECT} \DataTypeTok{year}\NormalTok{, }\FunctionTok{avg}\NormalTok{(}\FunctionTok{length}\NormalTok{)}
+        \KeywordTok{FROM}\NormalTok{ movie}
+        \KeywordTok{GROUP} \KeywordTok{BY} \DataTypeTok{year}\NormalTok{;}
+\end{Highlighting}
+\end{Shaded}
+\item
+  \textbf{\textcolor{red}{GROUP BY:}} is a very important concept that
+  shows up in many data processing platforms
+
+  \begin{itemize}
+  \tightlist
+  \item
+    What it does:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Partition the tuples by the group attributes (\emph{year} in this
+      case)
+    \item
+      Do something (\emph{compute avg} in this case) for each group
+    \item
+      Number of resulting tuples == number of groups
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Single Table Queries}
+\protect\phantomsection\label{single-table-queries-1}
+\begin{itemize}
+\item
+  Find movie with the maximum length
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{SELECT}\NormalTok{ title, }\DataTypeTok{year}
+        \KeywordTok{FROM}\NormalTok{ movie}
+        \KeywordTok{WHERE}\NormalTok{ movie.}\FunctionTok{length} \OperatorTok{=}\NormalTok{ (}\KeywordTok{SELECT} \FunctionTok{max}\NormalTok{(}\FunctionTok{length}\NormalTok{) }\KeywordTok{FROM}\NormalTok{ movie);}
+\end{Highlighting}
+\end{Shaded}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The smaller ``subquery'' is called a ``nested subquery''
+  \end{itemize}
+\item
+  Find movies with at most 5 stars: an example of a correlated subquery
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{SELECT} \OperatorTok{*}
+        \KeywordTok{FROM}\NormalTok{ movies m}
+        \KeywordTok{WHERE} \DecValTok{5} \OperatorTok{\textgreater{}=}\NormalTok{ (}\KeywordTok{SELECT} \FunctionTok{count}\NormalTok{(}\OperatorTok{*}\NormalTok{)}
+                    \KeywordTok{FROM}\NormalTok{ starsIn si}
+                    \KeywordTok{WHERE}\NormalTok{ si.title }\OperatorTok{=}\NormalTok{ m.title }\KeywordTok{AND}
+\NormalTok{                          si.}\DataTypeTok{year} \OperatorTok{=}\NormalTok{ m.}\DataTypeTok{year}\NormalTok{);}
+\end{Highlighting}
+\end{Shaded}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The ``inner'' subquery counts the number of actors for that movie.
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Single Table Queries}
+\protect\phantomsection\label{single-table-queries-2}
+\begin{itemize}
+\item
+  Rank movies by their length
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{SELECT}\NormalTok{ title, }\DataTypeTok{year}\NormalTok{,}
+\NormalTok{        (}\KeywordTok{SELECT} \FunctionTok{count}\NormalTok{(}\OperatorTok{*}\NormalTok{)}
+        \KeywordTok{FROM}\NormalTok{ movies m2}
+        \KeywordTok{WHERE}\NormalTok{ m1.}\FunctionTok{length} \OperatorTok{\textless{}=}\NormalTok{ m2.}\FunctionTok{length}\NormalTok{) }\KeywordTok{AS} \FunctionTok{rank}
+        \KeywordTok{FROM}\NormalTok{ movies m1;}
+\end{Highlighting}
+\end{Shaded}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Key insight: A movie is ranked 5th if there are exactly 4 movies
+    with longer length.
+  \item
+    Most database systems support some sort of a \emph{rank} keyword for
+    doing this
+  \item
+    The above query doesn't work in presence of ties, etc.
+  \end{itemize}
+\item
+  Set operations
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{SELECT}\NormalTok{ name}
+        \KeywordTok{FROM}\NormalTok{ movieExec}
+    \KeywordTok{union}\OperatorTok{/}\KeywordTok{intersect}\OperatorTok{/}\KeywordTok{minus}
+        \KeywordTok{SELECT}\NormalTok{ name }\KeywordTok{FROM}
+\NormalTok{            movieStar}
+\end{Highlighting}
+\end{Shaded}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Single Table Queries}
+\protect\phantomsection\label{single-table-queries-3}
+\begin{itemize}
+\item
+  Set Comparisons
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{SELECT} \OperatorTok{*}
+    \KeywordTok{FROM}\NormalTok{ movies}
+    \KeywordTok{WHERE} \DataTypeTok{year} \KeywordTok{IN}\NormalTok{ [}\DecValTok{1990}\NormalTok{, }\DecValTok{1995}\NormalTok{, }\DecValTok{2000}\NormalTok{];}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{SELECT} \OperatorTok{*}
+    \KeywordTok{FROM}\NormalTok{ movies}
+    \KeywordTok{WHERE} \DataTypeTok{year} \KeywordTok{NOT} \KeywordTok{IN}\NormalTok{ (}
+        \KeywordTok{SELECT} \FunctionTok{EXTRACT}\NormalTok{(}\DataTypeTok{year} \KeywordTok{from}\NormalTok{ birthdate)}
+        \KeywordTok{FROM}\NormalTok{ MovieStar}
+\NormalTok{    );}
+\end{Highlighting}
+\end{Shaded}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Multi-Table Queries}
+\protect\phantomsection\label{multi-table-queries}
+\begin{itemize}
+\item
+  Key:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Do a join to get an appropriate table
+  \item
+    Use the constructs for single-table queries
+  \item
+    You will get used to doing all at once
+  \end{itemize}
+\item
+  Examples:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{SELECT}\NormalTok{ title, }\DataTypeTok{year}\NormalTok{, me.name }\KeywordTok{AS}\NormalTok{ producerName}
+        \KeywordTok{FROM}\NormalTok{ movies m, movieexec me}
+        \KeywordTok{WHERE}\NormalTok{ m.producerC\# }\OperatorTok{=}\NormalTok{ me.cert\#;}
+\end{Highlighting}
+\end{Shaded}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Multi-Table Queries}
+\protect\phantomsection\label{multi-table-queries-1}
+\begin{itemize}
+\item
+  Consider the query:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{SELECT}\NormalTok{ title, }\DataTypeTok{year}\NormalTok{, producerC\#, }\FunctionTok{count}\NormalTok{(starName)}
+        \KeywordTok{FROM}\NormalTok{ movies, starsIn}
+        \KeywordTok{WHERE}\NormalTok{ title }\OperatorTok{=}\NormalTok{ starsIn.movieTitle }\KeywordTok{AND}
+              \DataTypeTok{year} \OperatorTok{=}\NormalTok{ starsIn.movieYear}
+        \KeywordTok{GROUP} \KeywordTok{BY}\NormalTok{ title, }\DataTypeTok{year}\NormalTok{, producerC\#}
+\end{Highlighting}
+\end{Shaded}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    What about movies with no stars?
+  \item
+    Need to use \textbf{\textcolor{red}{outer joins}}
+  \end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{SELECT}\NormalTok{ title, }\DataTypeTok{year}\NormalTok{, producerC\#, }\FunctionTok{count}\NormalTok{(starName)}
+        \KeywordTok{FROM}\NormalTok{ movies }\KeywordTok{LEFT} \KeywordTok{OUTER} \KeywordTok{JOIN}\NormalTok{ starsIn}
+        \KeywordTok{ON}\NormalTok{ title }\OperatorTok{=}\NormalTok{ starsIn.movieTitle }\KeywordTok{AND} \DataTypeTok{year} \OperatorTok{=}\NormalTok{ starsIn.movieYear}
+        \KeywordTok{GROUP} \KeywordTok{BY}\NormalTok{ title, }\DataTypeTok{year}\NormalTok{, producerC\#}
+\end{Highlighting}
+\end{Shaded}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    All tuples from `movies' that have no matches in starsIn are
+    included with NULLs
+  \item
+    So if a tuple (m1, 1990) has no match in starsIn, we get (m1, 1990,
+    NULL) in the result
+  \item
+    The count(starName) works correctly then
+  \item
+    Note: count(*) would not work correctly (NULLs can have unintuitive
+    behavior)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Other SQL Constructs}
+\protect\phantomsection\label{other-sql-constructs}
+\begin{itemize}
+\item
+  Views
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \KeywordTok{CREATE} \KeywordTok{VIEW}\NormalTok{ DisneyMovies}
+      \KeywordTok{SELECT} \OperatorTok{*}
+          \KeywordTok{FROM}\NormalTok{ movie m}
+          \KeywordTok{WHERE}\NormalTok{ m.studioname }\OperatorTok{=} \StringTok{\textquotesingle{}disney\textquotesingle{}}\NormalTok{;}
+\end{Highlighting}
+\end{Shaded}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Can use it in any place where a table name is used
+  \item
+    Views are used quite extensively to:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Simplify queries
+    \item
+      Hide data (by giving users access only to specific views)
+    \end{itemize}
+  \item
+    Views may be \emph{materialized }or not
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Other SQL Constructs}
+\protect\phantomsection\label{other-sql-constructs-1}
+\begin{itemize}
+\tightlist
+\item
+  NULLs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Value of any attribute can be NULL
+  \item
+    Because: value is unknown, or it is not applicable, or hidden, etc.
+  \item
+    Can lead to counterintuitive behavior
+  \item
+    For example, the following query does not return movies where length
+    = NULL
+  \end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+      \KeywordTok{SELECT} \OperatorTok{*} \KeywordTok{FROM}\NormalTok{ movies}
+      \KeywordTok{WHERE} \FunctionTok{length} \OperatorTok{\textgreater{}=} \DecValTok{120} \KeywordTok{OR} \FunctionTok{length} \OperatorTok{\textless{}=} \DecValTok{120}
+\end{Highlighting}
+\end{Shaded}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Aggregate operations can be especially tricky
+  \end{itemize}
+\item
+  Transactions
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A transaction is a sequence of queries and update statements
+    executed as a single unit
+  \item
+    For example, transferring money from one account to another
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Both the \emph{deduction} from one account and \emph{credit} to
+      the other account should happen, or neither should
+    \end{itemize}
+  \end{itemize}
+\item
+  Triggers
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A trigger is a statement that is executed automatically by the
+    system as a side effect of a modification to the database
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Other SQL Constructs}
+\protect\phantomsection\label{other-sql-constructs-2}
+\begin{itemize}
+\tightlist
+\item
+  Integrity Constraints
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Predicates on the database that must always hold
+  \item
+    Key Constraints: Specifying something is a primary key or unique
+  \end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{CREATE} \KeywordTok{TABLE}\NormalTok{ customer (}
+\NormalTok{        ssn }\DataTypeTok{CHAR}\NormalTok{(}\DecValTok{9}\NormalTok{) }\KeywordTok{PRIMARY} \KeywordTok{KEY}\NormalTok{,}
+\NormalTok{        cname }\DataTypeTok{CHAR}\NormalTok{(}\DecValTok{15}\NormalTok{),}
+\NormalTok{        address }\DataTypeTok{CHAR}\NormalTok{(}\DecValTok{30}\NormalTok{),}
+\NormalTok{        city }\DataTypeTok{CHAR}\NormalTok{(}\DecValTok{10}\NormalTok{),}
+    \KeywordTok{UNIQUE}\NormalTok{ (cname, address, city));}
+\end{Highlighting}
+\end{Shaded}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Attribute constraints: Constraints on the values of attributes
+  \end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bname }\DataTypeTok{char}\NormalTok{(}\DecValTok{15}\NormalTok{) }\KeywordTok{not} \KeywordTok{null}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{balance }\DataTypeTok{int} \KeywordTok{not} \KeywordTok{null}\NormalTok{, }\KeywordTok{check}\NormalTok{ (balance}\OperatorTok{\textgreater{}=} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Integrity Constraints}
+\protect\phantomsection\label{integrity-constraints}
+\begin{itemize}
+\item
+  Referential integrity: prevent dangling tuples
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \KeywordTok{CREATE} \KeywordTok{TABLE}\NormalTok{ branch(bname }\DataTypeTok{CHAR}\NormalTok{(}\DecValTok{15}\NormalTok{) }\KeywordTok{PRIMARY} \KeywordTok{KEY}\NormalTok{, }\OperatorTok{..}\NormalTok{.);}
+  \KeywordTok{CREATE} \KeywordTok{TABLE}\NormalTok{ loan(}\OperatorTok{..}\NormalTok{., }\KeywordTok{FOREIGN} \KeywordTok{KEY}\NormalTok{ bname }\KeywordTok{REFERENCES}\NormalTok{ branch);}
+\end{Highlighting}
+\end{Shaded}
+\item
+  Can tell the system what to do if a referenced tuple is being deleted
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Integrity Constraints}
+\protect\phantomsection\label{integrity-constraints-1}
+\begin{itemize}
+\tightlist
+\item
+  Global Constraints
+
+  \begin{itemize}
+  \item
+    Single-table
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \KeywordTok{CREATE} \KeywordTok{TABLE}\NormalTok{ branch (}\OperatorTok{..}\NormalTok{., bcity }\DataTypeTok{CHAR}\NormalTok{(}\DecValTok{15}\NormalTok{), assets }\DataTypeTok{INT}\NormalTok{,}
+      \KeywordTok{CHECK}\NormalTok{ (}\KeywordTok{NOT}\NormalTok{(bcity }\OperatorTok{=} \StringTok{\textquotesingle{}Bkln\textquotesingle{}}\NormalTok{) }\KeywordTok{OR}\NormalTok{ assets}\OperatorTok{\textgreater{}}\DecValTok{5}\NormalTok{M))}
+\end{Highlighting}
+\end{Shaded}
+  \item
+    Multi-table
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \KeywordTok{CREATE} \KeywordTok{ASSERTION}\NormalTok{ loan}\OperatorTok{{-}}\KeywordTok{constraint}
+  \KeywordTok{CHECK}\NormalTok{ (}\KeywordTok{NOT} \KeywordTok{EXISTS}
+\NormalTok{      (}\KeywordTok{SELECT}\OperatorTok{*} \KeywordTok{FROM}\NormalTok{ loan }\KeywordTok{AS}\NormalTok{ L }\KeywordTok{WHERE} \KeywordTok{NOT} \KeywordTok{EXISTS}
+\NormalTok{          (}\KeywordTok{SELECT}\OperatorTok{*} \KeywordTok{FROM}\NormalTok{ borrower B, depositor D, }\KeywordTok{account}\NormalTok{ A}
+          \KeywordTok{WHERE}\NormalTok{ B.cname }\OperatorTok{=}\NormalTok{ D.cname }\KeywordTok{AND}\NormalTok{ D.acct\_no }\OperatorTok{=}\NormalTok{ A.acct\_no}
+              \KeywordTok{AND}\NormalTok{ L.lno}\OperatorTok{=}\NormalTok{ B.lno)))}
+\end{Highlighting}
+\end{Shaded}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Additional SQL Constructs}
+\protect\phantomsection\label{additional-sql-constructs}
+\begin{itemize}
+\tightlist
+\item
+  \textcolor{blue}{\texttt{SELECT}} subquery factoring
+
+  \begin{itemize}
+  \item
+    To allow assigning a name to a subquery, then use its result by
+    referencing that name
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \KeywordTok{WITH}\NormalTok{ temp }\KeywordTok{AS}\NormalTok{ (}
+      \KeywordTok{SELECT}\NormalTok{ title, }\FunctionTok{avg}\NormalTok{(}\FunctionTok{length}\NormalTok{)}
+      \KeywordTok{FROM}\NormalTok{ movies}
+      \KeywordTok{GROUP} \KeywordTok{BY} \DataTypeTok{year}\NormalTok{)}
+  \KeywordTok{SELECT} \FunctionTok{COUNT}\NormalTok{(}\OperatorTok{*}\NormalTok{) }\KeywordTok{FROM}\NormalTok{ temp;}
+\end{Highlighting}
+\end{Shaded}
+  \item
+    Can have multiple subqueries (multiple with clauses)
+  \item
+    Real advantage is when subquery needs to be referenced multiple
+    times in main select
+  \item
+    Helps with complex queries, both for readability and maybe
+    performance (can cache subquery results)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Another SQL Construct}
+\protect\phantomsection\label{another-sql-construct}
+\begin{itemize}
+\tightlist
+\item
+  \textcolor{blue}{\texttt{SELECT HAVING}} clause
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Used in combination with \textcolor{blue}{\texttt{GROUP BY}} to
+    restrict the groups of returned rows to only those where condition
+    evaluates to true
+  \end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \KeywordTok{SELECT} \DataTypeTok{year}\NormalTok{, }\FunctionTok{count}\NormalTok{(}\OperatorTok{*}\NormalTok{)}
+      \KeywordTok{FROM}\NormalTok{ movies}
+      \KeywordTok{WHERE} \DataTypeTok{year} \OperatorTok{\textgreater{}} \DecValTok{1980}
+      \KeywordTok{GROUP} \KeywordTok{BY} \DataTypeTok{year}
+      \KeywordTok{HAVING} \FunctionTok{COUNT}\NormalTok{(}\OperatorTok{*}\NormalTok{) }\OperatorTok{\textgreater{}} \DecValTok{10}\NormalTok{;}
+\end{Highlighting}
+\end{Shaded}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Difference from \textcolor{blue}{\texttt{WHERE}} clause is that it
+    applies to summarized group records, and where applies to individual
+    records
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\end{document}

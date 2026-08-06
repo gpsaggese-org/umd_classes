@@ -62,10 +62,10 @@ UMD DATA605 - Big Data Systems
 - **Data Centers: Opex**
 ::: columns
 :::: {.column width=55%}
-- **Powering equipment cost**
+- @Powering equipment cost@
   - Focus on energy-efficient computing
 
-- **High cooling cost**
+- @High cooling cost@
   - Vent placement is key to managing thermal hotspots
   - PUE (Power Usage Effectiveness)
     - Some power is converted into computation
@@ -75,9 +75,9 @@ UMD DATA605 - Big Data Systems
     - Current PUE is 1.07-1.22
     - May lead to the development of large data centers soon
 
-- **Lots of research on energy-saving**
+- @Lots of research on energy-saving@
 
-- **Data centers built**
+- @Data centers built@
   - Close to cheap energy sources
   - In cold climates
 ::::
@@ -154,7 +154,7 @@ UMD DATA605 - Big Data Systems
 - Different tiers for reliability, cost, performance
 
 \small
-|        | **Default** | **RRS** | **IA** | **Glacier** |
+|        | @Default@ | @RRS@ | @IA@ | @Glacier@ |
 |---------|---------|---------|---------|---------|
 | Durability | 99.999999999% | 99.99% | 99.999999999% | 99.999999999% |
 | Availability | 99.99% | 99.99% | 99.9% | 99.99% |
@@ -163,20 +163,20 @@ UMD DATA605 - Big Data Systems
 | Frequently Accessed? | Yes | Yes | No | No |
 
 - **Google App Engine**
-- **Google Compute Engine** (IaaS)
+- @Google Compute Engine@ (IaaS)
   - Competes with AWS EC2
 
-- **Google Infrastructure** (PaaS)
+- @Google Infrastructure@ (PaaS)
   - Run Docker containers on Google resources
   - Managed services (e.g., databases)
 
-- **Google Docs** (SaaS)
+- @Google Docs@ (SaaS)
   - Word processor, spreadsheet, presentations in the cloud
 
 ::: columns
 :::: {.column width=55%}
 
-- Google Cloud's **compute market share**
+- Google Cloud's @compute market share@
   - Built software data centers before Amazon
   - Invented cloud technologies (e.g., Google File System, MapReduce, BigTable)
   - Market share 3x smaller than AWS
@@ -195,15 +195,15 @@ UMD DATA605 - Big Data Systems
 ## Virtualization
 
 - **Virtualization**
-- **Virtual machines have been around for a long time**
+- @Virtual machines have been around for a long time@
   - Processors have had support since the 1980s
   - In the 2000s, they became efficient enough for cloud computing
 
-- **Basic idea of cloud computing**
+- @Basic idea of cloud computing@
   - Run virtual machines on servers and sell time on them
   - E.g., AWS, Microsoft Azure, Google Cloud
 
-- **Many advantages**
+- @Many advantages@
   - _Security_: virtual machines have a strong boundary that enhances security
   - _Multi-tenancy_: multiple VMs can run on the same server
   - _Efficiency_: replace many underpowered machines with fewer high-powered
@@ -212,17 +212,17 @@ UMD DATA605 - Big Data Systems
 - **Desktop vs Server Virtualization**
 ::: columns
 :::: {.column width=50%}
-- **Desktop virtualization**
+- @Desktop virtualization@
   - VMware, Xen, VirtualBox
   - Runs on host OS
   - Hypervisor/VM supports guest OS
-- **Server virtualization**
+- @Server virtualization@
   - Runs hypervisor on hardware
   - Ideal for server farms, cloud computing
   - Amazon used Xen on Red Hat
     - Now it uses AWS Nitro
 
-- **Performance is tricky**
+- @Performance is tricky@
   - Hard to reason about performance
   - Identical VMs may deliver different performance
   - Multi-tenancy, different hardware
@@ -246,7 +246,7 @@ _Server virtualization_
 - **Docker**
 - Package all dependencies in a single container
 
-- **Advantages**
+- @Advantages@
   - Containers are fast and portable
   - Reduce virtualization overhead
   - All containers can run on a single host
@@ -267,11 +267,11 @@ _Server virtualization_
 ## Programming frameworks
 
 - **Programming Frameworks**
-- **Programming frameworks** emerged to:
+- @Programming frameworks@ emerged to:
   - Scale out workloads
   - Distribute work over thousands of machines
 
-- **Parallel approach** has existed for a long time to program clusters
+- @Parallel approach@ has existed for a long time to program clusters
   - Challenging for programmers
     - Parallelize applications
     - Distribute data
@@ -279,16 +279,16 @@ _Server virtualization_
     - Debugging
     - Race conditions/Heisenbugs
 
-- **The difference is the user interface**
+- @The difference is the user interface@
   - Google developed MapReduce, starting a new era
     - Hadoop, Spark
   - AWS services
 
 - **MapReduce Framework**
-- Provide a **restricted but powerful abstraction** for programming distributed
+- Provide a @restricted but powerful abstraction@ for programming distributed
   workloads
 
-- **Separation of responsibilities**
+- @Separation of responsibilities@
   - _Programmers_
     - Write functions \textcolor{blue}{\texttt{map}} and \textcolor{blue}{\texttt{reduce}}
     - Perform arbitrary computations on input data within structure
@@ -300,20 +300,20 @@ _Server virtualization_
 - **Other Programming Frameworks**
 - Many programming frameworks for different applications address MapReduce
   limitations
-  - **High-performance Computing (HPC) Systems**
+  - @High-performance Computing (HPC) Systems@
     - Clusters of supercomputers
     - E.g., GridRPC, MPI
     - More expressive and efficient
-  - **Spark**
+  - @Spark@
     - Based on Resilient Distributed Datasets (RDD)
     - In-memory, efficient
-  - **Apache Storm, Spark Streaming**
+  - @Apache Storm, Spark Streaming@
     - Handle real-time streaming data
-  - **Giraph, GraphLab, GraphX**
+  - @Giraph, GraphLab, GraphX@
     - Graph processing systems
-  - **Apache Hive**
+  - @Apache Hive@
     - SQL-like interface on Hadoop/HDFS
-  - **Apache HBase**
+  - @Apache HBase@
     - NoSQL column-oriented database
     - Supports random read/write of large tables on Hadoop/HDFS
     - Modeled after Google BigTable
@@ -321,79 +321,79 @@ _Server virtualization_
 ## Challenges and Opportunities
 
 - **Cloud Benefits (1/2)**
-- **Lower-cost, light end-devices**
+- @Lower-cost, light end-devices@
   - Offload compute/storage to cloud $\rightarrow$ PCs/laptops need less
     memory/disk/CPU
   - Useful for thin clients, low-cost devices, legacy hardware
 
-- **Scalability and elastic storage**
+- @Scalability and elastic storage@
   - Unlimited storage and dynamic scalability for data/workloads
   - No need to buy or pre-provision resources
 
-- **Anywhere access and device independence**
+- @Anywhere access and device independence@
   - Work from any device (laptop, tablet, phone) with Internet
   - Documents, apps, data follow user: seamless cross-device continuity
 
 - **Cloud Benefits (2/2)**
-- **Cloud‑native software and SaaS model**
+- @Cloud‑native software and SaaS model@
   - Access full-featured applications without installation or license
   - Automatic updates and patching, always-on latest versions
 
-- **Improved collaboration and version control**
+- @Improved collaboration and version control@
   - Real‑time, multi-user editing and sharing from any location
   - Built-in revision history and conflict avoidance for shared documents
 
-- **Faster development and deployment cycles**
+- @Faster development and deployment cycles@
   - Containerization, serverless functions, microservices enable rapid
     provisioning
   - Ideal for modern workloads (e.g., AI/ML, analytics, distributed apps)
 
 - **Modern Opportunities**
-- **Cloud‑native support for AI/ML workloads**
+- @Cloud‑native support for AI/ML workloads@
   - Providers offer specialized hardware (GPUs, TPUs) for training/serving
     models
   - Enables scaling without owning expensive hardware
 
-- **Multi-cloud and hybrid-cloud strategies to boost resilience**
+- @Multi-cloud and hybrid-cloud strategies to boost resilience@
   - Organizations adopt multicloud fallback after major outages
 
-- **Improved data sovereignty and regulatory compliance**
+- @Improved data sovereignty and regulatory compliance@
   - New regulations (e.g. EU Data Act of 2025) increase portability
     and reduce vendor lock-in
   - "Sovereign cloud" options for jurisdiction and legal control concerns
 
 - **Cloud Limitations**
-- **Cloud provider dependency and vendor lock‑in**
+- @Cloud provider dependency and vendor lock‑in@
   - Reliance on major providers limits flexibility and competition
   - Switching providers is complex and costly
 
-- **Security, privacy, and data‑ownership issues**
+- @Security, privacy, and data‑ownership issues@
   - Data stored off‑site may be subject to foreign access laws
   - Sensitive workloads require encryption, strong data governance, or
     on‑premises solutions
 
-- **Outages and service disruptions**
+- @Outages and service disruptions@
   - Major outages continue
   - Even top providers are not immune; "design for failure" remains essential
 
-- **Latency, bandwidth, and connectivity dependence**
+- @Latency, bandwidth, and connectivity dependence@
   - Cloud services require stable, fast Internet (problematic in regions with
     spotty connectivity)
   - High-latency workloads (e.g., real-time gaming, low-latency HPC, real‑time
     control) may suffer
 
 - **Post‑2025 Challenges**
-- **Increasing regulatory burden and data‑sovereignty demands**
+- @Increasing regulatory burden and data‑sovereignty demands@
   - Regulations like EU Data Act require cloud providers to support data
     portability, transparency, restricted cross‑border access
   - Compliance adds complexity for companies across jurisdictions
 
-- **Cloud sprawl and rising costs**
+- @Cloud sprawl and rising costs@
   - Multicloud and hybrid setups complicate cost management, egress charges,
     licensing
   - Resource usage can increase without careful monitoring
 
-- **Feature and performance limitations for specialized workloads**
+- @Feature and performance limitations for specialized workloads@
   - Desktop-level apps and advanced tools often outperform web/cloud versions
   - Compute‑intensive or latency-sensitive tasks may remain sub‑optimal in the
     cloud

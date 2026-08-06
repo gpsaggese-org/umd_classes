@@ -64,14 +64,14 @@ UMD DATA605 - Big Data Systems
   - Poulton, [Docker Deep Dive: Zero to Docker in a single book](https://www.amazon.com/Docker-Deep-Dive-Nigel-Poulton/dp/1521822808), 2020
 
 #### Application Deployment
-- For (almost all) Internet companies, **the application is the business**
+- For (almost all) Internet companies, **\textcolor{red}{the application is the business}**
   - If the application breaks, the business stops
   - E.g., Amazon, Google, Facebook, online banks, travel sites, ...
 
-- **Problem**
+- **\textcolor{darkgreen}{Problem}**
   - Release, deploy, manage, monitor applications
 
-- **Solutions**
+- **\textcolor{blue}{Solutions}**
   - Before 2000s: "bare-metal era"
   - 2000s-2010s: "virtual machine era"
   - After ~2013: "container era"
@@ -80,11 +80,11 @@ UMD DATA605 - Big Data Systems
 
 :::columns
 ::::{.column width=65%}
-- **DevOps** = practices combining:
+- **\textcolor{red}{DevOps}** = practices combining:
   - Software development (_dev_)
   - IT operations (_ops_)
 
-- **Containers revolutionized DevOps**
+- **\textcolor{blue}{Containers revolutionized DevOps}**
   - Enable independence between app development and IT ops
     - One team creates an app
     - Another team deploys and manages apps
@@ -112,17 +112,17 @@ UMD DATA605 - Big Data Systems
 #### Run on bare metal
 :::columns
 ::::{.column width=80%}
-- **< 2000s**
+- **\textcolor{red}{< 2000s}**
   - Running few applications per server (no virtualization)
 
-- **Pros**
+- **\textcolor{orange}{Pros}**
   - No virtualization overhead
 
-- **Cons**
+- **\textcolor{darkgreen}{Cons}**
   - Insecure due to no application separation
   - Expensive
 
-- **Expensive / low efficiency**
+- **\textcolor{teal}{Expensive / low efficiency}**
   - New server for each application
   - Hard to spec machines $\to$ buy "big and fast servers"
     - Overpowered servers at 5-10% capacity
@@ -130,32 +130,30 @@ UMD DATA605 - Big Data Systems
 
 - Resurfaced in 2020 with different Cloud Computing use cases
 
-- **Winners**: Cisco, Sun Microsystems, Microsoft
+- **\textcolor{cyan}{Winners}**: Cisco, Sun Microsystems, Microsoft
 ::::
 ::::{.column width=20%}
 \vspace{2.5cm}
 ![](data605/lectures_source/images/lecture_3/lec_3_slide_6_image_1.png)
 ::::
 :::
-```
-
 #### Virtual Machine Era
 :::columns
 ::::{.column width=75%}
-- **Circa 2000-2010: Virtual Machine**
+- **\textcolor{red}{Circa 2000-2010: Virtual Machine}**
   - Run multiple OS copies on the same hardware
 
-- **Pros**
+- **\textcolor{darkgreen}{Pros}**
   - Run multiple apps safely on one server
   - Use existing servers with spare capacity
 
-- **Cons**
+- **\textcolor{blue}{Cons}**
   - Each VM needs an OS (wastes CPU, RAM, disk)
   - Buy OS license
   - Monitor and patch each OS
   - Slow boot times
 
-- **Winners**: VMWare, RedHat, Citrix
+- **\textcolor{violet}{Winners}**: VMWare, RedHat, Citrix
 ::::
 ::::{.column width=25%}
 
@@ -166,9 +164,9 @@ UMD DATA605 - Big Data Systems
 #### Containers Era
 :::columns
 ::::{.column width=60%}
-- **Circa 2013: Docker becomes ubiquitous**
+- **\textcolor{red}{Circa 2013: Docker becomes ubiquitous}**
 
-- **Docker**
+- **\textcolor{orange}{Docker}**
   - Didn't invent containers
   - Made containers simple and mainstream
 
@@ -177,7 +175,7 @@ UMD DATA605 - Big Data Systems
   - Control groups
   - Union filesystems
 
-- **Pros**
+- **\textcolor{darkgreen}{Pros}**
   - Containers are fast and portable
   - Don't require a full OS
   - All run on a single host
@@ -193,24 +191,24 @@ UMD DATA605 - Big Data Systems
 ![](data605/lectures_source/images/lecture_3/lec_3_slide_8_image_2.png){width=120%}
 ::::
 :::
-- **Cons**
+- **\textcolor{teal}{Cons}**
   - CPU overhead
   - Toolchain to learn / use
 
-- **Winners**: AWS, Microsoft Azure, Google (not Docker Inc.)
+- **\textcolor{cyan}{Winners}**: AWS, Microsoft Azure, Google (not Docker Inc.)
 
 #### Serverless Computing
-- **Containers run in an OS, OS runs on a host**
-  - **Where is the host running?**
+- **\textcolor{red}{Containers run in an OS, OS runs on a host}**
+  - **\textcolor{darkgreen}{Where is the host running?}**
     - Local (your laptop)
     - On-premise (your computer in a rack)
     - Cloud instance (e.g., AWS EC2)
-  - **How is the host running?**
+  - **\textcolor{blue}{How is the host running?}**
     - On a bare-metal server
     - On a virtual machine
     - On a virtual machine running on a virtual machine
 
-- **Serverless computing**
+- **\textcolor{violet}{Serverless computing}**
   - Application runs without concern for _"how"_ or _"where"_
   - E.g., AWS Lambda
 
@@ -218,7 +216,7 @@ UMD DATA605 - Big Data Systems
 :::columns
 ::::{.column width=55%}
 
-- **Hypervisor performs HW virtualization**
+- **\textcolor{red}{Hypervisor performs HW virtualization}**
   - Carves physical hardware into VMs
   - Allocates CPUs, RAM, and storage to a VM
   - Like having multiple computers
@@ -232,7 +230,7 @@ UMD DATA605 - Big Data Systems
   - You just want to run 3 apps!
 
 \vspace{1cm}
-- **Containers perform OS virtualization**
+- **\textcolor{blue}{Containers perform OS virtualization}**
   - It's like having multiple isolated environments within the same OS
 ::::
 ::::{.column width=40%}
@@ -247,14 +245,14 @@ UMD DATA605 - Big Data Systems
 
 :::columns
 ::::{.column width=55%}
-- Docker relies on a **client-server architecture**
+- Docker relies on a **\textcolor{red}{client-server architecture}**
 
-- **Docker client**
+- **\textcolor{darkgreen}{Docker client}**
   - Command line interface
   - Communicates with the server through an IPC socket
     - E.g., `/var/run/docker.sock` or IP port
 
-- **Docker engine**
+- **\textcolor{blue}{Docker engine}**
   - Runs and manages containers
   - Modular, built from OCI-compliant subsystems
     - E.g., docker daemon, `containerd`, `runc`, plugins for networking and
@@ -273,18 +271,18 @@ UMD DATA605 - Big Data Systems
 
 :::columns
 ::::{.column width=60%}
-- **Docker runtime**
+- **\textcolor{red}{Docker runtime}**
   - `runc`: Start and stop containers
   - `containerd`
     - Pull images
     - Create containers, volumes, network interfaces
 
-- **Docker engine**
+- **\textcolor{darkgreen}{Docker engine}**
   - `dockerd`
     - Expose remote API
     - Manage images, volumes, networks
 
-- **Docker orchestration**
+- **\textcolor{blue}{Docker orchestration}**
   - `docker swarm`
     - Manage clusters of nodes
     - Often replaced by Kubernetes
@@ -296,31 +294,31 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Open Container Initiative (OCI)**
+- **\textcolor{violet}{Open Container Initiative (OCI)}**
   - Standardize low-level components of container infrastructure
   - E.g., image format, runtime API
   - Evolution of Docker standards
 
 #### Docker Container
 
-- **Docker Container**
+- **\textcolor{red}{Docker Container}**
   - Unit of computation
   - Lightweight, stand-alone, executable software package
 
-- **Includes everything needed to run**
+- **\textcolor{darkgreen}{Includes everything needed to run}**
   - Code
   - Runtime/system libraries
   - Settings
 
-- **Run-time object**
+- **\textcolor{blue}{Run-time object}**
   - Docker images are build-time objects
   - Like program running (container) vs program code (image)
 
 #### Docker Image
-- **Docker Image**
+- **\textcolor{red}{Docker Image}**
   - Unit of deployment
 
-- **Contains everything needed to run an app**
+- **\textcolor{blue}{Contains everything needed to run an app}**
   - Application code
   - Application dependencies
   - Minimal OS support
@@ -336,21 +334,21 @@ UMD DATA605 - Big Data Systems
 #### Docker Image Layers
 :::columns
 ::::{.column width=60%}
-- **Docker image** is a configuration file listing layers and metadata
+- **\textcolor{red}{Docker image}** is a configuration file listing layers and metadata
   - Composed of read-only layers
   - Each layer is independent
   - Each layer comprises many files
 
-- **Docker driver**
+- **\textcolor{darkgreen}{Docker driver}**
   - Stacks layers as a unified filesystem
   - Implements copy-on-write behavior
   - Files from top layers can obscure files from bottom layers
 
-- **Layer hash**
+- **\textcolor{blue}{Layer hash}**
   - Each layer has a hash based on content
   - Layers are pulled and pushed in a compressed format
 
-- **Image hash**
+- **\textcolor{violet}{Image hash}**
   - Each image has a hash
   - Hash is a function of the config file and layers
   - Image changes generate a new hash
@@ -369,7 +367,7 @@ UMD DATA605 - Big Data Systems
 #### Docker: Container Data
 - A container has access to different data
 
-- **Container storage**
+- **\textcolor{red}{Container storage}**
   - Copy-on-write layer in the image
   - Ephemeral (temporary data)
   - Data persists until the container is removed
@@ -377,10 +375,10 @@ UMD DATA605 - Big Data Systems
   - Containers are immutable
     - Avoid writing persistent data into containers
 
-- **Bind-mount a local dir**
+- **\textcolor{darkgreen}{Bind-mount a local dir}**
   - Mount a local directory to a directory inside a container
 
-- **Docker volumes**
+- **\textcolor{blue}{Docker volumes}**
   - Volumes exist separately from the container
     - E.g., store PostgreSQL DB content
   - State is permanent across container invocations
@@ -389,7 +387,7 @@ UMD DATA605 - Big Data Systems
 #### Docker Repos
 :::columns
 ::::{.column width=55%}
-- **Docker Repo (Registry)**
+- **\textcolor{red}{Docker Repo (Registry)}**
   - E.g., DockerHub, AWS ECR
   - Store Docker images
     - `<registry>/<repo>:<tag>`
@@ -413,7 +411,7 @@ UMD DATA605 - Big Data Systems
 
 :::columns
 ::::{.column width=50%}
-- **Devs**
+- **\textcolor{red}{Devs}**
 - Implement app
   - Python, virtual environment
 - Containerize app
@@ -424,7 +422,7 @@ UMD DATA605 - Big Data Systems
 - Test locally
 ::::
 ::::{.column width=50%}
-- **Ops**
+- **\textcolor{blue}{Ops}**
 - Download container images
   - Filesystem, application, dependencies
 - Start / destroy containers

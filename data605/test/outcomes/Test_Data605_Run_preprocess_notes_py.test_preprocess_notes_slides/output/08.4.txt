@@ -37,12 +37,12 @@ UMD DATA605 - Big Data Systems
 :::
 
 #### MapReduce: Applications
-- **Intuition**
+- **\textcolor{red}{Intuition}**
   - Break massive jobs into independent map tasks
   - Aggregate via shuffle
   - Combine in reduce
 
-- **Major classes of applications**
+- **\textcolor{darkgreen}{Major classes of applications}**
   - Text processing and search
     - E.g., tokenization, inverted index, log analysis
   - Large data transforms
@@ -52,13 +52,13 @@ UMD DATA605 - Big Data Systems
   - Graph and link analysis
     - E.g., PageRank, connected components
 
-- **Typical outputs**, e.g.,
+- **\textcolor{blue}{Typical outputs}**, e.g.,
   - Counts
   - Aggregates
   - Reorganized datasets for downstream systems
 
 #### Cost Measures for Distributed Algorithms
-- What matter is the **real dollar cost** not just $O(\cdot)$
+- What matter is the **\textcolor{red}{real dollar cost}** not just $O(\cdot)$
   - _Total cost_ $\approx \text { CPU + storage + network}$
   - _Communication cost_
     - Total I/O across all processes, e.g., shuffling 1TB
@@ -66,46 +66,46 @@ UMD DATA605 - Big Data Systems
     - Max I/O along the critical path
   - _Elapsed computation cost_
     - Wall clock with $p$ workers, sensitive to skew and stragglers
-- **Dominant term heuristic**
+- **\textcolor{darkgreen}{Dominant term heuristic}**
   - _"If one cost dominates, ignore the others for first order reasoning"_
-- **Practical note**
+- **\textcolor{blue}{Practical note}**
   - _"Adding more machines trades \$ for time and may not fix skew"_
 
 #### Total Cost Model for MapReduce
-- **Total cost** of a computation
+- **\textcolor{red}{Total cost}** of a computation
   $$C_{total} = C_{compute} + C_{io} + C_{network} + C_{storage}$$
 
-- **Notation**
+- **\textcolor{darkgreen}{Notation}**
   - $|I|$ input GB, $|S|$ shuffle GB, $|O|$ output GB
   - $p_m$ mappers, $p_r$ reducers
   - $T_m$ map hours, $T_r$ reduce hours
   - $c_{compute}$ = \$/VM hour, $c_{io}$ = \$/GB I/O, $c_{shuffle}$ = \$/GB shuffle
 
-- **Compute cost**
+- **\textcolor{blue}{Compute cost}**
   $$C_{compute} = c_{compute}\left(p_m T_m + p_r T_r\right)$$
   where $T_m,T_r$ include skew and stragglers
   - Skew effects = a heavy key or hotspot inflates the heaviest task and the
     critical path
 
-- **I/O cost**
+- **\textcolor{violet}{I/O cost}**
   $$C_{io} = c_{io}\left(|I| + 2|S| + |O|\right)$$
   - Shuffle often dominates since $\sum_i |S_i| \gg |I|, |O|$
 
 
 #### Total Cost Model for MapReduce
-- **Notation**
+- **\textcolor{red}{Notation}**
   - $|I|$ input GB, $|S|$ shuffle GB, $|O|$ output GB
   - $c_{shuffle}$ = \$/GB shuffle $c_{egress}$ = \$/GB egress, $c_{storage}$ = \$/GB hour
   - $R$ HDFS replication
 
-- **Network cost**
+- **\textcolor{darkgreen}{Network cost}**
   $$C_{network} = c_{shuffle} |S| + c_{egress} |O|_{egress}$$
   where $|O|_{egress}$ is data leaving the provider
 
-- **Storage cost**
+- **\textcolor{blue}{Storage cost}**
   $$C_{storage} = c_{storage} R (|I| + |O|)$$
 
-- **Putting all together**
+- **\textcolor{violet}{Putting all together}**
   - Plug in variables and unit prices to get $C_{total}$
   - Apply the dominant term heuristic to prioritize optimization
   - Tuning levers
@@ -116,9 +116,9 @@ UMD DATA605 - Big Data Systems
 
 #### Inverted Index using MapReduce
 
-- **Goal**: build a mapping from words to the list of documents they appear in
+- **\textcolor{red}{Goal}**: build a mapping from words to the list of documents they appear in
 
-- **Example**
+- **\textcolor{darkgreen}{Example}**
     - Input in \textcolor{blue}{\texttt{doc1}} = \textcolor{blue}{\texttt{MapReduce is powerful}}
     - Output = \textcolor{blue}{\texttt{[(MapReduce, doc1)}}, \textcolor{blue}{\texttt{(is, doc1)}}, \textcolor{blue}{\texttt{(powerful, doc1)]}}
   - _Map phase_:
@@ -128,17 +128,17 @@ UMD DATA605 - Big Data Systems
     - Input: \textcolor{blue}{\texttt{(word, [docID\_1, docID\_2, ...])}}
     - Emit: \textcolor{blue}{\texttt{(word, list of unique docIDs)}}
 
-- **Implementation considerations**
+- **\textcolor{blue}{Implementation considerations}**
   - Useful in search engines and information retrieval
   - Requires tokenization and normalization of content
   - Deduplication of document IDs in reducer
 
 #### Join Operations using MapReduce
-- **Goal**: join two datasets based on a common key
+- **\textcolor{red}{Goal}**: join two datasets based on a common key
   - Types of joins:
     - Inner join, left/right outer join, full outer join
 
-- **Example**
+- **\textcolor{darkgreen}{Example}**
   - Join \textcolor{blue}{\texttt{EmployeeRecords(empID, name, deptID)}} with
     \textcolor{blue}{\texttt{Department(deptID, deptName)}}
   - Join key: \textcolor{blue}{\texttt{deptID}}
@@ -149,7 +149,7 @@ UMD DATA605 - Big Data Systems
     - Input: \textcolor{blue}{\texttt{(deptID, [list of tagged records])}}
     - Cross-product logic based on tags to perform the actual join
 
-- **Implementation considerations**
+- **\textcolor{blue}{Implementation considerations}**
   - Use composite values with source tag to distinguish record origin
   - Optimize data layout to minimize network shuffle
   - Ensure proper partitioning so all records with the same key go to the same
@@ -157,9 +157,9 @@ UMD DATA605 - Big Data Systems
 
 #### Sorting and Grouping in MapReduce
 
-- **Goal**: organize data by keys or values for further analysis
+- **\textcolor{red}{Goal}**: organize data by keys or values for further analysis
 
-- **Example**
+- **\textcolor{blue}{Example}**
   - Sort sales data by date or group by product ID
   - _Map phase_:
     - Emit data with key as sort/group criterion
@@ -185,18 +185,18 @@ UMD DATA605 - Big Data Systems
 
 #### Statistical Aggregation and Log Analysis
 
-- **Statistical Aggregation**
+- **\textcolor{red}{Statistical Aggregation}**
   - Example: \textcolor{blue}{\texttt{(sensorID, temperature)}} $\to$ compute average temperature per
     sensor
   - _Map phase_: emit relevant quantities (e.g., value, 1 for count)
   - _Reduce phase_: compute sums, averages, variances
 
-- **Log Analysis**
+- **\textcolor{darkgreen}{Log Analysis}**
   - Example: \textcolor{blue}{\texttt{(status code, 1)}} $\to$ count occurrences
   - _Map phase_: parse logs, extract fields (timestamp, IP, status)
     and emit \textcolor{blue}{\texttt{(key, value)}} for desired metrics
   - _Reduce phase_: aggregate (e.g., count errors, hits per IP)
 
-- **Implementation considerations**
+- **\textcolor{blue}{Implementation considerations}**
   - Useful for monitoring, alerting, and trend analysis
   - Can handle large-scale logs from distributed systems
