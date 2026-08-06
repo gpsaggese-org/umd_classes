@@ -1,12 +1,15 @@
 # Refer to https://github.com/mckinsey/causalnex/blob/develop/devel-cpu.Dockerfile
-FROM ubuntu:20.04
+# Use Ubuntu 22.04 so that the default `python3` is Python 3.10 (Ubuntu
+# 20.04's `python3.10` apt package does not exist and silently resolves to an
+# unrelated package instead of failing, leaving the venv on Python 3.8).
+FROM ubuntu:22.04
 
 # Avoid interactive prompts during apt operations.
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install CA certificates, build tools, and graphviz (needed for pygraphviz).
 RUN apt-get update -y && apt-get install -y \
-    python3.10 \
+    python3 \
     python3-venv \
     python3-pip \
     ca-certificates \
