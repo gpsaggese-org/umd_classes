@@ -15,15 +15,15 @@
 
 - @Definition@: **Multi-Armed Bandit** is a sequential decision-making problem
   where:
-  - At each time step $t = 1, 2, \ldots, T$
-    - Choose one action (arm) from $K$ options
-    - Receive a random reward $r_t \sim P_i$ based on chosen $i$
+  - At each time step $t = 1, 2, \ldots, T$:
+    1. Choose one action (arm) from $K$ options
+    2. Receive a random reward $r_t \sim P_i$ based on chosen $i$
   - Reward distributions $P_1, \ldots, P_K$ are _unknown_ and _fixed_
   - _Goal_: Learn which arms are best while collecting rewards
 
-- @Key Challenge@: Balance:
-    - _Exploration_: Try different arms to learn their reward distributions
-    - _Exploitation_: Play the arm you believe is best
+- @Key idea@: Need to balance:
+  - _Exploration_: Try different arms to learn their reward distributions
+  - _Exploitation_: Play the arm you believe is best
 
 - @Example@: in a casino there are $K$ slot machines (aka "one-armed bandits")
   - Each machine $i \in \{1, ..., K\}$ has an unknown probability of winning
@@ -42,7 +42,7 @@
   - Provable regret bounds and optimality results
   - Serves as building block for more complex RL problems
 
-* Applications: Real-World Decision-Making
+* Applications of Bandits
 
 - @Online Advertising@
   - Platform must choose which ad to display
@@ -62,7 +62,7 @@
   - Need to identify best variant quickly to minimize opportunity cost during
     testing
 
-* Applications: Real-World Decision-Making
+* Applications of Bandits
 
 - @Recommendation Systems@
   - E.g., Netflix/Spotify/...
@@ -83,19 +83,23 @@
   - Balance risk and reward
   - Market conditions are non-stationary
 
-* The Exploration–Exploitation Tradeoff
+* The Exploration-Exploitation Tradeoff
 
-- The **Exploration–Exploitation Tradeoff** is the _unavoidable dilemma_ of
-  sequential learning
+- @Fact@: The **Exploration-Exploitation Tradeoff** is the _unavoidable dilemma_
+  of sequential learning
 
 ::: columns
 :::: {.column width=40%}
-- **Pure exploitation**: Never try suboptimal-looking arms $\to$ may stick with
-  suboptimal choice forever
-- **Pure exploration**: Always try random arms $\to$ collect lots of information
-  but low total reward
-- **Must do both**: Explore enough to find good arms, exploit enough to gain high
-  reward
+- @Comparison@
+  - **Pure exploitation**:
+    - Never try suboptimal-looking arms
+    - May stick with suboptimal choice forever
+  - **Pure exploration**:
+    - Always try random arms
+    - Collect lots of information, but low total reward
+  - **Must do both**:
+    - Explore enough to find good arms
+    - Exploit enough to gain high reward
 ::::
 :::: {.column width=60%}
 
