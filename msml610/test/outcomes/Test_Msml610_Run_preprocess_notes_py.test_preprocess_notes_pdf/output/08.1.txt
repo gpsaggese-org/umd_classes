@@ -4,6 +4,24 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
+::: columns
+:::: {.column width=20%}
+![](msml610/lectures_source/figures/UMD_Logo.png)
+::::
+:::: {.column width=80%}
+
+MSML610: Advanced Machine Learning
+::::
+:::
+
+\vspace{2cm}
+
+**$$\text{\textcolor{blue}{\text{L08.1: Intro to Causal AI}}}$$**
+
+\vspace{3cm}
+
+**Instructor**: Dr. GP Saggese - gsaggese@umd.edu
+
 
 # Introduction and Motivation
 
@@ -382,43 +400,42 @@ fontsize: 10pt
 
 - **Causal AI**
 
-- @Capabilities@: Causal AI unlocks five key abilities
+- **Causal** AI unlocks five key abilities
 
-- **Understand the why**
-  - Determines cause-and-effect between variables
-  - Example: _"Did marketing campaign increase sales?"_
+  - @Understand the why@
+    - Determines cause-and-effect between variables
+    - E.g., _"Did marketing campaign increase sales?"_
 
-- **Identify interventions**
-  - Identifies variables and interventions to change outcomes
-  - Example: _"Which lifestyle changes reduce blood pressure?"_
+  - @Identify interventions@
+    - Identifies variables and interventions to change outcomes
+    - E.g., _"Which lifestyle changes reduce blood pressure?"_
 
-- **Predict counterfactuals**
-  - Hypothesize outcomes under different circumstances
-  - Example: student grades if they attended a different school
+  - @Predict counterfactuals@
+    - Hypothesize outcomes under different circumstances
+    - E.g., student grades if they attended a different school
 
-- **Avoid bias**
-  - Ensure fairness beyond training data biases
-  - Account for confounding variables explicitly
+  - @Avoid bias@
+    - Ensure fairness beyond training data biases
+    - Account for confounding variables explicitly
 
-- **Improve decisions**
-  - Understand relationships for better choices
-  - Example: improve supply chain by understanding impact of decisions on logistics
+  - @Improve decisions@
+    - Understand relationships for better choices
+    - E.g., improve supply chain by understanding impact of decisions on logistics
 
 - **Causal AI vs Traditional AI**
 
-- @Comparison@: **Current AI** focuses on correlation
+- @Traditional AI@
+  - Focuses on correlation
+  - Uses correlation to:
+    - Analyze data
+    - Identify patterns
+    - Make predictions
+    - Model quality depends on data quality (biased or unclean data $\to$ poor model)
 
-- Uses correlation to:
-  - Analyze data
-  - Identify patterns
-  - Make predictions
-  - Model quality depends on data quality (biased or unclean data $\to$ poor model)
+- @Causal AI@ infers causation from association
+  - Science of inferring causation from association
+  - Understanding when and why causation and association differ
+  - Understand cause-and-effect relationships to intervene for desired effect
 
-- @Comparison@: **Causal AI** infers causation from association
-
-- Science of inferring causation from association
-- Understanding when and why causation and association differ
-- Understand cause-and-effect relationships to intervene for desired effect
-
-- @Quote@: _"The next revolution of data science is the science of
-  interpreting reality, not of summarizing data"_ (Judea Pearl, 2021)
+- @Quote@: _"The next revolution of data science is the science of interpreting
+  reality, not of summarizing data"_ (Judea Pearl, 2021)

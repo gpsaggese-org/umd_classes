@@ -20,7 +20,7 @@ _ALL_LABELS = [
     "Slides (PDF)",
     "Commentary (HTML)",
     "Commentary (PDF)",
-    "Recap",
+    "Recap (TXT)",
 ]
 
 
@@ -62,7 +62,7 @@ def _create_lesson_artifacts(
             "lectures_commentary",
             f"{lesson_name}.book_chapter.pdf",
         ),
-        "Recap": os.path.join(
+        "Recap (TXT)": os.path.join(
             class_dir, "lectures_recap", f"{lesson_name}.recap.md"
         ),
     }
@@ -257,7 +257,7 @@ class Test_get_lesson_artifacts(hunitest.TestCase):
         expected_exists = r"""
         {'Commentary (HTML)': True,
          'Commentary (PDF)': True,
-         'Recap': True,
+         'Recap (TXT)': True,
          'Slides (PDF)': True}
         """
         # Run test.
@@ -274,14 +274,14 @@ class Test_get_lesson_artifacts(hunitest.TestCase):
         class_dir = os.path.join(self.get_scratch_space(), "data605")
         lesson_name = "Lesson01.1-Intro"
         _create_lesson_artifacts(
-            class_dir, lesson_name, ["Slides (PDF)", "Recap"]
+            class_dir, lesson_name, ["Slides (PDF)", "Recap (TXT)"]
         )
         do_not_fail_on_warnings = True
         # Prepare outputs.
         expected_exists = r"""
         {'Commentary (HTML)': False,
          'Commentary (PDF)': False,
-         'Recap': True,
+         'Recap (TXT)': True,
          'Slides (PDF)': True}
         """
         # Run test.
