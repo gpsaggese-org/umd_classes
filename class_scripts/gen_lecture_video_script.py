@@ -140,7 +140,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     # Step 5: Lint the final script.
     _LOG.info("Step 5: Linting the final script")
     cmd = (
-        f"lint_txt.py -i {output_file} -o {output_file} "
+        f"lint_text.py -i {output_file} -o {output_file} "
         f"--use_dockerized_prettier --action prettier --action frame_chapters"
     )
     hsystem.system(cmd)

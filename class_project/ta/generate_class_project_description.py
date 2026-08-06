@@ -166,7 +166,7 @@ def create_markdown_file(
         _LOG.info("Generated Markdown File: %s", file_name)
         # Run linter on the generated file to ensure proper formatting.
         lint_script = (
-            "helpers_root/dev_scripts_helpers/documentation/lint_txt.py"
+            "helpers_root/dev_scripts_helpers/documentation/lint_text.py"
         )
         cmd = f"{lint_script} -i {markdown_path}"
         hsystem.system(cmd, suppress_output=False)

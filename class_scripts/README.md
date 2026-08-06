@@ -82,7 +82,7 @@ slide quality through automated LLM-powered transformations
 | Script                | Description                                                            |
 | :-------------------- | :--------------------------------------------------------------------- |
 | `concatenate_pdfs.py` | Combines multiple PDF files into one (creates full book from chapters) |
-| `lint_txt.py`         | Lints and formats text using prettier; used for quiz output            |
+| `lint_text.py`         | Lints and formats text using prettier; used for quiz output            |
 | `notes_to_pdf.py`     | Converts markdown to PDF (slides, documents); used by gen_slides.py    |
 | `to_github.py`        | Converts a local file path to its GitHub URL; used by publish_class_links.py |
 
@@ -91,7 +91,7 @@ slide quality through automated LLM-powered transformations
 - `for_loop_lessons.py` (Main orchestrator)
   - action=`generate_pdf` -> `notes_to_pdf.py`
   - action=`generate_tex` -> `notes_to_pdf.py`
-  - action=`generate_script` -> `generate_slide_script.py`, `lint_txt.py`
+  - action=`generate_script` -> `generate_slide_script.py`, `lint_text.py`
   - action=`reduce_slide` -> `process_slides.py`
   - action=`check_slide` -> `process_slides.py`
   - action=`improve_slide` (not yet implemented)
@@ -106,7 +106,7 @@ slide quality through automated LLM-powered transformations
   - `gen_lecture_video_script.py`
     - `generate_slide_script.py`
     - `llm_cli.py`
-    - `lint_txt.py`
+    - `lint_text.py`
   - `gen_lecture_commentary.py`
     - `notes_to_pdf.py`
   - `slide_check.py`
@@ -117,7 +117,7 @@ slide quality through automated LLM-powered transformations
     - `process_slides.py`
   - `gen_quizzes.py`
     - `llm_cli.py`
-    - `lint_txt.py`
+    - `lint_text.py`
   - `publish_class_links.py`
     - `to_github.py`
 
@@ -368,7 +368,7 @@ slide quality through automated LLM-powered transformations
     `{DIR}/lectures_quizzes/<lesson>.quizzes.md`
   - _Discussion/review questions_: 3-6 open-ended questions ->
     `{DIR}/lectures_recap/<lesson>.recap.md`
-- Automatically formats output using `lint_txt.py` with prettier (use
+- Automatically formats output using `lint_text.py` with prettier (use
   `--no_lint` to skip)
 
 ### Examples

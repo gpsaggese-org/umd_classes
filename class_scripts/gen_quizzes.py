@@ -11,7 +11,7 @@ This script generates questions from lecture content using `llm_cli.py`.
   - Discussion/review questions (--for_class_recap): 3-6 open-ended questions
     - Saved to: `<class_dir>/lectures_recap/<lesson>.recap.md`
 
-- By default, the output file is automatically formatted using `lint_txt.py`
+- By default, the output file is automatically formatted using `lint_text.py`
   with prettier. Use --no_lint to skip formatting.
 
 # Usage Example
@@ -149,13 +149,13 @@ def _parse() -> argparse.ArgumentParser:
         "--lint",
         action="store_true",
         default=True,
-        help="Run lint_txt.py with prettier action on output file (default: True)",
+        help="Run lint_text.py with prettier action on output file (default: True)",
     )
     parser.add_argument(
         "--no_lint",
         action="store_false",
         dest="lint",
-        help="Skip running lint_txt.py on output file",
+        help="Skip running lint_text.py on output file",
     )
     parser.add_argument(
         "extra_opts",
@@ -224,10 +224,10 @@ def _main(parser: argparse.ArgumentParser) -> None:
     hsystem.system(cmd)
     # Run linting if requested.
     if args.lint:
-        _LOG.info("Running lint_txt.py on output file: %s", output_file)
+        _LOG.info("Running lint_text.py on output file: %s", output_file)
         # Prepare linting command.
         lint_action = "prettier"
-        lint_cmd = f"lint_txt.py -i {output_file} --action {lint_action}"
+        lint_cmd = f"lint_text.py -i {output_file} --action {lint_action}"
         _LOG.info("Executing: %s", lint_cmd)
         hsystem.system(lint_cmd)
 
