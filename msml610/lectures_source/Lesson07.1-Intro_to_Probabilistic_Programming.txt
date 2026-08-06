@@ -141,34 +141,12 @@
 
 ## Analytical Approach
 
-* Coin Example: Problem
-- @Problem@:
-  - Toss a coin $N$ times
-  - Record the number of heads $Y$ and tails $N - Y$
-
-- @Question@: _"How biased is the coin?"_
-
-- @Remark@: there is **true uncertainty**
-  - An underlying parameter (the coin bias $\theta$ ) exists, but it is unknown
-    - $\theta = 0$: always tails
-    - $\theta = 1$: always heads
-    - $\theta = 0.5$: half tails, half heads
-
-- @Assumptions@:
-  - Independent Identically Distributed (IID)
-    - _Independence_: coin tosses don't affect each other
-    - _Identically distributed_: coin's bias is constant
-  - Likelihood $Y | \theta$ as a binomial distribution
-    - Probability of $Y$ heads out of $N$ tosses, given $\theta$
-  - Prior $\theta$ as a beta distribution
-    - Adopts several shapes
-    - Beta is the conjugate prior of the binomial distribution
-
-* Binomial Distribution
+* Binomial Distribution: Definition
 
 ::: columns
 :::: {.column width=40%}
-- @Definition@: probability of $k$ heads out of $n$ tosses given bias $p$
+- @Definition@: **Binomial distribution** models the probability of getting $k$
+  heads out of $n$ tosses given bias $p$
   $$
   \begin{align*}
     & X \sim Binomial(n, p) \\
@@ -177,43 +155,73 @@
   $$
 
 ::::
-:::: {.column width=55%}
+:::: {.column width=60%}
 ![](msml610/lectures_source/figures/L07.1.Binomial_distribution.png)
+
+::: {.center size=tiny}
+PDF (function of $k$) varying the parameters $n$, $p$
+:::
+
 ::::
 :::
 
-* Beta Distribution
+* Beta Distribution: Definition
 
 ::: columns
-:::: {.column width=50%}
-- @Characteristics@:
-  - _Support_: continuous PDF in [0, 1]
-  - _Shapes_: adopts several shapes
-    - Uniform, increasing, decreasing, Gaussian-like, U-like
-    - $\alpha$: "success" parameter
-    - $\beta$: "failure" parameter
-    - $\alpha > \beta$: Skews toward 1, higher probability of success
-    - $\alpha = \beta$: Symmetric, centered around 0.5
-  - _Use_: models probability or proportion
-    - E.g., probability of success in a Bernoulli trial $\theta$
-  - _Conjugacy_: beta is the conjugate prior of the binomial distribution
-::::
-:::: {.column width=50%}
+:::: {.column width=40%}
+- @Definition@: **Beta distribution** models the probability of an event
+  $$
+  \begin{align*}
+    & X \sim Beta(\alpha, \beta) \\
+    & \Pr(\theta)
+      = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)}
+      \theta^{\alpha - 1} (1 - \theta)^{\beta - 1} \\
+  \end{align*}
+  $$
 
-\begin{align*}
-  & X \sim Beta(\alpha, \beta) \\
-  & \Pr(\theta)
-    = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)}
-    \theta^{\alpha - 1} (1 - \theta)^{\beta - 1} \\
-\end{align*}
+- @Example@: a coin's bias, a click-through rate, a batting average, the fraction
+  of a population that will convert
+::::
+:::: {.column width=60%}
 
 ![](msml610/lectures_source/figures/L07.1.Beta_distribution.png)
+
+::: {.center size=tiny}
+PDF varying $\alpha, \beta$
+:::
+
+::::
+:::
+
+* Beta Distribution: Properties
+::: columns
+:::: {.column width=40%}
+- **Support**: continuous PDF in [0, 1]
+- **Parameters**:
+  - $\alpha$: "success" parameter
+  - $\beta$: "failure" parameter
+- **Shapes**: adopts several shapes
+  - E.g., uniform, increasing, decreasing, Gaussian-like, U-like
+  - $\alpha > \beta$: Skews toward 1, higher probability of success
+  - $\alpha = \beta$: Symmetric, centered around 0.5
+- **Conjugacy**: beta is the conjugate prior of the binomial distribution
+::::
+:::: {.column width=60%}
+
+![](msml610/lectures_source/figures/L07.1.Beta_distribution.png)
+
+::: {.center size=tiny}
+PDF varying $\alpha, \beta$
+:::
+
+\endgroup
 ::::
 :::
 
 * Conjugate Prior of a Likelihood
-- @Definition@: **conjugate prior** is a prior that, when combined with a
-  likelihood, returns a posterior with the same functional form as the prior
+- @Definition@: **Conjugate prior** of likelihood $F$ is a _prior_ that, when
+  combined with a _likelihood_ $F$, returns a _posterior_ with the same
+  functional form as the prior
 
   - E.g.,
 
@@ -233,22 +241,52 @@
     - Update parameters from the prior using data in multiple iterations
   - Ensures tractability of the posterior
 
-* Coin Example: Analytical Solution
-- @Solution@: the **\red{posterior}** is proportional to **\green{likelihood}**
-  $\times$ **\blue{prior}**
-  $$\red{\Pr(\theta | y)} \propto \green{\Pr(y | \theta)} \blue{\Pr(\theta)}$$
+* Coin Example: Problem
+- @Problem@
+  - Toss a coin $N$ times
+  - Record the number of heads $Y$ and tails $N - Y$
 
-- @Derivation@: substituting **\green{likelihood}** with a Binomial and
-  **\blue{prior}** with a Beta
+- @Question@: _"How biased is the coin?"_
+
+- @Remark@: there is **true uncertainty**
+  - An underlying parameter (the coin bias $\theta$ ) exists, but it is unknown
+    - $\theta = 0$: always tails
+    - $\theta = 1$: always heads
+    - $\theta = 0.5$: half tails, half heads
+
+* Coin Example: Assumptions
+1. Independent Identically Distributed (IID)
+   - _Independence_: coin tosses don't affect each other
+   - _Identically distributed_: coin's bias is constant
+
+2. Likelihood $Y | \theta$ is a _binomial distribution_
+   - I.e., probability of $Y$ heads out of $N$ tosses, given $\theta$
+
+3. Prior $\theta$ is a _beta distribution_
+   - Adopts several shapes
+   - Beta is the conjugate prior of the binomial distribution
+
+* Coin Example: Analytical Solution
+- @Recap@: the _posterior_ is proportional to _likelihood_ $\times$ _prior_
+  $$
+  \Pr(\theta | y) \propto \Pr(y | \theta) \Pr(\theta)
+  $$
+
+- Substituting _likelihood_ with a Binomial and _prior_ with a Beta:
+  $$
   \begin{align*}
   & \Pr(\theta \mid Y)
   \\
-  & = \underbrace{\frac{N!}{y!(N - y)!} \theta^y (1 - \theta)^{N - y}}_{likelihood}
-  \underbrace{\frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)}
-   \theta^{\alpha - 1} (1 - \theta)^{\beta - 1}}_{prior}
+  & = \underbrace{
+    \frac{N!}{y!(N - y)!} \theta^y (1 - \theta)^{N - y}}_{likelihood}
+  \cdot
+  \underbrace{
+    \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)}
+    \theta^{\alpha - 1} (1 - \theta)^{\beta - 1}}_{prior}
   \\
   & \propto
   \underbrace{\theta^y (1 - \theta)^{N - y}}_{likelihood}
+  \cdot
   \underbrace{\theta^{\alpha - 1} (1 - \theta)^{\beta - 1}}_{prior}
   \\
   & = \theta^{y + \alpha - 1} (1 - \theta)^{ N - y + \beta - 1}
@@ -256,17 +294,19 @@
   & = Beta \left( \alpha_{prior} + y, \beta_{prior} + N - y \right)
   \\
   \end{align*}
+  $$
 
-\vspace{-0.7cm}
-- @Key idea@: this is how **\black{the posterior is updated}** given the data
+- @Key idea@: this formula is how the posterior is updated given the data
+  - In case of conjugate prior, the Bayesian update becomes an update of
+    parameters, without changing the functional form
 
 * Coin Example: Effect of Priors (1/2)
 
 ::: columns
 :::: {.column width=40%}
-- @Setup@: the true (unknown) value of the coin bias is 0.35
+- **Setup**: the true (unknown) value of the coin bias is 0.35
 
-- @Procedure@:
+- **Procedure**
   1. Start with 3 different priors
      - \red{Red}: uniform prior
        - All bias values equally probable
@@ -286,16 +326,14 @@
 * Coin Example: Effect of Priors (2/2)
 ::: columns
 :::: {.column width=40%}
-- @Properties@:
-  - **Outcome**: Bayesian analysis yields a posterior distribution, not a
+- **Properties**:
+  - _Outcome_: Bayesian analysis yields a posterior distribution, not a
     single value
-  - **Spread**: proportional to uncertainty
+  - _Spread_: proportional to uncertainty
     - Decreases with more data
-    - Decreases faster if aligned with prior
+    - Decreases faster if data aligned with prior
     - With enough data, models with different priors converge to same
       result
-  - **Order invariance**: applying posterior sequentially or at once yields
-    same result
 ::::
 :::: {.column width=55%}
 
@@ -303,38 +341,40 @@
 ::::
 :::
 
+- _Order invariance_: applying posterior sequentially or at once yields same
+  result
+
 ## Frequentist vs Bayesian
 
-* Frequentist Approach vs Priors
-- @Problem@: detractors of the Bayesian approach complain that
-  - _"One should let the data speak"_
+* Frequentist Approach vs Bayesian Priors
+- @Problem@: detractors of the Bayesian approach complain that:
+  - _"One should let the data speak!"_
   - The prior doesn't let the data speak for itself
 
-- @Counterpoints@:
-  - _"Data doesn't speak, but murmurs"_
-    - Data doesn't have meaning per-se
-    - Make sense of data only in context of models (e.g., mental models,
-      mathematical models)
-    - A prior is a mathematical model
+- @Counterpoints@
+  1. _"Data doesn't speak, but murmurs"_
+     - Data doesn't have meaning per-se
+     - Data can make sense only in context of models (e.g., mental models,
+       mathematical models)
+     - A prior is a mathematical model
 
-  - Every statistical model has a prior, even if not explicit
-    - Frequentist statistics still makes assumptions (i.e., has a prior), but
-      are hidden
-    - E.g., maximum likelihood estimate (MLE) in frequentist approach
-      corresponds to a uniform prior and mode of the posterior
-    - E.g., MLE is a point-estimate, not a distribution of plausible values
+  2. Every statistical model has a prior, even if not explicit
+     - Frequentist statistics still makes assumptions (i.e., has a prior), but
+       are hidden
+     - E.g., maximum likelihood estimate (MLE) in frequentist approach
+       corresponds to a uniform prior and choosing the mode of the posterior
 
 * Advantages of Using Prior
 - @Pros@:
-  - **Explicit assumptions**
-    - Instead of hidden by frequentist or hacker ML approach
-  - **Deeper understanding**
+  - _Explicit assumptions_: Instead of hidden by frequentist or hacker ML
+    approach
+  - _Deeper understanding_
     - Encourages deeper analysis of problem and data
     - Forces understanding before seeing data
-  - **Less overfitting**: posterior averaged over priors is less prone to
+  - _Less overfitting_: Posterior averaged over priors is less prone to
     overfitting
-  - **Uncertainty measure**: spread of distribution measures uncertainty
-  - **Faster inference**: well-chosen prior simplifies and speeds up
+  - _Uncertainty measure_: spread of distribution measures uncertainty
+  - _Faster inference_: well-chosen prior simplifies and speeds up
     inference
     - _"When you encounter computational problems, there's often an issue
       with your model"_ (Gelman, 2008)
@@ -342,21 +382,21 @@
 * How to Choose Priors
 - @Variants@:
   - _Weakly-informative priors_ (aka "flat", "vague", "diffuse priors")
-    - Provide minimal information
+    - Provide minimal information, e.g.,
       - Coefficient of linear regression centered around 0:
         $\beta \sim Normal(0, 10)$
   - _Regularizing priors_
-    - Known information about the parameter
+    - Known information about the parameter, e.g.,
       - Parameter is positive: $\sigma \sim HalfCauchy(0, 5)$
       - Parameter close to zero, above/below a number, or in a range
       - $\beta \sim Laplace(0, 1)$ (lasso prior) encourages sparsity
       - $\beta \sim Normal(0, 1)$ discourages extreme values
   - _Informative priors_
-    - Strong priors from previous knowledge (expert opinion, studies)
+    - Strong priors from previous knowledge (expert opinion, studies), e.g.,
       - From experimental data: $\beta_1 \sim Normal(2.5, 0.5^2)$
       - From previous data, about 5% of cases positive: $p \sim Beta(2, 38)$
   - _Prior elicitation_
-    - Compute least informative distribution given constraints
+    - Compute least informative distribution given constraints, e.g.,
       - Estimate distribution using maximum entropy to satisfy constraints
       - E.g., beta distribution with 90% of mass between 0.1 and 0.7
 
@@ -364,7 +404,7 @@
 ::: columns
 :::: {.column width=65%}
 - @Procedure@:
-  1. **Communicate assumptions / hypothesis**
+  1. **Communicate assumptions and hypothesis**
      - Describe priors and probabilistic models
      - E.g., coin-flip distributions:
        \begin{equation*}
@@ -376,59 +416,56 @@
   2. **Communicate Bayesian analysis result**
      - Describe posterior distribution
      - Summarize location and dispersion
-     - Mean (or mode, median)
-     - Std dev
-       - Misleading for skewed distributions
+       - Mean (or mode, median)
+       - Std dev (although misleading for skewed distributions)
      - Highest-posterior density (HPD)
-       - Shortest interval containing a portion of probability density
-         (e.g., 95% or 50%)
+       - Shortest interval containing a portion of probability density (e.g., 95%
+         or 50%)
        - Amount is arbitrary (e.g., `ArviZ` defaults to 94%)
 
 ::::
-:::: {.column width=30%}
+:::: {.column width=35%}
 
 Kruschke diagram
-![](msml610/lectures_source/figures/L07.1.Kruschke_diagram.png){ height=50%}
+![](msml610/lectures_source/figures/L07.1.Kruschke_diagram.png){height=50%}
 ::::
 :::
 
 * Confidence Intervals vs Credible Intervals
-- @Remark@: people confuse
-  - **Frequentist confidence intervals**
-  - **Bayesian credible intervals**
+- @Remark@: people confuse _frequentist confidence intervals_ with _Bayesian
+  credible intervals_
 
 - @Comparison@:
-  - _Frequentist_: in the frequentist framework, there is a true (unknown)
+  - **Frequentist**: in the frequentist framework, there is a true (unknown)
     parameter value
-    - A **confidence interval** may or may not contain the true parameter
-      value
+    - A _confidence interval_ may or may not contain the true parameter value
     - Interpretation of a 95% confidence interval
-      - **No**: _"There is a 95% probability that the true value is in this
+      - _No_: _"There is a 95% probability that the true value is in this
         interval"_
-      - **Yes**: _"If repeated many times, 95% of intervals would contain
-        the true value"_
-  - _Bayesian_: in the Bayesian framework, parameters are random variables
-    - Interpretation of a 95% **Bayesian credible interval**
-      - _"There is a 95% probability that the true parameter lies within
-        this interval, given the observed data"_
-      - Bayesian **credible interval** is intuitive
+      - _Yes_: _"If repeated many times, 95% of intervals would contain the true
+        value"_
+  - **Bayesian**: in the Bayesian framework, parameters are random variables
+    - Interpretation of a 95% _Bayesian credible interval_
+      - _"There is a 95% probability that the true parameter lies within this
+        interval, given the observed data"_
+      - Bayesian _credible interval_ is intuitive
 
-* Confidence Intervals vs Credible Intervals (ELI5)
+* Confidence Intervals vs Credible Intervals: ELI5
+// TODO(ai_gp): Add an image somehow
 - @Comparison@:
-  - _Confidence Interval (Frequentist)_:
+  - **Confidence Interval (Frequentist)**:
     - Imagine fishing in a lake without seeing the fish
     - You throw your net
-    - 95% confidence interval: _"If I threw this net 100 times, about 95
-      nets would catch the fish."_
+    - 95% confidence interval: _"If I threw this net 100 times, about 95 nets
+      would catch the fish."_
     - Important: once the net is thrown, it either caught the fish or not
       - The 95% makes sense across many attempts
-  - _Credible Interval (Bayesian)_:
-    - Imagine a magical map showing where fish _probably_ are, based on
-      past observations
-    - 95% credible interval: _"Given my map, there's a 95% chance the fish
-      is inside this part of the lake."_
-    - The fish's location is uncertain, and probability describes your
-      belief
+  - **Credible Interval (Bayesian)**:
+    - Imagine a magical map showing where fish _probably_ is, based on past
+      observations
+    - 95% credible interval: _"Given my map, there's a 95% chance the fish is
+      inside this part of the lake."_
+    - The fish's location is uncertain, and probability describes your belief
 
 // 2, Programming probabilistically
 
@@ -444,7 +481,7 @@ Kruschke diagram
   - The **"unknowns"**
     - Model parameters (modeled as probability distributions)
 
-- @Goal@: use Bayes' theorem to
+- @Goal@: use Bayes' theorem to:
   - Condition unknowns to knowns
   - Reduce the uncertainty about the unknowns
 
@@ -478,28 +515,25 @@ digraph BayesTheorem {
 ::::
 :::
 
-- @Problem@:
-  - Most probabilistic models are analytically intractable
+- @Problem@: Most probabilistic models are analytically intractable
 
-- @Solution@:
-  - Probabilistic programming
-    - Specify a probabilistic model using code
-    - Solve models using numerical techniques
+- @Solution@: Probabilistic programming
+  - Specify a probabilistic model using code
+  - Solve models using numerical techniques
 
 * Probabilistic Programming Languages
 - @Procedure@:
   1. Specify models using code
   2. Numerical models solve inference problems without need of user to
      understand how
-     - Universal inference engines
      - `PyMC3`: flexible Python library for probabilistic programming
      - `Theano`: library to define, optimize, evaluate mathematical
        expressions using tensors
      - `ArviZ`: library to interpret probabilistic model results
 
-- @Pros@:
+- @Pros@
   - Compute results without analytical closed form
-  - Treat model solving as a black box
+  - Treat model solving as a black box (e.g., universal inference engines)
   - Focus on model design, evaluation, interpretation
 
 - @Remark@: probabilistic programming languages
@@ -508,17 +542,20 @@ digraph BayesTheorem {
 
 * Coin Example: Numerical Solution (1/3)
 
-- @Remark@: it's a synthetic example
+- @Example@
   - Assume you know the true value of $\theta$ (not true in general)
+  - It's a synthetic example
 
-- @Procedure@:
+- @Procedure@
   1. Model the prior $\theta$ and the likelihood $Y | \theta$
+     $$
      \begin{equation*}
        \begin{cases}
        \theta \sim Beta(\alpha = 1, \beta = 1) \\
        Y \sim Binomial(n = 1, p = \theta) \\
        \end{cases}
      \end{equation*}
+     $$
   2. Observe samples of the variable $Y$
   3. Run inference
   4. Generate samples of the posterior
@@ -529,11 +566,9 @@ digraph BayesTheorem {
 * Coin Example: Numerical Solution (2/3)
 
 ::: columns
-:::: {.column width=30%}
+:::: {.column width=40%}
 
-\begingroup \scriptsize
-
-- @Procedure@:
+- @Procedure@
   - Generate data from ground truth model
   - Build `PyMC` model matching mathematical model
   - `PyMC` uses NUTS sampler, computes 4 chains
@@ -545,10 +580,8 @@ digraph BayesTheorem {
     - $\EE[\hat{\theta}] \approx 0.324$
     - $\Pr(\hat{\theta} \in [0.031, 0.653]) = 0.94$
 
-\endgroup
-
 ::::
-:::: {.column width=70%}
+:::: {.column width=60%}
 
 ![](msml610/lectures_source/figures/L07.1.Coin_example_numerical_solution.png)
 
@@ -558,21 +591,19 @@ digraph BayesTheorem {
 * Coin Example: Numerical Solution (3/3)
 
 ::: columns
-:::: {.column width=30%}
+:::: {.column width=40%}
 
-\begingroup \small
-
-- @Procedure@:
+- @Procedure@
   1. Compute single KDE for all chains
   2. Rank plot to check results
      - Histograms should look uniform, exploring different (and all)
        posterior regions
   3. Plot single KDE with all statistics
 
-\endgroup
-
 ::::
-:::: {.column width=70%}
+:::: {.column width=60%}
+
 ![](msml610/lectures_source/figures/L07.1.Coin_example_numerical_solution_2.png)
+
 ::::
 :::
