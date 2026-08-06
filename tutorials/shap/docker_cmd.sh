@@ -30,7 +30,7 @@ print_docker_vars
 
 # List available Docker images matching the expected image name.
 DOCKER_CMD=$(get_docker_cmd)
-run "$DOCKER_CMD image ls $FULL_IMAGE_NAME"
+run "$DOCKER_CMD image ls | grep '$FULL_IMAGE_NAME' || true"
 #(docker manifest inspect $FULL_IMAGE_NAME | grep arch) || true
 
 # Configure and run the Docker container with the specified command.

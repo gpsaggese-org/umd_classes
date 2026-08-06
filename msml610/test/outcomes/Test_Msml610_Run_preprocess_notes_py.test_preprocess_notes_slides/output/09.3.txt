@@ -4,6 +4,24 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
+::: columns
+:::: {.column width=20%}
+![](msml610/lectures_source/figures/UMD_Logo.png)
+::::
+:::: {.column width=80%}
+
+MSML610: Advanced Machine Learning
+::::
+:::
+
+\vspace{2cm}
+
+**$$\text{\textcolor{blue}{L09.3: Multi-armed Bandits}}$$**
+
+\vspace{3cm}
+
+**Instructor**: Dr. GP Saggese - gsaggese@umd.edu
+
 
 # Introduction
 

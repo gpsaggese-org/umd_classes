@@ -522,8 +522,8 @@ digraph G {
   - Equivalent to $M(\alpha) \subseteq M(\beta)$
 
 - @Example@: in the "rain and wet ground" world
-  - $\alpha: "(Rain = T, WetGround = T)"$ entails
-    $\beta: "Rain \implies WetGround"$
+  - $\alpha$: "(Rain = T, WetGround = T)" entails
+    $\beta$: "Rain $\implies$ WetGround"
   - If you know for a fact that it's raining and the ground is wet, then you can
     confidently conclude that the rule "if it rains, then the ground is wet" must
     be true (at least in this world)
