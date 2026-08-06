@@ -2,4 +2,6 @@ ipywidgets
 matplotlib
 numpy
 pandas
+scipy
 seaborn
+statsmodels

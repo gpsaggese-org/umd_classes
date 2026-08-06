@@ -54,8 +54,7 @@ ut.config_notebook()
 # Initialize logger.
 logging.basicConfig(level=logging.INFO)
 _LOG = logging.getLogger(__name__)
-hnotebo.set_logger_to_print(_LOG)
-hnotebo.set_all_loggers_to_print()
+hnotebo.init_loggers(_LOG, set_all_loggers_to_print=True)
 
 # %% [markdown]
 # # Cell 1: The Core Problem: Correlation vs. Causation
