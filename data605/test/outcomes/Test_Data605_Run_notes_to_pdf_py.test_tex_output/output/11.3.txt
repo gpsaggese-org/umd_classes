@@ -1,0 +1,2309 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{\textbf{#1}}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+\usepackage{listings}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{10 mm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+\newcommand{\black}[1]{\textcolor{black}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\brown}[1]{\textcolor{brown}{#1}}
+\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
+\newcommand{\gray}[1]{\textcolor{gray}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\olive}[1]{\textcolor{olive}{#1}}
+\newcommand{\orange}[1]{\textcolor{orange}{#1}}
+\newcommand{\purple}[1]{\textcolor{purple}{#1}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\teal}[1]{\textcolor{teal}{#1}}
+\newcommand{\violet}[1]{\textcolor{violet}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+\begin{columns}[T]
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/UMD_Logo.png}}
+\end{column}
+
+\begin{column}{0.75\linewidth}
+\vspace{0.4cm}
+\begingroup \large
+
+UMD DATA605 - Big Data Systems \endgroup
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begingroup \Large
+
+\textbf{\[\text{\textcolor{blue}{\text{11.3: AWS Overview}}}\]}
+\endgroup
+
+\begin{columns}[T]
+\begin{column}{0.75\linewidth}
+\begin{itemize}
+\item
+  \textbf{Instructor}: Dr.~GP Saggese, \url{gsaggese@umd.edu}
+\item
+  @References@:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Some basic info in the slides
+  \item
+    Many tutorials on-line
+  \item
+    Mastery
+
+    \begin{itemize}
+    \tightlist
+    \item
+      ``Amazon Web Services in Action'' 3rd Edition
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.2\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_2_image_1.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Amazon Web Services (AWS)}
+\protect\phantomsection\label{amazon-web-services-aws}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{AWS is a platform offering complete cloud solutions}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Computing (e.g., EC2)
+  \item
+    Storage (e.g., S3)
+  \item
+    Networking
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Offers different levels of abstraction}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    IaaS, PaaS, SaaS
+  \item
+    From virtual hardware to applications, e.g.,
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Host websites
+    \item
+      Run enterprise software
+    \item
+      Run machine learning applications
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Control services in different ways}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Web interface (console)
+  \item
+    CLI: \textcolor{blue}{\texttt{aws}} command
+  \item
+    Language libraries, SDKs (e.g., Python
+    \textcolor{blue}{\texttt{boto3}})
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{AWS as Business}
+\protect\phantomsection\label{aws-as-business}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  Services charge a pay-per-use pricing model
+
+  \begin{itemize}
+  \tightlist
+  \item
+    500 new services and features added annually
+  \end{itemize}
+\item
+  Data centers distributed globally
+
+  \begin{itemize}
+  \tightlist
+  \item
+    US, Europe, Asia, South America
+  \end{itemize}
+\item
+  Extremely profitable
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \$91B/year in revenue (2023)
+  \item
+    Grows 42\% year-over-year
+  \item
+    Controls 30\% of the cloud business
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\center \small
+
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_4_image_1.png}}
+
+\emph{Beef Jezos}
+
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_4_image_2.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Types of Cloud Computing}
+\protect\phantomsection\label{types-of-cloud-computing}
+\begin{itemize}
+\tightlist
+\item
+  Cloud computing enables a
+  \textbf{\textcolor{red}{shared pool of configurable computing resources}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., servers, storage, networks, applications, services
+  \item
+    Accessible from anywhere
+  \item
+    Convenient
+  \item
+    On-demand
+  \end{itemize}
+\item
+  Clouds can be:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Public}: open to the general public (e.g., AWS)
+  \item
+    \emph{Private}: virtualize and share IT infrastructure within one
+    organization (e.g., government)
+  \item
+    \emph{Hybrid}: mix of public and private clouds
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{AWS vs Google Cloud vs Microsoft Azure}
+\protect\phantomsection\label{aws-vs-google-cloud-vs-microsoft-azure}
+\begin{columns}[T]
+\begin{column}{0.6\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Similarities:}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Worldwide infrastructure
+  \item
+    Provide IaaS (computing, networking, storage)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      AWS EC2 / Google Compute Engine / Azure VMs
+    \item
+      AWS S3 / Google Cloud Storage / Azure Blob Storage
+    \end{itemize}
+  \item
+    Pay-as-you-go pricing model
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Differences:}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    AWS
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Market leader, mature, powerful
+    \item
+      Utilizes open source technologies
+    \end{itemize}
+  \item
+    Azure
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Offers Microsoft stack in the cloud
+    \end{itemize}
+  \item
+    Google
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Focuses on cloud-native applications
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.35\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_6_image_2.png}}
+
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_6_image_3.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{From On-premise to AWS: 1/3}
+\protect\phantomsection\label{from-on-premise-to-aws-13}
+\begin{itemize}
+\item
+  Aka ``Cloud-transformation''
+\item
+  \textbf{\textcolor{red}{Example}}: move a medium-sized e-commerce site
+  \emph{from on-premise to the cloud}
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{No-cloud}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Web-server}: handles customer requests
+  \item
+    \emph{DB}: stores product info and orders
+  \item
+    \emph{Static content} (e.g., JPEG images)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Delivered over CDN
+    \item
+      Reduces load on services
+    \end{itemize}
+  \item
+    \emph{Dynamic content} (e.g., HTML pages)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., products and prices
+    \item
+      Delivered by web server
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_8_image_1.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{From On-premise to AWS: 2/3}
+\protect\phantomsection\label{from-on-premise-to-aws-23}
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Move to cloud}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Keep the same architecture
+  \item
+    Move components to cloud
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_8_image_1.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{From On-premise to AWS: 3/3}
+\protect\phantomsection\label{from-on-premise-to-aws-33}
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Design for the cloud}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    DNS
+  \item
+    Database
+  \item
+    Object store (S3)
+  \item
+    Managed solutions
+  \item
+    Use multiple smaller virtual services with a load balancer to
+    increase reliability
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_9_image_1.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Capacity Scaling}
+\protect\phantomsection\label{capacity-scaling}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{No need to plan for capacity}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Do not predict capacity
+  \item
+    Schedule capacity on-the-fly
+  \item
+    No concern for rack space, switches, power supplies
+  \item
+    Add more VMs (1 to 1000) and storage (GB to PB) as needed
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Handle seasonal traffic by scaling up/down}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Day vs night
+  \item
+    Weekday vs weekend
+  \item
+    Holidays
+  \item
+    No test system needed when the team is off
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_11_image_1.png}}
+
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_11_image_2.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Worldwide presence}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    AWS has many data centers
+  \item
+    Deploy applications close to customers
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Pay-per-use}
+\protect\phantomsection\label{pay-per-use}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{AWS bill}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Similar to an electric bill
+  \item
+    Services billed based on usage:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Hours of virtual server (rounded up)
+    \item
+      Used storage in GB (allocated or real)
+    \item
+      Data traffic in GB or requests
+    \item
+      \ldots{}
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_12_image_1.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Free tier}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use some AWS services free for 12 months after signing up
+  \item
+    Experiment with services
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., EC2, S3
+    \end{itemize}
+  \item
+    Exceed limits, start paying (without notice)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Set an alarm!
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Pay-per-use}
+\protect\phantomsection\label{pay-per-use-1}
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Advantages}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    No upfront investments or commitment
+  \item
+    Lower project startup cost
+  \item
+    Easier to divide the system into smaller parts
+
+    \begin{itemize}
+    \tightlist
+    \item
+      One big server or two smaller ones cost the same
+    \end{itemize}
+  \item
+    Affordable fault tolerance/high performance
+
+    \begin{itemize}
+    \tightlist
+    \item
+      For a scalable workload ``buy 1 server for 1000 hours'' = ``buy
+      1000 servers for 1 hour''
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_13_image_1.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Interacting with AWS}
+\protect\phantomsection\label{interacting-with-aws}
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{GUI (Management Console)}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Start interacting with services easily
+  \item
+    Set up cloud infrastructure for development and testing
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Command-line tool (CLI)}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Manage and access AWS services
+  \item
+    Automate recurring tasks
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{SDKs}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use libraries in any language to interact with AWS
+  \item
+    Integrate applications with AWS
+  \item
+    E.g., \textcolor{blue}{\texttt{boto3}} for Python
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Blueprints}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Describe your system with all services and dependencies
+  \item
+    Describe the system, not how to build it
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_14_image_3.png}}
+
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_14_image_2.png}}
+
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_14_image_1.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Accounts and Users}
+\protect\phantomsection\label{accounts-and-users}
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Users}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    One root AWS account
+  \item
+    Attach multiple users to an account
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Different privileges
+    \item
+      Isolate workloads
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Be safe}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Never use root account to develop
+  \item
+    Always use 2FA
+  \item
+    Avoid costly mistakes
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Key pair}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Create a key pair to access a virtual server
+  \item
+    Public key (stored in AWS and on virtual servers)
+  \item
+    Private key is your secret
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Don't lose it; it can't be retrieved
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_15_image_1.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Create User Account}
+\protect\phantomsection\label{create-user-account}
+\begin{columns}[T]
+\begin{column}{0.4\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Create a new user}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Do not use the AWS root account for development
+  \item
+    IAM: Identity and Access Management
+  \item
+    Access key ID + secret access key
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Access control}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Enable programmatic access
+  \item
+    Enable console access
+  \item
+    Limit user actions through policies
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.55\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_29_image_2.png}}
+
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_29_image_3.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{AWS VMs}
+\protect\phantomsection\label{aws-vms}
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{With virtualization}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Multiple VMs run on the same hardware
+  \item
+    Start and stop VMs on-demand
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Physical server}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Aka ``host machine'', ``bare metal''
+  \item
+    Consists of CPUs, memory, networking interfaces, storage
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Hypervisor}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Software + CPU hardware
+  \item
+    Isolates guests
+  \item
+    Schedules hardware requests
+  \end{itemize}
+\item
+  AWS
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Used Xen hypervisor (open-source) before
+  \item
+    Switched to AWS Nitro
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Hardware-assisted virtualization
+    \item
+      Performance close to bare metal
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Virtual servers}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Isolated on the same hardware
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_16_image_1.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Select Region}
+\protect\phantomsection\label{select-region}
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  E.g., \textcolor{blue}{\texttt{us-east-1}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    21155 Smith Switch Road, Ashburn, VA, USA
+  \end{itemize}
+\end{itemize}
+
+\vspace{0.2cm}
+\center
+
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_17_image_2.png}
+
+\begin{itemize}
+\tightlist
+\item
+  Major internet backbone in Ashburn, VA
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Equinix
+  \item
+    Digital Realty
+  \item
+    Vantage Data Centers
+  \item
+    H5 Data Centers
+  \item
+    \ldots{}
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_17_image_1.png}
+
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_17_image_3.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Starting an EC2 Instance}
+\protect\phantomsection\label{starting-an-ec2-instance}
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Select OS}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Amazon Machine Image (AMI)
+  \item
+    Contains OS + pre-installed software
+  \item
+    Saves time installing OS, packages, software
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Choose instance parameters}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., \textcolor{blue}{\texttt{t2.micro}}
+  \item
+    More info later
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Configure instance}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Network, shutdown behavior, termination protection, monitoring
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_18_image_1.png}
+
+\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_18_image_3.png}
+
+\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_18_image_2.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{AWS Instance Type}
+\protect\phantomsection\label{aws-instance-type}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Instance type}} describes the computing power
+\item
+  \textbf{\textcolor{blue}{Instance family}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textcolor{blue}{\texttt{T}}: cheap, baseline
+  \item
+    \textcolor{blue}{\texttt{M}}: general purpose
+  \item
+    \textcolor{blue}{\texttt{C}}: compute optimized
+  \item
+    \textcolor{blue}{\texttt{R}}: memory optimized
+  \item
+    \textcolor{blue}{\texttt{D}}: storage optimized for HDD
+  \item
+    \textcolor{blue}{\texttt{I}}: storage optimized for SSD
+  \item
+    \textcolor{blue}{\texttt{F}}: with FPGAs
+  \item
+    \textcolor{blue}{\texttt{P, G, CG}}: with GPUs
+  \end{itemize}
+\item
+  \href{https://aws.amazon.com/ec2/instance-types}{AWS EC2 list}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_19_image_1.png}}
+
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_19_image_2.png}}
+
+\begin{itemize}
+\tightlist
+\item
+  E.g., \textcolor{blue}{\texttt{t2.micro}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textcolor{blue}{\texttt{t}}: instance family (small, cheap)
+  \item
+    \textcolor{blue}{\texttt{2}}: generation (second)
+  \item
+    \textcolor{blue}{\texttt{micro}}: size (1 vCPU, 1GB memory)
+  \item
+    0.013 USD/hr
+  \end{itemize}
+\item
+  E.g., \textcolor{blue}{\texttt{m4.large}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textcolor{blue}{\texttt{m}}: general purpose
+  \item
+    \textcolor{blue}{\texttt{large}}: size (2 vCPUs, 8GB memory)
+  \item
+    0.10 USD/hr
+  \end{itemize}
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{AWS Instance Type}
+\protect\phantomsection\label{aws-instance-type-1}
+\begin{itemize}
+\tightlist
+\item
+  Pricing on the AWS website can be unclear due to various factors:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Burst mode
+  \item
+    vCPUs
+  \item
+    Multi-tenancy
+  \item
+    On-demand vs.~spot vs.~reserved vs.~pre-paid
+  \end{itemize}
+\item
+  642 types of EC2 machines (as of 2023)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Cheapest: \$37 USD/year
+  \item
+    Most expensive: \$1.91M USD/year (500 CPUs and 24TB of memory)
+  \end{itemize}
+\item
+  \href{https://instances.vantage.sh}{Alternative sites} tracking prices
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Starting an EC2 Instance}
+\protect\phantomsection\label{starting-an-ec2-instance-1}
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  Add storage
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Volume size
+  \item
+    Volume type (SSD or magnetic HDD)
+  \end{itemize}
+\item
+  Tag
+\item
+  Configure firewall
+
+  \begin{itemize}
+  \tightlist
+  \item
+    How to access using SSH
+  \item
+    Select key pair
+  \end{itemize}
+\item
+  How to monitor the instance
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., CloudWatch
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_21_image_1.png}}
+
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_21_image_2.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Starting an EC2 Instance}
+\protect\phantomsection\label{starting-an-ec2-instance-2}
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  Start instance
+\item
+  Find public IP
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_22_image_1.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\item
+  Connect to the machine \small
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{\textgreater{}}\NormalTok{ ssh }\ExtensionTok{{-}i} \VariableTok{$PATH}\NormalTok{/mykey.pem ubuntu@}\VariableTok{$PUBLIC\_UP}
+\OperatorTok{\textgreater{}}\NormalTok{ cat }\ExtensionTok{/proc/cpuinfo}
+\OperatorTok{\textgreater{}}\NormalTok{ free }\ExtensionTok{{-}m}
+\OperatorTok{\textgreater{}}\NormalTok{ sudo }\ExtensionTok{apt{-}get}\NormalTok{ update}
+\OperatorTok{\textgreater{}}\NormalTok{ sudo }\ExtensionTok{apt{-}get}\NormalTok{ install ...}
+\end{Highlighting}
+\end{Shaded}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{States of a VM}
+\protect\phantomsection\label{states-of-a-vm}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Start}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Start stopped VM
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Stop}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Stopped VM not billed
+  \item
+    Network HDD persists and incurs charges
+  \item
+    Local disk does not persist
+  \item
+    VM can restart on a different host (different IP)
+  \end{itemize}
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Reboot}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Network HDD persists
+  \item
+    Local disk does not persist
+  \item
+    Software remains installed
+  \item
+    VM restarts on a different host
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Terminate}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Delete: cannot restart
+  \item
+    Network HDD persists
+  \item
+    Local disk wiped out
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_23_image_1.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Moving / Upgrading EC2 Instances}
+\protect\phantomsection\label{moving-upgrading-ec2-instances}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Scale up / down}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Increase VM size for more computing power
+  \item
+    Stop VM
+  \item
+    Change instance type (e.g., \textcolor{blue}{\texttt{m3.large}})
+  \item
+    Start VM
+  \item
+    IP addresses change
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{AWS regions}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Regions are collections of data centers
+  \item
+    Regions are independent
+  \item
+    No automatic data transfer across regions
+  \item
+    Some services (e.g., IAM, CDN, DNS) are global
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Why move across AWS regions}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Proximity to users
+  \item
+    Compliance
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Data storage and processing permissions
+    \end{itemize}
+  \item
+    Service availability
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Some services unavailable in certain regions
+    \end{itemize}
+  \item
+    Redundancy
+  \item
+    Costs
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Vary by region
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Optimizing Costs}
+\protect\phantomsection\label{optimizing-costs}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{On-demand instances}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Maximum flexibility, no restrictions
+  \item
+    Start and stop VMs anytime
+  \item
+    Pay by hour
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{EC2 / Compute saving plans}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    1 yr vs 3 yrs
+  \item
+    Commit to a certain number of hours
+  \item
+    Payment options: all, partial, no upfront
+  \item
+    Discount: up to 3x cheaper than on-demand
+  \item
+    Useful for dev servers
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Capacity reservation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Access machines even in peak hours
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Spot instances}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Bid for unused capacity
+  \item
+    Price based on supply/demand
+  \item
+    Discount: up to 10x cheaper than on-demand
+  \item
+    Useful for asynchronous tasks
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Low-Cost Processing}
+\protect\phantomsection\label{low-cost-processing}
+\begin{itemize}
+\tightlist
+\item
+  Lots of batch jobs are not critical / run on a schedule
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Analyze data daily
+  \item
+    Generate reports from a database
+  \end{itemize}
+\end{itemize}
+
+\begin{enumerate}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Allocate machines on demand}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    AWS bills VMs per minute
+  \item
+    Pay only when running jobs
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{AWS Batch}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Offers spare capacity at a discount
+  \item
+    Runs when capacity is available, saving 50\%
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{AWS Lambda}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Serverless
+  \end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Programming the Infrastructure}
+\protect\phantomsection\label{programming-the-infrastructure}
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  On AWS everything can be
+  \textbf{\textcolor{red}{controlled via an API}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Start a VM
+  \item
+    Create 1TB of storage
+  \item
+    Start a Hadoop cluster
+  \end{itemize}
+\item
+  Use:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    AWS GUI console
+  \item
+    HTTP requests to API
+  \item
+    CLI (Command Line Interface)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Call AWS API from terminal
+    \end{itemize}
+  \item
+    SDK (Software Development Kit)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Call AWS API from code
+    \end{itemize}
+  \item
+    CloudFormation: templates describe infrastructure state, translated
+    into API calls
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_26_image_1.png}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Jeff Bezos 2002 API mandate}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    An email worth \$100B/yr
+  \end{itemize}
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Infrastructure-as-Code}
+\protect\phantomsection\label{infrastructure-as-code}
+\begin{itemize}
+\item
+  Use high-level
+  \textbf{\textcolor{red}{programming language to control IT systems}}
+\item
+  Apply
+  \textbf{\textcolor{darkgreen}{software development principles to infrastructure}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Code repository
+  \item
+    Automated tests
+  \item
+    Continuous integration
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{DevOps (SRE in Google parlance)}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Mix developers and operations in the same team
+  \item
+    Use software to bring development and operations closer
+  \item
+    Switch roles to experience each other's challenges
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Devs \(\to\) responsible for operational tasks (e.g., on-call)
+    \item
+      Ops \(\to\) involved in software development, making systems
+      easier to operate
+    \end{itemize}
+  \item
+    Foster communication and collaboration
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Infrastructure-as-Code: Advantages}
+\protect\phantomsection\label{infrastructure-as-code-advantages}
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Save time}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Reuse scripts or blueprints
+  \item
+    Automate tasks
+  \item
+    Copy-paste vs.~click-click-click
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Fewer mistakes}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Push-button flow
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Consistency of actions}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Multiple deployments per day
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Deployment pipeline}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Commit changes to source code
+  \item
+    Build application from source
+  \item
+    Automatic tests (e.g., integration tests)
+  \item
+    Build testing environment
+  \item
+    Run acceptance tests in isolation
+  \item
+    Propagate changes to production
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Scripts as detailed documentation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Explains what and how, not why
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_3_slide_15_image_1.png}}
+
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_3_slide_15_image_2.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{AWS Command Line Interface (CLI)}
+\protect\phantomsection\label{aws-command-line-interface-cli}
+\begin{itemize}
+\item
+  Provides a \textbf{\textcolor{red}{unified interface}} to all AWS
+  services
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Output is in JSON format
+  \end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{\textgreater{}}\NormalTok{ apt{-}get }\FunctionTok{install}\NormalTok{ awscli}
+\end{Highlighting}
+\end{Shaded}
+\item
+  \textbf{\textcolor{darkgreen}{Authenticate}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{\textgreater{}}\NormalTok{ aws }\ExtensionTok{configure}
+\end{Highlighting}
+\end{Shaded}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    AWS access key ID
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., \textcolor{blue}{\texttt{AKIAIR...D7ZCA}}
+    \end{itemize}
+  \item
+    AWS secret access key
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., \textcolor{blue}{\texttt{SSKIng7jkA...enqBj7}}
+    \end{itemize}
+  \item
+    Default region name
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., \textcolor{blue}{\texttt{us-east-1}}
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Execute command}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{\textgreater{}}\NormalTok{ aws }\OperatorTok{\textless{}}\NormalTok{service}\OperatorTok{\textgreater{}} \OperatorTok{\textless{}}\NormalTok{action}\OperatorTok{\textgreater{}}\NormalTok{ {-}{-}key }\ExtensionTok{value}
+\end{Highlighting}
+\end{Shaded}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Software Development Kit (SDK)}
+\protect\phantomsection\label{software-development-kit-sdk}
+\begin{columns}[T]
+\begin{column}{0.6\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{SDK is a library for calling AWS API}} from
+  your programming language
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., Python, Go, C++, JavaScript
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Pros}}: it handles
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Authentication
+  \item
+    Retry on error
+  \item
+    HTTPS communication
+  \item
+    XML / JSON de-/serialization
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Cons}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Imperative approach
+  \item
+    Dealing with dependencies
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.35\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_31_image_1.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{AWS CloudFormation}
+\protect\phantomsection\label{aws-cloudformation}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Use templates to describe infrastructure}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., JSON, YAML
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Declarative vs imperative approach}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Declare the system, not the steps to build it
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{AWS Stacks}} processes CloudFormation
+  templates
+\item
+  \textbf{\textcolor{violet}{Pros}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Consistent infrastructure description
+  \item
+    Handles dependencies
+  \item
+    Customizable
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Inject parameters to customize templates
+    \end{itemize}
+  \item
+    Testable
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Create infrastructure from a template, test, shut down
+    \end{itemize}
+  \item
+    Updatable
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Update template, Stacks apply changes automatically
+    \end{itemize}
+  \item
+    Serves as documentation
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Use as code in source control
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Securing Your System}
+\protect\phantomsection\label{securing-your-system}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Always install software updates}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Fix security vulnerabilities promptly
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Restrict access to AWS account}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use separate AWS accounts for individuals and scripts
+  \item
+    Apply ``least privilege'': grant only necessary permissions
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Restrict network traffic}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Open essential ports
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., 80 for HTTP, 443 for HTTPS
+    \end{itemize}
+  \item
+    Close others
+  \item
+    Encrypt traffic and data
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Create a private network}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use subnets not reachable from the Internet
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_11_2/lec_11_2_slide_33_image_1.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{AWS Shared-responsibility Principle}
+\protect\phantomsection\label{aws-shared-responsibility-principle}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{AWS is responsible for}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Protecting the network by monitoring Internet access
+  \item
+    Preventing DDoS attacks
+  \item
+    Ensuring the physical security of data centers
+  \item
+    Decommissioning storage devices after end of life
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{You are responsible for}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Restricting access using IAM
+  \item
+    Encrypting network traffic (e.g., HTTPS)
+  \item
+    Configuring firewalls and VPNs
+  \item
+    Encrypting data
+  \item
+    Updating the OS and software
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\end{document}

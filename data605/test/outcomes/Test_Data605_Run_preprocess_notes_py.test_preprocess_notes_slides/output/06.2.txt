@@ -30,7 +30,7 @@ UMD DATA605 - Big Data Systems
 
 - **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
-- **References**:
+- @References@:
   - All concepts in slides
   - MongoDB tutorial
   - Web
@@ -47,22 +47,22 @@ UMD DATA605 - Big Data Systems
 #### CRUD Operations
 - CRUD = Create, Read, Update, Delete
 
-- **Create**
+- **\textcolor{red}{Create}**
   ```python
   db.collection.insert(<document>)
   db.collection.update(<query>, <update>, {upsert: true})
   ```
   - Upsert = update (if exists) or insert (if it doesn't)
-- **Read**
+- **\textcolor{darkgreen}{Read}**
   ```python
   db.collection.find(<query>, <projection>)
   db.collection.findOne(<query>, <projection>)
   ```
-- **Update**
+- **\textcolor{blue}{Update}**
   ```python
   db.collection.update(<query>, <update>, <options>)
   ```
-- **Delete**
+- **\textcolor{violet}{Delete}**
   ```python
   db.collection.remove(<query>, <justOne>)
   ```
@@ -83,7 +83,7 @@ UMD DATA605 - Big Data Systems
     ```python
     db.parts.insert({_id: 10, type: "hammer", quantity: 1})
     ```
-- Update 1 or more records in a collection satisfying **query**
+- Update 1 or more records in a collection satisfying **\textcolor{red}{query}**
   ```python
   db.collection.update(<query>, <update>, {upsert: true})
   ```
@@ -116,7 +116,7 @@ UMD DATA605 - Big Data Systems
 :::columns
 ::::{.column width=40%}
 \footnotesize
-**SQL**
+**\textcolor{red}{SQL}**
 ```sql
 SELECT * FROM users WHERE age>33
 
@@ -139,7 +139,7 @@ SELECT * FROM users
 ::::
 ::::{.column width=40%}
 \footnotesize
-**Mongo**
+**\textcolor{blue}{Mongo}**
 ```python
 db.users.find({age: {$gt: 33}})
 
