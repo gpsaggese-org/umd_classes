@@ -90,21 +90,44 @@
 - Each slide deck should be about 30-35 slides
 
 ### Lesson Materials
-- For each chapter
+- For each chapter:
   - Read the table of content for the slides in `### Topics` and the content in
     `### Lesson Materials`
   - Update the `### Lesson Materials` to cover the `### Topics` using the
     materials listed above in `## All Lesson Materials`
   - Reference the actual lecture files to verify coverage percentages
-  - The output must follow the template below
+
+- The output must follow the template below
   ```
   ### Lesson Materials
   - `pointer to a lecture`
-    - [<Amount of the lecture material covering this chapter>]: <topics>
-  - `book_springer/lectures_source/Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt`
-    - [100%]: Integration of causality and uncertainty into ML systems, moving beyond correlation
-  - Not covered
+    - [<Amount used>]: topics
+  - ...
+  - _Not covered_
     - [<Amount of topics not covered by any lesson>]: <topics>
+  ```
+- E.g.,
+  ```
+  ### Lesson Materials
+  - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
+    - [95%]: Causal effects to expected value, EVPI/EVSI, Bayesian optimization,
+      causal multi-armed bandits, exploration vs. exploitation
+  - `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt`
+    - [90%]: Thompson sampling, UCB, epsilon-greedy, contextual bandits, regret
+      bounds
+  - `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
+    - [80%]: MDPs, value/policy iteration, off-line vs. on-line MDP solving
+  - `msml610/lectures_source/Lesson08.5-Experimentation.txt`
+    - [75%]: A/B testing design, decision framework for experiment vs. observe,
+      hybrid experimental-causal approaches
+  - `msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt`
+    - [65%]: Posterior-based decision rules via loss functions and ROPE: using
+      full posterior distribution, not point estimates
+  - `msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt`
+    - [45%]: Bayesian updating fundamentals, priors: foundational only
+  - _Not covered_
+    - [50%]: Minimax/distributional robustness against model misspecification,
+      formal sensitivity analysis, advanced acquisition-function design
   ```
 
 ### Notes
@@ -236,6 +259,9 @@ msml610/tutorials/L12_reinforcement_learning/L12_01_gridworld_4x3.ipynb
 msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipynb
 ```
 
+## TODOs
+- Incorporate ./notes/math.Probabilistic_programming_for_hackers.DavidsonPilon.2017.txt
+
 # Detailed TOC
 
 # Part I: Why Businesses Need Decisions, Not Predictions
@@ -271,7 +297,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
 - Interactive Jupyter notebook tutorials for hands-on approach
 
 ### Slides
-- N/A
+- `book_springer/lectures_source/Lesson01.1_Introduction.txt`
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson00-Class.txt`
@@ -338,8 +364,8 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
 // TODO(ai_gp): Check this
 
 ### Slides 
-- `book_springer/lectures_source/Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt`
-- `book_springer/lectures_source/Lesson01.03_Integrating_Business_Objective_And_Real_World_Dynamics.txt`
+- `book_springer/lectures_source/Lesson02.2_Integrating_Causality_And_Probability_in_ML.txt`
+- `book_springer/lectures_source/Lesson02.3_Integrating_Business_Objective_And_Real_World_Dynamics.txt`
 
 ### Lesson Materials
 
@@ -595,6 +621,9 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
   - Risk neutrality: a linear utility function over outcomes
   - Risk seeking: increasing marginal utility, rare and context-dependent
 
+### Slides
+- N/A
+
 ### Lesson Materials
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
   - [95%]: Utility functions, expected utility principle, risk preferences and
@@ -643,6 +672,13 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
   - Minimax and distributional robustness against unknown unknowns
   - Sensitivity analysis: how much conclusions change with assumptions
 
+### Slides
+- `book_springer/lectures_source/Lesson10.1_Taxonomy_of_Decision_Problems.txt`
+- `book_springer/lectures_source/Lesson10.01.algo_info.md`
+- `book_springer/lectures_source/Lesson10.01.algo_to_problem_table.md`
+- `book_springer/lectures_source/Lesson10.01.problem_to_algo_table.md`
+- `book_springer/lectures_source/Lesson10.01.tutorial_plan.md`
+
 ### Lesson Materials
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
   - [95%]: Causal effects to expected value, EVPI/EVSI, Bayesian optimization,
@@ -660,7 +696,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
     full posterior distribution, not point estimates
 - `msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt`
   - [45%]: Bayesian updating fundamentals, priors: foundational only
-- Not covered
+- _Not covered_
   - [50%]: Minimax/distributional robustness against model misspecification,
     formal sensitivity analysis, advanced acquisition-function design
 
@@ -692,6 +728,9 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
   - Value functions: Q-learning, SARSA, value and policy iteration
   - Deep value-based methods: DQN and function approximation for large states
   - Delayed rewards: learning environment structure from sparse feedback
+
+### Slides
+- `book_springer/lectures_source/Lesson11.1_Simple_Decisions.txt`
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
@@ -738,6 +777,9 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
   - Reasoning about decisions when other agents are also acting
   - Equilibrium and coordination: Nash equilibrium solvers (CFR), QMIX, CommNet
   - Competitive and cooperative learning: MAPPO, MAAC, MADDPG
+
+### Slides
+- `book_springer/lectures_source/Lesson12.1_Complex_Decisions.txt`
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
@@ -790,6 +832,9 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
     probabilities
   - Uncertainty quantification maintained over causal structure itself
   - Online discovery: learning causal DAGs from live deployment data
+
+### Slides
+- N/A
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson15.1-Causal_Reasoning_Agents.txt`
@@ -848,6 +893,9 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
   - Assumption sign-off: stakeholders formally endorse the causal structure
   - Go/no-go decision: assessing readiness for production deployment
 
+### Slides
+- N/A
+
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
   - [90%]: Causal AI workflow with hybrid teams, "Roles in Hybrid Teams," Step 4
@@ -897,6 +945,9 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
   - Learning from deployed decisions and adapting to concept drift
   - Iterative refinement of models and assumptions over time
   - System reliability, documentation, and management of legacy components
+
+### Slides
+- `book_springer/lectures_source/Lesson15.1_Deployment_Monitoring_And_Adaptation.txt`
 
 ### Lesson Materials
 - `book_springer/lectures_source/Lesson15.1_Deployment_Monitoring_And_Adaptation.txt`
@@ -948,6 +999,9 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
   - GDPR, the EU AI Act, and other fairness standards
   - Documentation and audit preparation, with legal coordination as needed
   - Guardrails: safety constraints and graceful degradation under failure
+
+### Slides
+- N/A
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson13.1-Explainability.txt`
