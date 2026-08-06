@@ -27,7 +27,6 @@ import create_markdown_summary as crmasu
 # TODO(gp): Use mistletoe to parse the markdown file and process it.
 # See https://github.com/miyuchina/mistletoe/blob/master/dev-guide.md
 
-
 import argparse
 import logging
 import os
@@ -40,6 +39,7 @@ import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hmarkdown as hmarkdo
 import helpers.hparser as hparser
+import helpers.hselect_action as hselacti
 import helpers.hprint as hprint
 import helpers.hsystem as hsystem
 
@@ -447,7 +447,7 @@ def _action_check_output(
 def _parse() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter,
+        formatter_class=hparser.CustomHelpFormatter,
     )
     parser.add_argument("--in_file", required=True, help="Input markdown file")
     parser.add_argument("--out_file", help="Output file path")
@@ -468,7 +468,7 @@ def _parse() -> argparse.ArgumentParser:
         action="store_true",
         help="Use llm library instead of command line llm tool",
     )
-    hparser.add_action_arg(parser, _VALID_ACTIONS, _DEFAULT_ACTIONS)
+    hselacti.add_action_arg(parser, _VALID_ACTIONS, _DEFAULT_ACTIONS)
     hparser.add_verbosity_arg(parser)
     return parser
 
@@ -485,9 +485,14 @@ def _main(parser: argparse.ArgumentParser) -> None:
         base_name = os.path.splitext(os.path.basename(args.in_file))[0]
         args.out_file = f"{base_name}.summary.txt"
     # Get selected actions.
-    actions = hparser.select_actions(args, _VALID_ACTIONS, _DEFAULT_ACTIONS)
+    actions = hselacti.select_actions(args, _VALID_ACTIONS, _DEFAULT_ACTIONS)
+    print(hselacti.actions_to_string(actions, _VALID_ACTIONS, add_frame=True))
     # Process each action.
-    for action in actions:
+    while actions:
+        action = actions[0]
+        to_execute, actions = hselacti.mark_action(action, actions)
+        if not to_execute:
+            continue
         if action == "summarize":
             _action_summarize(
                 args.in_file,
@@ -501,7 +506,10 @@ def _main(parser: argparse.ArgumentParser) -> None:
         elif action == "check_output":
             _action_check_output(args.in_file, args.out_file, args.max_level)
         else:
-            hdbg.dfatal("Invalid action: %s", action)
+            raise ValueError(f"Invalid action='{action}'")
+    hdbg.dassert_eq(
+        len(actions), 0, "There are unprocessed actions: %s", str(actions)
+    )
 
 
 if __name__ == "__main__":

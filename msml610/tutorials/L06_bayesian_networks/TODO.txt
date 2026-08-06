@@ -1,0 +1,3 @@
+- [ ] Review tutorials/L06_bayesian_networks/L06_01_exact_inference.ipynb
+
+- [ ] Review tutorials/L06_bayesian_networks/L06_02

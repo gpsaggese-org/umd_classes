@@ -1,43 +1,10 @@
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{0.5cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 07.1: Introduction to Probabilistic Programming}}$$**
-\endgroup
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA (Artificial Intelligence: a Modern Approach), Chap 15: Probabilistic
-  programming
-
-- Martin, Bayesian Analysis with Python, 2018 (2e)
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){width=1.5cm}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Bayesian_analysis_with_Python.jpg){width=1.5cm}
-
-::::
-:::
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L07.1: Introduction to Probabilistic Programming
+// slides_engine=typst
+// references=
+// - AIMA (Artificial Intelligence: a Modern Approach), Chap 15: Probabilistic
+// - Martin, Bayesian Analysis with Python, 2018 (2e)
 
 # Concepts
 
@@ -177,9 +144,7 @@ MSML610: Advanced Machine Learning
 
 # Coin Example
 
-## #############################################################################
 ## Analytical Approach
-## #############################################################################
 
 * Coin Example: Problem
 - **Problem**:
@@ -472,9 +437,7 @@ Kruschke diagram
 
 // 2, Programming probabilistically
 
-## #############################################################################
 ## Probabilistic Programming
-## #############################################################################
 
 * Bayesian Statistics
 ::: columns

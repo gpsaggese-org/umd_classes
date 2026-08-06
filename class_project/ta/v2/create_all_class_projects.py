@@ -29,6 +29,7 @@ from typing import List
 
 import helpers.hdbg as hdbg
 import helpers.hio as hio
+import helpers.hselect_input_output as hseinout
 import helpers.hparser as hparser
 import helpers.hsystem as hsystem
 
@@ -46,7 +47,7 @@ def _parse() -> argparse.ArgumentParser:
     """
     parser = argparse.ArgumentParser(
         description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter,
+        formatter_class=hparser.CustomHelpFormatter,
     )
     parser.add_argument(
         "--input_dir",
@@ -69,7 +70,7 @@ def _parse() -> argparse.ArgumentParser:
         default="both",
         help="Action to perform: generate_summary, generate_projects, or both (default: both)",
     )
-    hparser.add_limit_range_arg(parser)
+    hseinout.add_limit_range_arg(parser)
     hparser.add_verbosity_arg(parser)
     return parser
 
@@ -93,7 +94,7 @@ def _find_lesson_files(input_dir: str, *, limit_range=None) -> List[str]:
             lesson_files.append(full_path)
     lesson_files.sort()
     # Apply limit range if specified.
-    lesson_files = hparser.apply_limit_range(
+    lesson_files = hseinout.apply_limit_range(
         lesson_files, limit_range, item_name="lesson files"
     )
     return lesson_files
@@ -153,11 +154,7 @@ def _find_packages(in_file: str, output_dir: str) -> str:
         _LOG.warning("Output file already exists, skipping: %s", out_file)
         return out_file
     # Build command
-    cmd = (
-        f"find_lesson_packages.py "
-        f"--in_file {in_file} "
-        f"--output_file {out_file}"
-    )
+    cmd = f"find_lesson_packages.py --in_file {in_file} --output_file {out_file}"
     _LOG.info("Running find packages command: %s", cmd)
     # Execute command
     ret_code = hsystem.system(cmd)
@@ -165,7 +162,9 @@ def _find_packages(in_file: str, output_dir: str) -> str:
     return out_file
 
 
-def _generate_projects(in_file: str, output_dir: str, packages_file: str) -> List[str]:
+def _generate_projects(
+    in_file: str, output_dir: str, packages_file: str
+) -> List[str]:
     """
     Generate projects for a lesson file using create_lesson_project.py.
 
@@ -237,7 +236,7 @@ def _process_all_lessons(
     # TODO(ai): Add a progress bar.
     for lesson_file in lesson_files:
         _LOG.info("Processing %s", lesson_file)
-        
+
         # Step 1: Generate summary (always needed for the new flow)
         if action in ["generate_summary", "both"]:
             summary_file = _generate_summary(lesson_file, output_dir)
@@ -248,8 +247,10 @@ def _process_all_lessons(
             summary_file = os.path.join(output_dir, f"{base_name}.summary.txt")
             if not os.path.exists(summary_file):
                 summary_file = _generate_summary(lesson_file, output_dir)
-                _LOG.info("Generated summary (required for projects): %s", summary_file)
-        
+                _LOG.info(
+                    "Generated summary (required for projects): %s", summary_file
+                )
+
         # Step 2 & 3: Find packages and generate projects
         if action in ["generate_projects", "both"]:
             # Find packages using the summary file.
@@ -257,9 +258,7 @@ def _process_all_lessons(
             _LOG.info("Generated packages: %s", packages_file)
             # Generate projects using the summary file and packages file.
             projects_files = _generate_projects(
-                summary_file, 
-                output_dir, 
-                packages_file
+                summary_file, output_dir, packages_file
             )
             _LOG.info("Generated projects: %s", ", ".join(projects_files))
 
@@ -273,7 +272,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     # Validate input directory
     hdbg.dassert_dir_exists(args.input_dir)
     # Parse limit range if specified.
-    limit_range = hparser.parse_limit_range_args(args)
+    limit_range = hseinout.parse_limit_range_args(args)
     # Process all lessons
     _process_all_lessons(
         args.input_dir,

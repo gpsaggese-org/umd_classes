@@ -17,7 +17,7 @@ import class_scripts.count_lecture_pages as clcolepa
 import argparse
 import logging
 
-import class_scripts.common_utils as clcomuut
+import class_scripts.common_utils as csccouti
 import helpers.hdbg as hdbg
 import helpers.hparser as hparser
 
@@ -29,7 +29,7 @@ _LOG = logging.getLogger(__name__)
 def _parse() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter,
+        formatter_class=hparser.CustomHelpFormatter,
     )
     parser.add_argument(
         "dir",
@@ -47,7 +47,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     lectures_dir = f"{args.dir}/lectures"
     _LOG.info("DIR=%s", lectures_dir)
     # Get page counts for all PDFs.
-    page_counts = clcomuut.get_pdf_page_counts(
+    page_counts = csccouti.get_pdf_page_counts(
         lectures_dir, pattern="Lesson*.pdf"
     )
     # Print results tab-separated.

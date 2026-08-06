@@ -1,0 +1,7 @@
+ipywidgets
+matplotlib
+numpy
+pandas
+seaborn
+
+gymnasium==1.3.0

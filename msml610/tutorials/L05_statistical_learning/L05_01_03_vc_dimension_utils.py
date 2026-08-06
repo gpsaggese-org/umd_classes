@@ -3,7 +3,7 @@ Utility functions for Lesson 5.1 - Learning Theory VC Dimension notebook.
 
 Import as:
 
-import L05_01_03_vc_dimension_utils as mtl00vdut
+import msml610.tutorials.L05_statistical_learning.L05_01_03_vc_dimension_utils as mtlsll00vdu
 """
 
 import logging
@@ -15,9 +15,9 @@ import numpy as np
 from IPython.display import display
 
 try:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 except ImportError:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 
 _LOG = logging.getLogger(__name__)
 
@@ -244,7 +244,7 @@ def _draw_dichotomy_3points(
         text_content += f"  {label}:                  {sign}\n"
     # Add text box to right subplot.
     ax2.axis("off")
-    mtumsuti.add_fitted_text_box(ax2, text_content)
+    htutori.add_fitted_text_box(ax2, text_content)
     plt.tight_layout()
     plt.show()
 
@@ -278,7 +278,7 @@ def cell1_dichotomy_explorer_3points() -> None:
         style={"description_width": "120px"},
     )
     # Create widgets for angle and offset.
-    angle_slider, angle_box = mtumsuti.build_widget_control(
+    angle_slider, angle_box = htutori.build_widget_control(
         name="angle",
         description="angle of line (degrees)",
         min_val=0.0,
@@ -287,7 +287,7 @@ def cell1_dichotomy_explorer_3points() -> None:
         initial_value=angle_init,
         is_float=True,
     )
-    offset_slider, offset_box = mtumsuti.build_widget_control(
+    offset_slider, offset_box = htutori.build_widget_control(
         name="offset",
         description="line offset",
         min_val=-1.5,
@@ -449,7 +449,7 @@ def _draw_dichotomy_3points_with_target(
         text_content += "Status: Keep adjusting to match the target.\n"
     # Add text box to right subplot.
     ax2.axis("off")
-    mtumsuti.add_fitted_text_box(ax2, text_content)
+    htutori.add_fitted_text_box(ax2, text_content)
     plt.tight_layout()
     plt.show()
 
@@ -499,7 +499,7 @@ def cell2_dichotomy_explorer_3points_target() -> None:
         style={"description_width": "120px"},
     )
     # Create widgets for angle and offset.
-    angle_slider, angle_box = mtumsuti.build_widget_control(
+    angle_slider, angle_box = htutori.build_widget_control(
         name="angle",
         description="angle of line (degrees)",
         min_val=0.0,
@@ -508,7 +508,7 @@ def cell2_dichotomy_explorer_3points_target() -> None:
         initial_value=angle_init,
         is_float=True,
     )
-    offset_slider, offset_box = mtumsuti.build_widget_control(
+    offset_slider, offset_box = htutori.build_widget_control(
         name="offset",
         description="line offset",
         min_val=-1.5,
@@ -780,7 +780,7 @@ def _draw_dichotomy_4points(
         text_content += "because not all 2^4 dichotomies are achievable.\n"
     # Add text box to right subplot.
     ax2.axis("off")
-    mtumsuti.add_fitted_text_box(ax2, text_content)
+    htutori.add_fitted_text_box(ax2, text_content)
     plt.tight_layout()
     plt.show()
 
@@ -808,7 +808,7 @@ def cell3_dichotomy_explorer_4points() -> None:
         style={"description_width": "120px"},
     )
     # Create widgets for angle and offset.
-    angle_slider, angle_box = mtumsuti.build_widget_control(
+    angle_slider, angle_box = htutori.build_widget_control(
         name="angle",
         description="angle of line (degrees)",
         min_val=0.0,
@@ -817,7 +817,7 @@ def cell3_dichotomy_explorer_4points() -> None:
         initial_value=angle_init,
         is_float=True,
     )
-    offset_slider, offset_box = mtumsuti.build_widget_control(
+    offset_slider, offset_box = htutori.build_widget_control(
         name="offset",
         description="line offset",
         min_val=-1.5,
@@ -937,7 +937,7 @@ def _draw_positive_rays(n: int, threshold: float) -> None:
         text_content += f"  P{i + 1}:                {sign}\n"
     # Add text box to right subplot.
     ax2.axis("off")
-    mtumsuti.add_fitted_text_box(ax2, text_content)
+    htutori.add_fitted_text_box(ax2, text_content)
     plt.tight_layout()
     plt.show()
 
@@ -952,7 +952,7 @@ def cell4_dichotomy_explorer_positive_rays() -> None:
     n_init = 5
     threshold_init = 0.0
     # Create widgets for N and threshold.
-    n_slider, n_box = mtumsuti.build_widget_control(
+    n_slider, n_box = htutori.build_widget_control(
         name="N",
         description="number of points",
         min_val=1,
@@ -961,7 +961,7 @@ def cell4_dichotomy_explorer_positive_rays() -> None:
         initial_value=n_init,
         is_float=False,
     )
-    threshold_slider, threshold_box = mtumsuti.build_widget_control(
+    threshold_slider, threshold_box = htutori.build_widget_control(
         name="threshold",
         description="threshold position",
         min_val=-1.5,
@@ -1088,7 +1088,7 @@ def _draw_positive_intervals(
         text_content += f"  P{i + 1}:                {sign}\n"
     # Add text box to right subplot.
     ax2.axis("off")
-    mtumsuti.add_fitted_text_box(ax2, text_content)
+    htutori.add_fitted_text_box(ax2, text_content)
     plt.tight_layout()
     plt.show()
 
@@ -1104,7 +1104,7 @@ def cell5_dichotomy_explorer_positive_intervals() -> None:
     left_threshold_init = -0.5
     right_threshold_init = 0.5
     # Create widgets for N and thresholds.
-    n_slider, n_box = mtumsuti.build_widget_control(
+    n_slider, n_box = htutori.build_widget_control(
         name="N",
         description="number of points",
         min_val=1,
@@ -1113,7 +1113,7 @@ def cell5_dichotomy_explorer_positive_intervals() -> None:
         initial_value=n_init,
         is_float=False,
     )
-    left_slider, left_box = mtumsuti.build_widget_control(
+    left_slider, left_box = htutori.build_widget_control(
         name="left",
         description="left boundary",
         min_val=-1.5,
@@ -1122,7 +1122,7 @@ def cell5_dichotomy_explorer_positive_intervals() -> None:
         initial_value=left_threshold_init,
         is_float=True,
     )
-    right_slider, right_box = mtumsuti.build_widget_control(
+    right_slider, right_box = htutori.build_widget_control(
         name="right",
         description="right boundary",
         min_val=-1.5,
@@ -1378,7 +1378,7 @@ def _draw_convex_sets(
     text_content += "Selected point indices: " + str(selected_indices) + "\n"
     # Add text box to right subplot.
     ax2.axis("off")
-    mtumsuti.add_fitted_text_box(ax2, text_content)
+    htutori.add_fitted_text_box(ax2, text_content)
     plt.tight_layout()
     plt.show()
 
@@ -1395,7 +1395,7 @@ def cell6_dichotomy_explorer_convex_sets() -> None:
     # Store current selected indices.
     selected_indices_state = {"value": []}
     # Create widgets for N.
-    n_slider, n_box = mtumsuti.build_widget_control(
+    n_slider, n_box = htutori.build_widget_control(
         name="N",
         description="number of points",
         min_val=3,
@@ -1405,7 +1405,7 @@ def cell6_dichotomy_explorer_convex_sets() -> None:
         is_float=False,
     )
     # Create seed slider for random target generation.
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="random seed",
         min_val=0,

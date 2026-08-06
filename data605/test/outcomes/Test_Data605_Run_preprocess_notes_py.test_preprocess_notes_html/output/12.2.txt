@@ -1,0 +1,311 @@
+---
+fontsize: 10pt
+---
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+::: columns
+:::: {.column width=15%}
+![](data605/lectures_source/images/UMD_Logo.png)
+::::
+:::: {.column width=75%}
+
+\vspace{0.4cm}
+\begingroup \large
+UMD DATA605 - Big Data Systems
+\endgroup
+::::
+:::
+
+\vspace{1cm}
+
+\begingroup \Large
+**$$\text{\textcolor{blue}{\text{12.2: Neo4j}}}$$**
+\endgroup
+
+::: columns
+:::: {.column width=75%}
+- **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
+
+::::
+:::: {.column width=20%}
+::::
+:::
+
+
+- **Neo4j**
+:::columns
+::::{.column width=60%}
+- Graph DB storing data as Property Graph
+  - Nodes, edges hold data as key-value pairs
+- Graph structure enables flexible schema
+  - Focus is on relationships between values
+- Two querying languages
+  - Cypher
+  - Gremlin
+- GUI or REST API
+- Full ACID-compliant transactions
+- High-availability clustering
+- Incremental backups
+- Run in small application or large server clusters
+::::
+::::{.column width=40%}
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_19_image_1.png)
+::::
+:::
+
+- **Graph Data Model in Neo4j: Intuition**
+- **Nodes**
+  - Represent entities or objects
+  - Connected via _relationships_
+  - Have _properties_ (key/value pairs)
+
+- **Relationships**
+  - Represent (directional) connections between nodes
+  - Relationship types give semantic meaning to edges
+  - Multiple relationships per node
+  - Have _properties_ (key/value pairs)
+
+- **Properties**
+  - Store key–value information on nodes and relationships
+    - Named values (key is a string)
+  - Indexed and constrained
+  - Composite indexes from multiple properties
+
+- **Labels**
+  - Group nodes into sets with similar roles
+  - Nodes may have multiple labels
+  - Labels indexed for faster node retrieval
+  - Native label indexes optimized for performance
+
+- **Why Cypher is Powerful**
+- Direct mapping between query and graph structure
+  - Encourages thinking in relationships
+  - Reduces impedance mismatch with graph data
+- Scales naturally with connected data
+- Enables expressive exploratory queries
+
+- **Basic Cypher Pattern Matching**
+- Queries describe graph patterns to search for
+  - Parentheses \textcolor{blue}{\texttt{()}} represent nodes
+  - Brackets \textcolor{blue}{\texttt{[]}} represent relationships
+  - Arrows \textcolor{blue}{\texttt{->}} or \textcolor{blue}{\texttt{<-}} show relationship direction
+
+- Example
+  ```cypher
+  (a)-[:FRIEND_OF]->(b)
+  ```
+
+- Query Structure
+  ```cypher
+  MATCH [Nodes and relationships]
+    WHERE [Boolean filter statement]
+    RETURN [DISTINCT] [statements [AS alias]]
+    ORDER BY [Properties] [ASC or DESC]
+    SKIP [Number] LIMIT [Number]
+  ```
+
+- **MATCH Clause**
+- Used to find patterns in the graph
+  - Similar to \textcolor{blue}{\texttt{FROM ... WHERE}} in relational databases
+  - Does not modify data
+  - Can match multiple patterns in one query
+
+- Example
+  ```cypher
+  MATCH (p:Person)-[:LIVES_IN]->(c:City)
+  ```
+
+- **Advanced Matching**
+- \textcolor{blue}{\texttt{RETURN}} clause specifies what data to output
+  - Can return nodes relationships or properties
+  - Controls query result shape
+  - Example
+    ```cypher
+    RETURN p.name, c.name
+    ```
+
+- Filtering with \textcolor{blue}{\texttt{WHERE}}
+  - Adds conditions to pattern matches
+  - Works with properties labels and expressions
+  - Often combined with \textcolor{blue}{\texttt{MATCH}}
+  - Example
+    ```cypher
+    WHERE p.age > 30
+    ```
+
+- Aggregation and Grouping
+  - Uses functions like \textcolor{blue}{\texttt{count}}, \textcolor{blue}{\texttt{avg}}, \textcolor{blue}{\texttt{max}}
+  - Aggregation happens after \textcolor{blue}{\texttt{MATCH}}
+  - \textcolor{blue}{\texttt{GROUP BY}} is implicit in \textcolor{blue}{\texttt{RETURN}}
+  - Example
+    ```cypher
+    RETURN c.name, count(p)
+    ```
+
+- **Creating Data with CREATE**
+- Used to add new nodes and relationships
+- Pattern describes what should be created
+- Executes exactly as written
+- Example
+  ```cypher
+  CREATE
+    (a:Person {name:"Alice"})
+    -[:KNOWS]->
+    (b:Person {name:"Bob"})
+  ```
+
+- **Updating Graph Data**
+- \textcolor{blue}{\texttt{SET}} modifies properties or labels
+- \textcolor{blue}{\texttt{REMOVE}} deletes properties or labels
+- Allows incremental graph evolution
+- Example
+  ```cypher
+  SET p.age = p.age + 1
+  ```
+
+- **Wine Suggestion Engine: Example 1/2**
+- **Create a wine suggestion engine**
+  - Wines categorized by:
+    - Varieties (e.g., Chardonnay, Pinot Noir)
+    - Regions (e.g., Bordeaux, Napa, Tuscany)
+    - Vintage (year grapes harvested)
+  - Track articles describing wines by authors
+  - Users track favorite wines
+  - ...
+
+- **Wine Suggestion Engine: Example 2/2**
+:::columns
+::::{.column width=50%}
+- **Relational approach**
+- Create various tables
+  - \textcolor{blue}{\texttt{wines}}: (id, name, year)
+  - \textcolor{blue}{\texttt{wines\_categories}} (wine_id, category_id)
+  - \textcolor{blue}{\texttt{category}} table (id, name)
+  - \textcolor{blue}{\texttt{wines\_articles}} (wine_id, article_id)
+  - \textcolor{blue}{\texttt{articles}} (id, publish_date, title, content)
+- Relationships are
+  - \textcolor{blue}{\texttt{produced}}
+  - \textcolor{blue}{\texttt{reported\_on}}
+  - \textcolor{blue}{\texttt{grape\_type}}
+::::
+::::{.column width=45%}
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_20_image_1.png)
+::::
+:::
+
+- **Problem with relational approach**
+  - There isn't much of a schema
+  - Lots of incomplete data
+  - An old saying in relational DB world: _"On a long enough timeline all fields
+    become optional"_
+
+- **Cypher Example**
+- **Graph DB approach**: provide values and structure only where necessary
+
+  \footnotesize
+  ```cypher
+  CREATE (w:Wine
+      {name: "Prancing Wolf",
+        style: "ice wine",
+        vintage: 2015})
+
+  CREATE (p:Publication
+      {name: "Wine Expert Monthly"})
+
+  MATCH (p:Publication
+      {name: "Wine Expert Monthly"}),
+      (w:Wine {name: "Prancing Wolf",
+      vintage: 2015})
+      CREATE (p)-[r:reported_on]->(w)
+  ```
+
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_22_image_1.png)
+
+- **Cypher Example**
+\footnotesize
+```cypher
+MATCH (p:Publication {name: "Wine Expert Monthly"}),
+    (w:Wine {name: "Prancing Wolf"})
+    CREATE (p)-[r:reported_on {rating: 2}]->(w)
+
+CREATE (g:GrapeType {name: "Riesling"})
+
+MATCH (w:Wine {name: "Prancing Wolf"}),
+  (g:GrapeType {name: "Riesling"})
+  CREATE (w)-[r:grape_type]->(g)
+```
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_23_image_1.png){width=40%}
+
+- **Cypher Example**
+\footnotesize
+```cypher
+CREATE (wr:Winery {name: "Prancing Wolf Winery"})
+MATCH (w:Wine {name: "Prancing Wolf"}),
+    (wr:Winery {name: "Prancing Wolf Winery"})
+    CREATE (wr)-[r:produced]->(w)
+CREATE (w:Wine
+    {name:"Prancing Wolf", style: "Kabinett", vintage: 2002})
+CREATE (w:Wine
+    {name: "Prancing Wolf", style: "Spätlese", vintage: 2010})
+MATCH (wr:Winery
+    {name: "Prancing Wolf Winery"}),(w:Wine {name: "Prancing Wolf"})
+    CREATE (wr)-[r:produced]->(w)
+MATCH (w:Wine), (g:GrapeType {name: "Riesling"})
+    CREATE (w)-[r:grape_type]->(g)
+```
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_24_image_1.png){wdith=80%}
+
+- **Cypher Example**
+- Add a social component to the wine graph
+  - People preference for wine
+  - Relationships with one another
+
+- The changes were made "superimposing" new relationships without changing the
+  previous data
+:::columns
+::::{.column width=50%}
+\footnotesize
+```cypher
+CREATE (p:Person {name: "Alice"})
+
+MATCH (p:Person {name: "Alice"}),
+    (w:Wine {name: "Prancing Wolf",
+    style: "ice wine"})
+    CREATE (p)-[r:likes]->(w)
+
+CREATE (p:Person {name: "Patty"})
+
+MATCH (p1:Person {name: "Patty"}),
+    (p2:Person {name: "Tom"})
+    CREATE (p1)-[r:friends]->(p2)
+```
+
+::::
+::::{.column width=45%}
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_25_image_1.png)
+::::
+:::
+
+- **Cypher: Query Example**
+:::columns
+::::{.column width=50%}
+\footnotesize
+```cypher
+MATCH (p:Person
+  {name: "Alice"})-->(n)
+  RETURN n;
+
+MATCH (p:Person
+  {name: "Alice"})-->(other: Person)
+  RETURN other.name;
+
+MATCH (fof:Person)-[:friends]-(f:Person)-[:friends]-(p:Person {name: "Alice"})
+  RETURN fof.name;
+```
+::::
+::::{.column width=45%}
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_26_image_1.png)
+::::
+:::

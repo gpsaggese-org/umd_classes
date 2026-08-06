@@ -1,174 +1,156 @@
-// notes_to_pdf.py --input lectures_source/Lesson07-Bayesian_statistics_1.txt --output tmp.pdf --type slides --debug_on_error --skip_action cleanup_after --toc_type navigation
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L06.1: Bayesian Networks
+// slides_engine=typst
+// references=
+// - Russell et al.: _"Artificial Intelligence: A Modern Approach"_ (4th ed, 2020)
+//   - Chap 12, Quantifying uncertainty
+//   - Chap 13: Probabilistic reasoning
+//   - Chap 14: Probabilistic reasoning over time
 
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
+// ![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
 
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 06.1: Bayesian Networks}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- AIMA (Artificial Intelligence: a Modern Approach)
-  - Chap 12, Quantifying uncertainty
-  - Chap 13: Probabilistic reasoning
-  - Chap 14: Probabilistic reasoning over time
-
-::::
-:::: {.column width=20%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
-
-::::
-:::
-
-
-
-# ##############################################################################
 # Logic-Based AI Under Uncertainty
-# ##############################################################################
+
+## Problem: Limitations of Logic-Based Systems
 
 * Logic-Based AI Under Uncertainty: Problem
 
-- **Logic-based AI systems**:
-  - Based on **propositional logic**
-  - Represent **actions** using **rules** like:
-    - _"If preconditions P hold, then action A causes effect E"_
-  - Example:
-    - _"If I turn the car key, the engine starts"_
-    - **But**: the battery might be dead, there's no fuel, the starter is
-      broken, etc.
+- @Definition@: **Logic-based AI systems**:
+  - Are based on propositional logic
+  - Represent actions using rules
+    - E.g., _"If preconditions P hold, then action A causes effect E"_
 
-- Real-world agents face **uncertainty** from:
-  - Partial observability
-    - Agent can't see the full state of the world
-  - Non-determinism
-    - Actions don't always have predictable outcomes
-  - Adversarial conditions
-    - Other agents may interfere
+- @Example@:
+  - _"If I turn the car key, the engine starts"_
+  - But the battery might be dead, there's no fuel, the starter is broken, ...
 
-* Logic-Based AI Under Uncertainty: Naive Solution
+- @Problem@: Real-world agents face _uncertainty_ from:
+  1. _Partial observability_
+     - Agent can't see the full state of the world
+  2. _Non-determinism_
+     - Actions don't always have deterministic or predictable outcomes
+  3. _Adversarial conditions_
+     - Other agents may interfere
 
-- A possible solution to uncertainty is:
+* Logic-Based Under Uncertainty: Naive Solution
 
-  1. Use a **belief state**, i.e., set of all possible current world states
-  2. Use **causal and exhaustive augmentation** for rules
-     - Must consider all possible preconditions for acting, even unlikely ones
-  3. Construct **contingent plans** that handle every possible sensor report and
-     belief
-     - Plans become large and complex
-     - No guaranteed plan may exist, yet action is required
+- @Naive Solution@: A possible solution to logic-based AI under uncertainty is to
+  use:
+  1. **Belief state**, i.e., set of all possible current world states
+     - _Cons_: difficult to enumerate and track
+  2. **Causal and exhaustive augmentation** for rules
+     - _Cons_: Must consider all possible preconditions for acting, even unlikely
+       ones
+  3. **Contingent plans** to handle every possible sensor report and belief
+     - _Cons_:
+       - Plans become large and complex
+       - No guaranteed plan may exist, yet action is required
 
-* Logic-Based AI Under Uncertainty: Example
-- **Goal**: start a car by turning the car key
+* Naive Solution: Example of Starting a Car
 
-- **Obvious preconditions**
-  - The car has fuel
-  - The car battery is charged
-  - The car key is the right one
-  - The starter motor is working
+- @Goal@: build a system to start a car by turning the car key
+
+- @Remark@: Obvious preconditions
+  - Car has fuel
+  - Car battery is charged
+  - Car key is the right one
   - ...
 
-- **Less obvious preconditions**
-  - The fuel lines are not clogged
-  - The fuel pump is working
-  - The electrical system is intact (no blown fuses)
-  - The engine oil level is sufficient
+- @Remark@: Less obvious preconditions
+  - Electrical system is intact
+  - Fuel pump is working
+  - Fuel lines are not clogged
+  - Engine oil level is sufficient
   - ...
 
-- Every precondition requires something different to do to achieve the goal!
+- @Problem@: Every precondition requires something else to achieve the goal
+
+## Why Logic Fails Under Uncertainty
+
+### The Qualification Problem
 
 * Causal and Exhaustive Augmentation
-- To use propositional logic under uncertainty, augment the left-side of
-  $X \implies Y$ to make it:
-  1. **Causal**: identify true causal-effect relationships
-  2. **Exhaustive**: identify all possible conditions leading to the outcome
 
-- **Logical qualification problem**
-  - Enumerate all the preconditions necessary for an action to succeed
-
-- **Difficulties**
-  - Every action can have more hidden conditions in order to succeed
+- @Definition@: Causal and exhaustive augmentation of logic-rules
+  - To use propositional logic under uncertainty, need to augment left-side of
+    rules $X \implies Y$ to make it:
+    1. _Causal_: identify true causal-effect relationships
+    2. _Exhaustive_: identify all possible conditions $X$ leading to outcome $Y$
+- @Limitations@:
+  - Every action can have more hidden conditions needed to succeed
     - E.g., start the engine $\implies$ turn car key $\implies$ starter motor is
       working $\implies$ battery is charged $\implies$ ...
-  - Preconditions can change depending on the situation
-    - E.g., start the engine $\implies$ battery is charged $\implies$ it's not
-      too cold $\implies$ ...
+  - Preconditions can change depending on situation
+    - E.g., ... $\implies$ battery is charged $\implies$ it's not too cold
+      $\implies$ ...
 
-* Causal and Exhaustive Augmentation
-- **Limitations** of logical qualification
-  1. **Laziness**
-     - Too much work to create all possible rules
-  2. **Theoretical ignorance**
-     - Science doesn't always have a complete theory of the domain
+* Limitations of Logical Qualification
+
+- @Definition@: **Logical qualification problem** is the need to enumerate all
+  preconditions necessary for an action to succeed
+
+- @Limitations@: It is not possible to solve the logical qualification problem
+  for several reasons
+  1. **Laziness**: Too much effort required to create all possible rules
+  2. **Theoretical ignorance**: Science doesn't always have complete theory of
+     domain
      - E.g., medical science doesn't know all the "rules"
-  3. **Practical ignorance**
-     - Even if you knew all the rules, you might not have all the information
-       needed
-     - E.g., not all necessary medical tests can be run for a particular patient
+  3. **Practical ignorance**: Even if you knew all rules, you might not have all
+     necessary info
+     - E.g., not all required medical tests can be performed for particular
+       patient
 
-- Expert systems failure and AI winter (mid 1980s, 1990s)
-  - The real world is complex and open-ended
+- @Consequence@: **AI winter (mid-1980s, 1990s)**
+  - Researchers believed that expert systems could achieve AGI
+  - Real world is complex and open-ended
   - Logical rules can't capture all necessary and sufficient conditions
 
-* Failure of Logic-Based AI: Wet Grass Example
+### Garden World: Demonstrating the Problem
+
+* Failure of Logic AI: Garden World Example
 
 ::: columns
 :::: {.column width=65%}
-- Consider the propositions:
-  - $Rain$ = "it rains"
-  - $WetGrass$ = "the grass is wet"
+- Consider propositions:
+  - $Rain$ = _"it rains"_
+  - $WetGrass$ = _"the grass is wet"_
 
-- You would expect $Rain \implies WetGrass$
+- @Question@: Is it true that $Rain \implies WetGrass$?
+  - "$Rain \implies WetGrass$" is not true in general
+  - If it rains but there is a cover over grass, grass will not be wet
+  - If it rains but temperature is high, wet grass might dry quickly
+
 ::::
 :::: {.column width=30%}
 ![](msml610/lectures_source/figures/L06.1.grass_sprinkler.png)
 ::::
 :::
 
-- "$Rain \implies WetGrass$" is not true in general
-  - If it rains but there is a cover over the grass, the grass will not be wet
-  - If it rains but there is high temperature, the wet grass might dry quickly
+- @Question@: What about converse "$WetGrass \implies Rain$?
+  - "$WetGrass \implies Rain$" is not true in general
+    - Grass could be wet because of sprinkler system
+    - Grass could be wet because of morning dew
 
-- "$WetGrass \implies Rain$" is not true in general
-  - The grass could be wet because of a sprinkler system
-  - The grass could be wet because of morning dew
+- @Answer@: you also need to consider propositions:
+  - $Cover$ = _"there is a protective cover over the grass"_
+  - $Evaporate$ = _"the water evaporates quickly"_
+  - $Sprinkler$ = _"the sprinkler system is on"_
+  - $Dew$ = _"there is morning dew"_
 
-- You need to consider also the propositions:
-  - $Cover$ = "there is a protective cover over the grass"
-  - $Evaporate$ = "the water evaporates quickly"
-  - $Sprinkler$ = "the sprinkler system is on"
-  - $Dew$ = "there is morning dew"
+* Failure of Logic AI: Garden World Example
 
-* Failure of Logic-Based AI: Wet Grass Example
+- Identify all exceptions and dependencies to make $X \implies Y$
 
-- Identify all exceptions and dependencies to make $X \implies Y$:
-  1. **Causal**
-     - "If it rains and there is no other source of water, the grass will be wet"
-     - $Rain \implies WetGrass \lor Cover \lor Evaporate \ldots$
+  1. **Causal**: _"If it rains and there is no other source of water, grass will
+  be wet"_
      - $Rain \land \lnot (Cover \land Evaporate ...) \implies WetGrass$
-  2. **Exhaustive**
-     - "The grass is wet, if it rains or sprinkler is on or there is morning dew"
+
+  2. **Exhaustive**: _"Grass is wet if it rains or sprinkler is on or morning
+  dew"_
      - $WetGrass \implies Rain \lor Sprinkler \lor Dew \ldots$
-```graphviz
+
+```graphviz[width=80%]
 digraph BayesianFlow {
     splines=true;
     nodesep=1.0;
@@ -199,143 +181,143 @@ digraph BayesianFlow {
 }
 ```
 
-* Acting Under Uncertainty: Actual Solution
-- Can't use propositional logic under uncertainty
+## Solution: Probabilistic Reasoning Under Uncertainty
 
-- Acting under uncertainty requires combining:
-  - **Probability**: to handle uncertainty and partial knowledge
-  - **Utilities**: for evaluating desirability of each outcome
+### The Proper Approach
 
-- **Key idea:**
-  - Rational choice = plan that maximizes expected utility
-    - Performance measure: combines goals like punctuality, comfort, legal
-      compliance
-    - Belief: agent's internal estimate of outcome likelihoods
-  - Evaluate plans based on performance on average, given known information
-  - But success is not guaranteed!
+* Acting Under Uncertainty: Proper Solution
+
+- @Conclusion@: We can't use propositional logic under uncertainty
+
+- @Solution@: Acting under uncertainty requires combining:
+  - **Probability**: handle uncertainty and partial knowledge
+    - E.g., agent's internal estimate of outcome likelihoods
+  - **Utility functions**: evaluate desirability of each outcome
+    - E.g., combine goals like punctuality, comfort, legal compliance
+
+- @Key idea@: **Rational choice** = plan that maximizes expected utility
+  - Evaluate plans based on performance on average, given known info
+  - Still success is not guaranteed
+
+### Knowledge, Uncertainty, and Belief
 
 * The Paradox of Probability and Knowledge
-- **Paradox**
-  - _"There is no uncertainty in the actual world!"_
-  - E.g., the grass is wet, but either it has rained or not
 
-- **Knowledge is subjective**
-  - Probabilities relate to a knowledge state, not to the real world
+- @Paradox@: There is **no uncertainty in the actual world!**
+  - E.g., the grass is wet, but either it rained or not
+
+- @Answer@: **Knowledge is subjective**:
+  - Probabilities relate to knowledge state, not to the real world
   - Updating knowledge changes probability statements
 
-* The Paradox of Probability and Knowledge
-- E.g., updating belief about wet grass and rain
+- @Example@
+  - Initially, observe _"wet grass"_
+    - From past data: $\Pr(Rain | WetGrass) = 0.8$
+    - Current belief: _"80% chance it rained if grass is wet"_ (Bayesian prior)
+  - Further observe _"sprinkler was on"_
+    - Wet grass could be due to sprinkler, not rain
+    - Belief changes: $\Pr(Rain | WetGrass \land Sprinkler) = 0.4$ (Bayesian update)
+  - Learn from weather report that there was no rain
+    - Belief changes: _"It didn't rain"_
+    - Evidence overrides prior: $\Pr(Rain | WetGrass \land WeatherReport) = 0$
+  - All statements were true even if contradictory
+    - Need non-monotonic logic
 
-- Initially, you observe wet grass
-  - From past data you know that $\Pr(Rain | WetGrass) = 0.8$
-  - 80% chance it rained if grass is wet
-  - This is the Bayesian prior
-
-- You learn new information:
-  - Sprinkler was on
-  - Wet grass could be due to the sprinkler, not rain
-  - Belief changes: $\Pr(Rain | WetGrass \land Sprinkler) = 0.4$
-  - This is a Bayesian update
-
-- You further observe:
-  - Weather report says there was no rain
-  - Certain it did not rain, despite wet grass
-  - Evidence overrides prior: $\Pr(Rain | WetGrass \land WeatherReport) = 0$
-
-- All the statements were true even if contradictory (given the state of
-  knowledge!)
-  - You need non-monotonic logic
-
-# ##############################################################################
 # Probabilistic Reasoning
-# ##############################################################################
 
 // From AIMA 13, Probabilistic reasoning (p. 425)
 
-## Conditional Independence
+## Foundations: Representing Uncertainty
 
-// ## 13.1, Representing knowledge in an uncertain domain (p. 425)
+### Full Joint Probability Distribution
 
 * Full Joint Probability Distribution
 
-- Consider a set of random variables $X_1, X_2, \dots, X_n$
+- @Definition@: Consider The **full joint probability distribution** of a set of
+  random variables $X_1, X_2, \dots, X_n$ assigns probability to every possible
+  world:
+  $$
+  \Pr(X_1 = x_1, X_2 = x_2, \dots, X_n = x_n)
+  $$
+  where _possible world_ is any assignment of values to all variables
 
-- The **full joint probability distribution**
-  - Assigns a probability to every possible world:
-    $$
-    \Pr(X_1 = x_1, X_2 = x_2, \dots, X_n = x_n)
-    $$
-    where a **possible world** is a particular assignment of values to all
-    variables
-  - Can answer any probabilistic query about the domain
+- @Fact@: Full joint probability can answer any probabilistic query about domain
 
-- **Cons**
-  - Size grows exponentially $k^n$ with the number of variables $n$ and number of
-    values $k$
+- @Cons@
+  - Size grows exponentially $k^n$ with number of variables $n$ and values $k$
   - Impractical for real-world problems with many variables
-  - Manually specifying each entry is tedious
+  - Manually specifying each entry is tedious or impossible
 
-- **Independence** (conditional and absolute) simplifies modeling
-  - In the real world, many variables are not fully dependent on all others
-  - Reduces the number of variables needed in the model
+- @Remark@: In the real world, many variables are **not fully dependent** from
+  all others
+- _Conditional and absolute independence_ of random variables:
+  - Reduces number of variables needed in model
   - Makes compact and structured representations possible
     - E.g., factorized probabilistic models, Bayesian networks
 
+### Independence of Random Variables
+
 * Independence of Random Variables: Definition
-- Two random variables $X$ and $Y$ are **independent** iff:
+
+- @Definition@: Two random variables $X$ and $Y$ are **independent** iff:
   $$
   \Pr(X, Y) = \Pr(X) \cdot \Pr(Y)
   $$
-  - Equivalently, knowing $Y$ tells nothing about $X$
+
+- _Equivalently_: Knowing $Y$ tells nothing about $X$
   $$
   \Pr(X | Y) = \Pr(X)
   $$
-- E.g.,
-  - The events "coin flip" and "weather" are independent
+  - E.g., events "coin flip" and "weather" are independent
     $$
     \Pr(Coin=Heads | Weather=Rainy) = \Pr(Coin=Heads)
     $$
 
-- **Independence** of random variables
-  - Reduces the number of parameters needed to model a system, e.g.,
+- @Consequence@: Independence of random variables:
+  - Reduces number of parameters needed to model system
     $$
     \Pr(X_1 | X_2, X_3) = \Pr(X_1)
     $$
-  - Allows factorization of joint distribution, e.g.,
+  - Allows factorization of joint distribution
     $$
     \Pr(X_1, X_2, X_3) = \Pr(X_1) \cdot \Pr(X_2) \cdot \Pr(X_3)
     $$
 
+## Conditional Independence: Key Concept
+
+### Definition and Basic Examples
+
 * Conditional Independence: Definition
-- Two random variables $X$ and $Y$ are **conditionally independent** given a
-  random variable $Z$ iff knowing $Z$ makes $X$ and $Y$ independent:
+
+- @Definition@: Two random variables $X$ and $Y$ are **conditionally
+  independent** given a random variable $Z$ iff knowing $Z$ makes $X$ and $Y$
+  independent:
   $$
   X \perp Y | Z \iff \Pr(X, Y | Z) = \Pr(X | Z) \cdot \Pr(Y | Z)
   $$
 
-- **Example**
+- @Example@:
   - $X$ = _"it is raining today"_
   - $Y$ = _"a person is carrying an umbrella"_
   - $Z$ = _"the weather forecast"_
-  - **Without $Z$**: there is a relationship between $X$ and $Y$ (i.e., $X$ and
-    $Y$ are not independent)
-  - **Given $Z$**: rain $X$ may not directly influence whether a person carries
-    an umbrella $Y$
+  - Without knowing $Z$: relationship between rain $X$ and umbrellas $Y$
+  - Given/knowing $Z$: once forecast is known, knowing if someone carries
+    umbrella $Y$ gives no info about rain $X$
   - Thus, $X$ and $Y$ are conditionally independent given $Z$
 
-- **Pros**
-  - Conditional independence is more common than absolute independence
-  - Simplify probabilistic models by factorizing the joint conditional
-    distribution into product of individual conditional distributions
+- @Pros@
+  - Conditional independence more common than absolute independence
+  - Simplify probabilistic models by factorizing joint conditional distribution
+    into product of individual conditional distributions
 
 * Conditional Independence: Example
 
 ::: columns
 :::: {.column width=65%}
-- Two events can become independent once we know a third event
+- Two events can **become independent** once we know third event
 
-- **Example**
-  - $Fire$ = _"there is a fire"_
+- Consider:
+  - $Fire$ = _"there is a fire in the house"_
   - $Toast$ = _"someone burned toast"_
   - $Alarm$ = _"the fire alarm rings"_
   - $Call$ = _"a friend calls to check on you"_
@@ -343,11 +325,6 @@ digraph BayesianFlow {
 - **Dependencies**
   - $Alarm$ depends on $Fire$ or $Toast$
   - $Call$ depends on whether $Alarm$ rings
-
-- **Conditional independence**
-  - Once we know the alarm rang, the specific cause doesn't affect whether the
-    friend calls
-  - $\Pr(Call \mid Alarm, Fire) = \Pr(Call \mid Alarm)$
 
 ::::
 :::: {.column width=30%}
@@ -374,31 +351,34 @@ digraph BayesianFlow {
 ```
 ::::
 :::
-- **Interpretation**
+
+- **Conditional independence**
   - $Call$ is conditionally independent of $Fire$ and $Toast$ given $Alarm$
-  - Knowing the alarm rang "blocks" the path of influence from $Fire$ and $Toast$
-    to $Call$
+  - Once alarm rang, the specific cause doesn't affect whether friend calls
+    $$\Pr(Call | Alarm, Fire, Toast) = \Pr(Call | Alarm)$$
 
-* Conditional Independence: Garden Example
+- @Interpretation@: Knowing alarm rang "blocks" path of influence from $Fire$ and
+  $Toast$ to $Call$
 
-- Garden world with $Rain$, $Sprinkler$, and $WetGrass$
-  - Is $\Pr(Rain | Sprinkler) = \Pr(Rain)$ ?
-    - **No**: if the sprinkler is on, it's less likely it rained
-    - $Rain$ and $Sprinkler$ are not independent
-  - Is $\Pr(Rain | Sprinkler, WetGrass) = \Pr(Rain | WetGrass)$ ?
-    - **Yes**: knowing the grass is wet, whether the sprinkler was on tells you
-      nothing more about the rain
-    - $Rain$ and $Sprinkler$ are conditionally independent given $WetGrass$
+### Conditional Independence in Garden World
+
+* Conditional Independence: Garden World Example
 
 ::: columns
-:::: {.column width=60%}
-- **Interpretation**:
-  - Without $WetGrass$: $Rain$ and $Sprinkler$ affect each other because they
-    both explain $WetGrass$
-  - With $WetGrass$: once $WetGrass$ is observed, the "explaining away" effect
-    occurs
+:::: {.column width=70%}
+
+- Garden world with $Rain$, $Sprinkler$, $WetGrass$
+- Is $\Pr(Rain | Sprinkler) = \Pr(Rain)$?
+  - No: if sprinkler is on, it's less likely it rained
+  - $Rain$ and $Sprinkler$ are not independent
+
+- Is $\Pr(Rain | Sprinkler, WetGrass) = \Pr(Rain | WetGrass)$?
+  - Yes: knowing grass is wet, whether sprinkler was on tells you nothing more
+    about rain
+  - $Rain$ and $Sprinkler$ are conditionally independent given $WetGrass$
+
 ::::
-:::: {.column width=35%}
+:::: {.column width=30%}
 
 ```graphviz
 digraph BayesianFlow {
@@ -425,96 +405,86 @@ digraph BayesianFlow {
 ::::
 :::
 
-- **"Explaining away" occurs when**
-  - Two variables (causes) independently influence a third variable (effect)
-  - Observing the effect creates a dependence between the causes
-  - Evidence for one explains the effect and reduces the need to believe in the
-    other
+- @Interpretation@
+  - Without $WetGrass$: $Rain$ and $Sprinkler$ affect each other because both
+    explain $WetGrass$
+  - With $WetGrass$: once $WetGrass$ is observed, effect is "explained away"
+
+- @Definition@: _"Explaining away"_ (collider) occurs when:
+  - Two variables (causes) influence third variable (effect)
+  - Observing effect creates dependence between causes
+  - Evidence for one explains effect and reduces need to believe in other
 
 ## Bayesian Networks
 
+### Core Concepts and Intuition
+
 * Bayesian Networks: Definition
-- Aka:
-  - "Bayes nets",
-  - "Belief networks"
-  - "Probabilistic networks"
-  - "Graphical models" (somehow a broader class of statistical models)
-  - "Causal networks" (arrows have special meaning)
 
-- A **Bayesian network** is a Directed Acyclic Graph (DAG)
-  1. **Nodes** $X_i$ correspond to random variables (discrete or continuous)
-  2. **Edges** $X \to Y$ connect nodes and represent direct dependencies among
-     variables
-     - We say that $X = Parent(Y)$, $Y = Child(X)$, ancestors, spouses, ...
-  3. Each node $X_i$ is associated with a **conditional probability** (CPD):
-     $$
-     \Pr(X_i | Parents(X_i))
-     $$
-     quantifying the effect of the parents on the node
-     - If a node has no parents, it has a prior probability
+- Aka: "Bayes nets", "Belief networks", "Probabilistic networks", "Graphical
+  models" (broader class), "Causal networks" (arrows have special meaning)
 
-// TODO: Add example graph
+- @Definition@: A _Bayesian network_ is a Directed Acyclic Graph (DAG)
+  1. _Nodes_ $X_i$ correspond to random variables (discrete or continuous)
+  2. _Edges_ $X \to Y$ connect nodes and represent dependencies among variables
+     - E.g., $X = Parent(Y)$, $Y = Child(X)$, ancestors, spouses, ...
+  3. Each node $X_i$ associated with _conditional probability table_ (CPT or
+  CPD): $$
+     \Pr(X_i | Parents(X_i)) $$ quantifying effect of parents on node
+     - If node has no parents, it has prior probability
 
 * Bayesian Network: Intuition
-- Bayesian networks are the analogous for uncertain knowledge to propositional
+
+- @Remark@: Bayesian networks analogous for uncertain knowledge to propositional
   logic for definite knowledge
-  - \red{Propositional logic} = rigid rules, i.e., `True` or `False`
-  - \blue{Bayesian networks} = flexible inference, i.e., degrees of belief
+  - Propositional logic = rigid rules (`True` or `False`)
+  - Bayesian networks = flexible, degrees of belief
   - Replace $X \implies Y$ with $\Pr(Y | X)$
 
-- E.g., wet grass example
-  - $R$ = "It is raining"
-  - $W$ = "The grass is wet"
-  - \red{Propositional logic}
-    - If $R \rightarrow W$ and $R$ is true, then $W$ must be true
-  - \blue{Bayesian network}
-    - $\Pr(R = True) = 0.2$
-    - $\Pr(W | R) = 0.9$
-    - $\Pr(W | \neg R) = 0.1$
+- @Example@: Garden world
+  - $R$ = "It is raining", $W$ = "The grass is wet"
+  - Propositional logic: If $R \rightarrow W$ and $R$ is true, then $W$ must be
+    true
+  - Bayesian network:
+    $\Pr(R = True) = 0.2$, $\Pr(W | R) = 0.9$, $\Pr(W | \neg R) = 0.1$
 
-- E.g., medical diagnosis
-  - \red{Propositional logic}
-    - "Patient has disease $D$" $\implies$ "Patient has symptom $S$"
-  - \blue{Bayesian network}
-    - "Probability of $S$ given $D$ is high, but not certain"
+- @Example@: Medical diagnosis
+  - Propositional logic: _"Patient has disease $D$" $\implies$ "Patient has
+    symptom $S$"_
+  - Bayesian network: _"Probability of $S$ given $D$ is high, but not certain"_
 
-* Bayesian Network and Full-joint distribution
-- It can be shown that **topology** and **conditional probabilities** are
-  sufficient to specify the full joint distribution
-    - **Any full joint** distribution
-    - **Very concisely** (often)
+* Bayesian Network and Full-joint Distribution
+
+- @Theorem@: **Graph topology** and **conditional probabilities** are sufficient
+  to specify any full joint distribution, (often) very concisely
+
+- Topology of network (nodes and edges) specifies conditional independence
+  relationships
+  - E.g., $X \to Y$ means _"$X$ has direct influence on $Y$"_ (not necessarily
+    _$X$ causes $Y$_)
 
 - Nodes are:
-  - Directly influenced by their parents
-  - Indirectly influenced by all their ancestors
+  - Directly influenced by parents
+  - Indirectly influenced by ancestors
 
-- The topology of the network (nodes and edges) specifies conditional
-  independence relationships
-  - E.g., $X \to Y$ means _"$X$ has a direct influence on $Y$"_, i.e., _"$X$
-    relates to $Y$"_ (not necessarily "causes")
-
-- How to build a Bayesian Network:
-  - Domain experts can decide what relationships exist among domain variables,
-    determining the topology
+- **How to build Bayesian Network**
+  - Domain experts decide what relationships exist among variables, determining
+    topology
   - Conditional probabilities can be specified or estimated
 
-* Bayesian Networks: Wet Grass Example
+### Garden World: Understanding Independence Patterns
+
+* Bayesian Networks: Garden World Example
 
 ::: columns
 :::: {.column width=50%}
-- Consider a world with 5 variables
-  - $Weather$
-    - Represents general environmental conditions (e.g., sunny, cloudy)
-    - Can't be observed
-  - $Rain$
-    - Directly influenced by $Weather$
-  - $Sprinkler$
-    - Influenced by $Weather$ (e.g., less likely when raining)
-  - $WetGrass$
-    - Represents whether the grass is wet
-    - Affected by both $Rain$ and $Sprinkler$
-  - $StockMarketUp$
-    - Indicates whether the stock market is up or down
+- Consider Garden World with 5 variables
+  - $Rain$: directly influenced by $Weather$
+  - $Sprinkler$: influenced by $Weather$ (e.g., less likely when raining)
+  - $WetGrass$: affected by both $Rain$ and $Sprinkler$
+  - $Weather$: general environmental conditions (e.g., sunny, cloudy)
+  - $StockMarketUp$: whether stock market is up or down
+
 ::::
 :::: {.column width=45%}
 ```graphviz
@@ -542,57 +512,20 @@ digraph BayesianFlow {
 ::::
 :::
 
-* Bayesian Networks: Wet Grass Example
+* Garden World Example: Dependencies
+
 ::: columns
 :::: {.column width=60%}
 - $Rain$ and $Sprinkler$ are **dependent** (marginally)
   $$Rain \not\perp Sprinkler \iff Rain \leftrightarrow Sprinkler$$
-  - If there is no $Rain$, $Weather = sunny$ and $Sprinkler$ is more likely to
-    happen (since sprinklers are usually turned on in sunny weather)
-  - $Rain$ and $Sprinkler$ are related since they share a common parent $Weather$
-
-::::
-:::: {.column width=35%}
-```graphviz
-digraph BayesianFlow {
-    splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-
-    Weather       [label="Weather",       fillcolor="#A6E7F4", xlabel="P(W)"];
-    Rain          [label="Rain",          fillcolor="#A6C8F4", xlabel="P(R | W)"];
-    Sprinkler     [label="Sprinkler",     fillcolor="#FFD1A6", xlabel="P(S | W)"];
-    WetGrass      [label="WetGrass",      fillcolor="#B2E2B2", xlabel="P(G | R, S)"];
-    StockMarketUp [label="StockMarketUp", fillcolor="#C6A6F4", xlabel="P(M)"];
-
-    { rank = same; Rain; Sprinkler; }
-
-    Weather   -> Rain;
-    Weather   -> Sprinkler;
-    Rain      -> WetGrass;
-    Sprinkler -> WetGrass;
-}
-```
-::::
-:::
+  - If no $Rain$, then $Weather = sunny$ and $Sprinkler$ more likely (sprinklers on in sunny weather)
+  - $Rain$ and $Sprinkler$ related since they share common parent $Weather$
 
 - $Rain$ and $Sprinkler$ are **conditionally independent** given $Weather$
   $$Rain \perp Sprinkler | Weather$$
-  - Once $Weather$ is fixed, knowing whether it rained tells you nothing about
-    the $Sprinkler$
-  - The correlation is "explained away" by $Weather$
+  - Once $Weather$ fixed, knowing if it rained tells nothing about $Sprinkler$
+  - Correlation "explained" by $Weather$ (confounder)
 
-* Bayesian Networks: Wet Grass Example
-::: columns
-:::: {.column width=60%}
-- $Rain$ and $Sprinkler$ are **conditionally independent** given $WetGrass$,
-  but only if $Weather$ is not observed
-  $$Rain \perp Sprinkler | WetGrass (not Weather)$$
-  - If we condition on $WetGrass$, i.e., the grass is wet, knowing that the
-    sprinkler was off increases the chances that it must have rained (and vice
-    versa)
 ::::
 :::: {.column width=35%}
 ```graphviz
@@ -620,65 +553,140 @@ digraph BayesianFlow {
 ::::
 :::
 
-- $Rain$ and $Sprinkler$ are **conditionally dependent** given $WetGrass$,
-  and $Weather$
-  $$Rain \not\perp Sprinkler | WetGrass, Weather$$
-  - If you know that it's sunny, rain is unlikely and sprinkler likely
-  - If you also know that $WetGrass$
-    - If you learn $Sprinkler$ off $\implies$ must have $Rain$
-  - Fork path (common cause) and collider path (common effect)
+* Garden World Example: Explaining Away
 
+::: columns
+:::: {.column width=60%}
+- $Rain$ and $Sprinkler$ are **conditionally independent** given $WetGrass$ (but only if $Weather$ not observed)
+  $$Rain \perp Sprinkler | WetGrass \text{(but not } Weather)$$
+  - If we condition on $WetGrass$ (grass is wet), knowing sprinkler was off increases chances it rained (and vice versa)
+
+- $Rain$ and $Sprinkler$ are **conditionally dependent** given $WetGrass$ and $Weather$
+  $$Rain \not\perp Sprinkler | WetGrass, Weather$$
+  - If you know it's sunny, rain unlikely and sprinkler likely
+  - If you also know $WetGrass$, learning $Sprinkler$ off $\implies$ must have $Rain$
+
+- **Fork path** (common cause) and **collider path** (common effect)
+
+::::
+:::: {.column width=35%}
+```graphviz
+digraph BayesianFlow {
+    splines=true;
+    nodesep=1.0;
+    ranksep=0.75;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Weather       [label="Weather",       fillcolor="#A6E7F4", xlabel="P(W)"];
+    Rain          [label="Rain",          fillcolor="#A6C8F4", xlabel="P(R | W)"];
+    Sprinkler     [label="Sprinkler",     fillcolor="#FFD1A6", xlabel="P(S | W)"];
+    WetGrass      [label="WetGrass",      fillcolor="#B2E2B2", xlabel="P(G | R, S)"];
+    StockMarketUp [label="StockMarketUp", fillcolor="#C6A6F4", xlabel="P(M)"];
+
+    { rank = same; Rain; Sprinkler; }
+
+    Weather   -> Rain;
+    Weather   -> Sprinkler;
+    Rain      -> WetGrass;
+    Sprinkler -> WetGrass;
+}
+```
+::::
+:::
+
+* Garden World Example: Independence
+
+::: columns
+:::: {.column width=60%}
 - $StockMarketUp$ is **(unconditionally) independent** of all other variables
+  - But is it really?
+  - Change in $StockMarket$ doesn't affect $Weather$
+  - In the past, dependency of $StockMarket$ from $Weather$
+    - Correlation between sunny weather in NYC and higher market index returns
+    - Cold weather requires more heating oil
+
+::::
+:::: {.column width=35%}
+```graphviz
+digraph BayesianFlow {
+    splines=true;
+    nodesep=1.0;
+    ranksep=0.75;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Weather       [label="Weather",       fillcolor="#A6E7F4", xlabel="P(W)"];
+    Rain          [label="Rain",          fillcolor="#A6C8F4", xlabel="P(R | W)"];
+    Sprinkler     [label="Sprinkler",     fillcolor="#FFD1A6", xlabel="P(S | W)"];
+    WetGrass      [label="WetGrass",      fillcolor="#B2E2B2", xlabel="P(G | R, S)"];
+    StockMarketUp [label="StockMarketUp", fillcolor="#C6A6F4", xlabel="P(M)"];
+
+    { rank = same; Rain; Sprinkler; }
+
+    Weather   -> Rain;
+    Weather   -> Sprinkler;
+    Rain      -> WetGrass;
+    Sprinkler -> WetGrass;
+}
+```
+::::
+:::
+
+### Conditional Probability Tables
 
 * Conditional Probability Table
-- **Conditional Probability Table** (CPT) encodes the probability of one node
-  $X_i$ given its parents $Parents(X_i)$
+
+- @Definition@: _Conditional Probability Table_ (CPT) encodes probability of node $X_i$ given parents $Parents(X_i)$
   $$
   \Pr(X_i | Parents(X_i))
   $$
 
-- Each row of the CPT contains the conditional probability of the node under a
-  conditioning case (i.e., a possible combination of the values for the parent
-  nodes)
+- Each row of CPT contains conditional probability of node under conditioning case (possible combination of parent values)
 
-- E.g., $\Pr(A | B, C)$
+- **Note**
+  - Natural for discrete variables, but can extend to continuous variables
+  - Conditional probability table summarizes infinite set of circumstances
+
+* Conditional Probability Table: Example
+
+- Consider events:
+  - $T$ = "Traffic Jam", $S$ = "Snow", $R$ = "Rush Hour"
+- CPT models $\Pr(T | S, R)$
 
 \begingroup \scriptsize
-| **A**    | **P(A\|B,C)** | **P(A\|B,-C)** | **P(A\|-B,C)**  | **P(A\|-B,-C)**|
-| ---------|---------------| ---------------|-----------------|-----------------|
-| True     | 0.80          | 0.10           | 0.05            | 0.05 |
-| False    | 0.05          | 0.85           | 0.10            | 0.0 |
+| T 		| P(T\|S,R) | P(T\|S,-R) | P(T\|-S,R) | P(T\|-S,-R) |
+|-------|----------|-----------|-----------|------------|
+| True  | 0.80     | 0.10      | 0.50      | 0.05       |
+| False | 0.20     | 0.90      | 0.50      | 0.95       |
 \endgroup
 
-- **Note**:
-  - Natural for discrete variables, but can be extended to continuous variables
-  - A conditional probability table summarizes an infinite set of circumstances
-    in the table
+- For any conditional probability:
+  - Sum of probabilities on left side of conditioning is 1
+  - Not on right side
+
+- **Interpretation**
+  - Traffic highly likely when both snow and rush hour
+  - Traffic unlikely when neither condition holds
+
+### Practical Application: Burglar Alarm Example
 
 * Bayesian Networks: Burglar Example
 
 - Famous example from Judea Pearl
-
-- An $Alarm$ system installed at a home in LA
-  - Fairly reliable at detecting $Burglary$
-  - Also responds to minor $Earthquakes$ (false positive)
-
-- Two neighbors, $John$ and $Mary$ will $Call$ you when they hear the $Alarm$
-  - $John$:
-    - Almost always $Call$s when he hears the alarm
-    - Sometimes confuses telephone with the $Alarm$ and $Call$s (false positives)
-  - $Mary$:
-    - Misses the alarm 30% of the cases (false negatives)
+- $Alarm$ system installed at home in LA
+  - Detects $Burglary$, but also responds to minor $Earthquakes$
+- Two neighbors, $John$ and $Mary$ will $Call$ when they hear $Alarm$
 
 ::: columns
 :::: {.column width=60%}
-- The **structure of the graph** shows that:
-  - $Burglary$ and $Earthquake$ affects the event $Alarm$
-  - $JohnCalls$ and $MaryCalls$ depend only on the $Alarm$, and not on
-    $Burglary$ and $Earthquake$
+- Structure of graph shows:
+  - $Burglary$ and $Earthquake$ affect $Alarm$
+  - $JohnCalls$ and $MaryCalls$ depend only on $Alarm$, not on $Burglary$ and $Earthquake$
+
 ::::
 :::: {.column width=35%}
-```graphviz[width=70%]
+```graphviz
 digraph BayesianFlow {
     splines=true;
     nodesep=1.0;
@@ -686,33 +694,35 @@ digraph BayesianFlow {
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    Burglary     [label="Burglary",     fillcolor="#A6C8F4"];
-    Earthquake   [label="Earthquake",   fillcolor="#FFD1A6"];
-    Alarm        [label="Alarm",        fillcolor="#B2E2B2"];
-    JohnCalls    [label="JohnCalls",    fillcolor="#C6A6F4"];
-    MaryCalls    [label="MaryCalls",    fillcolor="#C6A6F4"];
+    Burglary [label="Burglary", fillcolor="#A6C8F4"];
+    Earthquake [label="Earthquake", fillcolor="#FFD1A6"];
+    Alarm [label="Alarm", fillcolor="#B2E2B2"];
+    JohnCalls [label="JohnCalls", fillcolor="#C6A6F4"];
+    MaryCalls [label="MaryCalls", fillcolor="#C6A6F4"];
 
     { rank = same; Burglary; Earthquake; }
     { rank = same; JohnCalls; MaryCalls; }
 
-    Burglary   -> Alarm;
+    Burglary -> Alarm;
     Earthquake -> Alarm;
-    Alarm      -> JohnCalls;
-    Alarm      -> MaryCalls;
+    Alarm -> JohnCalls;
+    Alarm -> MaryCalls;
 }
 ```
 ::::
 :::
 
-* Bayesian Networks: Burglar Example
+* Burglar Example: Probabilities
+
 ::: columns
 :::: {.column width=60%}
-- The probability of $Burglary$ is 0.001
-- The probability of $Earthquake$ is 0.002
+- Probability of:
+  - $Burglary$ is 0.001
+  - $Earthquake$ is 0.002
 
-- $Alarm$ system
-  - Is fairly reliable at detecting $Burglary$
-  - Responds to minor $Earthquakes$
+- $Alarm$ system:
+  - Fairly reliable at detecting $Burglary$
+  - Responds to minor $Earthquakes$ (false positives)
 
 \begingroup \scriptsize
 | **Burglary** | **Earthquake** | **P(Alarm\| B,E)** |
@@ -722,6 +732,10 @@ digraph BayesianFlow {
 | False        | True           | 0.30                 |
 | False        | False          | 0.01                 |
 \endgroup
+
+- Events conditionally independent:
+  $$\Pr(Alarm) = \Pr(Alarm | Burglary, Earthquake) \Pr(Burglary) \Pr(Earthquake)$$
+
 ::::
 :::: {.column width=35%}
 ```graphviz
@@ -750,92 +764,87 @@ digraph BayesianFlow {
 ::::
 :::
 
-- Since events are independent:
-  $$\Pr(Alarm) = \Pr(Alarm | Burglary, Earthquake) \Pr(Burglary) \Pr(Earthquake)$$
+* Burglar Example: Neighbors
 
-* Bayesian Networks: Burglar Example
-
-- Two neighbors, $John$ and $Mary$ will $Call$ you when they hear the $Alarm$
-  - $John$:
-    - Almost always $Call$s when he hears the alarm
-    - Sometimes confuses telephone with the $Alarm$ and $Call$s (false positives)
-  - $Mary$:
-    - Misses the alarm 30% of the cases (false negatives)
-
-- $JohnCalls$ and $MaryCalls$ are represented by:
-
-\begingroup \scriptsize
-| **Alarm (A)** | **P(JohnCalls\| Alarm)** |
-| ------------- | ---------------------- |
-| True          | 0.90                   |
-| False         | 0.05                   |
-\endgroup
-
-\begingroup \scriptsize
-| **Alarm (A)** | **P(MaryCalls\| Alarm)** |
-| ------------- | ---------------------- |
-| True          | 0.70                   |
-| False         | 0.01                   |
-\endgroup
-
-* Conditional Probability Table
+- Two neighbors, $John$ and $Mary$ will $Call$ when they hear $Alarm$
 
 ::: columns
 :::: {.column width=60%}
-- A **node without parents** has an unconditional probability
-::::
-:::: {.column width=35%}
-\begingroup \scriptsize
-| **P(Burglary)** |
-| ----------------- |
-| .001              |
-\endgroup
+- **John**
+  - Almost always $Call$s when hears alarm
+  - Sometimes confuses telephone with $Alarm$ and $Call$s (false positives)
+
+- **Mary**
+  - Misses alarm 30% of cases (false negatives)
 
 ::::
-:::
+:::: {.column width=35%}
+\vspace{-0.5cm}
+\begingroup \scriptsize
+| **Alarm** | **P(JohnCalls)** |
+| --------- | --------------- |
+| True      | 0.90            |
+| False     | 0.05            |
+\endgroup
 
 \vspace{0.5cm}
 
-::: columns
-:::: {.column width=40%}
-- The **sum of probabilities** must be 1
-  - If there is a single input variable, it is possible to remove the redundancy
-::::
-:::: {.column width=55%}
-\vspace{-0.5cm}
 \begingroup \scriptsize
-| **Alarm (A)** | **P(JohnCalls\| .)** | **P(-JohnCalls \| .)** |
-| ------------- | ---------------------- | ------------------------ |
-| True          | 0.90                   | 0.10                     |
-| False         | 0.05                   | 0.95                     |
-\endgroup
-
-\begingroup \scriptsize
-| **Alarm (A)** | **P(JohnCalls\| .)** |
-| ------------- | ---------------------- |
-| True          | 0.90                   |
-| False         | 0.05                   |
+| **Alarm** | **P(MaryCalls)** |
+| --------- | --------------- |
+| True      | 0.70            |
+| False     | 0.01            |
 \endgroup
 ::::
 :::
 
-\vspace{1cm}
+* Burglar Example: CPTs
 
 ::: columns
-:::: {.column width=60%}
-- **A node with $k$ parents** has $2^k$ possible rows in the table
+:::: {.column width=50%}
+- Node without parents has unconditional probability
+
+- Single input variable:
+  - Sum of probabilities must be 1
+  - Can remove redundancy
+
+- Node with $k$ parents has $2^k$ possible rows
 
 ::::
-:::: {.column width=35%}
-\vspace{-0.5cm}
+:::: {.column width=45%}
+\vspace{-1cm}
+\begingroup \scriptsize
+| **P(Burglary)** |
+| --------------- |
+| .001            |
+\endgroup
+
+\vspace{0.3cm}
 
 \begingroup \scriptsize
-| **Burglary** | **Earthquake** | **P(Alarm \| .)** |
-| ------------ | -------------- | ------------------- |
-| T            | T              | .95                 |
-| T            | F              | .94                 |
-| ...          | ...            | ...                 |
+| **Alarm** | **P(JohnCalls)** | **P(-JohnCalls)** |
+| --------- | --------------- | --------------- |
+| True      | 0.90            | 0.10            |
+| False     | 0.05            | 0.95            |
+\endgroup
+
+\vspace{0.3cm}
+
+\begingroup \scriptsize
+| **Alarm** | **P(JohnCalls)** |
+| --------- | --------------- |
+| True      | 0.90            |
+| False     | 0.05            |
+\endgroup
+
+\vspace{0.3cm}
+
+\begingroup \scriptsize
+| **Burglary** | **Earthquake** | **P(Alarm)** |
+| ------------ | -------------- | ---------- |
+| T            | T              | .95        |
+| T            | F              | .94        |
+| ...          | ...            | ...        |
 \endgroup
 ::::
 :::
-

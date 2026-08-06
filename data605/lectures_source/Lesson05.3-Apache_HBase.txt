@@ -25,7 +25,7 @@ UMD DATA605 - Big Data Systems
 
 - **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
-- **References**
+- @References@
   - Web
     - 2006, BigTable paper
     - https://hbase.apache.org/
@@ -45,7 +45,7 @@ UMD DATA605 - Big Data Systems
 :::columns
 ::::{.column width=80%}
 
-- HBase = **H**adoop Data**Base**
+- HBase = @H@adoop Data@Base@
   - Supports large tables on commodity hardware clusters
   - Column-oriented DB
   - Part of Apache Hadoop ecosystem
@@ -55,11 +55,11 @@ UMD DATA605 - Big Data Systems
     - Google BigTable runs on GFS, HBase runs on HDFS
   - Used by Google, Airbnb, eBay
 
-- **When to use HBase**
+- @When to use HBase@
   - For large DBs (e.g., many 100 GBs or TBs)
   - With at least 5 nodes in production
 
-- **Applications**
+- @Applications@
   - Large-scale online analytics
   - Heavy-duty logging
   - Search systems (e.g., Internet search)
@@ -93,20 +93,20 @@ UMD DATA605 - Big Data Systems
     - Nodes rely on each other, not centralized source
 
 * From HDFS to HBase
-- **Different types of workloads for DB backends**
-  - **OLTP** (On-Line Transactional Processing)
+- @Different types of workloads for DB backends@
+  - @OLTP@ (On-Line Transactional Processing)
     - Read and write individual data items in a large table
     - E.g., update inventory and price as orders come in
-  - **OLAP** (On-Line Analytical Processing)
+  - @OLAP@ (On-Line Analytical Processing)
     - Read large data amounts and process it
     - E.g., analyze item purchases over time
 
-- **Hadoop FileSystem (HDFS) supports OLAP workloads**
+- @Hadoop FileSystem (HDFS) supports OLAP workloads@
   - Provide a filesystem with large files
   - Read data sequentially, end-to-end
   - Rarely updated
 
-- **HBase supports OLTP interactions**
+- @HBase supports OLTP interactions@
   - Built on HDFS
   - Use additional storage and memory to organize tables
   - Write tables back to HDFS as needed
@@ -115,25 +115,25 @@ UMD DATA605 - Big Data Systems
 :::columns
 ::::{.column width=65%}
 
-- **Warning**: HBase uses names similar to relational DB concepts, but with
+- @Warning@: HBase uses names similar to relational DB concepts, but with
   different meanings
 
-- A **database** consists of multiple tables
+- A @database@ consists of multiple tables
 
-- Each **table** consists of multiple rows, sorted by row key
+- Each @table@ consists of multiple rows, sorted by row key
 
 - Each row contains a _row key_ and one or more column families
 
-- Each **column family**
+- Each @column family@
   - Contains multiple columns (family:column)
   - Defined when the table is created
 
-- A **cell**
+- A @cell@
   - Uniquely identified by (table, row, family:column)
   - Contains metadata (e.g., timestamp) and an uninterpreted array of bytes
     (blob)
 
-- **Versioning**
+- @Versioning@
   - New values don't overwrite old ones
   - `put()` and `get()` allow specifying a timestamp (otherwise uses current
     time)
@@ -214,16 +214,16 @@ table = {
 :::columns
 ::::{.column width=60%}
 
-- **A row in HBase is like a mini-database**
+- @A row in HBase is like a mini-database@
   - A cell has many values
   - Data stored sparsely
 
-- **Rows in HBase are "deeper" than in relational DBs**
+- @Rows in HBase are "deeper" than in relational DBs@
   - Relational DBs: rows have many column values (fixed array with types)
   - HBase: rows like a two-level nested dictionary with metadata (e.g.,
     timestamp)
 
-- **Applications**
+- @Applications@
   - Store versioned website data
   - Store a wiki
 ::::
@@ -236,11 +236,11 @@ table = {
 :::columns
 ::::{.column width=50%}
 
-- **Wiki (e.g., Wikipedia)**
+- @Wiki (e.g., Wikipedia)@
   - Contains pages
   - Each page has a title, article text varies over time
 
-- **HBase data model**
+- @HBase data model@
   - Table name $\to$ `wikipedia`
   - Row $\to$ entire wiki page
   - Row keys $\to$ wiki identifier (e.g., title or URL)
@@ -275,7 +275,7 @@ wiki_table['Home']['text']
 * Example 2: Storing a Wiki
 :::columns
 ::::{.column width=50%}
-- **Add data**
+- @Add data@
   - Columns don't need to be predefined when creating a table
   - The column is defined as `text`
 
@@ -286,7 +286,7 @@ wiki_table['Home']['text']
   ```
 
   \endgroup
-  - **Query data**
+  - @Query data@
   - Specify the table name, the row key, and optionally a list of columns
 
   \begingroup \color{blue} \footnotesize
@@ -327,7 +327,7 @@ wiki_table['Home']['text']
 :::columns
 :::{.column width=60%}
 
-- **Improved wiki using versioning**
+- @Improved wiki using versioning@
 
 - A page
   - Uniquely identified by title
@@ -339,7 +339,7 @@ wiki_table['Home']['text']
   - Identified by timestamp
   - Contains text
 
-- **HBase data model**
+- @HBase data model@
 
 - Add family column "revision" with multiple columns
   - E.g., author, comment,
@@ -459,11 +459,11 @@ GET People:101:Name:First
 
 * Column Family vs Column
 
-- **Adding a column**
+- @Adding a column@
   - Cheap
   - Done at run-time
 
-- **Adding a column family**
+- @Adding a column family@
   - Not at run-time
   - Requires table copy (expensive)
   - Indicates data storage method
@@ -471,7 +471,7 @@ GET People:101:Name:First
     - Hard to add: static array
     - E.g., mongoDB document vs Relational DB column
 
-- **Why differentiate column families vs columns?**
+- @Why differentiate column families vs columns?@
   - Why not store all row data in one column family?
   - Each column family configured independently, e.g.,
     - Compression
@@ -482,11 +482,11 @@ GET People:101:Name:First
 
 * Consistency Model
 
-- **Atomicity**
+- @Atomicity@
   - Update entire rows atomically or not at all
   - Independent of column count
 
-- **Consistency**
+- @Consistency@
   - GET returns a complete row from the table's history
     - Weak/eventual consistency
     - Check timestamp for certainty
@@ -494,12 +494,12 @@ GET People:101:Name:First
     - Includes all data written before scan
     - May include updates since start
 
-- **Isolation**
+- @Isolation@
   - Concurrent vs sequential semantics
   - Not guaranteed beyond a single row
   - Row is the atom of information
 
-- **Durability**
+- @Durability@
   - Successful writes are durable on disk
 
 * Checking for Row or Column Existence
@@ -508,12 +508,12 @@ GET People:101:Name:First
   - Acts like a cache for keys
   - Track presence without querying
 
-- **Hashset complexity**
+- @Hashset complexity@
   - Unbounded space for data storage
   - No false positives
   - O(1) average/amortized time
 
-- **Bloom filter implementation**
+- @Bloom filter implementation@
   - Probabilistic hash set
   - Array of bits initially set to 0
   - Hash new data, set bits to 1
@@ -521,7 +521,7 @@ GET People:101:Name:First
     - All bits 0: data not seen
     - All bits 1: likely seen (false positive possible)
 
-- **Bloom filter complexity**
+- @Bloom filter complexity@
   - Constant space usage
   - False positives possible (no false negatives)
   - O(1) time complexity
@@ -535,17 +535,17 @@ GET People:101:Name:First
 
 - HBase and Postgres use WAL
 
-- **WAL mechanics**
+- @WAL mechanics@
 
 - Updated state of tables:
   - Not written to disk immediately
   - Buffered in memory
   - Written to disk as checkpoints periodically
 
-- **Problem**
+- @Problem@
   - Server crash during this period loses state
 
-- **Solution**
+- @Solution@
   - Use append-only disk-resident data structure
   - Log operations since last checkpoint in WAL
   - Clear WAL when tables stored to disk
@@ -557,7 +557,7 @@ GET People:101:Name:First
 * Storing Variable-Length Data in Dbs
 
 \footnotesize
-**SQL Table**
+@SQL Table@
 
 ```sql
 People(ID: Integer, FirstName: CHAR[20], LastName: CHAR[20], Phone: CHAR[8])
@@ -582,7 +582,7 @@ UPDATE People SET Phone="555-3434" WHERE ID=403;
 - Overwrite data in place
 ::::
 :::
-**HBase Table**
+@HBase Table@
 ```
 People(ID, Name, Home, Office)
 PUT People, 403, Home:Phone, 555-3434
@@ -610,15 +610,15 @@ Need to use pointers
 
 * HBase Implementation
 
-- **How to store the web on disk?**
+- @How to store the web on disk?@
 
-- **HBase is backed by HDFS**
+- @HBase is backed by HDFS@
   - Store each table (e.g., Wikipedia) in one file
   - "One file" means one gigantic file stored in HDFS
     - HDFS splits/replicates file into blocks on different servers
 
 - Idea in several steps:
-  - **Idea 1: Put entire table in one file**
+  - @Idea 1: Put entire table in one file@
     - Overwrite file with any cell change
     - Too slow
   - `Idea 2: One file + WAL`
@@ -653,33 +653,33 @@ Table People(Name, Home, Office)
 	...
 }
 
-**File "People"**
+@File "People"@
 
 * Idea 2: One File + WAL
 
-**Table People(Name, Home, Office)**
+@Table People(Name, Home, Office)@
 
 PUT 101:Office:Phone = "555-3434"
 PUT 102:Home:Email = mt@yahoo.com
 ....
 
-**WAL for Table People**
+@WAL for Table People@
 
 - Changes are applied only to the log file
 - The resulting record is cached in memory
 - Reads must consult both memory and disk
 
-**Memory Cache for Table People**
+@Memory Cache for Table People@
 
 101
 
 102
 
-**GET People:101**
+@GET People:101@
 
-**GET People:103**
+@GET People:103@
 
-**PUT People:101:Office:Phone = "555-3434"**
+@PUT People:101:Office:Phone = "555-3434"@
 
     101: {
     	Timestamp: T403;
@@ -699,17 +699,17 @@ PUT 102:Home:Email = mt@yahoo.com
 101: {Timestamp: T403;Name: {First="Florian", Middle="Garfield", Last="Krepsbach"},Home: {Phone="555-1212", Email="florian@wobegon.org"},Office: {Phone="666-1212", Email="fk@phc.com"}},
 102: {Timestamp: T593;Name: { First="Marilyn", Last="Tollerud"},Home: { Phone="555-1213" },Office: { Phone="666-1213" }}, . . .
 
-**Table for People on Disk (Old)**
+@Table for People on Disk (Old)@
 
 PUT 101:Office:Phone = "555-3434"
 PUT 102:Home:Email = mt@yahoo.com
 ...
 
-**WAL for Table People:**
+@WAL for Table People:@
 
-101: {Timestamp: T403;Name: {First="Florian", Middle="Garfield", Last="Krepsbach"},Home: {Phone="555-1212", Email="florian@wobegon.org"},Office: {Phone="**555-3434**", Email="fk@phc.com"}},102: {Timestamp: T593;Name: { First="Marilyn", Last="Tollerud"},Home: { Phone="555-1213", **Email="my@yahoo.com"** }, . . .
+101: {Timestamp: T403;Name: {First="Florian", Middle="Garfield", Last="Krepsbach"},Home: {Phone="555-1212", Email="florian@wobegon.org"},Office: {Phone="@555-3434@", Email="fk@phc.com"}},102: {Timestamp: T593;Name: { First="Marilyn", Last="Tollerud"},Home: { Phone="555-1213", @Email="my@yahoo.com"@ }, . . .
 
-**Table for People on Disk (New)**
+@Table for People on Disk (New)@
 
 - Write out a new copy of the table, with all of the changes applied
 - Delete the log and memory cache
@@ -723,15 +723,15 @@ Data for
 Column Family
 Name
 
-**Tables for People on Disk (Old)**
+@Tables for People on Disk (Old)@
 
 PUT 101:Office:Phone = "555-3434"
 PUT 102:Home:Email = mt@yahoo.com
 ...
 
-**WAL for Table People**
+@WAL for Table People@
 
-**Tables for People on Disk (New)**
+@Tables for People on Disk (New)@
 
 - Write out a new copy of the table, with all of the changes applied
 - Delete the log and memory cache

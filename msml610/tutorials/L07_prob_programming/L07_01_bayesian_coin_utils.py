@@ -3,7 +3,7 @@ Utility functions for Bayesian coin flip tutorial (L07_01).
 
 Import as:
 
-import L07_01_bayesian_coin_utils as mtl0bcout
+import msml610.tutorials.L07_prob_programming.L07_01_bayesian_coin_utils as mtlppl0bcu
 """
 
 import logging
@@ -16,7 +16,7 @@ import numpy as np
 import scipy.stats as stats
 from IPython.display import clear_output, display
 
-import msml610.tutorials.msml610_utils as mtumsuti
+import helpers.htutorial as htutori
 
 _LOG = logging.getLogger(__name__)
 
@@ -62,7 +62,7 @@ def plot_binomial() -> None:
     ax[1, 0].set_xticks(range(0, max_n))
     #
     title = "Binomial distribution"
-    mtumsuti.process_figure(title)
+    htutori.process_figure(title)
 
 
 def plot_beta() -> None:
@@ -98,7 +98,7 @@ def plot_beta() -> None:
     ax[1, 0].set_ylabel("p(x)", rotation=0, labelpad=20)
     #
     title = "Beta distribution"
-    mtumsuti.process_figure(title)
+    htutori.process_figure(title)
 
 
 # #############################################################################
@@ -301,7 +301,7 @@ def update_prior() -> None:
     plt.tight_layout()
     #
     title = "Updating the prior"
-    mtumsuti.process_figure(title)
+    htutori.process_figure(title)
 
 
 # #############################################################################

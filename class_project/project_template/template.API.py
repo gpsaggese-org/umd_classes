@@ -14,48 +14,64 @@
 # ---
 
 # %% [markdown]
-# # Template API Notebook
+# # Description
 #
-# This is a template notebook. The first heading should be the title of what notebook is about. For example, if it is a neo4j tutorial the heading should be `Neo4j API`.
+# This notebook examines ...
 #
+# The name of this notebook should follow the format: `<tool>.API.ipynb` (e.g., `pycaret.API.ipynb` for exploring the pycaret API).
+#
+# References:
 # - Add description of what the notebook does.
-# - Point to references, e.g. (neo4j.API.md)
+# - Point to references, e.g. (tool.API.md)
 # - Add citations.
 # - Keep the notebook flow clear.
 # - Comments should be imperative and have a period at the end.
 # - Your code should be well commented.
 #
-# The name of this notebook should in the following format:
-# - if the notebook is exploring `pycaret API`, then it is `pycaret.API.ipynb`
-#
-# Follow the reference to write notebooks in a clear manner: https://github.com/causify-ai/helpers/blob/master/docs/coding/all.jupyter_notebook.how_to_guide.md
-
-# %%
-# %load_ext autoreload
-# %autoreload 2
-# %matplotlib inline
+# Guide: https://github.com/causify-ai/helpers/blob/master/docs/coding/all.jupyter_notebook.how_to_guide.md
 
 # %% [markdown]
 # ## Imports
 
 # %%
+# %load_ext autoreload
+# %autoreload 2
+
+# System libraries.
 import logging
-# Import libraries in this section.
-# Avoid imports like import *, from ... import ..., from ... import *, etc.
 
-import helpers.hdbg as hdbg
-import helpers.hnotebook as hnotebo
-
-# %% [markdown]
-# ## Configuration
+# Third-party libraries.
+# import numpy as np
+# import pandas as pd
+# import seaborn as sns
+# import matplotlib.pyplot as plt
 
 # %%
-hdbg.init_logger(verbosity=logging.INFO)
+# # To install additional packages, use:
+# import helpers.hmodule as hmodule
+# hmodule.install_module_if_not_present(
+#     ["pycaret"],
+#     use_activate=True,
+#     use_sudo=False,
+#     venv_path="/opt/venv",
+# )
+
+# %%
+# Use this for most notebooks.
+import helpers.hdbg as hdbg
+import helpers.hnotebook as hnotebook
 
 _LOG = logging.getLogger(__name__)
 
-hnotebo.config_notebook()
+# Initialize notebook configuration and logging.
+hdbg.init_logger(verbosity=logging.INFO)
+hnotebook.config_notebook()
 
+# Convert `display` into `print()`.
+try:
+    from IPython.display import display
+except ImportError:
+    display = print  # type: ignore
 
 # %% [markdown]
 # ## Make the notebook flow clear
@@ -66,15 +82,6 @@ hnotebo.config_notebook()
 # - Compute stats
 # - Do analysis
 # - Show results
-#
-#
-#
-#
-
-
-# #############################################################################
-# Template
-# #############################################################################
 
 
 # %%
@@ -83,7 +90,10 @@ class Template:
     Brief imperative description of what the class does in one line, if needed.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """
+        Initialize the Template class.
+        """
         pass
 
     def method1(self, arg1: int) -> None:
@@ -97,7 +107,7 @@ class Template:
         :param arg1: description of arg1
         :return: description of return
         """
-        # Code bloks go here.
+        # Code blocks go here.
         # Make sure to include comments to explain what the code is doing.
         # No empty lines between code blocks.
         pass
@@ -114,7 +124,7 @@ def template_function(arg1: int) -> None:
     :param arg1: description of arg1
     :return: description of return
     """
-    # Code bloks go here.
+    # Code blocks go here.
     # Make sure to include comments to explain what the code is doing.
     # No empty lines between code blocks.
     pass

@@ -1,0 +1,402 @@
+---
+fontsize: 10pt
+---
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+# Causal AI in Business
+
+## Business Context and Motivation
+
+#### Digital Transformation in Business
+
+- @Definition@: **Digital transformation** uses digital technologies to reduce
+  costs and improve revenues
+
+- @Techniques@: Five key approaches
+  - **Integration**: Embed digital tools (AI, cloud, IoT, automation)
+  - **Cultural change**: Encourage innovation, agility, data-driven mindset
+  - **Customer-centric**: Use digital solutions for engagement and satisfaction
+  - **Process automation**: Streamline operations through AI, robots, analytics
+  - **Data-driven decisions**: Leverage big data, ML, real-time analytics
+
+#### Why AI Projects Fail?
+
+- @Problem@: AI projects approach problems only from ML perspective
+  - Data scientists focus on accuracy and technical metrics
+  - Work in isolation from domain experts, business users, data engineers
+  - Lack of problem context leads to irrelevant solutions
+
+- @Limitations@: Five common failure modes
+  - **Misalignment**: Models solve wrong problem or answer irrelevant questions
+  - **Black-box models**: Difficult to interpret or explain to stakeholders
+  - **Data issues**: Poor quality, missing, or biased data
+  - **Deployment challenges**: Not easily integrated into production systems
+  - **Lack of monitoring**: No process for tracking performance post-deployment
+
+#### How to Make AI Project Succeed
+
+- @Techniques@: Four success factors
+
+1. **Create a hybrid team**
+   - Represents all business aspects
+   - Uses collaborative framework
+   - Communicates with single language (e.g., DAGs)
+
+2. **Meet regularly** to ensure continuity
+
+3. **Find an executive sponsor**
+   - Understands project goals and potential
+
+4. **Initial pilot**
+   - Small team for targeted problem
+   - Demonstrates AI approach merit
+
+## The Causal AI Workflow
+
+#### AI in Business: The Causal AI Workflow
+
+- @Question@: How do you apply Causal AI in Business?
+
+\centering
+
+```graphviz[width=80%]
+digraph CausalFlowGrid {
+  layout=neato;
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, width=1.4, height=0.6, fixedsize=true];
+
+  // Design-grade rainbow in edge order (ROYGBIV + magenta wrap)
+  BusinessGoals   [label="Business Goals",        pos="0,2!",  fillcolor="#E53935", fontcolor="white"]; // Red
+  UseCases        [label="Use Cases",             pos="2,2!",  fillcolor="#FB8C00", fontcolor="black"]; // Orange
+  CausalModels    [label="Causal Models",         pos="4,2!",  fillcolor="#FDD835", fontcolor="black"]; // Yellow
+  DataSources     [label="Data Sources",          pos="4,1!",  fillcolor="#43A047", fontcolor="white"]; // Green
+  KnowledgeModels [label="Knowledge\nModels",     pos="4,0!",  fillcolor="#1E88E5", fontcolor="white"]; // Blue
+  Algorithms      [label="Algorithms/\nLibraries", pos="2,0!", fillcolor="#5E35B1", fontcolor="white"]; // Indigo
+  Interventions   [label="Interventions/\nCounterfactuals", pos="0,0!", fillcolor="#8E24AA", fontcolor="white"]; // Violet
+  Results         [label="Key Results/\nTakeaways", pos="0,1!", fillcolor="#D81B60", fontcolor="white"]; // Magenta (wrap toward red)
+
+  Placeholder     [label="", pos="2,1!", style=invis]; // layout anchor
+
+  edge [color="#555555", penwidth=1.4, splines=true];
+
+  BusinessGoals -> UseCases;
+  UseCases -> CausalModels;
+  CausalModels -> DataSources;
+  DataSources -> KnowledgeModels;
+  KnowledgeModels -> Algorithms;
+  Algorithms -> Interventions;
+  Interventions -> Results;
+  Results -> BusinessGoals;
+}
+```
+
+#### Step 1: What Are the Intended Outcomes?
+
+- @Problem@: Most AI projects (even 90%) fail from misalignment between
+  business goals and project
+
+- @Questions@: Key questions to answer
+  - What process are you analyzing?
+  - What happens if a course of action is taken or not?
+  - Outcomes: positive, negative, unacceptable, optimal?
+  - What related data can be combined and leveraged?
+  - What are possible and feasible interventions?
+  - Confounding factors correlated with outcomes and treatments?
+
+#### Step 2: What Are the Proposed Interventions?
+
+- @Definition@: **Levers** are variables to achieve business outcomes
+
+- @Example@: Customer marketing for a product
+  - Introduce a new product?
+  - Bundle multiple products (improve sales or inhibit long-term)?
+  - Focus advertisement on quality vs other options?
+  - Add more variations of same product?
+  - Discontinue or divest product line?
+
+#### Step 3: What Factors Create Changes?
+
+- @Definition@: **Identify confounders** that obscure or distort relationships
+  - Confounders mute or inflate relationship strength
+
+- @Definition@: **Direct effect**: Effect through intervention pathway
+
+- @Definition@: **Indirect effect**: Effect by environment or intervention
+  byproduct
+
+- @Definition@: **Total causal effect**: All factors modifying outcome
+
+#### Step 4: Build Causal DAG
+
+- @Definition@: **Causal models** simplify systems without losing key
+  relationships
+
+- **Visual models** abstract complexity into interpretable formats
+  - Highlight direction and strength of influence
+  - Aid communication between stakeholders
+  - Reduce cognitive overload by excluding irrelevant details
+  - Guide data collection by identifying impactful variables
+
+- @Key idea@: **Balance** is critical
+  - Too much simplicity loses insight
+  - Too much complexity loses clarity
+
+#### Marketing Example: Price Intervention
+
+- @Example@: Assume **price is intervention** and goal is **maximize revenue**
+  - Increase price by how much?
+  - Decrease price by how much?
+  - Change price one-time or over time?
+  - Develop individual pricing model for each customer?
+
+- The causal DAG illustrates price's complex effects:
+  ```graphviz[height=50%]
+  digraph CausalDiagram {
+      splines=true;
+      nodesep=1.0;
+      ranksep=0.75;
+
+      node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+      Price [label="Price", fillcolor="#F4A6A6"];
+      Behavior [label="Behavior", fillcolor="#FFD1A6"];
+      ProductAmount [label="Product Amount", fillcolor="#B2E2B2"];
+      Revenue [label="Revenue", fillcolor="#A6C8F4"];
+      CompetitiveOffers [label="Competitive Offers", fillcolor="#C6A6F4"];
+      Supply [label="Product Supply", fillcolor="#A6E7F4"];
+      StoreDistance [label="Distance to store", fillcolor="#D2B48C"];
+
+      Price -> Behavior;
+      Behavior -> Revenue;
+      Price -> ProductAmount;
+      ProductAmount -> Revenue;
+      Price -> CompetitiveOffers;
+      CompetitiveOffers -> ProductAmount;
+      Supply -> ProductAmount;
+      StoreDistance -> ProductAmount;
+  }
+  ```
+
+#### Step 5: Data Acquisition and Integration
+
+- @Workflow@: Leverage existing data and collect new data
+  - Use data collected for correlation-based ML
+  - Collect data specifically for causal AI objectives
+
+- **Prepare data** to match refined causal model
+  - Clean, normalize, align data with model assumptions
+  - Map observed variables to DAG nodes
+  - Encode categorical variables
+  - Handle missing data (imputation or exclusion)
+  - Normalize or scale values
+
+- **Control for bias and confounding**
+  - Goal: Ensure data structure supports causal estimation
+
+#### Step 6: Model Modification
+
+- @Workflow@: Refine initial DAG design
+  - Reduce bias and improve reliability
+  - Clarify variables as confounders, mediators, or outcomes
+
+- @Cons@: Avoid common pitfalls
+  - Do not control for mediators or colliders
+  - Control for direct and indirect confounders
+
+- **Test models** against technical and business objectives
+  - Isolate causal effects with necessary controls
+  - Ensure assumptions align with data and domain logic
+
+#### Step 7: Preparing for Deployment in Business
+
+- @Workflow@: Transition from experimentation to decision-making
+  - Validate model against real-world business outcomes
+  - Ensure stakeholders understand and trust causal logic
+
+- **Develop user-friendly interfaces** for business users
+  - Automate data pipelines for timely updates
+
+- **Set up monitoring**
+  - Establish metrics for performance tracking and drift detection
+  - Create feedback loops to refine models post-deployment
+
+- **Document and train** stakeholders
+  - Provide clear model documentation
+  - Train on interpreting results and making informed decisions
+
+- @Goal@: Deliver measurable business value
+
+#### Roles in Hybrid Teams
+
+\begingroup \scriptsize
+```{=typst}
+#styled-table(
+  headers: ("Role", "Responsibilities"),
+  rows: (
+    ("Business Strategists", "Align modeling with business goals; Sponsor projects; Communicate insights"),
+    ("Subject-Matter Experts", "Provide domain expertise; Identify relevant variables; Validate DAGs"),
+    ("Data Experts", "Source and clean data; Map data to model variables; Handle missing values"),
+    ("Data Scientists", "Construct and validate DAGs; Apply causal inference methods; Simulate decisions"),
+    ("Software Developers", "Build tools and interfaces; Create data pipelines"),
+    ("IT Professionals", "Provide infrastructure and governance; Ensure model execution; Integrate systems"),
+    ("Project Managers", "Coordinate collaboration and timelines; Manage documentation; Ensure alignment"),
+  ),
+)
+```
+\endgroup
+
+#### Executing for a Hybrid Team Project
+
+- @Workflow@: Establish a collaborative approach
+  - Align strategic goals with technical efforts
+  - Emphasize early stakeholder engagement and shared ownership
+
+- @Step@: Define team goals
+  - Use SMART objectives aligned with business strategy
+
+- @Step@: Target a project
+  - Choose a bounded, feasible, high-value use case
+  - Prioritize early wins for trust and momentum
+
+- @Step@: Define the hypothesis
+  - Build a preliminary DAG with experts' input
+
+- @Step@: Incremental model development
+  - Build the model in small stages
+  - Iterate with regular feedback
+
+## Explainability and Interpretability
+
+#### The Importance of Explainability
+
+- @Question@: Can we understand how AI models make decisions?
+  - How do ML models make decisions?
+  - Can they be trusted?
+  - Are they biased?
+
+- @Problem@: AI systems must foster trust, transparency, and user confidence
+  - Loss of trust, regulation violations, fines, lawsuits
+  - Example: false negative in medical screening for cancer
+
+- @Solution@: Humans in the loop
+  - Ensure interpretation and context are considered
+
+#### Techniques for Interpretability
+
+- @Definition@: **LIME** (Local Interpretable Model-agnostic Explanations)
+  - Focus on single prediction
+  - Approximate model locally with interpretable model
+  - Perturb input data, observe prediction changes
+
+- @Definition@: **PDP** (Partial Dependence Plots)
+  - Show marginal effect of features on predicted outcome
+
+- @Definition@: **ICE** (Individual Conditional Expectation)
+  - Show feature-prediction relationship for individual instances
+
+- @Definition@: **SHAP** (SHapley Additive exPlanations)
+  - Quantify feature contribution to specific prediction
+
+#### Causal AI in Interpretable AI
+
+- @Advantages@: Causal AI enables deeper interpretability
+  - DAGs present variables, relationships, strengths clearly
+  - Counterfactuals predict action outcomes
+  - Remove confounders to prevent skewed estimates
+  - Humans understand output (experts and non-experts both)
+  - Hybrid teams enhance context, reduce blind spots
+
+#### The Future of Causal AI
+
+- @Characteristics@: Causal AI evolution
+  - Moves from academia to commercial use
+  - Departs from purely data-driven systems
+  - Reflects human thinking and decision-making
+
+- @Convergence@: Multiple AI paradigms merge
+  - Causal AI
+  - Traditional AI
+  - Deep learning
+  - Generative techniques
+
+#### Why Probabilistic Machine Learning Matters
+
+- @Question@: When is confidence more important than prediction?
+  - Medical diagnosis: classifier needs to know how sure it is
+  - Autonomous driving: when should the car defer to human control?
+  - Financial risk: which decisions warrant caution despite high confidence?
+
+- @Advantages@: Probabilistic models output full distributions, not point
+  estimates
+  - Standard ML: _"The diagnosis is pneumonia"_
+  - Probabilistic ML: _"87% pneumonia, 13% flu, plus credible intervals"_
+
+- @Applications@: Uncertainty quantification
+  - Drives better decisions under risk
+  - Handles limited or noisy data naturally
+  - Encodes domain expertise formally when data is expensive
+
+- @Intuition@: Probability embraces what we _don't_ know as information, not
+  failure
+
+#### Probabilistic ML: Robustness Through Uncertainty
+
+- @Problem@: Deterministic models fail silently
+  - Overfit to small datasets
+  - Produce overconfident predictions on out-of-distribution data
+  - Struggle with missing values (require imputation or deletion)
+
+- @Solution@: Probabilistic frameworks solve naturally
+  - **Uncertainty propagation**: Bayesian model averaging builds Occam's razor
+  - **Principled incomplete data handling**: Integrate over unknown values
+  - **Composability**: Chain probabilistic models, track uncertainty flow
+
+- @Key idea@: Probability enables decision-making under uncertainty
+  - When to act, when to wait, when to defer to humans
+
+#### Why Explainability Matters
+
+- @Problem@: Modern AI systems are powerful but opaque
+  - Deep neural networks with millions of parameters hard to interpret
+  - Business logic becomes implicit rather than explicit
+  - Regulators and stakeholders demand accountability
+
+- @Applications@: Explanations critical for high-stakes decisions
+  - Healthcare diagnosis, loan approval, criminal justice
+  - Autonomous vehicles, aircraft control
+  - Users and decision-makers need to verify model behavior
+
+- @Example@: Medical diagnosis scenario
+  - Model predicts 85% likelihood of disease X
+  - Which symptoms drove this prediction?
+  - Without explanation: doctor cannot assess clinical validity
+  - With explanation: doctor can override or accept
+
+- @Key idea@: Explainability enables accountability and builds trust
+
+#### Approaches to Explainability
+
+- @Definition@: **Explainability** is the degree to which we understand why a
+  model made a particular prediction
+  - Global explanation: _"How does the model work overall?"_
+  - Local explanation: _"Why this specific outcome?"_
+  - Feature importance: _"Which inputs most influence prediction?"_
+
+- @Techniques@: Two main approaches
+  1. **Intrinsic methods**: Design inherently interpretable models
+     - Decision trees, linear regression, rule-based systems
+     - Transparent structure allows direct inspection
+  2. **Post-hoc methods**: Explain predictions after training
+     - Feature attribution (LIME, SHAP, integrated gradients)
+     - Attention mechanisms, counterfactual explanations
+
+- @Example@: SHAP quantifies feature contribution
+  - Computes each feature's contribution to prediction shift
+  - Assigns value showing how much each feature pushed decision
+  - Enables ranking features by importance and visualizing impact
+
+- @Trade-off@: Model performance vs. explainability
+  - Simpler models easier to explain but lower accuracy
+  - Complex models better performance but need post-hoc explanation
+  - Choice depends on application's accuracy vs. interpretability requirements

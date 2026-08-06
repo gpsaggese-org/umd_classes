@@ -1,0 +1,15 @@
+# Core data science
+ipywidgets
+numpy
+pandas
+seaborn
+scipy
+scikit-learn
+
+# Causal discovery
+gcastle==1.0.4
+torch
+
+# Visualization
+matplotlib
+networkx

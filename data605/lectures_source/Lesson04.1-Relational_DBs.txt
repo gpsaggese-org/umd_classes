@@ -36,40 +36,40 @@ UMD DATA605 - Big Data Systems
 * Relational Model: Overview
 - Introduced by Ted Codd (late 60's, early 70's)
 
-- **First prototypes**
+- @First prototypes@
   - Ingres Project at Berkeley (1970-1985)
     - Ingres (INteractive Graphics REtrieval System)
     - $\to$ PostgreSQL (=Post Ingres)
   - IBM System R (1970s) $\to$ Oracle, IBM DB2
 
-- **Contributions from relational data model**
+- @Contributions from relational data model@
   - Formal semantics for data operations
   - Data independence: separation of logical and physical data models
   - Declarative query languages (e.g., SQL)
   - Query optimization
 
-- **Key to commercial success**
+- @Key to commercial success@
 
 * Relational Model: Key Definitions
 ::: columns
 :::: {.column width=60%}
 
-- Relational DB is a collection of **tables / relations**
+- Relational DB is a collection of @tables / relations@
   - Unique name and schema for each table
   - E.g., `instructor` and `course` relations
 
-- **Row / tuple / record**: Represents a relationship among values
+- @Row / tuple / record@: Represents a relationship among values
 
-- **Element**: Corresponds to a **column / field / attribute**
+- @Element@: Corresponds to a @column / field / attribute@
   - Atomic elements (e.g., phone number as a single object)
   - `NULL` for unknown or non-existent values
 
-- **Schema of a relation**
+- @Schema of a relation@
   - List of attributes and their domains
   - Like type definition in programming languages
   - E.g., domain of `salary` is integers >= 0
 
-- **Instance of relation**
+- @Instance of relation@
   - Specific instantiation with actual values
   - Changes over time
 ::::
@@ -94,16 +94,16 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=55%}
 
-- **UML class diagram**
+- @UML class diagram@
   - UML = Unified Modeling Language
   - Used in OOP and DB design
 
 \vspace{1cm}
 
-- **In OOP design**
+- @In OOP design@
   - Diagram showing classes, attributes, methods, and relationships
 
-- **In DB design**
+- @In DB design@
   - Each box is a table / relation
   - Columns / fields / attributes are listed inside the box
   - Primary keys are underlined
@@ -124,7 +124,7 @@ UMD DATA605 - Big Data Systems
 
 * Example: University DB
 
-- **UML diagram of a DB and schemas representing a University**
+- @UML diagram of a DB and schemas representing a University@
   - Each box is a table / relation
   - Column / fields / attributes are listed inside the box
   - Primary keys are underlined fields
@@ -133,7 +133,7 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=40%}
 
-- **Analysis of the diagram**
+- @Analysis of the diagram@
   - ER model
   - Entities
     - `student`
@@ -161,11 +161,11 @@ UMD DATA605 - Big Data Systems
   - E.g., `(ID)` and `(ID, name)` are superkeys of `instructor`
   - `(name)` is not a superkey of `instructor`
 
-- **Primary key**: minimal set of attributes that uniquely identify each row
+- @Primary key@: minimal set of attributes that uniquely identify each row
   - Typically small and immutable
   - Would `SSN` be a primary key? Yes and no
 
-- **Primary key constraint**: rows can't have the same primary key
+- @Primary key constraint@: rows can't have the same primary key
 ::::
 :::: {.column width=35%}
 
@@ -183,24 +183,25 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=75%}
 - Marital status
-  - Married(person1\_ssn, person2\_ssn, date\_married, date\_divorced)
+  - Married(`person1_ssn`, `person2_ssn`, `date_married`, `date_divorced`)
 
 - Bank account
-  - Account(cust\_ssn, account\_number, cust\_name, balance, cust\_address)
+  - Account(`cust_ssn`, `account_number`, `cust_name`, `balance`,
+  `cust_address`)
 
 - Research assistantship at UMD
-  - RA(student\_id, project\_id, supervisor\_id, appt\_time, appt\_start\_date,
-    appt\_end\_date)
+  - RA(`student_id`, `project_id`, `supervisor_id`, `appt_time`,
+    `appt_start_date`, `appt_end_date`)
 
 - Information typically found on Wikipedia
-  - Person(Name, Born, Died, Citizenship, Education, ...)
+  - Person(`name`, `born`, `died`, `citizenship`, `education`, ...)
 
 - Info about US President on Wikipedia
-  - President(name, start\_date, end\_date, vice\_president, preceded\_by,
-    succeeded\_by)
+  - President(`name`, `start_date`, `end_date`, `vice_president`, `preceded_by`,
+    `succeeded_by`)
 
 - Tour de France: historical rider participation information
-  - Rider(Name, Born, Team-name, Coach, Sponsor, Year)
+  - Rider(`name`, `born`, `team_name`, `coach`, `sponsor`, `year`)
 ::::
 :::: {.column width=25%}
 ![](data605/lectures_source/images/lecture_4_1/lec_4_1_slide_8_image_1.png)
@@ -211,24 +212,25 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=75%}
 - Marital status
-  - Married(**person1\_ssn, person2\_ssn, date\_married**, date\_divorced)
+  - Married(**`person1_ssn`, `person2_ssn`, `date_married`**, `date_divorced`)
 
 - Bank account
-  - Account(cust\_ssn, **account\_number**, cust\_name, balance, cust\_address)
+  - Account(`cust_ssn`, **`account_number`**, `cust_name`, `balance`,
+  `cust_address`)
 
 - Research assistantship at UMD
-  - RA(**student\_id, project\_id**, supervisor\_id, appt\_time,
-    **appt\_start\_date**, appt\_end\_date)
+  - RA(**`student_id`, `project_id`**, `supervisor_id`, `appt_time`,
+    `appt_start_date`, `appt_end_date`)
 
 - Information typically found on Wikipedia
-  - Person(**Name, Born, Died, Citizenship, Education, ...**)
+  - Person(**`name`, `born`, `died`, `citizenship`**, `education`, ...)
 
 - Info about US President on Wikipedia
-  - President(**name, start\_date**, end\_date, vice\_president, preceded\_by,
-    succeeded\_by)
+  - President(**`name`, `start_date`**, `end_date`, `vice_president`, `preceded_by`,
+    `succeeded_by`)
 
 - Tour de France: historical rider participation information
-  - Rider(**Name, Born, Team-name,** Coach, Sponsor, **Year**)
+  - Rider(**`name`, `born`, `team_name`**, `coach`, `sponsor`, **`year`**)
 ::::
 :::: {.column width=25%}
 ![](data605/lectures_source/images/lecture_4_1/lec_4_1_slide_9_image_1.png)
@@ -239,7 +241,7 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=60%}
 
-- **Foreign key** = primary key of another relation
+- @Foreign key@ = primary key of another relation
   - E.g., `(ID)` from `student` in `takes`, `advisor`
   - `takes` is the "referencing relation", has the foreign key
   - `student` is the "referenced relation", has the primary key
@@ -250,7 +252,7 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Foreign key constraint**: for each row, the primary key tuple must exist
+- @Foreign key constraint@: for each row, the primary key tuple must exist
   - Aka referential integrity constraint
   - If `(student101, DATA605)` is in `takes`, there must be `student101` in
     `student`
@@ -261,19 +263,19 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=70%}
 
-- **Relation**: set of tuples
+- @Relation@: set of tuples
 
-- **Relational algebra**: operations on relations producing a new relation
+- @Relational algebra@: operations on relations producing a new relation
   - Unary: selection, projection, rename
   - Binary: union, set difference, intersection, Cartesian product, join
 
-- **Selection $\Sigma$**: select tuples satisfying a predicate
+- @Selection $\Sigma$@: select tuples satisfying a predicate
   - E.g., select `instructor` tuples where `dept_name = "Physics"`
 
-- **Projection $\pi$**: return tuples with subset of attributes
+- @Projection $\pi$@: return tuples with subset of attributes
   - E.g., project `instructor` tuples with `(name, salary)`
 
-- **Set operations**: union, intersection, set difference
+- @Set operations@: union, intersection, set difference
   - Must be compatible (same attributes)
 ::::
 :::: {.column width=30%}
@@ -293,7 +295,7 @@ UMD DATA605 - Big Data Systems
 
 * Relational Algebra: 2/4
 
-- **Cartesian product**: combine two relations into a new one
+- @Cartesian product@: combine two relations into a new one
   - `instructor` = `(ID, name, dept_name, salary)`
   - `teaches` = `(ID, course_id, sec_id, semester, year)`
 
@@ -323,7 +325,7 @@ UMD DATA605 - Big Data Systems
 
 * Relational Algebra: 3/4
 
-- **Join**: composition of two operations
+- @Join@: composition of two operations
   - Cartesian product
   - Selection based on equality between two fields
   - E.g., `instructor` x `teaches` when `instructor.ID = teaches.ID`
@@ -354,15 +356,15 @@ UMD DATA605 - Big Data Systems
 * Relational Algebra: 4/4
 ::: columns
 :::: {.column width=55%}
-- **Query**: combination of relational algebra operations
+- @Query@: combination of relational algebra operations
   - E.g., _"find `course_id` from table section for fall 2017"_
 
-- **Assignment**: assign parts of relational algebra to temporary relation
+- @Assignment@: assign parts of relational algebra to temporary relation
   variables
   - Write a query as a sequential program
   - E.g., _"find `course_id` for classes in both fall 2017 and spring 2018"_
 
-- **Equivalent queries**: two queries giving the same result on any DB instance
+- @Equivalent queries@: two queries giving the same result on any DB instance
   - Some formulations are more efficient
 ::::
 :::: {.column width=40%}

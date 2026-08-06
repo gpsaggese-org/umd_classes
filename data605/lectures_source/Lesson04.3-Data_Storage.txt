@@ -27,7 +27,7 @@ UMD DATA605 - Big Data Systems
 
 - **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
-- **References**
+- @References@
   - Silberschatz et al. 2020, Chap 12, Physical Storage Systems
   - Silberschatz et al. 2020, Chap 13: Data Storage Structures
 
@@ -43,18 +43,18 @@ UMD DATA605 - Big Data Systems
 
 * Storage Characteristics
 
-- **Storage media trade-offs**:
+- @Storage media trade-offs@:
   - Speed of access (e.g., 500-3,500 MB/sec)
   - Cost per data unit (e.g., 50 USD/TB)
   - Medium reliability
 
-- **Volatile vs non-volatile storage**
+- @Volatile vs non-volatile storage@
   - _Volatile_: loses contents when power is switched off
   - _Non-volatile_: retains contents even after power is switched off
 
 :::columns
 ::::{.column width=70%}
-- **Sequential vs random access**
+- @Sequential vs random access@
   - _Sequential_: read the data contiguously
     \small
     ```
@@ -84,12 +84,12 @@ _Commodore 64 cassette player_
 :::: {.column width=55%}
 \footnotesize
 
-- **Cache**
+- @Cache@
   - Fastest, most costly
   - ~MBs on chip
   - DB developers consider cache effects
 
-- **Main memory**
+- @Main memory@
   - Up to 100s of GBs
   - Typically can't store entire DB
   - Volatile
@@ -102,31 +102,31 @@ _Commodore 64 cassette player_
 :::
 
 \footnotesize
-- **Flash memory / SSDs**
+- @Flash memory / SSDs@
   - Less expensive than RAM, more than magnetic disk
   - Non-volatile, random access
 
-- **Magnetic disk**
+- @Magnetic disk@
   - Long-term online storage
   - Non-volatile
 
-- **Optical disk (CD, Blu-ray)**
+- @Optical disk (CD, Blu-ray)@
   - Mainly read-only
 
-- **Magnetic tapes**
+- @Magnetic tapes@
   - Backup, archival data
   - Stored long-term, e.g., for legal reasons
   - Sequential-access
 
 * How Important Is Memory Hierarchy?
 
-- **Trade-offs have shifted** over the last 10-15 years
+- @Trade-offs have shifted@ over the last 10-15 years
 
-- **Innovations**
+- @Innovations@
   - Fast networks, SSDs, large memories
   - Data volume is growing rapidly
 
-- **Observations**
+- @Observations@
   - It is faster to access another computer's memory through a network than your
     own disk
   - Cache plays a crucial role
@@ -135,24 +135,24 @@ _Commodore 64 cassette player_
   - Disk considerations are less important
     - Disks still store most data today
 
-- **Algorithms depend on available technology**
+- @Algorithms depend on available technology@
 
 ## Magnetic Disks / SSDs
 
 * Connecting Disks to a Server
 
-- **Disks** (magnetic and SSDs) connect to computers via:
+- @Disks@ (magnetic and SSDs) connect to computers via:
   - High-speed bus interconnections
   - High-speed networks
 
-- **High-speed interconnections**
+- @High-speed interconnections@
   - Serial ATA (SATA)
   - Serial Attached SCSI (SAS)
   - NVMe (Non-Volatile Memory Express)
 
-- **High-speed networks**
+- @High-speed networks@
   - Storage Area Network (SAN): iSCSI, Fibre Channel, InfiniBand
-  - **Network Attached Storage (NAS)**
+  - @Network Attached Storage (NAS)@
     - Provides a file-system interface (e.g., NFS)
     - Cloud storage: Data stored in the cloud, accessed via API, object store,
       high latency
@@ -161,7 +161,7 @@ _Commodore 64 cassette player_
 :::columns
 ::::{.column width=50%}
 
-- **1956**
+- @1956@
   - IBM RAMAC
   - 24" platters
   - 5 million characters
@@ -177,7 +177,7 @@ _Commodore 64 cassette player_
 :::columns
 ::::{.column width=30%}
 
-- **1979**
+- @1979@
   - Seagate
   - 5MB
 ::::
@@ -187,7 +187,7 @@ _Commodore 64 cassette player_
 ::::
 ::::{.column width=30%}
 
-- **1998**
+- @1998@
   - Seagate
   - 47GB
 ::::
@@ -201,7 +201,7 @@ _Commodore 64 cassette player_
 :::columns
 ::::{.column width=30%}
 
-- **2006**
+- @2006@
   - Western Digital
   - 500GB
 ::::
@@ -214,20 +214,20 @@ _Commodore 64 cassette player_
 :::columns
 ::::{.column width=50%}
 
-- **Platters**
+- @Platters@
   - Rigid metal with magnetic material on both surfaces
   - Spins at 5400 or 7200 RPM
   - _Tracks_ subdivided into _sectors_ (smallest unit read/written)
 
-- **Read-write heads**
+- @Read-write heads@
   - Read/write data magnetically
   - Spinning creates a cushion maintaining heads a few microns from the surface
   - A _cylinder_ is the i-th track of all platters (read/written together)
 
-- **Arm**
+- @Arm@
   - Moves all heads along the disks
 
-- **Disk controller**
+- @Disk controller@
   - Accepts commands to read/write a sector
   - Operates arm/heads
   - Remaps bad sectors to a different location
@@ -243,10 +243,10 @@ _Commodore 64 cassette player_
 :::columns
 ::::{.column width=65%}
 
-- **Capacity**
+- @Capacity@
   - 10 terabytes and more
 
-- **Access time**
+- @Access time@
   - Time to start reading data
   - Seek time
     - Move arm across cylinders (2-20ms)
@@ -258,7 +258,7 @@ _Commodore 64 cassette player_
 ::::
 :::
 
-- **Data-transfer rate**
+- @Data-transfer rate@
   - Transfer begins once data is reached
   - Transfer rate: 50-200MB/sec
   - Sector (disk block): logical unit of storage (4-16KB)
@@ -266,13 +266,13 @@ _Commodore 64 cassette player_
   - Random access: each request requires a seek
     - IOPS: number of random single block accesses per second (50-200 IOPS)
 
-- **Reliability**
+- @Reliability@
   - Mean time to failure (MTTF): average time system runs without failure
   - HDD lifespan: ~5 years
 
 * Accessing Data Speed
 
-- **Random data transfer rates**
+- @Random data transfer rates@
   - Time to read a random sector
   - It has 3 components
     - _Seek time_: Time to seek to the track (~4-10ms)
@@ -282,11 +282,11 @@ _Commodore 64 cassette player_
     - Randomly accessed blocks
     - 100 block transfers (100/sec x 4 KB/block = 400 KB/s)
 
-- **Serial data transfer rates**
+- @Serial data transfer rates@
   - Data transfer rate without seek
   - 30-50MB/s to 200MB/s
 
-- **Seeks are bad!**
+- @Seeks are bad!@
 
 * Solid State Disk (SSD)
 :::columns
@@ -295,10 +295,10 @@ _Commodore 64 cassette player_
   - Better than HDD for all metrics, more expensive per GB
   - Like non-volatile RAM (NAND and NOR)
 
-- **Capacity**
+- @Capacity@
   - 250-500 GB (vs 1-10 TB for HDD)
 
-- **Access time**
+- @Access time@
   - Latency for random access is 1,000x smaller than HDD
     - E.g., 20-100 us (vs 10 ms for HDDs)
   - Multiple random requests (e.g., 32) in parallel
@@ -311,7 +311,7 @@ _Commodore 64 cassette player_
 ::::
 :::
 
-- **Data-transfer rate**
+- @Data-transfer rate@
   - 1 GB/s (vs 200 MB/s for HDD)
   - Typically limited by interface speed
   - Reads and writes ~500 MB/s for SATA and 2-3 GB/s for NVMe
@@ -319,7 +319,7 @@ _Commodore 64 cassette player_
   - Writing to SSD is slower than reading (~2-3x)
     - Requires erasing all pages in the block
 
-- **Reliability**
+- @Reliability@
   - Limit to how many times a flash page can be erased (~1M times)
 
 ## RAID
@@ -327,9 +327,9 @@ _Commodore 64 cassette player_
 * RAID
 :::columns
 ::::{.column width=65%}
-- **RAID** = Redundant Array of Independent Disks
+- @RAID@ = Redundant Array of Independent Disks
 
-- **Problem**
+- @Problem@
   - Storage capacity is growing exponentially
   - Data-storage needs are growing even faster
   - There is a need for more disks
@@ -340,14 +340,14 @@ _Commodore 64 cassette player_
 ![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_17_image_1.png)
 ::::
 :::
-- **Observations**
+- @Observations@
   - Disks are cheap
   - Failures are costly
   - Use extra disks for reliability
     - Store data redundantly
     - Data survives disk failure
 
-- **Goal**
+- @Goal@
   - Present a logical view of a large, reliable disk from many unreliable disks
   - Different RAID levels balance reliability and performance
 
@@ -355,7 +355,7 @@ _Commodore 64 cassette player_
 :::columns
 ::::{.column width=60%}
 
-- **Reliability**
+- @Reliability@
   - Use redundancy
     - Store data multiple times: e.g., mirroring
     - Reconstruct data if a disk fails
@@ -364,7 +364,7 @@ _Commodore 64 cassette player_
     - Consider power failures and natural disasters
     - Aging disks increase failure probability
 
-- **Performance**
+- @Performance@
   - Parallel access to multiple disks: e.g., mirroring, increases read requests
   - Stripe data across multiple disks: Increases transfer rate
 ::::
@@ -377,7 +377,7 @@ _Commodore 64 cassette player_
 :::columns
 ::::{.column width=70%}
 - = a technique used for controlling errors in data transmission over unreliable communication channels
-- **Idea**:
+- @Idea@:
   - the sender encodes the message in a redundant way
   - the receiver can detect errors and correct (a limited number of) errors
 - 1940-1960s: Hamming, Reed-Solomon, Shannon, Viterbi
@@ -403,12 +403,12 @@ _Commodore 64 cassette player_
 * RAID Levels
 :::columns
 ::::{.column width=60%}
-- **RAID 0: Striping / no redundancy**
+- @RAID 0: Striping / no redundancy@
   - Array of independent disks
   - Same access time
   - Increase transfer rate
 
-- **RAID 1: Mirroring**
+- @RAID 1: Mirroring@
   - Copy of disks
   - If one disk fails, you have data copy
     - Double redundancy like ECC
@@ -435,16 +435,16 @@ _Commodore 64 cassette player_
 * RAID Levels
 :::columns
 ::::{.column width=60%}
-- **RAID 2: Memory-style error correction**
+- @RAID 2: Memory-style error correction@
   - Use extra bits to reconstruct data (like ECC in RAM)
   - Trade-off error detection and recovery levels
 
-- **RAID 3: Interleaved parity**
+- @RAID 3: Interleaved parity@
   - One disk contains parity for main data disks
   - Handle single disk failure
   - Little overhead (only 25%)
 
-- **RAID 5: Block-interleaved distributed parity**
+- @RAID 5: Block-interleaved distributed parity@
   - Distributed parity blocks instead of bits
 ::::
 ::::{.column width=40%}
@@ -472,10 +472,10 @@ _Commodore 64 cassette player_
 ::::{.column width=50%}
 - Main choice between RAID 0, RAID 1, and RAID 5
 
-- **RAID 0 (striping)**
+- @RAID 0 (striping)@
   - Better performance, no reliability
 
-- **RAID 1 (mirroring)**
+- @RAID 1 (mirroring)@
   - Better performance and reliability
   - High cost
   - E.g., to write a single block
@@ -483,7 +483,7 @@ _Commodore 64 cassette player_
     - RAID 5: 2 block reads, 2 block writes
   - Preferred for high update rate, small data (e.g., log disks)
 
-- **RAID 5 (interleaved parity)**
+- @RAID 5 (interleaved parity)@
   - Lower storage cost
   - Preferred for low update rate, large data (e.g., analytics)
 ::::
@@ -605,18 +605,18 @@ _Commodore 64 cassette player_
 //::::
 //::::{.column width=50%}
 //
-//- **Query Processing Engine**
+//- @Query Processing Engine@
 //  - Execute user query
 //  - Specify page sequence for memory
 //  - Operate on tuples for results \vspace{1cm}
 //
-//- **Buffer Manager**
+//- @Buffer Manager@
 //  - Transfer pages from disk to memory
 //  - Manage limited memory
 //
 //\vspace{1cm}
 //
-//- **Storage hierarchy**
+//- @Storage hierarchy@
 //  - Map tables to files
 //  - Map tuples to disk blocks
 //::::

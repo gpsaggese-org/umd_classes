@@ -1,0 +1,5274 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+\usepackage{listings}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{10 mm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+\newcommand{\black}[1]{\textcolor{black}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\brown}[1]{\textcolor{brown}{#1}}
+\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
+\newcommand{\gray}[1]{\textcolor{gray}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\olive}[1]{\textcolor{olive}{#1}}
+\newcommand{\orange}[1]{\textcolor{orange}{#1}}
+\newcommand{\purple}[1]{\textcolor{purple}{#1}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\teal}[1]{\textcolor{teal}{#1}}
+\newcommand{\violet}[1]{\textcolor{violet}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+\begin{columns}[T]
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/UMD_Logo.png}}
+\end{column}
+
+\begin{column}{0.75\linewidth}
+\vspace{0.4cm}
+\begingroup \large
+
+MSML610: Advanced Machine Learning \endgroup
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begingroup \Large
+
+\textbf{\[\text{\blue{Lesson 08.4: }}\]} \endgroup
+
+\vspace{1cm}
+
+\begin{columns}[T]
+\begin{column}{0.75\linewidth}
+\textbf{Instructor}: Dr.~GP Saggese,
+\href{gsaggese@umd.edu}{\textcolor{blue}{\underline{gsaggese@umd.edu}}}
+
+\textbf{References}:
+
+\begin{itemize}
+\tightlist
+\item
+  Facure, Causal Inference in Python, 2023
+\end{itemize}
+\end{column}
+
+\begin{column}{0.2\linewidth}
+\includegraphics[width=1.5cm,height=\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg}
+
+\includegraphics[width=1.5cm,height=\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_Book_of_why.jpg}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content}
+\begin{itemize}
+\tightlist
+\item
+  \emph{\textbf{\textcolor{red}{Introduction to Causal Inference}}}
+\item
+  Randomized Experiments and Stats Review
+\item
+  Graphical Causal Models
+\item
+  The Unreasonable Effectiveness of Linear Regression
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Feature Selection Dilemma
+  \end{itemize}
+\item
+  Propensity score
+\item
+  Effect heterogeneity
+\item
+  Metalearners
+\item
+  Difference-in-differences
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Canonical Difference-in-Differences
+  \item
+    Identification Assumption
+  \end{itemize}
+\item
+  Synthetic control
+\item
+  Geo and switchback experiments
+\item
+  Non-compliance and instruments
+\item
+  Next steps
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Sales example}
+\protect\phantomsection\label{sales-example}
+\begin{itemize}
+\item
+  There are stores that put \textbf{\textcolor{red}{product on sales}}
+  for \textbf{\textcolor{darkgreen}{Christmas}}
+
+  \begingroup
+  \centering
+
+  \includegraphics[width=0.6\linewidth,height=\textheight,keepaspectratio]{msml610/lectures_source/figures/L08.4.xmas_sales_df.png}
+  \endgroup
+
+  where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textcolor{blue}{\texttt{store}}: id of the store
+  \item
+    \textcolor{blue}{\texttt{weeks\_to\_xmas}}: how many weeks before
+    Christmas the measurement was done
+  \item
+    \textcolor{blue}{\texttt{avg\_week\_sales}}: how much they sold in
+    average
+  \item
+    \textcolor{blue}{\texttt{is\_on\_sale}}: if store puts product on
+    sale
+  \item
+    \textcolor{blue}{\texttt{weekly\_amount\_on\_sale}}: how much that
+    store has sold in that week
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Causal inference question}}: \emph{``What is
+  the impact of \(T\) on \(Y\)?''}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., what is the impact of \textcolor{blue}{\texttt{is\_on\_sale}}
+    on \textcolor{blue}{\texttt{weekly\_amount\_sold}}?
+  \item
+    E.g., when is the best moment to have sales (i.e.,
+    \textcolor{blue}{\texttt{weeks\_to\_xmas}})?
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Definitions}
+\protect\phantomsection\label{definitions}
+\begin{columns}[T]
+\begin{column}{0.8\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Unit of analysis}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The entity for which outcomes are measured
+  \end{itemize}
+\end{itemize}
+
+\begingroup \small
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+\textbf{Study} & \textbf{Unit of analysis} \\
+\midrule\noalign{}
+\endhead
+Drug experiment & Patient \\
+Marketing experiment & Customer \\
+Sales promotion & Store or product \\
+Education policy & Student \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\endgroup
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{darkgreen}{Treatment $T$}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(T_i = 1\) if unit \(i\) has received the treatment
+  \item
+    Sometimes \(T\) is denoted with \(D\)
+  \item
+    E.g., \textcolor{blue}{\texttt{is\_on\_sale}} at
+    \textcolor{blue}{\texttt{weeks\_to\_xmas}},
+    \textcolor{blue}{\texttt{is\_on\_sale}},
+    \textcolor{blue}{\texttt{received\_discount}},
+    \textcolor{blue}{\texttt{saw\_ad}}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Outcome $Y$}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The variable one wants to influence, \(Y_i\)
+  \item
+    E.g., \textcolor{blue}{\texttt{weekly\_amount\_sold}}
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.1.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{The Fundamental Problem of Causal Inference}
+\protect\phantomsection\label{the-fundamental-problem-of-causal-inference}
+\begin{itemize}
+\tightlist
+\item
+  \emph{``You can never observe the same unit with and without
+  treatment''}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    One potential outcome is real, the other remains counterfactual
+  \end{itemize}
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Example}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Plot outcome \textcolor{blue}{\texttt{weekly\_amount\_sold}}
+    conditioned on treatment \textcolor{blue}{\texttt{is\_on\_sale}}
+  \item
+    Stores with a sale sell more (from 50 to 150)
+  \item
+    Matches intuition: \emph{``people buy more when prices are low due
+    to sales''}
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L08.4.xmas_boxplot.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{darkgreen}{Is it true?}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Maybe only larger businesses can afford aggressive price drops?
+  \item
+    Maybe customers buy close to Christmas anyway?
+  \end{itemize}
+\item
+  Observing both counterfactual situations would reveal the effect of
+  price drops (but it is \textbf{\textcolor{blue}{impossible}})
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Causal Model}
+\protect\phantomsection\label{causal-model}
+\begin{itemize}
+\tightlist
+\item
+  A \textbf{\textcolor{red}{causal model}} is a series of one-way
+  assignments \(\leftarrow\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Causality is non-reversible: you can't rearrange the equation
+  \end{itemize}
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.6\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Example}} \[
+  \left\{
+  \begin{aligned}
+  & T \leftarrow f_t(u_t) \\
+  & Y \leftarrow f_y(T, u_y) \\
+  \end{aligned}
+  \right.
+  \] where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(u_t, u_y\) are \emph{exogenous} variables (outside the model)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Account for everything not covered by model variables
+    \end{itemize}
+  \item
+    Treatment \(T\) and \(u_y\) cause outcome \(Y\)
+  \item
+    \(T\) and \(Y\) are \emph{endogenous} variables (inside the model)
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.35\linewidth}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.2.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Causal Model: Sales Example}
+\protect\phantomsection\label{causal-model-sales-example}
+\begin{columns}[T]
+\begin{column}{0.6\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  Causal model for sales example: \[
+  \small
+  \left\{
+  \begin{aligned}
+  & BusinessSize \leftarrow f_s(u_s) \\
+  & IsOnSales \leftarrow f_t(BusinessSize, u_t) \\
+  & AmountSold \leftarrow f_y(IsOnSales, BusinessSize, u_y) \\
+  \end{aligned}
+  \right.
+  \]
+\end{itemize}
+\end{column}
+
+\begin{column}{0.35\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.3.png}}
+\end{column}
+\end{columns}
+
+\vspace{0.5cm}
+
+\begin{itemize}
+\tightlist
+\item
+  One can make an assumption of linear model for \(f_y(.)\) and get:
+  \[AmountSold = \alpha + \beta_1 IsOnSales + \beta_2 BusinessSize + \varepsilon\]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Applying a Treatment to Sales Example}
+\protect\phantomsection\label{applying-a-treatment-to-sales-example}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Assumption}}: the causal model is: \[
+  \small
+  \left\{
+  \begin{aligned}
+  & T \leftarrow f_t(u_t) \\
+  & Y \leftarrow f_y(T, u_y) \\
+  \end{aligned}
+  \right.
+  \]
+\item
+  \textbf{\textcolor{blue}{Question}}: \emph{``what would happen to the
+  outcome \(Y\) if I were to set the treatment to \(t_0\)?''} \[
+  \small
+  \left\{
+  \begin{aligned}
+  & T \leftarrow t_0 \\
+  & Y \leftarrow f_y(T, u_y) \\
+  \end{aligned}
+  \right.
+  \]
+\item
+  The intervention is represented by the \(do()\) operator, e.g.,
+  \(do(T = t_0)\)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Conditioning vs Intervention}
+\protect\phantomsection\label{conditioning-vs-intervention}
+\begin{itemize}
+\item
+  \emph{Conditioning} represent what happens to businesses that make a
+  price cut \[
+  \EE[AmountSold | isOnSales = 1]
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Filter samples for business that \emph{decide} to cut prices
+  \item
+    Some business (e.g., large businesses) are \emph{self-selecting} to
+    cut prices
+  \end{itemize}
+\item
+  \emph{Intervention} is what happens if \emph{we force} every business
+  to engage in sales \[
+  \EE[AmountSold | do(IsOnSales = 1)]
+  \]
+\item
+  \textbf{\textcolor{red}{Remark}}: Conditioning and intervention are
+  different \[
+  \small
+  \EE[AmountSold | isOnSales = 1] \ne \EE[AmountSold | do(IsOnSales = 1)]
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Individual Treatment Effect}
+\protect\phantomsection\label{individual-treatment-effect}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: the impact of the treatment
+  \(T\) on the outcome \(Y\) for an individual unit \(i\) is:
+  \[\tau_i \defeq Y_i|do(T=t_1) - Y_i|do(T=t_0)\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The effect \(\tau_i\) of going from treatment \(t_0\) to \(t_1\) for
+    unit \(i\) is the difference in the outcome of that unit under
+    \(t_1\) compared to \(t_0\)
+  \end{itemize}
+\item
+  E.g., for the sales example
+  \[AmountSold_i|do(IsOnSales=1) - AmountSold_i|do(IsOnSales=0)\]
+\item
+  \textbf{\textcolor{blue}{Problem}}: you can only observe one term due
+  to the fundamental problem of causal inference
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Represent it in theory, but can't recover it from data
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Potential Outcomes}
+\protect\phantomsection\label{potential-outcomes}
+\begin{itemize}
+\item
+  Aka ``counterfactuals''
+\item
+  \textbf{\textcolor{red}{Definition}}: the \(do()\) operator represents
+  \emph{``unit \(i\) outcome \(Y\) if treatment is set to \(t\)''}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(Y_{t,i}\) is Rubin's notation
+  \item
+    \(Y_i | do(T_i = t)\) is Pearl's notation
+  \end{itemize}
+\item
+  For binary treatment:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(Y_{0i}\) potential outcome without treatment
+  \item
+    \(Y_{1i}\) potential outcome with treatment
+  \item
+    One is ``factual'' (i.e., observable)
+  \item
+    The other is ``counterfactual'' (i.e., theoretical, not observable)
+  \item
+    Alternative expression: \[
+    Y_i = T_i * Y_{1i} + (1 - T_i) * Y_{0i} = Y_{0i} + (Y_{1i} - Y_{0i}) * T_i
+    \]
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Remark}}: there is a difference between
+  conditioning and intervention
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(Y|do(T=t)\) is \emph{``what a business would sell if it cut
+    prices''}
+  \item
+    \(Y|T=t\) is \emph{``what a business that cut the prices sold''}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Consistency of the Treatment}
+\protect\phantomsection\label{consistency-of-the-treatment}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Assumption}}: consistency of the treatment
+  means that there is a single version of the treatment
+
+  \begin{itemize}
+  \tightlist
+  \item
+    I.e., \(T = T_i\) means only one thing
+  \item
+    No hidden multiple versions of the treatment
+  \end{itemize}
+\item
+  E.g.,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A drug can come in multiple dosages, but only one is used
+  \item
+    Giving a discount coupon: the value of the coupon is the same, it's
+    given only once, in way that is always equivalent
+  \item
+    In \emph{``help from a financial planner''}: is ``help'' a one-time
+    consultation or regular advice?
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{No Interference (SUTVA)}
+\protect\phantomsection\label{no-interference-sutva}
+\begin{itemize}
+\item
+  Aka ``Stable Unit of Treatment Value (SUTVA)''
+\item
+  \textbf{\textcolor{red}{Assumption}}: the effect of one unit is not
+  influenced by the treatment of other units
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., there are no spillovers or network effects
+  \end{itemize}
+\item
+  E.g., vaccinating one person makes other close people less likely to
+  catch the illness even if they don't get the treatment
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Average Treatment Effect}
+\protect\phantomsection\label{average-treatment-effect}
+\begin{itemize}
+\item
+  Assume you can see both potential outcomes \(Y_{1i}\) and \(Y_{0i}\)
+  at the same time (which is impossible)
+\item
+  \textbf{\textcolor{red}{Definition}}: Average Treatment Effect (ATE)
+  is the impact that the treatment \(T\) would have on the average (on
+  all units): \[
+  ATE \defeq \EE[Y_{1i} - Y_{0i}] = \EE[Y | do(T=1)] - \EE[Y | do(T=0)]
+  \]
+\item
+  E.g., average impact of price cuts on amount sold: \[
+  ATE = \EE[AmountSold_{1i} - AmountSold_{0i}]
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Average Treatment effect on the Treated (ATT)}
+\protect\phantomsection\label{average-treatment-effect-on-the-treated-att}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: Average Treatment effect on the
+  Treated (ATT) is the impact of the treatment on the units that got the
+  treatment: \[
+  ATT = \EE[(Y_{1i} - Y_{0i}) | T=1]
+  \]
+\item
+  E.g., how much sales increase for the business engaged in price cuts:
+  \[
+  ATT = \EE[(AmountSold_{1i} - AmountSold_{0i}) | IsOnSales=1]
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Conditional Average Treatment Effects (CATE)}
+\protect\phantomsection\label{conditional-average-treatment-effects-cate}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: Conditional Average Treatment
+  Effects (CATE) is the impact of the treatment on the units in a group
+  defined by \(X=x\) \[
+  CATE = \EE[(Y_{1i} - Y_{0i}) | X=x]
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    It's like \(ATE\) but on a subgroup with a certain characteristics
+  \item
+    Note that there is both intervention and conditioning
+  \end{itemize}
+\item
+  E.g., the impact of having sales during the week of Christmas: \[
+  CATE = \EE[AmountSold_{1i} - AmountSold_{0i} | weeksToXmas = 0]
+  \]
+\item
+  \textbf{\textcolor{darkgreen}{Remark}}: We can \emph{define} these
+  quantities \(ATE\), \(CATE\), \(ATT\), but not \emph{measure} them
+  directly
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Because we can't observe both potential outcomes \(Y_{1i}\) and
+    \(Y_{0i}\) at the same time
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Remark}}: We can extend the definition to
+  continuous treatments using partial derivatives of \(Y_i\),
+  \(\frac{\partial \mathbb{\EE}[Y_i]}{\partial t}\)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bias}
+\protect\phantomsection\label{bias}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: \emph{bias} is what makes
+  association different from causation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Treated and untreated groups differ in ways other than treatment
+  \end{itemize}
+\item
+  The claim \emph{``cutting prices increases the amount sold by a
+  business''} can be questioned with:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``Those businesses that cut prices could probably have sold
+    more anyway, even with no price cuts''}
+  \end{itemize}
+\item
+  Formally bias refers to potential outcomes
+
+  \begin{itemize}
+  \tightlist
+  \item
+    We are trying to estimate:
+    \[\EE[Y_{it}] \triangleq \EE[Y_i | do(T=t)]\] using
+    \(\EE[Y_i | T=t]\), which is a ``biased estimator'' (i.e., an
+    incorrect one)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Bias Equation}
+\protect\phantomsection\label{the-bias-equation}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Causal inference}} is interested in:
+  \begingroup
+  \small
+  $$
+  \EE[Y_1 - Y_0] = \EE[Y | do(T = 1)] - \EE[Y | do(T = 0)]
+  $$
+  \endgroup
+\item
+  \textbf{\textcolor{blue}{What is measured}} is: \begingroup
+  \small
+  $$
+  \EE[Y | T = 1] - \EE[Y | T = 0]
+  $$
+  \endgroup
+\item
+  Let's express one in terms of the other
+\item
+  Replacing the observed outcomes (each unit has two potential outcomes
+  but only one can be observed and the other is 0) \begingroup
+  \small
+  $$
+  Y | T=1 = (Y_1 | T=1) + \cancel{(Y_0 | T=1)} = Y_1 | T=1
+  $$
+  \endgroup
+\item
+  Adding and subtracting \(\EE[Y_0 | T=1]\), reordering and merging
+  expectations // Make entire block smaller \begingroup
+  \small
+  $$
+  \underbrace{\EE[Y | T = 1] - \EE[Y | T = 0]}_{\text{Measured}} =
+  \underbrace{\EE[Y_1 - Y_0 | T = 1]}_{\text{ATT}} +
+  \underbrace{\EE[Y_0 | T = 1] - \EE[Y_0 | T = 0]}_{\text{Bias}}
+  $$
+  \endgroup
+\item
+  Association = causation + bias term from group difference
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Bias Equation: Remarks}
+\protect\phantomsection\label{the-bias-equation-remarks}
+\begin{itemize}
+\item
+  Bias equation says: \[
+  \text{Association = causation + a bias term}
+  \] \begingroup
+  \small
+  $$
+  \underbrace{\EE[Y | T = 1] - \EE[Y | T = 0]}_{\text{Measured}} =
+  \underbrace{\EE[Y_1 - Y_0 | T = 1]}_{\text{ATT}} +
+  \underbrace{\EE[Y_0 | T = 1] - \EE[Y_0 | T = 0]}_{\text{Bias}}
+  $$
+  \endgroup
+\item
+  \textbf{\textcolor{red}{Remark}}: bias arises from differences between
+  treated and control groups, besides the treatment
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Unobservable factors change together with treatment (i.e.,
+    confounders)
+  \end{itemize}
+\item
+  In sales example, treated and untreated businesses differ beyond price
+  cuts
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., differ in size, location, day of the week on which they have a
+    sale, cities they are located in
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Corollary}}: for association to be causation,
+  treated and control units must be \emph{exchangeable}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Bias Equation: Visual Example}
+\protect\phantomsection\label{the-bias-equation-visual-example}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  Plot \textcolor{blue}{\texttt{weekly\_amount\_sold}} by
+  \textcolor{blue}{\texttt{avg\_week\_sales}} (business size)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Color points: treatment (red) / control (blue)
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L08.4.Association_Causation_Bias0.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  Treated units concentrated on the right (not exchangeable)
+\end{itemize}
+
+\vspace{0.5cm}
+
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  Difference in amount sold between groups has two causes
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Treatment effect}: Price cut increases amount sold
+  \item
+    \emph{Business size}: Bigger businesses sell more, can do more price
+    cuts
+  \end{itemize}
+\item
+  The challenge for causal inference is to untangle the two effects
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L08.4.Association_Causation_Bias1.png}}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L08.4.Association_Causation_Bias2.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Simpson's Paradox}
+\protect\phantomsection\label{simpsons-paradox}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: trend appears in different data
+  groups but reverses or disappear when combined
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L08.4.Simpson_Paradox.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  Paradox occurs due to a confounder influencing the relationship
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Aggregated data distorts results due to hidden variable
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Simpson's Paradox: Admission Bias in University}
+\protect\phantomsection\label{simpsons-paradox-admission-bias-in-university}
+\begin{itemize}
+\tightlist
+\item
+  A university has male acceptance rate 67.5\% and female acceptance
+  rate 48.3\%
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{red}{Question}}: is there a bias against females,
+    due to lower acceptance rate?
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Solution}}: break down data by the two
+  departments, Engineering and English
+\end{itemize}
+
+\begingroup \scriptsize
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.2609}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.2174}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0652}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0652}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.2609}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0652}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0652}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Department}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Male}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Female}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+& Applicants & Accepted & Rate & Applicants & Accepted & Rate \\
+\textbf{University} & 120 & 81 & 67.5\% & 120 & 58 & 48.3\% \\
+\textbf{Engineering} & 100 & 80 & 80\% & 20 & 18 & 90\% \\
+\textbf{English} & 20 & 1 & 5\% & 100 & 40 & 40\% \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\endgroup
+
+\begin{itemize}
+\item
+  At the department level women have higher acceptance in both
+  Engineering (90\% vs 80\%) and in English (40\% vs 5\%)
+\item
+  \textbf{\textcolor{blue}{Explanation of paradox}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Engineering has high acceptance; English has low acceptance
+  \item
+    More men apply to Engineering; more women apply to English
+  \item
+    Women apply more to harder department, making their overall
+    acceptance rate appear lower
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Identifying the Treatment Effect}
+\protect\phantomsection\label{identifying-the-treatment-effect}
+\begin{itemize}
+\item
+  We can't observe \(\EE[Y_{1i} - Y_{0i}]\) since we can only observe
+  one of the potential outcomes \(Y_{1i}\) or \(Y_{0i}\), but \emph{not
+  both}
+\item
+  \textbf{\textcolor{red}{Question}}: how can we recover causal
+  quantities from observable data?
+\item
+  \textbf{\textcolor{darkgreen}{Solution}}: the bias equation says that:
+  \begingroup
+  \small
+  $$
+  \underbrace{\EE[Y | T = 1] - \EE[Y | T = 0]} =
+  \underbrace{\EE[Y_1 - Y_0 | T = 1]}_{\text{ATT}} +
+  \underbrace{\EE[Y_0 | T = 1] - \EE[Y_0 | T = 0]}_{\text{Bias}}
+  $$
+  \endgroup
+\item
+  If the treatment and the control group are comparable regardless of
+  the treatment (exchangeable), i.e., \(\EE[Y_0|T=0] = \EE[Y_0|T=1]\)
+  then:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The bias term vanishes: \(bias = 0\)
+  \item
+    The measured difference in means equals
+    \(ATT = \EE[(Y_1 - Y_0) | T = 1]\)
+  \end{itemize}
+\item
+  If treatment effect is homogeneous (both groups respond similarly to
+  treatment), i.e.,
+  \(\EE[(Y_1 - Y_0) | T = 1] = \EE[(Y_1 - Y_0) | T = 0]\) then:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The measured difference of means equals \(ATE = \EE[Y_1 - Y_0]\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Sales Example}}: if businesses that cut and
+  don't cut prices are similar to each other (i.e., exchangeable), then
+  the difference in amount sold be entirely attributed to the price cut
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Independence Property (Aka Unconfoundedness)}
+\protect\phantomsection\label{independence-property-aka-unconfoundedness}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: the independence property means
+  that \emph{potential outcomes} are independent of the treatment: \[
+  (Y_0, Y_1) \perp T
+  \]
+\item
+  It's usually stated conditional on covariates:
+  \((Y_0, Y_1) \perp T | X\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Without \(X\) it implies complete randomization (like a perfect
+    experiment)
+  \item
+    In observational settings, we almost always need conditioning
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Implication}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\EE[Y_0 | T] = \EE[Y_0]\): the treatment gives no information
+    about potential outcomes
+  \item
+    \(\EE[Y_0 | T=1] = \EE[Y_0 | T=0]\): both groups have the same
+    \(Y_0\) in average (exchangeable)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Independence Property (Aka Unconfoundedness)}
+\protect\phantomsection\label{independence-property-aka-unconfoundedness-1}
+\begin{itemize}
+\tightlist
+\item
+  In \((Y_0, Y_1) \perp T\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    We are not asking for \emph{observed outcome} \(Y\) and treatment
+    \(T\) to be independent (i.e., the treatment has no effect)
+  \item
+    We are asking for each \emph{potential outcome} \(Y_0\) and \(Y_1\)
+    to be independent of the treatment
+  \item
+    \emph{``Knowing whether someone received the treatment tells you
+    nothing about what their outcome would have been without it''}
+  \item
+    Treatment assignment is as good as random, so differences in
+    outcomes can be attributed to the treatment
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Sales Example}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    We can't tell apart businesses that chose to engage in sales from
+    those that didn't
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Phases of Causal Inference}
+\protect\phantomsection\label{phases-of-causal-inference}
+\begin{itemize}
+\tightlist
+\item
+  A causal inference problem is often broken down into two steps:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    \textbf{\textcolor{red}{Identification}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Express the causal quantity of interest in terms of observable
+      data
+    \item
+      Remove the bias, making treated and untreated comparable, so that
+      all the difference can be attributed to the treatment effect
+      \[\EE[Y_0 | T=0] = \EE[Y_0 | T=1]\]
+    \item
+      You need to know how the treatment was distributed or assigned
+    \item
+      This is why data alone (observational) cannot answer causal
+      questions
+    \end{itemize}
+  \item
+    \textbf{\textcolor{blue}{Estimation}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Use data to estimate the causal quantity of interest:
+      \[\EE[Y | T=1] - \EE[Y | T=0]\]
+    \end{itemize}
+  \end{enumerate}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Randomization Removes Bias}
+\protect\phantomsection\label{randomization-removes-bias}
+\begin{itemize}
+\tightlist
+\item
+  Randomization of treatment forces independence to hold \(\implies\)
+  removes bias \[\EE[Y | T = 1] - \EE[Y | T = 0] = \EE[Y_1 - Y_0]\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The measured difference of means is the true ATE (Average Treatment
+    Effect)
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Sales Example}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Randomize the treatment, i.e., by forcing a business to cut prices
+    \[
+    \left\{
+    \begin{aligned}
+    & IsOnSales \leftarrow rand(t) \\
+    & AmountSold \leftarrow f_y(IsOnSales, u_y) \\
+    \end{aligned}
+    \right.
+    \]
+  \item
+    The dependency from \(u_t\) is replaced by assignment mechanism that
+    is:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Tied to a coin flip (unrelated to other factors in causal
+      mechanism)
+    \item
+      Fully known
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Caveat}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Randomizing eligibility doesn't mean randomizing participation
+  \item
+    E.g., online retailer randomly offered membership program
+  \item
+    But only engaged customers opted in, so self-selection remained
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-1}
+\begin{itemize}
+\tightlist
+\item
+  Introduction to Causal Inference
+\item
+  \emph{\textbf{\textcolor{red}{Randomized Experiments and Stats Review}}}
+\item
+  Graphical Causal Models
+\item
+  The Unreasonable Effectiveness of Linear Regression
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Feature Selection Dilemma
+  \end{itemize}
+\item
+  Propensity score
+\item
+  Effect heterogeneity
+\item
+  Metalearners
+\item
+  Difference-in-differences
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Canonical Difference-in-Differences
+  \item
+    Identification Assumption
+  \end{itemize}
+\item
+  Synthetic control
+\item
+  Geo and switchback experiments
+\item
+  Non-compliance and instruments
+\item
+  Next steps
+\end{itemize}
+\end{frame}
+
+\begin{frame}{A/B Testing: Example}
+\protect\phantomsection\label{ab-testing-example}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Fact}}: a common strategy among companies is
+  to:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Have a cheap / free product to attract customers
+  \item
+    Cross-sell other products that are more profitable
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Use email campaigns to sell premium product
+    \item
+      When a customer get an email and buys the premium product, they
+      are ``converted''
+    \end{itemize}
+  \end{itemize}
+\item
+  Non-randomized data show that customers receiving emails convert more
+  \[
+  \EE[ Conversion | Email = 1] > \EE[ Conversion | Email = 0]
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{darkgreen}{Problem}}: marketing team tends to
+    send emails for customers who they think they will convert (e.g.,
+    using a survey, customers who visited the website the most) \[
+    \EE[ Conversion_0 | Email = 1] > \EE[ Conversion_0 | Email = 0]
+    \]
+  \item
+    Customers would have converted even if the email was not sent
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Solution}}: make the treated and untreated
+  comparable with A/B testing
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., randomize who gets the email
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{A/B Testing: Example}
+\protect\phantomsection\label{ab-testing-example-1}
+\begin{itemize}
+\item
+  You have 3 emails:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    No email (\textcolor{blue}{\texttt{no\_email}})
+  \item
+    Long and beautiful email (\textcolor{blue}{\texttt{long}})
+  \item
+    Short and to-the-point email (\textcolor{blue}{\texttt{short}})
+  \end{itemize}
+\item
+  Collect the data (\textcolor{blue}{\texttt{id}},
+  \textcolor{blue}{\texttt{gender}}, \textcolor{blue}{\texttt{age}},
+  \textcolor{blue}{\texttt{cross\_sell\_email}},
+  \textcolor{blue}{\texttt{conversion}})
+\item
+  Compute the mean by group in
+  \textcolor{blue}{\texttt{cross\_sell\_email}}
+
+  \begingroup
+  \small
+
+  {\def\LTcaptype{none} % do not increment counter
+  \begin{longtable}[]{@{}ll@{}}
+  \toprule\noalign{}
+  cross\_sell\_email & conversion \\
+  \midrule\noalign{}
+  \endhead
+  no\_email & 0.042 \\
+  long & 0.055 \\
+  short & 0.125 \\
+  \bottomrule\noalign{}
+  \end{longtable}
+  }
+
+  \endgroup
+\item
+  Compute the ATE, i.e., difference between each treated group and
+  control \[ATE = \EE[Y | T=t] - \EE[Y | T=0]\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Sending the short and to-the-point email is best
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Caveat}}: sanity check that randomization was
+  done right
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., check if \textcolor{blue}{\texttt{gender}} and
+    \textcolor{blue}{\texttt{age}} are balanced in the groups (using a
+    statistical test)
+  \item
+    If not, might be effect is due to sending the email to a specific
+    demographic
+  \item
+    Biases sampling has large effect on small data
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Randomized Controlled Trials (RCTs)}
+\protect\phantomsection\label{randomized-controlled-trials-rcts}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Fact}}: RCTs are the most reliable way to
+  measure causal effects (gold standard)
+\item
+  \textbf{\textcolor{blue}{Problems}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Very expensive (in time and money)
+  \item
+    Potentially unethical
+  \item
+    Sometimes impossible (e.g., selection bias)
+  \end{itemize}
+\item
+  You can use an RCT as a benchmark
+
+  \begin{itemize}
+  \tightlist
+  \item
+    What is the best experiment to answer your question (even if it's
+    not) feasible?
+  \item
+    Can help discover the causal effect
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Small Size effect}
+\protect\phantomsection\label{small-size-effect}
+\begin{itemize}
+\item
+  Standard error of the mean \(SE = \frac{\sigma}{n}\) is related to the
+  sample size \(n\)
+\item
+  \textbf{\textcolor{red}{Example}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Imagine you have data about schools in terms of number of students
+    and average SAT score
+  \item
+    A frequent effect is that the top-performing schools have a small
+    number of students
+
+    \begin{itemize}
+    \tightlist
+    \item
+      An explanation is that \emph{``fewer students allows teachers to
+      give focused attention to each student''}
+    \end{itemize}
+  \item
+    \textbf{\textcolor{blue}{Counterpoint}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Also bottom 1\% of schools have few students
+    \item
+      The effect is due to standard error of the mean: more students
+      means more precise estimate and less variation due to chance
+    \item
+      This is shown by a ``triangular'' shape of
+      \textcolor{blue}{\texttt{avg\_score}} vs
+      \textcolor{blue}{\texttt{number\_of\_students}}
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L08.4.School_score_by_number_students.png}}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-2}
+\begin{itemize}
+\tightlist
+\item
+  Introduction to Causal Inference
+\item
+  Randomized Experiments and Stats Review
+\item
+  \emph{\textbf{\textcolor{red}{Graphical Causal Models}}}
+\item
+  The Unreasonable Effectiveness of Linear Regression
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Feature Selection Dilemma
+  \end{itemize}
+\item
+  Propensity score
+\item
+  Effect heterogeneity
+\item
+  Metalearners
+\item
+  Difference-in-differences
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Canonical Difference-in-Differences
+  \item
+    Identification Assumption
+  \end{itemize}
+\item
+  Synthetic control
+\item
+  Geo and switchback experiments
+\item
+  Non-compliance and instruments
+\item
+  Next steps
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Graphical Models}
+\protect\phantomsection\label{graphical-models}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Graphical Causal Models}} are DAGs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Arrows show causal direction
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Causality is non-reversible
+    \end{itemize}
+  \item
+    Missing edges means no direct causal link
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Pros}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Make causal assumptions explicit (and visual)
+  \item
+    Enable communication of causal thinking
+  \item
+    Clarify complex relationships
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Structural Causal Models}} (SCMs) use both
+  graphs and causal equations
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Email Conversion Example}
+\protect\phantomsection\label{email-conversion-example}
+\begin{itemize}
+\tightlist
+\item
+  Estimate impact of emails on conversion
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Cross-sell email = treatment \(T\)
+  \item
+    Customer converted to a new product (or not) = outcome \(Y\)
+  \end{itemize}
+\item
+  \(T\) was randomized, so:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The treatment is independent from potential outcomes
+    \((Y_0, Y_1) \perp T\)
+  \item
+    Association equals causation
+    \(\EE[Y | T=1] - \EE[Y | T=0] = \EE[Y_1 - Y_0] = ATE\)
+  \end{itemize}
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  You can't infer the independence assumption from the data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Need information about treatment mechanism (e.g., ``emails were
+    randomized'')
+  \end{itemize}
+\item
+  You believe that \textcolor{blue}{\texttt{age}},
+  \textcolor{blue}{\texttt{gender}} also cause conversion
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Other unobserved variables \(U\) (e.g., customer income, city we are
+    operating in)
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.4.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Are Consultants Worth It?}
+\protect\phantomsection\label{are-consultants-worth-it}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Example}}: You are a manager and you need to
+  decide whether to hire expensive consultants
+\item
+  \textbf{\textcolor{darkgreen}{Question}}: Which one is true?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Do expensive consultants improve business?
+  \item
+    Only very profitable businesses can afford consultants?
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Solution}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Setting up a randomized trial is difficult
+  \item
+    You need to untangle causation from association
+  \end{itemize}
+\end{itemize}
+
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.5.png}}
+\end{frame}
+
+\begin{frame}{Chains}
+\protect\phantomsection\label{chains}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: a chain is a causal graph
+  \(T \to M \to Y\):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(T\) is the treatment
+  \item
+    \(Y\) is the outcome
+  \item
+    \(M\) is ``mediator'' since it mediates the relationship between
+    \(T\) and \(Y\)
+  \end{itemize}
+\item
+  Causation flows only in the direction of the arrows
+
+  \begin{itemize}
+  \tightlist
+  \item
+    I.e., changing \(M\) affects \(Y\), but doesn't affect \(T\)
+  \end{itemize}
+\item
+  Association flows both ways
+
+  \begin{itemize}
+  \tightlist
+  \item
+    I.e., \(T\) and \(Y\) are dependent, \(T \not\!\perp Y\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Proposition}}: conditioning on mediator
+  variable blocks association flow \[(T \perp Y) | M\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The path is blocked
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Chains: Example}
+\protect\phantomsection\label{chains-example}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Example}}: consider
+  \(Study \to SolveProblems \to JobPromotion\)
+\item
+  \(JobPromotion\) is causally dependent on \(Study\)
+\item
+  The association goes both ways
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The more you study, the more likely to get a promotion
+  \item
+    The greater the chances of promotion, the greater your chance of
+    having studied (otherwise it would be difficult to get a promotion)
+  \item
+    So \(Study\) and \(JobPromotion\) are:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Dependent
+    \item
+      Not independent \(Study \cancel \perp JobPromotion\)
+    \end{itemize}
+  \end{itemize}
+\item
+  If you hold the intermediary variable fixed, i.e., conditioning on
+  \(M\), \emph{``looking for only people with the same skills at problem
+  solving''}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The dependency is blocked
+  \item
+    \(T\) and \(Y\) are independent given \(M\), i.e.,
+    \((T \perp Y) | M\)
+  \item
+    \(\EE[Y | T, M] = \EE[Y | M]\)
+  \item
+    Also the inverse \(\EE[T | Y, M] = \EE[T | M]\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Forks}
+\protect\phantomsection\label{forks}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: a fork is a causal graph
+  \(T \leftarrow X \rightarrow Y\):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(X\) is a ``confounder'' (common cause of \(T\) and \(Y\))
+  \end{itemize}
+\item
+  E.g.,
+  \(AnswerQuestion \leftarrow GoodProgrammer \rightarrow GoodEmployee\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    For this reason in tech interviews you are asked to solve problems
+    that might you never find in the job you apply for (e.g., ``invert a
+    binary tree'')
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Proposition}}: \(T\) and \(Y\) are
+  dependent \(T \not\perp Y\), even though neither causes the other
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Association flows backward through the arrows
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Proposition}}: conditioning on the common
+  cause blocks the association: \[T \cancel \perp Y, (T \perp Y) | X\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{violet}{Example}}: if you know that you are a
+    good programmer (e.g., you have an impressive resume), asking you a
+    tech question won't give new information about if you are a good
+    employee or not
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Collider}
+\protect\phantomsection\label{collider}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: a collider is a causal graph
+  \(T \rightarrow X \leftarrow Y\):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(X\) is a ``collider'' (two arrows collide at it)
+  \item
+    \(T\) and \(Y\) are independent: \(T \perp Y\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Proposition}}: conditioning on \(X\)
+  makes \(T\) and \(Y\) dependent: \(T \cancel \perp Y | X\) and opens
+  the path
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Aka ``explaining away'': one cause explains the effect, making the
+    other cause less likely
+  \item
+    Opens the path if you condition on any descendant of the collider
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Example}}:
+  \(Statistics \rightarrow Promotion \leftarrow FlatteringBoss\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    There are two ways to get a job promotion
+
+    \begin{itemize}
+    \tightlist
+    \item
+      You can be good at statistics
+    \item
+      You can flatter your boss
+    \end{itemize}
+  \item
+    If I don't know if you get or not the promotion (i.e., I don't
+    condition on \(Promotion\)) your level of statistics and flattering
+    are independent
+  \item
+    If I know you got promoted, and I know you are bad at statistics,
+    then you must be good at flattering your boss
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{D-separation}
+\protect\phantomsection\label{d-separation}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Theorem}}: a path is \emph{blocked} given a
+  conditioning set \(Z\) if and only if either condition holds:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    It contains a non-collider that has been conditioned on
+  \item
+    It contains a collider that has not been conditioned on and has no
+    descendants that have been conditioned on
+  \end{enumerate}
+\item
+  Otherwise the path is \emph{open} (nodes can be dependent)
+\item
+  \textbf{\textcolor{blue}{Theorem}}: two nodes \(A\) and \(B\) are
+  \emph{d-separated} (conditionally independent given \(Z\)) if and only
+  if all the paths between them are blocked
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Identification}
+\protect\phantomsection\label{identification}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: \emph{identification} is the
+  process of isolating causal relationship between treatment \(T\) and
+  outcome \(Y\)
+\item
+  Using causal graphs:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You can understand where the bias is coming from and thus how to
+    neutralize it
+  \item
+    Identification phase becomes equivalent to ``close all undesirable
+    flows of association''
+  \end{itemize}
+\item
+  After all sources of association are closed, the treatment behaves as
+  if it was ``randomized''
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Identification: Consultancy Example}
+\protect\phantomsection\label{identification-consultancy-example}
+\begin{columns}[T]
+\begin{column}{0.4\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  Consider the consultancy graph:
+\end{itemize}
+\end{column}
+
+\begin{column}{0.55\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.6.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  The graph has:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A fork on \textcolor{blue}{\texttt{profits\_next\_6m}}
+  \item
+    A confounder \textcolor{blue}{\texttt{profits\_prev\_6m}}
+  \item
+    A causal path \textcolor{blue}{\texttt{consultancy}} \(\to\)
+    \textcolor{blue}{\texttt{profits\_next\_6m}}
+  \item
+    A non-causal path (aka ``backdoor path'')
+    \textcolor{blue}{\texttt{profits\_prev\_6m}} \(\to\)
+    \textcolor{blue}{\texttt{profits\_next\_6m}}
+  \end{itemize}
+\item
+  To close the non-causal flows of association you need to condition on
+  the confounder, i.e., \textcolor{blue}{\texttt{profits\_prev\_6m}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Look at a group of companies with similar past performance
+  \item
+    Compare the ones that hired consultants (treated) vs the ones who
+    didn't (untreated)
+  \item
+    You are ``imposing'' conditional independence, i.e.,
+    \((Y_0, Y_1) \perp T | X\),
+    \textcolor{blue}{\texttt{profit\_next\_6m}} \(\perp\)
+    \textcolor{blue}{\texttt{consultancy}} \(|\)
+    \textcolor{blue}{\texttt{profits\_prev\_6m}}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Backdoor Adjustment}
+\protect\phantomsection\label{backdoor-adjustment}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: \emph{backdoor adjustment} means
+  closing backdoor paths by conditioning on confounders \(X\) makes the
+  causal quantity identifiable \(Y\) from observable data
+\item
+  You are inducing the ``conditional independence assumption'', i.e.,
+  \((Y_0, Y_1) \perp T | X\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    I.e., units with the same level of covariates \(X\) have potential
+    outcomes that are the same on average (it's as if they were
+    randomized)
+  \end{itemize}
+\item
+  You can then use the adjustment formula \begingroup
+  \small
+  $$
+  ATE
+    = \EE_X[ \EE[Y | T=1] - \EE[Y | T=0 ]
+    = \sum_x (\EE[Y | T=1, X=x] - \EE[Y | T=0, X=x]) \Pr(X=x)
+  $$
+  \endgroup
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Stratify by confounders \(X=x\)
+  \item
+    ATE is the weighted average of in-group \(X=x\) treated-vs-control
+    differences, weighted by group size \(\Pr(X=x)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Assumption}}: (Positivity): conditional
+  probability of treatment must be \(0 < \Pr(T | X) < 1\) (all groups of
+  X must have both treated and control units)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Confounding Bias}
+\protect\phantomsection\label{confounding-bias}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: confounding happens when there
+  is an open backdoor path through which association flows non-causally
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., treatment and outcome share a common cause
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Problem}}: it's difficult to adjust for all
+  common causes
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Some causes are unknown
+  \item
+    Known causes might be difficult to measure
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Example}}: does new management training
+  program increase employers' engagement?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{teal}{Problem}}: training is optional
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Only managers who are already doing a great job attend the program
+    \item
+      The managers that need the training the most, don't attend
+    \item
+      When you measure engagement of the teams, engagement under
+      managers who took the training is much higher
+    \item
+      There is a common cause between treatment and outcome, so they
+      move together regardless of a causal effect
+    \end{itemize}
+  \item
+    \textbf{\textcolor{cyan}{Solution}}: need to control for manager's
+    quality before taking the training
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Surrogate Confounding}
+\protect\phantomsection\label{surrogate-confounding}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Problem}}: the confounder variable might be
+  not be observable / measurable
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., you can't measure confounder ``manager quality''
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Solution}}: measure variable that can be
+  proxies for confounder
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., causes (manager's tenure, education level), effects (team's
+    attrition, past performance)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Selection bias}
+\protect\phantomsection\label{selection-bias}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: bias introduced when the
+  analysis conditions on a variable that is:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    a collider
+  \item
+    a mediator
+  \item
+    post-treatment variable
+  \end{itemize}
+\item
+  Selection bias is not only about ``bad sampling'', e.g.,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Analyze only survivors (survivorship bias)
+  \item
+    Analyze only adherent patients
+  \item
+    Self-selection
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Caveat}}: Can occur even with
+  randomization
+\item
+  \textbf{\textcolor{blue}{Solution}}: condition on variables causing
+  selection
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Cannot fully eliminate bias when:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Things causing selection are unmeasured/unmeasurable
+    \item
+      Treatment or outcome causes selection directly
+    \item
+      Unmeasured common cause between selection and outcome
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Selection bias: Example}
+\protect\phantomsection\label{selection-bias-example}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Example}}
+\item
+  A software company wants to estimate the impact of a new feature
+\item
+  Randomize rollout of the feature
+
+  \begin{itemize}
+  \tightlist
+  \item
+    10\% of the customers are randomly chosen to get the feature
+  \end{itemize}
+\item
+  You can't measure satisfaction directly so you send a survey to
+  customers in the rollout (treated) and in the control group, asking if
+  you would recommend the product
+\item
+  \textbf{\textcolor{darkgreen}{Question}}: is the difference in
+  satisfaction due entirely to causal effect of new feature?
+\end{itemize}
+
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.7.png}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Problem}}: you measure the satisfaction only
+  for the customers who responded to the survey (i.e., conditioning on
+  responding to the survey)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Selection bias through the collider: Example}
+\protect\phantomsection\label{selection-bias-through-the-collider-example}
+\begin{itemize}
+\tightlist
+\item
+  Suppose:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Treatment \(T\) affects hospitalization \(H\)
+  \item
+    Disease severity \(S\) also affects hospitalization \(H\) \[
+    T \rightarrow H \leftarrow S
+    \]
+  \item
+    \(H\) is a collider
+  \end{itemize}
+\item
+  If we analyze only hospitalized patients (conditioning on \(H\))
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(T\) and \(S\) become statistically associated
+  \item
+    Open the path between \(T\) and \(S\)
+  \item
+    This can create a false treatment effect
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Selection bias through mediator: Example}
+\protect\phantomsection\label{selection-bias-through-mediator-example}
+\begin{itemize}
+\tightlist
+\item
+  Suppose:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Treatment \(T\) affects blood pressure \(M\)
+  \item
+    Blood pressure affects stroke risk \(Y\) \[
+    T \rightarrow M \rightarrow Y
+    \]
+  \end{itemize}
+\item
+  If we adjust for \(M\):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Part of the treatment effect is blocked
+  \item
+    Estimated causal effect may be biased
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-3}
+\begin{itemize}
+\tightlist
+\item
+  Introduction to Causal Inference
+\item
+  Randomized Experiments and Stats Review
+\item
+  Graphical Causal Models
+\item
+  \emph{\textbf{\textcolor{red}{The Unreasonable Effectiveness of Linear Regression}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Feature Selection Dilemma
+  \end{itemize}
+\item
+  Propensity score
+\item
+  Effect heterogeneity
+\item
+  Metalearners
+\item
+  Difference-in-differences
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Canonical Difference-in-Differences
+  \item
+    Identification Assumption
+  \end{itemize}
+\item
+  Synthetic control
+\item
+  Geo and switchback experiments
+\item
+  Non-compliance and instruments
+\item
+  Next steps
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Lending Industry: Example}
+\protect\phantomsection\label{lending-industry-example}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Example}}: banking and lending industry
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Offer more credit to customers who have a lower chance of defaulting
+  \item
+    Understand the impact of loan amount / credit card limits on default
+    rate
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Intuition}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Increasing credit card limit should increase the odds of defaulting
+    on the credit card bill
+  \item
+    People tend to spend more when limits increase
+  \item
+    Higher balances \(\implies\) more interest \(\implies\) harder to
+    repay
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Data}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Looking at banking data there is a negative correlation between
+    credit lines and default rate
+  \item
+    The underwriting model would recommend to give more money to risky
+    customers
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Lending Industry: Example}
+\protect\phantomsection\label{lending-industry-example-1}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Reality}}
+  \pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.8.png}}
+\item
+  The risk of default is difficult to estimate so income or credit
+  scores can be used as proxy variable \textcolor{blue}{\texttt{X}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bank Loan Risk: Adjustment Formula}
+\protect\phantomsection\label{bank-loan-risk-adjustment-formula}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Assumption}}: assuming conditional
+  independence \((Y_0, Y_1) \perp T | X\), use the adjustment formula \[
+  ATE = \EE_X [
+    \EE[Y | T=1, X=x] - \EE[Y | T=0, X=x]
+  ]
+  \]
+\item
+  \textbf{\textcolor{darkgreen}{Problem}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Need partition data into segments defined by feature \(X\)
+  \item
+    If \(X\) has many values (e.g., a vector of 10 variables, each with
+    3 values), face curse of dimensionality (sparsity issues)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Need data points with same 10 characteristics and different
+      treatments
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Solution}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model potential outcome \(Y\) as linear regression on \(X\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Require treatment and control to be comparable ``on average''
+    \item
+      Functions as dimensionality reduction algorithm
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Using Regression to Estimate Causal Effects}
+\protect\phantomsection\label{using-regression-to-estimate-causal-effects}
+\begin{itemize}
+\tightlist
+\item
+  Under appropriate hypotheses (e.g., randomization, known confounders),
+  regression:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Estimates treatment effects (ATE)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Intercept: control group mean
+    \item
+      Treatment coefficient: average difference
+    \end{itemize}
+  \item
+    Has causal interpretation
+  \item
+    Computes statistics (confidence intervals, p-values)
+  \item
+    Matches manual group average computation
+  \end{itemize}
+\item
+  When confounders are observed, include them as regressors to adjust
+\item
+  In a randomized experiment, no adjustment is required
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Regression theory}
+\protect\phantomsection\label{regression-theory}
+\begin{itemize}
+\item
+  The vector of \(\beta^*\) minimizes mean squared error \[
+  \beta^* = \argmin_{\beta} \EE[(Y_i - \beta^T X_i)^2]
+  \]
+\item
+  It is estimated as \(\hat{\beta} = (X^T X)^{-1} X^T Y\)
+\item
+  Single variable regression estimates how treatment and outcome move
+  together, scaling by variance of treatment
+\item
+  Multivariate regression: each coefficient is the regressor's
+  coefficient accounting for other variables
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Regress against confounders and extract residual
+  \end{itemize}
+\item
+  Extrapolate model outside data region
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Risky since you don't know what happens without data points
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{FWL Theorem}
+\protect\phantomsection\label{fwl-theorem}
+\begin{itemize}
+\item
+  The Frisch--Waugh--Lovell (FWL) theorem explains how to interpret
+  coefficients in a multiple regression by ``partialling out'' other
+  variables
+\item
+  \textbf{\textcolor{red}{Example}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Consider \(y = X_1 \beta_1 + X_2 \beta_2 + \varepsilon\)
+  \item
+    The coefficient \(\hat{\beta}_1\) from the full regression is equal
+    to the coefficient obtained by:
+
+    \begin{enumerate}
+    \tightlist
+    \item
+      Regressing \(y\) on \(X_2\), getting residuals \(r_y\) (remove
+      part of \(y\) explained by \(X_2\))
+    \item
+      Regressing each column of \(X_1\) on \(X_2\), getting residuals
+      \(r_{X_1}\) (remove part of \(X_1\) explained by \(X_2\))
+    \item
+      Regressing \(r_y\) on \(r_{X_1}\)
+    \end{enumerate}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Intuition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\beta_1\) measures the effect of \(X_1\) on \(y\), holding \(X_2\)
+    constant
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{FWL Theorem}
+\protect\phantomsection\label{fwl-theorem-1}
+\begin{itemize}
+\item
+  Make non-experimental data look as if the treatment was randomized
+  (de-biasing)
+\item
+  Estimating a multi-variate regression is equivalent to the 3 steps:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Denoising: Regress outcome \(Y\) on the confounder variables to
+    obtain the outcome residuals \(\tilde{Y}\)
+  \item
+    Debiasing: Regress the treatment \(T\) on confounders \(X\) to
+    obtain the treatment residuals \(\tilde{T}\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Version of the treatment that is uncorrelated with the variables
+      used in debiasing the model
+    \end{itemize}
+  \item
+    Regress outcome residuals \(\tilde{Y}\) on treatment residuals
+    \(\tilde{T}\) to obtain estimate of causal effect of \(T\) on \(Y\)
+  \end{enumerate}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Non-linear Estimate}
+\protect\phantomsection\label{non-linear-estimate}
+\begin{itemize}
+\item
+  You want to estimate the causal effect of credit limit on credit card
+  spend, using wage as only confounder
+
+  \begin{itemize}
+  \tightlist
+  \item
+    It can be that the relationship is not linear
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., the effect of credit lines on spend diminishes as you
+      increase credit lines
+    \end{itemize}
+  \end{itemize}
+\item
+  You can apply some transform to \(X\) (e.g., square root, log)
+\item
+  Then you can apply the usual flow (adding confounders, FWL theorem)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Conditionally Random Experiments}
+\protect\phantomsection\label{conditionally-random-experiments}
+\begin{itemize}
+\tightlist
+\item
+  Best alternative to a randomized controlled trial is ``stratified
+  random experiments''
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Create local experiments from different distributions based on
+    covariates
+  \item
+    E.g., use features like credit score to create customer groups
+    (high-risk, neutral, low-risk)
+  \item
+    Randomize credit lines for high-risk from a low average distribution
+  \item
+    Randomize credit lines for low-risk from a higher average
+    distribution
+  \end{itemize}
+\item
+  Stratified random experiments are:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Cheaper
+  \item
+    More complex than completely random experiments
+  \end{itemize}
+\item
+  Simplify by:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Lower number of groups
+  \item
+    Bigger overlap in treatment distributions across groups
+  \end{itemize}
+\item
+  Use dummy variables (One-Hot Encoding):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model estimates one intercept per group, shared slope across all
+    groups
+  \item
+    Shared slope is variance-weighted average of regression slopes
+    within each group
+  \end{itemize}
+\item
+  Saturated regression model includes interaction terms between
+  treatment and dummy variables to estimate separate effects for each
+  group
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Noise-Reducing vs Noise-Inducing Controls}
+\protect\phantomsection\label{noise-reducing-vs-noise-inducing-controls}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Problem}}: Should we include every available
+  variable in our regression model?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Some variables are confounders (must include to eliminate bias)
+  \item
+    Some variables don't cause either treatment or outcome
+  \item
+    Question: Which additional variables help or hurt precision?
+  \end{itemize}
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\textbf{\textcolor{orange}{Noise-Reducing Controls}}
+
+Variables that \emph{predict the outcome well} but aren't confounders
+
+\begin{itemize}
+\tightlist
+\item
+  \emph{Example}: Credit score bucket \(\to\) credit limit \(\to\)
+  default
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textcolor{blue}{\texttt{credit\_score1\_buckets}}: confounder (must
+    include)
+  \item
+    \textcolor{blue}{\texttt{credit\_score2}}: predicts default but not
+    treatment
+  \end{itemize}
+\item
+  \emph{Effect}: Reduces variance in \(\varepsilon_i\) by FWL denoising
+  step
+\item
+  \emph{Result}: Same \(\hat{\beta}_{\text{treatment}}\), much tighter
+  confidence intervals
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Standard error shrinks substantially
+  \item
+    More statistical power
+  \end{itemize}
+\item
+  \emph{Strategy}: Always include strong outcome predictors
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+\textbf{\textcolor{darkgreen}{Noise-Inducing Controls}}
+
+Variables that \emph{predict the treatment well} but not the outcome
+
+\begin{itemize}
+\tightlist
+\item
+  \emph{Example}: Conditionally random spend experiment
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textcolor{blue}{\texttt{credit\_score1}}: drives treatment
+    assignment but \(\perp\) outcome
+  \item
+    Incorrectly including it increases variance
+  \end{itemize}
+\item
+  \emph{Effect}: Reduces treatment variance by explaining away
+  \(\text{Var}(T)\)
+\item
+  \emph{Result}: Same \(\hat{\beta}_{\text{treatment}}\), but standard
+  error \emph{increases}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Wider confidence intervals
+  \item
+    Less statistical power
+  \end{itemize}
+\item
+  \emph{Strategy}: Avoid including strong treatment predictors
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-4}
+\begin{itemize}
+\item
+  Introduction to Causal Inference
+\item
+  Randomized Experiments and Stats Review
+\item
+  Graphical Causal Models
+\item
+  The Unreasonable Effectiveness of Linear Regression
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{\textbf{\textcolor{red}{Feature Selection Dilemma}}}
+  \end{itemize}
+\item
+  Propensity score
+\item
+  Effect heterogeneity
+\item
+  Metalearners
+\item
+  Difference-in-differences
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Canonical Difference-in-Differences
+  \item
+    Identification Assumption
+  \end{itemize}
+\item
+  Synthetic control
+\item
+  Geo and switchback experiments
+\item
+  Non-compliance and instruments
+\item
+  Next steps
+\item
+  \textbf{\textcolor{teal}{Reality}}: Most variables are imperfect
+  confounders
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Strong cause of \(T\), weak cause of \(Y\) (like noise-inducing)
+  \item
+    Strong cause of \(Y\), weak cause of \(T\) (like noise-reducing)
+  \item
+    Varying importance across both dimensions
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{The Trade-off}}: Including all confounders
+  eliminates bias but increases variance
+  \[\text{MSE} = \text{Bias}^2 + \text{Variance}\]
+\item
+  \textbf{\textcolor{blue}{Practical Question}}: Is a small amount of
+  bias worth a large reduction in variance?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    No universal answer, it depends on context, sample size, and
+    precision needs
+  \item
+    Research shows it's often worth accepting small bias for large
+    variance reduction
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-5}
+\begin{itemize}
+\tightlist
+\item
+  Introduction to Causal Inference
+\item
+  Randomized Experiments and Stats Review
+\item
+  Graphical Causal Models
+\item
+  The Unreasonable Effectiveness of Linear Regression
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Feature Selection Dilemma
+  \end{itemize}
+\item
+  \emph{\textbf{\textcolor{red}{Propensity score}}}
+\item
+  Effect heterogeneity
+\item
+  Metalearners
+\item
+  Difference-in-differences
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Canonical Difference-in-Differences
+  \item
+    Identification Assumption
+  \end{itemize}
+\item
+  Synthetic control
+\item
+  Geo and switchback experiments
+\item
+  Non-compliance and instruments
+\item
+  Next steps
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Impact of Management Training}
+\protect\phantomsection\label{the-impact-of-management-training}
+\begin{itemize}
+\tightlist
+\item
+  A common phenomenon in tech companies is talented individual
+  contributors (ICs) transitioning to management tracks
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This transition often requires very different skill sets and comes
+    at high cost for the new managers and their teams
+  \item
+    Multinational tech company invest in manager training programs for
+    new managers to ease this transition
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The problem of non-compliance}
+\protect\phantomsection\label{the-problem-of-non-compliance}
+\begin{itemize}
+\tightlist
+\item
+  A company:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Selects managers randomly for the training program to measure its
+    effectiveness
+  \item
+    Compares employee engagement scores between teams whose managers
+    received training vs those who didn't
+  \item
+    Estimates the average treatment effect (ATE)
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Problem}}: \emph{non compliance} is when
+  people not receiving the treatment as assigned
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Some assigned managers didn't show up for training
+  \item
+    Other managers obtained the training without being assigned to it
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Result}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The randomized study became observational in nature
+  \item
+    This introduced bias into the causal estimates
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Likely biased upward because managers with already-engaged teams
+      are more likely to self-select into training
+    \end{itemize}
+  \item
+    Requires adjustment for confounders
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Propensity score}
+\protect\phantomsection\label{propensity-score}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: \emph{propensity score} is the
+  conditional probability of receiving treatment given covariates: \[
+  e(x) = \Pr(T=1 | X)
+  \]
+\item
+  \textbf{\textcolor{darkgreen}{Intuition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Propensity score acts as dimensionality reduction technique
+  \item
+    Instead of conditioning on high-dimensional \(X\), condition on
+    single propensity score
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Claim}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If two managers have same propensity score but different treatment
+    status, difference is due to chance
+  \item
+    Treatment should become ``as good as random'' after controlling for
+    propensity score
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Propensity Score Estimation}
+\protect\phantomsection\label{propensity-score-estimation}
+\begin{itemize}
+\tightlist
+\item
+  Can use ML models to estimate propensity score
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Need out-of-fold predictions to avoid overfitting bias
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Example}}: binary treatment
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use logistic regression to estimate \(e(x)\) from covariates \(X\)
+  \item
+    Replace true (unknown) propensity score with estimated version
+  \item
+    Apply in observational data where assignment mechanism unknown
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{FWL Orthogonalization and Propensity Score}
+\protect\phantomsection\label{fwl-orthogonalization-and-propensity-score}
+\begin{itemize}
+\tightlist
+\item
+  Both FWL approach and propensity score orthogonalize treatment but use
+  different models for \(T\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    FWL theorem: linear regression models \[\EE[T | X]\] in debiasing
+    step
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Residualize both \(T\) and \(X\)
+    \item
+      Low-dim \(X\), linear T-X relationship
+    \end{itemize}
+  \item
+    Propensity score estimation achieves similar orthogonalization
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Include propensity score \(\hat{e}(X)\) as control in regression
+    \item
+      E.g.,
+      \textcolor{blue}{\texttt{engagement\_score ~ intervention + propensity\_score}}
+    \item
+      High-dim \(X\), flexible T-X relationship
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Propensity score matching}
+\protect\phantomsection\label{propensity-score-matching}
+\begin{itemize}
+\item
+  Matches treated and control units based on propensity score similarity
+\item
+  Essentially 1-Nearest Neighbors (i.e., KNN with K=1) on propensity
+  score
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Fit KNN on treated units to impute \(Y_1\) for controls
+  \item
+    Fit KNN on control units to impute \(Y_0\) for treated
+  \end{itemize}
+\item
+  Matched value is outcome of nearest unit \[
+  \hat{ATE}
+  = \frac{1}{N}\sum (
+    ( {Y_{i} - Y_{jm}(i)} )T_{i} + 
+    ( {Y_{jm}(i) - Y_{i}} )( 1 - T_{i} )
+  )
+  \]
+\item
+  \textbf{\textcolor{red}{Cons}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    KNN inefficient in high dimensions
+  \item
+    Difficult to derive variance
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Inverse Propensity Weighting (IPW)}
+\protect\phantomsection\label{inverse-propensity-weighting-ipw}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Core Principle}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Re-weight data by inverse probability of observed treatment
+  \item
+    Create pseudo-population where treatment appears randomly assigned
+  \end{itemize}
+\item
+  For treated units:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Up-weight those unlikely to be treated (low \(e(x)\))
+  \item
+    They're informative, they look like untreated units but got
+    treatment anyway, so they reveal what would happen to
+  \end{itemize}
+\item
+  For control units:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Up-weight those likely to be treated (high \(e(x)\))
+  \item
+    Down-weights common treatment cases: Treated units with high
+    propensity (likely to be treated) get lower weight, since they're
+    less informative.
+  \end{itemize}
+
+  \[E[Y_t] = \EE[ \frac{\mathbf{1}(T=t)Y}{P(T=t|X)}]\]
+\item
+  The same scaling can be applied to recover the ATE: \[
+  ATE
+  = \EE\left[
+      \frac{\mathbb{1}(T=1)Y}{\Pr(T=1|X)}
+    \right]
+    - \EE\left[
+      \frac{\mathbb{1}(T=0)Y}{\Pr(T=0|X)}
+      \right]
+  \]
+\item
+  IPW is similar to importance weighting
+\item
+  To estimate the variance use bootstrap method (resample with
+  replacement multiple times)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Fit IPW estimator on each sample
+  \item
+    Calculate 2.5th and 97.5th percentiles for 95\% CI
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Stabilized Propensity Weights}
+\protect\phantomsection\label{stabilized-propensity-weights}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Problems}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Raw inverse propensity weights can be very large
+  \item
+    Treatment with low probability \(\Pr(T | X)\) creates extreme
+    weights
+  \item
+    Computational stability issue
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Solution}}: Stabilized propensity
+  weights \[
+  w = \frac{\Pr(T = t)}{\Pr(T = t | X)}
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Balances small denominator with also small numerator
+  \item
+    Produces more stable weights without changing balancing properties
+  \item
+    Sum of weights in each group matches original group sizes
+  \end{itemize}
+\item
+  Trim propensity scores to avoid extreme weights
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., keep between 1\% and 99\%
+  \item
+    Trade-off: slight bias increase for substantial variance reduction
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Visual intuition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Plot propensity score distributions by treatment status
+  \item
+    Before weighting: distributions shifted (confounding)
+  \item
+    After weighting: distributions overlap (treatment appears random)
+  \item
+    Overlapping distributions essential for IPW validity
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Propensity Score for Selection Bias}
+\protect\phantomsection\label{propensity-score-for-selection-bias}
+\begin{itemize}
+\tightlist
+\item
+  IPW originally developed (Horvitz-Thompson 1952) for selection bias
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Can adjust for non-response in surveys
+  \item
+    Can handle both confounding and selection together
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Example}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You send a survey asking people to rate your product on a 1-to-5
+    scale
+  \item
+    Survey respondents may differ from non-respondents
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., non-respondents are often unsatisfied customers and vice
+      versa
+    \end{itemize}
+  \item
+    Estimate probability of responding given customer's covariates
+    (e.g., age, income, app usage) \(\Pr(R = 1 | X)\)
+  \item
+    Re-weight respondents by \(1/\hat{\Pr}(R = 1)\) to account for who
+    didn't respond
+  \item
+    Creates pseudo-population representing full population
+  \end{itemize}
+\item
+  You can also compute the weights for both selection and confounding by
+  multiplying the re-weighting and can stability using the marginal
+  probability \[
+  W = \frac{
+    \hat{\Pr}(T = t)
+  }{
+    \hat{\Pr}(R = 1 | X)\hat{\Pr}(T = t | X)
+  }
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Positivity}
+\protect\phantomsection\label{positivity}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Positivity}} means that every unit has
+  non-zero probability of receiving each treatment level \[
+  \Pr(T = t | X) > 0 \text{ for all } t, X
+  \]
+\item
+  Essential for IPW validity
+\item
+  \textbf{\textcolor{blue}{Problems}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Some subgroups have almost no treated or control units
+  \item
+    Cannot estimate counterfactual outcomes in those regions
+  \item
+    IPW fails when positivity violated: cannot reweight units that don't
+    exist
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\subsubsection{IPW Sensitivity}\label{ipw-sensitivity}
+
+\begin{frame}{IPW Sensitivity}
+\begin{itemize}
+\tightlist
+\item
+  Propensity score distribution easy to visualize
+\item
+  Can directly check if treatment groups overlap
+\end{itemize}
+\end{frame}
+
+\subsubsection{Comparison with
+Regression}\label{comparison-with-regression}
+
+\begin{frame}{Comparison with Regression}
+\begin{itemize}
+\tightlist
+\item
+  Regression can extrapolate beyond region with data
+\item
+  Assumes linear (or specified) functional form for \(E[Y | T, X]\)
+\item
+  Can recover ATE even with positivity violation if model specification
+  correct
+\item
+  IPW makes no functional form assumptions → fails without positivity
+\end{itemize}
+\end{frame}
+
+\subsubsection{Positivity-Bias
+Trade-Off}\label{positivity-bias-trade-off}
+
+\begin{frame}{Positivity-Bias Trade-Off}
+\begin{itemize}
+\tightlist
+\item
+  More covariates in propensity model \(\to\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Stronger unconfoundedness / conditional independence assumption
+  \item
+    Weaker positivity
+  \end{itemize}
+\item
+  Fewer covariates
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Better positivity
+  \item
+    More potential confounding bias
+  \end{itemize}
+\item
+  Balance is contextual and requires judgment
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-6}
+\begin{itemize}
+\tightlist
+\item
+  Introduction to Causal Inference
+\item
+  Randomized Experiments and Stats Review
+\item
+  Graphical Causal Models
+\item
+  The Unreasonable Effectiveness of Linear Regression
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Feature Selection Dilemma
+  \end{itemize}
+\item
+  Propensity score
+\item
+  \emph{\textbf{\textcolor{red}{Effect heterogeneity}}}
+\item
+  Metalearners
+\item
+  Difference-in-differences
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Canonical Difference-in-Differences
+  \item
+    Identification Assumption
+  \end{itemize}
+\item
+  Synthetic control
+\item
+  Geo and switchback experiments
+\item
+  Non-compliance and instruments
+\item
+  Next steps
+\end{itemize}
+\end{frame}
+
+\begin{frame}{From ATE to CATE}
+\protect\phantomsection\label{from-ate-to-cate}
+\begin{itemize}
+\tightlist
+\item
+  Average Treatment Effect (ATE) \(\EE[Y_1 - Y_0]\) answers:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``Should we roll out a treatment to entire population?''}
+  \end{itemize}
+\item
+  Conditional Average Treatment Effect (CATE) \(\EE[Y_1 - Y_0 | X]\)
+  answers
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``Which units should we treat?''}
+  \item
+    \emph{``What's the optimal treatment for each unit?''}
+  \item
+    Enables personalization, since each unit is different in terms of
+    its covariate \(X\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{CATE}
+\protect\phantomsection\label{cate}
+\begin{itemize}
+\item
+  You have customers and a treatment
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(Y\) = outcome (purchase amount, satisfaction, churn probability,
+    etc.)
+  \item
+    \(T\) = treatment (discount, advertisement exposure, recommendation,
+    pricing change, etc.)
+  \end{itemize}
+\item
+  You want to personalize the treatment (e.g., different discounts to
+  different customers)
+\item
+  It's like customer segmentation: create groups of customers based on
+  how they respond to your treatment
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., some customers reacts well to discounts, others poorly
+  \end{itemize}
+\item
+  We want to measure ``customer's response to a treatment'' (aka
+  treatment effect or marginal effect):
+  \[\frac{\delta Y}{\delta T}\Big|_{X=x}\] how the outcome Y changes
+  when the treatment T changes slightly, holding other factors fixed
+\item
+  High / medium / low treatment effect (group with high slope)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why Prediction Is Not the Answer}
+\protect\phantomsection\label{why-prediction-is-not-the-answer}
+\begin{itemize}
+\tightlist
+\item
+  Predictive models estimate outcome \(Y = f(X, T)\), not treatment
+  sensitivity \[\frac{\delta Y}{\delta T}\Big|_{X=x}\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Partitioning units by \(Y\) does not partition by treatment effect
+  \item
+    Example: high sales prediction does not guarantee high discount
+    sensitivity
+  \end{itemize}
+\item
+  Treatment slopes are non-observable at unit level
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Fundamental problem: cannot observe same unit under multiple
+    treatment conditions
+  \item
+    Therefore cannot directly compute treatment sensitivity and ML can't
+    predict it
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Restaurant Discount: Example}
+\protect\phantomsection\label{restaurant-discount-example}
+\begin{itemize}
+\tightlist
+\item
+  A chain of restaurants that operate across the country. A key
+  component of this business is
+\item
+  Understanding when it should give discounts to its customers
+\item
+  The company ran a nationwide experiment that lasted three years, where
+  it randomized discounts in six different restaurants in the chain
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The unit of treatment is (day, restaurant)
+  \end{itemize}
+\item
+  Linear regression with treatment-covariate interactions estimates CATE
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model: \[
+    y_i = \beta_0 + \beta_1 t_i + \beta_2 X_i + \beta_3 t_i X_i + e_i
+    \]
+  \item
+    Slope prediction: \[
+    \frac{\partial y_i}{\partial t_i} = \beta_1 + \beta_3 X_i
+    \]
+  \end{itemize}
+\item
+  The interaction term \(t_i \cdot X_i\) (treatment × covariate) is the
+  simplest way to make the slope depend on the covariate
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Each unit with different \(X_i\) gets a different slope prediction
+    despite unobservable slopes.
+  \end{itemize}
+\item
+  You can estimate the fit and then use the coefficients to compute the
+  CATE
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A shortcut is to use CATE = prediction(t+1) - prediction(t)
+  \end{itemize}
+\item
+  If the treatment was not randomized, then you will need to do
+  identification removing confounding
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Evaluating CATE Predictions}
+\protect\phantomsection\label{evaluating-cate-predictions}
+\begin{itemize}
+\item
+  This is similar to a ML problem, but you don't have the actual
+  outcomes (since they are not observable)
+\item
+  Fundamental problem: \(Y_{1i}\) and \(Y_{0i}\) are never observed for
+  the same unit
+\item
+  Cannot compute standard ML metrics (e.g., MSE on \(\tau_i\)) \[
+  \tau(x) \defeq \EE[Y_1 - Y_0 | X = x]
+  \]
+\end{itemize}
+
+\begin{enumerate}
+\tightlist
+\item
+  Ground truth is non-observable at unit level, so evaluation must use
+  group-level metrics
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Instead: partition data by model predictions and estimate effects in
+    each partition
+  \end{itemize}
+\item
+  Use train/test split for unbiased evaluation of CATE model on held-out
+  data
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Process:}
+\protect\phantomsection\label{process}
+\begin{enumerate}
+\item
+  Fit the CATE model on training data
+
+\begin{verbatim}
+regr_model = smf.ols("sales ~ discounts*(month + weekday + ...)",
+                     data=train).fit()
+\end{verbatim}
+\item
+  Predict CATE values on test data
+
+\begin{verbatim}
+test_pred = regr_model.predict(test.assign(discounts=test["discounts"]+1)) \
+           - regr_model.predict(test)
+\end{verbatim}
+\item
+  Partition test data (by quantiles of those predictions)
+
+\begin{verbatim}
+# Divide test data into 10 groups based on predicted CATE values
+quantiles = pd.qcut(test_pred, q=10)
+# Low quantile: days with low predicted CATE
+# High quantile: days with high predicted CATE
+\end{verbatim}
+\item
+  Estimate group effects (regression within each group)
+
+\begin{verbatim}
+effect = regress(sales ~ discounts)
+\end{verbatim}
+\item
+  Evaluate (do the effects match the predictions?)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If your CATE predictions are good:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Quantile 1 (low prediction) → low actual effect
+    \item
+      Quantile 10 (high prediction) → high actual effect
+    \item
+      Monotonic staircase pattern = good model
+    \end{itemize}
+  \item
+    Random model produces flat curve (same effect in all quantiles =
+    ATE)
+  \end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Cumulative Effect}
+\protect\phantomsection\label{cumulative-effect}
+\begin{itemize}
+\tightlist
+\item
+  Sort data by CATE score, accumulate groups sequentially
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Estimate effect on top 1\%, then top 2\%, then top 3\%, etc
+  \item
+    Result: curve showing effect by cumulative sample percentage
+  \end{itemize}
+\item
+  Well-ordered model curve shape: starts high, gradually converges to
+  ATE
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Bad model: quickly converges to ATE or fluctuates around it
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Cumulative Gain}
+\protect\phantomsection\label{cumulative-gain}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: cumulative gain measures how
+  much value a CATE model captures by sequentially treating units with
+  highest predicted effects
+\item
+  Multiply cumulative effect by cumulative sample proportion: \[
+  \text{Gain} = \frac{N_{\text{cumulative}}}{N_{\text{total}}} \times (\text{effect} - ATE)
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Downscales early portion where sample size (and confidence) is small
+  \item
+    Centers around zero, with gains relative to population average
+    effect
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Interpretation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Well-ordered model: steep initial climb, then plateaus near ATE
+  \item
+    Random model: flat line (no gain above ATE anywhere)
+  \item
+    Enables visual model comparison on a single plot
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Area Under Curve (AUC)}
+\protect\phantomsection\label{area-under-curve-auc}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: area under the cumulative gain
+  curve aggregates CATE model quality into a single summary metric
+\item
+  \textbf{\textcolor{darkgreen}{Intuition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Larger AUC = better CATE ordering
+  \item
+    AUC = 0 if model predicts constant effect (equivalent to random
+    assignment)
+  \item
+    AUC \textgreater{} 0 indicates true heterogeneity in treatment
+    response
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Application}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Automates model selection among competing CATE approaches
+  \item
+    Enables hyperparameter tuning via grid search or Bayesian
+    optimization
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-7}
+\begin{itemize}
+\tightlist
+\item
+  Introduction to Causal Inference
+\item
+  Randomized Experiments and Stats Review
+\item
+  Graphical Causal Models
+\item
+  The Unreasonable Effectiveness of Linear Regression
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Feature Selection Dilemma
+  \end{itemize}
+\item
+  Propensity score
+\item
+  Effect heterogeneity
+\item
+  \emph{\textbf{\textcolor{red}{Metalearners}}}
+\item
+  Difference-in-differences
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Canonical Difference-in-Differences
+  \item
+    Identification Assumption
+  \end{itemize}
+\item
+  Synthetic control
+\item
+  Geo and switchback experiments
+\item
+  Non-compliance and instruments
+\item
+  Next steps
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Metalearners}
+\protect\phantomsection\label{metalearners}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Goal}}: Estimate conditional average treatment
+  effect (CATE) to identify how unit \(i\) responds differently to
+  treatment \[\tau_i(x) \triangleq \EE[Y_i(1) - Y_i(0) | X]\]
+\item
+  \textbf{\textcolor{blue}{Definition}}: metalearners leverage / recycle
+  off-the-shelf machine learning algorithms for treatment effect
+  estimation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Can estimate ATE but mainly used for CATE estimation
+  \item
+    Work well with high-dimensional data
+  \end{itemize}
+\item
+  Often this is a \emph{ranking problem}: correctly order units by
+  treatment sensitivity
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Discrete treatments: binary or categorical
+  \item
+    Continuous treatments: dose, price, discount level
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Marketing Email: Example}
+\protect\phantomsection\label{marketing-email-example}
+\begin{itemize}
+\item
+  Marketing team at an online retailer
+\item
+  \textbf{\textcolor{red}{Goal}}: Determine which customers are
+  receptive to a marketing email
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The email has potential to increase customer spending
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Problem}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Your budget of discount is limited
+  \item
+    Some customers don't like receiving marketing emails
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Avoid sending email to unreceptive customers to maintain
+      relationship quality
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Solution}}:
+\item
+  Estimate CATE of email on customers' future purchase volume
+\item
+  Data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Historical data about sending emails to fit CATE model
+  \item
+    Data from experiments where emails were randomized (use for
+    evaluation)
+  \end{itemize}
+\item
+  The treatment variable is \textcolor{blue}{\texttt{mkt\_email}}
+\item
+  The outcome variable is \textcolor{blue}{\texttt{next\_mnth\_pv}}
+  (purchase volume one month after sending the email)
+\item
+  Covariates (e.g., age, time since first purchase, how much bought on
+  each category)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{T-Learner}
+\protect\phantomsection\label{t-learner}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Approach}}: Fit separate outcome models for
+  each treatment level
+
+  \begin{itemize}
+  \tightlist
+  \item
+    For binary treatment: estimate \(\mu_0(x) = \EE[Y | T=0, X]\) and
+    \(\mu_1(x) = \EE[Y | T=1, X]\)
+  \item
+    Predict both potential outcomes for each unit and then estimate CATE
+    as: \[\hat{\tau}(x)_i = \hat{\mu}_1(X_i) - \hat{\mu}_0(X_i)\]
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Advantages}}: Simple and straightforward
+  implementation
+\item
+  \textbf{\textcolor{blue}{Disadvantage}}: Prone to regularization bias
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Regularization Bias}
+\protect\phantomsection\label{regularization-bias}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Problem}}: In T-learner you need to fit two
+  models at the same time
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If treated data is sparse, \(mu_1\) becomes overly regularized and
+    simple (e.g., a constant)
+  \item
+    If untreated data is abundant, \(mu_0\) can fit a non-linearity
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Result}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Bias in CATE estimation (nonlinear difference minus linear
+    difference)
+  \item
+    E.g., model with nonlinear outcome but constant treatment effect
+    produces wrong nonlinear CATE
+  \item
+    In imbalanced data, regularization creates artificial heterogeneity
+    // TODO: add picture
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{X-Learner}
+\protect\phantomsection\label{x-learner}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Approach}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Address regularization bias of T-learner
+  \item
+    Two-stage approach with propensity score weighting
+  \item
+    Performs better when one treatment group is much larger than the
+    other
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Stage 1}}: Fit initial outcome models (same
+  as T-learner)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\mu_0(X)\) and \(\mu_1(X)\) for control and treated groups
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Stage 2}}: Estimate imputed treatment
+  effects
+
+  \begin{itemize}
+  \tightlist
+  \item
+    For control units: estimate missing treatment outcome:
+    \[\hat{\tau}(X, T=0) = \hat{\mu}_1(X, T=0) - Y_{T=0}\]
+  \item
+    For treated units: estimate missing control outcome:
+    \[\hat{\tau}(X, T=1) = Y_{T=1} - \hat{\mu}_0(X, T=1)\]
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Stage 3}}: Fit effect models
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Fit \(\hat{\mu}_{\tau 0}(x)\) to predict \(\hat{\tau}(X, T=0)\)
+  \item
+    Fit \(\hat{\mu}_{\tau 1}(x)\) to predict \(\hat{\tau}(X, T=1)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Pros}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    X-learner shines when large imbalance between treatment and control
+    groups
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{X-Learner With Weighting Scheme}
+\protect\phantomsection\label{x-learner-with-weighting-scheme}
+\begin{itemize}
+\item
+  Combine second-stage models using propensity score
+  \(\hat{e}(x) = \Pr(T=1|X)\) \[\hat{\tau}(x) 
+  = \hat{\mu}_{\tau 0}(x) \cdot \hat{e}(x) + 
+    \hat{\mu}_{\tau 1}(x) \cdot (1 - \hat{e}(x))\]
+\item
+  \textbf{\textcolor{red}{Intuition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    When treatment is rare: \(\hat{e}(x)\) is small, down-weights flawed
+    \(\hat{\mu}_{\tau 0}\)
+  \item
+    When treatment is common: \(1 - \hat{e}(x)\) is large, up-weights
+    correct \(\hat{\mu}_{\tau 1}\)
+  \item
+    Automatically emphasizes the model trained on larger sub-sample
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Metalearners for Continuous Treatments}
+\protect\phantomsection\label{metalearners-for-continuous-treatments}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Problem}}: Randomized discount experiment at
+  restaurant chain
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Goal: which days should discounts be highest?
+  \item
+    Treatment: discount amount (continuous, 0-40\%)
+  \item
+    Outcome: sales volume one day later
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Insight}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Customers more sensitive to prices on some days (e.g., holidays)
+  \item
+    CATE tells us how much demand increases per unit discount
+  \item
+    High CATE days \(\Rightarrow\) use more discounts
+  \item
+    Low CATE days \(\Rightarrow\) use fewer
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Problem}}
+\item
+  Discrete approaches fail because they
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Can't fit separate models for each discount level (infinite
+    treatments)
+  \item
+    Need methods that handle continuous treatment as a feature or
+    component
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Solution}}: S-learner and Double-ML
+\end{itemize}
+\end{frame}
+
+\begin{frame}{S-Learner}
+\protect\phantomsection\label{s-learner}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Approach}}: Single machine learning model that
+  includes treatment \(T\) and covariates \(X\) to predict outcome \(Y\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Goal is to estimate \(\mu_s(x, t) = E[Y | T, X]\)
+  \item
+    ``S-Learner'' since it's ``single''
+  \item
+    This model doesn't output treatment effect, rather it outputs
+    counterfactual predictions (i.e., predictions under different
+    treatment regimes)
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{For binary treatment}}: CATE =
+  \(\mu_s(X_i, T=1) - \mu_s(X_i, T=0)\)
+\item
+  \textbf{\textcolor{darkgreen}{For continuous treatment}}: Extended
+  procedure needed
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Create grid of treatment values (e.g., {[}0, 10, 20, 30, 40{]} for
+    discounts)
+  \item
+    Compute predictions for all treatment level
+  \item
+    Summarize as slope via simple linear regression to extract CATE
+  \item
+    Formula: \(\beta = \text{Cov}(t, y) / \text{Var}(t)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Pros}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simple
+  \item
+    Supports both binary and continuous treatments
+  \item
+    Performs reasonably well
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Cons}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Biases treatment effect toward zero
+  \item
+    Treatment variable can be completely discarded if weak relative to
+    other covariates
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Solution}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use Double/Debiased Machine Learning (R-learner) to address bias
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{S-Learner: Implementation Steps}
+\protect\phantomsection\label{s-learner-implementation-steps}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Step 1}}: Train single model on all data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textcolor{blue}{\texttt{s\_learner.fit(X + [T], y)}} where T is
+    treatment feature
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Step 2}}: Create counterfactual grid
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Define treatment grid: e.g., \([0, 10, 20, 30, 40]\)
+  \item
+    Cross-join with test set: each test unit at each treatment level
+  \item
+    Makes predictions on expanded grid
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Step 3}}: Extract slopes
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Group by unit, apply linear regression
+  \item
+    Extract slope coefficient as unit-level CATE
+  \item
+    Can also use slope formula directly:
+    \(\hat{\beta} = \text{Cov}(t,y) / \text{Var}(t)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Result}}: CATE prediction for each unit
+\end{itemize}
+\end{frame}
+
+\begin{frame}{S-Learner: The Bias Problem}
+\protect\phantomsection\label{s-learner-the-bias-problem}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Problem}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    ML models are regularized by default
+  \item
+    Regularization can suppress treatment effect unless treatment signal
+    is very strong
+  \item
+    ML model may discard treatment feature entirely
+  \item
+    Distribution of estimated ATE is shifted toward zero compared to
+    true effect
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Solution}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use orthogonalization techniques
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{R-learner (Double/Debiased Machine Learning)}
+\protect\phantomsection\label{r-learner-doubledebiased-machine-learning}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{The principle}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use ML to model confounding relationships
+  \item
+    Orthogonalize treatment and outcome from confounders
+  \item
+    Extract treatment effect from residuals
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{The equation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\widetilde{Y}_i = Y_i - \hat{\mu}_y(X_i)\) (outcome residual)
+  \item
+    \(\widetilde{T}_i = T_i - \hat{\mu}_t(X_i)\) (treatment residual)
+  \item
+    Regress residuals:
+    \(\widetilde{Y}_i = \tau \widetilde{T}_i + \varepsilon_i\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Why it works}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\hat{\mu}_y\) captures confounding effects on outcome
+  \item
+    \(\hat{\mu}_t\) captures confounding effects on treatment
+  \item
+    Residuals are ``as if'' treatment was randomized
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Key requirement}}: no unobserved
+  confounders
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Double-ML: the Overfitting Problem}
+\protect\phantomsection\label{double-ml-the-overfitting-problem}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Stage 1}}: Estimate nuisance parameters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Focus on treatment effect \(\tau\) (or CATE \(\tau(X)\))
+  \item
+    Estimate nuisance parameters (what we are not interested in) to
+    obtain parameter of interest
+  \item
+    \emph{Step 1}: Estimate outcome model \(\hat{\mu}_y(X)\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Fit ML regression model to predict outcome \(Y\) from features
+      \(X\)
+    \item
+      E.g., capture nonlinear confounding relationships between \(X\)
+      and \(Y\)
+    \item
+      Use cross-validation predictions to prevent overfitting
+    \end{itemize}
+  \item
+    \emph{Step 2}: Estimate treatment model \(\hat{\mu}_t(X)\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Fit ML regression model to predict treatment \(T\) from features
+      \(X\)
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Stage 2}}: Compute residuals
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Step 3}: Residualize outcome
+    \(\widetilde{Y} = Y - \hat{\mu}_y(X)\)
+  \item
+    \emph{Step 4}: Residualize treatment
+    \(\widetilde{T} = T - \hat{\mu}_t(X)\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Residuals represent part of \(Y\) and \(T\) independent of \(X\)
+    \item
+      Confounding is removed and can estimate treatment effect without
+      bias
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Stage 3}}: Construct the causal target
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Step 5}: Create transformed outcome
+    \(Y^* = \frac{\widetilde{Y}}{\widetilde{T}}\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Dividing gives ``slope'' of relationship between treatment and
+      outcome residuals, i.e., estimate of \(\tau(X_i)\)
+    \end{itemize}
+  \item
+    \emph{Step 6}: Create weights \(w_i = \widetilde{T}_i^2\)
+  \item
+    Dividing by \(\widetilde{T}\) introduces noise
+  \item
+    Squared weights down-weight noisy estimates, up-weight stable
+    estimates
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Stage 4}}: Estimate the CATE Model
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Step 7}: Fit final ML model to predict \(Y^*\) from \(X\),
+    using weights \(w_i\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Train ML regression model on \((Y^*, X)\)
+    \item
+      Use weights \(w_i\) for stable, low-noise predictions
+    \item
+      Learn how treatment effect varies with features \(X\)
+    \item
+      Model predictions give heterogeneous treatment effects
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Double-ML for CATE Estimation}
+\protect\phantomsection\label{double-ml-for-cate-estimation}
+\begin{itemize}
+\tightlist
+\item
+  Allow causal parameter to vary with covariates \(\tau(X_i)\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Outcome model:
+    \[Y_i = \hat{\mu}_y(X_i) + \tau(X_i) \cdot \widetilde{T}_i + \varepsilon_i\]
+  \end{itemize}
+\item
+  You can isolate the error, which is called ``R-loss'' and can be used
+  as a causal objective function
+  \[\hat{L}_n(\tau(x)) = \frac{1}{n} \sum_{i=1}^{n} (\widetilde{Y}_i - \tau(X_i)
+  \widetilde{T}_i)^2\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Minimizing this loss directly estimates CATE
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-8}
+\begin{itemize}
+\tightlist
+\item
+  Introduction to Causal Inference
+\item
+  Randomized Experiments and Stats Review
+\item
+  Graphical Causal Models
+\item
+  The Unreasonable Effectiveness of Linear Regression
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Feature Selection Dilemma
+  \end{itemize}
+\item
+  Propensity score
+\item
+  Effect heterogeneity
+\item
+  Metalearners
+\item
+  \emph{\textbf{\textcolor{red}{Difference-in-differences}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Canonical Difference-in-Differences
+  \item
+    Identification Assumption
+  \end{itemize}
+\item
+  Synthetic control
+\item
+  Geo and switchback experiments
+\item
+  Non-compliance and instruments
+\item
+  Next steps
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-9}
+\begin{itemize}
+\tightlist
+\item
+  Introduction to Causal Inference
+\item
+  Randomized Experiments and Stats Review
+\item
+  Graphical Causal Models
+\item
+  The Unreasonable Effectiveness of Linear Regression
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Feature Selection Dilemma
+  \end{itemize}
+\item
+  Propensity score
+\item
+  Effect heterogeneity
+\item
+  Metalearners
+\item
+  Difference-in-differences
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{\textbf{\textcolor{red}{Canonical Difference-in-Differences}}}
+  \item
+    Identification Assumption
+  \end{itemize}
+\item
+  Synthetic control
+\item
+  Geo and switchback experiments
+\item
+  Non-compliance and instruments
+\item
+  Next steps
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Data Structures: Definition}
+\protect\phantomsection\label{data-structures-definition}
+\begin{itemize}
+\tightlist
+\item
+  Data can have different temporal and cross-sectional patterns
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Causal relationships can be estimated depending on the data
+    structure
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Cross-sectional data}: multiple units observed at a single
+    point in time
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., snapshot of sales across restaurants with/without discounts
+    \item
+      E.g., student test scores across schools in a single academic year
+    \end{itemize}
+  \item
+    \emph{Panel data} (aka \emph{longitudinal data}): same units
+    observed repeatedly over time
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., same restaurants before/after discount implementation
+    \item
+      E.g., same students' test scores tracked across multiple year
+    \end{itemize}
+  \item
+    \emph{Repeated cross-sectional data}: different units observed at
+    multiple time points
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., different restaurant samples in year 1 and year 2
+    \item
+      E.g., different student samples from schools surveyed in 2020 and
+      2025
+    \end{itemize}
+  \item
+    \emph{Pooled cross-section}: multiple independent cross-sections
+    combined and analyzed as a single dataset
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., multiple cross-sections treated as one large cross-section
+    \item
+      E.g., combining student test score data from 2020, 2022, and 2024
+      into one regression
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Panel}
+\protect\phantomsection\label{panel}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Motivation}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Most real-world interventions (policy, marketing, etc.) are
+    difficult to randomize
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., in marketing it's difficult to control who receives the
+      treatment (i.e., see your advertisement)
+    \end{itemize}
+  \item
+    Panel data offers two sources of variation
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \emph{Across units}: compare treated and control cities (spatial
+      variation)
+    \item
+      \emph{Across time}: compare pre- and post-treatment periods
+      (temporal variation)
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Key insight}}: By tracking units over time,
+  we can remove confounders that are fixed at the unit level
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Even with unmeasured confounders, we can identify causal effects
+  \item
+    This makes panel data \emph{as good as it gets} for observational
+    causal inference
+  \end{itemize}
+\end{itemize}
+
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.9.png}}
+\end{frame}
+
+\begin{frame}{Canonical Difference-in-Differences: The Setup}
+\protect\phantomsection\label{canonical-difference-in-differences-the-setup}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Notation}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(D_i = 1\) if unit \(i\) is treated, \(0\) otherwise
+  \item
+    \(t \leq T_{pre}\) is pre-intervention period
+  \item
+    \(t > T_{pre}\) is post-intervention
+  \item
+    \(\text{Post}_t = 1\) if \(t > T_{pre}\), otherwise \(0\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Definition}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The treatment indicator is \(W_{it} = D_i \cdot \text{Post}_t\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Equals 1 only for treated units in post-treatment period
+    \end{itemize}
+  \item
+    The outcome variable is \(Y_{it}\) (e.g., number of downloads)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Observable for all unit-time combinations
+    \end{itemize}
+  \item
+    The target is the Average Treatment Effect on the Treated (ATT),
+    i.e., the effect of treatment on units that received it, after
+    treatment takes place: \[
+    \text{ATT} = \EE[Y_{it}(1) - Y_{it}(0) | D_i = 1, t > T_{pre}]
+    \]
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{DiD: Imputing the Counterfactual}
+\protect\phantomsection\label{did-imputing-the-counterfactual}
+\begin{itemize}
+\item
+  The missing piece is the treated counterfactual
+  \[\EE[Y(0) | D = 1, \text{Post} = 1]\] which we estimate with: \[
+  \begin{aligned}
+    \EE[Y(0) | D = 1, Post = 1]
+    &= \EE[Y | D = 1, Post = 0] \\
+    &\quad + \left(
+      \EE[Y | D = 0, Post = 1]
+      - \EE[Y | D = 0, Post = 0]
+    \right)
+  \end{aligned}
+  \]
+\item
+  \textbf{\textcolor{red}{Intuition}}: Start with the treated baseline,
+  add the control growth
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Treated baseline}: average outcome of treated units before
+    treatment
+  \item
+    \emph{Control growth}: how much control units changed from pre to
+    post
+  \item
+    Assumption: This growth rate applies to treated units under the
+    counterfactual
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why Difference-in-Difference?}
+\protect\phantomsection\label{why-difference-in-difference}
+\begin{itemize}
+\tightlist
+\item
+  Replacing the estimate in ATT: \[
+  \begin{aligned}
+    \text{ATT}
+    &= \big[
+      \EE[Y | D = 1, \text{Post} = 1]
+      - \EE[Y | D = 1, \text{Post} = 0]
+      \big] \\
+    &\quad - \big[
+      \EE[Y | D = 0, \text{Post} = 1]
+      - \EE[Y | D = 0, \text{Post} = 0]
+      \big]
+  \end{aligned}
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{First bracket}: treated group's change (pre to post)
+  \item
+    \emph{Second bracket}: control group's change (pre to post)
+  \item
+    Difference of these two changes is the treatment effect
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-10}
+\begin{itemize}
+\tightlist
+\item
+  Introduction to Causal Inference
+\item
+  Randomized Experiments and Stats Review
+\item
+  Graphical Causal Models
+\item
+  The Unreasonable Effectiveness of Linear Regression
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Feature Selection Dilemma
+  \end{itemize}
+\item
+  Propensity score
+\item
+  Effect heterogeneity
+\item
+  Metalearners
+\item
+  Difference-in-differences
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Canonical Difference-in-Differences
+  \item
+    \emph{\textbf{\textcolor{red}{Identification Assumption}}}
+  \end{itemize}
+\item
+  Synthetic control
+\item
+  Geo and switchback experiments
+\item
+  Non-compliance and instruments
+\item
+  Next steps
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-11}
+\begin{itemize}
+\tightlist
+\item
+  Introduction to Causal Inference
+\item
+  Randomized Experiments and Stats Review
+\item
+  Graphical Causal Models
+\item
+  The Unreasonable Effectiveness of Linear Regression
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Feature Selection Dilemma
+  \end{itemize}
+\item
+  Propensity score
+\item
+  Effect heterogeneity
+\item
+  Metalearners
+\item
+  Difference-in-differences
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Canonical Difference-in-Differences
+  \item
+    Identification Assumption
+  \end{itemize}
+\item
+  \emph{\textbf{\textcolor{red}{Synthetic control}}}
+\item
+  Geo and switchback experiments
+\item
+  Non-compliance and instruments
+\item
+  Next steps
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-12}
+\begin{itemize}
+\tightlist
+\item
+  Introduction to Causal Inference
+\item
+  Randomized Experiments and Stats Review
+\item
+  Graphical Causal Models
+\item
+  The Unreasonable Effectiveness of Linear Regression
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Feature Selection Dilemma
+  \end{itemize}
+\item
+  Propensity score
+\item
+  Effect heterogeneity
+\item
+  Metalearners
+\item
+  Difference-in-differences
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Canonical Difference-in-Differences
+  \item
+    Identification Assumption
+  \end{itemize}
+\item
+  Synthetic control
+\item
+  \emph{\textbf{\textcolor{red}{Geo and switchback experiments}}}
+\item
+  Non-compliance and instruments
+\item
+  Next steps
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-13}
+\begin{itemize}
+\tightlist
+\item
+  Introduction to Causal Inference
+\item
+  Randomized Experiments and Stats Review
+\item
+  Graphical Causal Models
+\item
+  The Unreasonable Effectiveness of Linear Regression
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Feature Selection Dilemma
+  \end{itemize}
+\item
+  Propensity score
+\item
+  Effect heterogeneity
+\item
+  Metalearners
+\item
+  Difference-in-differences
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Canonical Difference-in-Differences
+  \item
+    Identification Assumption
+  \end{itemize}
+\item
+  Synthetic control
+\item
+  Geo and switchback experiments
+\item
+  \emph{\textbf{\textcolor{red}{Non-compliance and instruments}}}
+\item
+  Next steps
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-14}
+\begin{itemize}
+\tightlist
+\item
+  Introduction to Causal Inference
+\item
+  Randomized Experiments and Stats Review
+\item
+  Graphical Causal Models
+\item
+  The Unreasonable Effectiveness of Linear Regression
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Feature Selection Dilemma
+  \end{itemize}
+\item
+  Propensity score
+\item
+  Effect heterogeneity
+\item
+  Metalearners
+\item
+  Difference-in-differences
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Canonical Difference-in-Differences
+  \item
+    Identification Assumption
+  \end{itemize}
+\item
+  Synthetic control
+\item
+  Geo and switchback experiments
+\item
+  Non-compliance and instruments
+\item
+  \emph{\textbf{\textcolor{red}{Next steps}}}
+\end{itemize}
+\end{frame}
+
+\end{document}

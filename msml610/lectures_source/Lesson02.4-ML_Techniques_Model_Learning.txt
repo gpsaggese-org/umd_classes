@@ -1,54 +1,18 @@
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 02.4: ML Techniques - Model Learning}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=65%}
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- Burkov: _"The Hundred-Page Machine Learning Book"_ (2019)
-
-- Russell et al.: _"Artificial Intelligence: A Modern Approach"_ (4th ed, 2020)
-
-- Hastie et al.: _"The Elements of Statistical Learning"_ (2nd ed, 2009)
-
-::::
-:::: {.column width=40%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/Book_cover_The_Elements_of_Statistical_Learning.jpg){ height=20% }
-::::
-:::
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L02.4: ML Techniques - Model Learning
+// slides_engine=typst
+// references=
+// - Burkov: "The Hundred-Page Machine Learning Book" (2019)
+// - Russell et al.: "Artificial Intelligence: A Modern Approach" (4th ed, 2020)
+// - Hastie et al.: "The Elements of Statistical Learning" (2nd ed, 2009)
 
 // Model assessment and selection
 // Hastie 7 (p. 238)
 
-## #############################################################################
 ## Learning Algorithms
-## #############################################################################
 
-### ############################################################################
 ### Gradient Descent
-### ############################################################################
 
 * The Problem of Minimizing a Function
 
@@ -260,9 +224,7 @@ MSML610: Advanced Machine Learning
       examples for one update
     - Requires storing all data in memory
 
-### ############################################################################
 ### Stochastic Gradient Descent
-### ############################################################################
 
 * Stochastic Gradient Descent
 - Idea of **Stochastic Gradient Descent (SGD)**: update the weights only for one
@@ -335,13 +297,13 @@ digraph StreamModel {
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
     // Node styles
-    DataStream [label="Stream of data\nx_i", fillcolor=white, shape=plaintext];
+    DataStream [label=<Stream of data<BR/>x<SUB>i</SUB>>, fillcolor=white, shape=plaintext];
     Model      [label="Model", fillcolor="#C6A6F4"];
-    Output     [label="Output\ny_i", fillcolor=white, shape=plaintext];
+    Output     [label=<Output<BR/>y<SUB>i</SUB>>, fillcolor=white, shape=plaintext];
 
     // Edges
     DataStream -> Model;
-    Model -> Model [label="w_i", fontsize=10];
+    Model -> Model [label=<w<SUB>i</SUB>>, fontsize=10];
     Model -> Output;
 }
 ```
@@ -390,22 +352,22 @@ digraph BayesianFlow {
     // Operation nodes (rounded boxes)
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    Map_0 [label="Map_0\nCompute Gradient", fillcolor="#A6C8F4"];
-    Map_1 [label="Map_1\nCompute Gradient", fillcolor="#A6C8F4"];
-    Map_n [label="Map_n\nCompute Gradient", fillcolor="#A6C8F4"];
+    Map_0 [label=<Map<SUB>0</SUB><BR/>Compute Gradient>, fillcolor="#A6C8F4"];
+    Map_1 [label=<Map<SUB>1</SUB><BR/>Compute Gradient>, fillcolor="#A6C8F4"];
+    Map_n [label=<Map<SUB>n</SUB><BR/>Compute Gradient>, fillcolor="#A6C8F4"];
     ShuffleSort [label="Shuffle & Sort", fillcolor="#C6A6F4"];
     Update [label="Update Model", fillcolor="#D2B48C"];
 
     // Variable/value nodes (plain ellipses with white background)
     node [shape=ellipse, style=filled, fontname="Helvetica", fontsize=12, penwidth=1.4, fillcolor=white];
 
-    DataShard_0  [label="DataShard_0"];
-    DataShard_1  [label="DataShard_1"];
-    DataShard_n  [label="DataShard_n"];
+    DataShard_0  [label=<DataShard<SUB>0</SUB>>];
+    DataShard_1  [label=<DataShard<SUB>1</SUB>>];
+    DataShard_n  [label=<DataShard<SUB>n</SUB>>];
 
-    Gradient_0 [label="Gradient_0"];
-    Gradient_1 [label="Gradient_1"];
-    Gradient_n [label="Gradient_n"];
+    Gradient_0 [label=<Gradient<SUB>0</SUB>>];
+    Gradient_1 [label=<Gradient<SUB>1</SUB>>];
+    Gradient_n [label=<Gradient<SUB>n</SUB>>];
 
     AggregatedGradient [label="Aggregated Gradient"];
     Model [label="Model Parameters"];

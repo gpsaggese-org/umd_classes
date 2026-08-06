@@ -32,12 +32,16 @@ from flask import (
 from dotenv import load_dotenv
 from werkzeug.datastructures import FileStorage
 
+import helpers.hparser as hparser
+
 # Temporary hardcoded user identifier
 USER_ID = "demo_user"
 
 
 def user_path(root, *paths):
-    """Helper to build a user-specific path."""
+    """
+    Helper to build a user-specific path.
+    """
     return os.path.join(root, USER_ID, *paths)
 
 
@@ -244,7 +248,9 @@ def generate_dataframe_id() -> str:
 
 
 def get_bamboo_ai(session_id, df=None):
-    """Factory function to create or retrieve BambooAI instances"""
+    """
+    Factory function to create or retrieve BambooAI instances
+    """
     prefs = user_preferences.get(
         session_id,
         {"planning": False, "ontology_path": None, "auxiliary_datasets": []},
@@ -1345,7 +1351,9 @@ def submit_rank():
 
 @app.route("/storage/favourites", methods=["POST"])
 def store_favourite():
-    """Store the favourite solution in the storage/favourites directory"""
+    """
+    Store the favourite solution in the storage/favourites directory
+    """
 
     try:
         data = request.json
@@ -1400,7 +1408,9 @@ def store_favourite():
 
 @app.route("/get_threads", methods=["GET"])
 def get_threads():
-    """Get list of all saved threads with all their chains."""
+    """
+    Get list of all saved threads with all their chains.
+    """
     try:
         # Get the favorites directory
         favourites_dir = user_path("storage", "favourites")
@@ -1507,7 +1517,9 @@ def get_threads():
 
 @app.route("/load_thread/<thread_id>/<chain_id>", methods=["GET"])
 def load_thread(thread_id, chain_id):
-    """Load all content for a specific thread and chain."""
+    """
+    Load all content for a specific thread and chain.
+    """
     try:
         app.logger.info(f"Loading thread {thread_id} with chain {chain_id}")
 
@@ -1577,7 +1589,9 @@ def load_thread(thread_id, chain_id):
 
 @app.route("/get_chain_preview/<thread_id>/<chain_id>", methods=["GET"])
 def get_chain_preview(thread_id, chain_id):
-    """Get a preview image or plotly data for a specific chain."""
+    """
+    Get a preview image or plotly data for a specific chain.
+    """
     try:
         # Path to the chain file
         chain_file = user_path(
@@ -1646,7 +1660,9 @@ def get_chain_preview(thread_id, chain_id):
 
 @app.route("/delete_chain/<thread_id>/<chain_id>", methods=["DELETE"])
 def delete_chain(thread_id, chain_id):
-    """Delete a chain from the favorites directory and vector db if applicable."""
+    """
+    Delete a chain from the favorites directory and vector db if applicable.
+    """
     try:
         session_id = session.get("session_id")
 
@@ -1855,14 +1871,18 @@ def download_generated_dataset():
 # Endpoint to check if vector database is enabled
 @app.route("/get_vector_db_status", methods=["GET"])
 def get_vector_db_status():
-    """Endpoint to check if the vector database is enabled."""
+    """
+    Endpoint to check if the vector database is enabled.
+    """
     return jsonify({"vector_db_enabled": VECTOR_DB})
 
 
 # Endpoint to search threads in the vector database
 @app.route("/search_threads", methods=["POST"])
 def search_threads():
-    """Receives a search query and returns matching results (ID and score) from Pinecone."""
+    """
+    Receives a search query and returns matching results (ID and score) from Pinecone.
+    """
     if not VECTOR_DB:
         return jsonify(
             {"search_results": [], "message": "Vector DB not enabled."}
@@ -1949,7 +1969,9 @@ def sweatstack_callback():
 
 @app.route("/sweatstack/get_users", methods=["GET"])
 def sweatstack_get_users():
-    """Get available SweatStack users"""
+    """
+    Get available SweatStack users
+    """
     access_token = session.get("sweatstack_access_token")
     if not access_token:
         return jsonify({"error": "Not authenticated with SweatStack"}), 401
@@ -1979,7 +2001,9 @@ def sweatstack_get_users():
 
 @app.route("/sweatstack/load_data", methods=["POST"])
 def sweatstack_load_data():
-    """Load SweatStack data using stored access token"""
+    """
+    Load SweatStack data using stored access token
+    """
     access_token = session.get("sweatstack_access_token")
     if not access_token:
         return jsonify({"error": "Not authenticated with SweatStack"}), 401
@@ -2052,14 +2076,18 @@ def sweatstack_load_data():
 
 @app.route("/sweatstack/logout", methods=["POST"])
 def sweatstack_logout():
-    """Logout from SweatStack by removing access token"""
+    """
+    Logout from SweatStack by removing access token
+    """
     session.pop("sweatstack_access_token", None)
     return jsonify({"message": "Logged out from SweatStack successfully"}), 200
 
 
 @app.route("/sweatstack/remove_data", methods=["POST"])
 def sweatstack_remove_data():
-    """Remove SweatStack data (which is loaded as primary dataset)"""
+    """
+    Remove SweatStack data (which is loaded as primary dataset)
+    """
     session_id = session.get("session_id")
     if not session_id:
         return jsonify({"error": "No session ID found"}), 400
@@ -2116,7 +2144,9 @@ def sweatstack_remove_data():
 
 if __name__ == "__main__":
     # Simple command line argument for debug mode
-    parser = argparse.ArgumentParser(description="BambooAI Flask App")
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=hparser.CustomHelpFormatter
+    )
     parser.add_argument(
         "--debug", action="store_true", help="Skip thread cleanup"
     )

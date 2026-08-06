@@ -1,0 +1,7 @@
+matplotlib
+numpy
+pandas
+seaborn
+ipywidgets
+
+dowhy==0.14

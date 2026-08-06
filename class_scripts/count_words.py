@@ -3,7 +3,7 @@
 """
 Count words in lecture script files.
 
-This script counts the number of words in each file in {DIR}/lectures_script/.
+This script counts the number of words in each file in {DIR}/lectures_video_script/.
 
 Usage:
 > count_words.py data605
@@ -29,7 +29,7 @@ _LOG = logging.getLogger(__name__)
 def _parse() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter,
+        formatter_class=hparser.CustomHelpFormatter,
     )
     parser.add_argument(
         "dir",
@@ -57,7 +57,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
     # Build the directory path.
-    lectures_script_dir = Path(args.dir) / "lectures_script"
+    lectures_script_dir = Path(args.dir) / "lectures_video_script"
     hdbg.dassert(
         lectures_script_dir.exists(),
         "Directory does not exist:",
