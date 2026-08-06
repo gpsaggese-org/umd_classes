@@ -13,93 +13,93 @@
 
 * What are Multi-Armed Bandits?
 
+- @Definition@: **Multi-Armed Bandit** is a sequential decision-making problem
+  where:
+  - At each time step $t = 1, 2, \ldots, T$
+    - Choose one action (arm) from $K$ options
+    - Receive a random reward $r_t \sim P_i$ based on chosen $i$
+  - Reward distributions $P_1, \ldots, P_K$ are _unknown_ and _fixed_
+  - _Goal_: Learn which arms are best while collecting rewards
+
+- @Key Challenge@: Balance:
+    - _Exploration_: Try different arms to learn their reward distributions
+    - _Exploitation_: Play the arm you believe is best
+
 - @Example@: in a casino there are $K$ slot machines (aka "one-armed bandits")
   - Each machine $i \in \{1, ..., K\}$ has an unknown probability of winning
     $p_i$
   - _Goal_: Maximize total winnings given a budget of plays
 
-- @Definition@: **Multi-Armed Bandit (MAB)** is a sequential decision-making problem where:
-  - At each time step $t = 1, 2, \ldots, T$, choose one action (arm) from $K$
-    options
-  - After choosing arm $i$, receive a random reward $r_t \sim P_i$
-  - Reward distributions $P_1, \ldots, P_K$ are unknown
-  - Learn which arms are best while collecting rewards
-
-- Sequential decisions with uncertain outcomes and limited feedback
-
-- **Key Challenge**: Balance:
-  - _Exploration_: Try different arms to learn their reward distributions
-  - _Exploitation_: Play the arm you believe is best
-
 * Why Study Bandits?
 
-- **Fundamental Problem in Sequential Decision-Making**
-  - Core model for learning under uncertainty
-  - Simplest non-trivial reinforcement learning setting
+- @Fundamental Problem in Sequential Decision-Making@
+  - Simple but non-trivial reinforcement learning setting
   - Rich theoretical framework with practical algorithms
 
-- **Tractable Analysis**
-  - Stateless: No long-term consequences of actions
+- @Tractable Analysis@
+  - _Stateless_: No long-term consequences of actions
   - Clean mathematical formulation
   - Provable regret bounds and optimality results
   - Serves as building block for more complex RL problems
 
-- **Wide Applicability**
-  - Online advertising (which ad to show?)
-  - Recommendation systems (which movie to suggest?)
-  - Clinical trials (which treatment to test?)
-  - Website optimization (A/B testing)
-  - Resource allocation (which server to query?)
-
 * Applications: Real-World Decision-Making
-- **Online Advertising**
+
+- @Online Advertising@
   - Platform must choose which ad to display
   - Each ad click generates revenue
   - Must learn which ads perform best
-  - Trade-off: Show proven ads vs. test new ones
+  - Trade-off between showing _proven ads_ vs. testing _new ones_
 
-- **Clinical Trials**
-  - Allocate patients to treatment arms
+- @Clinical Trials@
+  - Allocate patients to treatment
   - Each treatment has unknown efficacy
   - _Ethical imperative_: Minimize patients receiving inferior treatments
   - _Exploration-exploitation_ is life-or-death
 
-- **A/B Testing**
+- @A/B Testing@
   - Test website designs, features, UI changes
   - Each variant has unknown conversion rate
-  - Want to identify best variant quickly
-  - Minimize opportunity cost during testing
+  - Need to identify best variant quickly to minimize opportunity cost during
+    testing
 
 * Applications: Real-World Decision-Making
-- **Recommendation Systems**
-  - Netflix/Spotify: Which content to recommend?
+
+- @Recommendation Systems@
+  - E.g., Netflix/Spotify/...
+  - Which content to recommend?
   - Each item has unknown appeal to user
   - Must balance popular items vs. discovery
   - Learn user preferences over time
 
-- **Network Routing**
+- @Network Routing@
   - Choose which server/path to route request
   - Each option has variable latency/reliability
   - Conditions change over time
   - Need fast, adaptive decisions
 
-- **Financial Portfolio Allocation**
+- @Financial Portfolio Allocation@
   - Allocate capital among investment options
   - Each asset has unknown future returns
   - Balance risk and reward
-  - Market conditions non-stationary
+  - Market conditions are non-stationary
 
 * The Exploration–Exploitation Tradeoff
 
-- The "Exploration–Exploitation Tradeoff" is the central dilemma of sequential learning
+- The **Exploration–Exploitation Tradeoff** is the _unavoidable dilemma_ of
+  sequential learning
 
-- **Why This Tradeoff is Unavoidable**:
-  - _Pure exploitation_: Never try suboptimal-looking arms $\to$ may stick with
-    suboptimal choice forever
-  - _Pure exploration_: Always try random arms $\to$ collect lots of information
-    but low total reward
-  - _Must do both_: Explore enough to find good arms, exploit enough to gain high
-    reward
+::: columns
+:::: {.column width=40%}
+- **Pure exploitation**: Never try suboptimal-looking arms $\to$ may stick with
+  suboptimal choice forever
+- **Pure exploration**: Always try random arms $\to$ collect lots of information
+  but low total reward
+- **Must do both**: Explore enough to find good arms, exploit enough to gain high
+  reward
+::::
+:::: {.column width=60%}
+
+// TODO(ai_gp): Make it look better somehow
 
 ```graphviz
 digraph ExploitationExploration {
@@ -122,6 +122,8 @@ digraph ExploitationExploration {
     Explore -> ExplorePro [style=dashed];
 }
 ```
+::::
+:::
 
 * The K-Armed Bandit Problem: Formal Definition
 - **Setting**:
