@@ -6,14 +6,19 @@
 
 # Introduction
 
+// TODO: Check the other material
+// ./msml610/lectures_source/Lesson08.7-Causal_experiments.txt
+// ./msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt
+// ./msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt
+
 * What are Multi-Armed Bandits?
 
-- Imagine you're in a casino facing $K$ slot machines (aka "one-armed bandits")
-  - Each machine has a different unknown probability of winning
-  - Limited budget of plays
-  - _Goal_: Maximize total winnings
+- @Example@: in a casino there are $K$ slot machines (aka "one-armed bandits")
+  - Each machine $i \in \{1, ..., K\}$ has an unknown probability of winning
+    $p_i$
+  - _Goal_: Maximize total winnings given a budget of plays
 
-- **Multi-Armed Bandit (MAB)** is a sequential decision-making problem where:
+- @Definition@: **Multi-Armed Bandit (MAB)** is a sequential decision-making problem where:
   - At each time step $t = 1, 2, \ldots, T$, choose one action (arm) from $K$
     options
   - After choosing arm $i$, receive a random reward $r_t \sim P_i$
