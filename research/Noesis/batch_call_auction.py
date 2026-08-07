@@ -1,10 +1,6 @@
 """
 In-memory batch call-auction order book for the Intelligence Market
-simulator (PR1).
-
-See `research/ideas/plan.Intelligence_Market.md` for the PR breakdown and
-`research/ideas/draft.Intelligence_Market.md` for the background and
-formalization this module implements.
+simulator.
 
 Import as:
 
@@ -43,8 +39,10 @@ class Bid:
     Store one buyer order for the batch auction.
 
     E.g., `Bid("buyer_1", 10_000, "frontier", 2.0, 0.999, 0.02)` requests
-    10,000 tasks at the "frontier" tier, under 2.0 latency, at least 0.999
-    reliability, for up to 0.02 price per task.
+    - 10,000 tasks at the "frontier" tier
+    - under 2.0 latency
+    - at least 0.999 reliability
+    - for up to 0.02 price per task.
     """
 
     buyer_id: str
@@ -96,10 +94,13 @@ class Ask:
     Store one seller order for the batch auction.
 
     E.g., `Ask("seller_1", 10_000, "frontier", 1.5, 0.995, 0.015)` offers
-    10,000 tasks at the "frontier" tier, with typical 1.5 latency and 0.995
-    reliability, for at least 0.015 price per task.
+    - 10,000 tasks at the "frontier" tier
+    - with typical 1.5 latency
+    - 0.995 reliability
+    - for at least 0.015 price per task.
     """
 
+    # TODO(ai_gp): Add a definition for each variable.
     seller_id: str
     n_tasks: int
     c_level: str
@@ -156,6 +157,7 @@ class Fill:
     `price`.
     """
 
+    # TODO(ai_gp): Add a definition for each variable.
     buyer_id: str
     seller_id: str
     c_level: str
@@ -178,6 +180,7 @@ class TierClearResult:
     no trade happened and both sides' full quantity went unfilled.
     """
 
+    # TODO(ai_gp): Add a definition for each variable.
     c_level: str
     clearing_price: Optional[float]
     fills: List[Fill]
@@ -286,16 +289,14 @@ class OrderBook:
     round.
 
     Buyers submit `Bid`s and sellers submit `Ask`s via `submit_bid()` /
-    `submit_ask()`; `clear_round()` buckets every pending order by
-    capability tier and clears each tier independently (see
-    `_match_orders_in_tier()`).
+    `submit_ask()`; `clear_round()` buckets every pending order by capability
+    tier and clears each tier independently (see `_match_orders_in_tier()`).
 
-    PR1 simplifications (see `research/ideas/plan.Intelligence_Market.md`):
+    Simplifications:
     - A bid's `c_level_min` is treated as an exact tier bucket, matched only
       against asks with the same `c_level` string; there is no cross-tier
       substitution.
-    - A cleared round drops every order it processed, matched or not: PR1
-      does not carry unfilled quantity into the next round.
+    - A cleared round drops every order it processed, matched or not
     """
 
     def __init__(self) -> None:
@@ -357,31 +358,3 @@ class OrderBook:
         self._asks = []
         _LOG.debug("return=%s", results)
         return results
-
-
-# #############################################################################
-# Example usage
-# #############################################################################
-
-
-def main() -> None:
-    """
-    Demonstrate a single batch round with two capability tiers.
-
-    One tier crosses (buyer and seller trade), the other does not (buyer's
-    max price is below the seller's minimum).
-    """
-    order_book = OrderBook()
-    # "frontier" tier: crosses at a uniform price between the two limits.
-    order_book.submit_bid(Bid("buyer_1", 10_000, "frontier", 2.0, 0.999, 0.02))
-    order_book.submit_ask(Ask("seller_1", 10_000, "frontier", 1.5, 0.995, 0.016))
-    # "cheap" tier: does not cross, buyer's limit is below seller's limit.
-    order_book.submit_bid(Bid("buyer_2", 5_000, "cheap", 5.0, 0.9, 0.001))
-    order_book.submit_ask(Ask("seller_2", 5_000, "cheap", 4.0, 0.92, 0.002))
-    results = order_book.clear_round()
-    for c_level, tier_result in results.items():
-        print(f"{c_level}: {tier_result}")
-
-
-if __name__ == "__main__":
-    main()
