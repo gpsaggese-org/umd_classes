@@ -24,10 +24,10 @@ and, when available, a user feedback signal, regardless of whether the
 request was placed under a contract. The storage schema is intentionally
 minimal:
 
-\[
+$$
   (\text{prompt}, \text{response}, \text{provider}, \text{model},
    \text{latency}, \text{cost}, \kappa\text{ or } \bot)
-\]
+$$
 
 This logging is passive by default: it does not change routing behavior
 and exists purely to build a reusable dataset for evaluation and
@@ -35,6 +35,11 @@ distillation (Section~\ref{sec:distillation}). Privacy and data-handling
 safeguards (PII scrubbing, opt-in/opt-out) are necessary before logging
 real traffic and are discussed as an open question in
 Section~\ref{sec:open_questions}.
+
+% TODO(ai_gp): Add a sequence diagram of a request's path through
+% NoesisServer: caller -> API gateway -> provider, with the logged tuple
+% (prompt, response, provider, model, latency, cost, contract-or-bottom)
+% captured on the way back.
 
 % ==============================================================================
 \subsection{Contract fulfillment monitoring}
@@ -103,6 +108,12 @@ sampling noise, so the contract is flagged as violated and reported back
 to \NoesisMarket.
 \end{example}
 
+% TODO(ai_gp): Add a figure illustrating the hypothesis test of
+% Equation~\eqref{eq:reliability_lower_bound}: the point estimate
+% $\hat r(\kappa, W)$, its lower confidence bound $\hat r_{\text{lower}}$,
+% and the threshold $\rminattr(\kappa)$ on a single number line, showing
+% when a shortfall is flagged versus attributed to noise.
+
 % ==============================================================================
 \subsection{Difficulty-aware routing}
 \label{sec:routing}
@@ -142,6 +153,11 @@ Measuring the left-hand side against the right-hand side on real traffic
 is a prerequisite for deploying routing in production, and is deferred to
 the implementation plan in Section~\ref{sec:roadmap}.
 
+% TODO(ai_gp): Add a flowchart of difficulty-aware routing: prompt $x$ ->
+% difficulty estimator $\hat d$ -> cheapest sufficient tier $\pi(x)$
+% (Equation~\eqref{eq:routing_policy}), next to the cost comparison of
+% Equation~\eqref{eq:routing_saving_condition}.
+
 % ==============================================================================
 \subsection{Answer fusion}
 \label{sec:fusion}
@@ -165,6 +181,11 @@ low-quality answer. Which lever is preferable for a given contract depends
 on the contract's price versus its $\rminattr$ term: a low-price,
 low-$\rminattr$ contract favors routing, while a high-$\rminattr$ contract
 may only be economically served through fusion.
+
+% TODO(ai_gp): Add a figure showing answer fusion as a fan-out/fan-in: one
+% prompt sent to several providers in $S(x)$, whose answers are combined
+% by the aggregator $g$ (Equation~\eqref{eq:fusion_aggregator}), contrasted
+% side by side with routing's single-provider path.
 
 % ==============================================================================
 \subsection{Training signal and distillation}
@@ -192,10 +213,15 @@ disagree while the cheap model happens to be correct. A genuine quality
 label requires independent verification, for instance from a pairwise
 preference arena, which is a companion research direction discussed in
 Section~\ref{sec:related_work}. With that caveat, the logged corpus
-\[
+$$
   \calD = \{ (x_i, f_{\text{strong}}(x_i)) \}_{i=1}^N
-\]
+$$
 also supports knowledge distillation of a smaller model $f_\theta$ trained
 to approximate $f_{\text{strong}}$'s outputs on the observed task
 distribution \cite{hinton2015}, offering a second, independent way for
 \NoesisServer{} to reduce cost on traffic it has already observed.
+
+% TODO(ai_gp): Add a figure showing the training pipeline: logged
+% prompt/response traffic -> agreement labels (Definition~\ref{def:agreement_label})
+% feeding the difficulty estimator, and the same corpus $\calD$ feeding
+% distillation of $f_\theta$, as two parallel consumers of one dataset.

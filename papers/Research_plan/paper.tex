@@ -81,31 +81,31 @@ Theory}
   complexity and generalization.
 
   Define a time-indexed hypothesis class:
-  \[
+  $$
     \mathcal{H}_{t}= \{h_{t}(x) : t \in \mathbb{T}\}
-  \]
+  $$
 
   Assume bounded drift:
-  \[
+  $$
     \|h_{t+1}- h_{t}\| \le \epsilon
-  \]
+  $$
 
   Generalize with drift
 
   Classical PAC bound:
-  \[
+  $$
     n \gtrsim \frac{VC(\mathcal{H}) + \log(1/\delta)}{\epsilon^{2}}
-  \]
+  $$
 
   Time-aware extension:
-  \[
+  $$
     n \gtrsim \frac{VC(\mathcal{H}) + D_{T}+ \log(1/\delta)}{\epsilon^{2}}
-  \]
+  $$
 
   where $D_{T}$ measures cumulative drift:
-  \[
+  $$
     D_{T}= \sum_{t=1}^{T-1}\|h_{t+1}- h_{t}\|
-  \]
+  $$
 
   \textbf{Examples}
 
@@ -215,9 +215,9 @@ Theory}
   \subsection*{Temporal VC Dimension}
 
   Define:
-  \[
+  $$
     VC_{T}= VC\left(\bigcup_{t=1}^{T}\mathcal{H}_{t}\right)
-  \]
+  $$
 
   \textbf{Examples:}
   \begin{itemize}
@@ -261,14 +261,14 @@ Theory}
   \subsection*{Kolmogorov Complexity Over Time}
 
   Measure compressibility of a data stream:
-  \[
+  $$
     K(x_{1:T})
-  \]
+  $$
 
   Incremental description length:
-  \[
+  $$
     L = \sum_{t=1}^{T}K(x_{t}\mid x_{<t})
-  \]
+  $$
 
   Use compression rate changes to detect regime shifts.
 
@@ -285,9 +285,9 @@ Theory}
   \subsection*{Forgetting Mechanisms}
 
   Exponential decay weights:
-  \[
+  $$
     w_{t}= e^{-t/\tau}
-  \]
+  $$
 
   \textbf{Examples:}
   \begin{itemize}
@@ -386,9 +386,9 @@ Theory}
   \subsection*{Including the Research Process}
 
   Total complexity:
-  \[
+  $$
     C = C_{\text{model}}+ C_{\text{search}}
-  \]
+  $$
 
   Study:
   \begin{itemize}
@@ -435,9 +435,9 @@ Theory}
   \subsection*{Backtesting Complexity}
 
   Effective complexity:
-  \[
+  $$
     VC_{\text{eff}}= VC(\mathcal{H}) + \log(N_{\text{strategies tested}})
-  \]
+  $$
 
   Research:
   \begin{itemize}

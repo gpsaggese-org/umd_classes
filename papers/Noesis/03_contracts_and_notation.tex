@@ -13,9 +13,9 @@ submitted to \NoesisMarket.
 \begin{definition}[Capability tiers]
 \label{def:capability_tiers}
 Let
-\[
+$$
   \calC = \{ c_1, c_2, \ldots, c_K \}
-\]
+$$
 be a finite, totally ordered set of \emph{capability tiers}, with
 $c_1 \prec c_2 \prec \cdots \prec c_K$, where $\prec$ denotes ``strictly
 less capable than''. A tier is a discrete, provider-agnostic label (e.g.,
@@ -58,10 +58,9 @@ definitions above.
 \begin{definition}[Intelligence contract]
 \label{def:contract}
 An \emph{intelligence contract} is a tuple
-% TODO(ai_gp): Use $$ instead of \[ and \]
-\[
+$$
   \kappa = ( \ntasksattr, \clevelattr, \lmaxattr, \rminattr, \priceattr )
-\]
+$$
 where
 \begin{itemize}
   \item $\ntasksattr \in \bbN$ is the number of tasks covered by the
@@ -83,9 +82,9 @@ $\priceattr$.''
 \begin{example}[Intelligence contract]
 \label{ex:contract}
 The contract
-\[
+$$
   \kappa_1 = (10{,}000,\ \texttt{frontier},\ 2\text{s},\ 0.999,\ P)
-\]
+$$
 reads: ``deliver 10,000 tasks at frontier-class capability or better,
 within 2 seconds of latency, with at least 99.9\% reliability, for a total
 price of $P$.''
@@ -103,29 +102,36 @@ role of the price attribute as a limit rather than a fixed value.
 \begin{definition}[Bid]
 \label{def:bid}
 A \emph{bid} is a tuple
-\[
+$$
   \beta = (n_\beta, c_\beta, \ell_\beta, r_\beta, p_\beta)
-\]
-% TODO(ai_gp): Use a bullet list
-submitted by a buyer, where $n_\beta$ is the requested number of tasks,
-$c_\beta \in \calC$ is the minimum required capability tier, $\ell_\beta$
-is the maximum acceptable latency, $r_\beta$ is the minimum acceptable
-reliability, and $p_\beta$ is the maximum price per task the buyer is
-willing to pay.
+$$
+submitted by a buyer, where
+\begin{itemize}
+  \item $n_\beta$ is the requested number of tasks,
+  \item $c_\beta \in \calC$ is the minimum required capability tier,
+  \item $\ell_\beta$ is the maximum acceptable latency,
+  \item $r_\beta$ is the minimum acceptable reliability,
+  \item $p_\beta$ is the maximum price per task the buyer is willing to
+    pay.
+\end{itemize}
 \end{definition}
 
 \begin{definition}[Ask]
 \label{def:ask}
 An \emph{ask} is a tuple
-\[
+$$
   \alpha = (n_\alpha, c_\alpha, \ell_\alpha, r_\alpha, p_\alpha)
-\]
-% TODO(ai_gp): Use a bullet list
-submitted by a seller, where $n_\alpha$ is the offered number of tasks,
-$c_\alpha \in \calC$ is the offered capability tier, $\ell_\alpha$ is the
-seller's typical (self-reported or previously measured) latency,
-$r_\alpha$ is the seller's typical reliability, and $p_\alpha$ is the
-minimum price per task the seller is willing to accept.
+$$
+submitted by a seller, where
+\begin{itemize}
+  \item $n_\alpha$ is the offered number of tasks,
+  \item $c_\alpha \in \calC$ is the offered capability tier,
+  \item $\ell_\alpha$ is the seller's typical (self-reported or previously
+    measured) latency,
+  \item $r_\alpha$ is the seller's typical reliability,
+  \item $p_\alpha$ is the minimum price per task the seller is willing to
+    accept.
+\end{itemize}
 \end{definition}
 
 Unlike a bid, an ask's capability, latency, and reliability attributes are
@@ -134,3 +140,9 @@ what the seller will accept; only $p_\alpha$ is a limit in the auction
 sense. Section~\ref{sec:compatibility} defines when a bid and an ask are
 compatible, i.e., when the ask's descriptive attributes satisfy the bid's
 required attributes.
+
+% TODO(gp): Add a figure showing the contract lifecycle: a bid and one or
+% more compatible asks (Definitions~\ref{def:bid} and \ref{def:ask}) are
+% matched by NoesisMarket into a single intelligence contract
+% (Definition~\ref{def:contract}), which is then dispatched to
+% NoesisServer for execution.

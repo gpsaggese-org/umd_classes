@@ -24,9 +24,12 @@
 \newcommand{\priceattr}{\textnormal{\texttt{P}}}
 
 % Table icons for the comparison tables, reused across sections.
-\newcommand{\ngood}{\textcolor{green}{+}}
-\newcommand{\npartial}{\textcolor{yellow}{o}}
-\newcommand{\nbad}{\textcolor{red}{-}}
+% Use darker color mixes instead of the raw xcolor names so the symbols stay
+% readable against a white background (plain "yellow" in particular is too
+% light to read).
+\newcommand{\ngood}{\textcolor{green!50!black}{+}}
+\newcommand{\npartial}{\textcolor{orange!70!black}{o}}
+\newcommand{\nbad}{\textcolor{red!70!black}{-}}
 
 \begin{document}
   \input{papers/Noesis/01_introduction.tex}

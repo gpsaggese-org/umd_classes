@@ -13,24 +13,37 @@ a market for machine intelligence.
 The demand side of the market is made of applications and autonomous agents
 that consume LLM inference as an input: a customer-support agent, a
 document-summarization pipeline, a coding assistant, or a multi-agent
-system delegating a sub-task.
-% TODO(ai_gp): Use bullet points, when possible
-These participants differ along several dimensions: how much they value low
-latency, how much they value a low error rate, how price-sensitive they are,
-and how much of their traffic is predictable in advance versus bursty.
+system delegating a sub-task. These participants differ along several
+dimensions:
 
-% TODO(ai_gp): Use bullet points, when possible
+\begin{itemize}
+  \item How much they value low latency.
+  \item How much they value a low error rate.
+  \item How price-sensitive they are.
+  \item How much of their traffic is predictable in advance versus bursty.
+\end{itemize}
+
 The supply side is made of model and compute providers: foundation-model
 API vendors, open-weight model hosts, and resellers of spare inference
-capacity. Sellers differ in the capability tier of the models they can
-serve, their typical latency and reliability under load, and their
-marginal cost of serving a request, which itself depends on hardware
-utilization and contractual commitments elsewhere.
+capacity. Sellers differ along several dimensions:
+
+\begin{itemize}
+  \item The capability tier of the models they can serve.
+  \item Their typical latency and reliability under load.
+  \item Their marginal cost of serving a request, which itself depends on
+    hardware utilization and contractual commitments elsewhere.
+\end{itemize}
 
 As in any market, the opportunity to trade arises from these differences:
 a buyer with a latency-insensitive, cost-sensitive batch job and a seller
 with idle capacity outside of peak hours can both be made better off by a
 contract that a rigid, single posted price cannot express.
+
+% TODO(ai_gp): Add a figure showing the two-sided market: demand-side
+% dimensions (latency sensitivity, error tolerance, price sensitivity,
+% traffic predictability) on one side, supply-side dimensions (capability
+% tier, latency/reliability under load, marginal cost) on the other, with
+% NoesisMarket as the meeting point in between.
 
 % ==============================================================================
 \subsection{Roles of an intelligence market}
@@ -89,6 +102,10 @@ axes:
     capability and latency terms.
 \end{itemize}
 
+% TODO(ai_gp): Add a figure showing the capability/latency/reliability bundle
+% as three axes of a single traded good, contrasted with a single-scalar
+% price-per-token good, to make the bundling problem visually concrete.
+
 Section~\ref{sec:contract} turns this into a formal contract. The
 consequence of this design choice is that the market cannot clear on price
 alone: two asks at the same price but different tiers are not
@@ -121,3 +138,7 @@ meter, while machine intelligence's capability attribute is not directly
 observable and can only be estimated from the content of a response. This
 is the problem that \NoesisServer{}'s fulfillment monitoring
 (Section~\ref{sec:fulfillment_monitoring}) has to solve.
+
+% TODO(gp): Add a timeline figure comparing electricity market layering
+% (day-ahead / real-time / capacity markets) against Noesis's periodic
+% tiered call auction, to make the borrowed structure concrete.

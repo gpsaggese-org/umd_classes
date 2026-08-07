@@ -53,6 +53,12 @@ clearinghouse for the latency, gas cost, and finality assumptions of the
 underlying chain, a trade-off Section~\ref{sec:decentralized_comparison}
 makes explicit.
 
+% TODO(ai_gp): Add a figure contrasting the two trust boundaries: a single
+% operator seeing all bids/asks and deciding eligibility (centralized), vs.
+% commit-reveal plus on-chain settlement with only addresses visible
+% (decentralized), to make Section~\ref{sec:decentralized_motivation}'s
+% concern concrete before the mechanisms below are introduced.
+
 % ==============================================================================
 \subsection{On-chain contracts, blind bidding, and anonymity}
 \label{sec:blind_bidding}
@@ -67,9 +73,9 @@ submitted and revealed.
 \label{def:blind_bid}
 A \emph{blind bid} for a bid $\beta = (n_\beta, c_\beta, \ell_\beta,
 r_\beta, p_\beta)$ (Definition~\ref{def:bid}) is a commitment
-\[
+$$
   h_\beta = H(\beta \,\|\, \nu_\beta)
-\]
+$$
 posted on-chain during a round's \emph{commit window}, where $H$ is a
 collision-resistant hash function and $\nu_\beta$ is a secret salt known
 only to the bidder. During the round's subsequent \emph{reveal window},
@@ -101,6 +107,11 @@ before logging real prompt/response pairs (Section~\ref{sec:gateway_architecture
 fulfillment still requires a buyer's requests to reach a real seller
 off-chain, so anonymity here covers the auction, not the inference traffic
 that a cleared contract subsequently generates.
+
+% TODO(ai_gp): Add a sequence diagram of one auction round under commit-reveal:
+% commit window (bidders post $h_\beta = H(\beta \| \nu_\beta)$) followed
+% by the reveal window (bidders disclose $(\beta, \nu_\beta)$), followed by
+% clearing (Problem~\ref{prob:clearing}) on only the matching, revealed bids.
 
 % ==============================================================================
 \subsection{Stake-backed fulfillment: slashing as decentralized reputation}
@@ -137,6 +148,11 @@ participation in future rounds to take effect. How $\hat
 r_{\text{lower}}(\kappa, W)$ is reported on-chain in a form a smart
 contract can act on, rather than treating \NoesisServer{} itself as a
 trusted oracle, is left open in Section~\ref{sec:decentralized_open_questions}.
+
+% TODO(ai_gp): Add a state diagram for a staked ask's lifecycle: posted at
+% reveal -> locked while matched into a contract -> released in full or
+% slashed once $\hat r_{\text{lower}}(\kappa, W)$ is reported
+% (Definition~\ref{def:staked_ask}).
 
 Sizing $\sigma_\alpha$ raises the same asymmetry ZK-Tulip's design notes
 flag for its own per-bid stake: a buyer setting the required stake
@@ -189,6 +205,11 @@ linear assignment problem, rather than merely of feasibility, is itself an
 open implementation question, listed in
 Section~\ref{sec:decentralized_open_questions}.
 
+% TODO(ai_gp): Add a figure spanning the three placements for the clearing
+% problem (fully on-chain, fully off-chain, verifiably off-chain) as a
+% spectrum from trust-minimized/expensive to cheap/trusted, marking where
+% each placement sits.
+
 % ==============================================================================
 \subsection{Redundancy as a decentralization safeguard}
 \label{sec:decentralized_redundancy}
@@ -216,6 +237,10 @@ full volume against the single lowest-priced compatible ask, a
 decentralized \NoesisMarket{} can split it across the $k_{\text{red}}$
 lowest-priced compatible asks, so that the same top seller does not
 deterministically win every round in a thin bucket.
+
+% TODO(ai_gp): Add a figure showing $k_{\text{red}}$ staked asks racing to
+% fulfill one contract, with only the sellers meeting the contract's terms
+% retaining their stake, next to a single-ask match for comparison.
 
 % ==============================================================================
 \subsection{Comparison with the centralized design}

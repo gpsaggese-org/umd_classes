@@ -42,6 +42,11 @@ prices diverge within the same day. A \texttt{cheap} tier and a
 are not expected to clear at the same price.
 \end{remark}
 
+% TODO(ai_gp): Add a figure showing the auction timeline: the order book
+% accepting bids/asks continuously, closing every $T$ minutes, with a
+% separate uniform-price clearing computed per capability-tier bucket at
+% each close.
+
 % ==============================================================================
 \subsection{Compatibility}
 \label{sec:compatibility}
@@ -54,13 +59,13 @@ latency and reliability requirements still need to be met.
 A bid $\beta = (n_\beta, c_\beta, \ell_\beta, r_\beta, p_\beta)$ and an ask
 $\alpha = (n_\alpha, c_\alpha, \ell_\alpha, r_\alpha, p_\alpha)$ are
 \emph{compatible}, written $\beta \sim \alpha$, if
-\[
+$$
   c_\alpha \succeq c_\beta,
   \qquad
   \ell_\alpha \leq \ell_\beta,
   \qquad
   r_\alpha \geq r_\beta.
-\]
+$$
 \end{definition}
 
 Compatibility is a feasibility filter, not a scoring function: capability,
@@ -76,6 +81,11 @@ Restricted to a tier bucket $c$, compatibility defines a bipartite graph
 $G_c = (B_c \cup A_c, E_c)$ between the bids $B_c$ and asks $A_c$ in the
 bucket, with an edge $(\beta, \alpha) \in E_c$ whenever $\beta \sim
 \alpha$.
+
+% TODO(ai_gp): Add a figure showing a small example bipartite compatibility
+% graph $G_c$: a handful of bids and asks as two columns of nodes, with
+% edges only where capability/latency/reliability compatibility holds
+% (Definition~\ref{def:compatibility}).
 
 % ==============================================================================
 \subsection{The clearing problem}
@@ -173,6 +183,10 @@ the classical Walrasian argument for existence of a market-clearing price
 \cite{mcafee1992}.
 \end{proof}
 
+% TODO(gp): Add a figure showing the cumulative demand curve $D(p)$
+% (non-increasing) and supply curve $S(p)$ (non-decreasing) crossing at
+% the clearing price $p^*(c, t)$, illustrating Proposition~\ref{prop:existence}.
+
 When the compatibility graph is not complete, Problem~\ref{prob:clearing}
 remains a well-posed linear program for any fixed candidate price, but a
 single uniform price is no longer guaranteed to support a volume-maximizing
@@ -225,6 +239,11 @@ Equation~\eqref{eq:reputation_update}; if $\rho_\alpha$ falls below
 $\rho_{\min}$, the seller is excluded from the \texttt{frontier} bucket in
 subsequent rounds until its reputation recovers.
 \end{example}
+
+% TODO(ai_gp): Add a figure showing the reputation and pricing feedback loop:
+% contract dispatched to NoesisServer -> measured reliability
+% $\hat r(\kappa, W)$ -> reputation update (Equation~\eqref{eq:reputation_update})
+% -> gated eligibility for future NoesisMarket rounds.
 
 % ==============================================================================
 \subsection{Mechanism-design risks}

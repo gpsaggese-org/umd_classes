@@ -1,6 +1,6 @@
 \title{Noesis: A Protocol for Trading and Fulfilling Machine Intelligence as a Commodity}
 
-\author{Giacinto Paolo Saggese$^{*}$}
+\author{Giacinto Paolo (GP) Saggese$^{*}$}
 \thanks{$^{*}$ The University of Maryland, College Park, MD 20742, USA, gsaggese@umd.edu}
 
 \date{\today}
@@ -29,9 +29,7 @@ the delivered capability, latency, and reliability met the contracted terms,
 and feeds the result back into the market as a reputation and pricing signal.
 As a byproduct, \NoesisServer{} logs every request and estimates how much
 capability each request actually needs, enabling difficulty-aware routing and
-answer fusion that trade cost for accuracy in opposite directions, and
-enabling distillation of the collected data into smaller, cheaper models.
-% TODO(ai_gp): Do not talk about distillation
+answer fusion that trade cost for accuracy in opposite directions.
 % TODO(ai_gp): Make it fully anonymized
 We formalize the contract, bid, and ask notation; state the market-clearing
 problem as a linear program and establish that a clearing price exists under
@@ -108,6 +106,91 @@ of the protocol's design.
     pricing signal (Section~\ref{sec:noesis_server}).
 \end{itemize}
 
+Figure~\ref{fig:architecture} lays out the resulting architecture: the
+demand and supply sides submit bids and asks to \NoesisMarket{}, whose
+cleared contracts are dispatched to \NoesisServer{}; \NoesisServer{}'s API
+gateway proxies matched requests to the underlying providers through
+per-provider APIs, and its metering logic checks the responses against the
+contract terms, using external intelligence-measure providers (e.g.,
+artificialanalysis.ai\footnote{\url{https://artificialanalysis.ai}}) as a
+capability reference.
+
+% rendered_images:begin
+% ```graphviz
+% digraph NoesisArchitecture {
+%   rankdir=LR;
+%   splines=spline;
+%   nodesep=0.6;
+%   ranksep=0.7;
+%   bgcolor="white";
+% 
+%   node [fontname="Helvetica", fontsize=12, style="rounded,filled", shape=box, penwidth=1.3];
+%   edge [fontname="Helvetica", fontsize=10, color="#4A4A4A", penwidth=1.2, arrowsize=0.8];
+% 
+%   subgraph cluster_participants {
+%     label="Market participants";
+%     fontname="Helvetica-Bold";
+%     fontsize=13;
+%     style="rounded,filled";
+%     fillcolor="#F7F9FC";
+%     color="#B8C4D9";
+%     margin=16;
+% 
+%     Demand [label="Demand\n(applications / agents)", fillcolor="#F4A6A6"];
+%     Supply [label="Supply\n(model & compute providers)", fillcolor="#FFD1A6"];
+%   }
+% 
+%   NoesisMarket [label="NoesisMarket\n(call auction)", fillcolor="#A0D6D1"];
+% 
+%   subgraph cluster_noesis_server {
+%     label="NoesisServer";
+%     fontname="Helvetica-Bold";
+%     fontsize=13;
+%     style="rounded,filled";
+%     fillcolor="#F7F9FC";
+%     color="#B8C4D9";
+%     margin=16;
+% 
+%     Gateway [label="API gateway", fillcolor="#A6C8F4"];
+%     Metering [label="Metering logic\n(fulfillment monitoring)", fillcolor="#B2E2B2"];
+%     Gateway -> Metering [label="  logged traffic  "];
+%   }
+% 
+%   ProviderAPIs [label="APIs for providers\n(per-provider endpoints)", fillcolor="#C6A6F4"];
+%   IntelligenceMeasure [label="Intelligence-measure providers\n(e.g., artificialanalysis.ai)", fillcolor="#C6A6F4"];
+% 
+%   Demand -> NoesisMarket [label="  bids  "];
+%   Supply -> NoesisMarket [label="  asks  "];
+%   NoesisMarket -> Gateway [label="  contracts  ", penwidth=1.8];
+%   Gateway -> ProviderAPIs [label="  requests / responses  ", dir=both];
+%   IntelligenceMeasure -> Metering [label="  capability reference  ", style=dashed, color="#8C8C8C"];
+%   Metering -> NoesisMarket [
+%     label="  reputation & pricing feedback  ",
+%     color="#B23A48",
+%     fontcolor="#B23A48",
+%     penwidth=1.8,
+%     style=dashed,
+%     constraint=false
+%   ];
+% }
+% ```
+% label=fig:architecture
+% caption=\Noesis{} architecture. Demand and supply submit bids and asks to
+%   \NoesisMarket{}, which clears them into contracts dispatched to
+%   \NoesisServer{}. \NoesisServer{}'s API gateway proxies matched requests to
+%   providers through per-provider APIs; its metering logic checks the
+%   responses against the contract terms and reports fulfillment back to
+%   \NoesisMarket{} as the reputation and pricing signal of
+%   Section~\ref{sec:reputation}.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{01_introduction.tex.figs/01_introduction.1.png}
+  \caption{\Noesis{} architecture. Demand and supply submit bids and asks to \NoesisMarket{}, which clears them into contracts dispatched to \NoesisServer{}. \NoesisServer{}'s API gateway proxies matched requests to providers through per-provider APIs; its metering logic checks the responses against the contract terms and reports fulfillment back to \NoesisMarket{} as the reputation and pricing signal of Section~\ref{sec:reputation}.}
+  \label{fig:architecture}
+\end{figure}
+% render_images:end
+
 The two components close a loop that is missing from today's LLM API
 market: a contract is not merely sold, it is metered, and the metering
 result changes the terms under which the same seller can sell in the
@@ -154,11 +237,6 @@ The innovative features of \Noesis{} are:
     providers and combine their answers, trading cost for accuracy in the
     direction opposite to routing.
 
-  \item \textbf{A reusable byproduct dataset}: every logged
-    prompt/response pair is available for evaluation and distillation,
-    without the market or the buyer having to do anything beyond normal
-    use of the protocol.
-
   \item \textbf{Provider-agnostic liquidity pooling}: many sellers compete
     for the same demand behind a single interface, instead of buyers being
     locked into a single provider's price list.
@@ -179,29 +257,27 @@ buying raw compute on a cloud spot market (e.g., spot GPU instances). The
 comparison is discussed in detail in Sections~\ref{sec:market_design}
 through \ref{sec:noesis_server}.
 
-% TODO(ai_gp): Make the first row and column bold
-% TODO(ai_gp): Make the symbols more readable by using darker colors
 \begin{samepage}
   \begin{table}[H]
     \centering
     \begin{tabular}{l|c|c|c|c|}
-                                              & \emph{Direct API} & \emph{Gateway} & \emph{Spot compute} & \emph{\Noesis} \\
+                                                        & \textbf{\emph{Direct API}} & \textbf{\emph{Gateway}} & \textbf{\emph{Spot compute}} & \textbf{\emph{\Noesis}} \\
       \hline
-      Price discovery via open auction       & \nbad             & \nbad          & \ngood               & \ngood         \\
+      \textbf{Price discovery via open auction}       & \nbad             & \nbad          & \ngood               & \ngood         \\
       \hline
-      Bundled quality guarantee              & \npartial         & \npartial      & \nbad                & \ngood         \\
+      \textbf{Bundled quality guarantee}              & \npartial         & \npartial      & \nbad                & \ngood         \\
       \hline
-      Verified fulfillment / SLA monitoring  & \nbad             & \nbad          & \npartial             & \ngood         \\
+      \textbf{Verified fulfillment / SLA monitoring}  & \nbad             & \nbad          & \npartial             & \ngood         \\
       \hline
-      Reputation-based accountability        & \nbad             & \nbad          & \npartial             & \ngood         \\
+      \textbf{Reputation-based accountability}        & \nbad             & \nbad          & \npartial             & \ngood         \\
       \hline
-      Difficulty-aware cost routing          & \nbad             & \npartial      & \nbad                 & \ngood         \\
+      \textbf{Difficulty-aware cost routing}          & \nbad             & \npartial      & \nbad                 & \ngood         \\
       \hline
-      Multi-provider liquidity pooling       & \nbad             & \ngood         & \npartial             & \ngood         \\
+      \textbf{Multi-provider liquidity pooling}       & \nbad             & \ngood         & \npartial             & \ngood         \\
       \hline
-      Reusable evaluation/training dataset   & \npartial         & \npartial      & \nbad                 & \ngood         \\
+      \textbf{Reusable evaluation/training dataset}   & \npartial         & \npartial      & \nbad                 & \ngood         \\
       \hline
-      Single-API ease of integration         & \ngood            & \ngood         & \nbad                 & \ngood         \\
+      \textbf{Single-API ease of integration}         & \ngood            & \ngood         & \nbad                 & \ngood         \\
       \hline
     \end{tabular}
     \caption{Comparison of \Noesis{} against alternative ways of obtaining
