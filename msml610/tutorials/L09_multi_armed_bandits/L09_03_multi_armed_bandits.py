@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.5
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -51,19 +51,27 @@ _LOG = logging.getLogger(__name__)
 # - How do you maximize your winnings?
 
 # %%
+# TODO(ai_gp): Click on the slot machine instead of the selector, and print the value (not in the machine)
 utils.cell1_casino_slot_machines()
+
+# %%
+// TODO(ai_gp): Describe the classes MultiArmedBandit, Strategy, BanditSimulation, BanditExperiment
+// TODO(ai_gp): Show the API
 
 # %% [markdown]
 # # Cell 2: Exploration vs Exploitation Dilemma
 #
-# Demonstrate the fundamental tradeoff between exploration and exploitation.
-# - Pure exploration learns but earns little
-# - Pure exploitation gets stuck on suboptimal choices
-# - Balance is key!
+# Demonstrate the fundamental tradeoff between exploration and exploitation in the three slot machine set up.
+#
+# // TODO(ai_gp): Explain the setup (there are under coins) and 3 strategies (describe the strategies)
+#
+# // Add a strategy with optimal choice (oracle)
 
 # %%
 utils.cell2_exploration_vs_exploitation()
-# Pure exploration learns but earns little. Pure exploitation gets stuck on suboptimal choices. Balance is key.
+# Pure exploration learns but earns little
+# Pure exploitation gets stuck on suboptimal choices
+# Balance is key.
 
 # %% [markdown]
 # <!-- # Cell A: Strategy Comparison with Epsilon Sweep
