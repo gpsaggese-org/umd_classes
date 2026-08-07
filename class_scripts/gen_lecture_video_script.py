@@ -10,8 +10,12 @@ This script performs multiple steps:
 4. Combine intro, script, and outro
 5. Lint the final script
 
-Usage:
+# Usage Example
+
+- Generate the lecture video script for DATA605 lesson 01.1:
 > gen_lecture_video_script.py data605 01.1
+
+- Generate the lecture video script for MSML610 lesson 02.3:
 > gen_lecture_video_script.py msml610 02.3
 
 Import as:
@@ -21,9 +25,8 @@ import class_scripts.gen_lecture_video_script as clgelesc
 
 import argparse
 import logging
-from pathlib import Path
 
-import class_scripts.common_utils as clcomuut
+import class_scripts.common_utils as csccouti
 import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hparser as hparser
@@ -80,16 +83,16 @@ def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
     # Validate arguments.
-    clcomuut.validate_dir_lesson_args(args.dir, args.lesson)
+    csccouti.validate_dir_lesson_args(args.dir, args.lesson)
     # Get source and destination names.
-    src_name = clcomuut.get_source_name(args.dir, args.lesson)
-    dst_name = clcomuut.get_output_name(src_name, ".script.txt")
+    src_name = csccouti.get_source_name(args.dir, args.lesson)
+    dst_name = csccouti.get_output_name(src_name, ".script.txt")
     # Build paths.
     input_file = f"{args.dir}/lectures_source/{src_name}"
     output_dir = f"{args.dir}/lectures_video_script"
     output_file = f"{output_dir}/{dst_name}"
     # Ensure output directory exists.
-    clcomuut.ensure_dir_exists(output_dir)
+    csccouti.ensure_dir_exists(output_dir)
     # Step 1: Generate script.
     _LOG.info("Step 1: Generating script using generate_slide_script.py")
     cmd_parts = [
@@ -136,7 +139,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     # Step 5: Lint the final script.
     _LOG.info("Step 5: Linting the final script")
     cmd = (
-        f"lint_txt.py -i {output_file} -o {output_file} "
+        f"lint_text.py -i {output_file} -o {output_file} "
         f"--use_dockerized_prettier --action prettier --action frame_chapters"
     )
     hsystem.system(cmd)

@@ -41,7 +41,7 @@ llm_cli.py -i $OUT_FILE -p "$PROMPT" -o outro.txt
 } > script.tmp && mv script.tmp $OUT_FILE
 
 # Lint.
-lint_txt.py \
+lint_text.py \
     -i $OUT_FILE \
     -o $OUT_FILE \
     --use_dockerized_prettier \

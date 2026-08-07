@@ -6,10 +6,18 @@ Count slides and text statistics in lecture source files.
 This script counts slides, headers, lines, words, and characters in each lecture
 source file in {DIR}/lectures_source/.
 
-Usage:
+# Usage Example
+
+- Count slides and text statistics for the data605 course:
 > count_lecture_slides.py data605
+
+- Count slides and text statistics for the msml610 course:
 > count_lecture_slides.py msml610
+
+- Print the statistics as a TSV table:
 > count_lecture_slides.py msml610 --format tsv
+
+- Print the statistics as a CSV table:
 > count_lecture_slides.py msml610 --format csv
 
 Import as:

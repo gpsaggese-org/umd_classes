@@ -17,8 +17,9 @@ This script processes markdown slides (identified by headers starting with '*')
 and generates a presentation script by passing groups of N slides to an LLM
 for analysis and script generation.
 
-Examples:
-# Process slides in groups of 3
+# Usage Example
+
+- Process slides in groups of 3:
 > generate_slide_script.py --in_file slides.md --out_file script.md --slides_per_group 3
 """
 

@@ -5,8 +5,12 @@ Count pages in lecture PDF files.
 
 This script counts the number of pages in each PDF file in {DIR}/lectures/.
 
-Usage:
+# Usage Example
+
+- Count pages in DATA605 lecture PDF files:
 > count_lecture_pages.py data605
+
+- Count pages in MSML610 lecture PDF files:
 > count_lecture_pages.py msml610
 
 Import as:

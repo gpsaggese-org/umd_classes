@@ -6,12 +6,13 @@ Copy Docker-related files from the source directory to a destination directory.
 This script copies all Docker configuration and utility files from
 class_project/project_template/ to a specified destination directory.
 
-Usage examples:
-    # Copy all files to a target directory.
-    > ./copy_docker_files.py --dst_dir /path/to/destination
+# Usage Example
 
-    # Copy with verbose logging.
-    > ./copy_docker_files.py --dst_dir /path/to/destination -v DEBUG
+- Copy all files to a target directory:
+> copy_docker_files.py --dst_dir /path/to/destination
+
+- Copy with verbose logging:
+> copy_docker_files.py --dst_dir /path/to/destination -v DEBUG
 
 Import as:
 

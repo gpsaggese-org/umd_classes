@@ -17,15 +17,17 @@ This script has two modes:
      from source to destination.
    - Asserts if destination directory already exists.
 
-Example usage (branch processing mode):
-> classes_project/create_PR.py \
+# Usage Example
+
+- Process branches and write branch/project-directory mappings to a file (branch processing mode):
+> create_PR.py \
     --input_file class_project/fall2025_msml610_branches.txt \
     --source_dir /Users/saggese/src/umd_classes2 \
     --dst_dir /Users/saggese/src/umd_classes3 \
     --output_file output.txt
 
-Example usage (copy directories mode):
-> classes_project/create_PR.py \
+- Check out each branch and copy its project directory to the destination (copy directories mode):
+> create_PR.py \
     --input_file class_project/fall2025_msml610_branches_dirs.txt \
     --source_dir /Users/saggese/src/umd_classes2 \
     --dst_dir /Users/saggese/src/umd_classes3 \
