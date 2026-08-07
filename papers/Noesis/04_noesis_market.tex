@@ -1,0 +1,435 @@
+% ##############################################################################
+\section{NoesisMarket: the auction mechanism}
+\label{sec:noesis_market}
+
+\NoesisMarket{} runs a periodic call auction that turns a pool of bids and
+asks into a set of intelligence contracts (Definition~\ref{def:contract}).
+This section defines auction rounds and tier bucketing, the compatibility
+relation between a bid and an ask, the clearing problem, the reputation and
+pricing feedback loop, and the mechanism-design risks the design has to
+withstand. The auction described throughout this section is a specific
+instantiation of the pluggable matching-engine component of
+Section~\ref{sec:modularity}; nothing below depends on the matching engine
+being a call auction rather than, e.g., a continuous double auction.
+
+% ==============================================================================
+\subsection{Auction rounds and tier bucketing}
+\label{sec:rounds}
+
+Every $T$ minutes (default $T = 5$), \NoesisMarket{} closes the open order
+book and runs one clearing round per capability tier $c \in \calC$. For
+clarity of exposition we describe the case in which a bucket for tier $c$
+contains exactly the bids with $c_\beta = c$ and the asks with
+$c_\alpha = c$; Remark~\ref{rem:tier_generalization} below discusses the
+natural generalization in which higher-tier asks are also eligible to fill
+lower-tier demand.
+
+\begin{example}[Basic auction round]
+\label{ex:basic_round}
+A buyer submits a bid for 10,000 tasks at \texttt{frontier} capability,
+under 2 seconds of latency, at 99.9\% reliability, with a limit price
+$p_\beta$. Several sellers submit asks at the \texttt{frontier} tier, with
+various typical latencies, reliabilities, and limit prices $p_\alpha$. At
+the close of the round, \NoesisMarket{} finds the compatible asks
+(Section~\ref{sec:compatibility}), clears the \texttt{frontier} bucket at a
+single uniform price, and matches the buyer's bid against one or more of
+the compatible asks, up to 10,000 tasks.
+\end{example}
+
+\begin{remark}[Tiered commodity pricing]
+\label{rem:tiered_pricing}
+Because each tier clears independently, prices can diverge across tiers
+within the same round, in the same way that peak and off-peak electricity
+prices diverge within the same day. A \texttt{cheap} tier and a
+\texttt{frontier} tier are not substitutes from the buyer's perspective and
+are not expected to clear at the same price.
+\end{remark}
+
+Figure~\ref{fig:auction_timeline} lays out this timeline: the order book
+accepts bids and asks continuously, and every $T$ minutes the round closes
+and a separate uniform-price clearing is computed independently per
+capability-tier bucket, so \texttt{cheap} and \texttt{frontier} can clear
+at different prices in the same round (Remark~\ref{rem:tiered_pricing}).
+
+% rendered_images:begin
+% ```tikz
+% \definecolor{orderband}{RGB}{255,209,166}
+% \definecolor{cheapcolor}{RGB}{166,200,244}
+% \definecolor{frontcolor}{RGB}{198,166,244}
+% \fill[orderband, opacity=0.35] (0,-0.3) rectangle (12.8,0.3);
+% \node[align=center] at (6.4,0) {\footnotesize order book open: continuously accepting bids / asks};
+% \draw[very thick, ->, >=stealth] (0,-1.0) -- (13.4,-1.0);
+% \draw[dashed, gray] (2,-1.15) -- (2,2.6);
+% \draw[dashed, gray] (6.4,-1.15) -- (6.4,2.6);
+% \draw[dashed, gray] (10.8,-1.15) -- (10.8,2.6);
+% \node[below] at (2,-1.15) {\footnotesize round closes at $t$};
+% \node[below] at (6.4,-1.15) {\footnotesize round closes at $t+T$};
+% \node[below] at (10.8,-1.15) {\footnotesize round closes at $t+2T$};
+% \node[draw, rounded corners, fill=cheapcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (2,1.1) {cheap tier\\clears at $p^*_{\text{cheap}}$};
+% \node[draw, rounded corners, fill=frontcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (2,2.0) {frontier tier\\clears at $p^*_{\text{frontier}}$};
+% \node[draw, rounded corners, fill=cheapcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (6.4,1.1) {cheap tier\\clears at $p^*_{\text{cheap}}$};
+% \node[draw, rounded corners, fill=frontcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (6.4,2.0) {frontier tier\\clears at $p^*_{\text{frontier}}$};
+% \node[draw, rounded corners, fill=cheapcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (10.8,1.1) {cheap tier\\clears at $p^*_{\text{cheap}}$};
+% \node[draw, rounded corners, fill=frontcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (10.8,2.0) {frontier tier\\clears at $p^*_{\text{frontier}}$};
+% ```
+% label=fig:auction_timeline
+% caption=The \NoesisMarket{} auction timeline.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{04_noesis_market.tex.figs/04_noesis_market.1.png}
+  \caption{The \NoesisMarket{} auction timeline.}
+  \label{fig:auction_timeline}
+\end{figure}
+% render_images:end
+
+% ==============================================================================
+\subsection{Compatibility}
+\label{sec:compatibility}
+
+Within a tier bucket, a bid is not compatible with every ask: the bid's
+latency and reliability requirements still need to be met.
+
+\begin{definition}[Compatibility]
+\label{def:compatibility}
+A bid $\beta = (n_\beta, c_\beta, \ell_\beta, r_\beta, p_\beta)$ and an ask
+$\alpha = (n_\alpha, c_\alpha, \ell_\alpha, r_\alpha, p_\alpha)$ are
+\emph{compatible}, written $\beta \sim \alpha$, if
+$$
+  c_\alpha \succeq c_\beta,
+  \qquad
+  \ell_\alpha \leq \ell_\beta,
+  \qquad
+  r_\alpha \geq r_\beta.
+$$
+\end{definition}
+
+Compatibility is a feasibility filter, not a scoring function: capability,
+latency, and reliability are treated as hard constraints rather than as
+continuous inputs to the price. This is a deliberate simplification. It
+avoids having to define an exchange rate between, say, one unit of latency
+and one unit of price, at the cost of potentially leaving compatible
+volume unmatched when a bid's requirements are only narrowly missed;
+Section~\ref{sec:open_questions} discusses relaxing this into a scored
+compatibility measure.
+
+Restricted to a tier bucket $c$, compatibility defines a bipartite graph
+$G_c = (B_c \cup A_c, E_c)$ between the bids $B_c$ and asks $A_c$ in the
+bucket, with an edge $(\beta, \alpha) \in E_c$ whenever $\beta \sim
+\alpha$.
+
+Figure~\ref{fig:compatibility_graph} shows a small example of such a
+graph: an edge marks a bid/ask pair whose capability, latency, and
+reliability terms are mutually satisfiable, and bid 4 has no compatible
+ask in this bucket and is left unmatched regardless of price.
+
+% rendered_images:begin
+% ```graphviz
+% digraph Compatibility {
+%   bgcolor="white";
+%   rankdir=LR;
+%   splines=line;
+%   nodesep=0.35;
+%   ranksep=1.8;
+%   pad=0.30;
+% 
+%   node [shape=box, style="rounded,filled", fontname="Helvetica",
+%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
+%         color="#7B8794"];
+%   edge [color="#9AA5B1", penwidth=1.1, arrowhead=none];
+% 
+%   subgraph cluster_bids {
+%     label     = "Bids B_c";
+%     labelloc  = "t";
+%     fontname  = "Helvetica-Bold";
+%     fontsize  = 12;
+%     fontcolor = "#52606D";
+%     style     = "rounded,filled";
+%     fillcolor = "#F7F9FC";
+%     color     = "#CBD2D9";
+%     penwidth  = 1.0;
+%     margin    = 14;
+%     rank = same;
+% 
+%     B1 [label="bid 1", fillcolor="#F4A6A6"];
+%     B2 [label="bid 2", fillcolor="#F4A6A6"];
+%     B3 [label="bid 3", fillcolor="#F4A6A6"];
+%     B4 [label="bid 4", fillcolor="#F4A6A6"];
+%   }
+%   subgraph cluster_asks {
+%     label     = "Asks A_c";
+%     labelloc  = "t";
+%     fontname  = "Helvetica-Bold";
+%     fontsize  = 12;
+%     fontcolor = "#52606D";
+%     style     = "rounded,filled";
+%     fillcolor = "#F7F9FC";
+%     color     = "#CBD2D9";
+%     penwidth  = 1.0;
+%     margin    = 14;
+%     rank = same;
+% 
+%     A1 [label="ask 1", fillcolor="#FFD1A6"];
+%     A2 [label="ask 2", fillcolor="#FFD1A6"];
+%     A3 [label="ask 3", fillcolor="#FFD1A6"];
+%   }
+% 
+%   B1 -> A1;
+%   B1 -> A2;
+%   B2 -> A2;
+%   B2 -> A3;
+%   B3 -> A3;
+% }
+% ```
+% label=fig:compatibility_graph
+% caption=A small example compatibility graph $G_c$ within one tier bucket.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{04_noesis_market.tex.figs/04_noesis_market.2.png}
+  \caption{A small example compatibility graph $G_c$ within one tier bucket.}
+  \label{fig:compatibility_graph}
+\end{figure}
+% render_images:end
+
+% ==============================================================================
+\subsection{The clearing problem}
+\label{sec:clearing_problem}
+
+\begin{problem}[NoesisMarket clearing]
+\label{prob:clearing}
+Fix a tier $c \in \calC$ and round $t$, with bids $B_c$, asks $A_c$, and
+compatibility graph $G_c = (B_c \cup A_c, E_c)$ as above. For each edge
+$(\beta, \alpha) \in E_c$, let $x_{\beta \alpha} \geq 0$ denote the number
+of tasks matched between $\beta$ and $\alpha$. The \NoesisMarket{}
+clearing problem is to find a uniform clearing price
+$p^*(c, t) \in \bbR_+$ and nonnegative quantities $\{x_{\beta \alpha}\}$
+that maximize the total number of matched tasks
+\begin{equation}
+  \label{eq:clearing_objective}
+  \sum_{(\beta, \alpha) \in E_c} x_{\beta \alpha}
+\end{equation}
+subject to
+\begin{align}
+  \label{eq:buyer_quantity}
+  \sum_{\alpha \,:\, (\beta, \alpha) \in E_c} x_{\beta \alpha}
+    &\leq n_\beta, & \forall \beta \in B_c, \\
+  \label{eq:seller_quantity}
+  \sum_{\beta \,:\, (\beta, \alpha) \in E_c} x_{\beta \alpha}
+    &\leq n_\alpha, & \forall \alpha \in A_c, \\
+  \label{eq:price_limit}
+  x_{\beta \alpha} &= 0
+    \text{ unless } p_\beta \geq p^*(c, t) \geq p_\alpha,
+    & \forall (\beta, \alpha) \in E_c.
+\end{align}
+\end{problem}
+
+Constraints~\eqref{eq:buyer_quantity} and \eqref{eq:seller_quantity}
+prevent over-filling a bid or an ask. Constraint~\eqref{eq:price_limit}
+enforces the uniform-price property: at most one price clears the bucket,
+and only bid/ask pairs whose limit prices bracket that price may be
+matched, exactly as in a standard call auction \cite{mcafee1992}. Each
+matched bid $\beta$ gives rise to a contract $\kappa$
+(Definition~\ref{def:contract}) with
+$\ntasksattr = \sum_\alpha x_{\beta \alpha}$, $\clevelattr = c$,
+$\lmaxattr = \ell_\beta$, $\rminattr = r_\beta$, and
+$\priceattr = p^*(c, t) \cdot \ntasksattr$, dispatched to \NoesisServer{}
+for execution.
+
+For fixed $p^*(c, t)$, Problem~\ref{prob:clearing} is a transportation
+problem, a special case of linear programming, and is solvable in
+polynomial time by standard methods. Choosing $p^*(c, t)$ itself is, in
+general, a search over the (finite) set of distinct limit prices submitted
+in the bucket, since the optimal matched volume as a function of a
+candidate uniform price is piecewise constant.
+
+\begin{remark}[Generalization across tiers]
+\label{rem:tier_generalization}
+Definition~\ref{def:compatibility} already allows $c_\alpha \succ c_\beta$:
+a seller offering a higher tier than requested is compatible with a
+lower-tier bid. A full implementation would therefore let a tier-$c$
+bucket draw on asks from tier $c$ and above, at the cost of a larger
+compatibility graph per round. We do not expect this to be exploited by
+rational sellers in practice, since serving a lower tier's demand at that
+tier's clearing price is only attractive when the seller's marginal cost is
+below it, but the possibility is worth flagging since it is exactly the
+kind of cross-tier fungibility that a naive per-tier bucketing could miss.
+\end{remark}
+
+% ==============================================================================
+\subsection{Existence of a clearing price}
+\label{sec:clearing_existence}
+
+\begin{proposition}[Existence of a clearing price]
+\label{prop:existence}
+Consider a tier bucket $c$ in which the compatibility graph $G_c$ is
+complete, i.e., every bid in $B_c$ is compatible with every ask in $A_c$
+(for instance, because every ask in the bucket meets the most demanding
+latency and reliability requirement among the bids in the bucket). Let
+$D(p) = \sum_{\beta \in B_c : p_\beta \geq p} n_\beta$ denote cumulative
+demand at price $p$ and $S(p) = \sum_{\alpha \in A_c : p_\alpha \leq p}
+n_\alpha$ denote cumulative supply at price $p$. Since $D$ is
+non-increasing and $S$ is non-decreasing in $p$, there exists a price
+$p^*(c, t)$ at which the volume-maximizing matching of
+Problem~\ref{prob:clearing} equals $\min(D(p^*), S(p^*))$, and no price
+supports strictly more matched volume.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+Under a complete compatibility graph, Problem~\ref{prob:clearing} reduces
+to a standard uniform-price double auction: for any candidate price $p$,
+the maximum feasible matched volume is $\min(D(p), S(p))$, achieved by
+matching the highest-limit-price compatible bids against the
+lowest-limit-price compatible asks. As $p$ increases, $D(p)$ is
+non-increasing and $S(p)$ is non-decreasing, so $\min(D(p), S(p))$ is
+maximized at any $p^*$ where the two curves cross (or, in the discrete
+case, at the price step immediately before $D$ falls below $S$). This is
+the classical Walrasian argument for existence of a market-clearing price
+\cite{mcafee1992}.
+\end{proof}
+
+% TODO(gp): Add a figure showing the cumulative demand curve $D(p)$
+% (non-increasing) and supply curve $S(p)$ (non-decreasing) crossing at
+% the clearing price $p^*(c, t)$, illustrating Proposition~\ref{prop:existence}.
+
+When the compatibility graph is not complete, Problem~\ref{prob:clearing}
+remains a well-posed linear program for any fixed candidate price, but a
+single uniform price is no longer guaranteed to support a volume-maximizing
+matching with zero unmatched compatible pairs; in that case, $p^*(c, t)$ is
+a design choice among the prices that support the (still well-defined)
+volume-maximizing matching, for instance the limit price of the marginal
+cleared ask.
+
+% ==============================================================================
+\subsection{Reputation and pricing feedback loop}
+\label{sec:reputation}
+
+Every contract $\kappa$ dispatched to \NoesisServer{} for execution is
+later reported back with a measured reliability $\hat r(\kappa, W)$ over
+its fulfillment window $W$ (Section~\ref{sec:fulfillment_monitoring}).
+\NoesisMarket{} maintains a reputation score per seller and uses it to
+gate participation in future rounds. As with the matching engine, the
+specific update rule given below is one instantiation of the pluggable
+reputation-and-feedback component of Section~\ref{sec:modularity}.
+
+\begin{definition}[Seller reputation]
+\label{def:reputation}
+For a seller whose ask $\alpha$ was matched into contract $\kappa$ at
+round $t$, the reputation score $\rho_\alpha(t) \in [0, 1]$ is updated as
+\begin{equation}
+  \label{eq:reputation_update}
+  \rho_\alpha(t + 1)
+    = (1 - \lambda) \, \rho_\alpha(t)
+    + \lambda \cdot \mathbb{1}\!\left[
+        \hat r(\kappa, W) \geq r_\kappa
+      \right],
+\end{equation}
+where $\lambda \in (0, 1]$ is a decay rate controlling how quickly recent
+performance dominates the score.
+\end{definition}
+
+A seller with $\rho_\alpha(t) < \rho_{\min}$, for a market-wide threshold
+$\rho_{\min}$, is excluded from submitting asks in the tier where the
+shortfall occurred, or is required to submit asks at a lower tier
+reflecting the downgraded assessment of its actual capability. This
+mirrors the non-performance penalties used in electricity capacity markets
+to keep generators accountable for the capacity they committed to sell
+\cite{cramtonstoft2005}.
+
+\begin{example}[Default]
+\label{ex:default}
+A seller wins a contract at the \texttt{frontier} tier with
+$\rminattr = 0.999$, but \NoesisServer{} measures $\hat r(\kappa, W) =
+0.97$ over the fulfillment window. The violation is reported to
+\NoesisMarket, which lowers $\rho_\alpha(t)$ via
+Equation~\eqref{eq:reputation_update}; if $\rho_\alpha$ falls below
+$\rho_{\min}$, the seller is excluded from the \texttt{frontier} bucket in
+subsequent rounds until its reputation recovers.
+\end{example}
+
+Figure~\ref{fig:reputation_loop} traces this loop from a cleared contract
+back to future eligibility: a contract $\kappa$ dispatched to
+\NoesisServer{} yields a measured reliability $\hat r(\kappa, W)$, which
+drives the reputation update of Equation~\eqref{eq:reputation_update}, and
+the resulting score gates the seller's eligibility to submit asks in
+future \NoesisMarket{} rounds, closing the loop.
+
+% rendered_images:begin
+% ```graphviz
+% digraph ReputationLoop {
+%   bgcolor="white";
+%   rankdir=LR;
+%   splines=spline;
+%   nodesep=0.35;
+%   ranksep=0.70;
+%   pad=0.30;
+% 
+%   node [shape=box, style="rounded,filled", fontname="Helvetica",
+%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
+%         color="#7B8794"];
+%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
+%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
+% 
+%   Market      [label="NoesisMarket\nRound t", fillcolor="#A0D6D1"];
+%   Contract    [label="Matched contract κ\nDispatched to NoesisServer", fillcolor="#A6C8F4"];
+%   Measured    [label="Measured reliability\nr(κ, W)", fillcolor="#B2E2B2"];
+%   Reputation  [label="Reputation update\nρ_α(t+1)", fillcolor="#FFD1A6"];
+%   Gate        [label="Gated eligibility\nFuture rounds", fillcolor="#F4A6A6"];
+% 
+%   Market -> Contract [label="clears", penwidth=1.5, color="#7B8794"];
+%   Contract -> Measured [label="fulfillment window W"];
+%   Measured -> Reputation [label="compare to R_min(κ)"];
+%   Reputation -> Gate;
+%   Gate -> Market [
+%     label="future asks",
+%     style=dashed, penwidth=1.5,
+%     color="#B23A48", fontcolor="#B23A48",
+%     constraint=false
+%   ];
+% }
+% ```
+% label=fig:reputation_loop
+% caption=The \NoesisMarket{} reputation and pricing feedback loop.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{04_noesis_market.tex.figs/04_noesis_market.3.png}
+  \caption{The \NoesisMarket{} reputation and pricing feedback loop.}
+  \label{fig:reputation_loop}
+\end{figure}
+% render_images:end
+
+% ==============================================================================
+\subsection{Mechanism-design risks}
+\label{sec:mechanism_design_risks}
+
+The design above leaves at least three classical mechanism-design problems
+open, which we flag here and revisit in
+Section~\ref{sec:open_questions}.
+
+\begin{itemize}
+  \item \textbf{Capability misrepresentation}: an ask may overstate
+    $c_\alpha$ to be eligible for a higher-clearing-price bucket than the
+    seller can actually serve. \Noesis{} does not attempt to prevent this
+    ex ante; it is deterred ex post through the reputation and pricing
+    feedback loop of Section~\ref{sec:reputation}, once fulfillment
+    monitoring detects the shortfall.
+
+  \item \textbf{Bid shading}: uniform-price double auctions are not, in
+    general, dominant-strategy incentive compatible, so a rational buyer
+    or seller may misreport its true valuation \cite{myerson1981}.
+    Dominant-strategy mechanisms exist for restricted settings, such as
+    single-unit double auctions \cite{mcafee1992}, but do not obviously
+    extend to the multi-unit, multi-attribute setting of
+    Problem~\ref{prob:clearing} without efficiency loss.
+
+  \item \textbf{Collusion}: a thin tier bucket, with few sellers, is
+    vulnerable to the kind of coordinated bidding studied in the auction
+    literature on bidding rings \cite{mcafeemcmillan1992}, which is more
+    of a concern at the \texttt{frontier} tier, where the number of
+    credible providers is small by construction.
+\end{itemize}
+
+We do not claim to resolve these problems in this paper; the auction
+design in Problem~\ref{prob:clearing} is a starting point whose robustness
+to strategic behavior is left for empirical and theoretical follow-up work.

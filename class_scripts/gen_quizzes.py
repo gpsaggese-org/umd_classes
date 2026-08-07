@@ -11,12 +11,18 @@ This script generates questions from lecture content using `llm_cli.py`.
   - Discussion/review questions (--for_class_recap): 3-6 open-ended questions
     - Saved to: `<class_dir>/lectures_recap/<lesson>.recap.md`
 
-- By default, the output file is automatically formatted using `lint_txt.py`
+- By default, the output file is automatically formatted using `lint_text.py`
   with prettier. Use --no_lint to skip formatting.
 
-Usage:
+# Usage Example
+
+- Generate multiple-choice quizzes for DATA605 lesson 01.1:
 > gen_quizzes.py --for_class_quizzes data605 01.1
+
+- Generate discussion/review questions for MSML610 lesson 02.3:
 > gen_quizzes.py --for_class_recap msml610 02.3
+
+- Generate discussion/review questions for DATA605 lesson 01.2 without auto-formatting the output:
 > gen_quizzes.py --for_class_recap data605 01.2 --no_lint
 
 Import as:
@@ -31,6 +37,7 @@ import class_scripts.common_utils as csccouti
 import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hparser as hparser
+import helpers.hprint as hprint
 import helpers.hsystem as hsystem
 
 _LOG = logging.getLogger(__name__)
@@ -142,13 +149,13 @@ def _parse() -> argparse.ArgumentParser:
         "--lint",
         action="store_true",
         default=True,
-        help="Run lint_txt.py with prettier action on output file (default: True)",
+        help="Run lint_text.py with prettier action on output file (default: True)",
     )
     parser.add_argument(
         "--no_lint",
         action="store_false",
         dest="lint",
-        help="Skip running lint_txt.py on output file",
+        help="Skip running lint_text.py on output file",
     )
     parser.add_argument(
         "extra_opts",
@@ -212,15 +219,15 @@ def _main(parser: argparse.ArgumentParser) -> None:
     if args.extra_opts:
         cmd_parts.extend(args.extra_opts)
     cmd = " ".join(cmd_parts)
-    _LOG.info("Running command: %s", cmd)
+    _LOG.info("%s", hprint.color_highlight(f"> {cmd}", "green"))
     # Execute the command.
     hsystem.system(cmd)
     # Run linting if requested.
     if args.lint:
-        _LOG.info("Running lint_txt.py on output file: %s", output_file)
+        _LOG.info("Running lint_text.py on output file: %s", output_file)
         # Prepare linting command.
         lint_action = "prettier"
-        lint_cmd = f"lint_txt.py -i {output_file} --action {lint_action}"
+        lint_cmd = f"lint_text.py -i {output_file} --action {lint_action}"
         _LOG.info("Executing: %s", lint_cmd)
         hsystem.system(lint_cmd)
 
