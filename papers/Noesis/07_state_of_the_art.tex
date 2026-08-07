@@ -1,0 +1,228 @@
+% ##############################################################################
+\section{State of the art: industry landscape}
+\label{sec:state_of_the_art}
+
+Section~\ref{sec:related_work} positions \Noesis{} against academic work on
+routing, fusion, distillation, and auction theory. This section instead
+surveys currently operating startups and projects that address, piece by
+piece, the same problem \Noesis{} targets: buying and selling machine
+intelligence, trading raw compute, or verifying that a delivered service met
+its promise. The goal is to locate the specific combination of properties,
+auction-based price discovery for a capability/latency/reliability bundle,
+metered fulfillment, and reputation feedback into pricing, that no surveyed
+system currently occupies. The industry moves quickly, so the picture below
+reflects the state of the market at the time of writing and should be read
+as illustrative of the categories rather than exhaustive within any one of
+them.
+
+% ==============================================================================
+\subsection{Posted-price multi-provider gateways}
+\label{sec:sota_gateways}
+
+OpenRouter, introduced in Section~\ref{sec:protocol_overview}, is one of
+several gateways that unify access to hundreds of models behind a single
+API and bill at or near the underlying provider's price. Portkey
+\footnote{\url{https://portkey.ai}}, LiteLLM
+\footnote{\url{https://litellm.ai}}, Requesty
+\footnote{\url{https://requesty.ai}}, TrueFoundry's AI Gateway
+\footnote{\url{https://truefoundry.com}}, Cloudflare AI Gateway
+\footnote{\url{https://developers.cloudflare.com/ai-gateway}}, and the
+Vercel AI Gateway \footnote{\url{https://vercel.com/ai-gateway}} occupy the
+same niche, adding a fixed platform fee, a flat markup, or no markup at all
+on top of pass-through provider pricing, together with observability,
+caching, and automatic failover across providers. A single-vendor gateway
+such as AWS Bedrock \footnote{\url{https://aws.amazon.com/bedrock}} offers
+the same unified-API convenience without the multi-seller pooling. OpenRouter
+additionally ships a mixture-of-agents feature, Fusion, that fans a prompt
+out to several models and synthesizes one answer, which is the closest
+commercial analog to the answer-fusion strategy of
+Section~\ref{sec:fusion} that this survey identified.
+
+None of these gateways clears an auction: every price is posted or passed
+through unilaterally, so there is no price discovery in the sense of
+Section~\ref{sec:comparison_table}. None meters whether a request's
+capability, latency, or reliability matched a stated contract beyond a
+standard infrastructure uptime SLA, and none turns a delivered shortfall
+into a reputation signal that changes a provider's standing in future
+transactions.
+
+% ==============================================================================
+\subsection{Learned model routers}
+\label{sec:sota_routing}
+
+A second cluster of startups routes each individual request to the model
+expected to give the best cost/quality trade-off, which is the commercial
+counterpart to the difficulty-aware routing of Section~\ref{sec:routing}.
+Martian \footnote{\url{https://withmartian.com}} routes on an
+interpretability-derived model of what each request needs. Not Diamond
+\footnote{\url{https://notdiamond.ai}} and Unify
+\footnote{\url{https://unify.ai}} learn or benchmark a routing policy across
+models on standard evaluation suites. Arch \footnote{\url{https://github.com/katanemo/archgw}},
+an open-source, Envoy-based prompt gateway, routes from a natural-language
+policy description rather than hardcoded rules.
+
+These routers make the same difficulty-aware bet as \NoesisServer, that most
+requests do not need the most capable model, but the routing decision is a
+private policy internal to each vendor rather than the outcome of a market
+that prices the tiers being routed between, and none of them exposes a
+reputation signal that a request's actual capability, latency, or
+reliability fell short of what was routed for.
+
+% ==============================================================================
+\subsection{Reverse-auction and spot compute marketplaces}
+\label{sec:sota_compute_markets}
+
+A third cluster trades raw compute, rather than model access, through
+genuine bidding mechanisms. Akash Network \footnote{\url{https://akash.network}}
+runs a reverse auction in which a tenant posts a workload specification and
+a budget and providers bid to fill it. Vast.ai \footnote{\url{https://vast.ai}}
+runs a continuous bid/ask market for GPU-hours in which an underbid spot
+instance can be reclaimed by a higher bidder. RunPod
+\footnote{\url{https://runpod.io}}, io.net \footnote{\url{https://io.net}},
+Golem Network \footnote{\url{https://golem.network}}, CoreWeave
+\footnote{\url{https://coreweave.com}}, and Prime Intellect
+\footnote{\url{https://primeintellect.ai}} offer spot, reserved, or
+brokered tiers over pooled GPU capacity, with pricing that ranges from
+genuinely biddable to posted with a spot discount.
+
+Akash and Vast.ai in particular demonstrate that an open bid/ask market for
+compute-time is viable at production scale, which is direct evidence for
+the auction half of \NoesisMarket's design. The traded unit, however, is a
+GPU-hour or a workload's raw resource footprint, not the (capability,
+latency, reliability) bundle of Section~\ref{sec:intelligence_as_commodity}:
+none of these markets prices, or even observes, how good the resulting
+model answer is, so the bundled-quality and difficulty-routing rows of
+Table~\ref{tab:comparison} remain unaddressed.
+
+% ==============================================================================
+\subsection{Token-incentivized inference networks}
+\label{sec:sota_decentralized}
+
+A fourth cluster builds reputation and verification directly into a
+decentralized compute network, which is the closest analog to the
+fulfillment-monitoring and reputation loop that connects \NoesisServer{}
+and \NoesisMarket{} (Sections~\ref{sec:fulfillment_monitoring} and
+\ref{sec:reputation}).
+Bittensor \footnote{\url{https://bittensor.com}} organizes miners and
+validators into subnets; in its inference-oriented subnets, validators send
+prompts to many miners, score the returned completions for quality and
+latency, and an on-chain consensus mechanism aggregates the stake-weighted
+scores into recurring reward emissions, with a serverless-inference subnet
+layered on top for pay-per-query access. Gensyn \footnote{\url{https://gensyn.ai}}
+verifies distributed training work through a probabilistic proof-of-learning
+protocol rather than scoring inference output. Ritual
+\footnote{\url{https://ritual.net}} runs a network of inference oracles that
+attach a cryptographic proof of correct execution to each computation.
+Nosana \footnote{\url{https://nosana.com}} and the Fetch.ai / ASI Alliance
+\footnote{\url{https://fetch.ai}} pool idle compute and agent-to-agent
+transactions for AI workloads more broadly.
+
+Bittensor's validator scoring is the only mechanism surveyed here that
+continuously measures output quality and lets that measurement change a
+provider's economic standing, which is precisely the loop
+Section~\ref{sec:reputation} formalizes for \NoesisMarket. It differs from
+\Noesis{} in two respects: the reward is an emission schedule internal to
+the network's consensus rather than a price cleared against an explicit
+buyer bid, and the score is a continuous internal ranking rather than a
+pass/fail check against a specific bought (volume, tier, latency,
+reliability) contract. Gensyn's and Ritual's proofs verify that a
+computation was executed correctly, not that its output met a stated
+capability or latency bound, so they address a different, complementary
+notion of trust.
+
+% ==============================================================================
+\subsection{Compute exchanges and derivatives}
+\label{sec:sota_exchanges}
+
+A fifth, more recent cluster builds explicit auction or index
+infrastructure on top of the raw-compute markets of
+Section~\ref{sec:sota_compute_markets}. SF Compute
+\footnote{\url{https://sfcompute.com}} operates an order-book-style market
+for GPU-time blocks. Compute Exchange \footnote{\url{https://compute.exchange}}
+runs spot auctions over standardized compute contracts explicitly modeled
+on a commodity exchange. Andromeda \footnote{\url{https://andromeda.ai}}
+brokers capacity across many providers on standardized, benchmarked
+contracts to avoid multi-year lock-in. Ornn's Compute Price Index
+\footnote{\url{https://ornn.ai}} publishes a transaction-based benchmark
+price for GPU rental, feeding into early cash-settled compute futures.
+
+This cluster is the strongest evidence that the pairing of an open auction
+with a standardized contract, the structural bet underlying
+\NoesisMarket, is a fundable design for AI infrastructure: it did not exist
+a few years ago and now spans spot auctions, brokered standardized
+contracts, and price indices. Every instance found, however, prices raw
+compute capacity rather than a verified LLM answer, so none of them closes
+the fulfillment-to-reputation loop that Section~\ref{sec:noesis_server}
+adds on top of the market.
+
+% ==============================================================================
+\subsection{Serverless inference providers as prospective sellers}
+\label{sec:sota_sellers}
+
+A final cluster, serverless inference providers such as Together AI
+\footnote{\url{https://together.ai}}, Fireworks AI
+\footnote{\url{https://fireworks.ai}}, Groq \footnote{\url{https://groq.com}},
+Baseten \footnote{\url{https://baseten.co}}, and Fal.ai
+\footnote{\url{https://fal.ai}}, sell inference at posted per-token or
+per-second rates at a given capability tier. These are not competitors to
+\Noesis{} so much as its prospective sellers: each already meters its own
+delivered latency and offers a standard infrastructure SLA, which is a
+useful starting point for the request-level fulfillment statistics of
+Section~\ref{sec:fulfillment_monitoring}, but none of them exposes that
+metering as a contract a buyer can shop across sellers for, or as a
+reputation signal that follows the seller into a future transaction.
+
+% ==============================================================================
+\subsection{Comparison and market gap}
+\label{sec:sota_gap}
+
+Table~\ref{tab:sota_comparison} extends the comparison of
+Table~\ref{tab:comparison} to the six clusters surveyed above, each
+represented by its most characteristic mechanism.
+
+\begin{samepage}
+  \begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{l|c|c|c|c|c|}
+                                     & \emph{Auction} & \emph{Bundled} & \emph{Metered} & \emph{Reputation} & \emph{Liquidity} \\
+                                     & \emph{price}   & \emph{quality} & \emph{fulfillment} & \emph{$\to$ pricing} & \emph{pooling} \\
+      \hline
+      Posted-price gateways (\S\ref{sec:sota_gateways})            & \nbad & \npartial & \nbad     & \nbad     & \ngood \\
+      \hline
+      Learned model routers (\S\ref{sec:sota_routing})             & \nbad & \npartial & \nbad     & \nbad     & \npartial \\
+      \hline
+      Reverse-auction compute markets (\S\ref{sec:sota_compute_markets}) & \ngood & \nbad     & \nbad     & \npartial & \ngood \\
+      \hline
+      Token-incentivized inference networks (\S\ref{sec:sota_decentralized}) & \nbad & \nbad     & \npartial & \ngood    & \npartial \\
+      \hline
+      Compute exchanges \& derivatives (\S\ref{sec:sota_exchanges}) & \ngood & \nbad     & \npartial & \npartial & \ngood \\
+      \hline
+      Serverless inference sellers (\S\ref{sec:sota_sellers})       & \nbad & \npartial & \nbad     & \nbad     & \nbad  \\
+      \hline
+      \Noesis                                                       & \ngood & \ngood    & \ngood    & \ngood    & \ngood \\
+      \hline
+    \end{tabular}
+    \caption{Comparison of \Noesis{} against the six industry clusters
+      surveyed in Section~\ref{sec:state_of_the_art}. ``Bundled quality''
+      denotes a purchasable (capability, latency, reliability) contract
+      rather than a raw compute quantity or a single posted price;
+      ``metered fulfillment'' denotes verification of delivered quality
+      against that contract, rather than a generic infrastructure SLA.}
+    \label{tab:sota_comparison}
+  \end{table}
+\end{samepage}
+
+No cluster combines auction-based price discovery with a bundled,
+verifiable quality contract and a reputation loop that feeds back into
+pricing. What is striking is that each individual ingredient is already
+validated in production by at least one system: Akash and Vast.ai show
+that an open auction for compute is viable; Compute Exchange and Andromeda
+show that standardizing the traded contract attracts liquidity; Bittensor
+shows that continuously scoring delivered quality and tying it to economic
+standing changes provider incentives; OpenRouter's Fusion feature shows
+that answer fusion is a sellable product feature. \Noesis's contribution is
+not any one of these mechanisms in isolation, each already has a
+real-world precedent, but their combination into a single loop, applied to
+a verifiable (capability, latency, reliability) bundle rather than to raw
+compute, which to our knowledge no surveyed system currently offers.
