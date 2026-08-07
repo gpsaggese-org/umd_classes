@@ -53,11 +53,67 @@ clearinghouse for the latency, gas cost, and finality assumptions of the
 underlying chain, a trade-off Section~\ref{sec:decentralized_comparison}
 makes explicit.
 
-% TODO(ai_gp): Add a figure contrasting the two trust boundaries: a single
-% operator seeing all bids/asks and deciding eligibility (centralized), vs.
-% commit-reveal plus on-chain settlement with only addresses visible
-% (decentralized), to make Section~\ref{sec:decentralized_motivation}'s
-% concern concrete before the mechanisms below are introduced.
+Figure~\ref{fig:trust_boundaries} contrasts the two trust boundaries
+before the mechanisms below are introduced.
+
+% rendered_images:begin
+% ```graphviz
+% digraph TrustBoundaries {
+%   rankdir=TB;
+%   splines=spline;
+%   nodesep=0.5;
+%   ranksep=0.6;
+%   bgcolor="white";
+% 
+%   node [fontname="Helvetica", fontsize=11, style="rounded,filled", shape=box, penwidth=1.3];
+%   edge [fontname="Helvetica", fontsize=10, color="#4A4A4A", penwidth=1.2, arrowsize=0.8];
+% 
+%   subgraph cluster_centralized {
+%     label="Centralized";
+%     fontname="Helvetica-Bold";
+%     fontsize=12;
+%     style="rounded,filled";
+%     fillcolor="#F7F9FC";
+%     color="#B8C4D9";
+%     margin=16;
+%     BidsC [label="full bid/ask contents\n(tier, volume, price)", fillcolor="#FFD1A6"];
+%     Operator [label="single operator", fillcolor="#F4A6A6"];
+%     Decide [label="decides eligibility\n& matching", fillcolor="#A0D6D1"];
+%     BidsC -> Operator [label="  sees all  "];
+%     Operator -> Decide;
+%   }
+% 
+%   subgraph cluster_decentralized {
+%     label="Decentralized";
+%     fontname="Helvetica-Bold";
+%     fontsize=12;
+%     style="rounded,filled";
+%     fillcolor="#F7F9FC";
+%     color="#B8C4D9";
+%     margin=16;
+%     BidsD [label="only addresses visible\nuntil reveal window", fillcolor="#FFD1A6"];
+%     Chain [label="public chain\n(commit-reveal)", fillcolor="#F4A6A6"];
+%     Verify [label="matching & eligibility\nverifiable on-chain", fillcolor="#A0D6D1"];
+%     BidsD -> Chain [label="  commitments  "];
+%     Chain -> Verify;
+%   }
+% }
+% ```
+% label=fig:trust_boundaries
+% caption=The two trust boundaries. Centralized: a single operator sees
+%   every bid and ask in full and alone decides eligibility and matching.
+%   Decentralized: only on-chain addresses are visible until the reveal
+%   window closes (Section~\ref{sec:blind_bidding}), and matching and
+%   eligibility are verifiable on-chain rather than taken on the
+%   operator's word.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{08_decentralized_extension.tex.figs/08_decentralized_extension.1.png}
+  \caption{The two trust boundaries. Centralized: a single operator sees every bid and ask in full and alone decides eligibility and matching. Decentralized: only on-chain addresses are visible until the reveal window closes (Section~\ref{sec:blind_bidding}), and matching and eligibility are verifiable on-chain rather than taken on the operator's word.}
+  \label{fig:trust_boundaries}
+\end{figure}
+% render_images:end
 
 % ==============================================================================
 \subsection{On-chain contracts, blind bidding, and anonymity}
@@ -108,10 +164,44 @@ fulfillment still requires a buyer's requests to reach a real seller
 off-chain, so anonymity here covers the auction, not the inference traffic
 that a cleared contract subsequently generates.
 
-% TODO(ai_gp): Add a sequence diagram of one auction round under commit-reveal:
-% commit window (bidders post $h_\beta = H(\beta \| \nu_\beta)$) followed
-% by the reveal window (bidders disclose $(\beta, \nu_\beta)$), followed by
-% clearing (Problem~\ref{prob:clearing}) on only the matching, revealed bids.
+Figure~\ref{fig:commit_reveal_sequence} traces one round through these
+three phases.
+
+% rendered_images:begin
+% ```graphviz
+% digraph CommitReveal {
+%   rankdir=TB;
+%   splines=spline;
+%   nodesep=0.6;
+%   ranksep=0.7;
+%   bgcolor="white";
+% 
+%   node [fontname="Helvetica", fontsize=11, style="rounded,filled", shape=box, penwidth=1.3];
+%   edge [fontname="Helvetica", fontsize=10, color="#4A4A4A", penwidth=1.2, arrowsize=0.8];
+% 
+%   Commit [label="commit window\nbidders post h = H(bid || salt)", fillcolor="#FFD1A6"];
+%   Reveal [label="reveal window\nbidders disclose (bid, salt)", fillcolor="#A6E7F4"];
+%   Match [label="commitment check\nonly matching, revealed bids kept", fillcolor="#B2E2B2"];
+%   Clear [label="clearing\n(NoesisMarket clearing problem)", fillcolor="#A0D6D1"];
+% 
+%   Commit -> Reveal -> Match -> Clear;
+% }
+% ```
+% label=fig:commit_reveal_sequence
+% caption=One auction round under commit-reveal. During the commit window,
+%   bidders post the commitment $h_\beta = H(\beta \,\|\, \nu_\beta)$
+%   (Definition~\ref{def:blind_bid}); during the reveal window, they
+%   disclose $(\beta, \nu_\beta)$; only revealed bids and asks matching a
+%   posted commitment are kept for the clearing problem
+%   (Problem~\ref{prob:clearing}) run at the round's close.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{08_decentralized_extension.tex.figs/08_decentralized_extension.2.png}
+  \caption{One auction round under commit-reveal. During the commit window, bidders post the commitment $h_\beta = H(\beta \,\|\, \nu_\beta)$ (Definition~\ref{def:blind_bid}); during the reveal window, they disclose $(\beta, \nu_\beta)$; only revealed bids and asks matching a posted commitment are kept for the clearing problem (Problem~\ref{prob:clearing}) run at the round's close.}
+  \label{fig:commit_reveal_sequence}
+\end{figure}
+% render_images:end
 
 % ==============================================================================
 \subsection{Stake-backed fulfillment: slashing as decentralized reputation}
@@ -149,10 +239,49 @@ r_{\text{lower}}(\kappa, W)$ is reported on-chain in a form a smart
 contract can act on, rather than treating \NoesisServer{} itself as a
 trusted oracle, is left open in Section~\ref{sec:decentralized_open_questions}.
 
-% TODO(ai_gp): Add a state diagram for a staked ask's lifecycle: posted at
-% reveal -> locked while matched into a contract -> released in full or
-% slashed once $\hat r_{\text{lower}}(\kappa, W)$ is reported
-% (Definition~\ref{def:staked_ask}).
+Figure~\ref{fig:staked_ask_lifecycle} shows this lifecycle as a state
+diagram.
+
+% rendered_images:begin
+% ```graphviz
+% digraph StakedAskLifecycle {
+%   rankdir=LR;
+%   splines=spline;
+%   nodesep=0.6;
+%   ranksep=0.9;
+%   bgcolor="white";
+% 
+%   node [fontname="Helvetica", fontsize=11, style="rounded,filled", shape=box, penwidth=1.3];
+%   edge [fontname="Helvetica", fontsize=10, color="#4A4A4A", penwidth=1.2, arrowsize=0.8];
+% 
+%   Posted [label="posted\n(at reveal)", fillcolor="#FFD1A6"];
+%   Locked [label="locked\n(matched into contract κ)", fillcolor="#A6E7F4"];
+%   Released [label="released in full\n(compliant)", fillcolor="#B2E2B2"];
+%   Slashed [label="slashed, in full or in part\n(violated)", fillcolor="#F4A6A6"];
+% 
+%   Posted -> Locked [label="  matched  "];
+%   Locked -> Released [label="  window W closes,\n  r_lower >= R_min  "];
+%   Locked -> Slashed [
+%     label="  window W closes,\n  r_lower < R_min  ",
+%     color="#B23A48",
+%     fontcolor="#B23A48"
+%   ];
+% }
+% ```
+% label=fig:staked_ask_lifecycle
+% caption=Lifecycle of a staked ask (Definition~\ref{def:staked_ask}). The
+%   stake is posted when $\alpha$ is revealed, locked once matched into a
+%   contract $\kappa$, and released in full or slashed once
+%   $\hat r_{\text{lower}}(\kappa, W)$ is reported against
+%   $\rminattr(\kappa)$ at the close of the fulfillment window.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{08_decentralized_extension.tex.figs/08_decentralized_extension.3.png}
+  \caption{Lifecycle of a staked ask (Definition~\ref{def:staked_ask}). The stake is posted when $\alpha$ is revealed, locked once matched into a contract $\kappa$, and released in full or slashed once $\hat r_{\text{lower}}(\kappa, W)$ is reported against $\rminattr(\kappa)$ at the close of the fulfillment window.}
+  \label{fig:staked_ask_lifecycle}
+\end{figure}
+% render_images:end
 
 Sizing $\sigma_\alpha$ raises the same asymmetry ZK-Tulip's design notes
 flag for its own per-bid stake: a buyer setting the required stake
@@ -205,10 +334,37 @@ linear assignment problem, rather than merely of feasibility, is itself an
 open implementation question, listed in
 Section~\ref{sec:decentralized_open_questions}.
 
-% TODO(ai_gp): Add a figure spanning the three placements for the clearing
-% problem (fully on-chain, fully off-chain, verifiably off-chain) as a
-% spectrum from trust-minimized/expensive to cheap/trusted, marking where
-% each placement sits.
+Figure~\ref{fig:clearing_placement_spectrum} spans the three placements
+along this spectrum.
+
+% rendered_images:begin
+% ```tikz
+% \definecolor{ptcolor}{RGB}{74,110,168}
+% \draw[very thick, ->, >=stealth] (0.3,0) -- (10.7,0);
+% \node[anchor=west, align=left, font=\footnotesize] at (0,-0.9) {trust-minimized,\\expensive};
+% \node[anchor=east, align=right, font=\footnotesize] at (11,-0.9) {cheap,\\trusted};
+% \filldraw[ptcolor] (1.2,0) circle (3pt);
+% \node[align=center, font=\footnotesize] at (1.2,1.1) {fully on-chain\\(gas cost scales\\with $|B_c|\cdot|A_c|$)};
+% \filldraw[ptcolor] (5.5,0) circle (3pt);
+% \node[align=center, font=\footnotesize] at (5.5,1.4) {verifiably off-chain\\(succinct proof of\\feasibility; least developed)};
+% \filldraw[ptcolor] (9.8,0) circle (3pt);
+% \node[align=center, font=\footnotesize] at (9.8,1.1) {fully off-chain\\(operator posts\\the result only)};
+% ```
+% label=fig:clearing_placement_spectrum
+% caption=The three placements for the clearing problem
+%   (Section~\ref{sec:decentralized_matching_engine}), spanning a spectrum
+%   from trust-minimized and expensive to cheap and trusted. The
+%   verifiably-off-chain placement is the least developed of the three but
+%   is the only one that preserves trust-minimization without the gas cost
+%   of solving Problem~\ref{prob:clearing} on-chain.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{08_decentralized_extension.tex.figs/08_decentralized_extension.4.png}
+  \caption{The three placements for the clearing problem (Section~\ref{sec:decentralized_matching_engine}), spanning a spectrum from trust-minimized and expensive to cheap and trusted. The verifiably-off-chain placement is the least developed of the three but is the only one that preserves trust-minimization without the gas cost of solving Problem~\ref{prob:clearing} on-chain.}
+  \label{fig:clearing_placement_spectrum}
+\end{figure}
+% render_images:end
 
 % ==============================================================================
 \subsection{Redundancy as a decentralization safeguard}
@@ -238,9 +394,67 @@ decentralized \NoesisMarket{} can split it across the $k_{\text{red}}$
 lowest-priced compatible asks, so that the same top seller does not
 deterministically win every round in a thin bucket.
 
-% TODO(ai_gp): Add a figure showing $k_{\text{red}}$ staked asks racing to
-% fulfill one contract, with only the sellers meeting the contract's terms
-% retaining their stake, next to a single-ask match for comparison.
+Figure~\ref{fig:redundancy_racing} contrasts a redundant match with the
+single-ask baseline.
+
+% rendered_images:begin
+% ```graphviz
+% digraph Redundancy {
+%   rankdir=TB;
+%   splines=spline;
+%   nodesep=0.5;
+%   ranksep=0.7;
+%   bgcolor="white";
+% 
+%   node [fontname="Helvetica", fontsize=11, style="rounded,filled", shape=box, penwidth=1.3];
+%   edge [fontname="Helvetica", fontsize=10, color="#4A4A4A", penwidth=1.2, arrowsize=0.8];
+% 
+%   subgraph cluster_single {
+%     label="Single-ask match (k_red = 1)";
+%     fontname="Helvetica-Bold";
+%     fontsize=12;
+%     style="rounded,filled";
+%     fillcolor="#F7F9FC";
+%     color="#B8C4D9";
+%     margin=16;
+%     ContractS [label="contract κ", fillcolor="#A6C8F4"];
+%     AskS [label="one staked ask", fillcolor="#C6A6F4"];
+%     ContractS -> AskS;
+%   }
+% 
+%   subgraph cluster_redundant {
+%     label="Redundant match (k_red > 1)";
+%     fontname="Helvetica-Bold";
+%     fontsize=12;
+%     style="rounded,filled";
+%     fillcolor="#F7F9FC";
+%     color="#B8C4D9";
+%     margin=16;
+%     ContractR [label="contract κ", fillcolor="#A6C8F4"];
+%     Ask1 [label="staked ask 1", fillcolor="#C6A6F4"];
+%     Ask2 [label="staked ask 2", fillcolor="#C6A6F4"];
+%     Ask3 [label="staked ask k_red", fillcolor="#C6A6F4"];
+%     ContractR -> Ask1 [label="  race  "];
+%     ContractR -> Ask2 [label="  race  "];
+%     ContractR -> Ask3 [label="  race  "];
+%   }
+% }
+% ```
+% label=fig:redundancy_racing
+% caption=Redundancy as a decentralization safeguard
+%   (Section~\ref{sec:decentralized_redundancy}). Instead of matching a
+%   contract against a single staked ask, it is matched against
+%   $k_{\text{red}}$ staked asks that race to fulfill it; only the sellers
+%   who meet the contract's terms retain their stake, hedging against any
+%   one seller being unavailable or slashed.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{08_decentralized_extension.tex.figs/08_decentralized_extension.5.png}
+  \caption{Redundancy as a decentralization safeguard (Section~\ref{sec:decentralized_redundancy}). Instead of matching a contract against a single staked ask, it is matched against $k_{\text{red}}$ staked asks that race to fulfill it; only the sellers who meet the contract's terms retain their stake, hedging against any one seller being unavailable or slashed.}
+  \label{fig:redundancy_racing}
+\end{figure}
+% render_images:end
 
 % ==============================================================================
 \subsection{Comparison with the centralized design}

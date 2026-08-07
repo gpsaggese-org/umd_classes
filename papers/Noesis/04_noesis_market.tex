@@ -7,7 +7,10 @@ asks into a set of intelligence contracts (Definition~\ref{def:contract}).
 This section defines auction rounds and tier bucketing, the compatibility
 relation between a bid and an ask, the clearing problem, the reputation and
 pricing feedback loop, and the mechanism-design risks the design has to
-withstand.
+withstand. The auction described throughout this section is a specific
+instantiation of the pluggable matching-engine component of
+Section~\ref{sec:modularity}; nothing below depends on the matching engine
+being a call auction rather than, e.g., a continuous double auction.
 
 % ==============================================================================
 \subsection{Auction rounds and tier bucketing}
@@ -296,7 +299,9 @@ Every contract $\kappa$ dispatched to \NoesisServer{} for execution is
 later reported back with a measured reliability $\hat r(\kappa, W)$ over
 its fulfillment window $W$ (Section~\ref{sec:fulfillment_monitoring}).
 \NoesisMarket{} maintains a reputation score per seller and uses it to
-gate participation in future rounds.
+gate participation in future rounds. As with the matching engine, the
+specific update rule given below is one instantiation of the pluggable
+reputation-and-feedback component of Section~\ref{sec:modularity}.
 
 \begin{definition}[Seller reputation]
 \label{def:reputation}

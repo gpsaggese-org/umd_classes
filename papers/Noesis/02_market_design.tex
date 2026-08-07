@@ -121,6 +121,10 @@ functions beyond simply connecting a buyer to a seller:
   \item Generate reusable market data: clearing prices per tier and round,
     and, as a byproduct of fulfillment monitoring, a record of measured
     provider performance over time.
+  \item Disseminate that clearing-price data in real time to participants
+    and downstream systems, through the pricing-dissemination component
+    introduced in Section~\ref{sec:modularity}, rather than requiring them
+    to poll \NoesisMarket{} or wait for the next round.
 \end{itemize}
 
 As in traditional exchanges, we expect the market to be compensated for

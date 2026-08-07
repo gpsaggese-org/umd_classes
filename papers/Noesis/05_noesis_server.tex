@@ -92,7 +92,10 @@ For a request $x$ served under contract $\kappa$, let $\hat c(x) \in
 \calC$ denote the capability tier actually delivered and $\hat\ell(x)$ the
 actually measured latency, both estimated from the response (e.g., via a
 verifier model, a benchmark probe, or agreement with a stronger reference
-model). Request $x$ is a \emph{success} under $\kappa$ if
+model). This estimator is the pluggable capability-measurement component
+of Section~\ref{sec:modularity}: the fulfillment test below only requires
+$\hat c(x)$, not a commitment to one specific way of computing it. Request
+$x$ is a \emph{success} under $\kappa$ if
 
 \begin{equation}
   \label{eq:success_indicator}
@@ -231,7 +234,7 @@ expensive, or inaccurate enough to route hard requests to weak tiers and
 force costly retries, can cost more than always calling the strong model.
 Measuring the left-hand side against the right-hand side on real traffic
 is a prerequisite for deploying routing in production, and is deferred to
-the implementation plan in Section~\ref{sec:roadmap}.
+future implementation work (Section~\ref{sec:open_questions}).
 
 Figure~\ref{fig:routing_flowchart} lays out this chain next to the
 condition under which it pays off.
@@ -286,7 +289,9 @@ per request, \NoesisServer{} may query a set of providers $S(x) \subseteq
   \hat y(x) = g\big( \{ f_m(x) \}_{m \in S(x)} \big),
 \end{equation}
 where $g$ may be a majority vote, a verifier model that scores and selects
-among candidates, or a learned combiner trained on logged outcomes.
+among candidates, or a learned combiner trained on logged outcomes: the
+aggregator is the pluggable answer-fusion component of
+Section~\ref{sec:modularity}.
 
 Routing and fusion trade cost for accuracy in opposite directions relative
 to a single-strong-model baseline: routing accepts a higher risk of a

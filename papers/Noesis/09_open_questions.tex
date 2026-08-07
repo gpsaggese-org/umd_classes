@@ -95,7 +95,7 @@ which component they primarily affect.
 \end{enumerate}
 
 % ==============================================================================
-\subsection{Cross-cutting question}
+\subsection{Cross-cutting questions}
 \label{sec:open_questions_cross}
 
 The reputation and pricing feedback loop of Section~\ref{sec:reputation}
@@ -105,3 +105,13 @@ attribution-reliability question above is therefore a prerequisite, not
 an independent improvement, for the market-side reputation mechanism to
 have the intended deterrent effect on capability misrepresentation and
 under-delivery.
+
+\textbf{Interface contracts for pluggable components}: Section~\ref{sec:modularity}
+treats the matching engine, capability measurement, reputation and
+feedback, answer fusion, and pricing dissemination as independently
+replaceable components, but this paper only sketches each interface in
+prose. Making a component genuinely swappable, e.g., trying a continuous
+double auction in place of the call auction of Section~\ref{sec:noesis_market}
+without touching \NoesisServer{}, requires pinning down the exact inputs,
+outputs, and invariants each interface guarantees, which is left as
+future specification work rather than resolved here.

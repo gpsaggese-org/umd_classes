@@ -9,7 +9,11 @@ call auction that clears bids and asks bundling capability, latency, and
 reliability into a single contract, and \NoesisServer, the gateway that
 executes those contracts, meters whether they were fulfilled, and reuses
 the resulting traffic for difficulty-aware routing, answer fusion, and
-distillation. We formalized the contract and auction notation, stated the
+distillation. Each of these two components is, in turn, a thin
+coordination layer around independently pluggable sub-components, matching
+engine, capability measurement, reputation and feedback, answer fusion, and
+pricing dissemination (Section~\ref{sec:modularity}), rather than a fixed
+monolith. We formalized the contract and auction notation, stated the
 market-clearing problem as a linear program, established existence of a
 clearing price under a completeness assumption on the compatibility
 graph, and proposed a hypothesis-testing approach to distinguishing
@@ -31,8 +35,9 @@ design against real traffic, real providers, or strategic sellers, and
 Section~\ref{sec:mechanism_design_risks} makes clear that the mechanism's
 robustness to bid shading, capability misrepresentation, and collusion is
 an open question rather than a settled property. The open questions of
-Section~\ref{sec:open_questions} and the milestone sequence of
-Section~\ref{sec:roadmap} are intended as a concrete, incremental path
-toward closing that gap, starting from components, an auction simulator
-and a logging proxy, that are each independently useful and testable
-before the full closed loop is attempted.
+Section~\ref{sec:open_questions}, including the interface contracts each
+pluggable component of Section~\ref{sec:modularity} would need to be
+truly swappable, are intended as a concrete, incremental path toward
+closing that gap, starting from components, an auction simulator and a
+logging proxy, that are each independently useful and testable before the
+full closed loop is attempted.

@@ -1,20 +1,9 @@
 \title{Noesis: A Protocol for Trading and Fulfilling Machine Intelligence as a Commodity}
 
-\author{Giacinto Paolo (GP) Saggese$^{*}$}
-\thanks{$^{*}$ The University of Maryland, College Park, MD 20742, USA, gsaggese@umd.edu}
+\author{Anonymous Author(s)}
+\thanks{Affiliation and contact withheld for anonymous review.}
 
 \date{\today}
-
-% TODO(ai_gp): Noesis should be a modular platform where components
-% can be easily plugged in
-% E.g., NoesisMarket should be a pluggable matching engine (without call auction)
-% - its responsibility is only to match supply and demand
-% E.g., how to measure the intelligence of markets is a general component
-% E.g., the reputation and feedback loop is a pluggable component
-% E.g., answer fusion
-% E.g., add an interface to disseminate pricing information in real time
-% TODO(ai_gp): Add a table with all the components, what they do, and an example
-% TODO(ai_gp): Add more components to figure 1
 
 \begin{abstract}
 Applications and autonomous agents increasingly consume large language model
@@ -130,12 +119,12 @@ capability reference.
 % digraph NoesisArchitecture {
 %   rankdir=LR;
 %   splines=spline;
-%   nodesep=0.6;
+%   nodesep=0.5;
 %   ranksep=0.7;
 %   bgcolor="white";
 % 
-%   node [fontname="Helvetica", fontsize=12, style="rounded,filled", shape=box, penwidth=1.3];
-%   edge [fontname="Helvetica", fontsize=10, color="#4A4A4A", penwidth=1.2, arrowsize=0.8];
+%   node [fontname="Helvetica", fontsize=11, style="rounded,filled", shape=box, penwidth=1.3];
+%   edge [fontname="Helvetica", fontsize=9, color="#4A4A4A", penwidth=1.2, arrowsize=0.8];
 % 
 %   subgraph cluster_participants {
 %     label="Market participants";
@@ -150,7 +139,21 @@ capability reference.
 %     Supply [label="Supply\n(model & compute providers)", fillcolor="#FFD1A6"];
 %   }
 % 
-%   NoesisMarket [label="NoesisMarket\n(call auction)", fillcolor="#A0D6D1"];
+%   subgraph cluster_noesis_market {
+%     label="NoesisMarket";
+%     fontname="Helvetica-Bold";
+%     fontsize=13;
+%     style="rounded,filled";
+%     fillcolor="#F7F9FC";
+%     color="#B8C4D9";
+%     margin=16;
+% 
+%     MatchingEngine [label="Matching engine\n(pluggable)", fillcolor="#A0D6D1"];
+%     ReputationLoop [label="Reputation and feedback\n(pluggable)", fillcolor="#A0D6D1"];
+%     PricingFeed [label="Pricing dissemination\n(pluggable)", fillcolor="#A0D6D1"];
+%     ReputationLoop -> MatchingEngine [label="  gates eligibility  ", style=dashed, color="#8C8C8C"];
+%     MatchingEngine -> PricingFeed [label="  cleared prices  ", style=dashed, color="#8C8C8C"];
+%   }
 % 
 %   subgraph cluster_noesis_server {
 %     label="NoesisServer";
@@ -163,19 +166,24 @@ capability reference.
 % 
 %     Gateway [label="API gateway", fillcolor="#A6C8F4"];
 %     Metering [label="Metering logic\n(fulfillment monitoring)", fillcolor="#B2E2B2"];
+%     CapabilityMeasure [label="Capability measurement\n(pluggable)", fillcolor="#A0D6D1"];
+%     Fusion [label="Answer fusion\n(pluggable)", fillcolor="#A0D6D1"];
 %     Gateway -> Metering [label="  logged traffic  "];
+%     CapabilityMeasure -> Metering [label="  delivered capability  ", style=dashed, color="#8C8C8C"];
+%     Gateway -> Fusion [label="  multi-provider fan-out  ", style=dashed, color="#8C8C8C"];
 %   }
 % 
 %   ProviderAPIs [label="APIs for providers\n(per-provider endpoints)", fillcolor="#C6A6F4"];
 %   IntelligenceMeasure [label="Intelligence-measure providers\n(e.g., artificialanalysis.ai)", fillcolor="#C6A6F4"];
 % 
-%   Demand -> NoesisMarket [label="  bids  "];
-%   Supply -> NoesisMarket [label="  asks  "];
-%   NoesisMarket -> Gateway [label="  contracts  ", penwidth=1.8];
+%   Demand -> MatchingEngine [label="  bids  "];
+%   Supply -> MatchingEngine [label="  asks  "];
+%   MatchingEngine -> Gateway [label="  contracts  ", penwidth=1.8];
 %   Gateway -> ProviderAPIs [label="  requests / responses  ", dir=both];
-%   IntelligenceMeasure -> Metering [label="  capability reference  ", style=dashed, color="#8C8C8C"];
-%   Metering -> NoesisMarket [
-%     label="  reputation & pricing feedback  ",
+%   Fusion -> ProviderAPIs [label="  fan-out  ", style=dashed, color="#8C8C8C"];
+%   IntelligenceMeasure -> CapabilityMeasure [label="  capability reference  ", style=dashed, color="#8C8C8C"];
+%   Metering -> ReputationLoop [
+%     label="  reputation and pricing feedback  ",
 %     color="#B23A48",
 %     fontcolor="#B23A48",
 %     penwidth=1.8,
@@ -185,18 +193,24 @@ capability reference.
 % }
 % ```
 % label=fig:architecture
-% caption=\Noesis{} architecture. Demand and supply submit bids and asks to
-%   \NoesisMarket{}, which clears them into contracts dispatched to
-%   \NoesisServer{}. \NoesisServer{}'s API gateway proxies matched requests to
-%   providers through per-provider APIs; its metering logic checks the
-%   responses against the contract terms and reports fulfillment back to
-%   \NoesisMarket{} as the reputation and pricing signal of
-%   Section~\ref{sec:reputation}.
+% caption=\Noesis{} architecture, with the five pluggable components of
+%   Section~\ref{sec:modularity} and Table~\ref{tab:components} shaded in
+%   teal. Demand and supply submit bids and asks to \NoesisMarket{}'s
+%   matching engine, which clears them into contracts dispatched to
+%   \NoesisServer{}'s API gateway. The gateway proxies matched requests to
+%   providers, and its metering logic checks the responses against the
+%   contract terms using a capability-measurement component, fed, e.g., by
+%   external intelligence-measure providers, and reports fulfillment back to
+%   \NoesisMarket{}'s reputation-and-feedback component, which gates the
+%   matching engine and feeds its pricing-dissemination component. The
+%   gateway also fans a request out to several providers through the
+%   answer-fusion component (Section~\ref{sec:fusion}) when reliability
+%   outweighs cost.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{01_introduction.tex.figs/01_introduction.1.png}
-  \caption{\Noesis{} architecture. Demand and supply submit bids and asks to \NoesisMarket{}, which clears them into contracts dispatched to \NoesisServer{}. \NoesisServer{}'s API gateway proxies matched requests to providers through per-provider APIs; its metering logic checks the responses against the contract terms and reports fulfillment back to \NoesisMarket{} as the reputation and pricing signal of Section~\ref{sec:reputation}.}
+  \caption{\Noesis{} architecture, with the five pluggable components of Section~\ref{sec:modularity} and Table~\ref{tab:components} shaded in teal. Demand and supply submit bids and asks to \NoesisMarket{}'s matching engine, which clears them into contracts dispatched to \NoesisServer{}'s API gateway. The gateway proxies matched requests to providers, and its metering logic checks the responses against the contract terms using a capability-measurement component, fed, e.g., by external intelligence-measure providers, and reports fulfillment back to \NoesisMarket{}'s reputation-and-feedback component, which gates the matching engine and feeds its pricing-dissemination component. The gateway also fans a request out to several providers through the answer-fusion component (Section~\ref{sec:fusion}) when reliability outweighs cost.}
   \label{fig:architecture}
 \end{figure}
 % render_images:end
@@ -211,12 +225,105 @@ which combines several providers' answers when higher reliability is worth
 the extra cost.
 
 % ==============================================================================
+\subsection{A modular, pluggable architecture}
+\label{sec:modularity}
+
+The description above treats \NoesisMarket{} and \NoesisServer{} as if each
+were a single, fixed implementation. In fact, each is a thin coordination
+layer around a small set of narrower components, each responsible for one
+function and exposed behind an interface that a different implementation
+can satisfy without requiring changes anywhere else in the pipeline:
+
+\begin{itemize}
+  \item \textbf{Matching engine}: \NoesisMarket's only structural
+    commitment is to match compatible bids and asks
+    (Definition~\ref{def:compatibility}) into contracts; its responsibility
+    stops there. The periodic uniform-price call auction of
+    Section~\ref{sec:noesis_market} is one instantiation of this component,
+    and a continuous double auction or a posted-price mechanism
+    (Section~\ref{sec:open_questions_market}) could be substituted without
+    touching \NoesisServer.
+
+  \item \textbf{Capability measurement}: how \NoesisServer{} estimates the
+    capability tier $\hat c(x)$ actually delivered by a response
+    (Section~\ref{sec:fulfillment_monitoring}) is itself pluggable. A
+    verifier model, a benchmark probe, agreement with a stronger reference
+    model (Definition~\ref{def:agreement_label}), or a hosted third-party
+    evaluation service such as artificialanalysis.ai
+    (Section~\ref{sec:protocol_overview}) are interchangeable
+    implementations of the same interface: a mapping from a prompt/response
+    pair to a tier in $\calC$.
+
+  \item \textbf{Reputation and feedback loop}: the exponential-decay update
+    of Equation~\eqref{eq:reputation_update} is one instantiation of this
+    component; any function that maps a seller's compliance history to a
+    score used to gate future eligibility (Section~\ref{sec:reputation})
+    satisfies the same interface.
+
+  \item \textbf{Answer fusion}: the aggregator $g$ of
+    Equation~\eqref{eq:fusion_aggregator} is already defined as a pluggable
+    function, majority vote, a verifier model, or a learned combiner
+    (Section~\ref{sec:fusion}); self-consistency \cite{wang2022selfconsistency}
+    and mixture-of-agents \cite{wang2024moa} are two published
+    instantiations of the same interface (Section~\ref{sec:related_fusion}).
+
+  \item \textbf{Pricing dissemination}: a component absent from the
+    description so far. \NoesisMarket{} clears a price $p^*(c, t)$ per tier
+    and round (Problem~\ref{prob:clearing}), and that price is a useful
+    signal beyond the bidders and sellers of the round that produced it. A
+    pricing-dissemination interface, e.g., a real-time push feed or an
+    on-chain event log (Section~\ref{sec:decentralized_extension}),
+    publishes cleared prices to subscribers, buyers timing a future bid,
+    other market makers, monitoring dashboards, without requiring them to
+    poll \NoesisMarket{} or participate in a round.
+\end{itemize}
+
+Table~\ref{tab:components} summarizes these five components, their
+responsibility, and the instantiation used elsewhere in this paper versus a
+pluggable alternative. This independence is also what lets the matching
+engine and the gateway-plus-logging layer be built and demonstrated as
+separate, independently testable pieces of a prototype, precisely because
+each is a separately pluggable component rather than part of one monolith.
+
+\begin{samepage}
+  \begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{l|p{4.8cm}|p{5.8cm}|}
+      \textbf{Component} & \textbf{What it does} & \textbf{Example (this paper / alternative)} \\
+      \hline
+      Matching engine & Matches compatible bids and asks into contracts within a tier (Problem~\ref{prob:clearing}) & This paper: periodic uniform-price call auction (Section~\ref{sec:noesis_market}). Alternative: continuous double auction \\
+      \hline
+      Capability measurement & Estimates the capability tier $\hat c(x)$ actually delivered by a response (Section~\ref{sec:fulfillment_monitoring}) & This paper: a verifier model, benchmark probe, or reference-model agreement (Definition~\ref{def:agreement_label}). Alternative: a hosted evaluation provider, e.g., artificialanalysis.ai \\
+      \hline
+      Reputation and feedback loop & Aggregates a seller's fulfillment history into a score that gates future eligibility (Section~\ref{sec:reputation}) & This paper: exponential-decay update (Equation~\eqref{eq:reputation_update}). Alternative: a Bayesian trust score \\
+      \hline
+      Answer fusion & Combines several providers' answers into one when reliability outweighs cost (Section~\ref{sec:fusion}) & This paper: majority vote or a verifier model. Alternative: a learned combiner, e.g., mixture-of-agents \cite{wang2024moa} \\
+      \hline
+      Pricing dissemination & Publishes each round's cleared prices to subscribers outside the round that produced them & This paper: a real-time push feed. Alternative: an on-chain event log (Section~\ref{sec:decentralized_extension}) \\
+      \hline
+    \end{tabular}
+    \caption{The five pluggable components behind \NoesisMarket{} and
+      \NoesisServer, their responsibility, and the instantiation used
+      elsewhere in this paper versus a pluggable alternative.}
+    \label{tab:components}
+  \end{table}
+\end{samepage}
+
+% ==============================================================================
 \subsection{Contributions}
 \label{sec:contributions}
 
 The innovative features of \Noesis{} are:
 
 \begin{enumerate}
+  \item \textbf{Modular, pluggable components}: \NoesisMarket{} and
+    \NoesisServer{} are thin coordination layers around five independently
+    replaceable components, matching engine, capability measurement,
+    reputation and feedback, answer fusion, and pricing dissemination,
+    each defined by a narrow interface rather than a fixed implementation
+    (Section~\ref{sec:modularity}, Table~\ref{tab:components}).
+
   \item \textbf{Price discovery through auction, not price lists}:
     \NoesisMarket{} clears buyers and sellers through a periodic call
     auction instead of relying on prices unilaterally posted by a small
