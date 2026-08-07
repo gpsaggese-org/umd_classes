@@ -1,8 +1,7 @@
 \title{Noesis: A Protocol for Trading and Fulfilling Machine Intelligence as a Commodity}
 
 \author{Giacinto Paolo Saggese$^{*}$}
-\thanks{$^{*}$ Causify.AI, The University of Maryland, College Park, MD 20742,
-USA, gsaggese@umd.edu}
+\thanks{$^{*}$ The University of Maryland, College Park, MD 20742, USA, gsaggese@umd.edu}
 
 \date{\today}
 
@@ -11,31 +10,36 @@ Applications and autonomous agents increasingly consume large language model
 (LLM) inference as a raw input, in the same way that factories consume
 electricity. Today this input is purchased through static, per-model price
 lists set unilaterally by a small number of providers, with no price
-discovery, no verification that the delivered service matched what was
-paid for, and no mechanism to route a request to only as much capability as
-it actually requires. We propose \Noesis, a protocol that treats machine
+discovery, no verification that the delivered service matched what was paid
+for, and no mechanism to route a request to only as much capability as it
+actually requires.
+%
+We propose \Noesis, a protocol that treats machine
 intelligence as a fungible commodity and organizes its exchange around two
-cooperating components. \NoesisMarket{} is a periodic call auction that
+cooperating components.
+% TODO(gp): Market -> Exchange?
+\NoesisMarket{} is a periodic call auction that
 matches buyers, who bid for a bundle of task volume, capability tier,
 latency, and reliability, against sellers, who ask a price for delivering
 that bundle, clearing at a single uniform price per capability tier.
-\NoesisServer{} is the fulfillment and monitoring layer: an API gateway
-that executes the matched contracts against real model providers, meters
-whether the delivered capability, latency, and reliability met the
-contracted terms, and feeds the result back into the market as a
-reputation and pricing signal. As a byproduct, \NoesisServer{} logs every
-request and estimates how much capability each request actually needs,
-enabling difficulty-aware routing and answer fusion that trade cost for
-accuracy in opposite directions, and enabling distillation of the
-collected data into smaller, cheaper models. We formalize the contract,
-bid, and ask notation; state the market-clearing problem as a linear
-program and establish that a clearing price exists under standard
-monotonicity assumptions; and describe the request-level fulfillment
-statistics needed to attribute a shortfall to a specific seller rather
-than to noise. We compare \Noesis{} against direct provider APIs,
-pass-through gateways, and raw-compute spot markets, and lay out the open
-mechanism-design questions and a phased implementation plan for a
-prototype.
+%
+\NoesisServer{} is the fulfillment and monitoring layer: an API gateway that
+executes the matched contracts against real model providers, meters whether
+the delivered capability, latency, and reliability met the contracted terms,
+and feeds the result back into the market as a reputation and pricing signal.
+As a byproduct, \NoesisServer{} logs every request and estimates how much
+capability each request actually needs, enabling difficulty-aware routing and
+answer fusion that trade cost for accuracy in opposite directions, and
+enabling distillation of the collected data into smaller, cheaper models.
+% TODO(ai_gp): Do not talk about distillation
+% TODO(ai_gp): Make it fully anonymized
+We formalize the contract, bid, and ask notation; state the market-clearing
+problem as a linear program and establish that a clearing price exists under
+standard monotonicity assumptions; and describe the request-level fulfillment
+statistics needed to attribute a shortfall to a specific seller rather than
+to noise. We compare \Noesis{} against direct provider APIs, pass-through
+gateways, and raw-compute spot markets, and lay out the open mechanism-design
+questions and a phased implementation plan for a prototype.
 \end{abstract}
 
 \maketitle
@@ -47,13 +51,12 @@ prototype.
 \section{Introduction}
 \label{sec:introduction}
 
-\Noesis{} is a protocol for exchanging machine intelligence, understood as
-LLM inference capacity delivered at a stated capability, latency, and
-reliability level, between buyers who need it and sellers who supply it. It
-brings together price discovery through an open auction, a contract that
-bundles quality attributes rather than a single price-per-token, and a
-fulfillment layer that measures and reports whether the contract was
-actually honored.
+\Noesis{} is a protocol for exchanging machine intelligence, understood as LLM
+inference capacity delivered at a stated capability, latency, and reliability
+level, between buyers who need it and sellers who supply it. It brings together
+price discovery through an open auction, a contract that bundles quality
+attributes rather than a single price-per-token, and a fulfillment layer that
+measures and reports whether the contract was actually honored.
 
 % ==============================================================================
 \subsection{Machine intelligence as a commodity}
@@ -62,13 +65,13 @@ actually honored.
 Electricity, natural gas, and bandwidth all share a property that makes them
 tradeable as commodities: any unit supplied by any seller is, for practical
 purposes, interchangeable with any unit supplied by any other seller, once
-quality attributes (voltage and frequency for electricity, calorific value
-for gas, latency and jitter for bandwidth) are specified and metered.
-LLM inference exhibits a version of the same property. A request answered at
-a stated capability tier, under a stated latency bound, with a stated
-reliability, is, from the buyer's perspective, largely interchangeable
-across providers that can meet those terms, even though the underlying
-models, weights, and hardware differ completely.
+quality attributes (voltage and frequency for electricity, calorific value for
+gas, latency and jitter for bandwidth) are specified and metered. LLM inference
+exhibits a version of the same property. A request answered at a stated
+capability tier, under a stated latency bound, with a stated reliability, is,
+from the buyer's perspective, largely interchangeable across providers that can
+meet those terms, even though the underlying models, weights, and hardware
+differ completely.
 
 Unlike electricity, however, the traded unit cannot be reduced to a single
 scalar such as kilowatt-hours. Raw compute, measured in FLOPs or GPU-hours,

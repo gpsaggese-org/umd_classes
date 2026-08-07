@@ -21,7 +21,7 @@
   books — single tier, multiple tiers, no-match case, partial fill
 - Result: unit-tested auction library; no real settlement yet
 
-### PR2: [ ] Contract schema + dispatch to a stubbed fulfillment layer
+### PR2: [x] Contract schema + dispatch to a stubbed fulfillment layer
 - Define the contract schema `(N_tasks, C_level, L_max, R_min, P)` from a
   cleared PR1 match
 - Dispatch each cleared contract to a **mock** fulfillment interface

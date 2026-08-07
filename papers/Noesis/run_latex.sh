@@ -54,7 +54,7 @@ EOF
 fi
 
 # Find the actual git root directory.
-export GIT_ROOT=$(pwd)
+export GIT_ROOT=$(git rev-parse --show-toplevel)
 if [[ -z $GIT_ROOT ]]; then
     echo "Can't find GIT_ROOT=$GIT_ROOT"
     exit -1
@@ -67,7 +67,11 @@ if [[ -z $1 ]]; then
 else
     NUM_PASSES=$1
 fi;
-SCRIPT_DIR=$(dirname $SCRIPT_SOURCE)
+# Resolve to an absolute path so `basename` below works regardless of
+# whether the script was invoked as `./run_latex.sh` or with a relative /
+# absolute path from another directory (e.g. `papers/Noesis/run_latex.sh`
+# from the git root), where `dirname` alone would return `.`.
+SCRIPT_DIR=$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)
 echo $SCRIPT_DIR
 echo "SCRIPT_DIR=$SCRIPT_DIR"
 

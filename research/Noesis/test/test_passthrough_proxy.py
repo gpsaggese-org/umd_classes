@@ -176,3 +176,83 @@ class TestGateway(hunitest.TestCase):
         actual = gateway.get_log()
         # Check outputs.
         self.assert_equal(str(actual), str(expected))
+
+    def test4(self) -> None:
+        """
+        Test that `call()` to an unregistered provider raises
+        `AssertionError`.
+        """
+        # Prepare inputs.
+        gateway = rnpp.Gateway()
+        gateway.register_provider(
+            rnpp.ProviderConfig("openai_mock", _echo_call_fn, 0.0)
+        )
+        # Run test and check output.
+        with self.assertRaises(AssertionError):
+            gateway.call("unknown_provider", "gpt-4o-mini", "2+2=")
+
+    def test5(self) -> None:
+        """
+        Test that registering the same provider name twice raises
+        `AssertionError`.
+        """
+        # Prepare inputs.
+        gateway = rnpp.Gateway()
+        gateway.register_provider(
+            rnpp.ProviderConfig("openai_mock", _echo_call_fn, 0.0)
+        )
+        # Run test and check output.
+        with self.assertRaises(AssertionError):
+            gateway.register_provider(
+                rnpp.ProviderConfig("openai_mock", _upper_call_fn, 0.01)
+            )
+
+    def test6(self) -> None:
+        """
+        Test that `query_log()` with both `provider` and `model` set
+        returns only entries matching both, not the union of either alone.
+        """
+        # Prepare inputs.
+        gateway = rnpp.Gateway(clock_fn=iter([0.0] * 6).__next__)
+        gateway.register_provider(
+            rnpp.ProviderConfig("openai_mock", _echo_call_fn, 0.0)
+        )
+        gateway.register_provider(
+            rnpp.ProviderConfig("anthropic_mock", _echo_call_fn, 0.0)
+        )
+        gateway.call("openai_mock", "gpt-4o-mini", "a")
+        gateway.call("openai_mock", "gpt-4o", "b")
+        gateway.call("anthropic_mock", "gpt-4o-mini", "c")
+        # Prepare outputs.
+        expected = """
+        [RequestLogEntry(request_id=0,
+                         provider='openai_mock',
+                         model='gpt-4o-mini',
+                         prompt='a',
+                         response='[gpt-4o-mini] a',
+                         latency_in_secs=0.0,
+                         cost=0.0)]
+        """
+        # Run test.
+        actual = pprint.pformat(
+            gateway.query_log(provider="openai_mock", model="gpt-4o-mini")
+        )
+        # Check outputs.
+        self.assert_equal(actual, expected, dedent=True)
+
+    def test7(self) -> None:
+        """
+        Test that mutating a `get_log()` snapshot does not affect the
+        `Gateway`'s internal log.
+        """
+        # Prepare inputs.
+        gateway = rnpp.Gateway(clock_fn=iter([0.0, 0.0]).__next__)
+        gateway.register_provider(
+            rnpp.ProviderConfig("openai_mock", _echo_call_fn, 0.0)
+        )
+        gateway.call("openai_mock", "gpt-4o-mini", "a")
+        # Run test.
+        snapshot = gateway.get_log()
+        snapshot.clear()
+        # Check outputs.
+        self.assertEqual(len(gateway.get_log()), 1)
