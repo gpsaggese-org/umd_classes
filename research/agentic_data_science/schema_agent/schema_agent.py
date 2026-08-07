@@ -189,11 +189,7 @@ def run_pipeline(
 def _build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="schema_agent",
-<<<<<<< HEAD
         description=__doc__,
-=======
-        description="Data Profiler Agent — statistical + LLM column profiling",
->>>>>>> master
         formatter_class=hparser.CustomHelpFormatter,
     )
     # --- Inputs ---

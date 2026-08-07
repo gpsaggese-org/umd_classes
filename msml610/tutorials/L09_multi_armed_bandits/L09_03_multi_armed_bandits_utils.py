@@ -20,6 +20,115 @@ import helpers.htutorial as htutori
 
 _LOG = logging.getLogger(__name__)
 
+
+# #############################################################################
+# MultiArmedBandit
+# #############################################################################
+
+
+class MultiArmedBandit:
+    """
+    Multi-armed bandit environment with K machines.
+
+    Each machine has an unknown probability distribution with mean mu_i.
+    Rewards are drawn from a uniform distribution in [mu_i - width, mu_i +
+    width], clipped to [-1, 1].
+    """
+
+    def __init__(
+        self,
+        *,
+        k_machines: int,
+        mu_values: List[float],
+        seed: int,
+        width: float = 0.3,
+    ) -> None:
+        """
+        Initialize multi-armed bandit.
+
+        :param k_machines: number of machines (K)
+        :param mu_values: true mean values for each machine
+        :param seed: random seed for reproducibility
+        :param width: half-width of uniform distribution around mean
+        """
+        hdbg.dassert_eq(
+            len(mu_values),
+            k_machines,
+            "Number of mu values must equal k_machines:",
+            len(mu_values),
+            k_machines,
+        )
+        hdbg.dassert_lte(1, k_machines, "Must have at least 1 machine")
+        hdbg.dassert_lt(0.0, width, "Width must be positive")
+        self.k_machines = k_machines
+        self.mu_values = list(mu_values)
+        self.width = width
+        self.seed = seed
+        # Initialize random state.
+        self._rng = np.random.RandomState(seed)
+        # Track statistics per machine.
+        self.machine_pulls = [0] * k_machines
+        self.machine_rewards = [[] for _ in range(k_machines)]
+
+    def pull(self, machine_idx: int) -> float:
+        """
+        Pull a specific machine and get reward.
+
+        :param machine_idx: index of machine to pull (0 to K-1)
+        :return: reward value in [-1, 1]
+        """
+        hdbg.dassert_lte(
+            0,
+            machine_idx,
+            "Machine index must be non-negative:",
+            machine_idx,
+        )
+        hdbg.dassert_lt(
+            machine_idx,
+            self.k_machines,
+            "Machine index out of range:",
+            machine_idx,
+        )
+        # Generate reward from uniform distribution.
+        true_mean = self.mu_values[machine_idx]
+        reward = np.clip(
+            self._rng.uniform(true_mean - self.width, true_mean + self.width),
+            -1.0,
+            1.0,
+        )
+        # Update statistics.
+        self.machine_pulls[machine_idx] += 1
+        self.machine_rewards[machine_idx].append(reward)
+        return reward
+
+    def get_empirical_means(self) -> List[float]:
+        """
+        Get empirical mean reward for each machine.
+
+        :return: list of empirical means (or 0.0 if machine not pulled)
+        """
+        means = []
+        for rewards in self.machine_rewards:
+            if len(rewards) > 0:
+                means.append(np.mean(rewards))
+            else:
+                means.append(0.0)
+        return means
+
+    def reset(self, seed: Optional[int] = None) -> None:
+        """
+        Reset all statistics but keep mu values.
+
+        :param seed: optional new seed; if None, use original seed
+        """
+        if seed is not None:
+            self.seed = seed
+        self.machine_pulls = [0] * self.k_machines
+        self.machine_rewards = [[] for _ in range(self.k_machines)]
+        # Reset random state.
+        self._rng = np.random.RandomState(self.seed)
+
+
 # #############################################################################
 # Cell 1: Introduction: Casino Slot Machines
 # #############################################################################
@@ -278,114 +387,6 @@ def cell1_casino_slot_machines() -> None:
     # Display widgets and initial plot.
     display(controls, output)
     update_plot()
-
-
-# #############################################################################
-# MultiArmedBandit
-# #############################################################################
-
-
-class MultiArmedBandit:
-    """
-    Multi-armed bandit environment with K machines.
-
-    Each machine has an unknown probability distribution with mean mu_i.
-    Rewards are drawn from a uniform distribution in [mu_i - width, mu_i +
-    width], clipped to [-1, 1].
-    """
-
-    def __init__(
-        self,
-        *,
-        k_machines: int,
-        mu_values: List[float],
-        seed: int,
-        width: float = 0.3,
-    ) -> None:
-        """
-        Initialize multi-armed bandit.
-
-        :param k_machines: number of machines (K)
-        :param mu_values: true mean values for each machine
-        :param seed: random seed for reproducibility
-        :param width: half-width of uniform distribution around mean
-        """
-        hdbg.dassert_eq(
-            len(mu_values),
-            k_machines,
-            "Number of mu values must equal k_machines:",
-            len(mu_values),
-            k_machines,
-        )
-        hdbg.dassert_lte(1, k_machines, "Must have at least 1 machine")
-        hdbg.dassert_lt(0.0, width, "Width must be positive")
-        self.k_machines = k_machines
-        self.mu_values = list(mu_values)
-        self.width = width
-        self.seed = seed
-        # Initialize random state.
-        self._rng = np.random.RandomState(seed)
-        # Track statistics per machine.
-        self.machine_pulls = [0] * k_machines
-        self.machine_rewards = [[] for _ in range(k_machines)]
-
-    def pull(self, machine_idx: int) -> float:
-        """
-        Pull a specific machine and get reward.
-
-        :param machine_idx: index of machine to pull (0 to K-1)
-        :return: reward value in [-1, 1]
-        """
-        hdbg.dassert_lte(
-            0,
-            machine_idx,
-            "Machine index must be non-negative:",
-            machine_idx,
-        )
-        hdbg.dassert_lt(
-            machine_idx,
-            self.k_machines,
-            "Machine index out of range:",
-            machine_idx,
-        )
-        # Generate reward from uniform distribution.
-        true_mean = self.mu_values[machine_idx]
-        reward = np.clip(
-            self._rng.uniform(true_mean - self.width, true_mean + self.width),
-            -1.0,
-            1.0,
-        )
-        # Update statistics.
-        self.machine_pulls[machine_idx] += 1
-        self.machine_rewards[machine_idx].append(reward)
-        return reward
-
-    def get_empirical_means(self) -> List[float]:
-        """
-        Get empirical mean reward for each machine.
-
-        :return: list of empirical means (or 0.0 if machine not pulled)
-        """
-        means = []
-        for rewards in self.machine_rewards:
-            if len(rewards) > 0:
-                means.append(np.mean(rewards))
-            else:
-                means.append(0.0)
-        return means
-
-    def reset(self, seed: Optional[int] = None) -> None:
-        """
-        Reset all statistics but keep mu values.
-
-        :param seed: optional new seed; if None, use original seed
-        """
-        if seed is not None:
-            self.seed = seed
-        self.machine_pulls = [0] * self.k_machines
-        self.machine_rewards = [[] for _ in range(self.k_machines)]
-        # Reset random state.
-        self._rng = np.random.RandomState(self.seed)
 
 
 # #############################################################################

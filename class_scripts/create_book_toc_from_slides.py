@@ -66,7 +66,11 @@ def _extract_chapters_and_lessons(
             # Save previous chapter.
             if current_chapter_title:
                 chapters.append(
-                    (current_chapter_title, current_chapter_header, current_lessons)
+                    (
+                        current_chapter_title,
+                        current_chapter_header,
+                        current_lessons,
+                    )
                 )
             current_chapter_title = match.group(2)
             current_chapter_header = line
@@ -248,9 +252,7 @@ def _create_book_toc(
     :param max_number: Maximum number of chapters (h2 headers) to include
         - Default: 0 (include all chapters)
     """
-    _LOG.debug(
-        hprint.to_str("book_map_file output_file max_level max_number")
-    )
+    _LOG.debug(hprint.to_str("book_map_file output_file max_level max_number"))
     # Validate input file exists.
     hdbg.dassert_file_exists(book_map_file)
     # Extract chapters and lessons.

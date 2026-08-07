@@ -45,8 +45,6 @@ def _parse() -> argparse.ArgumentParser:
     return parser
 
 
-
-
 def find_packages(in_file: str, output_file: str = None) -> str:
     """
     Find packages related to the lesson content.
@@ -83,14 +81,14 @@ def find_packages(in_file: str, output_file: str = None) -> str:
     result_lines.append("# Related Python Packages")
     result_lines.append(packages)
     result_lines.append("")  # Empty line for spacing.
-    
+
     result_content = "\n".join(result_lines)
-    
+
     # Save result to output file if specified.
     if output_file:
         hio.to_file(output_file, result_content)
         _LOG.info("Package suggestions saved to: %s", output_file)
-    
+
     return result_content
 
 
@@ -104,13 +102,13 @@ def _main(parser: argparse.ArgumentParser) -> None:
     hdbg.dassert_file_exists(args.in_file)
     # Check LLM availability.
     cutil.check_llm_available()
-    
+
     # Generate default output file if not specified.
     output_file = args.output_file
     if not output_file:
         base_name = os.path.splitext(os.path.basename(args.in_file))[0]
         output_file = f"{base_name}.packages.txt"
-    
+
     # Execute find_packages.
     find_packages(args.in_file, output_file)
 

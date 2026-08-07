@@ -10,8 +10,8 @@ import random
 from typing import List
 
 import helpers.hunit_test as hunitest
-import research.Noesis.batch_call_auction as rnbca
-import research.Noesis.contract_dispatch as rncd
+import research.Noesis.batch_call_auction as rnbacaau
+import research.Noesis.contract_dispatch as rnocodis
 
 _LOG = logging.getLogger(__name__)
 
@@ -31,9 +31,9 @@ class Test_build_contracts(hunitest.TestCase):
         Test one contract built from a single-tier, single-fill round.
         """
         # Prepare inputs.
-        bids = [rnbca.Bid("buyer_1", 100, "frontier", 2.0, 0.999, 20.0)]
-        asks = [rnbca.Ask("seller_1", 100, "frontier", 2.5, 0.98, 16.0)]
-        order_book = rnbca.OrderBook()
+        bids = [rnbacaau.Bid("buyer_1", 100, "frontier", 2.0, 0.999, 20.0)]
+        asks = [rnbacaau.Ask("seller_1", 100, "frontier", 2.5, 0.98, 16.0)]
+        order_book = rnbacaau.OrderBook()
         order_book.submit_bid(bids[0])
         order_book.submit_ask(asks[0])
         tier_results = order_book.clear_round()
@@ -49,7 +49,7 @@ class Test_build_contracts(hunitest.TestCase):
                   fulfilled=None)]
         """
         # Run test.
-        actual = pprint.pformat(rncd.build_contracts(bids, tier_results))
+        actual = pprint.pformat(rnocodis.build_contracts(bids, tier_results))
         # Check outputs.
         self.assert_equal(actual, expected, dedent=True)
 
@@ -59,12 +59,12 @@ class Test_build_contracts(hunitest.TestCase):
         per fill, both carrying the same bid's `l_max`/`r_min`.
         """
         # Prepare inputs.
-        bids = [rnbca.Bid("buyer_1", 100, "frontier", 2.0, 0.999, 20.0)]
+        bids = [rnbacaau.Bid("buyer_1", 100, "frontier", 2.0, 0.999, 20.0)]
         asks = [
-            rnbca.Ask("seller_1", 60, "frontier", 2.5, 0.98, 15.0),
-            rnbca.Ask("seller_2", 60, "frontier", 2.5, 0.98, 18.0),
+            rnbacaau.Ask("seller_1", 60, "frontier", 2.5, 0.98, 15.0),
+            rnbacaau.Ask("seller_2", 60, "frontier", 2.5, 0.98, 18.0),
         ]
-        order_book = rnbca.OrderBook()
+        order_book = rnbacaau.OrderBook()
         order_book.submit_bid(bids[0])
         for ask in asks:
             order_book.submit_ask(ask)
@@ -89,7 +89,7 @@ class Test_build_contracts(hunitest.TestCase):
                   fulfilled=None)]
         """
         # Run test.
-        actual = pprint.pformat(rncd.build_contracts(bids, tier_results))
+        actual = pprint.pformat(rnocodis.build_contracts(bids, tier_results))
         # Check outputs.
         self.assert_equal(actual, expected, dedent=True)
 
@@ -98,16 +98,16 @@ class Test_build_contracts(hunitest.TestCase):
         Test that a tier with no crossing bid/ask yields no contracts.
         """
         # Prepare inputs.
-        bids = [rnbca.Bid("buyer_1", 100, "frontier", 2.0, 0.99, 10.0)]
-        asks = [rnbca.Ask("seller_1", 80, "frontier", 2.5, 0.98, 12.0)]
-        order_book = rnbca.OrderBook()
+        bids = [rnbacaau.Bid("buyer_1", 100, "frontier", 2.0, 0.99, 10.0)]
+        asks = [rnbacaau.Ask("seller_1", 80, "frontier", 2.5, 0.98, 12.0)]
+        order_book = rnbacaau.OrderBook()
         order_book.submit_bid(bids[0])
         order_book.submit_ask(asks[0])
         tier_results = order_book.clear_round()
         # Prepare outputs.
-        expected: List[rncd.Contract] = []
+        expected: List[rnocodis.Contract] = []
         # Run test.
-        actual = rncd.build_contracts(bids, tier_results)
+        actual = rnocodis.build_contracts(bids, tier_results)
         # Check outputs.
         self.assert_equal(str(actual), str(expected))
 
@@ -118,14 +118,14 @@ class Test_build_contracts(hunitest.TestCase):
         """
         # Prepare inputs.
         bids = [
-            rnbca.Bid("buyer_c", 50, "cheap", 5.0, 0.9, 5.0),
-            rnbca.Bid("buyer_f", 100, "frontier", 2.0, 0.99, 20.0),
+            rnbacaau.Bid("buyer_c", 50, "cheap", 5.0, 0.9, 5.0),
+            rnbacaau.Bid("buyer_f", 100, "frontier", 2.0, 0.99, 20.0),
         ]
         asks = [
-            rnbca.Ask("seller_c", 50, "cheap", 4.0, 0.92, 3.0),
-            rnbca.Ask("seller_f", 100, "frontier", 2.5, 0.98, 16.0),
+            rnbacaau.Ask("seller_c", 50, "cheap", 4.0, 0.92, 3.0),
+            rnbacaau.Ask("seller_f", 100, "frontier", 2.5, 0.98, 16.0),
         ]
-        order_book = rnbca.OrderBook()
+        order_book = rnbacaau.OrderBook()
         for bid in bids:
             order_book.submit_bid(bid)
         for ask in asks:
@@ -151,7 +151,7 @@ class Test_build_contracts(hunitest.TestCase):
                   fulfilled=None)]
         """
         # Run test.
-        actual = pprint.pformat(rncd.build_contracts(bids, tier_results))
+        actual = pprint.pformat(rnocodis.build_contracts(bids, tier_results))
         # Check outputs.
         self.assert_equal(actual, expected, dedent=True)
 
@@ -171,11 +171,11 @@ class Test_mock_fulfill(hunitest.TestCase):
         Test that a `success_rate` of 1.0 always reports success.
         """
         # Prepare inputs.
-        contract = rncd.Contract(
+        contract = rnocodis.Contract(
             "buyer_1", "seller_1", 100, "frontier", 2.0, 0.999, 18.0
         )
         # Run test.
-        actual = rncd.mock_fulfill(
+        actual = rnocodis.mock_fulfill(
             contract, success_rate=1.0, rng=random.Random(0)
         )
         # Check outputs.
@@ -186,11 +186,11 @@ class Test_mock_fulfill(hunitest.TestCase):
         Test that a `success_rate` of 0.0 always reports failure.
         """
         # Prepare inputs.
-        contract = rncd.Contract(
+        contract = rnocodis.Contract(
             "buyer_1", "seller_1", 100, "frontier", 2.0, 0.999, 18.0
         )
         # Run test.
-        actual = rncd.mock_fulfill(
+        actual = rnocodis.mock_fulfill(
             contract, success_rate=0.0, rng=random.Random(0)
         )
         # Check outputs.
@@ -201,14 +201,14 @@ class Test_mock_fulfill(hunitest.TestCase):
         Test that a fixed seed makes the outcome reproducible.
         """
         # Prepare inputs.
-        contract = rncd.Contract(
+        contract = rnocodis.Contract(
             "buyer_1", "seller_1", 100, "frontier", 2.0, 0.999, 18.0
         )
         # Run test.
-        actual1 = rncd.mock_fulfill(
+        actual1 = rnocodis.mock_fulfill(
             contract, success_rate=0.5, rng=random.Random(42)
         )
-        actual2 = rncd.mock_fulfill(
+        actual2 = rnocodis.mock_fulfill(
             contract, success_rate=0.5, rng=random.Random(42)
         )
         # Check outputs.
@@ -219,13 +219,13 @@ class Test_mock_fulfill(hunitest.TestCase):
         Test that a `success_rate` outside `[0, 1]` raises `AssertionError`.
         """
         # Prepare inputs.
-        contract = rncd.Contract(
+        contract = rnocodis.Contract(
             "buyer_1", "seller_1", 100, "frontier", 2.0, 0.999, 18.0
         )
         success_rate = 1.5
         # Run test and check output.
         with self.assertRaises(AssertionError):
-            rncd.mock_fulfill(
+            rnocodis.mock_fulfill(
                 contract, success_rate=success_rate, rng=random.Random(0)
             )
 
@@ -246,11 +246,11 @@ class Test_dispatch_contract(hunitest.TestCase):
         `fulfilled=True` onto the contract.
         """
         # Prepare inputs.
-        contract = rncd.Contract(
+        contract = rnocodis.Contract(
             "buyer_1", "seller_1", 100, "frontier", 2.0, 0.999, 18.0
         )
         # Run test.
-        actual = rncd.dispatch_contract(
+        actual = rnocodis.dispatch_contract(
             contract, fulfillment_fn=lambda _contract: True
         )
         # Check outputs.
@@ -264,11 +264,11 @@ class Test_dispatch_contract(hunitest.TestCase):
         `fulfilled=False` onto the contract.
         """
         # Prepare inputs.
-        contract = rncd.Contract(
+        contract = rnocodis.Contract(
             "buyer_1", "seller_1", 100, "frontier", 2.0, 0.999, 18.0
         )
         # Run test.
-        actual = rncd.dispatch_contract(
+        actual = rnocodis.dispatch_contract(
             contract, fulfillment_fn=lambda _contract: False
         )
         # Check outputs.
@@ -292,20 +292,20 @@ class Test_dispatch_contracts(hunitest.TestCase):
         """
         # Prepare inputs.
         bids = [
-            rnbca.Bid("buyer_c", 50, "cheap", 5.0, 0.9, 5.0),
-            rnbca.Bid("buyer_f", 100, "frontier", 2.0, 0.99, 20.0),
+            rnbacaau.Bid("buyer_c", 50, "cheap", 5.0, 0.9, 5.0),
+            rnbacaau.Bid("buyer_f", 100, "frontier", 2.0, 0.99, 20.0),
         ]
         asks = [
-            rnbca.Ask("seller_c", 50, "cheap", 4.0, 0.92, 3.0),
-            rnbca.Ask("seller_f", 100, "frontier", 2.5, 0.98, 16.0),
+            rnbacaau.Ask("seller_c", 50, "cheap", 4.0, 0.92, 3.0),
+            rnbacaau.Ask("seller_f", 100, "frontier", 2.5, 0.98, 16.0),
         ]
-        order_book = rnbca.OrderBook()
+        order_book = rnbacaau.OrderBook()
         for bid in bids:
             order_book.submit_bid(bid)
         for ask in asks:
             order_book.submit_ask(ask)
         tier_results = order_book.clear_round()
-        contracts = rncd.build_contracts(bids, tier_results)
+        contracts = rnocodis.build_contracts(bids, tier_results)
         # Prepare outputs.
         expected = """
         [Contract(buyer_id='buyer_c',
@@ -326,7 +326,7 @@ class Test_dispatch_contracts(hunitest.TestCase):
                   fulfilled=True)]
         """
         # Run test.
-        actual = rncd.dispatch_contracts(
+        actual = rnocodis.dispatch_contracts(
             contracts, fulfillment_fn=lambda _contract: True
         )
         # Check outputs.
@@ -337,11 +337,11 @@ class Test_dispatch_contracts(hunitest.TestCase):
         Test that dispatching an empty contract list returns an empty list.
         """
         # Prepare inputs.
-        contracts: List[rncd.Contract] = []
+        contracts: List[rnocodis.Contract] = []
         # Prepare outputs.
-        expected: List[rncd.Contract] = []
+        expected: List[rnocodis.Contract] = []
         # Run test.
-        actual = rncd.dispatch_contracts(
+        actual = rnocodis.dispatch_contracts(
             contracts, fulfillment_fn=lambda _contract: True
         )
         # Check outputs.

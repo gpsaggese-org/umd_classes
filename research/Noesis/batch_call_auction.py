@@ -4,7 +4,7 @@ simulator.
 
 Import as:
 
-import research.Noesis.batch_call_auction as rnbca
+import research.Noesis.batch_call_auction as rnbacaau
 """
 
 import dataclasses

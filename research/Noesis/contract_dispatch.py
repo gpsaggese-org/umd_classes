@@ -11,7 +11,7 @@ not exist yet.
 
 Import as:
 
-import research.Noesis.contract_dispatch as rncd
+import research.Noesis.contract_dispatch as rnocodis
 """
 
 import dataclasses
@@ -21,7 +21,7 @@ from typing import Callable, Dict, List, Optional
 
 import helpers.hdbg as hdbg
 import helpers.hprint as hprint
-import research.Noesis.batch_call_auction as rnbca
+import research.Noesis.batch_call_auction as rnbacaau
 
 _LOG = logging.getLogger(__name__)
 
@@ -81,8 +81,8 @@ class Contract:
 
 
 def build_contracts(
-    bids: List[rnbca.Bid],
-    tier_results: Dict[str, rnbca.TierClearResult],
+    bids: List[rnbacaau.Bid],
+    tier_results: Dict[str, rnbacaau.TierClearResult],
 ) -> List[Contract]:
     """
     Build one `Contract` per fill across every cleared tier.

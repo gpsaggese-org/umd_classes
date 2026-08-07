@@ -1,10 +1,7 @@
 """
-<<<<<<< HEAD
 Fetch text content from Google Slides presentations and save to `output/`. By
 default, it reads URLs from `links.txt`.
 
-=======
->>>>>>> master
 Import as:
 
 import data605.lectures_source.scripts.slides_to_text as dlssstote
@@ -869,14 +866,7 @@ def read_urls_from_file(path: str) -> List[str]:
 
 def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-<<<<<<< HEAD
         description=__doc__,
-=======
-        description=(
-            "Fetch text content from Google Slides presentations and save to `output/`."
-            " By default, it reads URLs from `links.txt`."
-        ),
->>>>>>> master
         formatter_class=hparser.CustomHelpFormatter,
     )
     parser.add_argument(

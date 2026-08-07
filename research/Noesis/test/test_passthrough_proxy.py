@@ -9,7 +9,7 @@ import pprint
 from typing import Callable, List, Tuple
 
 import helpers.hunit_test as hunitest
-import research.Noesis.passthrough_proxy as rnpp
+import research.Noesis.passthrough_proxy as rnopapro
 
 _LOG = logging.getLogger(__name__)
 
@@ -49,7 +49,7 @@ class TestGateway(hunitest.TestCase):
 
     def helper(
         self,
-        provider_configs: List[rnpp.ProviderConfig],
+        provider_configs: List[rnopapro.ProviderConfig],
         calls: List[Tuple[str, str, str]],
         clock_fn: Callable[[], float],
         expected: str,
@@ -65,7 +65,7 @@ class TestGateway(hunitest.TestCase):
         :param expected: expected pretty-printed `get_log()` result
         """
         # Prepare inputs.
-        gateway = rnpp.Gateway(clock_fn=clock_fn)
+        gateway = rnopapro.Gateway(clock_fn=clock_fn)
         for provider_config in provider_configs:
             gateway.register_provider(provider_config)
         # Run test.
@@ -82,9 +82,9 @@ class TestGateway(hunitest.TestCase):
         """
         # Prepare inputs.
         provider_configs = [
-            rnpp.ProviderConfig("openai_mock", _echo_call_fn, 0.01),
-            rnpp.ProviderConfig("anthropic_mock", _echo_call_fn, 0.02),
-            rnpp.ProviderConfig("local_mock", _upper_call_fn, 0.0),
+            rnopapro.ProviderConfig("openai_mock", _echo_call_fn, 0.01),
+            rnopapro.ProviderConfig("anthropic_mock", _echo_call_fn, 0.02),
+            rnopapro.ProviderConfig("local_mock", _upper_call_fn, 0.0),
         ]
         calls = [
             ("openai_mock", "gpt-4o-mini", "2+2="),
@@ -125,12 +125,12 @@ class TestGateway(hunitest.TestCase):
         model independently.
         """
         # Prepare inputs.
-        gateway = rnpp.Gateway(clock_fn=iter([0.0, 0.0, 0.0, 0.0]).__next__)
+        gateway = rnopapro.Gateway(clock_fn=iter([0.0, 0.0, 0.0, 0.0]).__next__)
         gateway.register_provider(
-            rnpp.ProviderConfig("openai_mock", _echo_call_fn, 0.0)
+            rnopapro.ProviderConfig("openai_mock", _echo_call_fn, 0.0)
         )
         gateway.register_provider(
-            rnpp.ProviderConfig("anthropic_mock", _echo_call_fn, 0.0)
+            rnopapro.ProviderConfig("anthropic_mock", _echo_call_fn, 0.0)
         )
         gateway.call("openai_mock", "gpt-4o-mini", "2+2=")
         gateway.call("anthropic_mock", "claude-3-haiku", "capital of France?")
@@ -169,9 +169,9 @@ class TestGateway(hunitest.TestCase):
         Test that a fresh `Gateway` starts with an empty, queryable log.
         """
         # Prepare inputs.
-        gateway = rnpp.Gateway()
+        gateway = rnopapro.Gateway()
         # Prepare outputs.
-        expected: List[rnpp.RequestLogEntry] = []
+        expected: List[rnopapro.RequestLogEntry] = []
         # Run test.
         actual = gateway.get_log()
         # Check outputs.
@@ -183,9 +183,9 @@ class TestGateway(hunitest.TestCase):
         `AssertionError`.
         """
         # Prepare inputs.
-        gateway = rnpp.Gateway()
+        gateway = rnopapro.Gateway()
         gateway.register_provider(
-            rnpp.ProviderConfig("openai_mock", _echo_call_fn, 0.0)
+            rnopapro.ProviderConfig("openai_mock", _echo_call_fn, 0.0)
         )
         # Run test and check output.
         with self.assertRaises(AssertionError):
@@ -197,14 +197,14 @@ class TestGateway(hunitest.TestCase):
         `AssertionError`.
         """
         # Prepare inputs.
-        gateway = rnpp.Gateway()
+        gateway = rnopapro.Gateway()
         gateway.register_provider(
-            rnpp.ProviderConfig("openai_mock", _echo_call_fn, 0.0)
+            rnopapro.ProviderConfig("openai_mock", _echo_call_fn, 0.0)
         )
         # Run test and check output.
         with self.assertRaises(AssertionError):
             gateway.register_provider(
-                rnpp.ProviderConfig("openai_mock", _upper_call_fn, 0.01)
+                rnopapro.ProviderConfig("openai_mock", _upper_call_fn, 0.01)
             )
 
     def test6(self) -> None:
@@ -213,12 +213,12 @@ class TestGateway(hunitest.TestCase):
         returns only entries matching both, not the union of either alone.
         """
         # Prepare inputs.
-        gateway = rnpp.Gateway(clock_fn=iter([0.0] * 6).__next__)
+        gateway = rnopapro.Gateway(clock_fn=iter([0.0] * 6).__next__)
         gateway.register_provider(
-            rnpp.ProviderConfig("openai_mock", _echo_call_fn, 0.0)
+            rnopapro.ProviderConfig("openai_mock", _echo_call_fn, 0.0)
         )
         gateway.register_provider(
-            rnpp.ProviderConfig("anthropic_mock", _echo_call_fn, 0.0)
+            rnopapro.ProviderConfig("anthropic_mock", _echo_call_fn, 0.0)
         )
         gateway.call("openai_mock", "gpt-4o-mini", "a")
         gateway.call("openai_mock", "gpt-4o", "b")
@@ -246,9 +246,9 @@ class TestGateway(hunitest.TestCase):
         `Gateway`'s internal log.
         """
         # Prepare inputs.
-        gateway = rnpp.Gateway(clock_fn=iter([0.0, 0.0]).__next__)
+        gateway = rnopapro.Gateway(clock_fn=iter([0.0, 0.0]).__next__)
         gateway.register_provider(
-            rnpp.ProviderConfig("openai_mock", _echo_call_fn, 0.0)
+            rnopapro.ProviderConfig("openai_mock", _echo_call_fn, 0.0)
         )
         gateway.call("openai_mock", "gpt-4o-mini", "a")
         # Run test.

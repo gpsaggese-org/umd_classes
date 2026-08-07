@@ -21,7 +21,7 @@ import class_scripts.count_lecture_commentary_pages as clclecopa
 import argparse
 import logging
 
-import class_scripts.common_utils as clcomuut
+import class_scripts.common_utils as csccouti
 import helpers.hdbg as hdbg
 import helpers.hparser as hparser
 
@@ -51,7 +51,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     book_dir = f"{args.dir}/book"
     _LOG.info("DIR=%s", book_dir)
     # Get page counts for all PDFs.
-    page_counts = clcomuut.get_pdf_page_counts(book_dir, pattern="Lesson*.pdf")
+    page_counts = csccouti.get_pdf_page_counts(book_dir, pattern="Lesson*.pdf")
     # Print results tab-separated.
     for filename, page_count in page_counts.items():
         _LOG.info("%s\t%d", filename, page_count)

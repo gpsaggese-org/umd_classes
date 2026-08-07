@@ -97,9 +97,7 @@ def _parse_first_arg(arg: str) -> Tuple[str, str]:
         f"Expected dir/lesson format, got '{arg}'. Use 'data605/08.1'",
     )
     dir_input, lesson = parts
-    hdbg.dassert_dir_exists(
-        dir_input
-    )
+    hdbg.dassert_dir_exists(dir_input)
     return dir_input, lesson
 
 

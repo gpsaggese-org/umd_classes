@@ -9,7 +9,7 @@ import pprint
 from typing import List
 
 import helpers.hunit_test as hunitest
-import research.Noesis.batch_call_auction as rnbca
+import research.Noesis.batch_call_auction as rnbacaau
 
 _LOG = logging.getLogger(__name__)
 
@@ -26,8 +26,8 @@ class TestOrderBook(hunitest.TestCase):
 
     def helper(
         self,
-        bids: List[rnbca.Bid],
-        asks: List[rnbca.Ask],
+        bids: List[rnbacaau.Bid],
+        asks: List[rnbacaau.Ask],
         expected: str,
     ) -> None:
         """
@@ -39,7 +39,7 @@ class TestOrderBook(hunitest.TestCase):
         :param expected: expected pretty-printed `clear_round()` result
         """
         # Prepare inputs.
-        order_book = rnbca.OrderBook()
+        order_book = rnbacaau.OrderBook()
         for bid in bids:
             order_book.submit_bid(bid)
         for ask in asks:
@@ -55,8 +55,8 @@ class TestOrderBook(hunitest.TestCase):
         Test a single tier where one bid exactly fills one ask.
         """
         # Prepare inputs.
-        bids = [rnbca.Bid("buyer_1", 100, "frontier", 2.0, 0.99, 20.0)]
-        asks = [rnbca.Ask("seller_1", 100, "frontier", 2.5, 0.98, 16.0)]
+        bids = [rnbacaau.Bid("buyer_1", 100, "frontier", 2.0, 0.99, 20.0)]
+        asks = [rnbacaau.Ask("seller_1", 100, "frontier", 2.5, 0.98, 16.0)]
         # Prepare outputs.
         expected = """
         {'frontier': TierClearResult(c_level='frontier',
@@ -78,12 +78,12 @@ class TestOrderBook(hunitest.TestCase):
         """
         # Prepare inputs.
         bids = [
-            rnbca.Bid("buyer_c", 50, "cheap", 5.0, 0.9, 5.0),
-            rnbca.Bid("buyer_f", 100, "frontier", 2.0, 0.99, 20.0),
+            rnbacaau.Bid("buyer_c", 50, "cheap", 5.0, 0.9, 5.0),
+            rnbacaau.Bid("buyer_f", 100, "frontier", 2.0, 0.99, 20.0),
         ]
         asks = [
-            rnbca.Ask("seller_c", 50, "cheap", 4.0, 0.92, 3.0),
-            rnbca.Ask("seller_f", 100, "frontier", 2.5, 0.98, 16.0),
+            rnbacaau.Ask("seller_c", 50, "cheap", 4.0, 0.92, 3.0),
+            rnbacaau.Ask("seller_f", 100, "frontier", 2.5, 0.98, 16.0),
         ]
         # Prepare outputs.
         expected = """
@@ -114,8 +114,8 @@ class TestOrderBook(hunitest.TestCase):
         Test a tier where the best bid never crosses the best ask.
         """
         # Prepare inputs.
-        bids = [rnbca.Bid("buyer_1", 100, "frontier", 2.0, 0.99, 10.0)]
-        asks = [rnbca.Ask("seller_1", 80, "frontier", 2.5, 0.98, 12.0)]
+        bids = [rnbacaau.Bid("buyer_1", 100, "frontier", 2.0, 0.99, 10.0)]
+        asks = [rnbacaau.Ask("seller_1", 80, "frontier", 2.5, 0.98, 12.0)]
         # Prepare outputs.
         expected = """
         {'frontier': TierClearResult(c_level='frontier',
@@ -133,10 +133,10 @@ class TestOrderBook(hunitest.TestCase):
         unfilled quantity.
         """
         # Prepare inputs.
-        bids = [rnbca.Bid("buyer_1", 100, "frontier", 2.0, 0.99, 20.0)]
+        bids = [rnbacaau.Bid("buyer_1", 100, "frontier", 2.0, 0.99, 20.0)]
         asks = [
-            rnbca.Ask("seller_1", 60, "frontier", 2.5, 0.98, 15.0),
-            rnbca.Ask("seller_2", 60, "frontier", 2.5, 0.98, 18.0),
+            rnbacaau.Ask("seller_1", 60, "frontier", 2.5, 0.98, 15.0),
+            rnbacaau.Ask("seller_2", 60, "frontier", 2.5, 0.98, 18.0),
         ]
         # Prepare outputs.
         expected = """
@@ -163,14 +163,14 @@ class TestOrderBook(hunitest.TestCase):
         Test that `clear_round()` empties the book, matched or not.
         """
         # Prepare inputs.
-        bid = rnbca.Bid("buyer_1", 100, "frontier", 2.0, 0.99, 20.0)
-        ask = rnbca.Ask("seller_1", 100, "frontier", 2.5, 0.98, 16.0)
-        order_book = rnbca.OrderBook()
+        bid = rnbacaau.Bid("buyer_1", 100, "frontier", 2.0, 0.99, 20.0)
+        ask = rnbacaau.Ask("seller_1", 100, "frontier", 2.5, 0.98, 16.0)
+        order_book = rnbacaau.OrderBook()
         order_book.submit_bid(bid)
         order_book.submit_ask(ask)
         # Prepare outputs.
-        expected_pending_bids: List[rnbca.Bid] = []
-        expected_pending_asks: List[rnbca.Ask] = []
+        expected_pending_bids: List[rnbacaau.Bid] = []
+        expected_pending_asks: List[rnbacaau.Ask] = []
         # Run test.
         order_book.clear_round()
         # Check outputs.
@@ -184,8 +184,8 @@ class TestOrderBook(hunitest.TestCase):
         Test that clearing an empty book returns no tiers.
         """
         # Prepare inputs.
-        bids: List[rnbca.Bid] = []
-        asks: List[rnbca.Ask] = []
+        bids: List[rnbacaau.Bid] = []
+        asks: List[rnbacaau.Ask] = []
         # Prepare outputs.
         expected = "{}"
         # Run test.
@@ -197,8 +197,8 @@ class TestOrderBook(hunitest.TestCase):
         side has no unfilled quantity because it has no orders at all.
         """
         # Prepare inputs.
-        bids = [rnbca.Bid("buyer_1", 100, "frontier", 2.0, 0.99, 20.0)]
-        asks: List[rnbca.Ask] = []
+        bids = [rnbacaau.Bid("buyer_1", 100, "frontier", 2.0, 0.99, 20.0)]
+        asks: List[rnbacaau.Ask] = []
         # Prepare outputs.
         expected = """
         {'frontier': TierClearResult(c_level='frontier',
@@ -216,8 +216,8 @@ class TestOrderBook(hunitest.TestCase):
         though their prices alone would cross.
         """
         # Prepare inputs.
-        bids = [rnbca.Bid("buyer_1", 100, "frontier", 2.0, 0.99, 100.0)]
-        asks = [rnbca.Ask("seller_1", 80, "cheap", 2.5, 0.98, 1.0)]
+        bids = [rnbacaau.Bid("buyer_1", 100, "frontier", 2.0, 0.99, 100.0)]
+        asks = [rnbacaau.Ask("seller_1", 80, "cheap", 2.5, 0.98, 1.0)]
         # Prepare outputs.
         expected = """
         {'cheap': TierClearResult(c_level='cheap',
@@ -241,10 +241,10 @@ class TestOrderBook(hunitest.TestCase):
         """
         # Prepare inputs.
         bids = [
-            rnbca.Bid("buyer_1", 50, "frontier", 2.0, 0.99, 20.0),
-            rnbca.Bid("buyer_2", 50, "frontier", 2.0, 0.99, 20.0),
+            rnbacaau.Bid("buyer_1", 50, "frontier", 2.0, 0.99, 20.0),
+            rnbacaau.Bid("buyer_2", 50, "frontier", 2.0, 0.99, 20.0),
         ]
-        asks = [rnbca.Ask("seller_1", 50, "frontier", 2.5, 0.98, 15.0)]
+        asks = [rnbacaau.Ask("seller_1", 50, "frontier", 2.5, 0.98, 15.0)]
         # Prepare outputs.
         expected = """
         {'frontier': TierClearResult(c_level='frontier',
@@ -279,7 +279,7 @@ class TestBid(hunitest.TestCase):
         n_tasks = 0
         # Run test and check output.
         with self.assertRaises(AssertionError):
-            rnbca.Bid("buyer_1", n_tasks, "frontier", 2.0, 0.99, 20.0)
+            rnbacaau.Bid("buyer_1", n_tasks, "frontier", 2.0, 0.99, 20.0)
 
 
 # #############################################################################
@@ -300,4 +300,4 @@ class TestAsk(hunitest.TestCase):
         r_typical = 1.5
         # Run test and check output.
         with self.assertRaises(AssertionError):
-            rnbca.Ask("seller_1", 100, "frontier", 2.5, r_typical, 15.0)
+            rnbacaau.Ask("seller_1", 100, "frontier", 2.5, r_typical, 15.0)

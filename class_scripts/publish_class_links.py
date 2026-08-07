@@ -82,6 +82,11 @@ class LessonArtifact(NamedTuple):
     exists: bool
 
 
+# #############################################################################
+# LessonPage
+# #############################################################################
+
+
 class LessonPage(NamedTuple):
     """
     Store a lesson name and its list of `LessonArtifact` in display order.

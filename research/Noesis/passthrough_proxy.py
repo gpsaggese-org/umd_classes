@@ -7,7 +7,7 @@ model, latency, and cost metadata.
 
 Import as:
 
-import research.Noesis.passthrough_proxy as rnpapro
+import research.Noesis.passthrough_proxy as rnopapro
 """
 
 import dataclasses

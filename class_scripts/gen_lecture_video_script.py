@@ -25,9 +25,8 @@ import class_scripts.gen_lecture_video_script as clgelesc
 
 import argparse
 import logging
-from pathlib import Path
 
-import class_scripts.common_utils as clcomuut
+import class_scripts.common_utils as csccouti
 import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hparser as hparser
@@ -84,16 +83,16 @@ def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
     # Validate arguments.
-    clcomuut.validate_dir_lesson_args(args.dir, args.lesson)
+    csccouti.validate_dir_lesson_args(args.dir, args.lesson)
     # Get source and destination names.
-    src_name = clcomuut.get_source_name(args.dir, args.lesson)
-    dst_name = clcomuut.get_output_name(src_name, ".script.txt")
+    src_name = csccouti.get_source_name(args.dir, args.lesson)
+    dst_name = csccouti.get_output_name(src_name, ".script.txt")
     # Build paths.
     input_file = f"{args.dir}/lectures_source/{src_name}"
     output_dir = f"{args.dir}/lectures_video_script"
     output_file = f"{output_dir}/{dst_name}"
     # Ensure output directory exists.
-    clcomuut.ensure_dir_exists(output_dir)
+    csccouti.ensure_dir_exists(output_dir)
     # Step 1: Generate script.
     _LOG.info("Step 1: Generating script using generate_slide_script.py")
     cmd_parts = [
