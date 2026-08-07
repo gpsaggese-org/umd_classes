@@ -432,15 +432,17 @@ digraph OptimismConcept {
        = \hat{\mu}_i(t) + \sqrt{\frac{2 \log t}{N_i(t)}}
        $$
        where:
-      - $\hat{\mu}_i(t)$: Empirical mean (exploitation term)
-      - $\sqrt{\frac{2 \log t}{N_i(t)}}$: Exploration bonus (uncertainty term)
-      - $N_i(t)$: Number of times arm $i$ pulled so far
+       - $\hat{\mu}_i(t)$: Empirical mean (exploitation term)
+       - $\sqrt{\frac{2 \log t}{N_i(t)}}$: Exploration bonus (uncertainty term)
+       - $N_i(t)$: Number of times arm $i$ pulled so far
     2. Pull arm $A_t = \argmax_i \text{UCB}_i(t)$
 
-* Upper Confidence Bound: Arm Selection Rule
+* Upper Confidence Bound: Interpretation
 
-- **UCB Index**:
-  $$\text{UCB}_i(t) = \underbrace{\hat{\mu}_i(t)}_{\text{exploitation}} + \underbrace{\sqrt{\frac{2 \log t}{N_i(t)}}}_{\text{exploration bonus}}$$
+- @Definition@: **UCB Index** is given by:
+  $$\text{UCB}_i(t)
+  = \underbrace{\hat{\mu}_i(t)}_{\text{exploitation}} + 
+  \underbrace{\sqrt{\frac{2 \log t}{N_i(t)}}}_{\text{exploration bonus}}$$
 
 - **How It Works**:
   - Arms with high empirical mean $\hat{\mu}_i$ have high UCB (exploitation)
@@ -461,50 +463,36 @@ digraph OptimismConcept {
     - Ensures with high probability: $\mu_i \leq \text{UCB}_i(t)$
     - "Optimism": We act as if each arm is as good as its UCB
 
-- **Self-Correcting**:
+- @Self-Correcting@:
   - If we pull a suboptimal arm too much: Its UCB decreases (more data $\to$ less uncertainty)
   - If we neglect the optimal arm: Its UCB increases ($\log t$ grows, while $N_i$ stays fixed)
   - Automatically balances exploration and exploitation
 
-- **No Tuning Parameters**:
-  - Unlike $\epsilon$-greedy (requires choosing $\epsilon$)
+- @No Tuning Parameters@
+  - UCB has no tuning parameters (unlike $\epsilon$-greedy, which requires
+    choosing $\epsilon$)
   - UCB has no hyperparameters (besides confidence constant)
   - Adapts automatically to problem structure
 
 * Regret Analysis of UCB
 
-- **Theorem** (Auer et al., 2002):
+- @Theorem@ (Auer et al., 2002):
   - For UCB1 with rewards in $[0, 1]$, the cumulative regret satisfies:
-    $$L_T \leq 8 \sum_{i: \Delta_i > 0} \frac{\log T}{\Delta_i} + \left( 1 + \frac{\pi^2}{3} \right) \sum_{i=1}^{K} \Delta_i$$
-  - **Simplified**: $L_T = O\left( \sum_{i: \Delta_i > 0} \frac{\log T}{\Delta_i} \right)$
+    $$L_T \leq 
+    8 \sum_{i: \Delta_i > 0} \frac{\log T}{\Delta_i} +
+    \left( 1 + \frac{\pi^2}{3} \right) \sum_{i=1}^{K} \Delta_i$$
+  - Simplified expression:
+    $$L_T = O\left( \sum_{i: \Delta_i > 0} \frac{\log T}{\Delta_i} \right)$$
+  - Smaller gaps $\Delta_i$ $\to$ higher regret since harder to distinguish arms
 
-- **Interpretation**:
+- @Interpretation@:
   - Logarithmic regret: $L_T = O(\log T)$
-  - Matches Lai–Robbins lower bound (up to constants)
-  - _Order-optimal_: Cannot do better asymptotically
-
-- **Dependence on $\Delta_i$**:
-  - Smaller gaps $\Delta_i$ $\to$ higher regret (harder to distinguish arms)
-  - Arms with $\Delta_i = 0$ (i.e., optimal arms) don't contribute to regret bound
-
-* Regret Analysis: Role of Concentration Inequalities
-
-- **Key Tool**: Hoeffding's Inequality
-  - For rewards $R_1, \ldots, R_n$ iid in $[0, 1]$ with mean $\mu$:
-    $$\Pr\left( \left|\hat{\mu} - \mu\right| \geq \epsilon \right) \leq 2 \exp(-2n\epsilon^2)$$
-
-- **Application to UCB**:
-  - Choose radius $c = \sqrt{\frac{2 \log t}{n}}$ so that:
-    $$\Pr\left( \mu_i > \hat{\mu}_i + \sqrt{\frac{2 \log t}{N_i(t)}} \right) \leq \frac{1}{t^4}$$
-  - With high probability, the true mean is below the UCB
-
-- **Union Bound**: Across all arms and time steps:
-  - Probability that any UCB is violated at any time $\leq \sum_{t=1}^{T} \sum_{i=1}^{K} \frac{1}{t^4} < \infty$
-  - UCB indices are "optimistic" with high probability
-
-- **Consequence**: If optimal arm has high UCB, we'll pull it; if suboptimal arm has high UCB, we'll pull it until UCB decreases
+  - Matches Lai–Robbins lower bound up to constants
+  - Cannot do better asymptotically
 
 * Regret Comparison: UCB vs. $\epsilon$-Greedy
+
+// TODO(ai_gp): turn it into a table
 
 ::: columns
 :::: {.column width=50%}
@@ -535,143 +523,112 @@ digraph OptimismConcept {
 ::::
 :::
 
-- **Practical Takeaway**: UCB is theoretically and empirically superior for stationary problems
+- **Practical Takeaway**: UCB is _theoretically_ and _empirically_ superior for
+  stationary problems
 
 * Variants of UCB
 
-- **UCB1**: Original algorithm (assumes bounded rewards in $[0, 1]$)
+- @UCB1@: Original algorithm
+  - Assumes bounded rewards in $[0, 1]$ and uniform variance
 
-- **UCB-V** (Variance-Aware UCB):
+- @UCB-V@: Variance-Aware UCB
   - Incorporates empirical variance of rewards
-  - Index:
-    $$\text{UCB-V}_i(t) = \hat{\mu}_i(t) + \sqrt{\frac{2 \hat{\sigma}_i^2(t) \log t}{N_i(t)}} + \frac{3 \log t}{N_i(t)}$$
-  - Where $\hat{\sigma}_i^2(t)$ is sample variance of arm $i$
+    $$
+    \text{UCB-V}_i(t)
+    = \hat{\mu}_i(t) + \sqrt{\frac{2 \hat{\sigma}_i^2(t) \log t}{N_i(t)}}
+      + \frac{3 \log t}{N_i(t)}$$
+    where $\hat{\sigma}_i^2(t)$ is sample variance of arm $i$
+  - E.g., some ads have consistent CTR, others highly variable
   - **Benefit**: Better for arms with low variance (tighter bounds)
 
-- **KL-UCB**:
+- @KL-UCB@
   - Uses Kullback–Leibler divergence for tighter confidence bounds
-  - Index:
-    $$\text{KL-UCB}_i(t) = \max \left\{ q : N_i(t) \, D(\hat{\mu}_i(t) \| q) \leq \log t \right\}$$
-  - Where $D(p \| q)$ is KL divergence
+    $$\text{KL-UCB}_i(t)
+    = \max \left\{ q : N_i(t) \, D(\hat{\mu}_i(t) \| q) \leq \log t \right\}$$
+    where $D(p \| q)$ is KL divergence
   - **Benefit**: Asymptotically optimal constants (better than UCB1)
-
-* Variants of UCB: When They Matter
-
-- **UCB1**: Good default choice
-  - Simple, no tuning, strong guarantees
-  - Works for any reward distribution with bounded support
-
-- **UCB-V**: Use when variance varies across arms
-  - Example: Some ads have consistent CTR, others highly variable
-  - Can reduce regret if some arms have low variance
-
-- **KL-UCB**: Use when asymptotic performance matters
-  - Better constants in regret bound
-  - More computationally expensive (requires solving equation for index)
-  - Recommended for Bernoulli or Gaussian bandits
-
-- **Practical Advice**: Start with UCB1; switch to variants if:
-  - You have domain knowledge about variance structure (UCB-V)
-  - You need best possible asymptotic performance (KL-UCB)
 
 # Bayesian Approaches
 
 * Bayesian Bandits
 
-- So far: **Frequentist** approach (UCB, $\epsilon$-greedy)
+- @Recap@: so far **frequentist** approach (e.g., UCB, $\epsilon$-greedy)
   - Treat $\mu_i$ as fixed unknown constants
   - Use confidence bounds and empirical means
 
-- **Bayesian Approach**: Treat $\mu_i$ as random variables
+- @Definition@: **Bayesian Approach** for multi-armed bandits:
+  - Treat $\mu_i$ as random variables
   - Start with prior distribution $p(\mu_i)$ for each arm
   - Update beliefs using Bayes' rule after each observation
   - Make decisions based on posterior distributions
 
-- **Bayesian Framework**:
-  - Prior: $p(\mu_i)$ (e.g., $\mu_i \sim \text{Beta}(1, 1)$ for Bernoulli arm)
-  - Likelihood: $p(R | \mu_i)$ (e.g., $R \sim \text{Bernoulli}(\mu_i)$)
-  - Posterior: $p(\mu_i | R_{1:t}) \propto p(R_{1:t} | \mu_i) p(\mu_i)$ (by Bayes' rule)
+- **Bayesian Framework**
+  - Prior: $p(\mu_i)$
+    - E.g., $\mu_i \sim \text{Beta}(1, 1)$ for Bernoulli arm
+  - Likelihood: $p(R | \mu_i)$
+    - E.g., $R \sim \text{Bernoulli}(\mu_i)$)
+  - Posterior (by Bayes' rule):
+    $p(\mu_i | R_{1:t}) \propto p(R_{1:t} | \mu_i) p(\mu_i)$
 
 * Bayesian Bandits: Priors and Posteriors
 
-- **Prior Distribution**: Encodes initial beliefs about $\mu_i$
-  - Uniform prior: $\mu_i \sim \text{Beta}(1, 1)$ (no prior knowledge)
-  - Informative prior: $\mu_i \sim \text{Beta}(\alpha, \beta)$ (domain knowledge)
+- We can use the usual framework for Bayesian inference and decision making
 
-- **Posterior Update**: After observing rewards from arm $i$
-  - Suppose arm $i$ has been pulled $n$ times: $s$ successes, $f$ failures
+- @Prior Distribution@: Encodes initial beliefs about $\mu_i$
+  - Uniform prior: e.g., $\mu_i \sim \text{Beta}(1, 1)$ (uniform, no prior knowledge)
+  - Informative prior: e.g., $\mu_i \sim \text{Beta}(\alpha, \beta)$ (domain knowledge)
+
+- @Posterior Update@: After observing rewards from arm $i$
+  - Suppose arm $i$ has been pulled $n$ times, with $s$ successes, $f$ failures
   - Posterior (for Bernoulli arm with Beta prior):
     $$p(\mu_i | \text{data}) = \text{Beta}(\alpha + s, \beta + f)$$
   - Conjugate prior: Posterior has same form as prior (easy to update)
 
-- **Bayesian Inference**: Posterior encodes all information about $\mu_i$
-  - Mean: $\EE[\mu_i | \text{data}] = \frac{\alpha + s}{\alpha + \beta + n}$
-  - Uncertainty: $\VV[\mu_i | \text{data}] = \frac{(\alpha + s)(\beta + f)}{(\alpha + \beta + n)^2 (\alpha + \beta + n + 1)}$
+- @Bayesian Inference@: Posterior encodes all information about $\mu_i$
+  - Mean:
+    $\EE[\mu_i | \text{data}] = \frac{\alpha + s}{\alpha + \beta + n}$
+  - Uncertainty:
+    $\VV[\mu_i | \text{data}] = \frac{(\alpha + s)(\beta + f)}{(\alpha + \beta + n)^2 (\alpha + \beta + n + 1)}$
   - More data $\to$ sharper posterior (less uncertainty)
 
 * Bayesian Decision-Making
 
-- **How to Choose Arm?** Several strategies:
+- Several strategies on how to choose arm
 
-- **Greedy Bayesian**: Choose arm with highest posterior mean
+- @Greedy Bayesian@: Choose arm with highest posterior mean
   $$A_t = \argmax_i \EE[\mu_i | \text{data}_t]$$
-  - Problem: No exploration (same issue as frequentist greedy)
+  - _Problem_: No exploration $\to$ same issue as frequentist greedy
 
-- **Bayes-UCB**: Use posterior quantile as UCB
+- @Bayes-UCB@: Use posterior quantile as UCB
   $$A_t = \argmax_i Q_i(1 - \frac{1}{t})$$
-  - Where $Q_i(p)$ is the $p$-th quantile of posterior $p(\mu_i | \text{data}_t)$
+  where $Q_i(p)$ is the $p$-th quantile of posterior $p(\mu_i | \text{data}_t)$
   - Similar to UCB, but uses Bayesian uncertainty
 
-- **Probability of Best Arm**: Choose arm most likely to be optimal
+- @Probability of Best Arm@: Choose arm most likely to be optimal
   $$A_t = \argmax_i \Pr(\mu_i = \max_j \mu_j | \text{data}_t)$$
 
-- **Thompson Sampling**: Sample from posteriors and play best sample (next slide)
+- @Thompson Sampling@: Sample from posteriors and play best sample (next slide)
 
 * Thompson Sampling
 
-- **Posterior Sampling** (Thompson, 1933; Agrawal & Goyal, 2012)
+- @Definition@: **Thompson Sampling** (Thompson, 1933)
   - At each time $t$:
     1. Sample $\tilde{\mu}_i \sim p(\mu_i | \text{data}_t)$ for each arm $i$
     2. Pull arm $A_t = \argmax_i \tilde{\mu}_i$
     3. Observe reward $R_t$
     4. Update posterior for arm $A_t$
 
-- **Intuition**: "Probability matching"
+- @Intuition@: "Probability matching"
   - Pull arm $i$ with probability $\approx \Pr(i \text{ is optimal} | \text{data})$
   - If arm likely to be best, sample will often be highest
   - If arm uncertain, might still be sampled (exploration)
 
-- **Example**: Bernoulli Bandits with Beta Priors
+- @Example@: Bernoulli Bandits with Beta Priors
   - Posterior: $p(\mu_i | \text{data}) = \text{Beta}(\alpha_i, \beta_i)$
   - Algorithm:
     1. Sample $\tilde{\mu}_i \sim \text{Beta}(\alpha_i, \beta_i)$ for each $i$
     2. Pull $A_t = \argmax_i \tilde{\mu}_i$
     3. If reward $R_t = 1$: $\alpha_{A_t} \gets \alpha_{A_t} + 1$; else $\beta_{A_t} \gets \beta_{A_t} + 1$
-
-* Thompson Sampling: Algorithm Steps
-
-\begingroup \small
-**Thompson Sampling for Bernoulli Bandits**
-
-**Input**: Number of arms $K$, time horizon $T$
-
-**Initialize**: For each arm $i = 1, \ldots, K$:
-  - $\alpha_i \gets 1, \beta_i \gets 1$ (Beta(1,1) prior)
-
-**For** $t = 1, 2, \ldots, T$:
-
-1. **Sample** from posteriors:
-   - For each arm $i$: $\tilde{\mu}_i \sim \text{Beta}(\alpha_i, \beta_i)$
-
-2. **Select arm**: $A_t \gets \argmax_i \tilde{\mu}_i$
-
-3. **Observe reward**: $R_t$
-
-4. **Update posterior** for arm $A_t$:
-   - If $R_t = 1$: $\alpha_{A_t} \gets \alpha_{A_t} + 1$
-   - If $R_t = 0$: $\beta_{A_t} \gets \beta_{A_t} + 1$
-
-\endgroup
 
 * Thompson Sampling: Practical Performance
 

@@ -25,14 +25,13 @@ _LOG = logging.getLogger(__name__)
 # #############################################################################
 
 
-# TODO(ai_gp): Add type hints.
 def cell1_casino_slot_machines() -> None:
     """
     Interactive casino slot machine visualization.
 
     Display 3 slot machines with fixed true means generating random rewards.
     User can:
-    - Choose which machine to play.
+    - Click a machine directly to play it.
     - Toggle showing true means.
     - Reset total winnings and coin budget.
     """
@@ -42,7 +41,7 @@ def cell1_casino_slot_machines() -> None:
         "total_winnings": 0.0,
         "coins_remaining": 10,
         "initial_coins": 10,
-        "machine_results": ["?", "?", "?"],
+        "machine_last_rewards": [None, None, None],
         "bandit": None,
         "show_true_means": False,
     }
@@ -66,25 +65,22 @@ def cell1_casino_slot_machines() -> None:
         initial_value=10,
         is_float=False,
     )
-    # Create widgets for machine selection.
-    machine_selector = ipywidgets.Dropdown(
-        options=["Machine 1", "Machine 2", "Machine 3"],
-        value="Machine 1",
-        description="Select Machine:",
-        style={"description_width": "120px"},
-    )
     # Create widgets for showing true means.
     show_means_toggle = ipywidgets.Checkbox(
         value=False,
         description="Show True Means",
         style={"description_width": "120px"},
     )
-    # Create action buttons.
-    play_button = ipywidgets.Button(
-        description="Play Selected Machine",
-        button_style="success",
-        layout={"width": "200px"},
-    )
+    # Create one button per machine so the user clicks the machine directly
+    # to play it, instead of picking it from a selector.
+    machine_buttons = [
+        ipywidgets.Button(
+            description=f"Play Machine {i + 1}",
+            button_style="success",
+            layout={"width": "150px"},
+        )
+        for i in range(3)
+    ]
     reset_button = ipywidgets.Button(
         description="Reset Game",
         button_style="warning",
@@ -117,12 +113,13 @@ def cell1_casino_slot_machines() -> None:
                     facecolor="lightgray",
                 )
                 ax.add_patch(machine_rect)
-                # Display result or question mark.
-                result_text = state["machine_results"][i]
+                # Display a fixed placeholder (the machine face never reveals
+                # the reward value; the reward is printed below the machine
+                # instead).
                 ax.text(
                     0.5,
                     0.5,
-                    result_text,
+                    "?",
                     ha="center",
                     va="center",
                     fontsize=32,
@@ -138,6 +135,23 @@ def cell1_casino_slot_machines() -> None:
                     fontsize=14,
                     weight="bold",
                 )
+                # Display the last reward obtained from this machine, below
+                # the machine (not inside it).
+                last_reward = state["machine_last_rewards"][i]
+                if last_reward is None:
+                    reward_text = "Last reward: ?"
+                else:
+                    reward_text = f"Last reward: {last_reward:.2f}"
+                ax.text(
+                    0.5,
+                    0.13,
+                    reward_text,
+                    ha="center",
+                    va="center",
+                    fontsize=11,
+                    color="darkgreen",
+                    weight="bold",
+                )
                 # Calculate and display sample mean and number of pulls.
                 if state["bandit"] is not None:
                     rewards = state["bandit"].machine_rewards[i]
@@ -151,7 +165,7 @@ def cell1_casino_slot_machines() -> None:
                     stats_text = "n=0, mean=?"
                 ax.text(
                     0.5,
-                    0.05,
+                    0.03,
                     stats_text,
                     ha="center",
                     va="bottom",
@@ -163,7 +177,7 @@ def cell1_casino_slot_machines() -> None:
                 if state["show_true_means"]:
                     ax.text(
                         0.5,
-                        -0.05,
+                        -0.08,
                         f"true mu={true_means[i]:.2f}",
                         ha="center",
                         va="top",
@@ -181,42 +195,54 @@ def cell1_casino_slot_machines() -> None:
             plt.tight_layout()
             plt.show()
 
-    def on_play_clicked(b) -> None:
+    def make_on_play_clicked(machine_idx: int):
         """
-        Handle play button click.
-        """
-        if state["coins_remaining"] <= 0:
-            _LOG.warning("No coins remaining!")
-            return
-        # Initialize bandit if needed.
-        if state["bandit"] is None:
-            state["bandit"] = MultiArmedBandit(
-                k_machines=3,
-                mu_values=true_means,
-                seed=seed_slider.value,
-                width=0.3,
-            )
-        # Get selected machine index (0, 1, 2).
-        machine_idx = int(machine_selector.value.split()[-1]) - 1
-        # Pull the machine.
-        reward = state["bandit"].pull(machine_idx)
-        # Update state.
-        state["total_winnings"] += reward
-        state["coins_remaining"] -= 1
-        state["machine_results"][machine_idx] = f"{reward:.2f}"
-        # Increment seed for next play.
-        seed_slider.value = seed_slider.value + 1
-        # Update plot.
-        update_plot()
+        Build a click handler that plays a specific machine.
 
-    def on_reset_clicked(b) -> None:
+        :param machine_idx: index of the machine this button plays (0 to 2)
+        :return: click handler for `machine_buttons[machine_idx]`
+        """
+
+        def on_play_clicked(b: ipywidgets.Button) -> None:
+            """
+            Handle a click on one machine's play button.
+
+            :param b: button widget (unused)
+            """
+            if state["coins_remaining"] <= 0:
+                _LOG.warning("No coins remaining!")
+                return
+            # Initialize bandit if needed.
+            if state["bandit"] is None:
+                state["bandit"] = MultiArmedBandit(
+                    k_machines=3,
+                    mu_values=true_means,
+                    seed=seed_slider.value,
+                    width=0.3,
+                )
+            # Pull the machine.
+            reward = state["bandit"].pull(machine_idx)
+            # Update state.
+            state["total_winnings"] += reward
+            state["coins_remaining"] -= 1
+            state["machine_last_rewards"][machine_idx] = reward
+            # Increment seed for next play.
+            seed_slider.value = seed_slider.value + 1
+            # Update plot.
+            update_plot()
+
+        return on_play_clicked
+
+    def on_reset_clicked(b: ipywidgets.Button) -> None:
         """
         Handle reset button click.
+
+        :param b: button widget (unused)
         """
         state["total_winnings"] = 0.0
         state["initial_coins"] = coins_slider.value
         state["coins_remaining"] = coins_slider.value
-        state["machine_results"] = ["?", "?", "?"]
+        state["machine_last_rewards"] = [None, None, None]
         # Reset bandit with current seed.
         state["bandit"] = MultiArmedBandit(
             k_machines=3,
@@ -226,15 +252,18 @@ def cell1_casino_slot_machines() -> None:
         )
         update_plot()
 
-    def on_show_means_changed(change) -> None:
+    def on_show_means_changed(change: dict) -> None:
         """
         Handle toggle for showing true means.
+
+        :param change: dictionary with change information
         """
         state["show_true_means"] = change["new"]
         update_plot()
 
     # Connect callbacks.
-    play_button.on_click(on_play_clicked)
+    for machine_idx, button in enumerate(machine_buttons):
+        button.on_click(make_on_play_clicked(machine_idx))
     reset_button.on_click(on_reset_clicked)
     show_means_toggle.observe(on_show_means_changed, names="value")
     # Layout widgets.
@@ -243,8 +272,7 @@ def cell1_casino_slot_machines() -> None:
             seed_box,
             coins_box,
             show_means_toggle,
-            machine_selector,
-            ipywidgets.HBox([play_button, reset_button]),
+            ipywidgets.HBox(machine_buttons + [reset_button]),
         ]
     )
     # Display widgets and initial plot.
@@ -252,13 +280,11 @@ def cell1_casino_slot_machines() -> None:
     update_plot()
 
 
-
 # #############################################################################
 # MultiArmedBandit
 # #############################################################################
 
 
-# TODO(ai_gp): Is this abc?
 class MultiArmedBandit:
     """
     Multi-armed bandit environment with K machines.

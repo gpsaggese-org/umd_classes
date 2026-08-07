@@ -1,5 +1,22 @@
 # OpenRouter Clone for Collecting Prompt/Response Training Data
 
+Two phases
+
+- Intelligence auction
+  Create a market place where parties can come in and bet
+  - Every 5 mins there is an "auction" to match demand and supply
+
+- Contract fullfillment
+
+Contracts are a certain number of "tasks" (like tokens) with a certain
+level of intelligence and performance (reliability, fast)
+
+Both sides bet on it and then they are matched
+
+There is infra that monitors the intelligence and performance
+
+Intelligence like a commodity, electricity
+
 ## Status
 - **Status**: draft
 - **Complete Specs**: 15%

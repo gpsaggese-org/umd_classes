@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.5
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -30,6 +30,7 @@ sns.set_style("whitegrid")
 plt.rcParams["figure.figsize"] = (12, 6)
 
 # %%
+import helpers.hintrospection as hintros
 import helpers.htutorial as ut
 import L09_03_multi_armed_bandits_utils as utils
 
@@ -51,19 +52,54 @@ _LOG = logging.getLogger(__name__)
 # - How do you maximize your winnings?
 
 # %%
-# TODO(ai_gp): Click on the slot machine instead of the selector, and print the value (not in the machine)
+# TODO(ai_gp): For each machine show an histogram with the sequence of values and empirical mean.
+# After 10 coins stop.
 utils.cell1_casino_slot_machines()
 
+# %% [markdown]
+# ## Core classes
+#
+# The interactive cells above and below are built on top of a few core classes:
+#
+# | Object | Description | Comments |
+# |--------|-------------|----------|
+# | `MultiArmedBandit` | Environment with $K$ machines, each with a fixed but unknown true mean $\mu_i$ | Tracks pulls and rewards per machine |
+# | `Strategy` | Abstract base class for a machine-selection policy | Subclasses: `ExplorationStrategy`, `ExploitationStrategy`, `EpsilonGreedyStrategy` |
+# | `BanditExperiment` | Runs one `MultiArmedBandit` with one `Strategy` for $N$ coins | Returns rewards and cumulative rewards |
+# | `BanditSimulation` | Runs many `BanditExperiment` trials with different seeds | Aggregates mean/std statistics across trials |
+
 # %%
-// TODO(ai_gp): Describe the classes MultiArmedBandit, Strategy, BanditSimulation, BanditExperiment
-// TODO(ai_gp): Show the API
+# !apt-get update && apt-get install -y git
+
+# %%
+# Show the public API and GitHub source link of the core classes.
+for cls in [
+    utils.MultiArmedBandit,
+    utils.Strategy,
+    utils.BanditExperiment,
+    utils.BanditSimulation,
+]:
+    print(f"=== {cls.__name__} ===")
+    hintros.get_link_to_code(cls)
+    hintros.print_public_methods(cls)
 
 # %% [markdown]
 # # Cell 2: Exploration vs Exploitation Dilemma
 #
 # Demonstrate the fundamental tradeoff between exploration and exploitation in the three slot machine set up.
 #
-# // TODO(ai_gp): Explain the setup (there are under coins) and 3 strategies (describe the strategies)
+# **Setup**:
+# - Same 3 slot machines as before, each with a fixed but unknown true mean $\mu_i$
+# - Instead of playing one coin at a time, play $N$ coins automatically (set with the coins slider)
+# - Compare the total reward earned by each strategy over the $N$ coins
+#
+# **Strategies**:
+# - **Pure exploration**: pick a machine uniformly at random on every coin
+#   - Learns the true means accurately but wastes coins on bad machines
+# - **Pure exploitation**: pull each machine once, then always pick the machine with the highest observed mean
+#   - Can get stuck on a suboptimal machine if an early random reward looks good
+# - **Balanced (epsilon-greedy)**: explore with probability $\epsilon$, otherwise exploit the best known machine
+#   - Balances the two extremes: $\epsilon$ controls how much exploration is kept
 #
 # // Add a strategy with optimal choice (oracle)
 
