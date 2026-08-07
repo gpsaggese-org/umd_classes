@@ -5,8 +5,12 @@ Count words in lecture script files.
 
 This script counts the number of words in each file in {DIR}/lectures_video_script/.
 
-Usage:
+# Usage Example
+
+- Count words in DATA605 lecture script files:
 > count_words.py data605
+
+- Count words in MSML610 lecture script files:
 > count_words.py msml610
 
 Import as:

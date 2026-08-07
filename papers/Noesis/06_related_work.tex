@@ -1,0 +1,142 @@
+% ##############################################################################
+\section{Related work}
+\label{sec:related_work}
+
+% ==============================================================================
+\subsection{LLM gateways and routing}
+\label{sec:related_gateways}
+
+Multi-provider gateways such as OpenRouter unify access to many LLM
+providers behind a single API, which is the architectural starting point
+for \NoesisServer{} (Section~\ref{sec:gateway_architecture}); unlike
+\Noesis, they typically set prices unilaterally rather than clearing an
+auction, and do not meter delivered quality against a contract.
+RouteLLM \cite{routellm2024} and FrugalGPT \cite{frugalgpt2023} address
+the difficulty-aware routing problem of Section~\ref{sec:routing}
+directly, learning to route or cascade requests across models of
+different cost to reduce spend while controlling quality loss; \Noesis{}
+adopts a similar routing formalization but ties the resulting cost
+savings to contract fulfillment and to a market that prices the tiers
+being routed between.
+
+% ==============================================================================
+\subsection{Model fusion and distillation}
+\label{sec:related_fusion}
+
+Self-consistency \cite{wang2022selfconsistency} and mixture-of-agents
+\cite{wang2024moa} are examples of the answer-fusion strategy of
+Section~\ref{sec:fusion}: combining multiple model outputs, by voting or by
+a further aggregation model, to trade additional inference cost for
+higher answer quality. Knowledge distillation \cite{hinton2015} underlies
+the training-signal reuse of Section~\ref{sec:distillation}, in which
+\NoesisServer{}'s logged traffic plays the role of the training corpus.
+
+% ==============================================================================
+\subsection{Auction and market microstructure}
+\label{sec:related_auctions}
+
+The uniform-price call auction of Problem~\ref{prob:clearing} is a
+multi-attribute generalization of the classical double auction
+\cite{mcafee1992}. The choice of a periodic batch auction, rather than a
+continuous limit order book, follows the argument that frequent batch
+auctions remove the latency-arbitrage incentives that plague continuous
+markets \cite{budish2015}, an argument we expect to carry over to a
+market where sellers could otherwise race to snipe favorably priced
+demand. The strategic risks flagged in
+Section~\ref{sec:mechanism_design_risks}, bid shading and collusion, draw
+on the classical auction-theory literature on optimal and
+incentive-compatible auction design \cite{myerson1981} and on collusive
+bidding \cite{mcafeemcmillan1992}.
+
+% ==============================================================================
+\subsection{Commodity and capacity market design}
+\label{sec:related_commodity}
+
+Electricity market design \cite{stoft2002, cramton2017} is the closest
+analogy to \Noesis, as discussed in
+Section~\ref{sec:related_commodity_markets}: the day-ahead/real-time
+separation motivates the tiered, periodic clearing of
+Section~\ref{sec:rounds}, and non-performance penalties in capacity
+markets \cite{cramtonstoft2005} motivate the reputation and pricing
+feedback loop of Section~\ref{sec:reputation}.
+
+% ==============================================================================
+\subsection{Decentralized exchange protocols}
+\label{sec:related_dex}
+
+\Noesis{}'s contract, bid, and ask notation (Section~\ref{sec:contracts_and_notation})
+and its treatment of the clearing problem as a linear program
+(Problem~\ref{prob:clearing}) follow the approach taken by Tulip, a
+protocol for decentralized token exchange built around limit orders and a
+Walrasian-style auction \cite{tulip2023}. The two protocols differ in an
+important respect: Tulip's traded good, a token, is settled entirely
+on-chain and requires no external verification, whereas \Noesis's traded
+good, a unit of intelligence, is produced by off-chain computation whose
+quality can only be estimated, not settled atomically, which is why
+\NoesisServer's fulfillment monitoring (Section~\ref{sec:fulfillment_monitoring})
+has no counterpart in Tulip. Whether \NoesisMarket's contract matching and
+settlement, as opposed to the inference computation itself, should move
+on-chain, in the manner of Tulip or of automated market makers such as
+Uniswap \cite{uniswap2020, angerischitra2020}, is sketched as a concrete,
+blind-bid, stake-backed design in Section~\ref{sec:decentralized_extension},
+drawing on the companion ZK-Tulip design notes \cite{zktulip2023}; the
+resulting open questions are consolidated in
+Section~\ref{sec:open_questions}.
+
+Figure~\ref{fig:related_landscape} places the work surveyed above on
+these two axes: routing/fusion work and auction theory each occupy one
+axis; electricity and capacity markets are the closest existing analogy,
+occupying both, but for a physically metered commodity rather than
+machine intelligence (Section~\ref{sec:related_commodity}); \Noesis{} is
+the only point combining both axes for machine intelligence.
+
+% rendered_images:begin
+% ```tikz
+% \definecolor{ptcolor}{RGB}{74,110,168}
+% \definecolor{noesiscolor}{RGB}{178,58,72}
+% \draw[->, >=stealth, thick] (0,0) -- (9.6,0) node[right, font=\footnotesize, align=left] {auction-based\\price discovery};
+% \draw[->, >=stealth, thick] (0,0) -- (0,7.4) node[above, font=\footnotesize, align=center] {metered, verifiable\\fulfillment};
+% \draw[dashed, gray] (4.6,-0.3) -- (4.6,7.4);
+% \draw[dashed, gray] (-0.3,3.6) -- (9.6,3.6);
+% \node[font=\footnotesize] at (2.3,-0.5) {no};
+% \node[font=\footnotesize] at (7.0,-0.5) {yes};
+% \node[font=\footnotesize] at (-0.6,1.8) {no};
+% \node[font=\footnotesize] at (-0.6,5.6) {yes};
+% \filldraw[ptcolor] (1.7,1.0) circle (2.4pt);
+% \node[anchor=west, align=left, font=\footnotesize] at (0.3,1.9) {LLM routing \& fusion\\(RouteLLM, FrugalGPT,\\self-consistency, MoA)};
+% \filldraw[ptcolor] (7.3,1.0) circle (2.4pt);
+% \node[anchor=west, align=left, font=\footnotesize] at (6.3,1.9) {auction theory\\(McAfee, Budish,\\Myerson)};
+% \filldraw[ptcolor] (3.9,1.0) circle (2.4pt);
+% \node[anchor=west, align=left, font=\footnotesize] at (2.9,0.3) {decentralized exchange\\(Tulip, Uniswap)};
+% \filldraw[ptcolor] (7.2,5.4) circle (2.4pt);
+% \node[anchor=east, align=right, font=\footnotesize] at (6.6,6.0) {commodity \& capacity\\markets (electricity)};
+% \filldraw[noesiscolor] (8.8,6.6) circle (3pt);
+% \node[anchor=west, align=left, font=\footnotesize\bfseries, text=noesiscolor] at (8.3,7.05) {Noesis};
+% ```
+% label=fig:related_landscape
+% caption=Related work positioned by auction-based price discovery and metered fulfillment.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{06_related_work.tex.figs/06_related_work.1.png}
+  \caption{Related work positioned by auction-based price discovery and metered fulfillment.}
+  \label{fig:related_landscape}
+\end{figure}
+% render_images:end
+
+% ==============================================================================
+\subsection{Companion research directions}
+\label{sec:related_companion}
+
+Three ongoing, unpublished research notes are directly relevant and are
+referenced throughout this paper without being cited as external
+publications. A blockchain-based prediction market shares
+\NoesisMarket's matching-and-settlement problem, without the
+capability-verification problem that motivates
+\NoesisServer. A pairwise preference arena for LLMs would supply the
+independent, ground-truth quality judgments that
+Definition~\ref{def:agreement_label}'s agreement label only approximates,
+and could be used to score routing and fusion decisions directly. A
+dataset-construction effort for training and distilling LLMs would be a
+direct consumer of the corpus logged by \NoesisServer{}
+(Section~\ref{sec:distillation}).

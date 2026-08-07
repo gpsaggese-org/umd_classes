@@ -6,7 +6,10 @@
 """
 Parse Markdown lesson files and iterate through slides, headers, and comments.
 
-Usage: ./lesson_parser.py --input_file /path/to/lesson.txt
+# Usage Example
+
+- Parse a lesson file and print all extracted items:
+> lesson_parser.py --input_file /path/to/lesson.txt
 """
 
 import argparse
@@ -27,7 +30,7 @@ def _parse() -> argparse.ArgumentParser:
     :return: argument parser with lesson parsing options
     """
     parser = argparse.ArgumentParser(
-        description="Parse Markdown lesson files and extract slides, headers, and comments",
+        description=__doc__,
         formatter_class=hparser.CustomHelpFormatter,
     )
     parser.add_argument(

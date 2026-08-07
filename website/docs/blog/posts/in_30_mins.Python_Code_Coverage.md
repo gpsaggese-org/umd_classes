@@ -300,7 +300,7 @@ dev_scripts_helpers/documentation/convert_table.py                  111     36  
 dev_scripts_helpers/documentation/check_links.py                    146     48     56      9    65%
 dev_scripts_helpers/documentation/extract_chapters_from_text.py      99     27     34      1    74%
 dev_scripts_helpers/documentation/preprocess_notes.py               349     78    140     19    77%
-dev_scripts_helpers/documentation/lint_txt.py                       398     71    158     18    80%
+dev_scripts_helpers/documentation/lint_text.py                       398     71    158     18    80%
 dev_scripts_helpers/documentation/documentation_utils.py            169      5     28      5    95%
 dev_scripts_helpers/documentation/__init__.py                         0      0      0      0   100%
 ---------------------------------------------------------------------------------------------------
@@ -329,7 +329,7 @@ dev_scripts_helpers/documentation/generate_images.py
 dev_scripts_helpers/documentation/generate_images.README.py
 dev_scripts_helpers/documentation/generate_latex_sty.py
 dev_scripts_helpers/documentation/generate_script_catalog.py
-dev_scripts_helpers/documentation/lint_txt.py
+dev_scripts_helpers/documentation/lint_text.py
 dev_scripts_helpers/documentation/notes_to_pdf.py
 dev_scripts_helpers/documentation/open_md.py
 dev_scripts_helpers/documentation/piper_markdown_reader.py
@@ -389,7 +389,7 @@ dev_scripts_helpers/documentation/convert_table.py                        111   
 dev_scripts_helpers/documentation/check_links.py                          146     48     56      9    65%
 dev_scripts_helpers/documentation/extract_chapters_from_text.py            99     27     34      1    74%
 dev_scripts_helpers/documentation/preprocess_notes.py                     349     78    140     19    77%
-dev_scripts_helpers/documentation/lint_txt.py                             398     71    158     18    80%
+dev_scripts_helpers/documentation/lint_text.py                             398     71    158     18    80%
 dev_scripts_helpers/documentation/documentation_utils.py                  169      5     28      5    95%
 dev_scripts_helpers/documentation/__init__.py                               0      0      0      0   100%
 ---------------------------------------------------------------------------------------------------------
