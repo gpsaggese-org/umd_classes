@@ -298,7 +298,7 @@ def _generate_script(
     Performs the following steps:
     1. Calls generate_slide_script.py to create the script
     2. Removes 'Transition: ' prefix using perl
-    3. Lints the output using lint_txt.py
+    3. Lints the output using lint_text.py
 
     :param class_dir: class directory (data605 or msml610)
     :param source_path: path to source .txt file

@@ -199,8 +199,8 @@ flowchart LR
 
 ### Preview Mode
 
-- Use `--action open` to render diagrams as SVG and open the result as HTML in
-  your browser for quick previewing
+- Use `--clear_actions --action open` to open already-rendered images as HTML
+  in your browser for quick previewing, without re-rendering
 
 ## Comparison with Alternatives
 

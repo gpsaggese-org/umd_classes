@@ -5,10 +5,20 @@ Generate lecture slides PDF.
 
 This script generates a PDF from lecture source files using notes_to_pdf.py.
 
-Usage:
+# Usage Example
+
+- Generate the slides PDF for msml610 lesson 08.1:
 > gen_slides.py msml610/08.1
+
+- Generate the slides PDF for data605 lesson 01.1:
 > gen_slides.py data605/01.1
+
+- Generate the slides PDF for msml610 lesson 08.1, skipping the
+  cleanup_before action:
 > gen_slides.py msml610/08.1 --skip_action cleanup_before
+
+- Generate the slides PDF by specifying the lecture source file path
+  directly:
 > gen_slides.py msml610/lectures_source/Lesson10.2-Causal_Discovery.txt
 """
 
@@ -22,6 +32,7 @@ from typing import Tuple
 import class_scripts.common_utils as csccouti
 import helpers.hdbg as hdbg
 import helpers.hparser as hparser
+import helpers.hprint as hprint
 import helpers.hsystem as hsystem
 
 _LOG = logging.getLogger(__name__)
@@ -86,9 +97,7 @@ def _parse_first_arg(arg: str) -> Tuple[str, str]:
         f"Expected dir/lesson format, got '{arg}'. Use 'data605/08.1'",
     )
     dir_input, lesson = parts
-    hdbg.dassert_dir_exists(
-        dir_input
-    )
+    hdbg.dassert_dir_exists(dir_input)
     return dir_input, lesson
 
 
@@ -167,9 +176,17 @@ def _main(parser: argparse.ArgumentParser) -> None:
     quoted_parts = [shlex.quote(part) for part in cmd_parts]
     cmd = " ".join(quoted_parts)
     if args.daemon:
+        # `notes_to_pdf.py`'s default actions don't include "open", so build
+        # once upfront and open the PDF; then hand off to its own `--daemon`
+        # watch loop, which regenerates on change without reopening the viewer
+        # (it skips "open" on watch runs since the viewer auto-reloads).
+        # TODO(ai_gp): Rename the action open -> open_pdf
+        initial_cmd = cmd + " --action=open"
+        _LOG.info("%s", hprint.color_highlight(f"> {initial_cmd}", "green"))
+        hsystem.system(initial_cmd, suppress_output=False)
         cmd += " --daemon"
     # Execute the command.
-    _LOG.info("Running command: '%s'", cmd)
+    _LOG.info("%s", hprint.color_highlight(f"> {cmd}", "green"))
     hsystem.system(cmd, suppress_output=False)
 
 
