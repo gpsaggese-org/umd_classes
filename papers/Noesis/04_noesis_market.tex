@@ -45,7 +45,11 @@ prices diverge within the same day. A \texttt{cheap} tier and a
 are not expected to clear at the same price.
 \end{remark}
 
-Figure~\ref{fig:auction_timeline} lays out this timeline.
+Figure~\ref{fig:auction_timeline} lays out this timeline: the order book
+accepts bids and asks continuously, and every $T$ minutes the round closes
+and a separate uniform-price clearing is computed independently per
+capability-tier bucket, so \texttt{cheap} and \texttt{frontier} can clear
+at different prices in the same round (Remark~\ref{rem:tiered_pricing}).
 
 % rendered_images:begin
 % ```tikz
@@ -69,16 +73,12 @@ Figure~\ref{fig:auction_timeline} lays out this timeline.
 % \node[draw, rounded corners, fill=frontcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (10.8,2.0) {frontier tier\\clears at $p^*_{\text{frontier}}$};
 % ```
 % label=fig:auction_timeline
-% caption=The auction timeline. The order book accepts bids and asks
-%   continuously; every $T$ minutes the round closes and a separate
-%   uniform-price clearing is computed independently per capability-tier
-%   bucket, so \texttt{cheap} and \texttt{frontier} can clear at different
-%   prices in the same round (Remark~\ref{rem:tiered_pricing}).
+% caption=The \NoesisMarket{} auction timeline.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{04_noesis_market.tex.figs/04_noesis_market.1.png}
-  \caption{The auction timeline. The order book accepts bids and asks continuously; every $T$ minutes the round closes and a separate uniform-price clearing is computed independently per capability-tier bucket, so \texttt{cheap} and \texttt{frontier} can clear at different prices in the same round (Remark~\ref{rem:tiered_pricing}).}
+  \caption{The \NoesisMarket{} auction timeline.}
   \label{fig:auction_timeline}
 \end{figure}
 % render_images:end
@@ -119,7 +119,9 @@ bucket, with an edge $(\beta, \alpha) \in E_c$ whenever $\beta \sim
 \alpha$.
 
 Figure~\ref{fig:compatibility_graph} shows a small example of such a
-graph.
+graph: an edge marks a bid/ask pair whose capability, latency, and
+reliability terms are mutually satisfiable, and bid 4 has no compatible
+ask in this bucket and is left unmatched regardless of price.
 
 % rendered_images:begin
 % ```graphviz
@@ -180,16 +182,12 @@ graph.
 % }
 % ```
 % label=fig:compatibility_graph
-% caption=A small example compatibility graph $G_c$ within one tier bucket
-%   (Definition~\ref{def:compatibility}). An edge marks a bid/ask pair
-%   whose capability, latency, and reliability terms are mutually
-%   satisfiable; bid 4 has no compatible ask in this bucket and is left
-%   unmatched regardless of price.
+% caption=A small example compatibility graph $G_c$ within one tier bucket.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{04_noesis_market.tex.figs/04_noesis_market.2.png}
-  \caption{A small example compatibility graph $G_c$ within one tier bucket (Definition~\ref{def:compatibility}). An edge marks a bid/ask pair whose capability, latency, and reliability terms are mutually satisfiable; bid 4 has no compatible ask in this bucket and is left unmatched regardless of price.}
+  \caption{A small example compatibility graph $G_c$ within one tier bucket.}
   \label{fig:compatibility_graph}
 \end{figure}
 % render_images:end
@@ -350,7 +348,11 @@ subsequent rounds until its reputation recovers.
 \end{example}
 
 Figure~\ref{fig:reputation_loop} traces this loop from a cleared contract
-back to future eligibility.
+back to future eligibility: a contract $\kappa$ dispatched to
+\NoesisServer{} yields a measured reliability $\hat r(\kappa, W)$, which
+drives the reputation update of Equation~\eqref{eq:reputation_update}, and
+the resulting score gates the seller's eligibility to submit asks in
+future \NoesisMarket{} rounds, closing the loop.
 
 % rendered_images:begin
 % ```graphviz
@@ -387,17 +389,12 @@ back to future eligibility.
 % }
 % ```
 % label=fig:reputation_loop
-% caption=The reputation and pricing feedback loop. A contract $\kappa$
-%   dispatched to \NoesisServer{} yields a measured reliability
-%   $\hat r(\kappa, W)$, which drives the reputation update of
-%   Equation~\eqref{eq:reputation_update}; the resulting score gates the
-%   seller's eligibility to submit asks in future \NoesisMarket{} rounds,
-%   closing the loop.
+% caption=The \NoesisMarket{} reputation and pricing feedback loop.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{04_noesis_market.tex.figs/04_noesis_market.3.png}
-  \caption{The reputation and pricing feedback loop. A contract $\kappa$ dispatched to \NoesisServer{} yields a measured reliability $\hat r(\kappa, W)$, which drives the reputation update of Equation~\eqref{eq:reputation_update}; the resulting score gates the seller's eligibility to submit asks in future \NoesisMarket{} rounds, closing the loop.}
+  \caption{The \NoesisMarket{} reputation and pricing feedback loop.}
   \label{fig:reputation_loop}
 \end{figure}
 % render_images:end

@@ -54,7 +54,12 @@ underlying chain, a trade-off Section~\ref{sec:decentralized_comparison}
 makes explicit.
 
 Figure~\ref{fig:trust_boundaries} contrasts the two trust boundaries
-before the mechanisms below are introduced.
+before the mechanisms below are introduced: in the centralized design, a
+single operator sees every bid and ask in full and alone decides
+eligibility and matching, while in the decentralized design, only
+on-chain addresses are visible until the reveal window closes
+(Section~\ref{sec:blind_bidding}), and matching and eligibility are
+verifiable on-chain rather than taken on the operator's word.
 
 % rendered_images:begin
 % ```graphviz
@@ -112,17 +117,12 @@ before the mechanisms below are introduced.
 % }
 % ```
 % label=fig:trust_boundaries
-% caption=The two trust boundaries. Centralized: a single operator sees
-%   every bid and ask in full and alone decides eligibility and matching.
-%   Decentralized: only on-chain addresses are visible until the reveal
-%   window closes (Section~\ref{sec:blind_bidding}), and matching and
-%   eligibility are verifiable on-chain rather than taken on the
-%   operator's word.
+% caption=The two trust boundaries: centralized versus decentralized \NoesisMarket{}.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{08_decentralized_extension.tex.figs/08_decentralized_extension.1.png}
-  \caption{The two trust boundaries. Centralized: a single operator sees every bid and ask in full and alone decides eligibility and matching. Decentralized: only on-chain addresses are visible until the reveal window closes (Section~\ref{sec:blind_bidding}), and matching and eligibility are verifiable on-chain rather than taken on the operator's word.}
+  \caption{The two trust boundaries: centralized versus decentralized \NoesisMarket{}.}
   \label{fig:trust_boundaries}
 \end{figure}
 % render_images:end
@@ -177,7 +177,11 @@ off-chain, so anonymity here covers the auction, not the inference traffic
 that a cleared contract subsequently generates.
 
 Figure~\ref{fig:commit_reveal_sequence} traces one round through these
-three phases.
+three phases: during the commit window, bidders post the commitment
+$h_\beta = H(\beta \,\|\, \nu_\beta)$ (Definition~\ref{def:blind_bid});
+during the reveal window, they disclose $(\beta, \nu_\beta)$; and only
+revealed bids and asks matching a posted commitment are kept for the
+clearing problem (Problem~\ref{prob:clearing}) run at the round's close.
 
 % rendered_images:begin
 % ```graphviz
@@ -204,17 +208,12 @@ three phases.
 % }
 % ```
 % label=fig:commit_reveal_sequence
-% caption=One auction round under commit-reveal. During the commit window,
-%   bidders post the commitment $h_\beta = H(\beta \,\|\, \nu_\beta)$
-%   (Definition~\ref{def:blind_bid}); during the reveal window, they
-%   disclose $(\beta, \nu_\beta)$; only revealed bids and asks matching a
-%   posted commitment are kept for the clearing problem
-%   (Problem~\ref{prob:clearing}) run at the round's close.
+% caption=One auction round under commit-reveal.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{08_decentralized_extension.tex.figs/08_decentralized_extension.2.png}
-  \caption{One auction round under commit-reveal. During the commit window, bidders post the commitment $h_\beta = H(\beta \,\|\, \nu_\beta)$ (Definition~\ref{def:blind_bid}); during the reveal window, they disclose $(\beta, \nu_\beta)$; only revealed bids and asks matching a posted commitment are kept for the clearing problem (Problem~\ref{prob:clearing}) run at the round's close.}
+  \caption{One auction round under commit-reveal.}
   \label{fig:commit_reveal_sequence}
 \end{figure}
 % render_images:end
@@ -256,7 +255,10 @@ contract can act on, rather than treating \NoesisServer{} itself as a
 trusted oracle, is left open in Section~\ref{sec:decentralized_open_questions}.
 
 Figure~\ref{fig:staked_ask_lifecycle} shows this lifecycle as a state
-diagram.
+diagram: the stake is posted when $\alpha$ is revealed, locked once
+matched into a contract $\kappa$, and released in full or slashed once
+$\hat r_{\text{lower}}(\kappa, W)$ is reported against $\rminattr(\kappa)$
+at the close of the fulfillment window.
 
 % rendered_images:begin
 % ```graphviz
@@ -288,16 +290,12 @@ diagram.
 % }
 % ```
 % label=fig:staked_ask_lifecycle
-% caption=Lifecycle of a staked ask (Definition~\ref{def:staked_ask}). The
-%   stake is posted when $\alpha$ is revealed, locked once matched into a
-%   contract $\kappa$, and released in full or slashed once
-%   $\hat r_{\text{lower}}(\kappa, W)$ is reported against
-%   $\rminattr(\kappa)$ at the close of the fulfillment window.
+% caption=Lifecycle of a staked ask.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{08_decentralized_extension.tex.figs/08_decentralized_extension.3.png}
-  \caption{Lifecycle of a staked ask (Definition~\ref{def:staked_ask}). The stake is posted when $\alpha$ is revealed, locked once matched into a contract $\kappa$, and released in full or slashed once $\hat r_{\text{lower}}(\kappa, W)$ is reported against $\rminattr(\kappa)$ at the close of the fulfillment window.}
+  \caption{Lifecycle of a staked ask.}
   \label{fig:staked_ask_lifecycle}
 \end{figure}
 % render_images:end
@@ -354,7 +352,10 @@ open implementation question, listed in
 Section~\ref{sec:decentralized_open_questions}.
 
 Figure~\ref{fig:clearing_placement_spectrum} spans the three placements
-along this spectrum.
+along this spectrum, from trust-minimized and expensive to cheap and
+trusted: the verifiably-off-chain placement is the least developed of the
+three but is the only one that preserves trust-minimization without the
+gas cost of solving Problem~\ref{prob:clearing} on-chain.
 
 % rendered_images:begin
 % ```tikz
@@ -370,17 +371,12 @@ along this spectrum.
 % \node[align=center, font=\footnotesize] at (9.8,1.1) {fully off-chain\\(operator posts\\the result only)};
 % ```
 % label=fig:clearing_placement_spectrum
-% caption=The three placements for the clearing problem
-%   (Section~\ref{sec:decentralized_matching_engine}), spanning a spectrum
-%   from trust-minimized and expensive to cheap and trusted. The
-%   verifiably-off-chain placement is the least developed of the three but
-%   is the only one that preserves trust-minimization without the gas cost
-%   of solving Problem~\ref{prob:clearing} on-chain.
+% caption=The three placements for the clearing problem, on a trust/cost spectrum.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{08_decentralized_extension.tex.figs/08_decentralized_extension.4.png}
-  \caption{The three placements for the clearing problem (Section~\ref{sec:decentralized_matching_engine}), spanning a spectrum from trust-minimized and expensive to cheap and trusted. The verifiably-off-chain placement is the least developed of the three but is the only one that preserves trust-minimization without the gas cost of solving Problem~\ref{prob:clearing} on-chain.}
+  \caption{The three placements for the clearing problem, on a trust/cost spectrum.}
   \label{fig:clearing_placement_spectrum}
 \end{figure}
 % render_images:end
@@ -414,7 +410,10 @@ lowest-priced compatible asks, so that the same top seller does not
 deterministically win every round in a thin bucket.
 
 Figure~\ref{fig:redundancy_racing} contrasts a redundant match with the
-single-ask baseline.
+single-ask baseline: instead of matching a contract against a single
+staked ask, it is matched against $k_{\text{red}}$ staked asks that race
+to fulfill it, and only the sellers who meet the contract's terms retain
+their stake, hedging against any one seller being unavailable or slashed.
 
 % rendered_images:begin
 % ```graphviz
@@ -472,17 +471,12 @@ single-ask baseline.
 % }
 % ```
 % label=fig:redundancy_racing
-% caption=Redundancy as a decentralization safeguard
-%   (Section~\ref{sec:decentralized_redundancy}). Instead of matching a
-%   contract against a single staked ask, it is matched against
-%   $k_{\text{red}}$ staked asks that race to fulfill it; only the sellers
-%   who meet the contract's terms retain their stake, hedging against any
-%   one seller being unavailable or slashed.
+% caption=Redundancy as a decentralization safeguard.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{08_decentralized_extension.tex.figs/08_decentralized_extension.5.png}
-  \caption{Redundancy as a decentralization safeguard (Section~\ref{sec:decentralized_redundancy}). Instead of matching a contract against a single staked ask, it is matched against $k_{\text{red}}$ staked asks that race to fulfill it; only the sellers who meet the contract's terms retain their stake, hedging against any one seller being unavailable or slashed.}
+  \caption{Redundancy as a decentralization safeguard.}
   \label{fig:redundancy_racing}
 \end{figure}
 % render_images:end

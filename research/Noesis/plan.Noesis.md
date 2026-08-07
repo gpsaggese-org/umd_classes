@@ -72,6 +72,16 @@
   Milestone 7 loop reachable by a real external caller rather than adding
   a new market or server mechanism.
 
+- **Milestone 10: OpenRouter interoperability.** Two independent additions
+  that connect `NoesisServer` to the real OpenRouter service instead of
+  test stand-ins: back `Gateway`'s provider pool with a real OpenRouter
+  call for real multi-provider liquidity (`01_introduction.tex`'s
+  "provider-agnostic liquidity pooling" property), and expose an
+  OpenRouter-shaped API surface so an existing OpenRouter client can
+  consume `NoesisServer` unmodified (`NoesisServer` PR7-PR8 below). Like
+  Milestone 8, this does not depend on Milestone 7's closed loop and can
+  be built before or after it.
+
 Each milestone is scoped to be independently demonstrable within one to two
 days of focused work, consistent with the goal of showing progress
 incrementally rather than attempting the full closed loop in one step.
@@ -305,6 +315,58 @@ incrementally rather than attempting the full closed loop in one step.
   `NoesisMarket` PR3's reputation update, addressing the "attribution
   reliability" open question below
 
+#### PR7: [ ] Real provider liquidity via an OpenRouter-backed `ProviderConfig`
+- Background: `05_noesis_server.tex` models `NoesisServer` "on multi-provider
+  routers such as OpenRouter" precisely because a router like OpenRouter
+  already pools dozens of providers and models behind one API key,
+  matching the paper's "provider-agnostic liquidity pooling" property
+  (`01_introduction.tex`); PR1's `ProviderConfig.call_fn` today wraps only
+  test stand-ins, so `Gateway` has no real liquidity yet
+- Add an `OpenRouterProviderConfig` (or a `call_fn` factory) whose
+  `call_fn` forwards `(model, prompt)` to OpenRouter's real chat-
+  completions endpoint (`model` formatted as `"<upstream_provider>/
+  <model>"`, e.g. `"openai/gpt-4o"`), parses the response back into the
+  raw text `Gateway.call()` returns today, and replaces PR1's placeholder
+  `cost_per_char` with the real per-token cost OpenRouter reports in
+  `usage` (`architecture.md` Weakness 7)
+- One registered `OpenRouterProviderConfig` covers every model OpenRouter
+  lists (`GET /api/v1/models`), so `Gateway` gets real multi-provider
+  liquidity from a single integration instead of one bespoke
+  `ProviderConfig` per upstream provider
+- Unit tests keep injecting a fixture `ProviderCallFn` per the existing
+  convention (no live network call in the default suite); a
+  `requires_openrouter_key`-marked integration test, skipped unless an API
+  key is present in the environment, exercises one real OpenRouter call
+- Result: `Gateway` is backed by real, multi-provider liquidity instead of
+  test stand-ins; once wired to `NoesisMarket` (PR3/PR4 above), a cleared
+  ask can be fulfilled by an actual OpenRouter call in place of
+  `mock_fulfill()`
+
+#### PR8: [ ] OpenRouter-compatible API interface for `NoesisServer`
+- Background: `NoesisPlatform` PR1 sketches a bespoke HTTP wrapper around
+  `Gateway.call()` without specifying its wire format; adopting
+  OpenRouter's own REST contract instead means any existing OpenRouter
+  client (SDK, LangChain provider config, curl script) can point its
+  `base_url` at a `NoesisServer` deployment and work unmodified
+- Add `POST /api/v1/chat/completions` matching OpenRouter's request shape
+  (`model: "<provider>/<model>"`, `messages`, `stream`) and response shape
+  (`id`, `choices[].message`, `usage.{prompt,completion,total}_tokens`),
+  translating to/from `Gateway.call()`'s `(provider_name, model, prompt)`
+  signature internally
+- Add `GET /api/v1/models` mirroring OpenRouter's model-listing endpoint,
+  sourced from `Gateway`'s registered `ProviderConfig`s (name and, once
+  PR7 lands, a real per-token price instead of PR1's placeholder)
+- Auth: `Authorization: Bearer <api_key>` header, OpenRouter's own
+  convention, checked the same way as `NoesisPlatform` PR1's per-account
+  API key
+- Unit tests: a request built with an OpenRouter client's request shape
+  round-trips through `Gateway.call()` and returns an OpenRouter-shaped
+  response on a local test server; an unknown `model` string is rejected
+  with OpenRouter's error-response shape, not a bare 500
+- Result: `NoesisServer` is a drop-in replacement for OpenRouter from the
+  caller's point of view; supersedes the wire format of `NoesisPlatform`
+  PR1's passthrough-completion endpoint once this lands
+
 ### Open questions
 - Not blocking PR1-PR6 as scoped above; track before broader rollout
 1. Is a simple pass-through logger already useful for dataset building, or
@@ -329,6 +391,14 @@ incrementally rather than attempting the full closed loop in one step.
    enough to affect pricing? PR6 above answers the noise-vs-signal half of
    this question; attributing a confirmed shortfall to the right provider
    among several serving the same contract remains open
+7. OpenRouter dependency risk: PR7 makes `Gateway`'s real liquidity depend
+   on one third party's uptime, pricing, and model catalog; is a single-
+   upstream dependency acceptable for the prototype, or does it need a
+   fallback provider before real (non-synthetic) traffic relies on it?
+8. Fidelity vs. scope of PR8's compatibility: targeting chat completions
+   and model listing only; does divergence from OpenRouter's exact error
+   codes/streaming semantics break real OpenRouter clients in practice,
+   before advertising `NoesisServer` as a drop-in replacement?
 
 ## NoesisPlatform
 
@@ -347,7 +417,7 @@ incrementally rather than attempting the full closed loop in one step.
 
 ### Solution
 
-#### PR1: [ ] Public API surface for NoesisMarket and NoesisServer
+#### PR1: [x] Public API surface for NoesisMarket and NoesisServer
 - Background: PR1-PR6 of `NoesisMarket` and `NoesisServer` expose Python
   library calls only (`OrderBook.submit_bid()`, `Gateway.call()`, etc.); an
   external caller cannot reach either component today
@@ -365,6 +435,14 @@ incrementally rather than attempting the full closed loop in one step.
   reaching the underlying call
 - Result: `NoesisMarket` and `NoesisServer` are callable over HTTP by an
   external client, not just from within the same Python process
+- Implementation note (`research/Noesis/platform_api.py`): added an
+  unauthenticated `POST /rounds/clear` beyond the list above, since
+  `OrderBook.clear_round()` is the only thing that produces a
+  `Contract`/`TierClearResult` and none of the listed endpoints call it;
+  without it, `GET /contracts/{id}` and `GET /rounds/{tier}/latest` could
+  never be populated by an external caller. `GET /rounds/{tier}/latest`
+  reads from an in-process per-tier cache populated by `POST
+  /rounds/clear`, standing in for PR4's pub/sub feed until PR4 lands.
 
 #### PR2: [ ] Cloud deployment
 - Containerize PR1's API into a single Docker image, following this repo's
@@ -426,7 +504,9 @@ incrementally rather than attempting the full closed loop in one step.
   [[draft.Intelligence_Server]]
 - The full \Noesis{} paper: `papers/Noesis/paper.tex` (sections
   `01_introduction.tex` through `11_conclusion.tex`)
-- OpenRouter: unified API for multiple LLM providers (reference only)
+- OpenRouter: unified API for multiple LLM providers; design reference for
+  `NoesisServer` PR1, and the real integration target for `NoesisServer`
+  PR7 (backend liquidity) and PR8 (compatible API interface)
 - Stripe Checkout: hosted credit-card payment flow (reference only, for
   `NoesisPlatform` PR3)
 - Chen, L., et al., _FrugalGPT: How to Use Large Language Models While

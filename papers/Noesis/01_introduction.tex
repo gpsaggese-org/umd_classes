@@ -5,6 +5,9 @@
 
 \date{\today}
 
+% TODO(ai_gp): Add the concept of max delay (e.g., to execute workload within N
+% hours for batch execution)
+
 \begin{abstract}
 Applications and autonomous agents increasingly consume large language model
 (LLM) inference as a raw input, in the same way that factories consume
@@ -105,14 +108,23 @@ of the protocol's design.
     pricing signal (Section~\ref{sec:noesis_server}).
 \end{itemize}
 
-Figure~\ref{fig:architecture} lays out the resulting architecture: the
-demand and supply sides submit bids and asks to \NoesisMarket{}, whose
-cleared contracts are dispatched to \NoesisServer{}; \NoesisServer{}'s API
+Figure~\ref{fig:architecture} lays out the resulting architecture, with the
+five pluggable components of Section~\ref{sec:modularity} and
+Table~\ref{tab:components} shaded in teal: the demand and supply sides
+submit bids and asks to \NoesisMarket{}'s matching engine, which clears
+them into contracts dispatched to \NoesisServer{}'s API gateway. The
 gateway proxies matched requests to the underlying providers through
 per-provider APIs, and its metering logic checks the responses against the
 contract terms, using external intelligence-measure providers (e.g.,
 artificialanalysis.ai\footnote{\url{https://artificialanalysis.ai}}) as a
-capability reference.
+capability reference, then reports fulfillment back to \NoesisMarket{}'s
+reputation-and-feedback component, which gates the matching engine and
+feeds its pricing-dissemination component. The gateway can also fan a
+request out to several providers through the answer-fusion component
+(Section~\ref{sec:fusion}) when reliability outweighs cost.
+
+% TODO(ai_gp): Reorganize it visually so that the figure can be bigger and more 
+% readable. Add a color legend for Noesis, Providers / supply
 
 % rendered_images:begin
 % ```graphviz
@@ -205,24 +217,12 @@ capability reference.
 % }
 % ```
 % label=fig:architecture
-% caption=\Noesis{} architecture, with the five pluggable components of
-%   Section~\ref{sec:modularity} and Table~\ref{tab:components} shaded in
-%   teal. Demand and supply submit bids and asks to \NoesisMarket{}'s
-%   matching engine, which clears them into contracts dispatched to
-%   \NoesisServer{}'s API gateway. The gateway proxies matched requests to
-%   providers, and its metering logic checks the responses against the
-%   contract terms using a capability-measurement component, fed, e.g., by
-%   external intelligence-measure providers, and reports fulfillment back to
-%   \NoesisMarket{}'s reputation-and-feedback component, which gates the
-%   matching engine and feeds its pricing-dissemination component. The
-%   gateway also fans a request out to several providers through the
-%   answer-fusion component (Section~\ref{sec:fusion}) when reliability
-%   outweighs cost.
+% caption=The \Noesis{} architecture, with its five pluggable components shaded in teal.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{01_introduction.tex.figs/01_introduction.1.png}
-  \caption{\Noesis{} architecture, with the five pluggable components of Section~\ref{sec:modularity} and Table~\ref{tab:components} shaded in teal. Demand and supply submit bids and asks to \NoesisMarket{}'s matching engine, which clears them into contracts dispatched to \NoesisServer{}'s API gateway. The gateway proxies matched requests to providers, and its metering logic checks the responses against the contract terms using a capability-measurement component, fed, e.g., by external intelligence-measure providers, and reports fulfillment back to \NoesisMarket{}'s reputation-and-feedback component, which gates the matching engine and feeds its pricing-dissemination component. The gateway also fans a request out to several providers through the answer-fusion component (Section~\ref{sec:fusion}) when reliability outweighs cost.}
+  \caption{The \Noesis{} architecture, with its five pluggable components shaded in teal.}
   \label{fig:architecture}
 \end{figure}
 % render_images:end
@@ -386,6 +386,7 @@ buying raw compute on a cloud spot market (e.g., spot GPU instances). The
 comparison is discussed in detail in Sections~\ref{sec:market_design}
 through \ref{sec:noesis_server}.
 
+% TODO(ai_gp): Remove textbf from the table
 \begin{samepage}
   \begin{table}[H]
     \centering

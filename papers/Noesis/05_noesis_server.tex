@@ -36,7 +36,10 @@ safeguards (PII scrubbing, opt-in/opt-out) are necessary before logging
 real traffic and are discussed as an open question in
 Section~\ref{sec:open_questions}.
 
-Figure~\ref{fig:request_path} traces this path end to end.
+Figure~\ref{fig:request_path} traces this path end to end: the caller's
+request is proxied to a provider and the response streamed back, and on
+the way back, the request is logged as the tuple (prompt, response,
+provider, model, latency, cost, contract-or-$\bot$) described above.
 
 % rendered_images:begin
 % ```graphviz
@@ -73,16 +76,12 @@ Figure~\ref{fig:request_path} traces this path end to end.
 % }
 % ```
 % label=fig:request_path
-% caption=Path of a single request through \NoesisServer{}. The caller's
-%   request is proxied to a provider and the response streamed back; on the
-%   way back, the request is logged as the tuple (prompt, response,
-%   provider, model, latency, cost, contract-or-$\bot$) described in
-%   Section~\ref{sec:gateway_architecture}.
+% caption=Path of a single request through \NoesisServer{}.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{05_noesis_server.tex.figs/05_noesis_server.1.png}
-  \caption{Path of a single request through \NoesisServer{}. The caller's request is proxied to a provider and the response streamed back; on the way back, the request is logged as the tuple (prompt, response, provider, model, latency, cost, contract-or-$\bot$) described in Section~\ref{sec:gateway_architecture}.}
+  \caption{Path of a single request through \NoesisServer{}.}
   \label{fig:request_path}
 \end{figure}
 % render_images:end
@@ -159,7 +158,11 @@ to \NoesisMarket.
 
 Figure~\ref{fig:reliability_test} places the point estimate, its lower
 confidence bound, and the threshold on a single number line for both
-outcomes of the test.
+outcomes of the test: when the confidence interval
+$[\hat r_{\text{lower}}, \hat r(\kappa, W)]$ stays entirely above
+$\rminattr(\kappa)$, the shortfall, if any, is attributed to sampling
+noise, and when the interval dips below $\rminattr(\kappa)$, $\kappa$ is
+flagged as violated and reported to \NoesisMarket.
 
 % rendered_images:begin
 % ```tikz
@@ -185,17 +188,12 @@ outcomes of the test.
 % \node[align=right, red!60!black] at (-1.9,0) {\footnotesize flagged:\\[-1pt]\footnotesize violation reported};
 % ```
 % label=fig:reliability_test
-% caption=The hypothesis test of Equation~\eqref{eq:reliability_lower_bound}
-%   on a single number line. Top: the confidence interval
-%   $[\hat r_{\text{lower}}, \hat r(\kappa, W)]$ stays entirely above
-%   $\rminattr(\kappa)$, so the shortfall, if any, is attributed to
-%   sampling noise. Bottom: the interval dips below $\rminattr(\kappa)$, so
-%   $\kappa$ is flagged as violated and reported to \NoesisMarket.
+% caption=The reliability hypothesis test on a single number line.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{05_noesis_server.tex.figs/05_noesis_server.2.png}
-  \caption{The hypothesis test of Equation~\eqref{eq:reliability_lower_bound} on a single number line. Top: the confidence interval $[\hat r_{\text{lower}}, \hat r(\kappa, W)]$ stays entirely above $\rminattr(\kappa)$, so the shortfall, if any, is attributed to sampling noise. Bottom: the interval dips below $\rminattr(\kappa)$, so $\kappa$ is flagged as violated and reported to \NoesisMarket.}
+  \caption{The reliability hypothesis test on a single number line.}
   \label{fig:reliability_test}
 \end{figure}
 % render_images:end
@@ -240,7 +238,11 @@ is a prerequisite for deploying routing in production, and is deferred to
 future implementation work (Section~\ref{sec:open_questions}).
 
 Figure~\ref{fig:routing_flowchart} lays out this chain next to the
-condition under which it pays off.
+condition under which it pays off: a prompt $x$ is mapped by the
+difficulty estimator to the cheapest capability tier $\pi(x)$ expected to
+answer it correctly, and routing only pays off when the estimator's own
+cost plus the expected routed cost undercuts always calling the strongest
+tier (Inequality~\eqref{eq:routing_saving_condition}).
 
 % rendered_images:begin
 % ```graphviz
@@ -270,17 +272,12 @@ condition under which it pays off.
 % }
 % ```
 % label=fig:routing_flowchart
-% caption=Difficulty-aware routing. A prompt $x$ is mapped by the
-%   difficulty estimator to the cheapest capability tier $\pi(x)$ expected
-%   to answer it correctly (Equation~\eqref{eq:routing_policy}); routing
-%   only pays off when the estimator's own cost plus the expected routed
-%   cost undercuts always calling the strongest tier
-%   (Inequality~\eqref{eq:routing_saving_condition}).
+% caption=Difficulty-aware routing to the cheapest sufficient capability tier.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{05_noesis_server.tex.figs/05_noesis_server.3.png}
-  \caption{Difficulty-aware routing. A prompt $x$ is mapped by the difficulty estimator to the cheapest capability tier $\pi(x)$ expected to answer it correctly (Equation~\eqref{eq:routing_policy}); routing only pays off when the estimator's own cost plus the expected routed cost undercuts always calling the strongest tier (Inequality~\eqref{eq:routing_saving_condition}).}
+  \caption{Difficulty-aware routing to the cheapest sufficient capability tier.}
   \label{fig:routing_flowchart}
 \end{figure}
 % render_images:end
@@ -312,7 +309,10 @@ low-$\rminattr$ contract favors routing, while a high-$\rminattr$ contract
 may only be economically served through fusion.
 
 Figure~\ref{fig:fusion_fanout} contrasts fusion's fan-out/fan-in shape
-with routing's single-provider path.
+with routing's single-provider path: fusion sends the same prompt to
+every provider in $S(x)$ and combines their answers through the
+aggregator $g$ (Equation~\eqref{eq:fusion_aggregator}), trading extra
+inference cost for a lower risk of a low-quality answer.
 
 % rendered_images:begin
 % ```graphviz
@@ -377,16 +377,12 @@ with routing's single-provider path.
 % }
 % ```
 % label=fig:fusion_fanout
-% caption=Answer fusion as a fan-out/fan-in, contrasted with routing's
-%   single-provider path. Fusion sends the same prompt to every provider in
-%   $S(x)$ and combines their answers through the aggregator $g$
-%   (Equation~\eqref{eq:fusion_aggregator}), trading extra inference cost
-%   for a lower risk of a low-quality answer.
+% caption=Answer fusion's fan-out/fan-in versus routing's single-provider path.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{05_noesis_server.tex.figs/05_noesis_server.4.png}
-  \caption{Answer fusion as a fan-out/fan-in, contrasted with routing's single-provider path. Fusion sends the same prompt to every provider in $S(x)$ and combines their answers through the aggregator $g$ (Equation~\eqref{eq:fusion_aggregator}), trading extra inference cost for a lower risk of a low-quality answer.}
+  \caption{Answer fusion's fan-out/fan-in versus routing's single-provider path.}
   \label{fig:fusion_fanout}
 \end{figure}
 % render_images:end
@@ -426,7 +422,12 @@ distribution \cite{hinton2015}, offering a second, independent way for
 \NoesisServer{} to reduce cost on traffic it has already observed.
 
 Figure~\ref{fig:training_pipeline} shows the two consumers that share
-this one logged dataset.
+this one logged dataset: logged traffic feeds agreement labels
+(Definition~\ref{def:agreement_label}), which train the difficulty
+estimator of Section~\ref{sec:routing}, while the same traffic also forms
+the corpus $\calD$ used to distill a smaller model $f_\theta$
+(Section~\ref{sec:distillation}), as two parallel, independent consumers
+of one dataset.
 
 % rendered_images:begin
 % ```graphviz
@@ -457,18 +458,12 @@ this one logged dataset.
 % }
 % ```
 % label=fig:training_pipeline
-% caption=The training pipeline built from one logged dataset. Logged
-%   traffic feeds agreement labels (Definition~\ref{def:agreement_label}),
-%   which train the difficulty estimator of
-%   Section~\ref{sec:routing}; the same traffic also forms the corpus
-%   $\calD$ used to distill a smaller model $f_\theta$
-%   (Section~\ref{sec:distillation}), as two parallel, independent
-%   consumers of one dataset.
+% caption=The training pipeline built from one logged dataset.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{05_noesis_server.tex.figs/05_noesis_server.5.png}
-  \caption{The training pipeline built from one logged dataset. Logged traffic feeds agreement labels (Definition~\ref{def:agreement_label}), which train the difficulty estimator of Section~\ref{sec:routing}; the same traffic also forms the corpus $\calD$ used to distill a smaller model $f_\theta$ (Section~\ref{sec:distillation}), as two parallel, independent consumers of one dataset.}
+  \caption{The training pipeline built from one logged dataset.}
   \label{fig:training_pipeline}
 \end{figure}
 % render_images:end

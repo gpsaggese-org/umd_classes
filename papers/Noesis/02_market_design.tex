@@ -40,7 +40,15 @@ with idle capacity outside of peak hours can both be made better off by a
 contract that a rigid, single posted price cannot express.
 
 Figure~\ref{fig:two_sided_market} lays out both sides and the dimensions
-along which their participants differ.
+along which their participants differ: demand-side participants differ
+along latency sensitivity, error tolerance, price sensitivity, and traffic
+predictability, while supply-side participants differ along capability
+tier, latency/reliability under load, and marginal cost, and
+\NoesisMarket{} is the meeting point where bids and asks expressing these
+differences are matched into contracts.
+
+% TODO(ai_gp): Align Demand and Supply horizontally (with the description
+% below) so it's more compact
 
 % rendered_images:begin
 % ```graphviz
@@ -101,17 +109,12 @@ along which their participants differ.
 % }
 % ```
 % label=fig:two_sided_market
-% caption=The two-sided market. Demand-side participants differ along
-%   latency sensitivity, error tolerance, price sensitivity, and traffic
-%   predictability; supply-side participants differ along capability
-%   tier, latency/reliability under load, and marginal cost.
-%   \NoesisMarket{} is the meeting point where bids and asks expressing
-%   these differences are matched into contracts.
+% caption=The two-sided \Noesis{} market: demand and supply meeting at \NoesisMarket{}.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{02_market_design.tex.figs/02_market_design.1.png}
-  \caption{The two-sided market. Demand-side participants differ along latency sensitivity, error tolerance, price sensitivity, and traffic predictability; supply-side participants differ along capability tier, latency/reliability under load, and marginal cost. \NoesisMarket{} is the meeting point where bids and asks expressing these differences are matched into contracts.}
+  \caption{The two-sided \Noesis{} market: demand and supply meeting at \NoesisMarket{}.}
   \label{fig:two_sided_market}
 \end{figure}
 % render_images:end
@@ -177,7 +180,10 @@ axes:
     capability and latency terms.
 \end{itemize}
 
-Figure~\ref{fig:bundle_axes} makes this contrast visually concrete.
+Figure~\ref{fig:bundle_axes} makes this contrast visually concrete:
+\Noesis{}'s traded unit is a bundle along three largely orthogonal axes,
+capability, latency, and reliability, contrasted with a conventional
+single-scalar good quoted purely on price per token.
 
 % rendered_images:begin
 % ```tikz
@@ -194,15 +200,12 @@ Figure~\ref{fig:bundle_axes} makes this contrast visually concrete.
 % \node[above, font=\footnotesize\bfseries] at (7.4,2.0) {single-scalar good};
 % ```
 % label=fig:bundle_axes
-% caption=The bundling problem made concrete. \Noesis{}'s traded unit is a
-%   bundle along three largely orthogonal axes, capability, latency, and
-%   reliability (Section~\ref{sec:bundling}), contrasted with a
-%   conventional single-scalar good quoted purely on price per token.
+% caption=A three-axis quality bundle versus a single-scalar good.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{02_market_design.tex.figs/02_market_design.2.png}
-  \caption{The bundling problem made concrete. \Noesis{}'s traded unit is a bundle along three largely orthogonal axes, capability, latency, and reliability (Section~\ref{sec:bundling}), contrasted with a conventional single-scalar good quoted purely on price per token.}
+  \caption{A three-axis quality bundle versus a single-scalar good.}
   \label{fig:bundle_axes}
 \end{figure}
 % render_images:end

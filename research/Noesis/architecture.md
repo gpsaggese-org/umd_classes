@@ -1,14 +1,19 @@
 # Overview
 - `research/Noesis` prototypes two coupled systems described in
-  `plan.Noesis.md` (`NoesisMarket` and `NoesisServer` sections):
+  `plan.Noesis.md` (`NoesisMarket` and `NoesisServer` sections), plus a thin
+  HTTP surface over both (`NoesisPlatform` section):
   - `batch_call_auction.py` and `contract_dispatch.py`: an in-memory
     call-auction that matches buyer/seller orders for LLM inference capacity and
     dispatches cleared contracts to a fulfillment layer
   - `passthrough_proxy.py`: a minimal LLM API gateway that routes prompts to
     registered providers and logs every request/response pair
+  - `platform_api.py`: a `fastapi.FastAPI` app factory (`create_app()`) that
+    wraps both of the above behind HTTP endpoints, so an external caller can
+    reach them without importing the Python modules directly
 - Problem solved: bootstraps a two-sided market for LLM inference capacity
   (capability tier, latency, reliability, price) and the logging/proxy layer
-  that will eventually fulfill and monitor the matched contracts
+  that will eventually fulfill and monitor the matched contracts, reachable
+  over HTTP by a caller outside the Python process
 - Key design decisions visible from the code:
   - Everything is in-memory (Python lists/dicts); no persistence layer
   - Every side effect that would be non-deterministic in a test (fulfillment
@@ -17,14 +22,22 @@
     directly
   - Dataclasses with hand-written `__init__` methods encode the schema and
     validate every field with `hdbg.dassert_*` at construction time
-- Who uses it: currently only the unit test suites under
-  `research/Noesis/test/`; there is no CLI or script entry point yet (both plans
-  are still on PR1/PR2)
-- The two systems are not wired together yet: `contract_dispatch.mock_fulfill()`
-  stands in for `Intelligence_Server` (per `plan.Noesis.md`'s `NoesisMarket`
-  PR2 and `NoesisServer` PR4), and `passthrough_proxy.Gateway` has no
-  caller today; the plan defers the real integration until both sides reach
-  matching PRs
+  - `platform_api.py` adds no new validation logic: it reuses the same
+    `hdbg.dassert_*` checks already in the three lower modules, catching the
+    resulting `AssertionError` once at the app level and returning an HTTP 400
+- Who uses it: the unit test suites under `research/Noesis/test/`, plus, since
+  `platform_api.py`, an HTTP client wrapped in a
+  `fastapi.testclient.TestClient` (or a real server once `NoesisPlatform` PR2
+  containerizes and deploys `create_app()`'s app); there is still no
+  standalone launch script (`uvicorn.run(...)` entry point) — that is
+  `NoesisPlatform` PR2's job, not PR1's
+- The two systems are not wired together at the business-logic level yet:
+  `contract_dispatch.mock_fulfill()` stands in for `Intelligence_Server` (per
+  `plan.Noesis.md`'s `NoesisMarket` PR2 and `NoesisServer` PR4), and
+  `passthrough_proxy.Gateway` has no caller from the market side; the plan
+  defers that integration until both sides reach matching PRs.
+  `platform_api.py` unifies them only as two independent route groups on one
+  HTTP app, not as a shared dependency graph
 
 # Architecture (C4 Model)
 
@@ -37,20 +50,27 @@ C4Context
 
   Person(buyer, "Buyer", "Submits Bids for LLM inference capacity")
   Person(seller, "Seller", "Submits Asks to sell LLM inference capacity")
+  Person(caller, "External caller", "Any HTTP client with an API key")
 
-  System(noesis, "Noesis Prototype", "In-memory batch call-auction, contract dispatch, and LLM passthrough proxy")
+  System(noesis, "Noesis Prototype", "In-memory batch call-auction, contract dispatch, LLM passthrough proxy, and platform_api.py's HTTP surface over both")
 
   System_Ext(intelligence_server, "Intelligence_Server (planned)", "Real fulfillment/monitoring layer; not implemented yet")
   System_Ext(llm_providers, "LLM Providers", "OpenAI, Anthropic, etc.; stubbed via ProviderCallFn in tests")
 
-  Rel(buyer, noesis, "submits Bid", "OrderBook.submit_bid()")
-  Rel(seller, noesis, "submits Ask", "OrderBook.submit_ask()")
+  Rel(buyer, noesis, "submits Bid (Python call or HTTP)", "OrderBook.submit_bid() / POST /bids")
+  Rel(seller, noesis, "submits Ask (Python call or HTTP)", "OrderBook.submit_ask() / POST /asks")
+  Rel(caller, noesis, "reads contracts/prices, calls a model, reads logs", "GET /contracts/{id}, GET /rounds/{tier}/latest, POST /completions, GET /logs")
   Rel(noesis, intelligence_server, "dispatches cleared Contract to (mocked today)", "dispatch_contract()")
   Rel(noesis, llm_providers, "proxies prompt, logs response (stubbed today)", "Gateway.call()")
 ```
 
-- The buyer/seller side is currently a test harness, not a real user-facing
-  interface: unit tests construct `Bid`/`Ask` objects directly
+- The buyer/seller side is a test harness or, since `platform_api.py`, an HTTP
+  caller of `POST /bids`/`POST /asks`; either way there is still no real
+  user-facing UI
+- `External caller` is `platform_api.py`'s new addition: any HTTP client
+  (`fastapi.testclient.TestClient` in tests today) that reaches `NoesisMarket`
+  and `NoesisServer` without importing the Python modules, gated by an
+  `X-API-Key` header on the write endpoints
 - `Intelligence_Server` is the real fulfillment layer described in
   `plan.Noesis.md`'s `NoesisServer` section; `contract_dispatch.mock_fulfill()`
   is its placeholder until that section's PR4 lands
@@ -58,36 +78,45 @@ C4Context
   tests inject a stand-in `ProviderCallFn` instead of a network call
 
 ## C2 (Container)
-- Describes the three modules inside `research/Noesis` and the one internal
-  dependency between them
+- Describes the four modules inside `research/Noesis` and the dependencies
+  between them
 ```mermaid
 C4Container
   title research/Noesis - Container Diagram
 
-  Person(caller, "Caller", "Unit test harness (no script entry point yet)")
+  Person(caller, "Caller", "Unit test harness or an HTTP client (fastapi.testclient.TestClient today)")
 
   Container_Boundary(noesis, "research/Noesis") {
     Container(auction, "batch_call_auction.py", "Python module", "OrderBook: in-memory Bid/Ask book, per-tier uniform-price clearing")
     Container(dispatch, "contract_dispatch.py", "Python module", "Contract schema, build_contracts(), dispatch to a mocked fulfillment layer")
     Container(proxy, "passthrough_proxy.py", "Python module", "Gateway: routes prompts to registered providers, logs request/response")
+    Container(api, "platform_api.py", "fastapi.FastAPI app factory", "create_app(): HTTP surface over auction/dispatch and proxy, plus contract_id/round_id bookkeeping and API-key auth")
   }
 
   System_Ext(intelligence_server, "Intelligence_Server (planned)", "mock_fulfill() stands in for it today")
 
-  Rel(caller, auction, "submit_bid() / submit_ask() / clear_round()")
-  Rel(caller, proxy, "register_provider() / call()")
+  Rel(caller, auction, "submit_bid() / submit_ask() / clear_round() (direct Python)")
+  Rel(caller, proxy, "register_provider() / call() (direct Python)")
+  Rel(caller, api, "POST /bids, /asks, /rounds/clear, /completions; GET /contracts/{id}, /rounds/{tier}/latest, /logs")
   Rel(dispatch, auction, "imports Bid, Ask, TierClearResult")
   Rel(dispatch, intelligence_server, "dispatch_contract() (mocked)")
+  Rel(api, auction, "imports OrderBook, Bid, Ask")
+  Rel(api, dispatch, "imports build_contracts(), dispatch_contracts(), mock_fulfill()")
+  Rel(api, proxy, "imports Gateway, ProviderConfig")
 ```
 
-- `contract_dispatch.py` is the only module with an internal dependency: it
-  imports `batch_call_auction` (`Bid`, `Ask`, `TierClearResult`) to build
-  `Contract`s from a cleared round
-- `passthrough_proxy.py` has no import relationship with the other two modules;
-  it is a standalone container today, developed against a separate section of
-  the plan (`plan.Noesis.md`'s `NoesisServer` section) and only meant to
-  converge with the market side once `NoesisServer`'s PR4 and `NoesisMarket`'s
-  PR2/PR3 are both in place
+- `contract_dispatch.py` is the only lower-layer module with an internal
+  dependency: it imports `batch_call_auction` (`Bid`, `Ask`,
+  `TierClearResult`) to build `Contract`s from a cleared round
+- `passthrough_proxy.py` has no import relationship with `batch_call_auction.py`
+  /`contract_dispatch.py`; it is a standalone container, developed against a
+  separate section of the plan (`plan.Noesis.md`'s `NoesisServer` section) and
+  only meant to converge with the market side once `NoesisServer`'s PR4 and
+  `NoesisMarket`'s PR2/PR3 are both in place
+- `platform_api.py` imports all three lower modules but does not import
+  anything new between them: it is a fourth, higher container, not a rewire of
+  the three existing ones (see the `## Weaknesses and Assumptions` entry on
+  this)
 
 ## C3 (Component)
 - Describes the runtime call chain from order submission through logged
@@ -167,6 +196,8 @@ flowchart LR
 | `contract_dispatch.mock_fulfill()`                               | Randomized pass/fail stand-in for `Intelligence_Server`, seedable via `rng`                              | `bool`                                                                |
 | `contract_dispatch.dispatch_contract()` / `dispatch_contracts()` | Runs a contract (or list) through `fulfillment_fn` and logs the outcome onto `Contract.fulfilled`        | Mutated `Contract` / `List[Contract]`                                 |
 | `passthrough_proxy.Gateway`                                      | Registers providers and exposes one `call()` API that logs every request/response pair                   | `RequestLogEntry`-backed log, queried via `get_log()` / `query_log()` |
+| `platform_api.create_app()`                                      | Builds the HTTP app over an `OrderBook`/`Gateway` pair: bids, asks, round clearing, contract/round/log lookup | Configured `fastapi.FastAPI` app                                     |
+| `platform_api._MarketState`                                      | Assigns `contract_id`/`round_id` and caches each tier's latest cleared round, on top of `OrderBook`       | N/A (internal state holder)                                          |
 
 ## External Dependencies
 | Module           | Purpose                                                                                                                                      |
@@ -177,6 +208,8 @@ flowchart LR
 | `random`         | `random.Random` source for `mock_fulfill()`'s pass/fail draw                                                                                 |
 | `time`           | `time.perf_counter` default clock for `Gateway`'s latency measurement                                                                        |
 | `typing`         | `Callable`, `Dict`, `List`, `Optional`, `Tuple` type hints throughout                                                                        |
+| `fastapi`        | `platform_api.py`'s HTTP framework: routing, `Depends()`-based auth, request/response validation, `exception_handler()`                     |
+| `pydantic`       | `platform_api.py`'s request/response schemas (`BidRequest`, `ContractResponse`, etc.), pinned in via `fastapi`, not in the repo's `pip_list.txt` (see `research/Noesis/requirements.txt`) |
 
 # Critique and Improvements
 
@@ -200,9 +233,11 @@ flowchart LR
 ## Weaknesses and Assumptions
 1. `contract_dispatch.py` and `passthrough_proxy.py` are not wired together:
    **Fact** (no import or call between the two modules; `mock_fulfill()` never
-   invokes `Gateway.call()`). **Impact**: neither plan's PR3/PR4 can land until
-   this interface exists; the market and server prototypes remain two
-   disconnected islands
+   invokes `Gateway.call()`; `platform_api.py` imports both but only routes
+   HTTP requests to each independently, adding no call between them either).
+   **Impact**: neither plan's PR3/PR4 can land until this interface exists;
+   the market and server prototypes remain two disconnected islands, now each
+   reachable over HTTP but still not integrated with each other
 2. Tier matching is exact-string only, no capability substitution: **Fact**
    (`OrderBook`'s docstring states a bid's `c_level_min` is "matched only
    against asks with the same `c_level` string"). **Impact**: a bid requesting
@@ -239,3 +274,13 @@ flowchart LR
    lets any seller win a contract each round regardless of past `mock_fulfill()`
    outcomes, so under-delivering sellers are never priced out or excluded as the
    plan's end state intends
+9. `platform_api.py`'s state is per-app-instance in-memory, and only the
+   write endpoints are authenticated: **Fact** (`create_app()`'s
+   `OrderBook`/contract store/round cache live only as long as the process;
+   `POST /rounds/clear`, `GET /contracts/{id}`, `GET /rounds/{tier}/latest`,
+   and `GET /logs` take no `X-API-Key`, per `plan.Noesis.md`'s literal auth
+   scope of "before accepting a bid/ask or a gateway call"). **Impact**: a
+   restart loses every pending order, contract, and round record
+   (`NoesisPlatform` PR2 externalizes this to a real datastore); any caller
+   can trigger clearing or read contract/log data, including raw
+   unscrubbed prompts/responses via `GET /logs`, without an API key
