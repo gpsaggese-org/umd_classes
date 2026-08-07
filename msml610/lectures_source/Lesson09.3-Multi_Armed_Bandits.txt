@@ -130,238 +130,241 @@ digraph ExploitationExploration {
 :::
 
 * The K-Armed Bandit Problem: Formal Definition
-- **Setting**:
-  - $K$ arms (actions), indexed $i = 1, \ldots, K$
+
+- @Definition@: The **K-Armed Bandit** problem is defined as:
+  - There are $K$ actions (aka "arms"), indexed $i = 1, \ldots, K$
   - Time horizon: $T$ rounds (sometimes $T = \infty$)
-  - At round $t = 1, \ldots, T$:
+  - At each round $t$
     1. Agent selects arm $A_t \in \{1, \ldots, K\}$
     2. Environment reveals reward $R_t \sim P_{A_t}$
     3. Agent observes only $R_t$ (not rewards from other arms)
 
-- **Stochastic Bandit Assumption**:
+- @Assumptions@: **Stochastic bandit** model
+  - Rewards are independent across rounds ($R_t$ iid)
   - Each arm $i$ has a fixed reward distribution $P_i$ with mean
     $\mu_i = \EE[R | A = i]$
-  - Rewards are independent across rounds: $R_t$ iid
-  - The means $\mu_1, \ldots, \mu_K$ are unknown to the agent
+  - $R_i$ and their means $\mu_1, \ldots, \mu_K$ are unknown to the agent
 
-- **Goal**: Design a policy (algorithm) that selects $A_1, A_2, \ldots, A_T$ to
+- @Goal@: Design a policy (algorithm) that selects $A_1, A_2, \ldots, A_T$ to
   maximize $$\text{Total Reward} = \sum_{t=1}^{T} R_t$$
-
-- **Key Insight**: Can't maximize reward with certainty (rewards are random), but
-  can minimize _regret_
 
 * Reward Distributions
 
-- Each arm $i$ has an associated **reward distribution** $P_i$
+- @Definition@: Each arm $i$ has an associated **reward distribution** $P_i$
+  - Common distributions for $P_i$ are Bernoulli, Gaussian, bounded support
   - When arm $i$ is pulled, reward $R \sim P_i$ is sampled
-  - Common distributions: Bernoulli, Gaussian, bounded support
 
-- **Expected Reward** (Mean):
-  - Each arm has true mean reward: $\mu_i = \EE[R | A = i]$
+- @Definition@: The **expected reward** for an arm is $\mu_i = \EE[R | A = i]$
   - This is the quantity we care about for maximizing total reward
-  - The agent does not know $\mu_i$ initially
 
-- **Unknown Parameters**: The Challenge
+- @Example@: **Bernoulli Bandits**
+  - Each arm $i$ returns reward $R_t = 1$ with probability $\mu_i$, else $R_t = 0$
+  - $\mu_i$ is the "success probability" or "conversion rate"
+  - E.g., in A/B testing $\mu_i$ is click-through rate of ad $i$
+
+- @Challenges@: Parameters of the arms are **unknown**
   - The means $\mu_1, \ldots, \mu_K$ are unknown
-  - Also variance, shape of distribution may be unknown
+  - Also variance and shape of distribution are typically unknown
   - Agent must estimate these from observed rewards
   - Must balance learning (exploration) and earning (exploitation)
 
-- **Example**: Bernoulli Bandits
-  - Each arm $i$ returns reward $R_t = 1$ with probability $\mu_i$, else $R_t = 0$
-  - $\mu_i$ is the "success probability" or "conversion rate"
-  - Common in A/B testing: $\mu_i$ = click-through rate of ad $i$
-
 * Performance Metrics
 
-- How do we measure algorithm performance when rewards are random?
+- @Question@: How do we measure algorithm performance when rewards are random?
 
-- **Optimal Arm**: Define $i^* = \argmax_i \mu_i$
-  - The arm with highest expected reward
+- @Definition@: The **optimal arm** is the arm with highest expected reward
+  $$i^* = \argmax_i \mu_i$$
   - If we knew $\mu_1, \ldots, \mu_K$, we would always pull arm $i^*$
-  - Optimal expected reward per round: $\mu^* = \mu_{i^*}$
 
-- **Instantaneous Regret** at time $t$:
-  $$\ell_t = \mu^* - \mu_{A_t}$$
-  - The difference between optimal mean and mean of chosen arm
-  - How much expected reward we "lose" by not playing $i^*$
-  - Note: $\ell_t \geq 0$ always
+- @Definition@: The **instantaneous regret** at time $t$ is the difference
+  between optimal mean and mean of chosen arm
+  $$\ell_t = \mu^* - \mu_{A_t} \geq 0$$
+  - _Intuition_: How much expected reward we "lose" by not playing $i^*$
 
-- **Cumulative Regret** over $T$ rounds:
+- @Definition@: The **cumulative regret** over $T$ rounds:
   $$L_T = \sum_{t=1}^{T} \ell_t = T \mu^* - \sum_{t=1}^{T} \mu_{A_t}$$
   - Total expected loss from suboptimal decisions
-  - Measures how much worse the algorithm is vs. always pulling $i^*$
   - _Goal_: Design algorithm with low regret $L_T$
 
 * Performance Metrics: Intuition
 
-- **Why Regret?**
-  - Cannot maximize reward with certainty (randomness in rewards)
-  - But can minimize expected loss relative to optimal strategy
-  - Regret = "opportunity cost" of learning
+- @Question@: Why regret? Why expectation?
+  - Cannot maximize _reward with certainty_ due to randomness in rewards
+    - One arm can look better than its $\mu_i$ due to luck
+    - Even optimal policy can get unlucky low reward on a pull
+  - But can minimize _expected loss_ relative to optimal strategy
+    - "Expected" is the key word (vs actual)
 
-- **Key Property**: Regret depends only on how many times we pull each arm
-  - Let $N_i(T) = \sum_{t=1}^{T} I[\{A_t = i\}$] = number of times arm $i$ pulled
-  - Then:
+- @Properties@: Regret depends only on how many times we pull each arm
+  - Let $N_i(T) = \sum_{t=1}^{T} I[A_t = i]$ = "number of times arm $i$ pulled",
+    then:
     $$L_T = \sum_{i=1}^{K} (\mu^* - \mu_i) N_i(T) = \sum_{i=1}^{K} \Delta_i \, N_i(T)$$
-  - Where $\Delta_i = \mu^* - \mu_i$ is the "suboptimality gap" of arm $i$
+    where $\Delta_i = \mu^* - \mu_i$ is the "suboptimality gap" of arm $i$
 
-- **Implications**:
+- @Implications@
   - To minimize regret, pull suboptimal arms as few times as possible
-  - But we don't know which arms are suboptimal initially!
-  - Must explore to identify $i^*$, but exploration increases regret
+    - But we don't know which arms are suboptimal initially!
+    - Must explore to identify $i^*$, but exploration increases regret
+  - Regret is the "opportunity cost" of learning
 
 * Regret Lower Bounds
 
-- **Why Lower Bounds Matter**
-  - Shows fundamental limits of _any_ algorithm
-  - No algorithm can do better (up to constants)
+- @Question@: Why do lower bounds for algorithms matter?
+
+- @Answers@
+  - Lower bounds show fundamental limits of _any_ algorithm
+    - No algorithm can do better (up to constants)
   - Tells us if an algorithm is near-optimal
   - Guides algorithm design: what's achievable?
 
-- **Intuition**: Why Can't Regret Be Constant?
+* Regret Lower Bounds
+- @Question@: Can regret be constant?
+  $$
+  L_T \defeq \sum_{t=1}^{T} \ell_t = \sum_{i=1}^{K} (\mu^* - \mu_i) N_i(T)
+  $$
+  doesn't grow as $T$ grows
+
+- @Answer@: No, the intuition is
   - Need to distinguish between arms with close means
-  - If $\mu_1 \approx \mu_2$, need many samples to tell which is better
+    - If $\mu_1 \approx \mu_2$, need many samples to tell which is better
   - Must pull suboptimal arms enough to be confident they're suboptimal
-  - Trade-off: confidence vs. regret
+  - Trade-off: confidence vs regret
 
-* Regret Lower Bounds: Lai–Robbins Bound
+* Regret Lower Bounds: Lai-Robbins Bound
 
-- **Lai and Robbins (1985)** proved:
-  - For any "consistent" algorithm (one that identifies optimal arm eventually)
+- @Theorem@: **Lai and Robbins (1985)**:
+  - For any "consistent" algorithm (i.e., one that identifies optimal arm
+    eventually)
   - The cumulative regret must satisfy:
-    $$\liminf_{T \to \infty} \frac{L_T}{\log T} \geq \sum_{i: \Delta_i > 0} \frac{\Delta_i}{D(\mu_i \| \mu^*)}$$
-  - Where $D(\mu_i \| \mu^*)$ is the KL divergence between reward distributions
+    $$
+    \lim_{T \to \infty} \frac{L_T}{\log T} \geq
+    \sum_{i: \Delta_i > 0} \frac{\Delta_i}{D(\mu_i \| \mu^*)}
+    $$
+    where $D(\mu_i \| \mu^*)$ is the KL divergence between reward distributions
 
-- **Simplified Version** (for bounded rewards):
+- @Corollary@: simplified version for bounded rewards:
   - For any consistent algorithm:
-    $$L_T = \Omega\left( \sum_{i: \Delta_i > 0} \frac{\log T}{\Delta_i} \right)$$
-  - Regret must grow at least logarithmically with $T$
+    $$
+    L_T = \Omega\left( \sum_{i: \Delta_i > 0} \frac{\log T}{\Delta_i} \right)
+    $$
+  - Regret must grow at least logarithmically with $T$ ($\Omega$ is a lower
+    bound)
 
-- **Interpretation**:
-  - Cannot achieve constant regret (must be $\Omega(\log T)$)
+- @Interpretation@:
+  - Cannot achieve constant regret, but must be $\Omega(\log T)$
   - Smaller gap $\Delta_i$ $\to$ more pulls needed $\to$ higher regret
-  - Best achievable: $L_T = O(\log T)$ (logarithmic regret)
 
 * Regret Lower Bounds: Implications for Algorithm Design
 
-- **Design Goal**: Achieve $O(\log T)$ regret
+- @Goal@: Achieve $O(\log T)$ regret
   - Matches lower bound (up to constants)
   - Called "order-optimal" or "asymptotically optimal"
 
-- **Key Insight**: Must pull each suboptimal arm $i$ roughly $O(\frac{\log T}{\Delta_i^2})$ times
+- @Key idea@: Must pull each suboptimal arm $i$ roughly $O(\frac{\log T}{\Delta_i^2})$ times
   - Arms with smaller gaps $\Delta_i$ need more exploration
   - Total regret: $\sum_i \Delta_i \cdot O(\frac{\log T}{\Delta_i^2}) = O(\frac{\log T}{\Delta_i})$
 
-- **What Won't Work**:
+- @Counterexample@: What won't work
   - Fixed exploration schedule (e.g., pull each arm $n$ times): $\Omega(K)$ regret
   - Random sampling: $\Omega(\sqrt{T})$ regret
   - Need adaptive exploration that concentrates on promising arms
 
 # Algorithms
 
-* Baseline Strategies
+* Greedy Algorithm
 
-- Before studying sophisticated algorithms, consider naive approaches
-
-- **Greedy Algorithm**:
-  - At each time $t$:
-    1. Compute empirical mean reward for each arm: $\hat{\mu}_i(t) = \frac{1}{N_i(t)} \sum_{\tau: A_\tau = i} R_\tau$
+- @Definition@: **Greedy Algorithm**, at each time $t$:
+    1. Compute empirical mean reward for each arm:
+       $$\hat{\mu}_i(t) = \frac{1}{N_i(t)} \sum_{\tau: A_\tau = i} R_\tau$$
     2. Pull arm with highest empirical mean: $A_t = \argmax_i \hat{\mu}_i(t)$
-  - Pure exploitation: always pull current best arm
+  - _Pure exploitation_: always pull current best arm
 
-- **Random Selection**:
-  - At each time $t$: Choose $A_t$ uniformly at random from $\{1, \ldots, K\}$
-  - Pure exploration: no use of observed rewards
-
-* Baseline Strategies: Limitations
-
-- **Greedy Algorithm Fails**:
+- @Limitation@
   - _Problem_: May get "stuck" on suboptimal arm
-  - _Example_: Suppose arm 1 has $\mu_1 = 0.6$, arm 2 has $\mu_2 = 0.7$
+  - _Example_:
+    - Suppose arm 1 has $\mu_1 = 0.6$, arm 2 has $\mu_2 = 0.7$
     - If we happen to pull arm 1 first and get reward 1
     - Then $\hat{\mu}_1(1) = 1$, and we'll keep pulling arm 1
     - Never try arm 2, which is actually better
-  - _Regret_: $L_T = \Omega(T)$ (linear regret, very bad!)
+  - _Regret_: $L_T = \Omega(T)$, linear regret (very bad!)
 
-- **Random Selection Fails**:
+* Random Selection Algorithm
+
+- @Definition@: **Random Selection**, at each time $t$ choose $A_t$ uniformly at
+  random from $\{1, \ldots, K\}$
+  - _Pure exploration_: no use of observed rewards
+
+- @Limitation@:
   - _Problem_: Never uses information from rewards
-  - Pulls all arms equally, even after learning which are bad
-  - _Regret_: $L_T = \Theta(\sqrt{KT})$ (grows with $T$, suboptimal)
-
-- **Key Lesson**: Need to balance exploration and exploitation
-  - Greedy: too much exploitation
-  - Random: too much exploration
-  - Need adaptive strategy that explores less over time
+    - Pulls all arms equally, even after learning which are bad
+  - _Regret_: $L_T = \Theta(\sqrt{KT})$ (suboptimal)
 
 * $\epsilon$-Greedy Algorithm
 
-- **Simple Idea**: With small probability $\epsilon$, explore; otherwise exploit
+- @Key idea@: Need adaptive strategy that explores less over time
+  - Greedy algorithm: too much exploitation
+  - Random algorithm: too much exploration
 
-- **Algorithm**:
-  - At each time $t$:
-    1. Compute empirical means: $\hat{\mu}_i(t) = \frac{\sum_{\tau < t: A_\tau = i} R_\tau}{N_i(t)}$
+- @Definition@: **$\epsilon$-Greedy Algorithm** explores with small probability
+  $\epsilon$, otherwise exploits
+
+- @Algorithm@: at each time $t$:
+    1. Compute empirical means: 
+       $$
+       \hat{\mu}_i(t)
+       = \frac{1}{N_i(t)} \sum_{\tau < t: A_\tau = i} R_\tau
+       $$
     2. With probability $\epsilon$: Choose arm uniformly at random (explore)
     3. With probability $1 - \epsilon$: Choose arm $\argmax_i \hat{\mu}_i(t)$ (exploit)
-
-- **Hyperparameter**: $\epsilon \in (0, 1)$
-  - Small $\epsilon$ (e.g., 0.01): mostly exploit, little exploration
-  - Large $\epsilon$ (e.g., 0.5): explore half the time
-  - Typical choice: $\epsilon = 0.1$
+  - $\epsilon \in (0, 1)$ is an hyperparameter
+    - Small $\epsilon$ (e.g., 0.01): mostly exploit, little exploration
+    - Large $\epsilon$ (e.g., 0.5): explore half the time
+    - Typical choice: $\epsilon = 0.1$
 
 * $\epsilon$-Greedy: Exploration Schedules
 
-- **Fixed $\epsilon$**:
-  - Use same $\epsilon$ for all $t$
+- **Fixed $\epsilon$**: use same $\epsilon$ for all $t$
   - _Problem_: Keeps exploring even after identifying best arm
   - _Regret_: $L_T = \Omega(T)$ (linear, not optimal)
 
-- **Decaying $\epsilon_t$**:
-  - Use time-varying $\epsilon_t$ that decreases with $t$
-  - Example: $\epsilon_t = \frac{1}{t}$ or $\epsilon_t = \min(1, \frac{K}{t})$
+- **Decaying $\epsilon_t$**: use time-varying $\epsilon_t$ that decreases with
+  $t$
+  - _Example_: $\epsilon_t = O(1/t^\alpha)$
+    - If $\alpha$ too small: not enough exploration $\to$ may miss $i^*$
+    - If $\alpha$ too large: too much exploration $\to$ high regret
   - _Intuition_: Explore a lot early, less over time
   - _Regret_: Can achieve $L_T = O(T^{2/3})$ with right schedule (still not $O(\log T)$)
 
-- **Limitations**:
-  - Hard to choose optimal schedule without knowing $\Delta_i$'s
-  - Explores uniformly (doesn't focus on promising arms)
-  - Better algorithms exist (UCB, Thompson Sampling)
-
-* $\epsilon$-Greedy: Regret Behavior
-
-- **Fixed $\epsilon$**: $L_T = \Theta(T)$
-  - Explores $\epsilon$ fraction of time forever
-  - Linear regret: $\epsilon T \sum_i \Delta_i / K$
-
-- **Decaying $\epsilon_t = O(1/t^\alpha)$**:
-  - If $\alpha$ too small: not enough exploration $\to$ may miss $i^*$
-  - If $\alpha$ too large: too much exploration $\to$ high regret
-  - Best tuned: $L_T = O(T^{2/3})$ (worse than $O(\log T)$ lower bound)
-
-- **Practical Performance**:
+- @Pros@:
   - Simple, easy to implement
   - Works reasonably well in practice
-  - Often used as baseline
-  - But theoretically suboptimal (cannot achieve $O(\log T)$)
+
+- @Cons@
+  - Hard to choose optimal schedule without knowing $\Delta_i$'s
+  - Explores uniformly (doesn't focus on promising arms)
+  - Theoretically suboptimal (cannot achieve $O(\log T)$)
+  - There are better algorithms (e.g., UCB, Thompson Sampling)
 
 * Optimism in the Face of Uncertainty
 
-- **Core Idea**: "Be optimistic about uncertain options"
+- @Key Idea@: **"Be optimistic about uncertain options"**
   - If unsure about arm's value, assume it could be the best
   - Optimism drives exploration of uncertain arms
-  - As arms are explored, optimism diminishes (uncertainty shrinks)
+  - As arms are explored, uncertainty shrinks
 
-- **Why Optimism Works**:
+- @Intuition@: **Why optimism works**:
   - If an arm _is_ optimal: Optimism ensures we keep trying it
   - If an arm _is not_ optimal: We'll eventually learn and stop pulling it
   - Natural exploration-exploitation balance without explicit randomization
 
-- **Contrast with $\epsilon$-Greedy**:
-  - $\epsilon$-greedy: Random exploration (ignores uncertainty)
+- @Comparison@
+  - $\epsilon$-greedy: Random exploration ignores uncertainty
   - Optimism: Directed exploration toward uncertain arms
 
 * Optimism: Confidence Intervals
 
+::: columns
+:::: {.column width=60%}
 - **Confidence Bound** for arm $i$ after $n$ pulls:
   - Empirical mean: $\hat{\mu}_i = \frac{1}{n} \sum_{\tau: A_\tau = i} R_\tau$
   - Uncertainty radius: $c_i(n) = \sqrt{\frac{2 \log T}{n}}$ (example)
@@ -375,44 +378,64 @@ digraph ExploitationExploration {
 - **Optimistic Strategy**:
   - Pull arm with highest upper confidence bound: $A_t = \argmax_i \text{UCB}_i(t)$
   - Automatically explores uncertain arms and exploits promising arms
+::::
+:::: {.column width=40%}
 
 ```graphviz
 digraph OptimismConcept {
-    splines=true;
-    nodesep=1.0;
-    ranksep=1.0;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
-
-    Uncertain [label="Arm with\nHigh Uncertainty", fillcolor="#FFE6CC"];
-    HighUCB [label="High UCB\n(Optimistic Estimate)", fillcolor="#A6F4A6"];
-    Explore [label="Arm Gets Pulled\n(Exploration)", fillcolor="#A6C8F4"];
-    Learn [label="Uncertainty Decreases\n(Learning)", fillcolor="#E6E6FA"];
-
-    Optimal [label="If Truly Good:\nKeep Pulling", fillcolor="#90EE90"];
-    Suboptimal [label="If Truly Bad:\nStop Pulling", fillcolor="#FFB6C1"];
-
-    Uncertain -> HighUCB [label="leads to"];
-    HighUCB -> Explore;
-    Explore -> Learn;
-    Learn -> Optimal [label="good arm"];
-    Learn -> Suboptimal [label="bad arm"];
+    bgcolor    = "white";
+    rankdir    = TB;
+    splines    = spline;
+    nodesep    = 0.28;
+    ranksep    = 0.34;
+    pad        = 0.30;
+    fontname   = "Helvetica-Bold";
+    fontsize   = 15;
+    fontcolor  = "#1F2933";
+    labelloc   = t;
+    node [shape=box, style="rounded,filled", fontname="Helvetica",
+          fontsize=13, fontcolor="#1F2933", penwidth=1.2,
+          margin="0.20,0.11", height=0.50];
+    edge [fontname="Helvetica-Oblique", fontsize=11, fontcolor="#7B8794",
+          color="#9AA5B1", penwidth=1.1, arrowsize=0.75];
+    Uncertain  [label="Arm with high uncertainty",
+                fillcolor="#FDF3E3", color="#D9A441"];
+    HighUCB    [label="High UCB\nOptimistic estimate",
+                fillcolor="#EEF2F7", color="#9AA5B1"];
+    Explore    [label="Arm gets pulled\nExploration",
+                fillcolor="#EEF2F7", color="#9AA5B1"];
+    Learn      [label="Uncertainty decreases\nLearning",
+                fillcolor="#EEF2F7", color="#9AA5B1"];
+    Optimal    [label="Truly good\nKeep pulling",
+                fillcolor="#E6F4EA", color="#4E9A6B"];
+    Suboptimal [label="Truly bad\nStop pulling",
+                fillcolor="#FBEAEA", color="#C0736F"];
+    Uncertain -> HighUCB [label="  Inflates estimate"];
+    HighUCB   -> Explore [label="  Selected by policy"];
+    Explore   -> Learn   [label="  Observation"];
+    Learn -> Optimal    [label="  Good arm", color="#4E9A6B", fontcolor="#4E9A6B"];
+    Learn -> Suboptimal [label="  Bad arm",  color="#C0736F", fontcolor="#C0736F"];
+    { rank=same; Optimal; Suboptimal; }
 }
 ```
+::::
+:::
 
 * Upper Confidence Bound (UCB)
 
-- **UCB1 Algorithm** (Auer, Cesa-Bianchi, Fischer, 2002):
-  - For first $K$ rounds: Pull each arm once
+- @Definition@: **UCB1 Algorithm** (Auer, Cesa-Bianchi, Fischer, 2002):
+  - For first $K$ rounds, pull each arm once (explore)
   - For round $t > K$:
     1. For each arm $i$, compute UCB:
-       $$\text{UCB}_i(t) = \hat{\mu}_i(t) + \sqrt{\frac{2 \log t}{N_i(t)}}$$
-    2. Pull arm: $A_t = \argmax_i \text{UCB}_i(t)$
-
-- **Components**:
-  - $\hat{\mu}_i(t)$: Empirical mean (exploitation term)
-  - $\sqrt{\frac{2 \log t}{N_i(t)}}$: Exploration bonus (uncertainty term)
-  - $N_i(t)$: Number of times arm $i$ pulled so far
+       $$
+       \text{UCB}_i(t)
+       = \hat{\mu}_i(t) + \sqrt{\frac{2 \log t}{N_i(t)}}
+       $$
+       where:
+      - $\hat{\mu}_i(t)$: Empirical mean (exploitation term)
+      - $\sqrt{\frac{2 \log t}{N_i(t)}}$: Exploration bonus (uncertainty term)
+      - $N_i(t)$: Number of times arm $i$ pulled so far
+    2. Pull arm $A_t = \argmax_i \text{UCB}_i(t)$
 
 * Upper Confidence Bound: Arm Selection Rule
 
