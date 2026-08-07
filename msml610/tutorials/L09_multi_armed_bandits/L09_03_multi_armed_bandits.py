@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.5
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -40,6 +40,9 @@ ut.config_notebook()
 logging.basicConfig(level=logging.INFO)
 _LOG = logging.getLogger(__name__)
 
+# %%
+# #!apt-get update && apt-get install -y git
+
 # %% [markdown]
 # # Cell 1: Introduction - Casino Slot Machines
 #
@@ -67,9 +70,6 @@ utils.cell1_casino_slot_machines()
 # | `Strategy` | Abstract base class for a machine-selection policy | Subclasses: `ExplorationStrategy`, `ExploitationStrategy`, `EpsilonGreedyStrategy` |
 # | `BanditExperiment` | Runs one `MultiArmedBandit` with one `Strategy` for $N$ coins | Returns rewards and cumulative rewards |
 # | `BanditSimulation` | Runs many `BanditExperiment` trials with different seeds | Aggregates mean/std statistics across trials |
-
-# %%
-# !apt-get update && apt-get install -y git
 
 # %%
 # Show the public API and GitHub source link of the core classes.
