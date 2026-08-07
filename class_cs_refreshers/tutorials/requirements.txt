@@ -1,7 +1,9 @@
+arviz-base
 ipywidgets
 matplotlib
 numpy
 pandas
+preliz
 scipy
 seaborn
 statsmodels
