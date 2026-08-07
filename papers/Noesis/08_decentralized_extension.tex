@@ -59,43 +59,55 @@ before the mechanisms below are introduced.
 % rendered_images:begin
 % ```graphviz
 % digraph TrustBoundaries {
+%   bgcolor="white";
 %   rankdir=TB;
 %   splines=spline;
-%   nodesep=0.5;
-%   ranksep=0.6;
-%   bgcolor="white";
+%   nodesep=0.60;
+%   ranksep=0.50;
+%   pad=0.30;
 % 
-%   node [fontname="Helvetica", fontsize=11, style="rounded,filled", shape=box, penwidth=1.3];
-%   edge [fontname="Helvetica", fontsize=10, color="#4A4A4A", penwidth=1.2, arrowsize=0.8];
+%   node [shape=box, style="rounded,filled", fontname="Helvetica",
+%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
+%         color="#7B8794"];
+%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
+%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
 % 
 %   subgraph cluster_centralized {
-%     label="Centralized";
-%     fontname="Helvetica-Bold";
-%     fontsize=12;
-%     style="rounded,filled";
-%     fillcolor="#F7F9FC";
-%     color="#B8C4D9";
-%     margin=16;
-%     BidsC [label="full bid/ask contents\n(tier, volume, price)", fillcolor="#FFD1A6"];
-%     Operator [label="single operator", fillcolor="#F4A6A6"];
-%     Decide [label="decides eligibility\n& matching", fillcolor="#A0D6D1"];
-%     BidsC -> Operator [label="  sees all  "];
-%     Operator -> Decide;
+%     label     = "Centralized";
+%     labelloc  = "t";
+%     fontname  = "Helvetica-Bold";
+%     fontsize  = 12;
+%     fontcolor = "#52606D";
+%     style     = "rounded,filled";
+%     fillcolor = "#F7F9FC";
+%     color     = "#CBD2D9";
+%     penwidth  = 1.0;
+%     margin    = 14;
+% 
+%     BidsC    [label="Full bid/ask contents\nTier, volume, price", fillcolor="#FFD1A6"];
+%     Operator [label="Single operator", fillcolor="#F4A6A6"];
+%     Decide   [label="Decides eligibility\n& matching", fillcolor="#A0D6D1"];
+%     BidsC -> Operator [label="sees all", penwidth=1.5, color="#7B8794"];
+%     Operator -> Decide [penwidth=1.5, color="#7B8794"];
 %   }
 % 
 %   subgraph cluster_decentralized {
-%     label="Decentralized";
-%     fontname="Helvetica-Bold";
-%     fontsize=12;
-%     style="rounded,filled";
-%     fillcolor="#F7F9FC";
-%     color="#B8C4D9";
-%     margin=16;
-%     BidsD [label="only addresses visible\nuntil reveal window", fillcolor="#FFD1A6"];
-%     Chain [label="public chain\n(commit-reveal)", fillcolor="#F4A6A6"];
-%     Verify [label="matching & eligibility\nverifiable on-chain", fillcolor="#A0D6D1"];
-%     BidsD -> Chain [label="  commitments  "];
-%     Chain -> Verify;
+%     label     = "Decentralized";
+%     labelloc  = "t";
+%     fontname  = "Helvetica-Bold";
+%     fontsize  = 12;
+%     fontcolor = "#52606D";
+%     style     = "rounded,filled";
+%     fillcolor = "#F7F9FC";
+%     color     = "#CBD2D9";
+%     penwidth  = 1.0;
+%     margin    = 14;
+% 
+%     BidsD  [label="Only addresses visible\nuntil reveal window", fillcolor="#FFD1A6"];
+%     Chain  [label="Public chain\nCommit-reveal", fillcolor="#F4A6A6"];
+%     Verify [label="Matching & eligibility\nverifiable on-chain", fillcolor="#A0D6D1"];
+%     BidsD -> Chain [label="commitments", penwidth=1.5, color="#7B8794"];
+%     Chain -> Verify [penwidth=1.5, color="#7B8794"];
 %   }
 % }
 % ```
@@ -170,21 +182,25 @@ three phases.
 % rendered_images:begin
 % ```graphviz
 % digraph CommitReveal {
+%   bgcolor="white";
 %   rankdir=TB;
 %   splines=spline;
-%   nodesep=0.6;
-%   ranksep=0.7;
-%   bgcolor="white";
+%   nodesep=0.35;
+%   ranksep=0.60;
+%   pad=0.30;
 % 
-%   node [fontname="Helvetica", fontsize=11, style="rounded,filled", shape=box, penwidth=1.3];
-%   edge [fontname="Helvetica", fontsize=10, color="#4A4A4A", penwidth=1.2, arrowsize=0.8];
+%   node [shape=box, style="rounded,filled", fontname="Helvetica",
+%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
+%         color="#7B8794"];
+%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
+%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
 % 
-%   Commit [label="commit window\nbidders post h = H(bid || salt)", fillcolor="#FFD1A6"];
-%   Reveal [label="reveal window\nbidders disclose (bid, salt)", fillcolor="#A6E7F4"];
-%   Match [label="commitment check\nonly matching, revealed bids kept", fillcolor="#B2E2B2"];
-%   Clear [label="clearing\n(NoesisMarket clearing problem)", fillcolor="#A0D6D1"];
+%   Commit [label="Commit window\nBidders post h = H(bid || salt)", fillcolor="#FFD1A6"];
+%   Reveal [label="Reveal window\nBidders disclose (bid, salt)", fillcolor="#F0E6FF"];
+%   Match  [label="Commitment check\nOnly matching, revealed bids kept", fillcolor="#B2E2B2"];
+%   Clear  [label="Clearing\nNoesisMarket clearing problem", fillcolor="#A0D6D1"];
 % 
-%   Commit -> Reveal -> Match -> Clear;
+%   Commit -> Reveal -> Match -> Clear [penwidth=1.5, color="#7B8794"];
 % }
 % ```
 % label=fig:commit_reveal_sequence
@@ -245,26 +261,29 @@ diagram.
 % rendered_images:begin
 % ```graphviz
 % digraph StakedAskLifecycle {
+%   bgcolor="white";
 %   rankdir=LR;
 %   splines=spline;
-%   nodesep=0.6;
-%   ranksep=0.9;
-%   bgcolor="white";
+%   nodesep=0.35;
+%   ranksep=0.80;
+%   pad=0.30;
 % 
-%   node [fontname="Helvetica", fontsize=11, style="rounded,filled", shape=box, penwidth=1.3];
-%   edge [fontname="Helvetica", fontsize=10, color="#4A4A4A", penwidth=1.2, arrowsize=0.8];
+%   node [shape=box, style="rounded,filled", fontname="Helvetica",
+%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
+%         color="#7B8794"];
+%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
+%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
 % 
-%   Posted [label="posted\n(at reveal)", fillcolor="#FFD1A6"];
-%   Locked [label="locked\n(matched into contract κ)", fillcolor="#A6E7F4"];
-%   Released [label="released in full\n(compliant)", fillcolor="#B2E2B2"];
-%   Slashed [label="slashed, in full or in part\n(violated)", fillcolor="#F4A6A6"];
+%   Posted   [label="Posted\nAt reveal", fillcolor="#FFD1A6"];
+%   Locked   [label="Locked\nMatched into contract κ", fillcolor="#F0E6FF"];
+%   Released [label="Released in full\nCompliant", fillcolor="#B2E2B2"];
+%   Slashed  [label="Slashed, in full or in part\nViolated", fillcolor="#F4A6A6"];
 % 
-%   Posted -> Locked [label="  matched  "];
-%   Locked -> Released [label="  window W closes,\n  r_lower >= R_min  "];
+%   Posted -> Locked [label="matched", penwidth=1.5, color="#7B8794"];
+%   Locked -> Released [label="window W closes,\nr_lower >= R_min"];
 %   Locked -> Slashed [
-%     label="  window W closes,\n  r_lower < R_min  ",
-%     color="#B23A48",
-%     fontcolor="#B23A48"
+%     label="window W closes,\nr_lower < R_min",
+%     color="#B23A48", fontcolor="#B23A48"
 %   ];
 % }
 % ```
@@ -400,43 +419,55 @@ single-ask baseline.
 % rendered_images:begin
 % ```graphviz
 % digraph Redundancy {
+%   bgcolor="white";
 %   rankdir=TB;
 %   splines=spline;
-%   nodesep=0.5;
-%   ranksep=0.7;
-%   bgcolor="white";
+%   nodesep=0.35;
+%   ranksep=0.60;
+%   pad=0.30;
 % 
-%   node [fontname="Helvetica", fontsize=11, style="rounded,filled", shape=box, penwidth=1.3];
-%   edge [fontname="Helvetica", fontsize=10, color="#4A4A4A", penwidth=1.2, arrowsize=0.8];
+%   node [shape=box, style="rounded,filled", fontname="Helvetica",
+%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
+%         color="#7B8794"];
+%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
+%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
 % 
 %   subgraph cluster_single {
-%     label="Single-ask match (k_red = 1)";
-%     fontname="Helvetica-Bold";
-%     fontsize=12;
-%     style="rounded,filled";
-%     fillcolor="#F7F9FC";
-%     color="#B8C4D9";
-%     margin=16;
+%     label     = "Single-ask match (k_red = 1)";
+%     labelloc  = "t";
+%     fontname  = "Helvetica-Bold";
+%     fontsize  = 12;
+%     fontcolor = "#52606D";
+%     style     = "rounded,filled";
+%     fillcolor = "#F7F9FC";
+%     color     = "#CBD2D9";
+%     penwidth  = 1.0;
+%     margin    = 14;
+% 
 %     ContractS [label="contract κ", fillcolor="#A6C8F4"];
-%     AskS [label="one staked ask", fillcolor="#C6A6F4"];
-%     ContractS -> AskS;
+%     AskS      [label="one staked ask", fillcolor="#C6A6F4"];
+%     ContractS -> AskS [penwidth=1.5, color="#7B8794"];
 %   }
 % 
 %   subgraph cluster_redundant {
-%     label="Redundant match (k_red > 1)";
-%     fontname="Helvetica-Bold";
-%     fontsize=12;
-%     style="rounded,filled";
-%     fillcolor="#F7F9FC";
-%     color="#B8C4D9";
-%     margin=16;
+%     label     = "Redundant match (k_red > 1)";
+%     labelloc  = "t";
+%     fontname  = "Helvetica-Bold";
+%     fontsize  = 12;
+%     fontcolor = "#52606D";
+%     style     = "rounded,filled";
+%     fillcolor = "#F7F9FC";
+%     color     = "#CBD2D9";
+%     penwidth  = 1.0;
+%     margin    = 14;
+% 
 %     ContractR [label="contract κ", fillcolor="#A6C8F4"];
-%     Ask1 [label="staked ask 1", fillcolor="#C6A6F4"];
-%     Ask2 [label="staked ask 2", fillcolor="#C6A6F4"];
-%     Ask3 [label="staked ask k_red", fillcolor="#C6A6F4"];
-%     ContractR -> Ask1 [label="  race  "];
-%     ContractR -> Ask2 [label="  race  "];
-%     ContractR -> Ask3 [label="  race  "];
+%     Ask1      [label="staked ask 1", fillcolor="#C6A6F4"];
+%     Ask2      [label="staked ask 2", fillcolor="#C6A6F4"];
+%     Ask3      [label="staked ask k_red", fillcolor="#C6A6F4"];
+%     ContractR -> Ask1 [label="race"];
+%     ContractR -> Ask2 [label="race"];
+%     ContractR -> Ask3 [label="race"];
 %   }
 % }
 % ```

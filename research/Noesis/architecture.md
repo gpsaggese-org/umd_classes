@@ -1,6 +1,6 @@
 # Overview
 - `research/Noesis` prototypes two coupled systems described in
-  `plan.Intelligence_Market.md` and `plan.Intelligence_Server.md`:
+  `plan.Noesis.md` (`NoesisMarket` and `NoesisServer` sections):
   - `batch_call_auction.py` and `contract_dispatch.py`: an in-memory
     call-auction that matches buyer/seller orders for LLM inference capacity and
     dispatches cleared contracts to a fulfillment layer
@@ -21,9 +21,9 @@
   `research/Noesis/test/`; there is no CLI or script entry point yet (both plans
   are still on PR1/PR2)
 - The two systems are not wired together yet: `contract_dispatch.mock_fulfill()`
-  stands in for `Intelligence_Server` (per `plan.Intelligence_Market.md` PR2 and
-  `plan.Intelligence_Server.md` PR4), and `passthrough_proxy.Gateway` has no
-  caller today; the plans defer the real integration until both sides reach
+  stands in for `Intelligence_Server` (per `plan.Noesis.md`'s `NoesisMarket`
+  PR2 and `NoesisServer` PR4), and `passthrough_proxy.Gateway` has no
+  caller today; the plan defers the real integration until both sides reach
   matching PRs
 
 # Architecture (C4 Model)
@@ -52,8 +52,8 @@ C4Context
 - The buyer/seller side is currently a test harness, not a real user-facing
   interface: unit tests construct `Bid`/`Ask` objects directly
 - `Intelligence_Server` is the real fulfillment layer described in
-  `plan.Intelligence_Server.md`; `contract_dispatch.mock_fulfill()` is its
-  placeholder until that plan's PR4 lands
+  `plan.Noesis.md`'s `NoesisServer` section; `contract_dispatch.mock_fulfill()`
+  is its placeholder until that section's PR4 lands
 - `LLM Providers` are the real backends `passthrough_proxy.Gateway` will call;
   tests inject a stand-in `ProviderCallFn` instead of a network call
 
@@ -84,10 +84,10 @@ C4Container
   imports `batch_call_auction` (`Bid`, `Ask`, `TierClearResult`) to build
   `Contract`s from a cleared round
 - `passthrough_proxy.py` has no import relationship with the other two modules;
-  it is a standalone container today, developed against a separate plan
-  (`plan.Intelligence_Server.md`) and only meant to converge with the market
-  side once `Intelligence_Server`'s PR4 and `Intelligence_Market`'s PR2/PR3 are
-  both in place
+  it is a standalone container today, developed against a separate section of
+  the plan (`plan.Noesis.md`'s `NoesisServer` section) and only meant to
+  converge with the market side once `NoesisServer`'s PR4 and `NoesisMarket`'s
+  PR2/PR3 are both in place
 
 ## C3 (Component)
 - Describes the runtime call chain from order submission through logged
@@ -193,9 +193,9 @@ flowchart LR
   `Contract`) instead of returning bare tuples, and validate at construction
   time instead of scattering checks downstream
 - Docstrings consistently tie code back to the owning plan and PR (e.g
-  `contract_dispatch.py`'s module docstring references
-  `plan.Intelligence_Market.md`'s PR2 and `plan.Intelligence_Server.md`'s PR4),
-  which keeps the mock-vs-real boundary explicit in the code itself
+  `contract_dispatch.py`'s module docstring references `plan.Noesis.md`'s
+  `NoesisMarket` PR2 and `NoesisServer` PR4), which keeps the mock-vs-real
+  boundary explicit in the code itself
 
 ## Weaknesses and Assumptions
 1. `contract_dispatch.py` and `passthrough_proxy.py` are not wired together:
@@ -233,8 +233,8 @@ flowchart LR
    for real per-token provider pricing once one is needed"). **Impact**: logged
    `cost` figures are not representative of real provider billing, which is
    normally token-based, not character-based
-8. Reputation/eligibility filtering from PR3 of `plan.Intelligence_Market.md` is
-   not implemented: **Fact** (PR3 is marked `[ ]` in the plan and no
+8. Reputation/eligibility filtering from `NoesisMarket` PR3 of `plan.Noesis.md`
+   is not implemented: **Fact** (PR3 is marked `[ ]` in the plan and no
    corresponding code exists in `research/Noesis`). **Impact**: today's auction
    lets any seller win a contract each round regardless of past `mock_fulfill()`
    outcomes, so under-delivering sellers are never priced out or excluded as the

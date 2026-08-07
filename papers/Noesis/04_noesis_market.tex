@@ -124,38 +124,49 @@ graph.
 % rendered_images:begin
 % ```graphviz
 % digraph Compatibility {
+%   bgcolor="white";
 %   rankdir=LR;
 %   splines=line;
-%   nodesep=0.5;
-%   ranksep=2.2;
-%   bgcolor="white";
+%   nodesep=0.35;
+%   ranksep=1.8;
+%   pad=0.30;
 % 
-%   node [fontname="Helvetica", fontsize=12, style="rounded,filled", shape=box, penwidth=1.3];
-%   edge [fontname="Helvetica", fontsize=10, color="#4A4A4A", penwidth=1.2, arrowhead=none];
+%   node [shape=box, style="rounded,filled", fontname="Helvetica",
+%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
+%         color="#7B8794"];
+%   edge [color="#9AA5B1", penwidth=1.1, arrowhead=none];
 % 
 %   subgraph cluster_bids {
-%     label="Bids B_c";
-%     fontname="Helvetica-Bold";
-%     fontsize=12;
-%     style="rounded,filled";
-%     fillcolor="#F7F9FC";
-%     color="#B8C4D9";
-%     margin=16;
-%     rank=same;
+%     label     = "Bids B_c";
+%     labelloc  = "t";
+%     fontname  = "Helvetica-Bold";
+%     fontsize  = 12;
+%     fontcolor = "#52606D";
+%     style     = "rounded,filled";
+%     fillcolor = "#F7F9FC";
+%     color     = "#CBD2D9";
+%     penwidth  = 1.0;
+%     margin    = 14;
+%     rank = same;
+% 
 %     B1 [label="bid 1", fillcolor="#F4A6A6"];
 %     B2 [label="bid 2", fillcolor="#F4A6A6"];
 %     B3 [label="bid 3", fillcolor="#F4A6A6"];
 %     B4 [label="bid 4", fillcolor="#F4A6A6"];
 %   }
 %   subgraph cluster_asks {
-%     label="Asks A_c";
-%     fontname="Helvetica-Bold";
-%     fontsize=12;
-%     style="rounded,filled";
-%     fillcolor="#F7F9FC";
-%     color="#B8C4D9";
-%     margin=16;
-%     rank=same;
+%     label     = "Asks A_c";
+%     labelloc  = "t";
+%     fontname  = "Helvetica-Bold";
+%     fontsize  = 12;
+%     fontcolor = "#52606D";
+%     style     = "rounded,filled";
+%     fillcolor = "#F7F9FC";
+%     color     = "#CBD2D9";
+%     penwidth  = 1.0;
+%     margin    = 14;
+%     rank = same;
+% 
 %     A1 [label="ask 1", fillcolor="#FFD1A6"];
 %     A2 [label="ask 2", fillcolor="#FFD1A6"];
 %     A3 [label="ask 3", fillcolor="#FFD1A6"];
@@ -344,31 +355,33 @@ back to future eligibility.
 % rendered_images:begin
 % ```graphviz
 % digraph ReputationLoop {
+%   bgcolor="white";
 %   rankdir=LR;
 %   splines=spline;
-%   nodesep=0.6;
-%   ranksep=0.9;
-%   bgcolor="white";
+%   nodesep=0.35;
+%   ranksep=0.70;
+%   pad=0.30;
 % 
-%   node [fontname="Helvetica", fontsize=12, style="rounded,filled", shape=box, penwidth=1.3];
-%   edge [fontname="Helvetica", fontsize=10, color="#4A4A4A", penwidth=1.2, arrowsize=0.8];
+%   node [shape=box, style="rounded,filled", fontname="Helvetica",
+%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
+%         color="#7B8794"];
+%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
+%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
 % 
-%   Market [label="NoesisMarket\n(round t)", fillcolor="#A0D6D1"];
-%   Contract [label="matched contract κ\ndispatched to NoesisServer", fillcolor="#A6C8F4"];
-%   Measured [label="measured reliability\nr(κ, W)", fillcolor="#B2E2B2"];
-%   Reputation [label="reputation update\nρ_α(t+1)", fillcolor="#FFD1A6"];
-%   Gate [label="gated eligibility\n(future rounds)", fillcolor="#F4A6A6"];
+%   Market      [label="NoesisMarket\nRound t", fillcolor="#A0D6D1"];
+%   Contract    [label="Matched contract κ\nDispatched to NoesisServer", fillcolor="#A6C8F4"];
+%   Measured    [label="Measured reliability\nr(κ, W)", fillcolor="#B2E2B2"];
+%   Reputation  [label="Reputation update\nρ_α(t+1)", fillcolor="#FFD1A6"];
+%   Gate        [label="Gated eligibility\nFuture rounds", fillcolor="#F4A6A6"];
 % 
-%   Market -> Contract [label="  clears  "];
-%   Contract -> Measured [label="  fulfillment window W  "];
-%   Measured -> Reputation [label="  compare to R_min(κ)  "];
+%   Market -> Contract [label="clears", penwidth=1.5, color="#7B8794"];
+%   Contract -> Measured [label="fulfillment window W"];
+%   Measured -> Reputation [label="compare to R_min(κ)"];
 %   Reputation -> Gate;
 %   Gate -> Market [
-%     label="  future asks  ",
-%     color="#B23A48",
-%     fontcolor="#B23A48",
-%     penwidth=1.4,
-%     style=dashed,
+%     label="future asks",
+%     style=dashed, penwidth=1.5,
+%     color="#B23A48", fontcolor="#B23A48",
 %     constraint=false
 %   ];
 % }
