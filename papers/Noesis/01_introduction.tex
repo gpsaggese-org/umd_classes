@@ -5,6 +5,17 @@
 
 \date{\today}
 
+% TODO(ai_gp): Noesis should be a modular platform where components
+% can be easily plugged in
+% E.g., NoesisMarket should be a pluggable matching engine (without call auction)
+% - its responsibility is only to match supply and demand
+% E.g., how to measure the intelligence of markets is a general component
+% E.g., the reputation and feedback loop is a pluggable component
+% E.g., answer fusion
+% E.g., add an interface to disseminate pricing information in real time
+% TODO(ai_gp): Add a table with all the components, what they do, and an example
+% TODO(ai_gp): Add more components to figure 1
+
 \begin{abstract}
 Applications and autonomous agents increasingly consume large language model
 (LLM) inference as a raw input, in the same way that factories consume
@@ -30,7 +41,6 @@ and feeds the result back into the market as a reputation and pricing signal.
 As a byproduct, \NoesisServer{} logs every request and estimates how much
 capability each request actually needs, enabling difficulty-aware routing and
 answer fusion that trade cost for accuracy in opposite directions.
-% TODO(ai_gp): Make it fully anonymized
 We formalize the contract, bid, and ask notation; state the market-clearing
 problem as a linear program and establish that a clearing price exists under
 standard monotonicity assumptions; and describe the request-level fulfillment

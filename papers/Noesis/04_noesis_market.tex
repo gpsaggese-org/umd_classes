@@ -42,10 +42,43 @@ prices diverge within the same day. A \texttt{cheap} tier and a
 are not expected to clear at the same price.
 \end{remark}
 
-% TODO(ai_gp): Add a figure showing the auction timeline: the order book
-% accepting bids/asks continuously, closing every $T$ minutes, with a
-% separate uniform-price clearing computed per capability-tier bucket at
-% each close.
+Figure~\ref{fig:auction_timeline} lays out this timeline.
+
+% rendered_images:begin
+% ```tikz
+% \definecolor{orderband}{RGB}{255,209,166}
+% \definecolor{cheapcolor}{RGB}{166,200,244}
+% \definecolor{frontcolor}{RGB}{198,166,244}
+% \fill[orderband, opacity=0.35] (0,-0.3) rectangle (12.8,0.3);
+% \node[align=center] at (6.4,0) {\footnotesize order book open: continuously accepting bids / asks};
+% \draw[very thick, ->, >=stealth] (0,-1.0) -- (13.4,-1.0);
+% \draw[dashed, gray] (2,-1.15) -- (2,2.6);
+% \draw[dashed, gray] (6.4,-1.15) -- (6.4,2.6);
+% \draw[dashed, gray] (10.8,-1.15) -- (10.8,2.6);
+% \node[below] at (2,-1.15) {\footnotesize round closes at $t$};
+% \node[below] at (6.4,-1.15) {\footnotesize round closes at $t+T$};
+% \node[below] at (10.8,-1.15) {\footnotesize round closes at $t+2T$};
+% \node[draw, rounded corners, fill=cheapcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (2,1.1) {cheap tier\\clears at $p^*_{\text{cheap}}$};
+% \node[draw, rounded corners, fill=frontcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (2,2.0) {frontier tier\\clears at $p^*_{\text{frontier}}$};
+% \node[draw, rounded corners, fill=cheapcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (6.4,1.1) {cheap tier\\clears at $p^*_{\text{cheap}}$};
+% \node[draw, rounded corners, fill=frontcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (6.4,2.0) {frontier tier\\clears at $p^*_{\text{frontier}}$};
+% \node[draw, rounded corners, fill=cheapcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (10.8,1.1) {cheap tier\\clears at $p^*_{\text{cheap}}$};
+% \node[draw, rounded corners, fill=frontcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (10.8,2.0) {frontier tier\\clears at $p^*_{\text{frontier}}$};
+% ```
+% label=fig:auction_timeline
+% caption=The auction timeline. The order book accepts bids and asks
+%   continuously; every $T$ minutes the round closes and a separate
+%   uniform-price clearing is computed independently per capability-tier
+%   bucket, so \texttt{cheap} and \texttt{frontier} can clear at different
+%   prices in the same round (Remark~\ref{rem:tiered_pricing}).
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{04_noesis_market.tex.figs/04_noesis_market.1.png}
+  \caption{The auction timeline. The order book accepts bids and asks continuously; every $T$ minutes the round closes and a separate uniform-price clearing is computed independently per capability-tier bucket, so \texttt{cheap} and \texttt{frontier} can clear at different prices in the same round (Remark~\ref{rem:tiered_pricing}).}
+  \label{fig:auction_timeline}
+\end{figure}
+% render_images:end
 
 % ==============================================================================
 \subsection{Compatibility}
@@ -82,10 +115,70 @@ $G_c = (B_c \cup A_c, E_c)$ between the bids $B_c$ and asks $A_c$ in the
 bucket, with an edge $(\beta, \alpha) \in E_c$ whenever $\beta \sim
 \alpha$.
 
-% TODO(ai_gp): Add a figure showing a small example bipartite compatibility
-% graph $G_c$: a handful of bids and asks as two columns of nodes, with
-% edges only where capability/latency/reliability compatibility holds
-% (Definition~\ref{def:compatibility}).
+Figure~\ref{fig:compatibility_graph} shows a small example of such a
+graph.
+
+% rendered_images:begin
+% ```graphviz
+% digraph Compatibility {
+%   rankdir=LR;
+%   splines=line;
+%   nodesep=0.5;
+%   ranksep=2.2;
+%   bgcolor="white";
+% 
+%   node [fontname="Helvetica", fontsize=12, style="rounded,filled", shape=box, penwidth=1.3];
+%   edge [fontname="Helvetica", fontsize=10, color="#4A4A4A", penwidth=1.2, arrowhead=none];
+% 
+%   subgraph cluster_bids {
+%     label="Bids B_c";
+%     fontname="Helvetica-Bold";
+%     fontsize=12;
+%     style="rounded,filled";
+%     fillcolor="#F7F9FC";
+%     color="#B8C4D9";
+%     margin=16;
+%     rank=same;
+%     B1 [label="bid 1", fillcolor="#F4A6A6"];
+%     B2 [label="bid 2", fillcolor="#F4A6A6"];
+%     B3 [label="bid 3", fillcolor="#F4A6A6"];
+%     B4 [label="bid 4", fillcolor="#F4A6A6"];
+%   }
+%   subgraph cluster_asks {
+%     label="Asks A_c";
+%     fontname="Helvetica-Bold";
+%     fontsize=12;
+%     style="rounded,filled";
+%     fillcolor="#F7F9FC";
+%     color="#B8C4D9";
+%     margin=16;
+%     rank=same;
+%     A1 [label="ask 1", fillcolor="#FFD1A6"];
+%     A2 [label="ask 2", fillcolor="#FFD1A6"];
+%     A3 [label="ask 3", fillcolor="#FFD1A6"];
+%   }
+% 
+%   B1 -> A1;
+%   B1 -> A2;
+%   B2 -> A2;
+%   B2 -> A3;
+%   B3 -> A3;
+% }
+% ```
+% label=fig:compatibility_graph
+% caption=A small example compatibility graph $G_c$ within one tier bucket
+%   (Definition~\ref{def:compatibility}). An edge marks a bid/ask pair
+%   whose capability, latency, and reliability terms are mutually
+%   satisfiable; bid 4 has no compatible ask in this bucket and is left
+%   unmatched regardless of price.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{04_noesis_market.tex.figs/04_noesis_market.2.png}
+  \caption{A small example compatibility graph $G_c$ within one tier bucket (Definition~\ref{def:compatibility}). An edge marks a bid/ask pair whose capability, latency, and reliability terms are mutually satisfiable; bid 4 has no compatible ask in this bucket and is left unmatched regardless of price.}
+  \label{fig:compatibility_graph}
+\end{figure}
+% render_images:end
 
 % ==============================================================================
 \subsection{The clearing problem}
@@ -240,10 +333,56 @@ $\rho_{\min}$, the seller is excluded from the \texttt{frontier} bucket in
 subsequent rounds until its reputation recovers.
 \end{example}
 
-% TODO(ai_gp): Add a figure showing the reputation and pricing feedback loop:
-% contract dispatched to NoesisServer -> measured reliability
-% $\hat r(\kappa, W)$ -> reputation update (Equation~\eqref{eq:reputation_update})
-% -> gated eligibility for future NoesisMarket rounds.
+Figure~\ref{fig:reputation_loop} traces this loop from a cleared contract
+back to future eligibility.
+
+% rendered_images:begin
+% ```graphviz
+% digraph ReputationLoop {
+%   rankdir=LR;
+%   splines=spline;
+%   nodesep=0.6;
+%   ranksep=0.9;
+%   bgcolor="white";
+% 
+%   node [fontname="Helvetica", fontsize=12, style="rounded,filled", shape=box, penwidth=1.3];
+%   edge [fontname="Helvetica", fontsize=10, color="#4A4A4A", penwidth=1.2, arrowsize=0.8];
+% 
+%   Market [label="NoesisMarket\n(round t)", fillcolor="#A0D6D1"];
+%   Contract [label="matched contract κ\ndispatched to NoesisServer", fillcolor="#A6C8F4"];
+%   Measured [label="measured reliability\nr(κ, W)", fillcolor="#B2E2B2"];
+%   Reputation [label="reputation update\nρ_α(t+1)", fillcolor="#FFD1A6"];
+%   Gate [label="gated eligibility\n(future rounds)", fillcolor="#F4A6A6"];
+% 
+%   Market -> Contract [label="  clears  "];
+%   Contract -> Measured [label="  fulfillment window W  "];
+%   Measured -> Reputation [label="  compare to R_min(κ)  "];
+%   Reputation -> Gate;
+%   Gate -> Market [
+%     label="  future asks  ",
+%     color="#B23A48",
+%     fontcolor="#B23A48",
+%     penwidth=1.4,
+%     style=dashed,
+%     constraint=false
+%   ];
+% }
+% ```
+% label=fig:reputation_loop
+% caption=The reputation and pricing feedback loop. A contract $\kappa$
+%   dispatched to \NoesisServer{} yields a measured reliability
+%   $\hat r(\kappa, W)$, which drives the reputation update of
+%   Equation~\eqref{eq:reputation_update}; the resulting score gates the
+%   seller's eligibility to submit asks in future \NoesisMarket{} rounds,
+%   closing the loop.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{04_noesis_market.tex.figs/04_noesis_market.3.png}
+  \caption{The reputation and pricing feedback loop. A contract $\kappa$ dispatched to \NoesisServer{} yields a measured reliability $\hat r(\kappa, W)$, which drives the reputation update of Equation~\eqref{eq:reputation_update}; the resulting score gates the seller's eligibility to submit asks in future \NoesisMarket{} rounds, closing the loop.}
+  \label{fig:reputation_loop}
+\end{figure}
+% render_images:end
 
 % ==============================================================================
 \subsection{Mechanism-design risks}

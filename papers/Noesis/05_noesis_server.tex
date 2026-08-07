@@ -36,10 +36,53 @@ safeguards (PII scrubbing, opt-in/opt-out) are necessary before logging
 real traffic and are discussed as an open question in
 Section~\ref{sec:open_questions}.
 
-% TODO(ai_gp): Add a sequence diagram of a request's path through
-% NoesisServer: caller -> API gateway -> provider, with the logged tuple
-% (prompt, response, provider, model, latency, cost, contract-or-bottom)
-% captured on the way back.
+Figure~\ref{fig:request_path} traces this path end to end.
+
+% rendered_images:begin
+% ```graphviz
+% digraph RequestPath {
+%   rankdir=LR;
+%   splines=spline;
+%   nodesep=0.7;
+%   ranksep=0.9;
+%   bgcolor="white";
+% 
+%   node [fontname="Helvetica", fontsize=12, style="rounded,filled", shape=box, penwidth=1.3];
+%   edge [fontname="Helvetica", fontsize=10, color="#4A4A4A", penwidth=1.2, arrowsize=0.8];
+% 
+%   Caller [label="Caller\n(application / agent)", fillcolor="#F4A6A6"];
+%   Gateway [label="API gateway\n(NoesisServer)", fillcolor="#A0D6D1"];
+%   Provider [label="Provider", fillcolor="#C6A6F4"];
+%   Log [label="Log:\n(prompt, response, provider, model,\nlatency, cost, contract-or-bottom)", shape=note, fillcolor="#A6C8F4"];
+% 
+%   Caller -> Gateway [label="  request  "];
+%   Gateway -> Provider [label="  request  "];
+%   Provider -> Gateway [label="  response  ", style=dashed];
+%   Gateway -> Caller [label="  response  ", style=dashed];
+%   Gateway -> Log [
+%     label="  logged on the way back  ",
+%     color="#B23A48",
+%     fontcolor="#B23A48",
+%     penwidth=1.4,
+%     style=dashed,
+%     constraint=false
+%   ];
+% }
+% ```
+% label=fig:request_path
+% caption=Path of a single request through \NoesisServer{}. The caller's
+%   request is proxied to a provider and the response streamed back; on the
+%   way back, the request is logged as the tuple (prompt, response,
+%   provider, model, latency, cost, contract-or-$\bot$) described in
+%   Section~\ref{sec:gateway_architecture}.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{05_noesis_server.tex.figs/05_noesis_server.1.png}
+  \caption{Path of a single request through \NoesisServer{}. The caller's request is proxied to a provider and the response streamed back; on the way back, the request is logged as the tuple (prompt, response, provider, model, latency, cost, contract-or-$\bot$) described in Section~\ref{sec:gateway_architecture}.}
+  \label{fig:request_path}
+\end{figure}
+% render_images:end
 
 % ==============================================================================
 \subsection{Contract fulfillment monitoring}
@@ -108,11 +151,48 @@ sampling noise, so the contract is flagged as violated and reported back
 to \NoesisMarket.
 \end{example}
 
-% TODO(ai_gp): Add a figure illustrating the hypothesis test of
-% Equation~\eqref{eq:reliability_lower_bound}: the point estimate
-% $\hat r(\kappa, W)$, its lower confidence bound $\hat r_{\text{lower}}$,
-% and the threshold $\rminattr(\kappa)$ on a single number line, showing
-% when a shortfall is flagged versus attributed to noise.
+Figure~\ref{fig:reliability_test} places the point estimate, its lower
+confidence bound, and the threshold on a single number line for both
+outcomes of the test.
+
+% rendered_images:begin
+% ```tikz
+% \definecolor{flagred}{RGB}{244,166,166}
+% \definecolor{okgreen}{RGB}{178,226,178}
+% \fill[flagred, opacity=0.12] (0,-1) rectangle (6,3.4);
+% \fill[okgreen, opacity=0.12] (6,-1) rectangle (12,3.4);
+% \draw[dashed, thick, black!70] (6,-1) -- (6,3.4);
+% \node[above] at (6,3.4) {\footnotesize $R_{\min}(\kappa)$};
+% \draw[very thick, teal!60!black] (7.2,2.4) -- (10.4,2.4);
+% \draw[very thick, teal!60!black] (7.2,2.25) -- (7.2,2.55);
+% \draw[very thick, teal!60!black] (10.4,2.25) -- (10.4,2.55);
+% \filldraw[black] (9.8,2.4) circle (2pt);
+% \node[below] at (7.2,2.1) {\footnotesize $\hat r_{\text{lower}}$};
+% \node[above] at (9.8,2.7) {\footnotesize $\hat r(\kappa,W)$};
+% \node[align=right, teal!60!black] at (-1.9,2.4) {\footnotesize compliant:\\[-1pt]\footnotesize attributed to noise};
+% \draw[very thick, red!60!black] (3.6,0) -- (7.6,0);
+% \draw[very thick, red!60!black] (3.6,-0.15) -- (3.6,0.15);
+% \draw[very thick, red!60!black] (7.6,-0.15) -- (7.6,0.15);
+% \filldraw[black] (7.0,0) circle (2pt);
+% \node[below] at (3.6,-0.3) {\footnotesize $\hat r_{\text{lower}}$};
+% \node[above] at (7.0,0.3) {\footnotesize $\hat r(\kappa,W)$};
+% \node[align=right, red!60!black] at (-1.9,0) {\footnotesize flagged:\\[-1pt]\footnotesize violation reported};
+% ```
+% label=fig:reliability_test
+% caption=The hypothesis test of Equation~\eqref{eq:reliability_lower_bound}
+%   on a single number line. Top: the confidence interval
+%   $[\hat r_{\text{lower}}, \hat r(\kappa, W)]$ stays entirely above
+%   $\rminattr(\kappa)$, so the shortfall, if any, is attributed to
+%   sampling noise. Bottom: the interval dips below $\rminattr(\kappa)$, so
+%   $\kappa$ is flagged as violated and reported to \NoesisMarket.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{05_noesis_server.tex.figs/05_noesis_server.2.png}
+  \caption{The hypothesis test of Equation~\eqref{eq:reliability_lower_bound} on a single number line. Top: the confidence interval $[\hat r_{\text{lower}}, \hat r(\kappa, W)]$ stays entirely above $\rminattr(\kappa)$, so the shortfall, if any, is attributed to sampling noise. Bottom: the interval dips below $\rminattr(\kappa)$, so $\kappa$ is flagged as violated and reported to \NoesisMarket.}
+  \label{fig:reliability_test}
+\end{figure}
+% render_images:end
 
 % ==============================================================================
 \subsection{Difficulty-aware routing}
@@ -153,10 +233,46 @@ Measuring the left-hand side against the right-hand side on real traffic
 is a prerequisite for deploying routing in production, and is deferred to
 the implementation plan in Section~\ref{sec:roadmap}.
 
-% TODO(ai_gp): Add a flowchart of difficulty-aware routing: prompt $x$ ->
-% difficulty estimator $\hat d$ -> cheapest sufficient tier $\pi(x)$
-% (Equation~\eqref{eq:routing_policy}), next to the cost comparison of
-% Equation~\eqref{eq:routing_saving_condition}.
+Figure~\ref{fig:routing_flowchart} lays out this chain next to the
+condition under which it pays off.
+
+% rendered_images:begin
+% ```graphviz
+% digraph Routing {
+%   rankdir=LR;
+%   splines=spline;
+%   nodesep=0.7;
+%   ranksep=0.9;
+%   bgcolor="white";
+% 
+%   node [fontname="Helvetica", fontsize=12, style="rounded,filled", shape=box, penwidth=1.3];
+%   edge [fontname="Helvetica", fontsize=10, color="#4A4A4A", penwidth=1.2, arrowsize=0.8];
+% 
+%   Prompt [label="prompt x", fillcolor="#FFD1A6"];
+%   Estimator [label="difficulty estimator\n(cheapest tier expected\nto answer correctly)", fillcolor="#A0D6D1"];
+%   Tier [label="routed tier π(x)\n(cheapest sufficient tier)", fillcolor="#A6C8F4"];
+%   Cost [label="net saving only if:\nestimator cost + expected routed cost\n< always-strong-model cost", shape=note, fillcolor="#F7F9FC", color="#B8C4D9"];
+% 
+%   Prompt -> Estimator;
+%   Estimator -> Tier;
+%   Tier -> Cost [style=dashed, color="#8C8C8C", constraint=false];
+% }
+% ```
+% label=fig:routing_flowchart
+% caption=Difficulty-aware routing. A prompt $x$ is mapped by the
+%   difficulty estimator to the cheapest capability tier $\pi(x)$ expected
+%   to answer it correctly (Equation~\eqref{eq:routing_policy}); routing
+%   only pays off when the estimator's own cost plus the expected routed
+%   cost undercuts always calling the strongest tier
+%   (Inequality~\eqref{eq:routing_saving_condition}).
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{05_noesis_server.tex.figs/05_noesis_server.3.png}
+  \caption{Difficulty-aware routing. A prompt $x$ is mapped by the difficulty estimator to the cheapest capability tier $\pi(x)$ expected to answer it correctly (Equation~\eqref{eq:routing_policy}); routing only pays off when the estimator's own cost plus the expected routed cost undercuts always calling the strongest tier (Inequality~\eqref{eq:routing_saving_condition}).}
+  \label{fig:routing_flowchart}
+\end{figure}
+% render_images:end
 
 % ==============================================================================
 \subsection{Answer fusion}
@@ -182,10 +298,73 @@ on the contract's price versus its $\rminattr$ term: a low-price,
 low-$\rminattr$ contract favors routing, while a high-$\rminattr$ contract
 may only be economically served through fusion.
 
-% TODO(ai_gp): Add a figure showing answer fusion as a fan-out/fan-in: one
-% prompt sent to several providers in $S(x)$, whose answers are combined
-% by the aggregator $g$ (Equation~\eqref{eq:fusion_aggregator}), contrasted
-% side by side with routing's single-provider path.
+Figure~\ref{fig:fusion_fanout} contrasts fusion's fan-out/fan-in shape
+with routing's single-provider path.
+
+% rendered_images:begin
+% ```graphviz
+% digraph Fusion {
+%   rankdir=LR;
+%   splines=spline;
+%   nodesep=0.5;
+%   ranksep=0.7;
+%   bgcolor="white";
+% 
+%   node [fontname="Helvetica", fontsize=11, style="rounded,filled", shape=box, penwidth=1.3];
+%   edge [fontname="Helvetica", fontsize=10, color="#4A4A4A", penwidth=1.2, arrowsize=0.8];
+% 
+%   subgraph cluster_routing {
+%     label="Routing (single path)";
+%     fontname="Helvetica-Bold";
+%     fontsize=12;
+%     style="rounded,filled";
+%     fillcolor="#F7F9FC";
+%     color="#B8C4D9";
+%     margin=16;
+%     PromptR [label="prompt x", fillcolor="#FFD1A6"];
+%     ProviderR [label="one provider\n(routed tier)", fillcolor="#C6A6F4"];
+%     AnswerR [label="answer", fillcolor="#A6C8F4"];
+%     PromptR -> ProviderR -> AnswerR;
+%   }
+% 
+%   subgraph cluster_fusion {
+%     label="Fusion (fan-out / fan-in)";
+%     fontname="Helvetica-Bold";
+%     fontsize=12;
+%     style="rounded,filled";
+%     fillcolor="#F7F9FC";
+%     color="#B8C4D9";
+%     margin=16;
+%     PromptF [label="prompt x", fillcolor="#FFD1A6"];
+%     P1 [label="provider in S(x)", fillcolor="#C6A6F4"];
+%     P2 [label="provider in S(x)", fillcolor="#C6A6F4"];
+%     P3 [label="provider in S(x)", fillcolor="#C6A6F4"];
+%     Aggregator [label="aggregator g\n(vote / verifier / learned)", fillcolor="#A0D6D1"];
+%     AnswerF [label="answer", fillcolor="#A6C8F4"];
+%     PromptF -> P1;
+%     PromptF -> P2;
+%     PromptF -> P3;
+%     P1 -> Aggregator;
+%     P2 -> Aggregator;
+%     P3 -> Aggregator;
+%     Aggregator -> AnswerF;
+%   }
+% }
+% ```
+% label=fig:fusion_fanout
+% caption=Answer fusion as a fan-out/fan-in, contrasted with routing's
+%   single-provider path. Fusion sends the same prompt to every provider in
+%   $S(x)$ and combines their answers through the aggregator $g$
+%   (Equation~\eqref{eq:fusion_aggregator}), trading extra inference cost
+%   for a lower risk of a low-quality answer.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{05_noesis_server.tex.figs/05_noesis_server.4.png}
+  \caption{Answer fusion as a fan-out/fan-in, contrasted with routing's single-provider path. Fusion sends the same prompt to every provider in $S(x)$ and combines their answers through the aggregator $g$ (Equation~\eqref{eq:fusion_aggregator}), trading extra inference cost for a lower risk of a low-quality answer.}
+  \label{fig:fusion_fanout}
+\end{figure}
+% render_images:end
 
 % ==============================================================================
 \subsection{Training signal and distillation}
@@ -221,7 +400,46 @@ to approximate $f_{\text{strong}}$'s outputs on the observed task
 distribution \cite{hinton2015}, offering a second, independent way for
 \NoesisServer{} to reduce cost on traffic it has already observed.
 
-% TODO(ai_gp): Add a figure showing the training pipeline: logged
-% prompt/response traffic -> agreement labels (Definition~\ref{def:agreement_label})
-% feeding the difficulty estimator, and the same corpus $\calD$ feeding
-% distillation of $f_\theta$, as two parallel consumers of one dataset.
+Figure~\ref{fig:training_pipeline} shows the two consumers that share
+this one logged dataset.
+
+% rendered_images:begin
+% ```graphviz
+% digraph TrainingPipeline {
+%   rankdir=LR;
+%   splines=spline;
+%   nodesep=0.6;
+%   ranksep=0.8;
+%   bgcolor="white";
+% 
+%   node [fontname="Helvetica", fontsize=12, style="rounded,filled", shape=box, penwidth=1.3];
+%   edge [fontname="Helvetica", fontsize=10, color="#4A4A4A", penwidth=1.2, arrowsize=0.8];
+% 
+%   Traffic [label="logged prompt/response\ntraffic", fillcolor="#FFD1A6"];
+%   Agreement [label="agreement labels\n(cheap vs. strong model)", fillcolor="#B2E2B2"];
+%   Estimator [label="difficulty estimator\ntraining", fillcolor="#A0D6D1"];
+%   Corpus [label="corpus D\n(x, strong-model answer)", fillcolor="#B2E2B2"];
+%   Distill [label="distillation of\na smaller model", fillcolor="#A0D6D1"];
+% 
+%   Traffic -> Agreement;
+%   Agreement -> Estimator;
+%   Traffic -> Corpus;
+%   Corpus -> Distill;
+% }
+% ```
+% label=fig:training_pipeline
+% caption=The training pipeline built from one logged dataset. Logged
+%   traffic feeds agreement labels (Definition~\ref{def:agreement_label}),
+%   which train the difficulty estimator of
+%   Section~\ref{sec:routing}; the same traffic also forms the corpus
+%   $\calD$ used to distill a smaller model $f_\theta$
+%   (Section~\ref{sec:distillation}), as two parallel, independent
+%   consumers of one dataset.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{05_noesis_server.tex.figs/05_noesis_server.5.png}
+  \caption{The training pipeline built from one logged dataset. Logged traffic feeds agreement labels (Definition~\ref{def:agreement_label}), which train the difficulty estimator of Section~\ref{sec:routing}; the same traffic also forms the corpus $\calD$ used to distill a smaller model $f_\theta$ (Section~\ref{sec:distillation}), as two parallel, independent consumers of one dataset.}
+  \label{fig:training_pipeline}
+\end{figure}
+% render_images:end

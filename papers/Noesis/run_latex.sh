@@ -75,6 +75,16 @@ SCRIPT_DIR=$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)
 echo $SCRIPT_DIR
 echo "SCRIPT_DIR=$SCRIPT_DIR"
 
+# Move into SCRIPT_DIR so that all relative paths used below (LaTeX
+# `-output-directory=.` inside the Docker container, the `paper.log` grep,
+# and the `bibtex` invocation) are anchored to the paper's own directory
+# instead of to whatever directory the caller happened to invoke this
+# script from (e.g. the Git root). Without this, running
+# `papers/Noesis/run_latex.sh` from the Git root leaves `.aux`/`.log`/
+# `.out`/`.toc` build artifacts scattered at the Git root instead of in
+# `papers/Noesis/`.
+cd "$SCRIPT_DIR"
+
 if [[ ./figs ]]; then
     rm -rf figs
 fi;
