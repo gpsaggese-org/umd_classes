@@ -53,6 +53,7 @@ Lesson08.5-Experimentation.txt
 Lesson09.1-Reasoning_over_time.txt
 Lesson09.2-Hidden_Markov_Models.txt
 Lesson09.3-Multi_Armed_Bandits.txt
+Lesson09.7-Advanced_Bandits.txt
 Lesson09.4-gh_Filter.txt
 Lesson09.5-Kalman_Filter.txt
 Lesson09.6-Dynamic_Bayesian_Networks.txt

@@ -30,12 +30,13 @@ Scrape book catalog from Manning Publications.
 
 Fetches book data from Manning's online catalog and exports to CSV format.
 
-Examples:
-    # Scrape first 2 pages from Manning catalog
-    > get_catalog.py --target manning --pages 2 --output books.csv
+# Usage Example
 
-    # Scrape 5 pages and write to stdout
-    > get_catalog.py --target manning --pages 5
+- Scrape first 2 pages from Manning catalog and write to a CSV file:
+> get_catalog.py --target manning --pages 2 --output books.csv
+
+- Scrape 5 pages and write to stdout:
+> get_catalog.py --target manning --pages 5
 """
 
 import argparse
