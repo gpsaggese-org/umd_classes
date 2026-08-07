@@ -7,12 +7,12 @@ The script:
 - Renames the file using `git mv` (adding/removing `draft.` prefix)
 - Flips the `draft:` flag in the YAML frontmatter.
 
-# Usage
+# Usage Example
 
-## Publish a draft
+- Publish a draft:
 > mark_blog_as_ready.py --file draft.how_to.Use_OpenRouter.md
 
-## Unpublish (revert to draft)
+- Unpublish (revert to draft):
 > mark_blog_as_ready.py --file how_to.Use_OpenRouter.md --undo
 """
 

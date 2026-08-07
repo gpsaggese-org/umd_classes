@@ -6,19 +6,22 @@ This script reads a CSV file with tool information, generates project
 descriptions using OpenAI, and saves them as individual Markdown files.
 Set the OPENAI_API_KEY using export before running the script.
 
-> class_project/ta/generate_class_project_description.py \
+# Usage Example
+
+- Generate Markdown descriptions for the first 2 projects in the CSV:
+> generate_class_project_description.py \
     --input class_project/DATA605/Spring2026/projects.csv \
     --out_dir class_project/DATA605/Spring2026/projects_descriptions \
     --max_projects 2
 
-# Dry-run: print which projects are missing without generating.
-> class_project/ta/generate_class_project_description.py \
+- Dry-run: print which projects are missing without generating:
+> generate_class_project_description.py \
     --input class_project/DATA605/Spring2026/projects.csv \
     --out_dir class_project/DATA605/Spring2026/projects_descriptions \
     --dry-run
 
-# Disable incremental mode to regenerate all projects.
-> class_project/ta/generate_class_project_description.py \
+- Disable incremental mode to regenerate all projects:
+> generate_class_project_description.py \
     --input class_project/DATA605/Spring2026/projects.csv \
     --out_dir class_project/DATA605/Spring2026/projects_descriptions \
     --no-incremental
@@ -163,7 +166,7 @@ def create_markdown_file(
         _LOG.info("Generated Markdown File: %s", file_name)
         # Run linter on the generated file to ensure proper formatting.
         lint_script = (
-            "helpers_root/dev_scripts_helpers/documentation/lint_txt.py"
+            "helpers_root/dev_scripts_helpers/documentation/lint_text.py"
         )
         cmd = f"{lint_script} -i {markdown_path}"
         hsystem.system(cmd, suppress_output=False)

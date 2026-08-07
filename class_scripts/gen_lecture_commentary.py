@@ -31,8 +31,12 @@ This script performs multiple steps:
 7. Open the PDF in Skim (if `--open_pdf` is specified)
 8. Open the HTML file in the default browser (if `--open_html` is specified)
 
-Usage:
+# Usage Example
+
+- Generate the lecture commentary PDF for DATA605 lesson 01.1:
 > gen_lecture_commentary.py data605 01.1
+
+- Generate the lecture commentary PDF for MSML610 lesson 02.3:
 > gen_lecture_commentary.py msml610 02.3
 
 The output looks like:

@@ -6,8 +6,12 @@ Find and print the path to a lecture file.
 This script finds exactly one lecture file matching the pattern:
 {DIR}/lectures_source/Lesson{LESSON}*
 
-Usage:
+# Usage Example
+
+- Find the lecture file for lesson 01.1 in the data605 course:
 > get_lecture_file.py data605 01.1
+
+- Find the lecture file for lesson 02.3 in the msml610 course:
 > get_lecture_file.py msml610 02.3
 
 Import as:
@@ -18,7 +22,7 @@ import class_scripts.get_lecture_file as clgelifi
 import argparse
 import logging
 
-import class_scripts.common_utils as clcomuut
+import class_scripts.common_utils as csccouti
 import helpers.hdbg as hdbg
 import helpers.hparser as hparser
 
@@ -50,9 +54,9 @@ def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
     # Validate arguments.
-    clcomuut.validate_dir_lesson_args(args.dir, args.lesson)
+    csccouti.validate_dir_lesson_args(args.dir, args.lesson)
     # Find the lecture file.
-    lecture_file = clcomuut.find_lecture_file(args.dir, args.lesson)
+    lecture_file = csccouti.find_lecture_file(args.dir, args.lesson)
     # Print the file path.
     _LOG.info("Lecture file: %s", lecture_file)
 

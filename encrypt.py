@@ -6,14 +6,15 @@ Encrypt or decrypt a directory using Fernet symmetric encryption.
 This script processes .md, .txt, and .py files in a directory, encrypting or
 decrypting them using the VIM_SECRET environment variable.
 
-Examples:
-# Encrypt a directory (creates DIR.secret and removes DIR)
+# Usage Example
+
+- Encrypt a directory (creates DIR.secret and removes DIR):
 > encrypt.py --input_dir data605/lectures_quizzes
 
-# Encrypt a directory but keep the original
+- Encrypt a directory but keep the original:
 > encrypt.py --input_dir data605/lectures_quizzes --keep_old_dir
 
-# Decrypt a directory (creates DIR from DIR.secret)
+- Decrypt a directory (creates DIR from DIR.secret):
 > encrypt.py --input_dir data605/lectures_quizzes --decrypt
 
 Import as:

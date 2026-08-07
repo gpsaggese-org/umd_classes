@@ -1,0 +1,577 @@
+% ##############################################################################
+\section{Toward a decentralized, anonymized \NoesisMarket{}}
+\label{sec:decentralized_extension}
+
+Sections~\ref{sec:noesis_market} and \ref{sec:noesis_server} describe
+\Noesis{} as operated by a single, trusted market and gateway. That design
+is deliberately the simplest starting point: it lets the auction
+(Section~\ref{sec:noesis_market}) and the fulfillment layer
+(Section~\ref{sec:noesis_server}) be specified without also solving
+distributed-systems and cryptographic-protocol problems. This section
+sketches an alternative in which \NoesisMarket's auction runs on a public
+blockchain rather than inside a single operator's infrastructure, with
+bids and asks kept anonymous until a round closes. The design adapts
+ZK-Tulip \cite{zktulip2023}, an unpublished working note on a stake-based,
+blind-bid marketplace for zero-knowledge proof generation:
+\NoesisMarket's clearing problem (Problem~\ref{prob:clearing}) and
+ZK-Tulip's proof-matching problem share the same shape, matching a
+requester who needs a unit of off-chain computation performed under a
+deadline against a supplier who is paid for performing it, so the
+mechanisms below carry over with only minor changes. Section~\ref{sec:sota_decentralized}
+surveys production systems, Bittensor, Gensyn, and Ritual among them, that
+already run parts of this machinery, validator scoring, proof-of-learning,
+proof-of-execution, at network scale; the question this section asks is
+how far analogous machinery can go when applied to \NoesisMarket's own
+auction and contract, rather than to a network-internal reward schedule.
+
+We treat what follows as a design sketch rather than a specification.
+Section~\ref{sec:decentralized_open_questions} collects the open questions
+it leaves unresolved, most of which are open questions in ZK-Tulip's own
+design notes as well.
+
+% ==============================================================================
+\subsection{Motivation: censorship resistance and bidder privacy}
+\label{sec:decentralized_motivation}
+
+The centralized design of Section~\ref{sec:noesis_market} concentrates two
+kinds of trust in a single operator. First, the operator sees every bid
+and ask, including a buyer's required capability tier and volume, which
+can reveal competitively sensitive information, for instance that a buyer
+is about to run a large batch job, before the round even clears. Second,
+the operator alone decides which asks are eligible to compete, which
+contracts clear, and which sellers are excluded on reputation grounds
+(Section~\ref{sec:reputation}), with no mechanism for a participant to
+independently verify that this was done correctly.
+
+A blockchain-based \NoesisMarket{} addresses both concerns by moving the
+parts of the mechanism that most need to be trust-minimized, contract
+terms, matching, settlement, and non-performance penalties, onto a public
+ledger, while keeping bid and ask contents hidden until the round closes
+(Section~\ref{sec:blind_bidding}). Neither property is free: on-chain
+settlement trades the negligible latency and cost of a centralized
+clearinghouse for the latency, gas cost, and finality assumptions of the
+underlying chain, a trade-off Section~\ref{sec:decentralized_comparison}
+makes explicit.
+
+Figure~\ref{fig:trust_boundaries} contrasts the two trust boundaries
+before the mechanisms below are introduced: in the centralized design, a
+single operator sees every bid and ask in full and alone decides
+eligibility and matching, while in the decentralized design, only
+on-chain addresses are visible until the reveal window closes
+(Section~\ref{sec:blind_bidding}), and matching and eligibility are
+verifiable on-chain rather than taken on the operator's word.
+
+% rendered_images:begin
+% ```graphviz
+% digraph TrustBoundaries {
+%   bgcolor="white";
+%   rankdir=TB;
+%   splines=spline;
+%   nodesep=0.60;
+%   ranksep=0.50;
+%   pad=0.30;
+% 
+%   node [shape=box, style="rounded,filled", fontname="Helvetica",
+%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
+%         color="#7B8794"];
+%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
+%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
+% 
+%   subgraph cluster_centralized {
+%     label     = "Centralized";
+%     labelloc  = "t";
+%     fontname  = "Helvetica-Bold";
+%     fontsize  = 12;
+%     fontcolor = "#52606D";
+%     style     = "rounded,filled";
+%     fillcolor = "#F7F9FC";
+%     color     = "#CBD2D9";
+%     penwidth  = 1.0;
+%     margin    = 14;
+% 
+%     BidsC    [label="Full bid/ask contents\nTier, volume, price", fillcolor="#FFD1A6"];
+%     Operator [label="Single operator", fillcolor="#F4A6A6"];
+%     Decide   [label="Decides eligibility\n& matching", fillcolor="#A0D6D1"];
+%     BidsC -> Operator [label="sees all", penwidth=1.5, color="#7B8794"];
+%     Operator -> Decide [penwidth=1.5, color="#7B8794"];
+%   }
+% 
+%   subgraph cluster_decentralized {
+%     label     = "Decentralized";
+%     labelloc  = "t";
+%     fontname  = "Helvetica-Bold";
+%     fontsize  = 12;
+%     fontcolor = "#52606D";
+%     style     = "rounded,filled";
+%     fillcolor = "#F7F9FC";
+%     color     = "#CBD2D9";
+%     penwidth  = 1.0;
+%     margin    = 14;
+% 
+%     BidsD  [label="Only addresses visible\nuntil reveal window", fillcolor="#FFD1A6"];
+%     Chain  [label="Public chain\nCommit-reveal", fillcolor="#F4A6A6"];
+%     Verify [label="Matching & eligibility\nverifiable on-chain", fillcolor="#A0D6D1"];
+%     BidsD -> Chain [label="commitments", penwidth=1.5, color="#7B8794"];
+%     Chain -> Verify [penwidth=1.5, color="#7B8794"];
+%   }
+% }
+% ```
+% label=fig:trust_boundaries
+% caption=The two trust boundaries: centralized versus decentralized \NoesisMarket{}.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{08_decentralized_extension.tex.figs/08_decentralized_extension.1.png}
+  \caption{The two trust boundaries: centralized versus decentralized \NoesisMarket{}.}
+  \label{fig:trust_boundaries}
+\end{figure}
+% render_images:end
+
+% ==============================================================================
+\subsection{On-chain contracts, blind bidding, and anonymity}
+\label{sec:blind_bidding}
+
+The contract, bid, and ask notation of Section~\ref{sec:contracts_and_notation}
+carries over unchanged: a decentralized round still clears
+$(\ntasksattr, \clevelattr, \lmaxattr, \rminattr, \priceattr)$ tuples
+(Definition~\ref{def:contract}). What changes is how a bid or an ask is
+submitted and revealed.
+
+\begin{definition}[Blind bid]
+\label{def:blind_bid}
+A \emph{blind bid} for a bid $\beta = (n_\beta, c_\beta, \ell_\beta,
+r_\beta, p_\beta)$ (Definition~\ref{def:bid}) is a commitment
+$$
+  h_\beta = H(\beta \,\|\, \nu_\beta)
+$$
+posted on-chain during a round's \emph{commit window}, where $H$ is a
+collision-resistant hash function and $\nu_\beta$ is a secret salt known
+only to the bidder. During the round's subsequent \emph{reveal window},
+the bidder discloses $(\beta, \nu_\beta)$; only bids and asks revealed
+within that window, and matching a previously posted commitment, are
+eligible for the clearing problem (Problem~\ref{prob:clearing}) run at the
+round's close. An ask $\alpha$ is committed and revealed symmetrically.
+\end{definition}
+
+Definition~\ref{def:blind_bid} follows the commit-reveal pattern already
+used by ZK-Tulip's blind-bid mechanism, itself motivated by the same
+concern that motivates frequent batch auctions over continuous limit order
+books (Section~\ref{sec:related_auctions}): a party that can see pending
+bids before a round closes can front-run them, either by submitting a
+marginally better ask to snipe a favorable price, or, at the
+block-production layer, by reordering or censoring specific bids.
+Committing before revealing reduces the incentive to do so, at the cost of
+one additional round-trip and the mempool-monitoring risk flagged in
+Section~\ref{sec:decentralized_open_questions}: a party can still observe
+bids as they are revealed and submit a competing bid before the reveal
+window closes, unless that window is itself no longer than a single
+block.
+
+Anonymity is a byproduct of the same design: a buyer and a seller are
+identified on-chain only by an address, and, until the reveal window, not
+even the contents of their bid are visible. This does not, by itself,
+resolve \NoesisServer's own privacy question, what safeguards are needed
+before logging real prompt/response pairs (Section~\ref{sec:gateway_architecture}):
+fulfillment still requires a buyer's requests to reach a real seller
+off-chain, so anonymity here covers the auction, not the inference traffic
+that a cleared contract subsequently generates.
+
+Figure~\ref{fig:commit_reveal_sequence} traces one round through these
+three phases: during the commit window, bidders post the commitment
+$h_\beta = H(\beta \,\|\, \nu_\beta)$ (Definition~\ref{def:blind_bid});
+during the reveal window, they disclose $(\beta, \nu_\beta)$; and only
+revealed bids and asks matching a posted commitment are kept for the
+clearing problem (Problem~\ref{prob:clearing}) run at the round's close.
+
+% rendered_images:begin
+% ```graphviz
+% digraph CommitReveal {
+%   bgcolor="white";
+%   rankdir=TB;
+%   splines=spline;
+%   nodesep=0.35;
+%   ranksep=0.60;
+%   pad=0.30;
+% 
+%   node [shape=box, style="rounded,filled", fontname="Helvetica",
+%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
+%         color="#7B8794"];
+%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
+%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
+% 
+%   Commit [label="Commit window\nBidders post h = H(bid || salt)", fillcolor="#FFD1A6"];
+%   Reveal [label="Reveal window\nBidders disclose (bid, salt)", fillcolor="#F0E6FF"];
+%   Match  [label="Commitment check\nOnly matching, revealed bids kept", fillcolor="#B2E2B2"];
+%   Clear  [label="Clearing\nNoesisMarket clearing problem", fillcolor="#A0D6D1"];
+% 
+%   Commit -> Reveal -> Match -> Clear [penwidth=1.5, color="#7B8794"];
+% }
+% ```
+% label=fig:commit_reveal_sequence
+% caption=One auction round under commit-reveal.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{08_decentralized_extension.tex.figs/08_decentralized_extension.2.png}
+  \caption{One auction round under commit-reveal.}
+  \label{fig:commit_reveal_sequence}
+\end{figure}
+% render_images:end
+
+% ==============================================================================
+\subsection{Stake-backed fulfillment: slashing as decentralized reputation}
+\label{sec:stake_slashing}
+
+Section~\ref{sec:reputation}'s reputation score $\rho_\alpha(t)$ is a soft,
+ex post penalty enforced by a trusted operator: a seller who under-delivers
+is downgraded, but only the operator can act on that downgrade. A
+decentralized \NoesisMarket{} replaces, or complements, this with a hard,
+cryptoeconomic penalty.
+
+\begin{definition}[Staked ask]
+\label{def:staked_ask}
+A \emph{staked ask} extends an ask $\alpha$ (Definition~\ref{def:ask})
+with a stake $\sigma_\alpha \in \bbR_+$, denominated in a fixed token
+$\tau$, posted to an escrow contract at the time $\alpha$ is revealed. If
+$\alpha$ is matched into a contract $\kappa$, the stake is locked until
+the fulfillment window $W$ closes (Section~\ref{sec:fulfillment_monitoring}).
+It is released in full if $\kappa$ is not flagged as violated, i.e.,
+$\hat r_{\text{lower}}(\kappa, W) \geq \rminattr(\kappa)$
+(Equation~\eqref{eq:reliability_lower_bound}), and slashed, in full or in
+part, otherwise.
+\end{definition}
+
+Definition~\ref{def:staked_ask} still needs the report of
+$\hat r_{\text{lower}}(\kappa, W)$ itself, computed off-chain by
+\NoesisServer{} from delivered responses; slashing does not remove the
+need for fulfillment monitoring, it changes what happens once a violation
+is detected, from a reputation downgrade to an immediate, automatic,
+on-chain forfeiture. This is a stronger deterrent against the capability
+misrepresentation risk of Section~\ref{sec:mechanism_design_risks}
+precisely because it does not require the seller's continued
+participation in future rounds to take effect. How $\hat
+r_{\text{lower}}(\kappa, W)$ is reported on-chain in a form a smart
+contract can act on, rather than treating \NoesisServer{} itself as a
+trusted oracle, is left open in Section~\ref{sec:decentralized_open_questions}.
+
+Figure~\ref{fig:staked_ask_lifecycle} shows this lifecycle as a state
+diagram: the stake is posted when $\alpha$ is revealed, locked once
+matched into a contract $\kappa$, and released in full or slashed once
+$\hat r_{\text{lower}}(\kappa, W)$ is reported against $\rminattr(\kappa)$
+at the close of the fulfillment window.
+
+% rendered_images:begin
+% ```graphviz
+% digraph StakedAskLifecycle {
+%   bgcolor="white";
+%   rankdir=LR;
+%   splines=spline;
+%   nodesep=0.35;
+%   ranksep=0.80;
+%   pad=0.30;
+% 
+%   node [shape=box, style="rounded,filled", fontname="Helvetica",
+%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
+%         color="#7B8794"];
+%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
+%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
+% 
+%   Posted   [label="Posted\nAt reveal", fillcolor="#FFD1A6"];
+%   Locked   [label="Locked\nMatched into contract κ", fillcolor="#F0E6FF"];
+%   Released [label="Released in full\nCompliant", fillcolor="#B2E2B2"];
+%   Slashed  [label="Slashed, in full or in part\nViolated", fillcolor="#F4A6A6"];
+% 
+%   Posted -> Locked [label="matched", penwidth=1.5, color="#7B8794"];
+%   Locked -> Released [label="window W closes,\nr_lower >= R_min"];
+%   Locked -> Slashed [
+%     label="window W closes,\nr_lower < R_min",
+%     color="#B23A48", fontcolor="#B23A48"
+%   ];
+% }
+% ```
+% label=fig:staked_ask_lifecycle
+% caption=Lifecycle of a staked ask.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{08_decentralized_extension.tex.figs/08_decentralized_extension.3.png}
+  \caption{Lifecycle of a staked ask.}
+  \label{fig:staked_ask_lifecycle}
+\end{figure}
+% render_images:end
+
+Sizing $\sigma_\alpha$ raises the same asymmetry ZK-Tulip's design notes
+flag for its own per-bid stake: a buyer setting the required stake
+unilaterally can grief sellers by demanding collateral far in excess of
+the contract's value, while a buyer who is not itself bonded has nothing
+at risk if a matched contract turns out not to be genuine.
+Section~\ref{sec:decentralized_open_questions} returns to this.
+
+% ==============================================================================
+\subsection{Where the clearing problem runs}
+\label{sec:decentralized_matching_engine}
+
+Problem~\ref{prob:clearing} is a linear program over the revealed bids and
+asks in a tier bucket. Solving it naively on-chain, recomputing the
+clearing price and every matched quantity $x_{\beta\alpha}$ inside a smart
+contract, scales the gas cost of a round with $|B_c| \cdot |A_c|$, which
+is unattractive for a bucket with more than a handful of participants.
+Three placements are possible.
+
+\begin{itemize}
+  \item \textbf{Fully on-chain}: the clearing problem is solved inside the
+    smart contract itself. Trust-minimized by construction, but the gas
+    cost above makes it impractical beyond small buckets.
+
+  \item \textbf{Fully off-chain}: a designated operator solves
+    Problem~\ref{prob:clearing} off-chain and posts only the result,
+    $p^*(c, t)$ and the matched contracts. Cheap, but reintroduces the
+    single trusted operator that Section~\ref{sec:decentralized_motivation}
+    set out to remove: nothing on-chain prevents the operator from posting
+    an incorrect or self-favoring solution.
+
+  \item \textbf{Verifiably off-chain}: an off-chain solver computes
+    $p^*(c, t)$ and $\{x_{\beta\alpha}\}$ as before, but additionally
+    produces a succinct proof $\phi$ that the solution satisfies the
+    feasibility constraints of Problem~\ref{prob:clearing}
+    (Equations~\eqref{eq:buyer_quantity}--\eqref{eq:price_limit}) and
+    leaves no compatible pair unmatched at a price both sides would
+    accept. A smart contract verifies $\phi$ in time independent of
+    $|B_c| + |A_c|$ and only then finalizes the round.
+\end{itemize}
+
+The third option is the one ZK-Tulip's design notes gesture at when they
+ask whether the matchmaking engine can run partially off-chain with a
+zero-knowledge property showing the solution is correct, and it is the
+option that preserves both the trust-minimization goal of
+Section~\ref{sec:decentralized_motivation} and the practicality of the
+fully-off-chain design. It is also the least developed of the three:
+producing a succinct, efficiently verifiable proof of optimality for a
+linear assignment problem, rather than merely of feasibility, is itself an
+open implementation question, listed in
+Section~\ref{sec:decentralized_open_questions}.
+
+Figure~\ref{fig:clearing_placement_spectrum} spans the three placements
+along this spectrum, from trust-minimized and expensive to cheap and
+trusted: the verifiably-off-chain placement is the least developed of the
+three but is the only one that preserves trust-minimization without the
+gas cost of solving Problem~\ref{prob:clearing} on-chain.
+
+% rendered_images:begin
+% ```tikz
+% \definecolor{ptcolor}{RGB}{74,110,168}
+% \draw[very thick, ->, >=stealth] (0.3,0) -- (10.7,0);
+% \node[anchor=west, align=left, font=\footnotesize] at (0,-0.9) {trust-minimized,\\expensive};
+% \node[anchor=east, align=right, font=\footnotesize] at (11,-0.9) {cheap,\\trusted};
+% \filldraw[ptcolor] (1.2,0) circle (3pt);
+% \node[align=center, font=\footnotesize] at (1.2,1.1) {fully on-chain\\(gas cost scales\\with $|B_c|\cdot|A_c|$)};
+% \filldraw[ptcolor] (5.5,0) circle (3pt);
+% \node[align=center, font=\footnotesize] at (5.5,1.4) {verifiably off-chain\\(succinct proof of\\feasibility; least developed)};
+% \filldraw[ptcolor] (9.8,0) circle (3pt);
+% \node[align=center, font=\footnotesize] at (9.8,1.1) {fully off-chain\\(operator posts\\the result only)};
+% ```
+% label=fig:clearing_placement_spectrum
+% caption=The three placements for the clearing problem, on a trust/cost spectrum.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{08_decentralized_extension.tex.figs/08_decentralized_extension.4.png}
+  \caption{The three placements for the clearing problem, on a trust/cost spectrum.}
+  \label{fig:clearing_placement_spectrum}
+\end{figure}
+% render_images:end
+
+% ==============================================================================
+\subsection{Redundancy as a decentralization safeguard}
+\label{sec:decentralized_redundancy}
+
+A single seller's downtime is a single point of failure for the contract
+that seller was matched into. ZK-Tulip's design notes address the
+analogous risk, a single prover failing to deliver a proof in time, with a
+redundancy parameter: a requester can choose to have $k_{\text{red}} \geq
+1$ provers race for the same job, each staking collateral, with only the
+first, or, in an auction variant, the top few, to deliver being paid.
+
+The same parameter adapts directly to a decentralized \NoesisMarket: a
+contract can be matched against $k_{\text{red}}$ staked asks instead of
+one, with traffic split or raced across them during the fulfillment
+window, and only the sellers who meet the contract's terms retaining their
+stake. This is a different lever from answer fusion
+(Section~\ref{sec:fusion}): fusion queries several providers per request
+to improve the quality of a single answer, while redundancy here queries
+several providers to hedge against any one of them being unavailable or
+slashed, and is a settlement-layer property rather than an answer-quality
+one. Redundancy also gives the market a tool against the concentration
+risk noted in Section~\ref{sec:mechanism_design_risks}'s discussion of
+thin, collusion-prone tier buckets: instead of always matching a buyer's
+full volume against the single lowest-priced compatible ask, a
+decentralized \NoesisMarket{} can split it across the $k_{\text{red}}$
+lowest-priced compatible asks, so that the same top seller does not
+deterministically win every round in a thin bucket.
+
+Figure~\ref{fig:redundancy_racing} contrasts a redundant match with the
+single-ask baseline: instead of matching a contract against a single
+staked ask, it is matched against $k_{\text{red}}$ staked asks that race
+to fulfill it, and only the sellers who meet the contract's terms retain
+their stake, hedging against any one seller being unavailable or slashed.
+
+% rendered_images:begin
+% ```graphviz
+% digraph Redundancy {
+%   bgcolor="white";
+%   rankdir=TB;
+%   splines=spline;
+%   nodesep=0.35;
+%   ranksep=0.60;
+%   pad=0.30;
+% 
+%   node [shape=box, style="rounded,filled", fontname="Helvetica",
+%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
+%         color="#7B8794"];
+%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
+%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
+% 
+%   subgraph cluster_single {
+%     label     = "Single-ask match (k_red = 1)";
+%     labelloc  = "t";
+%     fontname  = "Helvetica-Bold";
+%     fontsize  = 12;
+%     fontcolor = "#52606D";
+%     style     = "rounded,filled";
+%     fillcolor = "#F7F9FC";
+%     color     = "#CBD2D9";
+%     penwidth  = 1.0;
+%     margin    = 14;
+% 
+%     ContractS [label="contract κ", fillcolor="#A6C8F4"];
+%     AskS      [label="one staked ask", fillcolor="#C6A6F4"];
+%     ContractS -> AskS [penwidth=1.5, color="#7B8794"];
+%   }
+% 
+%   subgraph cluster_redundant {
+%     label     = "Redundant match (k_red > 1)";
+%     labelloc  = "t";
+%     fontname  = "Helvetica-Bold";
+%     fontsize  = 12;
+%     fontcolor = "#52606D";
+%     style     = "rounded,filled";
+%     fillcolor = "#F7F9FC";
+%     color     = "#CBD2D9";
+%     penwidth  = 1.0;
+%     margin    = 14;
+% 
+%     ContractR [label="contract κ", fillcolor="#A6C8F4"];
+%     Ask1      [label="staked ask 1", fillcolor="#C6A6F4"];
+%     Ask2      [label="staked ask 2", fillcolor="#C6A6F4"];
+%     Ask3      [label="staked ask k_red", fillcolor="#C6A6F4"];
+%     ContractR -> Ask1 [label="race"];
+%     ContractR -> Ask2 [label="race"];
+%     ContractR -> Ask3 [label="race"];
+%   }
+% }
+% ```
+% label=fig:redundancy_racing
+% caption=Redundancy as a decentralization safeguard.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{08_decentralized_extension.tex.figs/08_decentralized_extension.5.png}
+  \caption{Redundancy as a decentralization safeguard.}
+  \label{fig:redundancy_racing}
+\end{figure}
+% render_images:end
+
+% ==============================================================================
+\subsection{Comparison with the centralized design}
+\label{sec:decentralized_comparison}
+
+Table~\ref{tab:decentralized_comparison} summarizes the trade-off between
+the centralized \NoesisMarket{} of Section~\ref{sec:noesis_market} and the
+decentralized variant sketched above.
+
+\begin{samepage}
+  \begin{table}[H]
+    \centering
+    \begin{tabular}{l|c|c|}
+                                                & \emph{Centralized \NoesisMarket} & \emph{Decentralized \NoesisMarket} \\
+      \hline
+      Clearing requires a trusted operator      & \nbad     & \ngood    \\
+      \hline
+      Bidder identity and volume kept private   & \nbad     & \ngood    \\
+      \hline
+      Non-performance penalty is automatic      & \npartial & \ngood    \\
+      \hline
+      Settlement latency and cost               & \ngood    & \npartial \\
+      \hline
+      Capability quality independently verified & \nbad     & \nbad     \\
+      \hline
+    \end{tabular}
+    \caption{Trade-offs between the centralized \NoesisMarket{} of
+      Section~\ref{sec:noesis_market} and the decentralized, blind-bid
+      variant sketched in this section.}
+    \label{tab:decentralized_comparison}
+  \end{table}
+\end{samepage}
+
+The last row is deliberately unchanged across both designs: staking
+(Section~\ref{sec:stake_slashing}) makes non-fulfillment costly, but it
+does not, by itself, make the delivered capability $\hat c(x)$
+(Section~\ref{sec:fulfillment_monitoring}) any more verifiable than it is
+in the centralized design. This is the same gap
+Section~\ref{sec:related_dex} identifies relative to Tulip: a token
+transfer settles atomically on-chain, but an LLM response's quality is
+estimated, not settled, whichever design clears the contract that produced
+it.
+
+% ==============================================================================
+\subsection{Open questions specific to the decentralized design}
+\label{sec:decentralized_open_questions}
+
+\begin{enumerate}
+  \item \textbf{Bid and price discovery for a new market}: with no trading
+    history, neither a buyer nor a seller has a reference price to anchor
+    a bid or an ask to; whether the first rounds of a new tier bucket need
+    a different mechanism, e.g., a wider price band or a subsidized
+    bootstrap period, than the steady-state design above is unresolved.
+
+  \item \textbf{Reveal-window griefing}: a blind bid
+    (Definition~\ref{def:blind_bid}) is visible to on-chain observers once
+    revealed; a party monitoring the mempool during the reveal window can
+    still submit a competing bid or ask before the window closes, unless
+    the window is bounded to a single block, which in turn bounds how many
+    participants can feasibly reveal in time.
+
+  \item \textbf{Commitment without capability}: nothing in
+    Definition~\ref{def:blind_bid} stops a seller from committing an ask
+    it cannot actually fulfill within $\lmaxattr$, since the stake
+    $\sigma_\alpha$ is only forfeited after the fact; whether a smaller,
+    non-refundable commitment fee at bid time is needed to discourage
+    speculative asks is open.
+
+  \item \textbf{Stake sizing and asymmetry}: whether the stake
+    $\sigma_\alpha$ required of a seller (Section~\ref{sec:stake_slashing})
+    should be set unilaterally by the buyer's bid, which risks the buyer
+    demanding excessive collateral, or by a market-wide rule tied to the
+    contract's price, and whether the buyer should also be required to
+    post a bond so that an under-collateralized buyer cannot costlessly
+    request contracts it does not intend to honor payment for.
+
+  \item \textbf{Sybil resistance}: whether stake-and-slash
+    (Section~\ref{sec:stake_slashing}) is by itself a sufficient deterrent
+    against a seller re-entering under a new address after being slashed,
+    or whether a Sybil-resistant identity layer is still needed on top, in
+    tension with the anonymity goal of Section~\ref{sec:decentralized_motivation}.
+
+  \item \textbf{Redundancy defaults}: whether $k_{\text{red}}$
+    (Section~\ref{sec:decentralized_redundancy}) should default to 1, as
+    in ZK-Tulip's design notes, and be raised only at the buyer's request
+    and expense, or whether the market itself should raise it
+    automatically in thin, collusion-prone buckets.
+
+  \item \textbf{Verifiable optimality}: whether a succinct proof of
+    clearing-problem optimality, not merely feasibility
+    (Section~\ref{sec:decentralized_matching_engine}), is practical to
+    generate and verify at the scale of a real tier bucket, or whether the
+    design must settle for verified feasibility and accept a centralized
+    operator's word on optimality.
+\end{enumerate}
