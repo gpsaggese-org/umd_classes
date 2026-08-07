@@ -58,7 +58,7 @@ Total: 22 published blogs
 
 - `website/docs/blog/posts/draft.in_30_mins.helpers_hllm_decorator.md`
 
-- `lint_txt.py`
+- `lint_text.py`
 - `linters2/lint.py`
 - `linters2/lint_cc.py`
 

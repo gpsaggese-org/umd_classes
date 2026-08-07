@@ -7,11 +7,12 @@ Generate comprehensive table of contents for book from lecture slides.
 - Extracts the table of contents from each lesson file
 - Combines them into a single output markdown file.
 
-Usage:
-# Generate a table of contents with headers up to level 2 (H1-H2 only)
+# Usage Example
+
+- Generate a table of contents with headers up to level 2 (H1-H2 only):
 > create_book_toc_from_slides.py --output book_toc.md --max_level 2
 
-# Generate a table of contents with headers up to level 5 (full depth)
+- Generate a table of contents with headers up to level 5 (full depth):
 > create_book_toc_from_slides.py --output book_toc.md --max_level 5
 """
 
@@ -65,7 +66,11 @@ def _extract_chapters_and_lessons(
             # Save previous chapter.
             if current_chapter_title:
                 chapters.append(
-                    (current_chapter_title, current_chapter_header, current_lessons)
+                    (
+                        current_chapter_title,
+                        current_chapter_header,
+                        current_lessons,
+                    )
                 )
             current_chapter_title = match.group(2)
             current_chapter_header = line
@@ -247,9 +252,7 @@ def _create_book_toc(
     :param max_number: Maximum number of chapters (h2 headers) to include
         - Default: 0 (include all chapters)
     """
-    _LOG.debug(
-        hprint.to_str("book_map_file output_file max_level max_number")
-    )
+    _LOG.debug(hprint.to_str("book_map_file output_file max_level max_number"))
     # Validate input file exists.
     hdbg.dassert_file_exists(book_map_file)
     # Extract chapters and lessons.

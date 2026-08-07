@@ -1,0 +1,248 @@
+% ##############################################################################
+\section{How an intelligence market creates value}
+\label{sec:market_design}
+
+To motivate the design choices made in the rest of the paper, we step back
+and consider the participants, roles, and the central design difficulty of
+a market for machine intelligence.
+
+% ==============================================================================
+\subsection{Market participants}
+\label{sec:market_participants}
+
+The demand side of the market is made of applications and autonomous agents
+that consume LLM inference as an input: a customer-support agent, a
+document-summarization pipeline, a coding assistant, or a multi-agent
+system delegating a sub-task. These participants differ along several
+dimensions:
+
+\begin{itemize}
+  \item How much they value low latency.
+  \item How much they value a low error rate.
+  \item How price-sensitive they are.
+  \item How much of their traffic is predictable in advance versus bursty.
+\end{itemize}
+
+The supply side is made of model and compute providers: foundation-model
+API vendors, open-weight model hosts, and resellers of spare inference
+capacity. Sellers differ along several dimensions:
+
+\begin{itemize}
+  \item The capability tier of the models they can serve.
+  \item Their typical latency and reliability under load.
+  \item Their marginal cost of serving a request, which itself depends on
+    hardware utilization and contractual commitments elsewhere.
+\end{itemize}
+
+As in any market, the opportunity to trade arises from these differences:
+a buyer with a latency-insensitive, cost-sensitive batch job and a seller
+with idle capacity outside of peak hours can both be made better off by a
+contract that a rigid, single posted price cannot express.
+
+Figure~\ref{fig:two_sided_market} lays out both sides and the dimensions
+along which their participants differ: demand-side participants differ
+along latency sensitivity, error tolerance, price sensitivity, and traffic
+predictability, while supply-side participants differ along capability
+tier, latency/reliability under load, and marginal cost, and
+\NoesisMarket{} is the meeting point where bids and asks expressing these
+differences are matched into contracts.
+
+% TODO(ai_gp): Align Demand and Supply horizontally (with the description
+% below) so it's more compact
+
+% rendered_images:begin
+% ```graphviz
+% digraph TwoSidedMarket {
+%   bgcolor="white";
+%   rankdir=LR;
+%   splines=spline;
+%   nodesep=1.0;
+%   ranksep=0.70;
+%   pad=0.30;
+% 
+%   node [shape=box, style="rounded,filled", fontname="Helvetica",
+%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
+%         color="#7B8794"];
+%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
+%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
+% 
+%   subgraph cluster_demand {
+%     label     = "Demand side";
+%     labelloc  = "t";
+%     fontname  = "Helvetica-Bold";
+%     fontsize  = 12;
+%     fontcolor = "#52606D";
+%     style     = "rounded,filled";
+%     fillcolor = "#F7F9FC";
+%     color     = "#CBD2D9";
+%     penwidth  = 1.0;
+%     margin    = 14;
+% 
+%     Demand [label="Applications / agents", fillcolor="#F4A6A6"];
+%     DemandDims [label="Latency sensitivity\nError tolerance\nPrice sensitivity\nTraffic predictability",
+%                 shape=note, fillcolor="#F0E6FF"];
+%     Demand -> DemandDims [style=dashed, arrowhead=none];
+%   }
+% 
+%   Market [label="NoesisMarket\nMeeting point", fillcolor="#A0D6D1"];
+% 
+%   subgraph cluster_supply {
+%     label     = "Supply side";
+%     labelloc  = "t";
+%     fontname  = "Helvetica-Bold";
+%     fontsize  = 12;
+%     fontcolor = "#52606D";
+%     style     = "rounded,filled";
+%     fillcolor = "#F7F9FC";
+%     color     = "#CBD2D9";
+%     penwidth  = 1.0;
+%     margin    = 14;
+% 
+%     Supply [label="Model & compute providers", fillcolor="#FFD1A6"];
+%     SupplyDims [label="Capability tier\nLatency / reliability under load\nMarginal cost",
+%                 shape=note, fillcolor="#F0E6FF"];
+%     Supply -> SupplyDims [style=dashed, arrowhead=none];
+%   }
+% 
+%   Demand -> Market [label="bids", penwidth=1.5, color="#7B8794"];
+%   Supply -> Market [label="asks", penwidth=1.5, color="#7B8794"];
+% }
+% ```
+% label=fig:two_sided_market
+% caption=The two-sided \Noesis{} market: demand and supply meeting at \NoesisMarket{}.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{02_market_design.tex.figs/02_market_design.1.png}
+  \caption{The two-sided \Noesis{} market: demand and supply meeting at \NoesisMarket{}.}
+  \label{fig:two_sided_market}
+\end{figure}
+% render_images:end
+
+% ==============================================================================
+\subsection{Roles of an intelligence market}
+\label{sec:market_roles}
+
+An intelligence market, like any exchange, has to perform several
+functions beyond simply connecting a buyer to a seller:
+
+\begin{itemize}
+  \item Provide a common meeting ground where buyers and sellers can
+    express demand and supply without prior bilateral negotiation.
+  \item Establish a standardized contract schema (Section~\ref{sec:contract})
+    so that a bid and an ask submitted by unrelated parties are directly
+    comparable.
+  \item Provide oversight by metering whether a matched contract was
+    actually fulfilled, a role played in \Noesis{} by \NoesisServer{}
+    rather than by a separate compliance function.
+  \item Generate reusable market data: clearing prices per tier and round,
+    and, as a byproduct of fulfillment monitoring, a record of measured
+    provider performance over time.
+  \item Disseminate that clearing-price data in real time to participants
+    and downstream systems, through the pricing-dissemination component
+    introduced in Section~\ref{sec:modularity}, rather than requiring them
+    to poll \NoesisMarket{} or wait for the next round.
+\end{itemize}
+
+As in traditional exchanges, we expect the market to be compensated for
+this value creation through a small fee on cleared volume; we do not
+formalize a fee schedule in this paper.
+
+% ==============================================================================
+\subsection{The bundling problem: quoting quality, not just quantity}
+\label{sec:bundling}
+
+The central design difficulty is choosing what, precisely, is being
+bought and sold. A market for a homogeneous good only needs to clear on
+price and quantity. Machine intelligence is not homogeneous: the same
+nominal price per request can correspond to wildly different quality, and
+the same underlying compute can be used to answer the same request at very
+different quality depending on the model and routing policy used to serve
+it.
+
+This is analogous to the base/quote asymmetry that a token-exchange
+protocol must resolve before a limit order is even well-defined: a limit
+order only makes sense once one has fixed which token plays the role of
+quantity and which plays the role of price. \Noesis{} faces a similar
+prior question: before a bid or an ask can be written down, the protocol
+must fix what a unit of ``intelligence'' is (Section~\ref{sec:task_unit})
+and what accompanies that unit as a quality specification. We adopt the
+position that quality should be expressed along three largely orthogonal
+axes:
+
+\begin{itemize}
+  \item \textbf{Capability}: how good the answer is expected to be,
+    expressed as a discrete tier rather than a continuous score, since
+    tiers are what providers can credibly commit to and what buyers can
+    reason about.
+  \item \textbf{Latency}: an upper bound on the time to produce an answer.
+  \item \textbf{Reliability}: the fraction of requests that meet both the
+    capability and latency terms.
+\end{itemize}
+
+Figure~\ref{fig:bundle_axes} makes this contrast visually concrete:
+\Noesis{}'s traded unit is a bundle along three largely orthogonal axes,
+capability, latency, and reliability, contrasted with a conventional
+single-scalar good quoted purely on price per token.
+
+% rendered_images:begin
+% ```tikz
+% \definecolor{goodcolor}{RGB}{160,214,209}
+% \definecolor{axiscolor}{RGB}{74,110,168}
+% \node[draw, rounded corners, fill=goodcolor, minimum width=2.8cm, minimum height=1cm, font=\small, align=center] (bundle) at (0,0) {traded unit\\(capability, latency,\\reliability)};
+% \draw[->, >=stealth, thick, axiscolor] (bundle.north) -- ++(0,1.1) node[above, font=\footnotesize, align=center] {capability};
+% \draw[->, >=stealth, thick, axiscolor] (bundle.east) -- ++(1.2,0.6) node[right, font=\footnotesize, align=center] {latency bound};
+% \draw[->, >=stealth, thick, axiscolor] (bundle.east) -- ++(1.2,-0.6) node[right, font=\footnotesize, align=center] {reliability};
+% \node[above, font=\footnotesize\bfseries] at (0,2.0) {three-axis quality bundle};
+% \draw[dashed, gray] (4.3,-2.2) -- (4.3,2.4);
+% \node[draw, rounded corners, fill=goodcolor, minimum width=2.8cm, minimum height=1cm, font=\small, align=center] (scalar) at (7.4,0) {traded unit\\(price per token)};
+% \draw[->, >=stealth, thick, axiscolor] (scalar.east) -- ++(1.2,0) node[right, font=\footnotesize, align=center] {price};
+% \node[above, font=\footnotesize\bfseries] at (7.4,2.0) {single-scalar good};
+% ```
+% label=fig:bundle_axes
+% caption=A three-axis quality bundle versus a single-scalar good.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{02_market_design.tex.figs/02_market_design.2.png}
+  \caption{A three-axis quality bundle versus a single-scalar good.}
+  \label{fig:bundle_axes}
+\end{figure}
+% render_images:end
+
+Section~\ref{sec:contract} turns this into a formal contract. The
+consequence of this design choice is that the market cannot clear on price
+alone: two asks at the same price but different tiers are not
+substitutes, and matching must first establish compatibility along these
+three axes before price discovery can proceed
+(Section~\ref{sec:compatibility}).
+
+% ==============================================================================
+\subsection{Related commodity markets}
+\label{sec:related_commodity_markets}
+
+Electricity markets are the closest existing analogy. Electricity cannot
+be usefully stored at scale, demand and supply must be balanced
+continuously, and quality (voltage, frequency) is metered rather than
+taken on faith. Electricity markets address this with a layered design:
+day-ahead markets clear the bulk of expected demand a day in advance,
+real-time markets clear residual imbalances close to delivery, and
+separate capacity markets pay generators for being available rather than
+for energy delivered, penalizing non-delivery when it matters most
+\cite{stoft2002, cramton2017}. \Noesis{}'s tiered call auction
+(Section~\ref{sec:noesis_market}) borrows the day-ahead/real-time
+separation as a candidate design (discussed further as an open question in
+Section~\ref{sec:open_questions}), and its reputation and pricing feedback
+loop (Section~\ref{sec:reputation}) borrows directly from capacity-market
+non-performance penalties \cite{cramtonstoft2005}.
+
+The analogy is imperfect in one important respect: electricity's quality
+attributes (voltage, frequency) are physical and essentially free to
+meter, while machine intelligence's capability attribute is not directly
+observable and can only be estimated from the content of a response. This
+is the problem that \NoesisServer{}'s fulfillment monitoring
+(Section~\ref{sec:fulfillment_monitoring}) has to solve.
+
+% TODO(gp): Add a timeline figure comparing electricity market layering
+% (day-ahead / real-time / capacity markets) against Noesis's periodic
+% tiered call auction, to make the borrowed structure concrete.
