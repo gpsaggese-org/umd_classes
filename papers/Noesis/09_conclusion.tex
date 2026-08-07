@@ -1,0 +1,31 @@
+% ##############################################################################
+\section{Conclusion}
+\label{sec:conclusion}
+
+We have described \Noesis, a protocol that treats machine intelligence as
+a fungible, but not homogeneous, commodity, and that organizes its
+exchange around two cooperating components: \NoesisMarket, a periodic
+call auction that clears bids and asks bundling capability, latency, and
+reliability into a single contract, and \NoesisServer, the gateway that
+executes those contracts, meters whether they were fulfilled, and reuses
+the resulting traffic for difficulty-aware routing, answer fusion, and
+distillation. We formalized the contract and auction notation, stated the
+market-clearing problem as a linear program, established existence of a
+clearing price under a completeness assumption on the compatibility
+graph, and proposed a hypothesis-testing approach to distinguishing
+genuine contract violations from sampling noise.
+
+The design suggests that the two problems, price discovery for a bundled
+quality good and verified fulfillment of that good, are naturally
+complementary: a market without fulfillment monitoring has no way to
+enforce what was sold, and a fulfillment layer without a market has no
+price signal to feed back into. We have not, however, evaluated this
+design against real traffic, real providers, or strategic sellers, and
+Section~\ref{sec:mechanism_design_risks} makes clear that the mechanism's
+robustness to bid shading, capability misrepresentation, and collusion is
+an open question rather than a settled property. The open questions of
+Section~\ref{sec:open_questions} and the milestone sequence of
+Section~\ref{sec:roadmap} are intended as a concrete, incremental path
+toward closing that gap, starting from components, an auction simulator
+and a logging proxy, that are each independently useful and testable
+before the full closed loop is attempted.

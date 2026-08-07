@@ -9,7 +9,7 @@
 
 ## Solution
 
-### PR1: [ ] Minimal passthrough proxy with logging
+### PR1: [x] Minimal passthrough proxy with logging
 - Support 2-3 providers behind one API
 - Define the storage schema for prompt, response, and metadata (provider,
   model, latency, cost)

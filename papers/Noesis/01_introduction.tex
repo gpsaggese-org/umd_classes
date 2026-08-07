@@ -1,0 +1,217 @@
+\title{Noesis: A Protocol for Trading and Fulfilling Machine Intelligence as a Commodity}
+
+\author{Giacinto Paolo Saggese$^{*}$}
+\thanks{$^{*}$ Causify.AI, The University of Maryland, College Park, MD 20742,
+USA, gsaggese@umd.edu}
+
+\date{\today}
+
+\begin{abstract}
+Applications and autonomous agents increasingly consume large language model
+(LLM) inference as a raw input, in the same way that factories consume
+electricity. Today this input is purchased through static, per-model price
+lists set unilaterally by a small number of providers, with no price
+discovery, no verification that the delivered service matched what was
+paid for, and no mechanism to route a request to only as much capability as
+it actually requires. We propose \Noesis, a protocol that treats machine
+intelligence as a fungible commodity and organizes its exchange around two
+cooperating components. \NoesisMarket{} is a periodic call auction that
+matches buyers, who bid for a bundle of task volume, capability tier,
+latency, and reliability, against sellers, who ask a price for delivering
+that bundle, clearing at a single uniform price per capability tier.
+\NoesisServer{} is the fulfillment and monitoring layer: an API gateway
+that executes the matched contracts against real model providers, meters
+whether the delivered capability, latency, and reliability met the
+contracted terms, and feeds the result back into the market as a
+reputation and pricing signal. As a byproduct, \NoesisServer{} logs every
+request and estimates how much capability each request actually needs,
+enabling difficulty-aware routing and answer fusion that trade cost for
+accuracy in opposite directions, and enabling distillation of the
+collected data into smaller, cheaper models. We formalize the contract,
+bid, and ask notation; state the market-clearing problem as a linear
+program and establish that a clearing price exists under standard
+monotonicity assumptions; and describe the request-level fulfillment
+statistics needed to attribute a shortfall to a specific seller rather
+than to noise. We compare \Noesis{} against direct provider APIs,
+pass-through gateways, and raw-compute spot markets, and lay out the open
+mechanism-design questions and a phased implementation plan for a
+prototype.
+\end{abstract}
+
+\maketitle
+
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+% ##############################################################################
+\section{Introduction}
+\label{sec:introduction}
+
+\Noesis{} is a protocol for exchanging machine intelligence, understood as
+LLM inference capacity delivered at a stated capability, latency, and
+reliability level, between buyers who need it and sellers who supply it. It
+brings together price discovery through an open auction, a contract that
+bundles quality attributes rather than a single price-per-token, and a
+fulfillment layer that measures and reports whether the contract was
+actually honored.
+
+% ==============================================================================
+\subsection{Machine intelligence as a commodity}
+\label{sec:intelligence_as_commodity}
+
+Electricity, natural gas, and bandwidth all share a property that makes them
+tradeable as commodities: any unit supplied by any seller is, for practical
+purposes, interchangeable with any unit supplied by any other seller, once
+quality attributes (voltage and frequency for electricity, calorific value
+for gas, latency and jitter for bandwidth) are specified and metered.
+LLM inference exhibits a version of the same property. A request answered at
+a stated capability tier, under a stated latency bound, with a stated
+reliability, is, from the buyer's perspective, largely interchangeable
+across providers that can meet those terms, even though the underlying
+models, weights, and hardware differ completely.
+
+Unlike electricity, however, the traded unit cannot be reduced to a single
+scalar such as kilowatt-hours. Raw compute, measured in FLOPs or GPU-hours,
+is observable but is not what a buyer wants to purchase: two providers can
+spend the same compute on the same request and produce answers of very
+different quality, and a buyer typically does not know, or care, how much
+compute was spent to produce a given answer. The good that a buyer actually
+wants to buy is better described as a bundle: a capability level (how good
+the answer is expected to be), a latency bound (how long the answer takes),
+and a reliability level (how often the first two conditions are actually
+met). Section~\ref{sec:bundling} returns to this point, which drives most
+of the protocol's design.
+
+% ==============================================================================
+\subsection{The Noesis protocol}
+\label{sec:protocol_overview}
+
+\Noesis{} is organized around two cooperating components.
+
+\begin{itemize}
+  \item \textbf{\NoesisMarket}: a periodic call auction that matches buyers
+    and sellers into contracts. Every $T$ minutes, buyers submit bids and
+    sellers submit asks, bucketed by capability tier; within each tier, bids
+    and asks are matched at a single uniform clearing price, subject to
+    latency and reliability compatibility (Section~\ref{sec:noesis_market}).
+
+  \item \textbf{\NoesisServer}: the fulfillment and monitoring layer. It is
+    an LLM API gateway, modeled on multi-provider routers such as
+    OpenRouter\footnote{\url{https://openrouter.ai}}, that executes the
+    requests matched by a \NoesisMarket{} contract against the underlying
+    providers, logs every prompt/response pair, and measures whether the
+    delivered capability, latency, and reliability met the contract terms.
+    Violations are reported back to \NoesisMarket{} as a reputation and
+    pricing signal (Section~\ref{sec:noesis_server}).
+\end{itemize}
+
+The two components close a loop that is missing from today's LLM API
+market: a contract is not merely sold, it is metered, and the metering
+result changes the terms under which the same seller can sell in the
+future. \NoesisServer{} additionally reuses the logged traffic for two
+purposes orthogonal to fulfillment: difficulty-aware routing, which sends a
+request to the cheapest provider expected to satisfy it, and answer fusion,
+which combines several providers' answers when higher reliability is worth
+the extra cost.
+
+% ==============================================================================
+\subsection{Contributions}
+\label{sec:contributions}
+
+The innovative features of \Noesis{} are:
+
+\begin{enumerate}
+  \item \textbf{Price discovery through auction, not price lists}:
+    \NoesisMarket{} clears buyers and sellers through a periodic call
+    auction instead of relying on prices unilaterally posted by a small
+    number of providers.
+
+  \item \textbf{A bundled, verifiable good}: the traded unit is a
+    (capability, latency, reliability) bundle rather than a raw compute
+    quantity, so the market quotes and clears on ``how good'', not only
+    ``how much''.
+
+  \item \textbf{Verified fulfillment}: \NoesisServer{} meters every
+    request executed under a contract and computes a measured reliability
+    and latency, so a contract's terms are checked against evidence rather
+    than taken on faith.
+
+  \item \textbf{Reputation and pricing feedback}: a seller whose measured
+    performance falls short of its ask is flagged, and the resulting
+    reputation signal feeds back into eligibility and pricing in future
+    auction rounds, in the spirit of non-performance penalties in capacity
+    markets.
+
+  \item \textbf{Difficulty-aware routing}: \NoesisServer{} estimates how
+    much capability a request actually needs and routes accordingly,
+    spending intelligence only where it is needed.
+
+  \item \textbf{Answer fusion as a complementary mode}: for requests where
+    reliability matters more than cost, \NoesisServer{} can query several
+    providers and combine their answers, trading cost for accuracy in the
+    direction opposite to routing.
+
+  \item \textbf{A reusable byproduct dataset}: every logged
+    prompt/response pair is available for evaluation and distillation,
+    without the market or the buyer having to do anything beyond normal
+    use of the protocol.
+
+  \item \textbf{Provider-agnostic liquidity pooling}: many sellers compete
+    for the same demand behind a single interface, instead of buyers being
+    locked into a single provider's price list.
+
+  \item \textbf{Tiered commodity pricing}: capability tiers clear
+    independently in each auction round, analogous to peak and off-peak
+    pricing in electricity markets.
+\end{enumerate}
+
+% ==============================================================================
+\subsection{Comparison with alternative solutions}
+\label{sec:comparison_table}
+
+Table~\ref{tab:comparison} compares \Noesis{} against three alternative ways
+of obtaining LLM inference: calling a provider's API directly, using a
+pass-through multi-provider gateway (e.g., OpenRouter-style routers), and
+buying raw compute on a cloud spot market (e.g., spot GPU instances). The
+comparison is discussed in detail in Sections~\ref{sec:market_design}
+through \ref{sec:noesis_server}.
+
+\begin{samepage}
+  \begin{table}[H]
+    \centering
+    \begin{tabular}{l|c|c|c|c|}
+                                              & \emph{Direct API} & \emph{Gateway} & \emph{Spot compute} & \emph{\Noesis} \\
+      \hline
+      Price discovery via open auction       & \nbad             & \nbad          & \ngood               & \ngood         \\
+      \hline
+      Bundled quality guarantee              & \npartial         & \npartial      & \nbad                & \ngood         \\
+      \hline
+      Verified fulfillment / SLA monitoring  & \nbad             & \nbad          & \npartial             & \ngood         \\
+      \hline
+      Reputation-based accountability        & \nbad             & \nbad          & \npartial             & \ngood         \\
+      \hline
+      Difficulty-aware cost routing          & \nbad             & \npartial      & \nbad                 & \ngood         \\
+      \hline
+      Multi-provider liquidity pooling       & \nbad             & \ngood         & \npartial             & \ngood         \\
+      \hline
+      Reusable evaluation/training dataset   & \npartial         & \npartial      & \nbad                 & \ngood         \\
+      \hline
+      Single-API ease of integration         & \ngood            & \ngood         & \nbad                 & \ngood         \\
+      \hline
+    \end{tabular}
+    \caption{Comparison of \Noesis{} against alternative ways of obtaining
+      LLM inference.}
+    \label{tab:comparison}
+  \end{table}
+\end{samepage}
+
+Cloud spot markets already apply auction-based price discovery, but to raw
+compute rather than to a capability/latency/reliability bundle, so they
+score poorly on the bundled-quality and difficulty-routing rows: a spot GPU
+market has no notion of ``how good'' the resulting answer is. Gateways pool
+liquidity across providers and are easy to integrate, but set prices
+unilaterally rather than clearing an auction, and typically do not meter
+fulfillment against a contract. \Noesis{} is designed to combine the
+liquidity pooling and ease-of-integration of a gateway with the price
+discovery of an auction market and the verifiability of a metered service
+contract.

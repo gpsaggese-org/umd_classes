@@ -1,0 +1,201 @@
+% ##############################################################################
+\section{NoesisServer: fulfillment and monitoring}
+\label{sec:noesis_server}
+
+\NoesisServer{} is the layer that turns a matched contract
+(Definition~\ref{def:contract}) into actual inference requests against
+real providers, and turns the resulting traffic into three things: a
+measurement of whether the contract was honored, a signal for
+difficulty-aware routing, and a corpus for downstream distillation.
+
+% ==============================================================================
+\subsection{Gateway architecture}
+\label{sec:gateway_architecture}
+
+\NoesisServer{} is, at its core, a lightweight LLM API gateway modeled on
+multi-provider routers such as OpenRouter: it exposes a single API,
+proxies each request to one or more underlying providers, and streams the
+response back to the caller. Two properties distinguish it from a plain
+pass-through router. First, every request is tagged with the contract
+$\kappa$ it is served under, if any, so that fulfillment can be attributed
+(Section~\ref{sec:fulfillment_monitoring}). Second, every prompt/response
+pair is logged with its provider, model, measured latency, measured cost,
+and, when available, a user feedback signal, regardless of whether the
+request was placed under a contract. The storage schema is intentionally
+minimal:
+
+\[
+  (\text{prompt}, \text{response}, \text{provider}, \text{model},
+   \text{latency}, \text{cost}, \kappa\text{ or } \bot)
+\]
+
+This logging is passive by default: it does not change routing behavior
+and exists purely to build a reusable dataset for evaluation and
+distillation (Section~\ref{sec:distillation}). Privacy and data-handling
+safeguards (PII scrubbing, opt-in/opt-out) are necessary before logging
+real traffic and are discussed as an open question in
+Section~\ref{sec:open_questions}.
+
+% ==============================================================================
+\subsection{Contract fulfillment monitoring}
+\label{sec:fulfillment_monitoring}
+
+For a request $x$ served under contract $\kappa$, let $\hat c(x) \in
+\calC$ denote the capability tier actually delivered and $\hat\ell(x)$ the
+actually measured latency, both estimated from the response (e.g., via a
+verifier model, a benchmark probe, or agreement with a stronger reference
+model). Request $x$ is a \emph{success} under $\kappa$ if
+
+\begin{equation}
+  \label{eq:success_indicator}
+  s(x) = \mathbb{1}\!\left[
+    \hat c(x) \succeq \clevelattr(\kappa)
+    \;\wedge\;
+    \hat\ell(x) \leq \lmaxattr(\kappa)
+  \right].
+\end{equation}
+
+\begin{definition}[Measured reliability]
+\label{def:measured_reliability}
+For a fulfillment window $W$, the set of requests served under contract
+$\kappa$, the measured reliability is
+\begin{equation}
+  \label{eq:measured_reliability}
+  \hat r(\kappa, W) = \frac{1}{|W|} \sum_{x \in W} s(x).
+\end{equation}
+\end{definition}
+
+A naive violation rule, flagging $\kappa$ whenever
+$\hat r(\kappa, W) < \rminattr(\kappa)$, conflates genuine under-delivery
+with sampling noise: $\hat r(\kappa, W)$ is a sample average of an
+unobserved true success rate, and a small $|W|$ makes false accusations
+likely. We instead treat fulfillment monitoring as a one-sided hypothesis
+test: the null hypothesis $H_0$ is that the seller is compliant, i.e., its
+true success rate is at least $\rminattr(\kappa)$, and $\kappa$ is flagged
+as violated only if $H_0$ is rejected at a chosen confidence level
+$1 - \delta$. A simple normal-approximation lower confidence bound gives
+
+\begin{equation}
+  \label{eq:reliability_lower_bound}
+  \hat r_{\text{lower}}(\kappa, W)
+  = \hat r(\kappa, W)
+  - z_{1 - \delta}
+    \sqrt{
+      \frac{\hat r(\kappa, W) \, (1 - \hat r(\kappa, W))}{|W|}
+    },
+\end{equation}
+where $z_{1 - \delta}$ is the corresponding standard normal quantile, and
+$\kappa$ is flagged as violated when
+$\hat r_{\text{lower}}(\kappa, W) < \rminattr(\kappa)$. For small $|W|$, an
+exact interval (e.g., Clopper--Pearson) is preferable to the normal
+approximation used here for exposition. Flagged violations are reported
+to \NoesisMarket{} and feed the reputation update of
+Equation~\eqref{eq:reputation_update}.
+
+\begin{example}[Fulfillment reporting]
+\label{ex:fulfillment_reporting}
+A contract promising 99.9\% reliability at \texttt{frontier} capability is
+served by three providers over a window of 5,000 requests. \NoesisServer{}
+computes $\hat r(\kappa, W) = 0.994$ and, applying
+Equation~\eqref{eq:reliability_lower_bound}, finds
+$\hat r_{\text{lower}}(\kappa, W) < 0.999$: the shortfall is unlikely to be
+sampling noise, so the contract is flagged as violated and reported back
+to \NoesisMarket.
+\end{example}
+
+% ==============================================================================
+\subsection{Difficulty-aware routing}
+\label{sec:routing}
+
+Not every request needs the strongest available model. \NoesisServer{}
+trains a difficulty estimator
+\begin{equation}
+  \label{eq:difficulty_estimator}
+  \hat d : \calP \to \calC
+\end{equation}
+mapping a prompt $x \in \calP$ to the cheapest capability tier expected to
+answer it correctly, and routes according to
+\begin{equation}
+  \label{eq:routing_policy}
+  \pi(x) = \min \{ c \in \calC : c \succeq \hat d(x) \}.
+\end{equation}
+
+Routing is only worthwhile if the estimator is cheaper than the savings it
+produces. Let $\text{cost}(c)$ denote the per-request cost of serving tier
+$c$, non-decreasing in $c$, let $c_K$ denote the strongest tier, and let
+$c_{\hat d}$ denote the per-request cost of evaluating $\hat d$ itself.
+Routing yields a net saving over an always-route-to-$c_K$ baseline exactly
+when
+
+\begin{equation}
+  \label{eq:routing_saving_condition}
+  c_{\hat d} + \EE_x [\, \text{cost}(\pi(x)) \,]
+  <
+  \text{cost}(c_K).
+\end{equation}
+
+Inequality~\eqref{eq:routing_saving_condition} makes explicit the trap
+flagged in the underlying design notes: an estimator that is itself
+expensive, or inaccurate enough to route hard requests to weak tiers and
+force costly retries, can cost more than always calling the strong model.
+Measuring the left-hand side against the right-hand side on real traffic
+is a prerequisite for deploying routing in production, and is deferred to
+the implementation plan in Section~\ref{sec:roadmap}.
+
+% ==============================================================================
+\subsection{Answer fusion}
+\label{sec:fusion}
+
+Fusion is the complementary lever to routing. Instead of picking one tier
+per request, \NoesisServer{} may query a set of providers $S(x) \subseteq
+\calM$ and combine their answers through an aggregator
+\begin{equation}
+  \label{eq:fusion_aggregator}
+  \hat y(x) = g\big( \{ f_m(x) \}_{m \in S(x)} \big),
+\end{equation}
+where $g$ may be a majority vote, a verifier model that scores and selects
+among candidates, or a learned combiner trained on logged outcomes.
+
+Routing and fusion trade cost for accuracy in opposite directions relative
+to a single-strong-model baseline: routing accepts a higher risk of a
+lower-quality answer on some fraction of requests in exchange for a lower
+expected cost, while fusion accepts a higher expected cost, from querying
+multiple providers per request, in exchange for a lower risk of a
+low-quality answer. Which lever is preferable for a given contract depends
+on the contract's price versus its $\rminattr$ term: a low-price,
+low-$\rminattr$ contract favors routing, while a high-$\rminattr$ contract
+may only be economically served through fusion.
+
+% ==============================================================================
+\subsection{Training signal and distillation}
+\label{sec:distillation}
+
+The difficulty estimator of Equation~\eqref{eq:difficulty_estimator}
+needs a training signal, which the logged traffic supplies for free.
+
+\begin{definition}[Agreement label]
+\label{def:agreement_label}
+For a prompt $x$ answered by both a cheap model $f_{\text{cheap}}$ and a
+strong model $f_{\text{strong}}$, the agreement label is
+\begin{equation}
+  \label{eq:agreement_label}
+  y(x) = 1 - \mathbb{1}\big[ f_{\text{cheap}}(x) \equiv f_{\text{strong}}(x) \big],
+\end{equation}
+where $\equiv$ denotes exact match or a similarity threshold, used as a
+proxy label for ``this prompt was hard'' ($y(x) = 1$) versus ``easy''
+($y(x) = 0$).
+\end{definition}
+
+Definition~\ref{def:agreement_label} is a proxy, not a ground-truth
+correctness label: the two models can agree on a wrong answer, or
+disagree while the cheap model happens to be correct. A genuine quality
+label requires independent verification, for instance from a pairwise
+preference arena, which is a companion research direction discussed in
+Section~\ref{sec:related_work}. With that caveat, the logged corpus
+\[
+  \calD = \{ (x_i, f_{\text{strong}}(x_i)) \}_{i=1}^N
+\]
+also supports knowledge distillation of a smaller model $f_\theta$ trained
+to approximate $f_{\text{strong}}$'s outputs on the observed task
+distribution \cite{hinton2015}, offering a second, independent way for
+\NoesisServer{} to reduce cost on traffic it has already observed.

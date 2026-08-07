@@ -1,0 +1,133 @@
+% ##############################################################################
+\section{Contracts and notation}
+\label{sec:contracts_and_notation}
+
+This section fixes the notation used throughout the rest of the paper: the
+capability tier set, the task unit, the contract, and the bid/ask tuples
+submitted to \NoesisMarket.
+
+% ==============================================================================
+\subsection{Capability tiers}
+\label{sec:capability_tiers}
+
+\begin{definition}[Capability tiers]
+\label{def:capability_tiers}
+Let
+\[
+  \calC = \{ c_1, c_2, \ldots, c_K \}
+\]
+be a finite, totally ordered set of \emph{capability tiers}, with
+$c_1 \prec c_2 \prec \cdots \prec c_K$, where $\prec$ denotes ``strictly
+less capable than''. A tier is a discrete, provider-agnostic label (e.g.,
+\emph{cheap}, \emph{medium}, \emph{frontier-class}) that a buyer can
+require and a seller can offer, rather than a continuous benchmark score.
+\end{definition}
+
+Tiers are deliberately coarse. A continuous capability score would be more
+informative but is harder for a seller to credibly commit to ex ante and
+harder for a buyer to reason about ex post; Section~\ref{sec:open_questions}
+returns to this trade-off.
+
+% ==============================================================================
+\subsection{The task unit}
+\label{sec:task_unit}
+
+\begin{definition}[Task]
+\label{def:task}
+A \emph{task} is an abstract, normalized unit of inference work, denoted
+$u \in \calU$, used as the unit of quantity in a contract. Throughout the
+formalization, quantities are expressed in tasks without committing to a
+specific definition of $\calU$.
+\end{definition}
+
+Definition~\ref{def:task} is deliberately left abstract. Candidate
+definitions include a raw token count, a wall-clock compute duration, or a
+benchmark-normalized task-equivalent that adjusts for the fact that a
+token from a frontier model and a token from a small model are not
+comparable units of work. This choice affects cross-provider
+comparability directly and is treated as an open research question
+(Section~\ref{sec:open_questions}) rather than resolved here; the
+remainder of the formalization only requires that $\calU$ support addition
+and a total order, both of which hold for any of the candidate
+definitions above.
+
+% ==============================================================================
+\subsection{Contracts}
+\label{sec:contract}
+
+\begin{definition}[Intelligence contract]
+\label{def:contract}
+An \emph{intelligence contract} is a tuple
+\[
+  \kappa = ( \ntasksattr, \clevelattr, \lmaxattr, \rminattr, \priceattr )
+\]
+where
+\begin{itemize}
+  \item $\ntasksattr \in \bbN$ is the number of tasks covered by the
+    contract,
+  \item $\clevelattr \in \calC$ is the required capability tier,
+  \item $\lmaxattr \in \bbR_+$ is the maximum latency per task,
+  \item $\rminattr \in [0, 1]$ is the minimum reliability, i.e., the
+    minimum fraction of tasks that must meet both $\clevelattr$ and
+    $\lmaxattr$,
+  \item $\priceattr \in \bbR_+$ is the price of the contract.
+\end{itemize}
+\end{definition}
+
+The quantities are ordered to read naturally: ``deliver $\ntasksattr$
+tasks at capability $\clevelattr$ or better, within $\lmaxattr$ latency,
+with at least $\rminattr$ reliability, for a total price of
+$\priceattr$.''
+
+\begin{example}[Intelligence contract]
+\label{ex:contract}
+The contract
+\[
+  \kappa_1 = (10{,}000,\ \texttt{frontier},\ 2\text{s},\ 0.999,\ P)
+\]
+reads: ``deliver 10,000 tasks at frontier-class capability or better,
+within 2 seconds of latency, with at least 99.9\% reliability, for a total
+price of $P$.''
+\end{example}
+
+% ==============================================================================
+\subsection{Bids and asks}
+\label{sec:bids_asks}
+
+A contract $\kappa$ is the outcome of matching a bid against one or more
+asks in a \NoesisMarket{} auction round (Section~\ref{sec:noesis_market}).
+Bids and asks share the contract's attributes, plus the buy/sell-specific
+role of the price attribute as a limit rather than a fixed value.
+
+\begin{definition}[Bid]
+\label{def:bid}
+A \emph{bid} is a tuple
+\[
+  \beta = (n_\beta, c_\beta, \ell_\beta, r_\beta, p_\beta)
+\]
+submitted by a buyer, where $n_\beta$ is the requested number of tasks,
+$c_\beta \in \calC$ is the minimum required capability tier, $\ell_\beta$
+is the maximum acceptable latency, $r_\beta$ is the minimum acceptable
+reliability, and $p_\beta$ is the maximum price per task the buyer is
+willing to pay.
+\end{definition}
+
+\begin{definition}[Ask]
+\label{def:ask}
+An \emph{ask} is a tuple
+\[
+  \alpha = (n_\alpha, c_\alpha, \ell_\alpha, r_\alpha, p_\alpha)
+\]
+submitted by a seller, where $n_\alpha$ is the offered number of tasks,
+$c_\alpha \in \calC$ is the offered capability tier, $\ell_\alpha$ is the
+seller's typical (self-reported or previously measured) latency,
+$r_\alpha$ is the seller's typical reliability, and $p_\alpha$ is the
+minimum price per task the seller is willing to accept.
+\end{definition}
+
+Unlike a bid, an ask's capability, latency, and reliability attributes are
+descriptive of what the seller can deliver rather than a constraint on
+what the seller will accept; only $p_\alpha$ is a limit in the auction
+sense. Section~\ref{sec:compatibility} defines when a bid and an ask are
+compatible, i.e., when the ask's descriptive attributes satisfy the bid's
+required attributes.

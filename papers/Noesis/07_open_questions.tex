@@ -1,0 +1,101 @@
+% ##############################################################################
+\section{Open questions}
+\label{sec:open_questions}
+
+The design in Sections~\ref{sec:noesis_market} and \ref{sec:noesis_server}
+is a starting point rather than a settled protocol. This section
+consolidates the open questions raised throughout the paper, grouped by
+which component they primarily affect.
+
+% ==============================================================================
+\subsection{Market design questions}
+\label{sec:open_questions_market}
+
+\begin{enumerate}
+  \item \textbf{Task unit}: which definition of the task unit
+    (Definition~\ref{def:task}), raw tokens, wall-clock compute, or a
+    benchmark-normalized task-equivalent, gives the best cross-provider
+    comparability, and how sensitive is the auction outcome to this
+    choice?
+
+  \item \textbf{Auction frequency and mechanism}: is a uniform-price call
+    auction on a fixed $T$-minute cadence
+    (Section~\ref{sec:rounds}) the right mechanism at this scale, or would
+    a continuous double auction serve latency-sensitive buyers better,
+    mirroring the tension between frequent batch auctions and continuous
+    limit order books \cite{budish2015}? A hybrid design, a fast spot
+    market layered on top of the periodic batch auction, mirroring the
+    day-ahead/real-time separation in electricity markets
+    (Section~\ref{sec:related_commodity_markets}), is a natural candidate
+    we have not evaluated.
+
+  \item \textbf{Compatibility versus scoring}: Definition~\ref{def:compatibility}
+    treats latency and reliability as hard eligibility constraints. Would
+    a scored compatibility measure, admitting partial matches at a
+    discount, recover otherwise-unmatched volume without requiring an
+    explicit exchange rate between quality and price?
+
+  \item \textbf{Pricing denomination}: should $\priceattr$ be denominated
+    in a real-world currency or in a synthetic task-credit, and how much
+    does that choice affect adoption and regulatory exposure?
+
+  \item \textbf{Resistance to gaming without gatekeeping}: how far can
+    Section~\ref{sec:mechanism_design_risks}'s ex post reputation penalty
+    substitute for ex ante seller vetting, without the market drifting
+    toward the kind of slow onboarding or reputation gate that would
+    defeat the goal of an open market?
+\end{enumerate}
+
+% ==============================================================================
+\subsection{Server design questions}
+\label{sec:open_questions_server}
+
+\begin{enumerate}
+  \item \textbf{Where the value actually lies}: is a simple pass-through
+    logger, without any routing intelligence, already useful for building
+    a dataset for downstream distillation, or does routing quality itself
+    materially affect the diversity and usefulness of the collected data?
+
+  \item \textbf{Net savings from routing}: how cheaply can the difficulty
+    estimator of Equation~\eqref{eq:difficulty_estimator} be trained and
+    served while still satisfying the saving condition of
+    Equation~\eqref{eq:routing_saving_condition}, and what fraction of
+    real traffic can be served by a small model with no measurable
+    quality loss?
+
+  \item \textbf{Routing versus fusion under a fixed budget}: for a fixed
+    per-request budget, is it preferable to route to one well-chosen
+    model (Section~\ref{sec:routing}) or to query several cheaper models
+    and combine their answers (Section~\ref{sec:fusion})?
+
+  \item \textbf{Privacy and data handling}: what safeguards, PII
+    scrubbing, opt-in versus opt-out consent, retention limits, are
+    required before \NoesisServer{} logs real prompt/response pairs at
+    scale (Section~\ref{sec:gateway_architecture})?
+
+  \item \textbf{Distillation quality}: can a model distilled from the
+    logged corpus (Section~\ref{sec:distillation}) match the quality of
+    the routed ``best tier per request'' policy at a fraction of the
+    inference cost, or does distillation only recover the easy-request
+    tail?
+
+  \item \textbf{Attribution reliability}: the hypothesis test of
+    Equation~\eqref{eq:reliability_lower_bound} distinguishes sampling
+    noise from a true reliability shortfall, but it still relies on
+    $\hat c(x)$ and $\hat\ell(x)$ being accurate per-request estimates of
+    delivered capability and latency; how reliable can those per-request
+    estimates be made, and how does verifier error propagate into false
+    or missed violations reported to \NoesisMarket?
+\end{enumerate}
+
+% ==============================================================================
+\subsection{Cross-cutting question}
+\label{sec:open_questions_cross}
+
+The reputation and pricing feedback loop of Section~\ref{sec:reputation}
+is only as trustworthy as the fulfillment monitoring that feeds it
+(Section~\ref{sec:fulfillment_monitoring}). Resolving the server-side
+attribution-reliability question above is therefore a prerequisite, not
+an independent improvement, for the market-side reputation mechanism to
+have the intended deterrent effect on capability misrepresentation and
+under-delivery.

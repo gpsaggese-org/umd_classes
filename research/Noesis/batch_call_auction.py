@@ -4,7 +4,7 @@ simulator.
 
 Import as:
 
-import research.Intelligence_Market.batch_call_auction as rimbca
+import research.Noesis.batch_call_auction as rnbca
 """
 
 import dataclasses
@@ -100,12 +100,18 @@ class Ask:
     - for at least 0.015 price per task.
     """
 
-    # TODO(ai_gp): Add a definition for each variable.
+    # Unique identifier of the seller submitting this order.
     seller_id: str
+    # Number of tasks offered.
     n_tasks: int
+    # Capability tier bucket this ask belongs to (matched exactly against a
+    # bid's `c_level_min`).
     c_level: str
+    # Typical latency the seller expects to deliver at.
     l_typical: float
+    # Typical reliability the seller expects to deliver at, in [0, 1].
     r_typical: float
+    # Minimum price per task the seller will accept.
     p_min: float
 
     def __init__(
@@ -157,11 +163,15 @@ class Fill:
     `price`.
     """
 
-    # TODO(ai_gp): Add a definition for each variable.
+    # Identifier of the buyer whose bid was matched.
     buyer_id: str
+    # Identifier of the seller whose ask was matched.
     seller_id: str
+    # Capability tier the fill belongs to.
     c_level: str
+    # Number of tasks matched in this fill.
     n_tasks: int
+    # Uniform clearing price applied to this fill.
     price: float
 
 
@@ -180,11 +190,16 @@ class TierClearResult:
     no trade happened and both sides' full quantity went unfilled.
     """
 
-    # TODO(ai_gp): Add a definition for each variable.
+    # Capability tier this result belongs to.
     c_level: str
+    # Uniform clearing price for the tier, or `None` if the best bid never
+    # crossed the best ask.
     clearing_price: Optional[float]
+    # Fills produced by clearing this tier.
     fills: List[Fill]
+    # Total bid quantity left unmatched after clearing.
     unfilled_bid_n_tasks: int
+    # Total ask quantity left unmatched after clearing.
     unfilled_ask_n_tasks: int
 
 
