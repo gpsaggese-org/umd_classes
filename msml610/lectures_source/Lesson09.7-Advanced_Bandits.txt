@@ -8,13 +8,13 @@
 
 * Recap: The Stochastic Bandit Model
 
-- @Recap@: in L09.3 we studied the **stochastic $K$-armed bandit**
+- @Recap@: We studied the **stochastic $K$-armed bandit**
   - $K$ arms, each with a fixed unknown reward distribution $P_i$
   - At round $t$: pull $A_t$, observe only $R_t \sim P_{A_t}$
-  - Minimize pseudo-regret $L_T = \sum_{i} \Delta_i N_i(T)$
+  - Minimize regret $L_T = \sum_{i} \Delta_i N_i(T)$
 
 - @Results@: what we established
-  - Lower bounds: $\Omega(\log T)$ gap-dependent, $\Omega(\sqrt{KT})$ minimax
+  - Lower bounds: $\Omega(\log T)$ and gap-dependent
   - Greedy, uniform exploration, fixed $\epsilon$: all $\Theta(T)$
   - UCB1 and Thompson Sampling: $O(\log T)$, order-optimal
 
@@ -39,7 +39,6 @@
     ([Stationarity], [Non-stationary bandit], [SW-UCB, D-UCB],
      [$tilde(O)(sqrt(Gamma_T T))$]),
   ),
-  caption: [$d$ = context dimension, $Gamma_T$ = number of change points],
   col-widths: (1.1fr, 1.1fr, 1fr, 1fr),
   width: 100%,
   bold-first-col: true
@@ -50,9 +49,6 @@
   - Context: regret scales with the _dimension_ $d$, not with $K$
   - Adversarial: $\log T$ becomes impossible, best is $\Theta(\sqrt{KT})$
   - Non-stationary: regret becomes _linear_ in $T$ unless change is bounded
-
-- @Outline@: we then cover structured bandits, best-arm identification, the
-  boundary with reinforcement learning, and practical issues
 
 * A Map of Bandit Problems
 
@@ -91,7 +87,7 @@ mindmap
 
 - @Problem@: the stochastic model must answer _"which arm is best?"_, but real
   systems must answer _"which arm is best **for this user**?"_
-  - A news headline that works for a sports fan fails for a finance reader
+  - E.g., a news headline that works for a finance reader fails for a sports fam
   - A single global "best arm" averages away the thing we care about
 
 - @Example@: personalized news
@@ -101,9 +97,10 @@ mindmap
   - The best article changes with every request
 
 - @Naive Solution@: run one independent bandit per user segment
-  - Cons: with $d$ binary features there are $2^d$ segments
-  - Cons: each segment gets too little traffic to ever learn
-  - Cons: no sharing of what was learned across similar users
+  - Cons:
+    - With $d$ binary features there are $2^d$ segments
+    - Each segment gets too little traffic to ever learn
+    - No sharing of what was learned across similar users
 
 - @Solution@: **generalize across contexts** by learning a reward _function_ of
   the context, not a reward _value_ per arm
@@ -113,9 +110,8 @@ mindmap
 - @Definition@: In a **contextual bandit**, at each round $t$:
   1. Environment reveals a context $x_t \in \mathcal{X}$
   2. Agent selects arm $A_t \in \{1, \ldots, K\}$
-  3. Agent receives reward $R_t$ with
-     $\EE[R_t | x_t, A_t = a] = f(x_t, a)$
-  - The agent observes the reward of the chosen arm only, as before
+  3. Agent observes the reward of the chosen arm only (as before),
+     $R_t$ with $\EE[R_t | x_t, A_t = a] = f(x_t, a)$
 
 - @Definition@: a **policy** is a map $\pi: \mathcal{X} \to \{1, \ldots, K\}$
   - The optimal policy is $\pi^*(x) = \argmax_a f(x, a)$
@@ -126,7 +122,7 @@ mindmap
     $$
 
 - @Assumptions@
-  - Contexts $x_t$ are drawn iid, or chosen by an oblivious adversary
+  - Contexts $x_t$ are drawn iid
   - _Crucially_: the action $A_t$ does not influence the next context $x_{t+1}$
     - This is what keeps it a bandit and not a full RL problem
 
@@ -140,7 +136,9 @@ mindmap
 - @Definition@: the **linear contextual bandit** assumes the reward is linear in
   a known feature map $x_{t,a} \in \mathbb{R}^d$
   $$\EE[R_t | x_{t, A_t}] = \langle x_{t, A_t}, \theta^* \rangle$$
-  where $\theta^* \in \mathbb{R}^d$ is unknown
+  where
+  - $\langle x, y \rangle$ is dot product of vectors
+  - $\theta^* \in \mathbb{R}^d$ is unknown
 
 - @Variants@: how features and parameters are shared
   - _Disjoint model_: one $\theta_a^*$ per arm, features $x_t$ describe the user
@@ -221,29 +219,29 @@ mindmap
     - Theory-driven values are far too conservative in practice
     - Usually tuned offline by replay on logged data
   - $O(d^2)$ memory and $O(d^3)$ for the initial inverse, so $d$ in the
-    thousands is already painful
-  - Model misspecification is not detected: a wrong linear model gives linear
-    regret with high confidence
+    thousands is already problematic
+  - Model misspecification is not detected
 
 - @Extensions@
   - _Generalized linear bandits_: $\EE[R] = g(\langle x, \theta \rangle)$ with a
-    link function $g$, e.g., logistic for click-through rate
-  - _Kernel and neural bandits_: replace the linear model by a kernel or a
-    neural network, keeping an uncertainty estimate
+    link function $g$
+    - E.g., logistic for click-through rate
+  - _Kernel and neural bandits_: replace the linear model by a kernel or a neural
+    network, keeping an uncertainty estimate
     - E.g., NeuralUCB, or last-layer Bayesian linear regression on a deep net
 
 * Contextual Thompson Sampling
 
 - @Definition@: **Contextual Thompson Sampling** (Agrawal and Goyal, 2013)
   - Maintain a Gaussian posterior over $\theta^*$
-    $$p(\theta | \mathcal{D}_t) = N(\hat{\theta}_t, v^2 V_t^{-1})$$
+    $p(\theta | \mathcal{D}_t) = N(\hat{\theta}_t, v^2 V_t^{-1})$
   - At round $t$:
     1. Sample $\tilde{\theta}_t \sim N(\hat{\theta}_t, v^2 V_t^{-1})$
     2. Play $A_t = \argmax_a \langle x_{t,a}, \tilde{\theta}_t \rangle$
     3. Observe $R_t$ and update $V_t$, $\hat{\theta}_t$
 
 - @Intuition@: sample a plausible world, then act optimally in it
-  - Exactly the L09.3 idea, with the posterior now over a parameter vector
+  - Same as Thompson Sampling, with the posterior now over a parameter vector
     instead of over $K$ independent means
 
 - @Theorem@: regret is $\tilde{O}(d^{3/2}\sqrt{T})$
@@ -298,7 +296,7 @@ mindmap
 - @Fact@: any **deterministic** algorithm has $L_T = \Omega(T)$
   - An adaptive adversary simulates the algorithm, predicts $A_t$, and sets
     $r_{t, A_t} = 0$ and every other reward to 1
-  - So randomization is not a convenience here, it is _necessary_
+  - So randomization is _necessary_
 
 * Importance-Weighted Estimates
 
@@ -319,7 +317,7 @@ mindmap
   $$
   - Every arm gets an unbiased reward estimate, even the ones not played
   - This is the same inverse-propensity weighting used in causal inference for
-    observational data (L08.6)
+    observational data
 
 - @Limitations@: the variance is $O(1/p_{t,i})$, which explodes for rarely
   played arms
@@ -438,9 +436,9 @@ mindmap
 
 - @Fact@: without restrictions on how $\mu_i(t)$ moves, $L_T^{dyn} = \Omega(T)$
   - If the best arm can change every round, nothing is learnable
-  - So we must _budget_ the amount of change
+  - So we must _limit_ the amount of change
 
-- @Variants@: two standard budgets
+- @Variants@: two standard budgets of change
   - _Piecewise-stationary_: means are constant except at $\Gamma_T$ change
     points
     - Best achievable: $\tilde{\Theta}(\sqrt{\Gamma_T T})$
@@ -491,8 +489,9 @@ mindmap
       (Besbes, Gur, Zeevi, 2014)
 
 - @Comparison@: detection vs discounting
-  - _Detection_ is better when change is abrupt and rare (deploys, launches)
-  - _Discounting_ is better when change is gradual (drift, decay)
+  - _Detection_ is better when change is abrupt and rare (e.g., deploys,
+    launches)
+  - _Discounting_ is better when change is gradual (e.g., drift, decay)
   - Detection needs enough post-change data to fire, so it lags
 
 - @Remark@: a Bayesian shortcut that works well in practice
@@ -528,8 +527,9 @@ mindmap
 * Best-Arm Identification
 
 - @Problem@: sometimes we do not care about reward _during_ the experiment
-  - Pick the best of 5 drug candidates, then run a large trial
-  - Choose one model to ship, after which the test traffic is thrown away
+  - E.g.,
+    - Pick the best of 5 drug candidates, then run a large trial
+    - Choose one model to ship, after which the test traffic is thrown away
   - This is **pure exploration**, not regret minimization
 
 - @Definition@: **simple regret** of the arm $\hat{i}_n$ recommended after $n$
