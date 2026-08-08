@@ -317,8 +317,6 @@
 - Log raw, unscrubbed prompt/response pairs for now, scoped to synthetic/test
   traffic only; add PII scrubbing as a follow-up before any real non-synthetic
   traffic is logged (tracked as an open question below)
-- Unit tests (per `testing.rules.md`): request routed to each configured
-  provider is logged with correct schema and fields
 - Result: every request/response pair is logged and queryable
 
 ### `PR_S2`: [ ] Routing Policy + Cost/quality Measurement
@@ -330,7 +328,7 @@
   classification; cost/quality metrics computed correctly on a fixture log
 - Result: a measured cost/quality frontier for at least one routing policy
 
-### `PR_S3`: [ ] Difficulty Estimator + Distillation Experiment (prototype)
+### `PR_S3`: [ ] Difficulty Estimator + Distillation Experiment
 - Exploratory/research PR, lighter bar than `PR_S1`/`PR_S2`: tests cover pipeline
   plumbing (data loads, estimator trains, metrics compute), not a model quality
   bar
@@ -339,6 +337,7 @@
 - Explore distilling a small model from the collected dataset
 - Result: a difficulty-aware router with a measured saving, and a first
   distillation experiment with reported (not necessarily strong) results
+  -> Project
 
 ### `PR_S4`: [ ] Fulfillment Monitoring Wired to the Market (stubbed Both Sides)
 - Background: `papers/Noesis/05_noesis_server.tex` sec:fulfillment_monitoring
@@ -384,6 +383,7 @@
   baseline on cost and on a simple correctness proxy (agreement with a fixed
   reference answer), giving a first cost/ reliability trade-off for fusion,
   analogous to `PR_S2`'s cost/quality frontier for routing
+  -> Project
 
 ### `PR_S6`: [ ] Statistical Fulfillment Violation Test
 - Background: `papers/Noesis/05_noesis_server.tex`'s fulfillment monitoring
@@ -407,38 +407,40 @@
 ### `PR_S7`: [ ] Real Provider Liquidity Via an OpenRouter-backed `ProviderConfig`
 - Background: `05_noesis_server.tex` models `NoesisServer` "on multi-provider
   routers such as OpenRouter" precisely because a router like OpenRouter already
-  pools dozens of providers and models behind one API key, matching the paper's
-  "provider-agnostic liquidity pooling" property (`01_introduction.tex`);
-  `PR_S1`'s `ProviderConfig.call_fn` today wraps only test stand-ins, so
-  `Gateway` has no real liquidity yet
+  pools dozens of providers and models behind one API key
+  - `ProviderConfig.call_fn` today wraps only test stand-ins, so `Gateway` has no
+    real liquidity yet
 - Add an `OpenRouterProviderConfig` (or a `call_fn` factory) whose `call_fn`:
   - Forwards `(model, prompt)` to OpenRouter's real chat-completions endpoint
     (`model` formatted as `"<upstream_provider>/<model>"`, e.g
     `"openai/gpt-4o"`)
   - Parses the response back into the raw text `Gateway.call()` returns today
   - Replaces `PR_S1`'s placeholder `cost_per_char` with the real per-token
-    cost OpenRouter reports in `usage` (`architecture.md` Weakness 7)
+    cost OpenRouter reports in `usage`
 - One registered `OpenRouterProviderConfig` covers every model OpenRouter lists
   (`GET /api/v1/models`), so `Gateway` gets real multi-provider liquidity from a
   single integration instead of one bespoke `ProviderConfig` per upstream
   provider
-- Unit tests keep injecting a fixture `ProviderCallFn` per the existing
-  convention (no live network call in the default suite); a
-  `requires_openrouter_key`-marked integration test, skipped unless an API key
-  is present in the environment, exercises one real OpenRouter call
 - Result: `Gateway` is backed by real, multi-provider liquidity instead of test
-  stand-ins; once wired to `NoesisMarket` (`PR_M8` above), a cleared ask can be
-  fulfilled by an actual OpenRouter call in place of `mock_fulfill()`
+  stand-ins; once wired to `NoesisMarket`, a cleared ask can be fulfilled by an
+  actual OpenRouter call in place of `mock_fulfill()`
 
 ### `PR_S8`: [ ] OpenRouter-compatible API Interface for `NoesisServer`
-- Background: `NoesisPlatform` `PR_P1` sketches a bespoke HTTP wrapper around
-  `Gateway.call()` without specifying its wire format; adopting OpenRouter's own
-  REST contract instead means any existing OpenRouter client (SDK, LangChain
-  provider config, curl script) can point its `base_url` at a `NoesisServer`
-  deployment and work unmodified
-- Add `POST /api/v1/chat/completions` matching OpenRouter's request shape
-  (`model: "<provider>/<model>"`, `messages`, `stream`) and response shape
-  (`id`, `choices[].message`, `usage.{prompt,completion,total}_tokens`),
+- Background:
+  - `NoesisPlatform` `PR_P1` sketches a bespoke HTTP wrapper around
+    `Gateway.call()` without specifying its wire format
+  - Adopting OpenRouter's own REST contract instead means any existing OpenRouter
+    client (SDK, LangChain provider config, curl script) can point its `base_url`
+    at a `NoesisServer` deployment and work unmodified
+- Add `POST /api/v1/chat/completions` matching OpenRouter's
+  - request shape
+    ```
+    (`model: "<provider>/<model>"`, `messages`, `stream`)
+    ```
+  - response shape
+    ```
+    (`id`, `choices[].message`, `usage.{prompt,completion,total}_tokens`)
+    ```
   translating to/from `Gateway.call()`'s `(provider_name, model, prompt)`
   signature internally
 - Add `GET /api/v1/models` mirroring OpenRouter's model-listing endpoint,
@@ -450,16 +452,20 @@
   round-trips through `Gateway.call()` and returns an OpenRouter-shaped response
   on a local test server; an unknown `model` string is rejected with
   OpenRouter's error-response shape, not a bare 500
-- Result: `NoesisServer` is a drop-in replacement for OpenRouter from the
-  caller's point of view; supersedes the wire format of `NoesisPlatform`
-  `PR_P1`'s passthrough-completion endpoint once this lands
+- Result:
+  - `NoesisServer` is a drop-in replacement for OpenRouter from the caller's
+    point of view
+  - supersedes the wire format of `NoesisPlatform` `PR_P1`'s
+    passthrough-completion endpoint once this lands
 
 ### `PR_S9`: [ ] OpenRouter Capacity as Market Supply (Auto-ask Adapter)
-- Background: `PR_S7` gives `Gateway` real OpenRouter-backed capacity and pricing
-  (`GET /api/v1/models`), but nothing in the plan turns that capacity into
-  `NoesisMarket` asks; `POST /asks` (`NoesisPlatform` `PR_P1`) still requires a
-  human/manual submission per seller, so OpenRouter's capacity is invisible
-  to the auction as supply
+- Background:
+  - `PR_S7` gives `Gateway` real OpenRouter-backed capacity and pricing
+    (`GET /api/v1/models`), but nothing in the plan turns that capacity into
+    `NoesisMarket` asks
+  - `POST /asks` (`NoesisPlatform` `PR_P1`) still requires a human/manual
+    submission per seller, so OpenRouter's capacity is invisible to the auction
+    as supply
 - Add an adapter that reads OpenRouter's model catalog and `usage`-reported
   pricing from `PR_S7`'s `OpenRouterProviderConfig` and periodically
   submits/refreshes one ask per `(model, tier)` into `NoesisMarket`'s order
@@ -469,28 +475,23 @@
   one ask per listed model with tier/price derived from the catalog; a model
   that drops out of a later catalog refresh has its stale ask withdrawn or
   not renewed
-- Result: OpenRouter's capacity participates in `NoesisMarket` auctions as
-  supply without a manual ask per model, the mechanism the roadmap's `v0.2`
-  target ("an adapter from OpenRouter to the API ... to provide capacity")
-  describes
+- Result:
+  - OpenRouter's capacity participates in `NoesisMarket` auctions as supply
+    without a manual ask per model
 
 ### `PR_S10`: [ ] Request Caching for Identical/Near-duplicate Requests
-- Background: `papers/Noesis/01_introduction.tex` sec:protocol_overview
+- Background: `papers/Noesis/01_introduction.tex` 
   describes `NoesisServer` as caching "responses to identical or
   near-duplicate requests to avoid paying a provider twice for the same
-  answer"; the paper's own TODO(gp) list at the top of `01_introduction.tex`
-  ("Add cache") flags this as still outstanding, and no PR above implements it
+  answer"
 - Add an exact-match cache keyed on `(provider, model, prompt)` in front of
   `Gateway.call()`, with a pluggable near-duplicate match (e.g., an
-  embedding-similarity threshold) as a stretch goal behind the same
-  interface
-- Unit tests: an identical repeated call is served from cache without a
-  second provider call; a cache miss falls through to the provider and
-  populates the cache; a near-duplicate above the similarity threshold is
-  served from cache, below it is not
-- Result: repeated/duplicate traffic no longer pays a provider twice;
-  measured cache-hit rate on a synthetic traffic fixture with a controlled
-  duplication rate
+  embedding-similarity threshold) as a stretch goal behind the same interface
+- Result:
+  - Repeated/duplicate traffic no longer pays a provider twice
+  - Measured cache-hit rate on a synthetic traffic fixture with a controlled
+    duplication rate
+  -> Project
 
 ### `PR_S11`: [ ] Capability-measurement Estimator (hat-c(x))
 - Background: `papers/Noesis/01_introduction.tex` Table~tab:components lists
@@ -599,19 +600,23 @@
 - Containerize `PR_P1`'s API into a single Docker image, following this repo's
   existing Docker template conventions
   (`class_project/project_template/Dockerfile*`)
-- Deploy to a cloud target (a single-node container service, e.g. AWS ECS,
-  Fly.io, or Render, to start; Kubernetes deferred until there is more than one
-  process to orchestrate)
-- Externalize the in-memory state `PR_M1`-`PR_M6` of `NoesisMarket` and
-  `PR_S1`-`PR_S6` of `NoesisServer` assume (order book, contract log, request log)
-  to a real datastore (e.g Postgres or Redis): a cloud deployment cannot rely
-  on a single long-lived process the way the current test suites do
+- Deploy to a cloud target:
+  - A single-node container service, e.g. AWS ECS, Fly.io, or Render, to start
+  - Kubernetes deferred until there is more than one process to orchestrate
+- Externalize the in-memory state of `NoesisMarket` and of `NoesisServer` assume
+  (order book, contract log, request log) to a real datastore (e.g Postgres or
+  Redis)
+  - A cloud deployment cannot rely on a single long-lived process the way the
+    current test suites do
 - Unit tests: a smoke test that boots the container and round-trips one bid/ask
   pair through the deployed API image locally (`docker run` + one HTTP call),
   not a real cloud test
 - Result: a `NoesisMarket`/`NoesisServer` instance reachable at a public URL,
   backed by persistent storage instead of the current in-process `List`/`Dict`
-  state (`architecture.md` Weakness 6)
+  state
+
+- TODO(gp): Read the documentation about how to release a product container
+- TODO(gp): Read how to inject a Postgress instance in the container
 
 ### `PR_P3`: [ ] Buying Credits (credit Card and Crypto)
 - Background: resolves `NoesisMarket` open question 4 (pricing denomination)
