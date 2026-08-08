@@ -81,7 +81,7 @@ verifiable on-chain rather than taken on the operator's word.
 %   splines=spline;
 %   nodesep=0.35;
 %   ranksep=0.42;
-%   rankdir=TB;
+%   rankdir=LR;
 % 
 %   node [shape=box,
 %         style="rounded,filled",
@@ -104,8 +104,9 @@ verifiable on-chain rather than taken on the operator's word.
 %         fontcolor="#7B8794"];
 % 
 %   // ---------------------------------------------------------------
-%   // The two clusters are stacked vertically (via the invisible
-%   // connecting edge below) to keep the figure narrow.
+%   // The two clusters run side by side (via the invisible connecting
+%   // edge below), each with its own bid/ask -> ... -> decision chain
+%   // flowing left to right.
 %   // source : warm sand   |   actor : rose   |   external : violet   |   process : blue
 % 
 %   subgraph cluster_centralized {
@@ -252,7 +253,7 @@ clearing problem (Problem~\ref{prob:clearing}) run at the round's close.
 %         fontcolor="#7B8794"];
 % 
 %   // ---------------------------------------------------------------
-%   rankdir=TB;
+%   rankdir=LR;
 % 
 %   // source : warm sand   |   process : blue   |   artifact : sage green
 % 

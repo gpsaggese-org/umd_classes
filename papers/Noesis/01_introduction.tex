@@ -156,9 +156,7 @@ Table~\ref{tab:components} shaded in teal:
     outweighs cost.
 \end{itemize}
 
-% TODO(ai_gp): Move provider API on the top so that the external reference
-% are on the top, then you can make the figure bigger
-% Switch the position of Supply and Demand
+% TODO(ai_gp): Switch the position of Supply and Demand
 
 % rendered_images:begin
 % ```graphviz
@@ -207,10 +205,10 @@ Table~\ref{tab:components} shaded in teal:
 %     penwidth  = 1.0;
 %     margin    = 16;
 % 
-%     Demand [label=<<b>Demand</b><br/><font point-size="10" color="#A34F6C">Applications / agents</font>>,
-%             fillcolor="#F6E1E8", color="#D98CA8", fontcolor="#6B2A44"];
 %     Supply [label=<<b>Supply</b><br/><font point-size="10" color="#946A2E">Model &amp; compute providers</font>>,
 %             fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+%     Demand [label=<<b>Demand</b><br/><font point-size="10" color="#A34F6C">Applications / agents</font>>,
+%             fillcolor="#F6E1E8", color="#D98CA8", fontcolor="#6B2A44"];
 %   }
 % 
 %   subgraph cluster_noesis_market {
@@ -265,13 +263,13 @@ Table~\ref{tab:components} shaded in teal:
 %   IntelligenceMeasure [label=<<font point-size="10">Intelligence-measure providers<br/>e.g. artificialanalysis.ai</font>>,
 %                         shape=note, fillcolor="#E9E1F7", color="#A88FD9", fontcolor="#45296B"];
 % 
-%   Demand -> ReputationLoop [style=invis];
-%   Supply -> CapabilityMeasure [style=invis];
+%   Supply -> ReputationLoop [style=invis];
+%   Demand -> CapabilityMeasure [style=invis];
 %   Demand -> MatchingEngine [label="Bids"];
 %   Supply -> MatchingEngine [label="Asks"];
 %   MatchingEngine -> Gateway [label="Contracts", penwidth=1.6, color="#8592A3", constraint=false];
 %   Gateway -> ProviderAPIs [label="Requests /\nresponses", dir=both];
-%   Fusion -> ProviderAPIs [label="Fan-out", style=dashed];
+%   Fusion -> ProviderAPIs [label="Fan-out", style=dashed, constraint=false];
 %   IntelligenceMeasure -> CapabilityMeasure [label="Capability reference", style=dashed, constraint=false];
 %   Metering -> ReputationLoop [
 %     label="Reputation & pricing feedback",

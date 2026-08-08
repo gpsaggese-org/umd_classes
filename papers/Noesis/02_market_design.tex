@@ -49,8 +49,6 @@ where bids and asks expressing these differences are matched into
 contracts. Each side's dimensions are drawn as short axes radiating from
 its box, echoing the three-axis bundle of Figure~\ref{fig:bundle_axes}.
 
-% TODO(ai_gp): Increase the size of the fonts, make the blocks closer, so
-% they can get bigger
 % rendered_images:begin
 % ```tikz
 % \definecolor{demandfill}{RGB}{246,225,232}
@@ -62,36 +60,36 @@ its box, echoing the three-axis bundle of Figure~\ref{fig:bundle_axes}.
 % \definecolor{axiscolor}{RGB}{163,177,192}
 % \fontfamily{phv}\selectfont
 % 
-% \node[draw=demandline, rounded corners, fill=demandfill, minimum width=2.7cm,
-%       minimum height=0.95cm, font=\small\bfseries, align=center, text=demandline]
-%   (demand) at (0,0) {Demand side\\[1pt]\footnotesize\normalfont Applications / agents};
-% \node[draw=marketline, rounded corners, fill=marketfill, minimum width=2.6cm,
-%       minimum height=0.95cm, font=\small\bfseries, align=center, text=marketline]
-%   (market) at (5.6,0) {NoesisMarket\\[1pt]\footnotesize\normalfont Meeting point};
-% \node[draw=supplyline, rounded corners, fill=supplyfill, minimum width=3.0cm,
-%       minimum height=0.95cm, font=\small\bfseries, align=center, text=supplyline]
-%   (supply) at (11.2,0) {Supply side\\[1pt]\footnotesize\normalfont Model \& compute providers};
+% \node[draw=demandline, rounded corners, fill=demandfill, minimum width=3.0cm,
+%       minimum height=1.05cm, font=\normalsize\bfseries, align=center, text=demandline]
+%   (demand) at (0,0) {Demand side\\[1pt]\small\normalfont Applications / agents};
+% \node[draw=marketline, rounded corners, fill=marketfill, minimum width=2.9cm,
+%       minimum height=1.05cm, font=\normalsize\bfseries, align=center, text=marketline]
+%   (market) at (4.6,0) {NoesisMarket\\[1pt]\small\normalfont Meeting point};
+% \node[draw=supplyline, rounded corners, fill=supplyfill, minimum width=3.3cm,
+%       minimum height=1.05cm, font=\normalsize\bfseries, align=center, text=supplyline]
+%   (supply) at (9.2,0) {Supply side\\[1pt]\small\normalfont Model \& compute providers};
 % 
 % \draw[->, >=stealth, thick, marketline] (demand.east) -- (market.west)
-%   node[midway, above, font=\footnotesize] {Bids};
+%   node[midway, above, font=\small] {Bids};
 % \draw[->, >=stealth, thick, marketline] (supply.west) -- (market.east)
-%   node[midway, above, font=\footnotesize] {Asks};
+%   node[midway, above, font=\small] {Asks};
 % 
 % % Demand-side dimensions, fanned as short axes to the left of the box.
 % \foreach \ang/\lab in {90/{traffic\\predictability}, 135/{latency\\sensitivity},
 %                        180/{capability\\required}, 225/{error\\tolerance},
 %                        270/{price\\sensitivity}} {
-%   \draw[->, >=stealth, thin, axiscolor] (demand.\ang) -- ++(\ang:1.35cm);
-%   \path (demand.\ang) -- ++(\ang:1.85cm)
-%     node[font=\tiny, align=center, text=demandline] {\lab};
+%   \draw[->, >=stealth, thin, axiscolor] (demand.\ang) -- ++(\ang:1.5cm);
+%   \path (demand.\ang) -- ++(\ang:2.05cm)
+%     node[font=\scriptsize, align=center, text=demandline] {\lab};
 % }
 % 
 % % Supply-side dimensions, fanned as short axes to the right of the box.
 % \foreach \ang/\lab in {45/{capability\\tier}, 0/{latency /\\reliability},
 %                        -45/{marginal\\cost}} {
-%   \draw[->, >=stealth, thin, axiscolor] (supply.\ang) -- ++(\ang:1.35cm);
-%   \path (supply.\ang) -- ++(\ang:1.85cm)
-%     node[font=\tiny, align=center, text=supplyline] {\lab};
+%   \draw[->, >=stealth, thin, axiscolor] (supply.\ang) -- ++(\ang:1.5cm);
+%   \path (supply.\ang) -- ++(\ang:2.05cm)
+%     node[font=\scriptsize, align=center, text=supplyline] {\lab};
 % }
 % ```
 % label=fig:two_sided_market
