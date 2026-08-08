@@ -30,6 +30,8 @@
 - Releases are cumulative: each version also requires every PR listed under
   the versions before it (e.g. `v0.4` also needs `v0.1`-`v0.3`'s PRs)
 
+# Component Specs
+
 ## NoesisMarket
 
 ### Goal
@@ -40,7 +42,115 @@
   - Feeds delivery performance back into pricing
 - Background: `papers/Noesis/04_noesis_market.tex`
 
-### Solution
+### Open Questions
+
+1. Task unit for cross-provider comparability: tokens vs. wall-clock compute vs
+   benchmark-normalized task-equivalent
+2. Auction mechanism/frequency: uniform-price batch call auction vs. continuous
+   double auction, and whether 5 min is the right cadence
+3. Anti-gaming: how to stop capability misrepresentation or bid shading without
+   a heavy onboarding/reputation system
+4. Pricing denomination: real currency vs. synthetic task-credit;
+   `NoesisPlatform` `PR_P3` below resolves this operationally by supporting both a
+   credit-card and a crypto funding rail rather than forcing a single choice at
+   the protocol level
+5. Batch vs. hybrid: does a spot market need to sit alongside the batch auction
+   for latency-sensitive buyers
+6. On-chain settlement and anonymity: are `PR_M6`'s commit-reveal gas costs,
+   redundancy defaults, and stake asymmetries (see
+   `papers/Noesis/08_decentralized_extension.tex`) compatible with the auction
+   frequency in open question 2
+7. Collusion: `papers/Noesis/04_noesis_market.tex` sec:mechanism_design_risks
+   flags thin, few-seller tier buckets, notably `frontier`, as vulnerable to
+   coordinated bidding/bidding rings; no mitigation is designed or planned
+   above
+
+## NoesisServer
+
+### Goal
+- Build a lightweight LLM API gateway (modeled on OpenRouter) that:
+  - Proxies requests to multiple providers
+  - Logs every prompt/response pair
+  - Adds difficulty-aware routing
+  - Serves as the fulfillment/monitoring layer for `NoesisMarket`
+- Background: `papers/Noesis/05_noesis_server.tex`
+
+### Open Questions
+1. Is a simple pass-through logger already useful for dataset building, or does
+   routing quality matter for data diversity? (affects how much `PR_S2` matters
+   before starting `PR_S3`'s dataset use)
+2. Can request difficulty be estimated cheaply enough that difficulty-aware
+   routing nets a real cost saving? (`PR_S3`'s core research question)
+3. Routing vs. fusion under a fixed budget: for a fixed per-request budget, is
+   it better to route to one well-chosen model (`PR_S2`) or to query several
+   cheaper models and combine their answers (`PR_S5`)? `PR_S5` above turns this
+   question into a measurable comparison rather than leaving it open
+4. **PII/data-handling safeguards** before logging real (non-synthetic)
+   prompt/response pairs: `PR_S1` defers scrubbing and stays on synthetic/test
+   traffic only until this is resolved; must be answered before enabling real
+   traffic logging
+5. Can a distilled model match routed "best model per task" quality at a
+   fraction of the cost? (`PR_S3`'s distillation sub-question)
+6. Attribution reliability: how reliably can the server attribute a
+   quality/latency shortfall to a specific provider vs. noise, so fulfillment
+   reporting to `NoesisMarket` is trustworthy enough to affect
+   pricing? `PR_S6` above answers the noise-vs-signal half of this question;
+   attributing a confirmed shortfall to the right provider among several serving
+   the same contract remains open
+7. OpenRouter dependency risk: `PR_S7` makes `Gateway`'s real liquidity depend on
+   one third party's uptime, pricing, and model catalog; is a single- upstream
+   dependency acceptable for the prototype, or does it need a fallback provider
+   before real (non-synthetic) traffic relies on it?
+8. Fidelity vs. scope of `PR_S8`'s compatibility: targeting chat completions and
+   model listing only; does divergence from OpenRouter's exact error
+   codes/streaming semantics break real OpenRouter clients in practice, before
+   advertising `NoesisServer` as a drop-in replacement?
+
+## Architecture
+
+### Goal
+- Pin down the exact inputs, outputs, and invariants of the five pluggable
+  components introduced in `papers/Noesis/01_introduction.tex`
+  sec:modularity (matching engine, capability measurement, reputation and
+  feedback, answer fusion, pricing dissemination), so a substitute
+  implementation, e.g., a continuous double auction in place of
+  `NoesisMarket` `PR_M1`'s call auction, can be swapped in without touching the
+  other component, as `papers/Noesis/09_open_questions.tex`
+  sec:open_questions_cross's "Interface contracts for pluggable components"
+  open question asks
+- Background/formalization: `papers/Noesis/01_introduction.tex`
+  Table~tab:components, `papers/Noesis/09_open_questions.tex`
+  sec:open_questions_cross
+
+## NoesisPlatform
+
+### Goal
+- Turn the `NoesisMarket`/`NoesisServer` prototypes into a service an external
+  caller can actually reach: a public API over both components, a cloud
+  deployment target, and a way for a buyer to fund an account with a credit card
+  or crypto before bidding
+- Unlike `NoesisMarket` and `NoesisServer`, this section is not grounded in a
+  specific mechanism from `papers/Noesis/*.tex`; it is the productization layer
+  both component plans assume but neither scopes (`architecture.md` notes "there
+  is no CLI or script entry point yet")
+- Background: `NoesisMarket`'s pricing-denomination open question (real currency
+  vs. synthetic task-credit) and `08_decentralized_extension.tex`'s staked-ask
+  escrow design, for the crypto funding rail in `PR_P3`
+
+### Open Questions
+1. Custody: does `NoesisMarket` hold buyer funds in escrow between funding and
+   settlement, or only check a balance and settle out-of-band? (affects `PR_P3`'s
+   debit timing and regulatory exposure)
+2. Refunds and chargebacks: how does a credit-card chargeback interact with
+   credit already spent on a matched contract?
+3. Cloud target for `PR_P2`: which provider to standardize on, and whether the
+   in-memory-to-datastore migration should land before or after the first public
+   deployment
+4. KYC/compliance: does accepting real-currency payments (credit card or crypto)
+   trigger money-transmitter obligations that a synthetic task-credit avoids?
+   (sharpens `NoesisMarket` open question 4)
+
+# PRs
 
 #### `PR_M1`: [x] Minimal Batch Call-auction Simulator
 - In-memory order book: bid `(N_tasks, C_level_min, L_max, R_min, P_max)` and
@@ -55,15 +165,15 @@
   - Fixed 5-min batch cadence
 
 #### `PR_M2`: [x] Contract Schema + Dispatch to a Stubbed Fulfillment Layer
-- Define the contract schema `(N_tasks, C_level, L_max, R_min, P)` from a
-  cleared `PR_M1` match
+- Define the contract schema `(N_tasks, C_level, L_max, R_min, P)` from a cleared
+  match
 - Dispatch each cleared contract to a **mock** fulfillment interface (fixed or
-  randomized pass/fail outcomes), standing in for `NoesisServer`,
-  which has no implementation yet
+  randomized pass/fail outcomes), standing in for `NoesisServer`, which has no
+  implementation yet
 - Log the (mocked) fulfillment result back onto the contract record
 - Result: closed loop match -> contract -> dispatch -> logged outcome, mocked
-  past the auction boundary; swap-in point for the real
-  `NoesisServer` once it exists, done by `PR_M8` below
+  past the auction boundary; swap-in point for the real `NoesisServer` once it
+  exists, done by `PR_M8` below
 
 #### `PR_M3`: [ ] Reputation and Pricing Feedback Loop
 - Background: `papers/Noesis/04_noesis_market.tex` sec:reputation
@@ -204,42 +314,6 @@
 - Result: a measured comparison of matched volume and average discount
   between `PR_M1`'s hard-constraint baseline and the scored variant, answering
   `09_open_questions.tex` item 3 empirically rather than leaving it open
-
-### Open Questions
-- Not blocking `PR_M1` (covered by defaults above); must be resolved before
-  `PR_M2`/`PR_M3` lock in the real contract schema and before
-  `NoesisServer` replaces the `PR_M2` mock
-
-1. Task unit for cross-provider comparability: tokens vs. wall-clock compute vs
-   benchmark-normalized task-equivalent
-2. Auction mechanism/frequency: uniform-price batch call auction vs. continuous
-   double auction, and whether 5 min is the right cadence
-3. Anti-gaming: how to stop capability misrepresentation or bid shading without
-   a heavy onboarding/reputation system
-4. Pricing denomination: real currency vs. synthetic task-credit;
-   `NoesisPlatform` `PR_P3` below resolves this operationally by supporting both a
-   credit-card and a crypto funding rail rather than forcing a single choice at
-   the protocol level
-5. Batch vs. hybrid: does a spot market need to sit alongside the batch auction
-   for latency-sensitive buyers
-6. On-chain settlement and anonymity: are `PR_M6`'s commit-reveal gas costs,
-   redundancy defaults, and stake asymmetries (see
-   `papers/Noesis/08_decentralized_extension.tex`) compatible with the auction
-   frequency in open question 2
-7. Collusion: `papers/Noesis/04_noesis_market.tex` sec:mechanism_design_risks
-   flags thin, few-seller tier buckets, notably `frontier`, as vulnerable to
-   coordinated bidding/bidding rings; no mitigation is designed or planned
-   above
-
-## NoesisServer
-
-### Goal
-- Build a lightweight LLM API gateway (modeled on OpenRouter) that proxies
-  requests to multiple providers, logs every prompt/response pair, adds
-  difficulty-aware routing, and serves as the fulfillment/monitoring layer for
-  `NoesisMarket`
-- Background/formalization: `NoesisServer`,
-  `papers/Noesis/05_noesis_server.tex`
 
 ### Solution
 
@@ -463,58 +537,10 @@
   real consent, ahead of the PII open question being fully resolved for raw
   logging
 
-### Open Questions
-- Not blocking `PR_S1`-`PR_S6` as scoped above; track before broader rollout
-
-1. Is a simple pass-through logger already useful for dataset building, or does
-   routing quality matter for data diversity? (affects how much `PR_S2` matters
-   before starting `PR_S3`'s dataset use)
-2. Can request difficulty be estimated cheaply enough that difficulty-aware
-   routing nets a real cost saving? (`PR_S3`'s core research question)
-3. Routing vs. fusion under a fixed budget: for a fixed per-request budget, is
-   it better to route to one well-chosen model (`PR_S2`) or to query several
-   cheaper models and combine their answers (`PR_S5`)? `PR_S5` above turns this
-   question into a measurable comparison rather than leaving it open
-4. **PII/data-handling safeguards** before logging real (non-synthetic)
-   prompt/response pairs: `PR_S1` defers scrubbing and stays on synthetic/test
-   traffic only until this is resolved; must be answered before enabling real
-   traffic logging
-5. Can a distilled model match routed "best model per task" quality at a
-   fraction of the cost? (`PR_S3`'s distillation sub-question)
-6. Attribution reliability: how reliably can the server attribute a
-   quality/latency shortfall to a specific provider vs. noise, so fulfillment
-   reporting to `NoesisMarket` is trustworthy enough to affect
-   pricing? `PR_S6` above answers the noise-vs-signal half of this question;
-   attributing a confirmed shortfall to the right provider among several serving
-   the same contract remains open
-7. OpenRouter dependency risk: `PR_S7` makes `Gateway`'s real liquidity depend on
-   one third party's uptime, pricing, and model catalog; is a single- upstream
-   dependency acceptable for the prototype, or does it need a fallback provider
-   before real (non-synthetic) traffic relies on it?
-8. Fidelity vs. scope of `PR_S8`'s compatibility: targeting chat completions and
-   model listing only; does divergence from OpenRouter's exact error
-   codes/streaming semantics break real OpenRouter clients in practice, before
-   advertising `NoesisServer` as a drop-in replacement?
-
-## Cross-cutting
-
-### Goal
-- Pin down the exact inputs, outputs, and invariants of the five pluggable
-  components introduced in `papers/Noesis/01_introduction.tex`
-  sec:modularity (matching engine, capability measurement, reputation and
-  feedback, answer fusion, pricing dissemination), so a substitute
-  implementation, e.g., a continuous double auction in place of
-  `NoesisMarket` `PR_M1`'s call auction, can be swapped in without touching the
-  other component, as `papers/Noesis/09_open_questions.tex`
-  sec:open_questions_cross's "Interface contracts for pluggable components"
-  open question asks
-- Background/formalization: `papers/Noesis/01_introduction.tex`
-  Table~tab:components, `papers/Noesis/09_open_questions.tex`
-  sec:open_questions_cross
 
 ### Solution
 
-#### `PR_C1`: [ ] Written Interface Contracts for the Five Pluggable Components
+#### `PR_A1`: [ ] Written Interface Contracts for the Five Pluggable Components
 - Background: each pluggable component today is only sketched in prose
   (the paper's own admission in sec:open_questions_cross); concretely,
   `NoesisMarket` `PR_M1`/`PR_M5` (matching engine), `NoesisServer` `PR_S11` above
@@ -542,21 +568,6 @@
   components
 - Result: the pluggability claimed in `01_introduction.tex` sec:modularity
   is enforced by tests, not only documented in prose
-
-## NoesisPlatform
-
-### Goal
-- Turn the `NoesisMarket`/`NoesisServer` prototypes into a service an external
-  caller can actually reach: a public API over both components, a cloud
-  deployment target, and a way for a buyer to fund an account with a credit card
-  or crypto before bidding
-- Unlike `NoesisMarket` and `NoesisServer`, this section is not grounded in a
-  specific mechanism from `papers/Noesis/*.tex`; it is the productization layer
-  both component plans assume but neither scopes (`architecture.md` notes "there
-  is no CLI or script entry point yet")
-- Background: `NoesisMarket`'s pricing-denomination open question (real currency
-  vs. synthetic task-credit) and `08_decentralized_extension.tex`'s staked-ask
-  escrow design, for the crypto funding rail in `PR_P3`
 
 ### Solution
 
@@ -643,19 +654,6 @@
   collected, satisfying the roadmap's `v0.4` "No charge" scope; `PR_P3` upgrades
   the same gate to a real-money funding rail when charging for real is in
   scope
-
-### Open Questions
-1. Custody: does `NoesisMarket` hold buyer funds in escrow between funding and
-   settlement, or only check a balance and settle out-of-band? (affects `PR_P3`'s
-   debit timing and regulatory exposure)
-2. Refunds and chargebacks: how does a credit-card chargeback interact with
-   credit already spent on a matched contract?
-3. Cloud target for `PR_P2`: which provider to standardize on, and whether the
-   in-memory-to-datastore migration should land before or after the first public
-   deployment
-4. KYC/compliance: does accepting real-currency payments (credit card or crypto)
-   trigger money-transmitter obligations that a synthetic task-credit avoids?
-   (sharpens `NoesisMarket` open question 4)
 
 ## Conventions
 - Code: `.claude/skills/coding.rules.md`
