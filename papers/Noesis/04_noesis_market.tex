@@ -366,11 +366,14 @@ Definition~\ref{def:compatibility} already allows $c_\alpha \succ c_\beta$:
 a seller offering a higher tier than requested is compatible with a
 lower-tier bid. A full implementation would therefore let a tier-$c$
 bucket draw on asks from tier $c$ and above, at the cost of a larger
-compatibility graph per round. We do not expect this to be exploited by
-rational sellers in practice, since serving a lower tier's demand at that
-tier's clearing price is only attractive when the seller's marginal cost is
-below it, but the possibility is worth flagging since it is exactly the
-kind of cross-tier fungibility that a naive per-tier bucketing could miss.
+compatibility graph per round. We do not expect this to be exploited
+routinely by rational sellers in practice, since a higher tier's clearing
+price is typically at least as high as a lower tier's (Remark~\ref{rem:tiered_pricing}),
+so a seller usually has no incentive to divert capacity away from its own
+tier's bucket; the case where it is worth doing so, e.g., a temporarily
+oversupplied higher tier, is exactly the kind of cross-tier fungibility
+that a naive per-tier bucketing could miss, so the possibility is still
+worth flagging.
 \end{remark}
 
 \begin{proposition}[Existence of a clearing price]
@@ -477,7 +480,7 @@ round $t$, the reputation score $\rho_\alpha(t) \in [0, 1]$ is updated as
   \rho_\alpha(t + 1)
     = (1 - \lambda) \, \rho_\alpha(t)
     + \lambda \cdot \mathbb{1}\!\left[
-        \hat r(\kappa, W) \geq r_\kappa
+        \hat r(\kappa, W) \geq \rminattr(\kappa)
       \right],
 \end{equation}
 where $\lambda \in (0, 1]$ is a decay rate controlling how quickly recent

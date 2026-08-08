@@ -115,8 +115,8 @@ functions beyond simply connecting a buyer to a seller:
     buyers and sellers can express demand and supply without prior
     bilateral negotiation.
   \item \textbf{Standardization}: establish a standardized contract schema
-    (Section~\ref{sec:contract}) so that a bid and an ask submitted by
-    unrelated parties are directly comparable.
+    (Section~\ref{sec:contracts_and_notation}) so that a bid and an ask
+    submitted by unrelated parties are directly comparable.
   \item \textbf{Oversight}: meter whether a matched contract was actually
     fulfilled, a role played in \Noesis{} by \NoesisServer{} rather than
     by a separate compliance function.
@@ -150,7 +150,7 @@ must resolve before a limit order is even well-defined: a limit order only
 makes sense once one has fixed which token plays the role of quantity and which
 plays the role of price. \Noesis{} faces a similar prior question: before a bid
 or an ask can be written down, the protocol must fix what a unit of
-``intelligence'' is (Section~\ref{sec:task_unit}) and what accompanies that
+``intelligence'' is (Definition~\ref{def:task}) and what accompanies that
 unit as a quality specification. We adopt the position that quality should be
 expressed along three largely orthogonal axes:
 
@@ -198,7 +198,7 @@ quoted purely on price per token.
 \end{figure}
 % render_images:end
 
-Section~\ref{sec:contract} turns this into a formal contract. The
+Section~\ref{sec:contracts_and_notation} turns this into a formal contract. The
 consequence of this design choice is that the market cannot clear on price
 alone: two asks at the same price but different tiers are not
 substitutes, and matching must first establish compatibility along these

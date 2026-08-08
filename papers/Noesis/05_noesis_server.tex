@@ -138,8 +138,8 @@ $x$ is a \emph{success} under $\kappa$ if
 
 \begin{definition}[Measured reliability]
 \label{def:measured_reliability}
-For a fulfillment window $W$, the set of requests served under contract
-$\kappa$, the measured reliability is
+Let $W$ denote the set of requests served under contract $\kappa$ during
+its fulfillment window. The measured reliability is
 \begin{equation}
   \label{eq:measured_reliability}
   \hat r(\kappa, W) = \frac{1}{|W|} \sum_{x \in W} s(x).
@@ -241,11 +241,13 @@ trains a difficulty estimator
   \label{eq:difficulty_estimator}
   \hat d : \calP \to \calC
 \end{equation}
-mapping a prompt $x \in \calP$ to the cheapest capability tier expected to
-answer it correctly, and routes according to
+where $\calP$ denotes the space of prompts, mapping a prompt $x \in \calP$
+to the cheapest capability tier expected to
+answer it correctly, and routes each request to the tier the estimator
+itself outputs,
 \begin{equation}
   \label{eq:routing_policy}
-  \pi(x) = \min \{ c \in \calC : c \succeq \hat d(x) \}.
+  \pi(x) = \hat d(x).
 \end{equation}
 
 Routing is only worthwhile if the estimator is cheaper than the savings it
@@ -342,7 +344,8 @@ tier (Inequality~\eqref{eq:routing_saving_condition}).
 
 Fusion is the complementary lever to routing. Instead of picking one tier
 per request, \NoesisServer{} may query a set of providers $S(x) \subseteq
-\calM$ and combine their answers through an aggregator
+\calM$, where $\calM$ denotes the set of available providers, and combine
+their answers through an aggregator
 \begin{equation}
   \label{eq:fusion_aggregator}
   \hat y(x) = g\big( \{ f_m(x) \}_{m \in S(x)} \big),

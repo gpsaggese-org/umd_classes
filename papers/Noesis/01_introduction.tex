@@ -40,8 +40,10 @@ As a byproduct, \NoesisServer{} logs every request and estimates how much
 capability each request actually needs, enabling difficulty-aware routing and
 answer fusion that trade cost for accuracy in opposite directions.
 We formalize the contract, bid, and ask notation; state the market-clearing
-problem as a linear program and establish that a clearing price exists under
-standard monotonicity assumptions; and describe the request-level fulfillment
+problem as a finite search over candidate clearing prices, each reducing to a
+linear program over matched quantities, and establish that a clearing price
+exists under standard monotonicity assumptions; and describe the
+request-level fulfillment
 statistics needed to attribute a shortfall to a specific seller rather than
 to noise. We compare \Noesis{} against direct provider APIs, pass-through
 gateways, and raw-compute spot markets, and lay out the open mechanism-design
