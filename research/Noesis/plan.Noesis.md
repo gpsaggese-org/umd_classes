@@ -57,14 +57,9 @@
 5. Batch vs. hybrid: does a spot market need to sit alongside the batch auction
    for latency-sensitive buyers
    -> Project
-6. On-chain settlement and anonymity: are `PR_M6`'s commit-reveal gas costs,
-   redundancy defaults, and stake asymmetries (see
-   `papers/Noesis/08_decentralized_extension.tex`) compatible with the auction
-   frequency in open question 2
-7. Collusion: `papers/Noesis/04_noesis_market.tex` sec:mechanism_design_risks
+7. P2: Collusion: `papers/Noesis/04_noesis_market.tex` sec:mechanism_design_risks
    flags thin, few-seller tier buckets, notably `frontier`, as vulnerable to
-   coordinated bidding/bidding rings; no mitigation is designed or planned
-   above
+   coordinated bidding/bidding rings; no mitigation is designed or planned above
 
 ## NoesisServer
 
@@ -78,26 +73,24 @@
 
 ### Open Questions
 1. Is a simple pass-through logger already useful for dataset building, or does
-   routing quality matter for data diversity? (affects how much `PR_S2` matters
-   before starting `PR_S3`'s dataset use)
+   routing quality matter for data diversity?
 2. Can request difficulty be estimated cheaply enough that difficulty-aware
-   routing nets a real cost saving? (`PR_S3`'s core research question)
+   routing nets a real cost saving?
+   -> project
 3. Routing vs. fusion under a fixed budget: for a fixed per-request budget, is
-   it better to route to one well-chosen model (`PR_S2`) or to query several
-   cheaper models and combine their answers (`PR_S5`)? `PR_S5` above turns this
-   question into a measurable comparison rather than leaving it open
+   it better to route to one well-chosen model or to query several
+   cheaper models and combine their answers?
+   -> project
 4. **PII/data-handling safeguards** before logging real (non-synthetic)
    prompt/response pairs: `PR_S1` defers scrubbing and stays on synthetic/test
    traffic only until this is resolved; must be answered before enabling real
    traffic logging
 5. Can a distilled model match routed "best model per task" quality at a
-   fraction of the cost? (`PR_S3`'s distillation sub-question)
+   fraction of the cost?
 6. Attribution reliability: how reliably can the server attribute a
    quality/latency shortfall to a specific provider vs. noise, so fulfillment
    reporting to `NoesisMarket` is trustworthy enough to affect
-   pricing? `PR_S6` above answers the noise-vs-signal half of this question;
-   attributing a confirmed shortfall to the right provider among several serving
-   the same contract remains open
+   pricing?
 7. OpenRouter dependency risk: `PR_S7` makes `Gateway`'s real liquidity depend on
    one third party's uptime, pricing, and model catalog; is a single- upstream
    dependency acceptable for the prototype, or does it need a fallback provider
@@ -112,20 +105,15 @@
 ### Goal
 - Pin down the exact inputs, outputs, and invariants of the five pluggable
   components introduced in `papers/Noesis/01_introduction.tex`
-  sec:modularity:
   - Matching engine
   - Capability measurement
   - Reputation and feedback
-  - Answer fusion
+  - Router / Answer fusion
   - Pricing dissemination
 - A substitute implementation, e.g., a continuous double auction in place of
-  `NoesisMarket` `PR_M1`'s call auction, can then be swapped in for one
-  component without touching the others, as
-  `papers/Noesis/09_open_questions.tex` sec:open_questions_cross's "Interface
-  contracts for pluggable components" open question asks
-- Background/formalization: `papers/Noesis/01_introduction.tex`
-  Table~tab:components, `papers/Noesis/09_open_questions.tex`
-  sec:open_questions_cross
+  `NoesisMarket`s call auction, can then be swapped in for one component without
+  touching the others
+- Background: `papers/Noesis/01_introduction.tex`
 
 ## NoesisPlatform
 
@@ -138,11 +126,7 @@
     bidding
 - Unlike `NoesisMarket` and `NoesisServer`, this section is not grounded in a
   specific mechanism from `papers/Noesis/*.tex`; it is the productization layer
-  both component plans assume but neither scopes (`architecture.md` notes "there
-  is no CLI or script entry point yet")
-- Background: `NoesisMarket`'s pricing-denomination open question (real currency
-  vs. synthetic task-credit) and `08_decentralized_extension.tex`'s staked-ask
-  escrow design, for the crypto funding rail in `PR_P3`
+  both component plans assume but neither scopes
 
 ### Open Questions
 1. Custody: does `NoesisMarket` hold buyer funds in escrow between funding and
@@ -155,11 +139,12 @@
    deployment
 4. KYC/compliance: does accepting real-currency payments (credit card or crypto)
    trigger money-transmitter obligations that a synthetic task-credit avoids?
-   (sharpens `NoesisMarket` open question 4)
 
 # PRs
 
-#### `PR_M1`: [x] Minimal Batch Call-auction Simulator
+## NoesisMarket
+
+### `PR_M1`: [x] Minimal Batch Call-auction Simulator
 - In-memory order book: bid `(N_tasks, C_level_min, L_max, R_min, P_max)` and
   ask `(N_tasks, C_level, L_typical, R_typical, P_min)` submission
 - Bucket bids/asks by capability tier `C_level`; every `T = 5` min, clear each
@@ -171,7 +156,7 @@
   - Single currency
   - Fixed 5-min batch cadence
 
-#### `PR_M2`: [x] Contract Schema + Dispatch to a Stubbed Fulfillment Layer
+### `PR_M2`: [x] Contract Schema + Dispatch to a Stubbed Fulfillment Layer
 - Define the contract schema `(N_tasks, C_level, L_max, R_min, P)` from a cleared
   match
 - Dispatch each cleared contract to a **mock** fulfillment interface (fixed or
@@ -182,7 +167,7 @@
   past the auction boundary; swap-in point for the real `NoesisServer` once it
   exists, done by `PR_M8` below
 
-#### `PR_M3`: [ ] Reputation and Pricing Feedback Loop
+### `PR_M3`: [ ] Reputation and Pricing Feedback Loop
 - Background: `papers/Noesis/04_noesis_market.tex` sec:reputation
 - Feed logged fulfillment outcomes (from `PR_M2`, mocked or real) into per-seller
   eligibility and a pricing adjustment for future auction rounds
@@ -195,7 +180,7 @@
 - Result: sellers that under-deliver lose eligibility/priority, or are
   downgraded a tier, in later auctions
 
-#### `PR_M4`: [ ] Pricing Dissemination Feed
+### `PR_M4`: [ ] Pricing Dissemination Feed
 - Background: `papers/Noesis/02_market_design.tex` lists pricing dissemination
   as one of the protocol's five pluggable components: each round's cleared price
   $p^*(c, t)$ per tier is a useful signal beyond the bidders and sellers of the
@@ -215,7 +200,7 @@
   an on-chain event log flagged in
   `papers/Noesis/08_decentralized_extension.tex` as the pluggable alternative
 
-#### `PR_M5`: [ ] Cross-tier Compatibility (generalized Bucketing)
+### `PR_M5`: [ ] Cross-tier Compatibility (generalized Bucketing)
 - Background: `papers/Noesis/04_noesis_market.tex`'s Remark on tier
   generalization notes that a bid's compatibility definition already allows a
   higher-tier ask to satisfy a lower-tier bid ($c_\alpha \succeq
@@ -233,7 +218,7 @@
 - Result: matched volume increases relative to `PR_M1`'s exact-tier-only baseline
   without introducing a new price axis, closing `architecture.md`'s Weakness 2
 
-#### `PR_M6`: [ ] Commit-reveal Blind-bid Auction Simulation (exploratory)
+### `PR_M6`: [ ] Commit-reveal Blind-bid Auction Simulation (exploratory)
 - Exploratory/research PR, lighter bar than `PR_M1`-`PR_M5`: no real cryptography or
   on-chain settlement, tests cover protocol plumbing (commit is rejected without
   a later matching reveal, front-running is or is not blocked), not a security
@@ -257,7 +242,7 @@
   order book and commit-reveal; stake-backed slashing (the paper's staked-ask
   definition) and real on-chain deployment are out of scope for this PR
 
-#### `PR_M7`: [ ] Automatic Periodic Auction Clearing (Configurable Cadence)
+### `PR_M7`: [ ] Automatic Periodic Auction Clearing (Configurable Cadence)
 - Background: `batch_call_auction.py`'s `DEFAULT_BATCH_INTERVAL_MINUTES = 5`
   constant is documented as "not enforced by this module, which clears one
   round per `OrderBook.clear_round()` call and leaves scheduling to the
@@ -279,7 +264,7 @@
   an auction is run and an allocation is available") is `T = 10 s` on this
   scheduler
 
-#### `PR_M8`: [ ] Real Fulfillment Via NoesisServer's Gateway (swap the `PR_M2` mock)
+### `PR_M8`: [ ] Real Fulfillment Via NoesisServer's Gateway (swap the `PR_M2` mock)
 - Background: `contract_dispatch.py`'s module docstring says its mocked
   fulfillment layer "stands in for `Intelligence_Server` ... which does not
   exist yet"; that is no longer true once `NoesisServer` `PR_S1` (passthrough
@@ -302,7 +287,7 @@
   ("get served through the API of the providers") is true rather than
   simulated
 
-#### `PR_M9`: [ ] Scored Compatibility (exploratory)
+### `PR_M9`: [ ] Scored Compatibility (exploratory)
 - Background: `papers/Noesis/09_open_questions.tex` sec:open_questions_market
   item 3, "Compatibility versus scoring," asks whether a scored
   compatibility measure, admitting partial matches at a discount, could
@@ -323,9 +308,9 @@
   between `PR_M1`'s hard-constraint baseline and the scored variant, answering
   `09_open_questions.tex` item 3 empirically rather than leaving it open
 
-### Solution
+## NoesisServer
 
-#### `PR_S1`: [x] Minimal Passthrough Proxy with Logging
+### `PR_S1`: [x] Minimal Passthrough Proxy with Logging
 - Support 2-3 providers behind one API
 - Define the storage schema for prompt, response, and metadata (provider, model,
   latency, cost)
@@ -336,7 +321,7 @@
   provider is logged with correct schema and fields
 - Result: every request/response pair is logged and queryable
 
-#### `PR_S2`: [ ] Routing Policy + Cost/quality Measurement
+### `PR_S2`: [ ] Routing Policy + Cost/quality Measurement
 - Add a simple routing policy (e.g., a task classifier): route to a cheap or
   fast model vs. a stronger model
 - Measure cost and quality against an always-call-the-strong-model baseline,
@@ -345,7 +330,7 @@
   classification; cost/quality metrics computed correctly on a fixture log
 - Result: a measured cost/quality frontier for at least one routing policy
 
-#### `PR_S3`: [ ] Difficulty Estimator + Distillation Experiment (prototype)
+### `PR_S3`: [ ] Difficulty Estimator + Distillation Experiment (prototype)
 - Exploratory/research PR, lighter bar than `PR_S1`/`PR_S2`: tests cover pipeline
   plumbing (data loads, estimator trains, metrics compute), not a model quality
   bar
@@ -355,7 +340,7 @@
 - Result: a difficulty-aware router with a measured saving, and a first
   distillation experiment with reported (not necessarily strong) results
 
-#### `PR_S4`: [ ] Fulfillment Monitoring Wired to the Market (stubbed Both Sides)
+### `PR_S4`: [ ] Fulfillment Monitoring Wired to the Market (stubbed Both Sides)
 - Background: `papers/Noesis/05_noesis_server.tex` sec:fulfillment_monitoring
   Equation~eq:success_indicator defines per-request success as the
   conjunction `capability_ok(x) and latency_ok(x)`, and
@@ -379,7 +364,7 @@
 - Result: closed loop between a matched contract and its measured fulfillment,
   real once both sides swap the mock for the real interface
 
-#### `PR_S5`: [ ] Answer Fusion Prototype
+### `PR_S5`: [ ] Answer Fusion Prototype
 - Background: `papers/Noesis/05_noesis_server.tex`'s answer-fusion section
   describes fusion as the complementary lever to routing: instead of picking one
   tier per request, fan a request out to a set of providers $S(x)$ and combine
@@ -400,7 +385,7 @@
   reference answer), giving a first cost/ reliability trade-off for fusion,
   analogous to `PR_S2`'s cost/quality frontier for routing
 
-#### `PR_S6`: [ ] Statistical Fulfillment Violation Test
+### `PR_S6`: [ ] Statistical Fulfillment Violation Test
 - Background: `papers/Noesis/05_noesis_server.tex`'s fulfillment monitoring
   section notes that `PR_S4`'s naive rule, flagging $\kappa$ whenever
   `measured_reliability < R_min`, conflates genuine under-delivery with sampling
@@ -419,7 +404,7 @@
   reputation update, addressing the "attribution reliability" open question
   below
 
-#### `PR_S7`: [ ] Real Provider Liquidity Via an OpenRouter-backed `ProviderConfig`
+### `PR_S7`: [ ] Real Provider Liquidity Via an OpenRouter-backed `ProviderConfig`
 - Background: `05_noesis_server.tex` models `NoesisServer` "on multi-provider
   routers such as OpenRouter" precisely because a router like OpenRouter already
   pools dozens of providers and models behind one API key, matching the paper's
@@ -445,7 +430,7 @@
   stand-ins; once wired to `NoesisMarket` (`PR_M8` above), a cleared ask can be
   fulfilled by an actual OpenRouter call in place of `mock_fulfill()`
 
-#### `PR_S8`: [ ] OpenRouter-compatible API Interface for `NoesisServer`
+### `PR_S8`: [ ] OpenRouter-compatible API Interface for `NoesisServer`
 - Background: `NoesisPlatform` `PR_P1` sketches a bespoke HTTP wrapper around
   `Gateway.call()` without specifying its wire format; adopting OpenRouter's own
   REST contract instead means any existing OpenRouter client (SDK, LangChain
@@ -469,7 +454,7 @@
   caller's point of view; supersedes the wire format of `NoesisPlatform`
   `PR_P1`'s passthrough-completion endpoint once this lands
 
-#### `PR_S9`: [ ] OpenRouter Capacity as Market Supply (Auto-ask Adapter)
+### `PR_S9`: [ ] OpenRouter Capacity as Market Supply (Auto-ask Adapter)
 - Background: `PR_S7` gives `Gateway` real OpenRouter-backed capacity and pricing
   (`GET /api/v1/models`), but nothing in the plan turns that capacity into
   `NoesisMarket` asks; `POST /asks` (`NoesisPlatform` `PR_P1`) still requires a
@@ -489,7 +474,7 @@
   target ("an adapter from OpenRouter to the API ... to provide capacity")
   describes
 
-#### `PR_S10`: [ ] Request Caching for Identical/Near-duplicate Requests
+### `PR_S10`: [ ] Request Caching for Identical/Near-duplicate Requests
 - Background: `papers/Noesis/01_introduction.tex` sec:protocol_overview
   describes `NoesisServer` as caching "responses to identical or
   near-duplicate requests to avoid paying a provider twice for the same
@@ -507,7 +492,7 @@
   measured cache-hit rate on a synthetic traffic fixture with a controlled
   duplication rate
 
-#### `PR_S11`: [ ] Capability-measurement Estimator (hat-c(x))
+### `PR_S11`: [ ] Capability-measurement Estimator (hat-c(x))
 - Background: `papers/Noesis/01_introduction.tex` Table~tab:components lists
   capability measurement as one of the five pluggable components,
   instantiated in the paper as "a verifier model, benchmark probe, or
@@ -529,7 +514,7 @@
 - Result: `NoesisServer` `PR_S4`/`PR_S6` gain a real (not stubbed) source for
   `capability_ok(x)`; should land before `PR_S4`/`PR_S6` are considered complete
 
-#### `PR_S12`: [ ] Opt-in Distillation Consent and Anonymization Gate
+### `PR_S12`: [ ] Opt-in Distillation Consent and Anonymization Gate
 - Background: `05_noesis_server.tex` sec:distillation distinguishes the
   distillation corpus `D` from `PR_S1`'s passive logging: inclusion requires
   the customer to opt in and requires prompts/responses to be anonymized to
@@ -546,10 +531,9 @@
   real consent, ahead of the PII open question being fully resolved for raw
   logging
 
+## NoesisPlatform
 
-### Solution
-
-#### `PR_A1`: [ ] Written Interface Contracts for the Five Pluggable Components
+### `PR_P5`: [ ] Written Interface Contracts for the Five Pluggable Components
 - Background: each pluggable component today is only sketched in prose (the
   paper's own admission in sec:open_questions_cross); concretely, each of the
   following fixed one instantiation without a written contract for what a
@@ -584,9 +568,7 @@
 - Result: the pluggability claimed in `01_introduction.tex` sec:modularity
   is enforced by tests, not only documented in prose
 
-### Solution
-
-#### `PR_P1`: [x] Public API Surface for NoesisMarket and NoesisServer
+### `PR_P1`: [x] Public API Surface for NoesisMarket and NoesisServer
 - Background: `PR_M1`-`PR_M6` of `NoesisMarket` and `PR_S1`-`PR_S6` of `NoesisServer`
   expose Python library calls only (`OrderBook.submit_bid()`, `Gateway.call()`,
   etc.); an external caller cannot reach either component today
@@ -613,7 +595,7 @@
   in-process per-tier cache populated by `POST /rounds/clear`, standing in for
   `PR_M4`'s pub/sub feed until `PR_M4` lands
 
-#### `PR_P2`: [ ] Cloud Deployment
+### `PR_P2`: [ ] Cloud Deployment
 - Containerize `PR_P1`'s API into a single Docker image, following this repo's
   existing Docker template conventions
   (`class_project/project_template/Dockerfile*`)
@@ -631,7 +613,7 @@
   backed by persistent storage instead of the current in-process `List`/`Dict`
   state (`architecture.md` Weakness 6)
 
-#### `PR_P3`: [ ] Buying Credits (credit Card and Crypto)
+### `PR_P3`: [ ] Buying Credits (credit Card and Crypto)
 - Background: resolves `NoesisMarket` open question 4 (pricing denomination)
   operationally, by supporting both a real-currency and a crypto funding rail
   instead of forcing a single choice
@@ -652,7 +634,7 @@
 - Result: a buyer can fund an account through either rail and see the balance
   gate bid submission
 
-#### `PR_P4`: [ ] No-charge Credit Ledger for Bid Gating
+### `PR_P4`: [ ] No-charge Credit Ledger for Bid Gating
 - Background: the roadmap's `v0.4` explicitly scopes "No charge", but the
   only PR that gates `POST /bids` on a balance is `PR_P3`, which requires real
   Stripe/crypto payment rails; `v0.4` needs the balance-gating *mechanism*
