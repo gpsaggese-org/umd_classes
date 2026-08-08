@@ -534,45 +534,11 @@
 
 ## NoesisPlatform
 
-### `PR_P5`: [ ] Written Interface Contracts for the Five Pluggable Components
-- Background: each pluggable component today is only sketched in prose (the
-  paper's own admission in sec:open_questions_cross); concretely, each of the
-  following fixed one instantiation without a written contract for what a
-  substitute must satisfy:
-  - `NoesisMarket` `PR_M1`/`PR_M5` (matching engine)
-  - `NoesisServer` `PR_S11` above (capability measurement)
-  - `NoesisMarket` `PR_M3` (reputation and feedback)
-  - `NoesisServer` `PR_S5` (answer fusion)
-  - `NoesisMarket` `PR_M4` (pricing dissemination)
-- Write one interface per component (e.g., a Python `Protocol` or abstract
-  base class) specifying required inputs, outputs, and invariants:
-  - Matching engine (`bids, asks -> contracts`)
-  - Capability measurement (`prompt, response -> tier`, per `NoesisServer`
-    `PR_S11`)
-  - Reputation and feedback (`fulfillment history -> score`)
-  - Answer fusion (`responses -> answer`, per `NoesisServer` `PR_S5`)
-  - Pricing dissemination (`cleared round -> published event`, per
-    `NoesisMarket` `PR_M4`)
-- Retrofit the existing concrete implementations to satisfy the written
-  interface, as a regression check that the interface is not just
-  aspirational:
-  - `NoesisMarket` `PR_M1`'s call auction
-  - `NoesisServer` `PR_S11`'s reference-model-agreement estimator
-  - `NoesisMarket` `PR_M3`'s exponential-decay update
-  - `NoesisServer` `PR_S5`'s majority-vote aggregator
-  - `NoesisMarket` `PR_M4`'s pub/sub feed
-- Unit tests: a second, deliberately trivial implementation of each
-  interface (e.g., a random-price matching engine, a constant-tier
-  capability estimator) can be substituted in the existing test suite for
-  each component without modifying tests that exercise the other
-  components
-- Result: the pluggability claimed in `01_introduction.tex` sec:modularity
-  is enforced by tests, not only documented in prose
-
 ### `PR_P1`: [x] Public API Surface for NoesisMarket and NoesisServer
-- Background: `PR_M1`-`PR_M6` of `NoesisMarket` and `PR_S1`-`PR_S6` of `NoesisServer`
-  expose Python library calls only (`OrderBook.submit_bid()`, `Gateway.call()`,
-  etc.); an external caller cannot reach either component today
+- Background:
+  - `NoesisMarket` and `NoesisServer` expose Python library calls only
+    (`OrderBook.submit_bid()`, `Gateway.call()`, etc.)
+  - An external caller cannot reach either component today
 - Wrap the existing modules behind a thin HTTP API (e.g., FastAPI):
   - `NoesisMarket`: `POST /bids`, `POST /asks`, `GET /contracts/{id}`,
     `GET /rounds/{tier}/latest` (`NoesisMarket` `PR_M4`'s pricing-dissemination
@@ -581,10 +547,6 @@
     `GET /logs`
   - Auth: a per-account API key, checked before accepting a bid/ask or a gateway
     call
-- Unit tests: each endpoint round-trips to the underlying library call with the
-  same validation (`hdbg.dassert_*`) surfaced as an HTTP 4xx, not a stack trace;
-  a request with a missing/invalid API key is rejected before reaching the
-  underlying call
 - Result: `NoesisMarket` and `NoesisServer` are callable over HTTP by an
   external client, not just from within the same Python process
 - Implementation note (`research/Noesis/platform_api.py`): added an
@@ -603,20 +565,30 @@
 - Deploy to a cloud target:
   - A single-node container service, e.g. AWS ECS, Fly.io, or Render, to start
   - Kubernetes deferred until there is more than one process to orchestrate
+- Result: a `NoesisMarket`/`NoesisServer` instance reachable at a public URL
+
+- TODO(gp): Read the documentation about how to release a product container
+  ./docs/tools/dev_system/all.devops_docker_auto_release.explanation.md
+  ./docs/tools/dev_system/all.devops_docker.how_to_guide.md
+  ./docs/tools/dev_system/all.devops_docker.reference.md
+  ./docs/tools/dev_system/all.docker_optimizer_container.how_to_guide.md
+  ./docs/tools/docker/all.docker.tutorial.md
+  ./docs/tools/docker/all.dockerized_flow.explanation.md
+
+### `PR_P2b`: [ ] Cloud Deployment
 - Externalize the in-memory state of `NoesisMarket` and of `NoesisServer` assume
   (order book, contract log, request log) to a real datastore (e.g Postgres or
   Redis)
   - A cloud deployment cannot rely on a single long-lived process the way the
     current test suites do
-- Unit tests: a smoke test that boots the container and round-trips one bid/ask
-  pair through the deployed API image locally (`docker run` + one HTTP call),
-  not a real cloud test
-- Result: a `NoesisMarket`/`NoesisServer` instance reachable at a public URL,
-  backed by persistent storage instead of the current in-process `List`/`Dict`
+- Result: a `NoesisMarket`/`NoesisServer` backed by persistent storage instead of
+  the current in-process `List`/`Dict`
   state
 
-- TODO(gp): Read the documentation about how to release a product container
 - TODO(gp): Read how to inject a Postgress instance in the container
+  - /Users/saggese/src/csfy1/datapull/im_lib_tasks.py
+  - /Users/saggese/src/csfy1/datapull/test/test_im_lib_tasks.py
+  - data605/tutorials/tutorial_postgres/tutorial_postgres.md
 
 ### `PR_P3`: [ ] Buying Credits (credit Card and Crypto)
 - Background: resolves `NoesisMarket` open question 4 (pricing denomination)
@@ -656,6 +628,41 @@
   collected, satisfying the roadmap's `v0.4` "No charge" scope; `PR_P3` upgrades
   the same gate to a real-money funding rail when charging for real is in
   scope
+
+### `PR_P5`: [ ] Written Interface Contracts for the Five Pluggable Components
+- Background: each pluggable component today is only sketched in prose (the
+  paper's own admission in sec:open_questions_cross); concretely, each of the
+  following fixed one instantiation without a written contract for what a
+  substitute must satisfy:
+  - `NoesisMarket` `PR_M1`/`PR_M5` (matching engine)
+  - `NoesisServer` `PR_S11` above (capability measurement)
+  - `NoesisMarket` `PR_M3` (reputation and feedback)
+  - `NoesisServer` `PR_S5` (answer fusion)
+  - `NoesisMarket` `PR_M4` (pricing dissemination)
+- Write one interface per component (e.g., a Python `Protocol` or abstract
+  base class) specifying required inputs, outputs, and invariants:
+  - Matching engine (`bids, asks -> contracts`)
+  - Capability measurement (`prompt, response -> tier`, per `NoesisServer`
+    `PR_S11`)
+  - Reputation and feedback (`fulfillment history -> score`)
+  - Answer fusion (`responses -> answer`, per `NoesisServer` `PR_S5`)
+  - Pricing dissemination (`cleared round -> published event`, per
+    `NoesisMarket` `PR_M4`)
+- Retrofit the existing concrete implementations to satisfy the written
+  interface, as a regression check that the interface is not just
+  aspirational:
+  - `NoesisMarket` `PR_M1`'s call auction
+  - `NoesisServer` `PR_S11`'s reference-model-agreement estimator
+  - `NoesisMarket` `PR_M3`'s exponential-decay update
+  - `NoesisServer` `PR_S5`'s majority-vote aggregator
+  - `NoesisMarket` `PR_M4`'s pub/sub feed
+- Unit tests: a second, deliberately trivial implementation of each
+  interface (e.g., a random-price matching engine, a constant-tier
+  capability estimator) can be substituted in the existing test suite for
+  each component without modifying tests that exercise the other
+  components
+- Result: the pluggability claimed in `01_introduction.tex` sec:modularity
+  is enforced by tests, not only documented in prose
 
 ## Conventions
 - Code: `.claude/skills/coding.rules.md`

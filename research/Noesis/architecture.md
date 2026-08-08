@@ -46,6 +46,7 @@
 - Describes how the Noesis prototype fits with its (simulated) users and the
   external systems it integrates with, some of which are stubbed
 ```mermaid
+%%{init: {"c4": {"c4ShapeMargin": 90, "c4ShapePadding": 20, "diagramMarginX": 40, "diagramMarginY": 50, "personFontSize": 16, "personFontWeight": "bold", "external_personFontSize": 16, "systemFontSize": 16, "systemFontWeight": "bold", "external_systemFontSize": 16, "boundaryFontSize": 16, "messageFontSize": 15}}}%%
 C4Context
   title research/Noesis - System Context
 
@@ -53,16 +54,17 @@ C4Context
   Person(seller, "Seller", "Submits Asks to sell LLM inference capacity")
   Person(caller, "External caller", "Any HTTP client with an API key")
 
-  System(noesis, "Noesis Prototype", "In-memory batch call-auction, contract dispatch, LLM passthrough proxy, and platform_api.py's HTTP surface over both")
+  System(noesis, "Noesis Prototype", "Batch call-auction, contract dispatch, and LLM proxy; HTTP surface via platform_api.py")
 
   System_Ext(intelligence_server, "Intelligence_Server (not implemented)", "Real fulfillment/monitoring layer")
-  System_Ext(llm_providers, "LLM Providers", "OpenAI, Anthropic, etc.; stubbed via ProviderCallFn in tests")
+  System_Ext(llm_providers, "LLM Providers", "OpenAI, Anthropic, etc. (stubbed in tests)")
 
   Rel(buyer, noesis, "submits Bid (Python call or HTTP)", "OrderBook.submit_bid() / POST /bids")
   Rel(seller, noesis, "submits Ask (Python call or HTTP)", "OrderBook.submit_ask() / POST /asks")
   Rel(caller, noesis, "reads contracts/prices, calls a model, reads logs", "GET /contracts/{id}, GET /rounds/{tier}/latest, POST /completions, GET /logs")
   Rel(noesis, intelligence_server, "dispatches cleared Contract to (mocked)", "dispatch_contract()")
   Rel(noesis, llm_providers, "proxies prompt, logs response (stubbed)", "Gateway.call()")
+  UpdateRelStyle(noesis, llm_providers, $offsetY="60", $offsetX="60")
 ```
 
 - The buyer/seller side is a test harness or an HTTP caller of `POST
@@ -81,6 +83,7 @@ C4Context
 - Describes the four modules inside `research/Noesis` and the dependencies
   between them
 ```mermaid
+%%{init: {"c4": {"c4ShapeMargin": 90, "c4ShapePadding": 20, "diagramMarginX": 40, "diagramMarginY": 50, "personFontSize": 16, "personFontWeight": "bold", "systemFontSize": 16, "external_systemFontSize": 16, "containerFontSize": 16, "containerFontWeight": "bold", "boundaryFontSize": 16, "messageFontSize": 15}}}%%
 C4Container
   title research/Noesis - Container Diagram
 
@@ -95,14 +98,18 @@ C4Container
 
   System_Ext(intelligence_server, "Intelligence_Server (not implemented)", "mock_fulfill() stands in for it")
 
-  Rel(caller, auction, "submit_bid() / submit_ask() / clear_round() (direct Python)")
-  Rel(caller, proxy, "register_provider() / call() (direct Python)")
-  Rel(caller, api, "POST /bids, /asks, /rounds/clear, /completions; GET /contracts/{id}, /rounds/{tier}/latest, /logs")
+  Rel(caller, auction, "submit_bid() / submit_ask() / clear_round()", "direct Python")
+  Rel(caller, proxy, "register_provider() / call()", "direct Python")
+  Rel(caller, api, "POST /bids,/asks,/rounds/clear,/completions", "GET /contracts/{id},/rounds/{tier}/latest,/logs")
   Rel(dispatch, auction, "imports Bid, Ask, TierClearResult")
   Rel(dispatch, intelligence_server, "dispatch_contract() (mocked)")
   Rel(api, auction, "imports OrderBook, Bid, Ask")
   Rel(api, dispatch, "imports build_contracts(), dispatch_contracts(), mock_fulfill()")
   Rel(api, proxy, "imports Gateway, ProviderConfig")
+
+  UpdateRelStyle(caller, proxy, $offsetY="580", $offsetX="330")
+  UpdateRelStyle(caller, api, $offsetY="920", $offsetX="-30")
+  UpdateRelStyle(dispatch, intelligence_server, $offsetY="-20", $offsetX="-160")
 ```
 
 - `contract_dispatch.py` is the only lower-layer module with an internal
@@ -119,16 +126,17 @@ C4Container
 - Describes the runtime call chain from order submission through logged
   fulfillment outcome, the primary multi-module flow in this codebase
 ```mermaid
+%%{init: {"themeVariables": {"fontSize": "18px"}, "flowchart": {"nodeSpacing": 45, "rankSpacing": 55}}}%%
 flowchart LR
-    submit_bid["OrderBook.submit_bid()"] --> book[("_bids / _asks\n(pending orders)")]
+    submit_bid["OrderBook.submit_bid()"] --> book[("_bids / _asks<br/>(pending orders)")]
     submit_ask["OrderBook.submit_ask()"] --> book
     book --> clear_round["OrderBook.clear_round()"]
-    clear_round --> match["_match_orders_in_tier()\n(per c_level)"]
-    match --> tier_result["TierClearResult\n(fills, clearing_price, unfilled)"]
+    clear_round --> match["_match_orders_in_tier()<br/>(per c_level)"]
+    match --> tier_result["TierClearResult<br/>(fills, clearing_price, unfilled)"]
     tier_result --> build["build_contracts(bids, tier_results)"]
-    build --> contract["Contract\n(fulfilled=None)"]
-    contract --> dispatch["dispatch_contract() /\ndispatch_contracts()"]
-    dispatch --> fulfill["fulfillment_fn\n(default: mock_fulfill())"]
+    build --> contract["Contract<br/>(fulfilled=None)"]
+    contract --> dispatch["dispatch_contract() /<br/>dispatch_contracts()"]
+    dispatch --> fulfill["fulfillment_fn<br/>(default: mock_fulfill())"]
     fulfill --> logged["Contract.fulfilled = True/False"]
 ```
 
@@ -206,7 +214,7 @@ flowchart LR
 | `time`           | `time.perf_counter` default clock for `Gateway`'s latency measurement                                                                        |
 | `typing`         | `Callable`, `Dict`, `List`, `Optional`, `Tuple` type hints throughout                                                                        |
 | `fastapi`        | `platform_api.py`'s HTTP framework: routing, `Depends()`-based auth, request/response validation, `exception_handler()`                     |
-| `pydantic`       | `platform_api.py`'s request/response schemas (`BidRequest`, `ContractResponse`, etc.), pinned in via `fastapi`, not in the repo's `pip_list.txt` (see `research/Noesis/requirements.txt`) |
+| `pydantic`       | `platform_api.py`'s request/response schemas (`BidRequest`, `ContractResponse`, etc.), pinned in via `fastapi`; neither `fastapi` nor `pydantic` is pinned anywhere in this directory, since no `research/Noesis/requirements.txt` exists yet despite `platform_api.py`'s own docstring pointing callers to one |
 
 # Critique and Improvements
 

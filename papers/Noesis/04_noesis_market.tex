@@ -25,6 +25,18 @@ contains exactly the bids with $c_\beta = c$ and the asks with $c_\alpha = c$;
 Remark~\ref{rem:tier_generalization} below discusses the natural generalization
 in which higher-tier asks are also eligible to fill lower-tier demand.
 
+% TODO(gp): Resolve, rather than defer, the mismatch between this
+% $T$-minute periodic clearing and interactive demand (chat agents, coding
+% assistants) that needs a synchronous, sub-second response. Spell out
+% explicitly how an individual request inside a fulfillment window is served
+% against a pre-cleared capacity contract (i.e., that $T$ governs when
+% capacity and price are cleared, not the latency of any one request), and
+% what happens on overage within a window or for a request that arrives
+% between rounds (spot fallback). This is currently only gestured at as a
+% future hybrid design in Section~\ref{sec:open_questions_market}, but it is
+% load-bearing for the whole premise and should be addressed in the main
+% design, not just the open-questions list.
+
 \begin{example}[Basic auction round]
 \label{ex:basic_round}
 A buyer submits a bid for 10,000 tasks at \texttt{frontier} capability,
@@ -614,6 +626,17 @@ Section~\ref{sec:open_questions}.
     of a concern at the \texttt{frontier} tier, where the number of
     credible providers is small by construction.
 \end{itemize}
+
+% TODO(gp): Replace the citation-only treatment above with at least one
+% formal result tailored to Noesis rather than a pointer to the general
+% auction-theory literature. Concretely: connect the reliability lower
+% bound of Equation~\eqref{eq:reliability_lower_bound} to a
+% minimum-detectable-shortfall analysis, i.e., derive how large a true
+% reliability shortfall a rational seller can sustain, as a function of the
+% window size $|W|$ and confidence level $\delta$, before
+% $\hat r_{\text{lower}}(\kappa, W) < \rminattr(\kappa)$ triggers a
+% violation. This turns the disclaimed "we do not resolve this" below into
+% a concrete, checkable bound on the capability-misrepresentation risk.
 
 We do not claim to resolve these problems in this paper; the auction
 design in Problem~\ref{prob:clearing} is a starting point whose robustness
