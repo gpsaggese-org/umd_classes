@@ -46,16 +46,17 @@
 
 1. Task unit for cross-provider comparability: tokens vs. wall-clock compute vs
    benchmark-normalized task-equivalent
+   -> Project
 2. Auction mechanism/frequency: uniform-price batch call auction vs. continuous
    double auction, and whether 5 min is the right cadence
 3. Anti-gaming: how to stop capability misrepresentation or bid shading without
    a heavy onboarding/reputation system
-4. Pricing denomination: real currency vs. synthetic task-credit;
-   `NoesisPlatform` `PR_P3` below resolves this operationally by supporting both a
-   credit-card and a crypto funding rail rather than forcing a single choice at
-   the protocol level
+4. Pricing denomination: real currency vs. synthetic task-credit?
+   - Maybe supporting both a credit-card and a crypto funding rail rather than
+     forcing a single choice at the protocol level
 5. Batch vs. hybrid: does a spot market need to sit alongside the batch auction
    for latency-sensitive buyers
+   -> Project
 6. On-chain settlement and anonymity: are `PR_M6`'s commit-reveal gas costs,
    redundancy defaults, and stake asymmetries (see
    `papers/Noesis/08_decentralized_extension.tex`) compatible with the auction
@@ -111,13 +112,17 @@
 ### Goal
 - Pin down the exact inputs, outputs, and invariants of the five pluggable
   components introduced in `papers/Noesis/01_introduction.tex`
-  sec:modularity (matching engine, capability measurement, reputation and
-  feedback, answer fusion, pricing dissemination), so a substitute
-  implementation, e.g., a continuous double auction in place of
-  `NoesisMarket` `PR_M1`'s call auction, can be swapped in without touching the
-  other component, as `papers/Noesis/09_open_questions.tex`
-  sec:open_questions_cross's "Interface contracts for pluggable components"
-  open question asks
+  sec:modularity:
+  - Matching engine
+  - Capability measurement
+  - Reputation and feedback
+  - Answer fusion
+  - Pricing dissemination
+- A substitute implementation, e.g., a continuous double auction in place of
+  `NoesisMarket` `PR_M1`'s call auction, can then be swapped in for one
+  component without touching the others, as
+  `papers/Noesis/09_open_questions.tex` sec:open_questions_cross's "Interface
+  contracts for pluggable components" open question asks
 - Background/formalization: `papers/Noesis/01_introduction.tex`
   Table~tab:components, `papers/Noesis/09_open_questions.tex`
   sec:open_questions_cross
@@ -126,9 +131,11 @@
 
 ### Goal
 - Turn the `NoesisMarket`/`NoesisServer` prototypes into a service an external
-  caller can actually reach: a public API over both components, a cloud
-  deployment target, and a way for a buyer to fund an account with a credit card
-  or crypto before bidding
+  caller can actually reach:
+  - A public API over both components
+  - A cloud deployment target
+  - A way for a buyer to fund an account with a credit card or crypto before
+    bidding
 - Unlike `NoesisMarket` and `NoesisServer`, this section is not grounded in a
   specific mechanism from `papers/Noesis/*.tex`; it is the productization layer
   both component plans assume but neither scopes (`architecture.md` notes "there
@@ -180,10 +187,11 @@
 - Feed logged fulfillment outcomes (from `PR_M2`, mocked or real) into per-seller
   eligibility and a pricing adjustment for future auction rounds
 - Sellers whose measured reliability drops below `R_min` on repeated
-  contracts are priced out or excluded from subsequent rounds, or, per
-  sec:reputation's alternative remediation, required to submit asks at a
-  lower tier reflecting the downgraded assessment of their actual
-  capability, instead of outright exclusion
+  contracts face one of two remediations:
+  - Priced out or excluded from subsequent rounds
+  - Per sec:reputation's alternative remediation, required to submit asks at
+    a lower tier reflecting the downgraded assessment of their actual
+    capability, instead of outright exclusion
 - Result: sellers that under-deliver lose eligibility/priority, or are
   downgraded a tier, in later auctions
 
@@ -379,10 +387,11 @@
   learned combiner); a high-`R_min` contract may only be economically served
   through fusion, while a low-price, low-`R_min` contract favors `PR_S2`'s routing
   instead
-- Extend the `PR_S1` gateway's `Gateway.call()` with a `call_fused()` that
-  dispatches the same prompt to every provider in `S(x)`, collects responses,
-  and applies a pluggable aggregator (majority vote / exact match to start; a
-  verifier-model or learned combiner deferred)
+- Extend the `PR_S1` gateway's `Gateway.call()` with a `call_fused()` that:
+  - Dispatches the same prompt to every provider in `S(x)`
+  - Collects responses
+  - Applies a pluggable aggregator (majority vote / exact match to start; a
+    verifier-model or learned combiner deferred)
 - Unit tests: the majority-vote aggregator picks the modal response on a fixture
   with a clear majority; ties are broken deterministically; cost accounting sums
   the cost of every fanned-out call, not just one
@@ -417,13 +426,13 @@
   "provider-agnostic liquidity pooling" property (`01_introduction.tex`);
   `PR_S1`'s `ProviderConfig.call_fn` today wraps only test stand-ins, so
   `Gateway` has no real liquidity yet
-- Add an `OpenRouterProviderConfig` (or a `call_fn` factory) whose `call_fn`
-  forwards `(model, prompt)` to OpenRouter's real chat- completions endpoint
-  (`model` formatted as `"<upstream_provider>/ <model>"`, e.g
-  `"openai/gpt-4o"`), parses the response back into the raw text
-  `Gateway.call()` returns today, and replaces `PR_S1`'s placeholder `cost_per_char`
-  with the real per-token cost OpenRouter reports in `usage` (`architecture.md`
-  Weakness 7)
+- Add an `OpenRouterProviderConfig` (or a `call_fn` factory) whose `call_fn`:
+  - Forwards `(model, prompt)` to OpenRouter's real chat-completions endpoint
+    (`model` formatted as `"<upstream_provider>/<model>"`, e.g
+    `"openai/gpt-4o"`)
+  - Parses the response back into the raw text `Gateway.call()` returns today
+  - Replaces `PR_S1`'s placeholder `cost_per_char` with the real per-token
+    cost OpenRouter reports in `usage` (`architecture.md` Weakness 7)
 - One registered `OpenRouterProviderConfig` covers every model OpenRouter lists
   (`GET /api/v1/models`), so `Gateway` gets real multi-provider liquidity from a
   single integration instead of one bespoke `ProviderConfig` per upstream
@@ -541,26 +550,32 @@
 ### Solution
 
 #### `PR_A1`: [ ] Written Interface Contracts for the Five Pluggable Components
-- Background: each pluggable component today is only sketched in prose
-  (the paper's own admission in sec:open_questions_cross); concretely,
-  `NoesisMarket` `PR_M1`/`PR_M5` (matching engine), `NoesisServer` `PR_S11` above
-  (capability measurement), `NoesisMarket` `PR_M3` (reputation and feedback),
-  `NoesisServer` `PR_S5` (answer fusion), and `NoesisMarket` `PR_M4` (pricing
-  dissemination) each fixed one instantiation without a written contract
-  for what a substitute must satisfy
+- Background: each pluggable component today is only sketched in prose (the
+  paper's own admission in sec:open_questions_cross); concretely, each of the
+  following fixed one instantiation without a written contract for what a
+  substitute must satisfy:
+  - `NoesisMarket` `PR_M1`/`PR_M5` (matching engine)
+  - `NoesisServer` `PR_S11` above (capability measurement)
+  - `NoesisMarket` `PR_M3` (reputation and feedback)
+  - `NoesisServer` `PR_S5` (answer fusion)
+  - `NoesisMarket` `PR_M4` (pricing dissemination)
 - Write one interface per component (e.g., a Python `Protocol` or abstract
-  base class) specifying required inputs, outputs, and invariants: matching
-  engine (`bids, asks -> contracts`), capability measurement (`prompt,
-  response -> tier`, per `NoesisServer` `PR_S11`), reputation and feedback
-  (`fulfillment history -> score`), answer fusion (`responses -> answer`,
-  per `NoesisServer` `PR_S5`), pricing dissemination (`cleared round ->
-  published event`, per `NoesisMarket` `PR_M4`)
-- Retrofit the existing concrete implementations (`NoesisMarket` `PR_M1`'s call
-  auction, `NoesisServer` `PR_S11`'s reference-model-agreement estimator,
-  `NoesisMarket` `PR_M3`'s exponential-decay update, `NoesisServer` `PR_S5`'s
-  majority-vote aggregator, `NoesisMarket` `PR_M4`'s pub/sub feed) to satisfy
-  the written interface, as a regression check that the interface is not
-  just aspirational
+  base class) specifying required inputs, outputs, and invariants:
+  - Matching engine (`bids, asks -> contracts`)
+  - Capability measurement (`prompt, response -> tier`, per `NoesisServer`
+    `PR_S11`)
+  - Reputation and feedback (`fulfillment history -> score`)
+  - Answer fusion (`responses -> answer`, per `NoesisServer` `PR_S5`)
+  - Pricing dissemination (`cleared round -> published event`, per
+    `NoesisMarket` `PR_M4`)
+- Retrofit the existing concrete implementations to satisfy the written
+  interface, as a regression check that the interface is not just
+  aspirational:
+  - `NoesisMarket` `PR_M1`'s call auction
+  - `NoesisServer` `PR_S11`'s reference-model-agreement estimator
+  - `NoesisMarket` `PR_M3`'s exponential-decay update
+  - `NoesisServer` `PR_S5`'s majority-vote aggregator
+  - `NoesisMarket` `PR_M4`'s pub/sub feed
 - Unit tests: a second, deliberately trivial implementation of each
   interface (e.g., a random-price matching engine, a constant-tier
   capability estimator) can be substituted in the existing test suite for
