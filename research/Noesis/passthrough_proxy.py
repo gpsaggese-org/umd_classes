@@ -54,8 +54,8 @@ class ProviderConfig:
     # Stand-in for the real provider SDK call (see `ProviderCallFn`).
     call_fn: ProviderCallFn
     # Crude placeholder pricing model: $ per character of prompt+response
-    # text. A follow-up PR can swap this for real per-token provider
-    # pricing once one is needed.
+    # text. This can be swapped for real per-token provider pricing once
+    # one is needed.
     cost_per_char: float
 
     def __init__(
@@ -83,8 +83,8 @@ class RequestLogEntry:
     """
     Storage schema for one logged prompt/response pair.
 
-    One entry is appended per `Gateway.call()`, matched or not: PR1 logs
-    every request regardless of provider outcome.
+    One entry is appended per `Gateway.call()`, matched or not: every
+    request is logged regardless of provider outcome.
     """
 
     # Monotonically increasing id, unique within one `Gateway` instance.

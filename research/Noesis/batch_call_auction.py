@@ -22,9 +22,9 @@ _LOG = logging.getLogger(__name__)
 # #############################################################################
 
 
-# Default batch cadence from the plan (PR1 default; not enforced by this
-# module, which clears one round per `OrderBook.clear_round()` call and
-# leaves scheduling to the caller).
+# Default batch cadence from the plan (not enforced by this module, which
+# clears one round per `OrderBook.clear_round()` call and leaves scheduling
+# to the caller).
 DEFAULT_BATCH_INTERVAL_MINUTES = 5
 
 

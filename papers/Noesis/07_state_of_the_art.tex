@@ -5,15 +5,21 @@
 Section~\ref{sec:related_work} positions \Noesis{} against academic work on
 routing, fusion, distillation, and auction theory. This section instead
 surveys currently operating startups and projects that address, piece by
-piece, the same problem \Noesis{} targets: buying and selling machine
-intelligence, trading raw compute, or verifying that a delivered service met
-its promise. The goal is to locate the specific combination of properties,
+piece, a similar problem \Noesis{} targets:
+
+\begin{itemize}
+  \item Buying and selling machine intelligence.
+  \item Trading raw compute.
+  \item Verifying that a delivered service met its promise.
+\end{itemize}
+
+The goal is to locate the specific combination of properties,
 auction-based price discovery for a capability/latency/reliability bundle,
 metered fulfillment, and reputation feedback into pricing, that no surveyed
 system currently occupies. The industry moves quickly, so the picture below
-reflects the state of the market at the time of writing and should be read
-as illustrative of the categories rather than exhaustive within any one of
-them.
+reflects the state of the market at the time of writing (August 2026) and
+should be read as illustrative of the categories rather than exhaustive within
+any one of them.
 
 % ==============================================================================
 \subsection{Posted-price multi-provider gateways}
@@ -34,6 +40,8 @@ commercial analog to the answer-fusion strategy of
 Section~\ref{sec:fusion} that this survey identified.
 Table~\ref{tab:sota_gateways_companies} lists the systems in this cluster.
 
+% TODO(ai_gp): Move the URL underneath the name and split the features into
+% multiple columns
 \begin{samepage}
   \begin{table}[H]
     \centering
@@ -65,13 +73,20 @@ Table~\ref{tab:sota_gateways_companies} lists the systems in this cluster.
   \end{table}
 \end{samepage}
 
-None of these gateways clears an auction: every price is posted or passed
-through unilaterally, so there is no price discovery in the sense of
-Section~\ref{sec:comparison_table}. None meters whether a request's
-capability, latency, or reliability matched a stated contract beyond a
-standard infrastructure uptime SLA, and none turns a delivered shortfall
-into a reputation signal that changes a provider's standing in future
-transactions.
+None of these gateways combines the three properties that motivate
+\NoesisMarket:
+
+\begin{itemize}
+  \item \textbf{Auction-based price discovery}: every price is posted or
+    passed through unilaterally, so there is no price discovery in the
+    sense of Section~\ref{sec:comparison_table}.
+  \item \textbf{Metered fulfillment}: none meters whether a request's
+    capability, latency, or reliability matched a stated contract beyond a
+    standard infrastructure uptime SLA.
+  \item \textbf{Reputation feedback}: none turns a delivered shortfall into
+    a reputation signal that changes a provider's standing in future
+    transactions.
+\end{itemize}
 
 % ==============================================================================
 \subsection{Learned model routers}

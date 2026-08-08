@@ -3,17 +3,16 @@
 \label{sec:noesis_server}
 
 \NoesisServer{} is the layer that turns a matched contract
-(Definition~\ref{def:contract}) into actual inference requests against
-real providers, and turns the resulting traffic into three things: a
-measurement of whether the contract was honored, a signal for
-difficulty-aware routing, and a corpus for downstream distillation.
+(Definition~\ref{def:contract}) into actual inference requests against real
+providers, and turns the resulting traffic into a measurement of whether the
+contract was honored and the quality of its fulfillment.
 
 % ==============================================================================
 \subsection{Gateway architecture}
 \label{sec:gateway_architecture}
 
-\NoesisServer{} is, at its core, a lightweight LLM API gateway modeled on
-multi-provider routers such as OpenRouter: it exposes a single API,
+\NoesisServer{} is a lightweight LLM API gateway modeled on
+multi-provider routers (e.g., OpenRouter): it exposes a single API,
 proxies each request to one or more underlying providers, and streams the
 response back to the caller. Two properties distinguish it from a plain
 pass-through router. First, every request is tagged with the contract
@@ -26,20 +25,19 @@ minimal:
 
 $$
   (\text{prompt}, \text{response}, \text{provider}, \text{model},
-   \text{latency}, \text{cost}, \kappa\text{ or } \bot)
+   \text{latency}, \text{cost}, \text{contract})
 $$
 
-This logging is passive by default: it does not change routing behavior
-and exists purely to build a reusable dataset for evaluation and
-distillation (Section~\ref{sec:distillation}). Privacy and data-handling
-safeguards (PII scrubbing, opt-in/opt-out) are necessary before logging
-real traffic and are discussed as an open question in
+This logging is passive by default: it does not change routing behavior and
+exists purely to build a reusable dataset for evaluation. Privacy and
+data-handling safeguards (PII scrubbing, opt-in/opt-out) are necessary before
+logging real traffic and are discussed as an open question in
 Section~\ref{sec:open_questions}.
 
-Figure~\ref{fig:request_path} traces this path end to end: the caller's
-request is proxied to a provider and the response streamed back, and on
-the way back, the request is logged as the tuple (prompt, response,
-provider, model, latency, cost, contract-or-$\bot$) described above.
+Figure~\ref{fig:request_path} traces this path end to end: the caller's request
+is proxied to a provider and the response streamed back, and on the way back,
+the request is logged as the tuple (prompt, response, provider, model, latency,
+cost, contract) described above.
 
 % rendered_images:begin
 % ```graphviz
@@ -85,6 +83,9 @@ provider, model, latency, cost, contract-or-$\bot$) described above.
   \label{fig:request_path}
 \end{figure}
 % render_images:end
+
+% TODO(ai_gp): In the routing show 3 provider and something looking like a demux
+% to route the request
 
 % ==============================================================================
 \subsection{Contract fulfillment monitoring}
@@ -391,6 +392,9 @@ inference cost for a lower risk of a low-quality answer.
 \subsection{Training signal and distillation}
 \label{sec:distillation}
 
+% TODO(ai_gp): Use a different term for distillation (this needs to be opt-in
+% by customers and anonymized, one can get better rate for opt-in)
+
 The difficulty estimator of Equation~\eqref{eq:difficulty_estimator}
 needs a training signal, which the logged traffic supplies for free.
 
@@ -432,29 +436,63 @@ of one dataset.
 % rendered_images:begin
 % ```graphviz
 % digraph TrainingPipeline {
-%   bgcolor="white";
-%   rankdir=LR;
+%   // ---------------------------------------------------------------
+%   // House style — soft/rounded palette
+%   // ---------------------------------------------------------------
+%   bgcolor="transparent";
+%   pad="0.06";
 %   splines=spline;
-%   nodesep=0.35;
-%   ranksep=0.70;
-%   pad=0.30;
+%   nodesep=0.30;
+%   ranksep=0.46;
 % 
-%   node [shape=box, style="rounded,filled", fontname="Helvetica",
-%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
-%         color="#7B8794"];
-%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
-%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
+%   node [shape=box,
+%         style="rounded,filled",
+%         fillcolor="#FFFFFF",
+%         color="#9AA9B8",
+%         penwidth=1.8,
+%         fontname="Helvetica",
+%         fontcolor="#243B53",
+%         fontsize=10,
+%         margin="0.22,0.14",
+%         height=0.50];
 % 
-%   Traffic    [label="Logged prompt/response\ntraffic", fillcolor="#FFD1A6"];
-%   Agreement  [label="Agreement labels\nCheap vs. strong model", fillcolor="#B2E2B2"];
-%   Estimator  [label="Difficulty estimator\ntraining", fillcolor="#A0D6D1"];
-%   Corpus     [label="Corpus D\n(x, strong-model answer)", fillcolor="#B2E2B2"];
-%   Distill    [label="Distillation of\na smaller model", fillcolor="#A0D6D1"];
+%   edge [color="#A3B1C0",
+%         penwidth=1.3,
+%         arrowhead=vee,
+%         arrowsize=0.75,
+%         fontname="Helvetica",
+%         fontsize=8.5,
+%         fontcolor="#7B8794"];
 % 
-%   Traffic -> Agreement [penwidth=1.5, color="#7B8794"];
+%   // ---------------------------------------------------------------
+%   // Figure
+%   // ---------------------------------------------------------------
+%   rankdir=LR;
+% 
+%   // source  : warm sand   |   artifact : sage green   |   process : blue
+% 
+%   Traffic   [label=<<b>Logged traffic</b><br/><font point-size="8.5" color="#946A2E">Prompt / response pairs</font>>,
+%              fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+% 
+%   Agreement [label=<<b>Agreement labels</b><br/><font point-size="8.5" color="#4F7A5A">Cheap vs. strong model</font>>,
+%              fillcolor="#DFEDE0", color="#8FB79A", fontcolor="#2E5A3D"];
+% 
+%   Corpus    [label=<<b>Corpus <i>D</i></b><br/><font point-size="8.5" color="#4F7A5A">(x, strong&#8209;model answer)</font>>,
+%              fillcolor="#DFEDE0", color="#8FB79A", fontcolor="#2E5A3D"];
+% 
+%   Estimator [label=<<b>Difficulty estimator</b><br/><font point-size="8.5" color="#41719C">Training</font>>,
+%              fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+% 
+%   Distill   [label=<<b>Distillation</b><br/><font point-size="8.5" color="#41719C">Smaller model</font>>,
+%              fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+% 
+%   Traffic   -> Agreement [label="Routing signal"];
+%   Traffic   -> Corpus    [label="Supervision targets"];
 %   Agreement -> Estimator;
-%   Traffic -> Corpus [penwidth=1.5, color="#7B8794"];
-%   Corpus -> Distill;
+%   Corpus    -> Distill;
+% 
+%   { rank=same; Agreement; Corpus;   }
+%   { rank=same; Estimator; Distill;  }
 % }
 % ```
 % label=fig:training_pipeline

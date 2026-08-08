@@ -10,20 +10,21 @@ a market for machine intelligence.
 \subsection{Market participants}
 \label{sec:market_participants}
 
-The demand side of the market is made of applications and autonomous agents
+The \textbf{demand side} of the market is made of applications and autonomous agents
 that consume LLM inference as an input: a customer-support agent, a
-document-summarization pipeline, a coding assistant, or a multi-agent
-system delegating a sub-task. These participants differ along several
-dimensions:
+document-summarization pipeline, a coding assistant, or a multi-agent system
+delegating a sub-task. These participants differ along several dimensions:
 
 \begin{itemize}
   \item How much they value low latency.
+  % TODO(ai_gp): model intelligence. The capability tier of the models they can
+  % serve.
   \item How much they value a low error rate.
   \item How price-sensitive they are.
   \item How much of their traffic is predictable in advance versus bursty.
 \end{itemize}
 
-The supply side is made of model and compute providers: foundation-model
+The \textbf{supply side} is made of model and compute providers: foundation-model
 API vendors, open-weight model hosts, and resellers of spare inference
 capacity. Sellers differ along several dimensions:
 
@@ -49,6 +50,8 @@ differences are matched into contracts.
 
 % TODO(ai_gp): Align Demand and Supply horizontally (with the description
 % below) so it's more compact
+% TODO(ai_gp): Find a better representation of the dimensions (maybe a set of
+% axes?)
 
 % rendered_images:begin
 % ```graphviz
@@ -123,8 +126,10 @@ differences are matched into contracts.
 \subsection{Roles of an intelligence market}
 \label{sec:market_roles}
 
-An intelligence market, like any exchange, has to perform several
+An intelligence market, like any financial exchange, has to perform several
 functions beyond simply connecting a buyer to a seller:
+
+% TODO(ai_gp): Use \textbf{word}: explanation
 
 \begin{itemize}
   \item Provide a common meeting ground where buyers and sellers can
@@ -144,31 +149,29 @@ functions beyond simply connecting a buyer to a seller:
     to poll \NoesisMarket{} or wait for the next round.
 \end{itemize}
 
-As in traditional exchanges, we expect the market to be compensated for
-this value creation through a small fee on cleared volume; we do not
-formalize a fee schedule in this paper.
+As in traditional exchanges, we expect the market to be compensated for this
+value creation through a small fee on cleared volume; we do not formalize a fee
+schedule in this paper.
 
 % ==============================================================================
 \subsection{The bundling problem: quoting quality, not just quantity}
 \label{sec:bundling}
 
-The central design difficulty is choosing what, precisely, is being
-bought and sold. A market for a homogeneous good only needs to clear on
-price and quantity. Machine intelligence is not homogeneous: the same
-nominal price per request can correspond to wildly different quality, and
-the same underlying compute can be used to answer the same request at very
-different quality depending on the model and routing policy used to serve
-it.
+The central design difficulty is choosing what, precisely, is being bought and
+sold. A market for a homogeneous good only needs to clear on price and
+quantity. Machine intelligence is not homogeneous: the same nominal price per
+request can correspond to wildly different quality, and the same underlying
+compute can be used to answer the same request at very different quality
+depending on the model and routing policy used to serve it.
 
-This is analogous to the base/quote asymmetry that a token-exchange
-protocol must resolve before a limit order is even well-defined: a limit
-order only makes sense once one has fixed which token plays the role of
-quantity and which plays the role of price. \Noesis{} faces a similar
-prior question: before a bid or an ask can be written down, the protocol
-must fix what a unit of ``intelligence'' is (Section~\ref{sec:task_unit})
-and what accompanies that unit as a quality specification. We adopt the
-position that quality should be expressed along three largely orthogonal
-axes:
+This is analogous to the base/quote asymmetry that a token-exchange protocol
+must resolve before a limit order is even well-defined: a limit order only
+makes sense once one has fixed which token plays the role of quantity and which
+plays the role of price. \Noesis{} faces a similar prior question: before a bid
+or an ask can be written down, the protocol must fix what a unit of
+``intelligence'' is (Section~\ref{sec:task_unit}) and what accompanies that
+unit as a quality specification. We adopt the position that quality should be
+expressed along three largely orthogonal axes:
 
 \begin{itemize}
   \item \textbf{Capability}: how good the answer is expected to be,
@@ -180,10 +183,13 @@ axes:
     capability and latency terms.
 \end{itemize}
 
-Figure~\ref{fig:bundle_axes} makes this contrast visually concrete:
-\Noesis{}'s traded unit is a bundle along three largely orthogonal axes,
-capability, latency, and reliability, contrasted with a conventional
-single-scalar good quoted purely on price per token.
+Figure~\ref{fig:bundle_axes} makes this contrast visually concrete: \Noesis{}'s
+traded unit is a bundle along three largely orthogonal axes, (capability,
+latency, and reliability) contrasted with a conventional single-scalar good
+quoted purely on price per token.
+
+% TODO(ai_gp): Make it a tridimensional representation vs a single axis
+% (Noesis vs current pricing)
 
 % rendered_images:begin
 % ```tikz
@@ -205,7 +211,7 @@ single-scalar good quoted purely on price per token.
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{02_market_design.tex.figs/02_market_design.2.png}
-  \caption{A three-axis quality bundle versus a single-scalar good.}
+  \caption{Noesis three-axis quality bundle versus a single-scalar good.}
   \label{fig:bundle_axes}
 \end{figure}
 % render_images:end
@@ -221,28 +227,24 @@ three axes before price discovery can proceed
 \subsection{Related commodity markets}
 \label{sec:related_commodity_markets}
 
-Electricity markets are the closest existing analogy. Electricity cannot
-be usefully stored at scale, demand and supply must be balanced
-continuously, and quality (voltage, frequency) is metered rather than
-taken on faith. Electricity markets address this with a layered design:
-day-ahead markets clear the bulk of expected demand a day in advance,
-real-time markets clear residual imbalances close to delivery, and
-separate capacity markets pay generators for being available rather than
-for energy delivered, penalizing non-delivery when it matters most
-\cite{stoft2002, cramton2017}. \Noesis{}'s tiered call auction
-(Section~\ref{sec:noesis_market}) borrows the day-ahead/real-time
-separation as a candidate design (discussed further as an open question in
-Section~\ref{sec:open_questions}), and its reputation and pricing feedback
-loop (Section~\ref{sec:reputation}) borrows directly from capacity-market
-non-performance penalties \cite{cramtonstoft2005}.
+Electricity markets are the closest existing analogy. Electricity cannot be
+usefully stored at scale, demand and supply must be balanced continuously, and
+quality (voltage, frequency) is metered rather than taken on faith. Electricity
+markets address this with a layered design: day-ahead markets clear the bulk of
+expected demand a day in advance, real-time markets clear residual imbalances
+close to delivery, and separate capacity markets pay generators for being
+available rather than for energy delivered, penalizing non-delivery when it
+matters most \cite{stoft2002, cramton2017}.
+
+\Noesis{}'s tiered call auction (Section~\ref{sec:noesis_market}) borrows the
+day-ahead/real-time separation as a candidate design (discussed further as an
+open question in Section~\ref{sec:open_questions}), and its reputation and
+pricing feedback loop (Section~\ref{sec:reputation}) borrows directly from
+capacity-market non-performance penalties \cite{cramtonstoft2005}.
 
 The analogy is imperfect in one important respect: electricity's quality
-attributes (voltage, frequency) are physical and essentially free to
-meter, while machine intelligence's capability attribute is not directly
-observable and can only be estimated from the content of a response. This
-is the problem that \NoesisServer{}'s fulfillment monitoring
+attributes (voltage, frequency) are physical and essentially free to meter,
+while machine intelligence's capability attribute is not directly observable
+and can only be estimated from the content of a response. This is the problem
+that \NoesisServer{}'s fulfillment monitoring
 (Section~\ref{sec:fulfillment_monitoring}) has to solve.
-
-% TODO(gp): Add a timeline figure comparing electricity market layering
-% (day-ahead / real-time / capacity markets) against Noesis's periodic
-% tiered call auction, to make the borrowed structure concrete.

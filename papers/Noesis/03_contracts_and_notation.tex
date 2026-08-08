@@ -6,10 +6,6 @@ This section fixes the notation used throughout the rest of the paper: the
 capability tier set, the task unit, the contract, and the bid/ask tuples
 submitted to \NoesisMarket.
 
-% ==============================================================================
-\subsection{Capability tiers}
-\label{sec:capability_tiers}
-
 \begin{definition}[Capability tiers]
 \label{def:capability_tiers}
 Let
@@ -28,11 +24,7 @@ informative but is harder for a seller to credibly commit to ex ante and
 harder for a buyer to reason about ex post; Section~\ref{sec:open_questions}
 returns to this trade-off.
 
-% ==============================================================================
-\subsection{The task unit}
-\label{sec:task_unit}
-
-\begin{definition}[Task]
+\begin{definition}[Task unit]
 \label{def:task}
 A \emph{task} is an abstract, normalized unit of inference work, denoted
 $u \in \calU$, used as the unit of quantity in a contract. Throughout the
@@ -50,10 +42,6 @@ comparability directly and is treated as an open research question
 remainder of the formalization only requires that $\calU$ support addition
 and a total order, both of which hold for any of the candidate
 definitions above.
-
-% ==============================================================================
-\subsection{Contracts}
-\label{sec:contract}
 
 \begin{definition}[Intelligence contract]
 \label{def:contract}
@@ -74,18 +62,19 @@ where
 \end{itemize}
 \end{definition}
 
-The quantities are ordered to read naturally: ``deliver $\ntasksattr$
-tasks at capability $\clevelattr$ or better, within $\lmaxattr$ latency,
-with at least $\rminattr$ reliability, for a total price of
-$\priceattr$.''
+The quantities are ordered to read naturally: 
+
+\emph{``deliver $\ntasksattr$ tasks at capability $\clevelattr$ or better,
+within $\lmaxattr$ latency, with at least $\rminattr$ reliability, for a total
+price of $\priceattr$.''}
 
 \begin{example}[Intelligence contract]
 \label{ex:contract}
 The contract
 $$
-  \kappa_1 = (10{,}000,\ \texttt{frontier},\ 2\text{s},\ 0.999,\ P)
+  \kappa_1 = (100,\ \texttt{frontier},\ 2\text{s},\ 0.999,\ P)
 $$
-reads: ``deliver 10,000 tasks at frontier-class capability or better,
+reads: ``deliver 100 tasks at frontier-class capability or better,
 within 2 seconds of latency, with at least 99.9\% reliability, for a total
 price of $P$.''
 \end{example}
@@ -94,6 +83,7 @@ price of $P$.''
 \subsection{Bids and asks}
 \label{sec:bids_asks}
 
+% TODO(ai_gp): refer to NoesisMarket matching without auction
 A contract $\kappa$ is the outcome of matching a bid against one or more
 asks in a \NoesisMarket{} auction round (Section~\ref{sec:noesis_market}).
 Bids and asks share the contract's attributes, plus the buy/sell-specific
@@ -141,7 +131,7 @@ sense. Section~\ref{sec:compatibility} defines when a bid and an ask are
 compatible, i.e., when the ask's descriptive attributes satisfy the bid's
 required attributes.
 
-% TODO(gp): Add a figure showing the contract lifecycle: a bid and one or
+% TODO(ai_gp): Add a figure showing the contract lifecycle: a bid and one or
 % more compatible asks (Definitions~\ref{def:bid} and \ref{def:ask}) are
 % matched by NoesisMarket into a single intelligence contract
 % (Definition~\ref{def:contract}), which is then dispatched to

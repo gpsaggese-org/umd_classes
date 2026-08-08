@@ -7,6 +7,12 @@
 
 % TODO(ai_gp): Add the concept of max delay (e.g., to execute workload within N
 % hours for batch execution)
+% TODO(ai_gp): People pay for token but they should pay for functionality.
+% (virtual tokens, intelligence token)
+% The fragmentation of the markets is not positive for consumers.
+% TODO(ai_gp): Users don't have a way to measure quality of service (e.g,
+% model nerfing, low availability)
+% TODO(ai_gp): Add cache
 
 \begin{abstract}
 Applications and autonomous agents increasingly consume large language model
@@ -108,20 +114,21 @@ of the protocol's design.
     pricing signal (Section~\ref{sec:noesis_server}).
 \end{itemize}
 
+% TODO(ai_gp): Use a bullet list for the components.
 Figure~\ref{fig:architecture} lays out the resulting architecture, with the
 five pluggable components of Section~\ref{sec:modularity} and
-Table~\ref{tab:components} shaded in teal: the demand and supply sides
-submit bids and asks to \NoesisMarket{}'s matching engine, which clears
-them into contracts dispatched to \NoesisServer{}'s API gateway. The
-gateway proxies matched requests to the underlying providers through
-per-provider APIs, and its metering logic checks the responses against the
-contract terms, using external intelligence-measure providers (e.g.,
-artificialanalysis.ai\footnote{\url{https://artificialanalysis.ai}}) as a
-capability reference, then reports fulfillment back to \NoesisMarket{}'s
-reputation-and-feedback component, which gates the matching engine and
-feeds its pricing-dissemination component. The gateway can also fan a
-request out to several providers through the answer-fusion component
-(Section~\ref{sec:fusion}) when reliability outweighs cost.
+Table~\ref{tab:components} shaded in teal: the demand and supply sides submit
+bids and asks to \NoesisMarket{}'s matching engine, which clears them into
+contracts dispatched to \NoesisServer{}'s API gateway. The gateway proxies
+matched requests to the underlying providers through per-provider APIs, and its
+metering logic checks the responses against the contract terms, using external
+intelligence-measure providers (e.g.,
+\footnote{\url{https://artificialanalysis.ai}}) as a capability reference, then
+reports fulfillment back to \NoesisMarket{}'s reputation-and-feedback
+component, which gates the matching engine and feeds its pricing-dissemination
+component. The gateway can also fan a request out to several providers through
+the answer-fusion component (Section~\ref{sec:fusion}) when reliability
+outweighs cost.
 
 % TODO(ai_gp): Reorganize it visually so that the figure can be bigger and more 
 % readable. Add a color legend for Noesis, Providers / supply
@@ -228,7 +235,7 @@ request out to several providers through the answer-fusion component
 % render_images:end
 
 The two components close a loop that is missing from today's LLM API
-market: a contract is not merely sold, it is metered, and the metering
+market: a contract is metered and not merely sold, and the metering
 result changes the terms under which the same seller can sell in the
 future. \NoesisServer{} additionally reuses the logged traffic for two
 purposes orthogonal to fulfillment: difficulty-aware routing, which sends a
@@ -249,12 +256,11 @@ can satisfy without requiring changes anywhere else in the pipeline:
 \begin{itemize}
   \item \textbf{Matching engine}: \NoesisMarket's only structural
     commitment is to match compatible bids and asks
-    (Definition~\ref{def:compatibility}) into contracts; its responsibility
-    stops there. The periodic uniform-price call auction of
-    Section~\ref{sec:noesis_market} is one instantiation of this component,
-    and a continuous double auction or a posted-price mechanism
-    (Section~\ref{sec:open_questions_market}) could be substituted without
-    touching \NoesisServer.
+    (Definition~\ref{def:compatibility}) into contracts. The periodic
+    uniform-price call auction of Section~\ref{sec:noesis_market} is one
+    instantiation of this component, and a continuous double auction or a
+    posted-price mechanism (Section~\ref{sec:open_questions_market}) could be
+    substituted without touching \NoesisServer.
 
   \item \textbf{Capability measurement}: how \NoesisServer{} estimates the
     capability tier $\hat c(x)$ actually delivered by a response
@@ -297,6 +303,7 @@ engine and the gateway-plus-logging layer be built and demonstrated as
 separate, independently testable pieces of a prototype, precisely because
 each is a separately pluggable component rather than part of one monolith.
 
+% TODO(ai_gp): Component, What it does, Section, This paper implementation, Alternative implementations
 \begin{samepage}
   \begin{table}[H]
     \centering
@@ -327,6 +334,9 @@ each is a separately pluggable component rather than part of one monolith.
 \label{sec:contributions}
 
 The innovative features of \Noesis{} are:
+
+% TODO(ai_gp): Answer fusion and difficulty-aware routing are part of the same
+% component.
 
 \begin{enumerate}
   \item \textbf{Modular, pluggable components}: \NoesisMarket{} and
@@ -416,6 +426,7 @@ through \ref{sec:noesis_server}.
   \end{table}
 \end{samepage}
 
+% TODO(ai_gp): Split in bullet points
 Cloud spot markets already apply auction-based price discovery, but to raw
 compute rather than to a capability/latency/reliability bundle, so they
 score poorly on the bundled-quality and difficulty-routing rows: a spot GPU

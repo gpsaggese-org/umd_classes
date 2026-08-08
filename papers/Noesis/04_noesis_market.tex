@@ -2,27 +2,28 @@
 \section{NoesisMarket: the auction mechanism}
 \label{sec:noesis_market}
 
-\NoesisMarket{} runs a periodic call auction that turns a pool of bids and
-asks into a set of intelligence contracts (Definition~\ref{def:contract}).
-This section defines auction rounds and tier bucketing, the compatibility
-relation between a bid and an ask, the clearing problem, the reputation and
-pricing feedback loop, and the mechanism-design risks the design has to
-withstand. The auction described throughout this section is a specific
+The auction described throughout this section is a specific
 instantiation of the pluggable matching-engine component of
 Section~\ref{sec:modularity}; nothing below depends on the matching engine
 being a call auction rather than, e.g., a continuous double auction.
+
+A possible implementation of \NoesisMarket{} runs a periodic call auction that
+turns a pool of bids and asks into a set of intelligence contracts
+(Definition~\ref{def:contract}). This section defines auction rounds and tier
+bucketing, the compatibility relation between a bid and an ask, the clearing
+problem, the reputation and pricing feedback loop, and the mechanism-design
+risks the design has to withstand. 
 
 % ==============================================================================
 \subsection{Auction rounds and tier bucketing}
 \label{sec:rounds}
 
-Every $T$ minutes (default $T = 5$), \NoesisMarket{} closes the open order
-book and runs one clearing round per capability tier $c \in \calC$. For
+Every $T$ minutes (e.g., $T = 5$ minutes), \NoesisMarket{} closes the open
+order book and runs one clearing round per capability tier $c \in \calC$. For
 clarity of exposition we describe the case in which a bucket for tier $c$
-contains exactly the bids with $c_\beta = c$ and the asks with
-$c_\alpha = c$; Remark~\ref{rem:tier_generalization} below discusses the
-natural generalization in which higher-tier asks are also eligible to fill
-lower-tier demand.
+contains exactly the bids with $c_\beta = c$ and the asks with $c_\alpha = c$;
+Remark~\ref{rem:tier_generalization} below discusses the natural generalization
+in which higher-tier asks are also eligible to fill lower-tier demand.
 
 \begin{example}[Basic auction round]
 \label{ex:basic_round}
@@ -35,6 +36,7 @@ the close of the round, \NoesisMarket{} finds the compatible asks
 single uniform price, and matches the buyer's bid against one or more of
 the compatible asks, up to 10,000 tasks.
 \end{example}
+% TODO(ai_gp): Add a figure explaining this
 
 \begin{remark}[Tiered commodity pricing]
 \label{rem:tiered_pricing}
@@ -50,6 +52,9 @@ accepts bids and asks continuously, and every $T$ minutes the round closes
 and a separate uniform-price clearing is computed independently per
 capability-tier bucket, so \texttt{cheap} and \texttt{frontier} can clear
 at different prices in the same round (Remark~\ref{rem:tiered_pricing}).
+
+% TODO(ai_gp): Add some arrows from bottom and top representing bids and asks,
+% in the yellow box
 
 % rendered_images:begin
 % ```tikz
@@ -122,6 +127,9 @@ Figure~\ref{fig:compatibility_graph} shows a small example of such a
 graph: an edge marks a bid/ask pair whose capability, latency, and
 reliability terms are mutually satisfiable, and bid 4 has no compatible
 ask in this bucket and is left unmatched regardless of price.
+
+% TODO(ai_gp): Smaller and also rotate the figure to put bids at the bottom and
+% ask at the top
 
 % rendered_images:begin
 % ```graphviz
@@ -256,10 +264,6 @@ below it, but the possibility is worth flagging since it is exactly the
 kind of cross-tier fungibility that a naive per-tier bucketing could miss.
 \end{remark}
 
-% ==============================================================================
-\subsection{Existence of a clearing price}
-\label{sec:clearing_existence}
-
 \begin{proposition}[Existence of a clearing price]
 \label{prop:existence}
 Consider a tier bucket $c$ in which the compatibility graph $G_c$ is
@@ -288,7 +292,7 @@ the classical Walrasian argument for existence of a market-clearing price
 \cite{mcafee1992}.
 \end{proof}
 
-% TODO(gp): Add a figure showing the cumulative demand curve $D(p)$
+% TODO(ai_gp): Add a figure showing the cumulative demand curve $D(p)$
 % (non-increasing) and supply curve $S(p)$ (non-decreasing) crossing at
 % the clearing price $p^*(c, t)$, illustrating Proposition~\ref{prop:existence}.
 
@@ -304,12 +308,12 @@ cleared ask.
 \subsection{Reputation and pricing feedback loop}
 \label{sec:reputation}
 
-Every contract $\kappa$ dispatched to \NoesisServer{} for execution is
-later reported back with a measured reliability $\hat r(\kappa, W)$ over
-its fulfillment window $W$ (Section~\ref{sec:fulfillment_monitoring}).
-\NoesisMarket{} maintains a reputation score per seller and uses it to
-gate participation in future rounds. As with the matching engine, the
-specific update rule given below is one instantiation of the pluggable
+Every contract $\kappa$ dispatched to \NoesisServer{} for execution is later
+reported back with a measured reliability $\hat r(\kappa, W)$ over its
+fulfillment window $W$ (Section~\ref{sec:fulfillment_monitoring}).
+\NoesisMarket{} maintains a reputation score per seller and uses it to gate
+participation in future rounds. As with the matching engine, the specific
+update rule given below is one instantiation of the pluggable
 reputation-and-feedback component of Section~\ref{sec:modularity}.
 
 \begin{definition}[Seller reputation]
@@ -353,6 +357,8 @@ back to future eligibility: a contract $\kappa$ dispatched to
 drives the reputation update of Equation~\eqref{eq:reputation_update}, and
 the resulting score gates the seller's eligibility to submit asks in
 future \NoesisMarket{} rounds, closing the loop.
+
+% TODO(ai_gp): Use a flow chart like diagram
 
 % rendered_images:begin
 % ```graphviz

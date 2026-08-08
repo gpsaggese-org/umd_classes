@@ -1,16 +1,15 @@
 """
 Thin HTTP API surface wrapping NoesisMarket (`batch_call_auction.py`,
 `contract_dispatch.py`) and NoesisServer (`passthrough_proxy.py`) for an
-external caller (`NoesisPlatform` PR1 of `plan.Noesis.md`).
+external caller (`NoesisPlatform` component of `plan.Noesis.md`).
 
 `create_app()` builds a `fastapi.FastAPI` app that round-trips every request
-to the underlying library call added by prior PRs, adding no new business
-logic beyond:
+to the underlying library call, adding no new business logic beyond:
 - Assigning a `contract_id`/`round_id`, since neither `batch_call_auction.py`
   nor `contract_dispatch.py` track one
-- A per-tier "latest cleared round" cache, standing in for `NoesisMarket`
-  PR4's pricing-dissemination feed (not implemented yet); `GET
-  /rounds/{tier}/latest` reads this cache instead of PR4's pub/sub
+- A per-tier "latest cleared round" cache, standing in for `NoesisMarket`'s
+  pricing-dissemination feed (not implemented yet); `GET
+  /rounds/{tier}/latest` reads this cache instead of that pub/sub
 - A `POST /rounds/clear` endpoint not in `plan.Noesis.md`'s illustrative
   endpoint list: without it, `GET /contracts/{contract_id}` and `GET
   /rounds/{tier}/latest` could never be populated by an external caller,
@@ -26,8 +25,8 @@ Endpoints:
 Auth: `POST /bids`, `POST /asks`, and `POST /completions` require a valid
 `X-API-Key` header, checked before the underlying library call runs (per
 `plan.Noesis.md`: "checked before accepting a bid/ask or a gateway call").
-Read-only `GET` endpoints and `POST /rounds/clear` are unauthenticated in
-this PR; see the `Open questions` note in `plan.Noesis.md`'s
+Read-only `GET` endpoints and `POST /rounds/clear` are unauthenticated
+here; see the `Open questions` note in `plan.Noesis.md`'s
 `NoesisPlatform` section (custody/KYC) for the follow-up this leaves open.
 
 Validation: every `hdbg.dassert_*` check already present in
@@ -122,7 +121,7 @@ class RoundClearResponse(pydantic.BaseModel):
     One cleared tier's outcome, returned by `POST /rounds/clear` and `GET
     /rounds/{tier}/latest`.
 
-    Field names match `NoesisMarket` PR4's pricing-dissemination event shape
+    Field names match `NoesisMarket`'s pricing-dissemination event shape
     `(tier, round_id, clearing_price, matched_volume)` from `plan.Noesis.md`.
     """
 
@@ -248,8 +247,8 @@ class _MarketState:
             self._contracts_by_id[self._next_contract_id] = contract
             self._next_contract_id += 1
         # Publish one `RoundClearResponse` per cleared tier, including tiers
-        # that matched no volume, standing in for `NoesisMarket` PR4's
-        # pricing feed until it exists.
+        # that matched no volume, standing in for `NoesisMarket`'s pricing
+        # feed until it exists.
         round_responses = []
         for c_level, tier_result in tier_results.items():
             matched_volume = sum(fill.n_tasks for fill in tier_result.fills)
@@ -347,7 +346,7 @@ def create_app(
     fulfillment_fn: rnocodis.FulfillmentFn = rnocodis.mock_fulfill,
 ) -> fastapi.FastAPI:
     """
-    Build the `NoesisPlatform` PR1 HTTP API over `order_book` and `gateway`.
+    Build the `NoesisPlatform` HTTP API over `order_book` and `gateway`.
 
     :param order_book: `NoesisMarket` order book backing `/bids`, `/asks`,
         `/rounds/*`, `/contracts/*`

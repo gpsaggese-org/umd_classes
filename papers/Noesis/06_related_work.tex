@@ -7,17 +7,16 @@
 \label{sec:related_gateways}
 
 Multi-provider gateways such as OpenRouter unify access to many LLM
-providers behind a single API, which is the architectural starting point
-for \NoesisServer{} (Section~\ref{sec:gateway_architecture}); unlike
-\Noesis, they typically set prices unilaterally rather than clearing an
-auction, and do not meter delivered quality against a contract.
-RouteLLM \cite{routellm2024} and FrugalGPT \cite{frugalgpt2023} address
-the difficulty-aware routing problem of Section~\ref{sec:routing}
-directly, learning to route or cascade requests across models of
-different cost to reduce spend while controlling quality loss; \Noesis{}
-adopts a similar routing formalization but ties the resulting cost
-savings to contract fulfillment and to a market that prices the tiers
-being routed between.
+providers behind a single API, which is the starting point for \NoesisServer{}
+(Section~\ref{sec:gateway_architecture}); unlike \Noesis, they typically set
+prices unilaterally rather than clearing an auction, and do not meter delivered
+quality against a contract. RouteLLM \cite{routellm2024} and FrugalGPT
+\cite{frugalgpt2023} address the difficulty-aware routing problem of
+Section~\ref{sec:routing} directly, learning to route or cascade requests
+across models of different cost to reduce spend while controlling quality loss;
+\Noesis{} adopts a similar routing formalization but ties the resulting cost
+savings to contract fulfillment and to a market that prices the tiers being
+routed between.
 
 % ==============================================================================
 \subsection{Model fusion and distillation}
@@ -90,6 +89,9 @@ occupying both, but for a physically metered commodity rather than
 machine intelligence (Section~\ref{sec:related_commodity}); \Noesis{} is
 the only point combining both axes for machine intelligence.
 
+% TODO(ai_gp): Capitalize the first letter of all the labels and make the
+% font larger and the image smaller.
+
 % rendered_images:begin
 % ```tikz
 % \definecolor{ptcolor}{RGB}{74,110,168}
@@ -123,20 +125,3 @@ the only point combining both axes for machine intelligence.
   \label{fig:related_landscape}
 \end{figure}
 % render_images:end
-
-% ==============================================================================
-\subsection{Companion research directions}
-\label{sec:related_companion}
-
-Three ongoing, unpublished research notes are directly relevant and are
-referenced throughout this paper without being cited as external
-publications. A blockchain-based prediction market shares
-\NoesisMarket's matching-and-settlement problem, without the
-capability-verification problem that motivates
-\NoesisServer. A pairwise preference arena for LLMs would supply the
-independent, ground-truth quality judgments that
-Definition~\ref{def:agreement_label}'s agreement label only approximates,
-and could be used to score routing and fusion decisions directly. A
-dataset-construction effort for training and distilling LLMs would be a
-direct consumer of the corpus logged by \NoesisServer{}
-(Section~\ref{sec:distillation}).

@@ -1,13 +1,13 @@
 """
 Contract schema and stubbed fulfillment dispatch for the Intelligence Market
-batch call-auction (`NoesisMarket` PR2 of `plan.Noesis.md`).
+batch call-auction (`NoesisMarket` component of `plan.Noesis.md`).
 
 `build_contracts()` turns a `batch_call_auction.OrderBook.clear_round()`
 result into `Contract` records; `dispatch_contract()` / `dispatch_contracts()`
 hand each contract to a fulfillment layer and log the outcome back onto the
 contract. The mocked fulfillment layer here stands in for
-`Intelligence_Server` (see `plan.Noesis.md`'s `NoesisServer` PR4), which does
-not exist yet.
+`Intelligence_Server` (see `plan.Noesis.md`'s `NoesisServer` section), which
+does not exist yet.
 
 Import as:
 
@@ -44,7 +44,7 @@ DEFAULT_FULFILLMENT_SUCCESS_RATE = 0.9
 @dataclasses.dataclass
 class Contract:
     """
-    Store one contract produced from a cleared PR1 `Fill`.
+    Store one contract produced from a cleared `Fill`.
 
     `l_max`/`r_min` come from the winning bid, not the `Fill` itself (a
     `Fill` only carries the settled `n_tasks`/`c_level`/`price`); see
@@ -146,7 +146,7 @@ def mock_fulfill(
     Stand in for `Intelligence_Server` and report a pass/fail outcome.
 
     Placeholder for the real fulfillment/monitoring layer (`NoesisServer`
-    PR4 of `plan.Noesis.md`), which does not exist yet; swap this for
+    section of `plan.Noesis.md`), which does not exist yet; swap this for
     the real interface once it does. For a fixed (non-randomized) outcome,
     pass a plain callable instead, e.g. `lambda contract: True`.
 
