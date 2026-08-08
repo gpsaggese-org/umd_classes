@@ -6,17 +6,30 @@
 
 ## Roadmap
 
-- **v0.1**: NoesisMarket accepting inputing requests from suppliers and
-  demands of compute, with API deployed on a laptop and on the cloud
+- **v0.1**: NoesisMarket accepting inputing requests from suppliers and demands
+  of compute, with API deployed on a laptop and on the cloud
+  - `NoesisMarket` PR1 [x]
+  - `NoesisPlatform` PR1 [x]
+  - `NoesisPlatform` PR2 [ ]
 
 - **v0.2**: Create an adapter from OpenRouter to the API as demand to provide
   capacity
+  - `NoesisServer` PR7 [ ]
+  - `NoesisServer` PR9 [ ]
 
 - **v0.3**: Every 10 seconds an auction is run and an allocation is available
+  - Needs: `NoesisMarket` PR7 [ ] (PR1 already provides the clearing logic;
+    PR7 makes it run automatically on a configurable cadence instead of only
+    on demand)
 
 - **v0.4**: Implement NoesisServer where people can pay for capacity and get
   served through the API of the providers
   - No charge
+  - Needs: `NoesisServer` PR1 [x], `NoesisMarket` PR8 [ ], `NoesisPlatform`
+    PR4 [ ]
+
+- Releases are cumulative: each version also requires every PR listed under
+  the versions before it (e.g. `v0.4` also needs `v0.1`-`v0.3`'s PRs)
 
 ## NoesisMarket
 
@@ -51,7 +64,7 @@
 - Log the (mocked) fulfillment result back onto the contract record
 - Result: closed loop match -> contract -> dispatch -> logged outcome, mocked
   past the auction boundary; swap-in point for the real
-  [[draft.Intelligence_Server]] once it exists
+  [[draft.Intelligence_Server]] once it exists, done by PR8 below
 
 #### PR3: [ ] Reputation and Pricing Feedback Loop
 - Feed logged fulfillment outcomes (from PR2, mocked or real) into per-seller
@@ -121,6 +134,51 @@
 - Result: a measured front-running-resistance comparison between the plain PR1
   order book and commit-reveal; stake-backed slashing (the paper's staked-ask
   definition) and real on-chain deployment are out of scope for this PR
+
+#### PR7: [ ] Automatic Periodic Auction Clearing (Configurable Cadence)
+- Background: `batch_call_auction.py`'s `DEFAULT_BATCH_INTERVAL_MINUTES = 5`
+  constant is documented as "not enforced by this module, which clears one
+  round per `OrderBook.clear_round()` call and leaves scheduling to the
+  caller"; today the only caller is `NoesisPlatform` PR1's `POST
+  /rounds/clear`, triggered manually/externally, not on a timer
+- Add a background scheduler (e.g. an `asyncio` task or a thread loop) that
+  calls `clear_round()` every configurable interval `T`, replacing manual
+  triggering as the default path; keep `POST /rounds/clear` available for
+  tests and manual/debug triggering
+- Make `T` a per-deployment configuration value rather than the hardcoded
+  `DEFAULT_BATCH_INTERVAL_MINUTES` constant, so a fast dev/demo cadence
+  (e.g. 10 s) and a production cadence can both be set without a code change
+- Unit tests: with an injectable/fake clock, the scheduler calls
+  `clear_round()` at the expected cadence; changing `T` changes the observed
+  cadence; a round with no matches does not stop the scheduler from clearing
+  the next round
+- Result: `NoesisMarket` clears rounds autonomously at a configured cadence
+  instead of only on demand; the roadmap's `v0.3` target ("every 10 seconds
+  an auction is run and an allocation is available") is `T = 10 s` on this
+  scheduler
+
+#### PR8: [ ] Real Fulfillment Via NoesisServer's Gateway (swap the PR2 mock)
+- Background: `contract_dispatch.py`'s module docstring says its mocked
+  fulfillment layer "stands in for `Intelligence_Server` ... which does not
+  exist yet"; that is no longer true once `NoesisServer` PR1 (passthrough
+  proxy) and PR7 (real OpenRouter-backed liquidity) exist, but no PR
+  currently swaps `mock_fulfill()` for a real call — `NoesisServer` PR7's own
+  Result line defers this to "`NoesisMarket` (PR3/PR4 above)", and neither of
+  those PRs performs a fulfillment call
+- Replace `dispatch_contract()`'s call to `mock_fulfill()` with a real call
+  through `NoesisServer`'s `Gateway.call()`, translating each `Contract`'s
+  `(n_tasks, c_level, ...)` into one or more Gateway calls at the contract's
+  tier, and log the real measured outcome (success/failure, latency) back
+  onto the contract in place of the mocked pass/fail; keep `mock_fulfill()`
+  available behind a flag for tests that should not depend on a live/fixture
+  `Gateway`
+- Unit tests: with a fixture `Gateway` in place of the real one, a dispatched
+  contract's `fulfilled`/latency fields are set from the fixture's returned
+  outcome, not from `random.random()` per `DEFAULT_FULFILLMENT_SUCCESS_RATE`
+- Result: a cleared `NoesisMarket` contract is actually served by
+  `NoesisServer` end to end, required before the roadmap's `v0.4` target
+  ("get served through the API of the providers") is true rather than
+  simulated
 
 ### Open Questions
 - Not blocking PR1 (covered by defaults above); must be resolved before PR2/PR3
@@ -259,7 +317,7 @@
   `requires_openrouter_key`-marked integration test, skipped unless an API key
   is present in the environment, exercises one real OpenRouter call
 - Result: `Gateway` is backed by real, multi-provider liquidity instead of test
-  stand-ins; once wired to `NoesisMarket` (PR3/PR4 above), a cleared ask can be
+  stand-ins; once wired to `NoesisMarket` (PR8 above), a cleared ask can be
   fulfilled by an actual OpenRouter call in place of `mock_fulfill()`
 
 #### PR8: [ ] OpenRouter-compatible API Interface for `NoesisServer`
@@ -285,6 +343,26 @@
 - Result: `NoesisServer` is a drop-in replacement for OpenRouter from the
   caller's point of view; supersedes the wire format of `NoesisPlatform` PR1's
   passthrough-completion endpoint once this lands
+
+#### PR9: [ ] OpenRouter Capacity as Market Supply (Auto-ask Adapter)
+- Background: PR7 gives `Gateway` real OpenRouter-backed capacity and pricing
+  (`GET /api/v1/models`), but nothing in the plan turns that capacity into
+  `NoesisMarket` asks; `POST /asks` (`NoesisPlatform` PR1) still requires a
+  human/manual submission per seller, so OpenRouter's capacity is invisible
+  to the auction as supply
+- Add an adapter that reads OpenRouter's model catalog and `usage`-reported
+  pricing from PR7's `OpenRouterProviderConfig` and periodically
+  submits/refreshes one ask per `(model, tier)` into `NoesisMarket`'s order
+  book (via `OrderBook.submit_ask()` directly, or `POST /asks` once
+  deployed), instead of a manual ask per model
+- Unit tests: given a fixture OpenRouter model catalog, the adapter submits
+  one ask per listed model with tier/price derived from the catalog; a model
+  that drops out of a later catalog refresh has its stale ask withdrawn or
+  not renewed
+- Result: OpenRouter's capacity participates in `NoesisMarket` auctions as
+  supply without a manual ask per model, the mechanism the roadmap's `v0.2`
+  target ("an adapter from OpenRouter to the API ... to provide capacity")
+  describes
 
 ### Open Questions
 - Not blocking PR1-PR6 as scoped above; track before broader rollout
@@ -402,6 +480,24 @@
 - Result: a buyer can fund an account through either rail and see the balance
   gate bid submission
 
+#### PR4: [ ] No-charge Credit Ledger for Bid Gating
+- Background: the roadmap's `v0.4` explicitly scopes "No charge", but the
+  only PR that gates `POST /bids` on a balance is PR3, which requires real
+  Stripe/crypto payment rails; `v0.4` needs the balance-gating *mechanism*
+  without collecting real payment yet
+- Add a per-account credit ledger (in-memory, or datastore-backed once PR2
+  lands) seeded with a fixed/free grant of task-credit and no real payment
+  collected; gate `POST /bids` (PR1) on `account_balance >= n_beta * p_beta`
+  exactly as PR3 describes, debiting only once a bid is matched into a
+  contract
+- Unit tests: a new account starts with the seeded free-credit balance; a bid
+  within balance is accepted and debits on match; a bid exceeding balance is
+  rejected before reaching the auction
+- Result: `POST /bids` is balance-gated end to end with zero real payment
+  collected, satisfying the roadmap's `v0.4` "No charge" scope; PR3 upgrades
+  the same gate to a real-money funding rail when charging for real is in
+  scope
+
 ### Open Questions
 1. Custody: does `NoesisMarket` hold buyer funds in escrow between funding and
    settlement, or only check a balance and settle out-of-band? (affects PR3's
@@ -418,18 +514,3 @@
 ## Conventions
 - Code: `.claude/skills/coding.rules.md`
 - Tests: `.claude/skills/testing.rules.md`
-
-## References
-- Background/formalization: [[draft.Intelligence_Market]],
-  [[draft.Intelligence_Server]]
-- The full \Noesis{} paper: `papers/Noesis/paper.tex` (sections
-  `01_introduction.tex` through `11_conclusion.tex`)
-- OpenRouter: unified API for multiple LLM providers; design reference for
-  `NoesisServer` PR1, and the real integration target for `NoesisServer` PR7
-  (backend liquidity) and PR8 (compatible API interface)
-- Stripe Checkout: hosted credit-card payment flow (reference only, for
-  `NoesisPlatform` PR3)
-- Chen, L., et al., _FrugalGPT: How to Use Large Language Models While Reducing
-  Cost and Improving Performance_. (2023)
-- Ong, I., et al., _RouteLLM: Learning to Route LLMs with Preference Data_
-  (2024)
