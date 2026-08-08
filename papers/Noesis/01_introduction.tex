@@ -5,14 +5,14 @@
 
 \date{\today}
 
-% TODO(ai_gp): Add the concept of max delay (e.g., to execute workload within N
+% TODO(gp): Add the concept of max delay (e.g., to execute workload within N
 % hours for batch execution)
-% TODO(ai_gp): People pay for token but they should pay for functionality.
+% TODO(gp): People pay for token but they should pay for functionality.
 % (virtual tokens, intelligence token)
 % The fragmentation of the markets is not positive for consumers.
-% TODO(ai_gp): Users don't have a way to measure quality of service (e.g,
+% TODO(gp): Users don't have a way to measure quality of service (e.g,
 % model nerfing, low availability)
-% TODO(ai_gp): Add cache
+% TODO(gp): Add cache
 
 \begin{abstract}
 Applications and autonomous agents increasingly consume large language model
@@ -64,6 +64,18 @@ price discovery through an open auction, a contract that bundles quality
 attributes rather than a single price-per-token, and a fulfillment layer that
 measures and reports whether the contract was actually honored.
 
+Today's LLM APIs price by the token, a unit that measures computation rather
+than the functionality a buyer actually receives: two providers can charge
+the same per-token rate while silently differing in the capability,
+availability, or consistency of what that token buys. A buyer has no
+standard way to detect that a model has been quietly downgraded (``model
+nerfing'') or is intermittently unavailable, and each provider's
+token-pricing scheme is incompatible with every other's, fragmenting the
+market in a way that hurts, rather than helps, buyers trying to compare
+offers. \Noesis{} addresses this by pricing and metering a \emph{(capability,
+latency, reliability)} bundle instead of a raw token count, so that what is
+bought and verified is delivered functionality, not consumed computation.
+
 % ==============================================================================
 \subsection{Machine intelligence as a commodity}
 \label{sec:intelligence_as_commodity}
@@ -88,8 +100,11 @@ compute was spent to produce a given answer. The good that a buyer actually
 wants to buy is better described as a bundle: a capability level (how good
 the answer is expected to be), a latency bound (how long the answer takes),
 and a reliability level (how often the first two conditions are actually
-met). Section~\ref{sec:bundling} returns to this point, which drives most
-of the protocol's design.
+met). For latency-insensitive batch workloads, the latency bound can
+instead be expressed as a maximum completion delay for the whole batch,
+e.g., delivered within $N$ hours, rather than as a per-request bound.
+Section~\ref{sec:bundling} returns to this point, which drives most of the
+protocol's design.
 
 % ==============================================================================
 \subsection{The Noesis protocol}
@@ -108,128 +123,192 @@ of the protocol's design.
     an LLM API gateway, modeled on multi-provider routers such as
     OpenRouter\footnote{\url{https://openrouter.ai}}, that executes the
     requests matched by a \NoesisMarket{} contract against the underlying
-    providers, logs every prompt/response pair, and measures whether the
-    delivered capability, latency, and reliability met the contract terms.
-    Violations are reported back to \NoesisMarket{} as a reputation and
-    pricing signal (Section~\ref{sec:noesis_server}).
+    providers, caches responses to identical or near-duplicate requests to
+    avoid paying a provider twice for the same answer, logs every
+    prompt/response pair, and measures whether the delivered capability,
+    latency, and reliability met the contract terms. Violations are
+    reported back to \NoesisMarket{} as a reputation and pricing signal
+    (Section~\ref{sec:noesis_server}).
 \end{itemize}
 
-% TODO(ai_gp): Use a bullet list for the components.
 Figure~\ref{fig:architecture} lays out the resulting architecture, with the
 five pluggable components of Section~\ref{sec:modularity} and
-Table~\ref{tab:components} shaded in teal: the demand and supply sides submit
-bids and asks to \NoesisMarket{}'s matching engine, which clears them into
-contracts dispatched to \NoesisServer{}'s API gateway. The gateway proxies
-matched requests to the underlying providers through per-provider APIs, and its
-metering logic checks the responses against the contract terms, using external
-intelligence-measure providers (e.g.,
-\footnote{\url{https://artificialanalysis.ai}}) as a capability reference, then
-reports fulfillment back to \NoesisMarket{}'s reputation-and-feedback
-component, which gates the matching engine and feeds its pricing-dissemination
-component. The gateway can also fan a request out to several providers through
-the answer-fusion component (Section~\ref{sec:fusion}) when reliability
-outweighs cost.
+Table~\ref{tab:components} shaded in teal:
 
-% TODO(ai_gp): Reorganize it visually so that the figure can be bigger and more 
-% readable. Add a color legend for Noesis, Providers / supply
+\begin{itemize}
+  \item The demand and supply sides submit bids and asks to
+    \NoesisMarket{}'s matching engine.
+  \item The matching engine clears compatible bids and asks into contracts,
+    dispatched to \NoesisServer{}'s API gateway.
+  \item The gateway proxies matched requests to the underlying providers
+    through per-provider APIs.
+  \item The gateway's metering logic checks the responses against the
+    contract terms, using external intelligence-measure providers, e.g.,
+    artificialanalysis.ai\footnote{\url{https://artificialanalysis.ai}}, as
+    a capability reference.
+  \item Metering reports fulfillment back to \NoesisMarket{}'s
+    reputation-and-feedback component, which gates the matching engine and
+    feeds its pricing-dissemination component.
+  \item The gateway can also fan a request out to several providers through
+    the answer-fusion component (Section~\ref{sec:fusion}) when reliability
+    outweighs cost.
+\end{itemize}
 
 % rendered_images:begin
 % ```graphviz
 % digraph NoesisArchitecture {
-%   bgcolor="white";
-%   rankdir=LR;
+%   // ---------------------------------------------------------------
+%   bgcolor="transparent";
+%   pad="0.15";
 %   splines=spline;
-%   nodesep=0.35;
-%   ranksep=0.70;
-%   pad=0.30;
+%   nodesep=0.30;
+%   ranksep=0.50;
 % 
-%   node [shape=box, style="rounded,filled", fontname="Helvetica",
-%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
-%         color="#7B8794"];
-%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
-%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
+%   node [shape=box,
+%         style="rounded,filled",
+%         fillcolor="#FFFFFF",
+%         color="#9AA9B8",
+%         penwidth=1.8,
+%         fontname="Helvetica",
+%         fontcolor="#243B53",
+%         fontsize=12,
+%         margin="0.22,0.14",
+%         height=0.50];
+% 
+%   edge [color="#A3B1C0",
+%         penwidth=1.3,
+%         arrowhead=vee,
+%         arrowsize=0.75,
+%         fontname="Helvetica",
+%         fontsize=10,
+%         fontcolor="#7B8794"];
+% 
+%   // ---------------------------------------------------------------
+%   rankdir=LR;
+%   newrank=true;
+% 
+%   // actor : rose   |   process : blue   |   fulfillment monitoring : sage green   |   external : violet
 % 
 %   subgraph cluster_participants {
 %     label     = "Market participants";
 %     labelloc  = "t";
 %     fontname  = "Helvetica-Bold";
-%     fontsize  = 12;
-%     fontcolor = "#52606D";
+%     fontsize  = 12.5;
+%     fontcolor = "#3A4A5C";
 %     style     = "rounded,filled";
-%     fillcolor = "#F7F9FC";
-%     color     = "#CBD2D9";
+%     fillcolor = "#F7F9FB";
+%     color     = "#C7D0DA";
 %     penwidth  = 1.0;
-%     margin    = 14;
+%     margin    = 16;
 % 
-%     Demand [label="Demand\nApplications / agents", fillcolor="#F4A6A6"];
-%     Supply [label="Supply\nModel & compute providers", fillcolor="#FFD1A6"];
+%     Demand [label=<<b>Demand</b><br/><font point-size="10" color="#A34F6C">Applications / agents</font>>,
+%             fillcolor="#F6E1E8", color="#D98CA8", fontcolor="#6B2A44"];
+%     Supply [label=<<b>Supply</b><br/><font point-size="10" color="#946A2E">Model &amp; compute providers</font>>,
+%             fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
 %   }
 % 
 %   subgraph cluster_noesis_market {
 %     label     = "NoesisMarket";
 %     labelloc  = "t";
 %     fontname  = "Helvetica-Bold";
-%     fontsize  = 12;
-%     fontcolor = "#52606D";
+%     fontsize  = 12.5;
+%     fontcolor = "#3A4A5C";
 %     style     = "rounded,filled";
-%     fillcolor = "#F7F9FC";
-%     color     = "#CBD2D9";
+%     fillcolor = "#F7F9FB";
+%     color     = "#C7D0DA";
 %     penwidth  = 1.0;
-%     margin    = 14;
+%     margin    = 16;
 % 
-%     MatchingEngine [label="Matching engine\nPluggable", fillcolor="#A0D6D1"];
-%     ReputationLoop [label="Reputation and feedback\nPluggable", fillcolor="#A0D6D1"];
-%     PricingFeed [label="Pricing dissemination\nPluggable", fillcolor="#A0D6D1"];
-%     ReputationLoop -> MatchingEngine [label="gates eligibility", style=dashed];
-%     MatchingEngine -> PricingFeed [label="cleared prices", style=dashed];
+%     ReputationLoop [label=<<b>Reputation and feedback</b><br/><font point-size="10" color="#41719C">Pluggable</font>>,
+%                     fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+%     MatchingEngine [label=<<b>Matching engine</b><br/><font point-size="10" color="#41719C">Pluggable</font>>,
+%                     fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+%     PricingFeed    [label=<<b>Pricing dissemination</b><br/><font point-size="10" color="#41719C">Pluggable</font>>,
+%                     fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+%     ReputationLoop -> MatchingEngine [label="Gates eligibility", style=dashed];
+%     MatchingEngine -> PricingFeed [label="Cleared prices", style=dashed];
 %   }
 % 
 %   subgraph cluster_noesis_server {
 %     label     = "NoesisServer";
 %     labelloc  = "t";
 %     fontname  = "Helvetica-Bold";
-%     fontsize  = 12;
-%     fontcolor = "#52606D";
+%     fontsize  = 12.5;
+%     fontcolor = "#3A4A5C";
 %     style     = "rounded,filled";
-%     fillcolor = "#F7F9FC";
-%     color     = "#CBD2D9";
+%     fillcolor = "#F7F9FB";
+%     color     = "#C7D0DA";
+%     penwidth  = 1.0;
+%     margin    = 16;
+% 
+%     Gateway           [label=<<b>API gateway</b>>,
+%                         fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+%     Metering          [label=<<b>Metering logic</b><br/><font point-size="10" color="#4F7A5A">Fulfillment monitoring</font>>,
+%                         fillcolor="#DFEDE0", color="#8FB79A", fontcolor="#2E5A3D"];
+%     CapabilityMeasure [label=<<b>Capability measurement</b><br/><font point-size="10" color="#41719C">Pluggable</font>>,
+%                         fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+%     Fusion            [label=<<b>Answer fusion</b><br/><font point-size="10" color="#41719C">Pluggable</font>>,
+%                         fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+%     Gateway -> Metering [label="Logged traffic"];
+%     Gateway -> Fusion [label="Multi-provider fan-out", style=dashed];
+%     CapabilityMeasure -> Metering [label="Delivered capability", style=dashed];
+%   }
+% 
+%   ProviderAPIs        [label=<<b>Provider APIs</b><br/><font point-size="10" color="#6B52A8">Per-provider endpoints</font>>,
+%                         fillcolor="#E9E1F7", color="#A88FD9", fontcolor="#45296B"];
+%   IntelligenceMeasure [label=<<font point-size="10">Intelligence-measure providers<br/>e.g. artificialanalysis.ai</font>>,
+%                         shape=note, fillcolor="#E9E1F7", color="#A88FD9", fontcolor="#45296B"];
+% 
+%   Demand -> ReputationLoop [style=invis];
+%   Supply -> CapabilityMeasure [style=invis];
+%   Demand -> MatchingEngine [label="Bids"];
+%   Supply -> MatchingEngine [label="Asks"];
+%   MatchingEngine -> Gateway [label="Contracts", penwidth=1.6, color="#8592A3", constraint=false];
+%   Gateway -> ProviderAPIs [label="Requests /\nresponses", dir=both];
+%   Fusion -> ProviderAPIs [label="Fan-out", style=dashed];
+%   IntelligenceMeasure -> CapabilityMeasure [label="Capability reference", style=dashed, constraint=false];
+%   Metering -> ReputationLoop [
+%     label="Reputation & pricing feedback",
+%     style=dashed, penwidth=1.6,
+%     color="#C0455B", fontcolor="#C0455B",
+%     constraint=false
+%   ];
+% 
+%   // Column alignment between NoesisMarket and NoesisServer
+%   { rank=same; ReputationLoop; CapabilityMeasure; IntelligenceMeasure; }
+%   CapabilityMeasure -> IntelligenceMeasure [style=invis];
+%   { rank=same; MatchingEngine; Gateway; }
+%   { rank=same; PricingFeed; Metering; Fusion; }
+% 
+%   // Legend
+%   subgraph cluster_legend {
+%     label     = "Legend";
+%     labelloc  = "t";
+%     fontname  = "Helvetica-Bold";
+%     fontsize  = 12.5;
+%     fontcolor = "#3A4A5C";
+%     style     = "rounded,filled";
+%     fillcolor = "#FBFBFD";
+%     color     = "#C7D0DA";
 %     penwidth  = 1.0;
 %     margin    = 14;
 % 
-%     Gateway [label="API gateway", fillcolor="#A6C8F4"];
-%     Metering [label="Metering logic\nFulfillment monitoring", fillcolor="#B2E2B2"];
-%     CapabilityMeasure [label="Capability measurement\nPluggable", fillcolor="#A0D6D1"];
-%     Fusion [label="Answer fusion\nPluggable", fillcolor="#A0D6D1"];
-%     Gateway -> Metering [label="logged traffic"];
-%     CapabilityMeasure -> Metering [label="delivered capability", style=dashed];
-%     Gateway -> Fusion [label="multi-provider fan-out", style=dashed];
+%     node [shape=box, style="rounded,filled", fontsize=10, height=0.32, margin="0.14,0.08"];
+%     LegendDemand   [label="Demand / Supply", fillcolor="#F6E1E8", color="#D98CA8", fontcolor="#6B2A44"];
+%     LegendNoesis   [label="Noesis component (pluggable)", fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+%     LegendMonitor  [label="Fulfillment monitoring", fillcolor="#DFEDE0", color="#8FB79A", fontcolor="#2E5A3D"];
+%     LegendExternal [label="External reference", fillcolor="#E9E1F7", color="#A88FD9", fontcolor="#45296B"];
+%     { rank=same; LegendDemand; LegendNoesis; LegendMonitor; LegendExternal; }
 %   }
-% 
-%   ProviderAPIs [label="Provider APIs\nPer-provider endpoints", fillcolor="#C6A6F4"];
-%   IntelligenceMeasure [label="Intelligence-measure providers\ne.g. artificialanalysis.ai",
-%                         shape=note, fillcolor="#F0E6FF"];
-% 
-%   Demand -> MatchingEngine [label="bids"];
-%   Supply -> MatchingEngine [label="asks"];
-%   MatchingEngine -> Gateway [label="contracts", penwidth=1.5, color="#7B8794"];
-%   Gateway -> ProviderAPIs [label="requests /\nresponses", dir=both];
-%   Fusion -> ProviderAPIs [label="fan-out", style=dashed];
-%   IntelligenceMeasure -> CapabilityMeasure [label="capability\nreference", dir=back, style=dashed];
-%   Metering -> ReputationLoop [
-%     label="\n\nreputation & pricing feedback",
-%     style=dashed, penwidth=1.5,
-%     color="#B23A48", fontcolor="#B23A48",
-%     constraint=false
-%   ];
 % }
 % ```
 % label=fig:architecture
-% caption=The \Noesis{} architecture, with its five pluggable components shaded in teal.
+% caption=The \Noesis{} architecture, with its five pluggable components shaded in teal, and a color legend for demand/supply, Noesis components, fulfillment monitoring, and external references.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{01_introduction.tex.figs/01_introduction.1.png}
-  \caption{The \Noesis{} architecture, with its five pluggable components shaded in teal.}
+  \caption{The \Noesis{} architecture, with its five pluggable components shaded in teal, and a color legend for demand/supply, Noesis components, fulfillment monitoring, and external references.}
   \label{fig:architecture}
 \end{figure}
 % render_images:end
@@ -303,23 +382,22 @@ engine and the gateway-plus-logging layer be built and demonstrated as
 separate, independently testable pieces of a prototype, precisely because
 each is a separately pluggable component rather than part of one monolith.
 
-% TODO(ai_gp): Component, What it does, Section, This paper implementation, Alternative implementations
 \begin{samepage}
   \begin{table}[H]
     \centering
-    \footnotesize
-    \begin{tabular}{l|p{4.8cm}|p{5.8cm}|}
-      \textbf{Component} & \textbf{What it does} & \textbf{Example (this paper / alternative)} \\
+    \scriptsize
+    \begin{tabular}{p{2.0cm}|p{3.3cm}|c|p{2.9cm}|p{2.9cm}|}
+      \textbf{Component} & \textbf{What it does} & \textbf{Sec.} & \textbf{This paper implementation} & \textbf{Alternative implementation} \\
       \hline
-      Matching engine & Matches compatible bids and asks into contracts within a tier (Problem~\ref{prob:clearing}) & This paper: periodic uniform-price call auction (Section~\ref{sec:noesis_market}). Alternative: continuous double auction \\
+      Matching engine & Matches compatible bids and asks into contracts within a tier (Problem~\ref{prob:clearing}) & \ref{sec:noesis_market} & Periodic uniform-price call auction & Continuous double auction \\
       \hline
-      Capability measurement & Estimates the capability tier $\hat c(x)$ actually delivered by a response (Section~\ref{sec:fulfillment_monitoring}) & This paper: a verifier model, benchmark probe, or reference-model agreement (Definition~\ref{def:agreement_label}). Alternative: a hosted evaluation provider, e.g., artificialanalysis.ai \\
+      Capability measurement & Estimates the capability tier $\hat c(x)$ actually delivered by a response & \ref{sec:fulfillment_monitoring} & A verifier model, benchmark probe, or reference-model agreement (Definition~\ref{def:agreement_label}) & A hosted evaluation provider, e.g., artificialanalysis.ai \\
       \hline
-      Reputation and feedback loop & Aggregates a seller's fulfillment history into a score that gates future eligibility (Section~\ref{sec:reputation}) & This paper: exponential-decay update (Equation~\eqref{eq:reputation_update}). Alternative: a Bayesian trust score \\
+      Reputation and feedback loop & Aggregates a seller's fulfillment history into a score that gates future eligibility & \ref{sec:reputation} & Exponential-decay update (Equation~\eqref{eq:reputation_update}) & A Bayesian trust score \\
       \hline
-      Answer fusion & Combines several providers' answers into one when reliability outweighs cost (Section~\ref{sec:fusion}) & This paper: majority vote or a verifier model. Alternative: a learned combiner, e.g., mixture-of-agents \cite{wang2024moa} \\
+      Answer fusion & Combines several providers' answers into one when reliability outweighs cost & \ref{sec:fusion} & Majority vote or a verifier model & A learned combiner, e.g., mixture-of-agents \cite{wang2024moa} \\
       \hline
-      Pricing dissemination & Publishes each round's cleared prices to subscribers outside the round that produced them & This paper: a real-time push feed. Alternative: an on-chain event log (Section~\ref{sec:decentralized_extension}) \\
+      Pricing dissemination & Publishes each round's cleared prices to subscribers outside the round that produced them & \ref{sec:modularity} & A real-time push feed & An on-chain event log (Section~\ref{sec:decentralized_extension}) \\
       \hline
     \end{tabular}
     \caption{The five pluggable components behind \NoesisMarket{} and
@@ -334,9 +412,6 @@ each is a separately pluggable component rather than part of one monolith.
 \label{sec:contributions}
 
 The innovative features of \Noesis{} are:
-
-% TODO(ai_gp): Answer fusion and difficulty-aware routing are part of the same
-% component.
 
 \begin{enumerate}
   \item \textbf{Modular, pluggable components}: \NoesisMarket{} and
@@ -367,14 +442,14 @@ The innovative features of \Noesis{} are:
     auction rounds, in the spirit of non-performance penalties in capacity
     markets.
 
-  \item \textbf{Difficulty-aware routing}: \NoesisServer{} estimates how
-    much capability a request actually needs and routes accordingly,
-    spending intelligence only where it is needed.
-
-  \item \textbf{Answer fusion as a complementary mode}: for requests where
-    reliability matters more than cost, \NoesisServer{} can query several
-    providers and combine their answers, trading cost for accuracy in the
-    direction opposite to routing.
+  \item \textbf{Difficulty-aware routing and answer fusion}: two
+    complementary modes of the same request-shaping capability.
+    \NoesisServer{} estimates how much capability a request actually
+    needs and routes accordingly, spending intelligence only where it is
+    needed; conversely, for requests where reliability matters more than
+    cost, it can instead query several providers and combine their
+    answers, trading cost for accuracy in the direction opposite to
+    routing.
 
   \item \textbf{Provider-agnostic liquidity pooling}: many sellers compete
     for the same demand behind a single interface, instead of buyers being
@@ -396,28 +471,27 @@ buying raw compute on a cloud spot market (e.g., spot GPU instances). The
 comparison is discussed in detail in Sections~\ref{sec:market_design}
 through \ref{sec:noesis_server}.
 
-% TODO(ai_gp): Remove textbf from the table
 \begin{samepage}
   \begin{table}[H]
     \centering
     \begin{tabular}{l|c|c|c|c|}
-                                                        & \textbf{\emph{Direct API}} & \textbf{\emph{Gateway}} & \textbf{\emph{Spot compute}} & \textbf{\emph{\Noesis}} \\
+                                                & \emph{Direct API} & \emph{Gateway} & \emph{Spot compute} & \emph{\Noesis} \\
       \hline
-      \textbf{Price discovery via open auction}       & \nbad             & \nbad          & \ngood               & \ngood         \\
+      Price discovery via open auction       & \nbad             & \nbad          & \ngood               & \ngood         \\
       \hline
-      \textbf{Bundled quality guarantee}              & \npartial         & \npartial      & \nbad                & \ngood         \\
+      Bundled quality guarantee              & \npartial         & \npartial      & \nbad                & \ngood         \\
       \hline
-      \textbf{Verified fulfillment / SLA monitoring}  & \nbad             & \nbad          & \npartial             & \ngood         \\
+      Verified fulfillment / SLA monitoring  & \nbad             & \nbad          & \npartial             & \ngood         \\
       \hline
-      \textbf{Reputation-based accountability}        & \nbad             & \nbad          & \npartial             & \ngood         \\
+      Reputation-based accountability        & \nbad             & \nbad          & \npartial             & \ngood         \\
       \hline
-      \textbf{Difficulty-aware cost routing}          & \nbad             & \npartial      & \nbad                 & \ngood         \\
+      Difficulty-aware cost routing          & \nbad             & \npartial      & \nbad                 & \ngood         \\
       \hline
-      \textbf{Multi-provider liquidity pooling}       & \nbad             & \ngood         & \npartial             & \ngood         \\
+      Multi-provider liquidity pooling       & \nbad             & \ngood         & \npartial             & \ngood         \\
       \hline
-      \textbf{Reusable evaluation/training dataset}   & \npartial         & \npartial      & \nbad                 & \ngood         \\
+      Reusable evaluation/training dataset   & \npartial         & \npartial      & \nbad                 & \ngood         \\
       \hline
-      \textbf{Single-API ease of integration}         & \ngood            & \ngood         & \nbad                 & \ngood         \\
+      Single-API ease of integration         & \ngood            & \ngood         & \nbad                 & \ngood         \\
       \hline
     \end{tabular}
     \caption{Comparison of \Noesis{} against alternative ways of obtaining
@@ -426,16 +500,20 @@ through \ref{sec:noesis_server}.
   \end{table}
 \end{samepage}
 
-% TODO(ai_gp): Split in bullet points
-Cloud spot markets already apply auction-based price discovery, but to raw
-compute rather than to a capability/latency/reliability bundle, so they
-score poorly on the bundled-quality and difficulty-routing rows: a spot GPU
-market has no notion of ``how good'' the resulting answer is. Gateways pool
-liquidity across providers and are easy to integrate, but set prices
-unilaterally rather than clearing an auction, and typically do not meter
-fulfillment against a contract. \Noesis{} is designed to combine the
-liquidity pooling and ease-of-integration of a gateway with the price
-discovery of an auction market and the verifiability of a metered service
-contract. Section~\ref{sec:state_of_the_art} surveys the current industry
-landscape, startups and projects that address pieces of this same problem,
-in more detail.
+\begin{itemize}
+  \item Cloud spot markets already apply auction-based price discovery,
+    but to raw compute rather than to a capability/latency/reliability
+    bundle, so they score poorly on the bundled-quality and
+    difficulty-routing rows: a spot GPU market has no notion of ``how
+    good'' the resulting answer is.
+  \item Gateways pool liquidity across providers and are easy to
+    integrate, but set prices unilaterally rather than clearing an
+    auction, and typically do not meter fulfillment against a contract.
+  \item \Noesis{} is designed to combine the liquidity pooling and
+    ease-of-integration of a gateway with the price discovery of an
+    auction market and the verifiability of a metered service contract.
+\end{itemize}
+
+Section~\ref{sec:state_of_the_art} surveys the current industry landscape,
+startups and projects that address pieces of this same problem, in more
+detail.

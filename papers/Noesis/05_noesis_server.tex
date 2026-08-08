@@ -34,58 +34,85 @@ data-handling safeguards (PII scrubbing, opt-in/opt-out) are necessary before
 logging real traffic and are discussed as an open question in
 Section~\ref{sec:open_questions}.
 
-Figure~\ref{fig:request_path} traces this path end to end: the caller's request
-is proxied to a provider and the response streamed back, and on the way back,
+Figure~\ref{fig:request_path} traces this path end to end: the caller's
+request is proxied through a router that selects one of several
+candidate providers, the response is streamed back, and on the way back,
 the request is logged as the tuple (prompt, response, provider, model, latency,
 cost, contract) described above.
 
 % rendered_images:begin
 % ```graphviz
 % digraph RequestPath {
-%   bgcolor="white";
-%   rankdir=LR;
+%   // ---------------------------------------------------------------
+%   bgcolor="transparent";
+%   pad="0.10";
 %   splines=spline;
-%   nodesep=0.45;
-%   ranksep=0.80;
-%   pad=0.30;
+%   nodesep=0.32;
+%   ranksep=0.60;
 % 
-%   node [shape=box, style="rounded,filled", fontname="Helvetica",
-%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
-%         color="#7B8794"];
-%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
-%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
+%   node [shape=box,
+%         style="rounded,filled",
+%         fillcolor="#FFFFFF",
+%         color="#9AA9B8",
+%         penwidth=1.8,
+%         fontname="Helvetica",
+%         fontcolor="#243B53",
+%         fontsize=10,
+%         margin="0.20,0.12",
+%         height=0.45];
 % 
-%   Caller   [label="Caller\nApplication / agent", fillcolor="#F4A6A6"];
-%   Gateway  [label="API gateway\nNoesisServer", fillcolor="#A0D6D1"];
-%   Provider [label="Provider", fillcolor="#C6A6F4"];
-%   Log      [label="Log:\n(prompt, response, provider, model,\nlatency, cost, contract-or-bottom)",
-%             shape=note, fillcolor="#F0E6FF"];
+%   edge [color="#A3B1C0",
+%         penwidth=1.3,
+%         arrowhead=vee,
+%         arrowsize=0.75,
+%         fontname="Helvetica",
+%         fontsize=8.5,
+%         fontcolor="#7B8794"];
 % 
-%   Caller -> Gateway [label="request", penwidth=1.5, color="#7B8794"];
-%   Gateway -> Provider [label="request", penwidth=1.5, color="#7B8794"];
-%   Provider -> Gateway [label="response", style=dashed];
+%   // ---------------------------------------------------------------
+%   rankdir=LR;
+% 
+%   // actor : rose   |   process : blue   |   external : violet   |   artifact : sage green
+% 
+%   Caller  [label=<<b>Caller</b><br/><font point-size="8.5" color="#A34F6C">Application / agent</font>>,
+%            fillcolor="#F6E1E8", color="#D98CA8", fontcolor="#6B2A44"];
+%   Gateway [label=<<b>API gateway</b><br/><font point-size="8.5" color="#41719C">NoesisServer</font>>,
+%            fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+%   Router  [shape=invtrapezium, label=<<b>Route by κ</b><br/><font point-size="7.5" color="#41719C">1-of-3 select</font>>,
+%            fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79", height=0.4, margin="0.10,0.02"];
+% 
+%   ProviderA [label="Provider A", fillcolor="#E9E1F7", color="#A88FD9", fontcolor="#45296B"];
+%   ProviderB [label="Provider B", fillcolor="#E9E1F7", color="#A88FD9", fontcolor="#45296B"];
+%   ProviderC [label="Provider C", fillcolor="#E9E1F7", color="#A88FD9", fontcolor="#45296B"];
+% 
+%   Log [label=<<font point-size="8.5">Log:<br/>(prompt, response, provider, model,<br/>latency, cost, contract-or-bottom)</font>>,
+%        shape=note, fillcolor="#DFEDE0", color="#8FB79A", fontcolor="#2E5A3D"];
+% 
+%   Caller -> Gateway [label="request", penwidth=1.6, color="#8592A3"];
+%   Gateway -> Router [label="request", penwidth=1.6, color="#8592A3"];
+%   Router -> ProviderA;
+%   Router -> ProviderB;
+%   Router -> ProviderC;
+%   Router -> Gateway [label="response", style=dashed, constraint=false];
 %   Gateway -> Caller [label="response", style=dashed];
 %   Gateway -> Log [
 %     label="logged on the way back",
 %     style=dashed, penwidth=1.5,
-%     color="#B23A48", fontcolor="#B23A48",
+%     color="#C0455B", fontcolor="#C0455B",
 %     constraint=false
 %   ];
 % }
 % ```
 % label=fig:request_path
-% caption=Path of a single request through \NoesisServer{}.
+% caption=Path of a single request through \NoesisServer{}, routed by a demux-style selector to one of several candidate providers.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{05_noesis_server.tex.figs/05_noesis_server.1.png}
-  \caption{Path of a single request through \NoesisServer{}.}
+  \caption{Path of a single request through \NoesisServer{}, routed by a demux-style selector to one of several candidate providers.}
   \label{fig:request_path}
 \end{figure}
 % render_images:end
-
-% TODO(ai_gp): In the routing show 3 provider and something looking like a demux
-% to route the request
 
 % ==============================================================================
 \subsection{Contract fulfillment monitoring}
@@ -167,26 +194,31 @@ flagged as violated and reported to \NoesisMarket.
 
 % rendered_images:begin
 % ```tikz
-% \definecolor{flagred}{RGB}{244,166,166}
-% \definecolor{okgreen}{RGB}{178,226,178}
-% \fill[flagred, opacity=0.12] (0,-1) rectangle (6,3.4);
-% \fill[okgreen, opacity=0.12] (6,-1) rectangle (12,3.4);
-% \draw[dashed, thick, black!70] (6,-1) -- (6,3.4);
+% \definecolor{flagzone}{RGB}{248,220,220}
+% \definecolor{flagline}{RGB}{107,31,31}
+% \definecolor{okzone}{RGB}{223,237,224}
+% \definecolor{okline}{RGB}{46,90,61}
+% \definecolor{dividercolor}{RGB}{133,146,163}
+% \definecolor{markcolor}{RGB}{36,59,83}
+% \fontfamily{phv}\selectfont
+% \fill[flagzone, opacity=0.45] (0,-1) rectangle (6,3.4);
+% \fill[okzone, opacity=0.45] (6,-1) rectangle (12,3.4);
+% \draw[dashed, thick, dividercolor] (6,-1) -- (6,3.4);
 % \node[above] at (6,3.4) {\footnotesize $R_{\min}(\kappa)$};
-% \draw[very thick, teal!60!black] (7.2,2.4) -- (10.4,2.4);
-% \draw[very thick, teal!60!black] (7.2,2.25) -- (7.2,2.55);
-% \draw[very thick, teal!60!black] (10.4,2.25) -- (10.4,2.55);
-% \filldraw[black] (9.8,2.4) circle (2pt);
+% \draw[very thick, okline] (7.2,2.4) -- (10.4,2.4);
+% \draw[very thick, okline] (7.2,2.25) -- (7.2,2.55);
+% \draw[very thick, okline] (10.4,2.25) -- (10.4,2.55);
+% \filldraw[markcolor] (9.8,2.4) circle (2pt);
 % \node[below] at (7.2,2.1) {\footnotesize $\hat r_{\text{lower}}$};
 % \node[above] at (9.8,2.7) {\footnotesize $\hat r(\kappa,W)$};
-% \node[align=right, teal!60!black] at (-1.9,2.4) {\footnotesize compliant:\\[-1pt]\footnotesize attributed to noise};
-% \draw[very thick, red!60!black] (3.6,0) -- (7.6,0);
-% \draw[very thick, red!60!black] (3.6,-0.15) -- (3.6,0.15);
-% \draw[very thick, red!60!black] (7.6,-0.15) -- (7.6,0.15);
-% \filldraw[black] (7.0,0) circle (2pt);
+% \node[align=right, okline] at (-1.9,2.4) {\footnotesize compliant:\\[-1pt]\footnotesize attributed to noise};
+% \draw[very thick, flagline] (3.6,0) -- (7.6,0);
+% \draw[very thick, flagline] (3.6,-0.15) -- (3.6,0.15);
+% \draw[very thick, flagline] (7.6,-0.15) -- (7.6,0.15);
+% \filldraw[markcolor] (7.0,0) circle (2pt);
 % \node[below] at (3.6,-0.3) {\footnotesize $\hat r_{\text{lower}}$};
 % \node[above] at (7.0,0.3) {\footnotesize $\hat r(\kappa,W)$};
-% \node[align=right, red!60!black] at (-1.9,0) {\footnotesize flagged:\\[-1pt]\footnotesize violation reported};
+% \node[align=right, flagline] at (-1.9,0) {\footnotesize flagged:\\[-1pt]\footnotesize violation reported};
 % ```
 % label=fig:reliability_test
 % caption=The reliability hypothesis test on a single number line.
@@ -248,27 +280,48 @@ tier (Inequality~\eqref{eq:routing_saving_condition}).
 % rendered_images:begin
 % ```graphviz
 % digraph Routing {
-%   bgcolor="white";
-%   rankdir=LR;
+%   // ---------------------------------------------------------------
+%   bgcolor="transparent";
+%   pad="0.06";
 %   splines=spline;
 %   nodesep=0.45;
-%   ranksep=0.80;
-%   pad=0.30;
+%   ranksep=0.60;
 % 
-%   node [shape=box, style="rounded,filled", fontname="Helvetica",
-%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
-%         color="#7B8794"];
-%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
-%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
+%   node [shape=box,
+%         style="rounded,filled",
+%         fillcolor="#FFFFFF",
+%         color="#9AA9B8",
+%         penwidth=1.8,
+%         fontname="Helvetica",
+%         fontcolor="#243B53",
+%         fontsize=10,
+%         margin="0.22,0.14",
+%         height=0.50];
 % 
-%   Prompt    [label="Prompt x", fillcolor="#FFD1A6"];
-%   Estimator [label="Difficulty estimator\nCheapest tier expected\nto answer correctly", fillcolor="#A0D6D1"];
-%   Tier      [label="Routed tier π(x)\nCheapest sufficient tier", fillcolor="#A6C8F4"];
-%   Cost      [label="Net saving only if:\nestimator cost + expected routed cost\n< always-strong-model cost",
-%              shape=note, fillcolor="#F0E6FF"];
+%   edge [color="#A3B1C0",
+%         penwidth=1.3,
+%         arrowhead=vee,
+%         arrowsize=0.75,
+%         fontname="Helvetica",
+%         fontsize=8.5,
+%         fontcolor="#7B8794"];
 % 
-%   Prompt -> Estimator [penwidth=1.5, color="#7B8794"];
-%   Estimator -> Tier [penwidth=1.5, color="#7B8794"];
+%   // ---------------------------------------------------------------
+%   rankdir=LR;
+% 
+%   // source : warm sand   |   process : blue   |   note : violet
+% 
+%   Prompt    [label=<<b>Prompt x</b>>,
+%              fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+%   Estimator [label=<<b>Difficulty estimator</b><br/><font point-size="8.5" color="#41719C">Cheapest tier expected<br/>to answer correctly</font>>,
+%              fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+%   Tier      [label=<<b>Routed tier π(x)</b><br/><font point-size="8.5" color="#41719C">Cheapest sufficient tier</font>>,
+%              fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+%   Cost      [label=<<font point-size="8.5">Net saving only if:<br/>estimator cost + expected routed cost<br/>&lt; always-strong-model cost</font>>,
+%              shape=note, fillcolor="#E9E1F7", color="#A88FD9", fontcolor="#45296B"];
+% 
+%   Prompt -> Estimator [penwidth=1.6, color="#8592A3"];
+%   Estimator -> Tier [penwidth=1.6, color="#8592A3"];
 %   Tier -> Cost [style=dashed, constraint=false];
 % }
 % ```
@@ -318,34 +371,55 @@ inference cost for a lower risk of a low-quality answer.
 % rendered_images:begin
 % ```graphviz
 % digraph Fusion {
-%   bgcolor="white";
-%   rankdir=LR;
+%   // ---------------------------------------------------------------
+%   bgcolor="transparent";
+%   pad="0.06";
 %   splines=spline;
 %   nodesep=0.30;
-%   ranksep=0.60;
-%   pad=0.30;
+%   ranksep=0.46;
 % 
-%   node [shape=box, style="rounded,filled", fontname="Helvetica",
-%         fontsize=12, penwidth=1.2, margin="0.18,0.10", height=0.45,
-%         color="#7B8794"];
-%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
-%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
+%   node [shape=box,
+%         style="rounded,filled",
+%         fillcolor="#FFFFFF",
+%         color="#9AA9B8",
+%         penwidth=1.8,
+%         fontname="Helvetica",
+%         fontcolor="#243B53",
+%         fontsize=9.5,
+%         margin="0.18,0.10",
+%         height=0.45];
+% 
+%   edge [color="#A3B1C0",
+%         penwidth=1.3,
+%         arrowhead=vee,
+%         arrowsize=0.75,
+%         fontname="Helvetica",
+%         fontsize=8.5,
+%         fontcolor="#7B8794"];
+% 
+%   // ---------------------------------------------------------------
+%   rankdir=LR;
+% 
+%   // source : warm sand   |   external : violet   |   process : blue   |   artifact : sage green
 % 
 %   subgraph cluster_routing {
 %     label     = "Routing (single path)";
 %     labelloc  = "t";
 %     fontname  = "Helvetica-Bold";
-%     fontsize  = 12;
-%     fontcolor = "#52606D";
+%     fontsize  = 10.5;
+%     fontcolor = "#3A4A5C";
 %     style     = "rounded,filled";
-%     fillcolor = "#F7F9FC";
-%     color     = "#CBD2D9";
+%     fillcolor = "#F7F9FB";
+%     color     = "#C7D0DA";
 %     penwidth  = 1.0;
 %     margin    = 14;
 % 
-%     PromptR   [label="prompt x", fillcolor="#FFD1A6"];
-%     ProviderR [label="one provider\nrouted tier", fillcolor="#C6A6F4"];
-%     AnswerR   [label="answer", fillcolor="#A6C8F4"];
+%     PromptR   [label=<<b>prompt x</b>>,
+%                fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+%     ProviderR [label=<<b>one provider</b><br/><font point-size="8" color="#6B52A8">routed tier</font>>,
+%                fillcolor="#E9E1F7", color="#A88FD9", fontcolor="#45296B"];
+%     AnswerR   [label=<<b>answer</b>>,
+%                fillcolor="#DFEDE0", color="#8FB79A", fontcolor="#2E5A3D"];
 %     PromptR -> ProviderR -> AnswerR;
 %   }
 % 
@@ -353,20 +427,26 @@ inference cost for a lower risk of a low-quality answer.
 %     label     = "Fusion (fan-out / fan-in)";
 %     labelloc  = "t";
 %     fontname  = "Helvetica-Bold";
-%     fontsize  = 12;
-%     fontcolor = "#52606D";
+%     fontsize  = 10.5;
+%     fontcolor = "#3A4A5C";
 %     style     = "rounded,filled";
-%     fillcolor = "#F7F9FC";
-%     color     = "#CBD2D9";
+%     fillcolor = "#F7F9FB";
+%     color     = "#C7D0DA";
 %     penwidth  = 1.0;
 %     margin    = 14;
 % 
-%     PromptF    [label="prompt x", fillcolor="#FFD1A6"];
-%     P1         [label="provider in S(x)", fillcolor="#C6A6F4"];
-%     P2         [label="provider in S(x)", fillcolor="#C6A6F4"];
-%     P3         [label="provider in S(x)", fillcolor="#C6A6F4"];
-%     Aggregator [label="aggregator g\nvote / verifier / learned", fillcolor="#A0D6D1"];
-%     AnswerF    [label="answer", fillcolor="#A6C8F4"];
+%     PromptF    [label=<<b>prompt x</b>>,
+%                 fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+%     P1         [label=<<b>provider in S(x)</b>>,
+%                 fillcolor="#E9E1F7", color="#A88FD9", fontcolor="#45296B"];
+%     P2         [label=<<b>provider in S(x)</b>>,
+%                 fillcolor="#E9E1F7", color="#A88FD9", fontcolor="#45296B"];
+%     P3         [label=<<b>provider in S(x)</b>>,
+%                 fillcolor="#E9E1F7", color="#A88FD9", fontcolor="#45296B"];
+%     Aggregator [label=<<b>aggregator g</b><br/><font point-size="8" color="#41719C">vote / verifier / learned</font>>,
+%                 fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+%     AnswerF    [label=<<b>answer</b>>,
+%                 fillcolor="#DFEDE0", color="#8FB79A", fontcolor="#2E5A3D"];
 %     PromptF -> P1;
 %     PromptF -> P2;
 %     PromptF -> P3;
@@ -389,11 +469,8 @@ inference cost for a lower risk of a low-quality answer.
 % render_images:end
 
 % ==============================================================================
-\subsection{Training signal and distillation}
+\subsection{Training signal and opt-in distillation}
 \label{sec:distillation}
-
-% TODO(ai_gp): Use a different term for distillation (this needs to be opt-in
-% by customers and anonymized, one can get better rate for opt-in)
 
 The difficulty estimator of Equation~\eqref{eq:difficulty_estimator}
 needs a training signal, which the logged traffic supplies for free.
@@ -425,6 +502,16 @@ to approximate $f_{\text{strong}}$'s outputs on the observed task
 distribution \cite{hinton2015}, offering a second, independent way for
 \NoesisServer{} to reduce cost on traffic it has already observed.
 
+Unlike the passive logging of Section~\ref{sec:gateway_architecture},
+inclusion in the distillation corpus $\calD$ is an \emph{opt-in
+distillation program}: a customer's traffic contributes to $\calD$ only
+after the customer opts in, and only after prompts and responses are
+anonymized to remove customer- and end-user-identifying content. Because
+an opted-in customer's traffic makes the corpus, and therefore the
+distilled model, more useful for every buyer on \NoesisMarket, an
+opted-in customer can be offered a preferential rate in exchange, in the
+same spirit as data-sharing discounts in other metered-service markets.
+
 Figure~\ref{fig:training_pipeline} shows the two consumers that share
 this one logged dataset: logged traffic feeds agreement labels
 (Definition~\ref{def:agreement_label}), which train the difficulty
@@ -436,8 +523,6 @@ of one dataset.
 % rendered_images:begin
 % ```graphviz
 % digraph TrainingPipeline {
-%   // ---------------------------------------------------------------
-%   // House style — soft/rounded palette
 %   // ---------------------------------------------------------------
 %   bgcolor="transparent";
 %   pad="0.06";
@@ -464,8 +549,6 @@ of one dataset.
 %         fontsize=8.5,
 %         fontcolor="#7B8794"];
 % 
-%   // ---------------------------------------------------------------
-%   // Figure
 %   // ---------------------------------------------------------------
 %   rankdir=LR;
 % 

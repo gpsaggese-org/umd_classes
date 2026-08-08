@@ -36,7 +36,83 @@ the close of the round, \NoesisMarket{} finds the compatible asks
 single uniform price, and matches the buyer's bid against one or more of
 the compatible asks, up to 10,000 tasks.
 \end{example}
-% TODO(ai_gp): Add a figure explaining this
+
+Figure~\ref{fig:basic_round} illustrates this example: the bid and the
+compatible asks at the \texttt{frontier} tier all flow into \NoesisMarket's
+clearing step for that bucket, which produces a single uniform price $p^*$ and
+matches the bid against compatible asks up to its 10,000-task limit.
+
+% rendered_images:begin
+% ```graphviz
+% digraph BasicRound {
+%   bgcolor="transparent";
+%   pad="0.10";
+%   splines=spline;
+%   nodesep=0.28;
+%   ranksep=0.55;
+%   rankdir=LR;
+% 
+%   node [shape=box,
+%         style="rounded,filled",
+%         fillcolor="#FFFFFF",
+%         color="#9AA9B8",
+%         penwidth=1.6,
+%         fontname="Helvetica",
+%         fontcolor="#243B53",
+%         fontsize=10,
+%         margin="0.18,0.10",
+%         height=0.42];
+% 
+%   edge [color="#A3B1C0",
+%         penwidth=1.2,
+%         arrowhead=vee,
+%         arrowsize=0.7,
+%         fontname="Helvetica",
+%         fontsize=8.5,
+%         fontcolor="#7B8794"];
+% 
+%   Bid [label=<<b>Bid</b><br/><font point-size="8.5" color="#A34F6C">10,000 tasks @ frontier<br/>&#8804;2s, &#8805;99.9%, limit p<sub>&#946;</sub></font>>,
+%        fillcolor="#F6E1E8", color="#D98CA8", fontcolor="#6B2A44"];
+% 
+%   subgraph cluster_asks {
+%     label     = "Asks at the frontier tier";
+%     labelloc  = "t";
+%     fontname  = "Helvetica-Bold";
+%     fontsize  = 9.5;
+%     fontcolor = "#3A4A5C";
+%     style     = "rounded,filled";
+%     fillcolor = "#F7F9FB";
+%     color     = "#C7D0DA";
+%     penwidth  = 1.0;
+%     margin    = 12;
+% 
+%     Ask1 [label=<Seller 1: limit p<SUB>&#945;1</SUB>>, fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+%     Ask2 [label=<Seller 2: limit p<SUB>&#945;2</SUB>>, fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+%     Ask3 [label=<Seller 3: limit p<SUB>&#945;3</SUB>>, fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+%   }
+% 
+%   Clear [label=<<b>NoesisMarket</b><br/><font point-size="8.5" color="#41719C">Clears frontier bucket<br/>at uniform price p*</font>>,
+%          fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+%   Matched [label=<<b>Matched</b><br/><font point-size="8.5" color="#2E7C74">Up to 10,000 tasks @ p*</font>>,
+%            fillcolor="#D4EEEB", color="#7FC2B9", fontcolor="#1F5A54"];
+% 
+%   Bid -> Clear [label="bid"];
+%   Ask1 -> Clear;
+%   Ask2 -> Clear [label="compatible asks"];
+%   Ask3 -> Clear;
+%   Clear -> Matched;
+% }
+% ```
+% label=fig:basic_round
+% caption=The basic auction round of Example~\ref{ex:basic_round}: a bid and compatible asks at the frontier tier are cleared into a match at a single uniform price.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{04_noesis_market.tex.figs/04_noesis_market.1.png}
+  \caption{The basic auction round of Example~\ref{ex:basic_round}: a bid and compatible asks at the frontier tier are cleared into a match at a single uniform price.}
+  \label{fig:basic_round}
+\end{figure}
+% render_images:end
 
 \begin{remark}[Tiered commodity pricing]
 \label{rem:tiered_pricing}
@@ -53,36 +129,52 @@ and a separate uniform-price clearing is computed independently per
 capability-tier bucket, so \texttt{cheap} and \texttt{frontier} can clear
 at different prices in the same round (Remark~\ref{rem:tiered_pricing}).
 
-% TODO(ai_gp): Add some arrows from bottom and top representing bids and asks,
-% in the yellow box
-
 % rendered_images:begin
 % ```tikz
-% \definecolor{orderband}{RGB}{255,209,166}
-% \definecolor{cheapcolor}{RGB}{166,200,244}
-% \definecolor{frontcolor}{RGB}{198,166,244}
-% \fill[orderband, opacity=0.35] (0,-0.3) rectangle (12.8,0.3);
+% \definecolor{orderband}{RGB}{251,235,212}
+% \definecolor{timelinecolor}{RGB}{133,146,163}
+% \definecolor{dividercolor}{RGB}{199,208,218}
+% \definecolor{cheapfill}{RGB}{211,227,243}
+% \definecolor{cheapline}{RGB}{124,166,206}
+% \definecolor{cheaptext}{RGB}{31,78,121}
+% \definecolor{frontfill}{RGB}{233,225,247}
+% \definecolor{frontline}{RGB}{168,143,217}
+% \definecolor{fronttext}{RGB}{69,41,107}
+% \definecolor{bidcolor}{RGB}{163,79,108}
+% \definecolor{askcolor}{RGB}{148,106,46}
+% \fontfamily{phv}\selectfont
+% \fill[orderband, opacity=0.55] (0,-0.3) rectangle (12.8,0.3);
 % \node[align=center] at (6.4,0) {\footnotesize order book open: continuously accepting bids / asks};
-% \draw[very thick, ->, >=stealth] (0,-1.0) -- (13.4,-1.0);
-% \draw[dashed, gray] (2,-1.15) -- (2,2.6);
-% \draw[dashed, gray] (6.4,-1.15) -- (6.4,2.6);
-% \draw[dashed, gray] (10.8,-1.15) -- (10.8,2.6);
+% \draw[very thick, ->, >=stealth, timelinecolor] (0,-1.0) -- (13.4,-1.0);
+% \draw[dashed, dividercolor] (2,-1.15) -- (2,2.6);
+% \draw[dashed, dividercolor] (6.4,-1.15) -- (6.4,2.6);
+% \draw[dashed, dividercolor] (10.8,-1.15) -- (10.8,2.6);
 % \node[below] at (2,-1.15) {\footnotesize round closes at $t$};
 % \node[below] at (6.4,-1.15) {\footnotesize round closes at $t+T$};
 % \node[below] at (10.8,-1.15) {\footnotesize round closes at $t+2T$};
-% \node[draw, rounded corners, fill=cheapcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (2,1.1) {cheap tier\\clears at $p^*_{\text{cheap}}$};
-% \node[draw, rounded corners, fill=frontcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (2,2.0) {frontier tier\\clears at $p^*_{\text{frontier}}$};
-% \node[draw, rounded corners, fill=cheapcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (6.4,1.1) {cheap tier\\clears at $p^*_{\text{cheap}}$};
-% \node[draw, rounded corners, fill=frontcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (6.4,2.0) {frontier tier\\clears at $p^*_{\text{frontier}}$};
-% \node[draw, rounded corners, fill=cheapcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (10.8,1.1) {cheap tier\\clears at $p^*_{\text{cheap}}$};
-% \node[draw, rounded corners, fill=frontcolor, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center] at (10.8,2.0) {frontier tier\\clears at $p^*_{\text{frontier}}$};
+% % Bids arriving from the top and asks arriving from the bottom, into the
+% % order band, at a few illustrative points along the timeline.
+% \foreach \x in {0.8, 3.1, 5.4, 7.7, 9.9, 12.1} {
+%   \draw[->, >=stealth, thin, bidcolor] (\x,0.75) -- (\x,0.32);
+% }
+% \node[font=\tiny, text=bidcolor] at (0.8,0.92) {bid};
+% \foreach \x in {1.6, 3.9, 6.2, 8.5, 10.7, 12.9} {
+%   \draw[->, >=stealth, thin, askcolor] (\x,-0.75) -- (\x,-0.32);
+% }
+% \node[font=\tiny, text=askcolor] at (1.6,-0.92) {ask};
+% \node[draw=cheapline, rounded corners, fill=cheapfill, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center, text=cheaptext] at (2,1.1) {cheap tier\\clears at $p^*_{\text{cheap}}$};
+% \node[draw=frontline, rounded corners, fill=frontfill, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center, text=fronttext] at (2,2.0) {frontier tier\\clears at $p^*_{\text{frontier}}$};
+% \node[draw=cheapline, rounded corners, fill=cheapfill, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center, text=cheaptext] at (6.4,1.1) {cheap tier\\clears at $p^*_{\text{cheap}}$};
+% \node[draw=frontline, rounded corners, fill=frontfill, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center, text=fronttext] at (6.4,2.0) {frontier tier\\clears at $p^*_{\text{frontier}}$};
+% \node[draw=cheapline, rounded corners, fill=cheapfill, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center, text=cheaptext] at (10.8,1.1) {cheap tier\\clears at $p^*_{\text{cheap}}$};
+% \node[draw=frontline, rounded corners, fill=frontfill, minimum width=1.9cm, minimum height=0.55cm, font=\footnotesize, align=center, text=fronttext] at (10.8,2.0) {frontier tier\\clears at $p^*_{\text{frontier}}$};
 % ```
 % label=fig:auction_timeline
 % caption=The \NoesisMarket{} auction timeline.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
-  \includegraphics[width=\linewidth]{04_noesis_market.tex.figs/04_noesis_market.1.png}
+  \includegraphics[width=\linewidth]{04_noesis_market.tex.figs/04_noesis_market.2.png}
   \caption{The \NoesisMarket{} auction timeline.}
   \label{fig:auction_timeline}
 \end{figure}
@@ -128,74 +220,91 @@ graph: an edge marks a bid/ask pair whose capability, latency, and
 reliability terms are mutually satisfiable, and bid 4 has no compatible
 ask in this bucket and is left unmatched regardless of price.
 
-% TODO(ai_gp): Smaller and also rotate the figure to put bids at the bottom and
-% ask at the top
-
 % rendered_images:begin
 % ```graphviz
 % digraph Compatibility {
-%   bgcolor="white";
-%   rankdir=LR;
+%   // ---------------------------------------------------------------
+%   bgcolor="transparent";
+%   pad="0.06";
 %   splines=line;
-%   nodesep=0.35;
-%   ranksep=1.8;
-%   pad=0.30;
+%   nodesep=0.28;
+%   ranksep=0.75;
+%   rankdir=TB;
 % 
-%   node [shape=box, style="rounded,filled", fontname="Helvetica",
-%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
-%         color="#7B8794"];
-%   edge [color="#9AA5B1", penwidth=1.1, arrowhead=none];
+%   node [shape=box,
+%         style="rounded,filled",
+%         fillcolor="#FFFFFF",
+%         color="#9AA9B8",
+%         penwidth=1.6,
+%         fontname="Helvetica",
+%         fontcolor="#243B53",
+%         fontsize=9,
+%         margin="0.14,0.08",
+%         height=0.35];
 % 
-%   subgraph cluster_bids {
-%     label     = "Bids B_c";
-%     labelloc  = "t";
-%     fontname  = "Helvetica-Bold";
-%     fontsize  = 12;
-%     fontcolor = "#52606D";
-%     style     = "rounded,filled";
-%     fillcolor = "#F7F9FC";
-%     color     = "#CBD2D9";
-%     penwidth  = 1.0;
-%     margin    = 14;
-%     rank = same;
+%   edge [color="#A3B1C0",
+%         penwidth=1.1,
+%         arrowhead=none,
+%         arrowsize=0.6,
+%         fontname="Helvetica",
+%         fontsize=7,
+%         fontcolor="#7B8794"];
 % 
-%     B1 [label="bid 1", fillcolor="#F4A6A6"];
-%     B2 [label="bid 2", fillcolor="#F4A6A6"];
-%     B3 [label="bid 3", fillcolor="#F4A6A6"];
-%     B4 [label="bid 4", fillcolor="#F4A6A6"];
-%   }
+%   // ---------------------------------------------------------------
+%   // Figure: asks at the top, bids at the bottom
+%   // ---------------------------------------------------------------
+%   // bid (demand-side) : rose   |   ask (supply-side) : warm sand
+% 
 %   subgraph cluster_asks {
 %     label     = "Asks A_c";
 %     labelloc  = "t";
 %     fontname  = "Helvetica-Bold";
-%     fontsize  = 12;
-%     fontcolor = "#52606D";
+%     fontsize  = 9.5;
+%     fontcolor = "#3A4A5C";
 %     style     = "rounded,filled";
-%     fillcolor = "#F7F9FC";
-%     color     = "#CBD2D9";
+%     fillcolor = "#F7F9FB";
+%     color     = "#C7D0DA";
 %     penwidth  = 1.0;
-%     margin    = 14;
+%     margin    = 10;
 %     rank = same;
 % 
-%     A1 [label="ask 1", fillcolor="#FFD1A6"];
-%     A2 [label="ask 2", fillcolor="#FFD1A6"];
-%     A3 [label="ask 3", fillcolor="#FFD1A6"];
+%     A1 [label="ask 1", fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+%     A2 [label="ask 2", fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+%     A3 [label="ask 3", fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+%   }
+%   subgraph cluster_bids {
+%     label     = "Bids B_c";
+%     labelloc  = "t";
+%     fontname  = "Helvetica-Bold";
+%     fontsize  = 9.5;
+%     fontcolor = "#3A4A5C";
+%     style     = "rounded,filled";
+%     fillcolor = "#F7F9FB";
+%     color     = "#C7D0DA";
+%     penwidth  = 1.0;
+%     margin    = 10;
+%     rank = same;
+% 
+%     B1 [label="bid 1", fillcolor="#F6E1E8", color="#D98CA8", fontcolor="#6B2A44"];
+%     B2 [label="bid 2", fillcolor="#F6E1E8", color="#D98CA8", fontcolor="#6B2A44"];
+%     B3 [label="bid 3", fillcolor="#F6E1E8", color="#D98CA8", fontcolor="#6B2A44"];
+%     B4 [label="bid 4", fillcolor="#F6E1E8", color="#D98CA8", fontcolor="#6B2A44"];
 %   }
 % 
-%   B1 -> A1;
-%   B1 -> A2;
-%   B2 -> A2;
-%   B2 -> A3;
-%   B3 -> A3;
+%   A1 -> B1;
+%   A2 -> B1;
+%   A2 -> B2;
+%   A3 -> B2;
+%   A3 -> B3;
 % }
 % ```
 % label=fig:compatibility_graph
-% caption=A small example compatibility graph $G_c$ within one tier bucket.
+% caption=A small example compatibility graph $G_c$ within one tier bucket, asks at the top and bids at the bottom.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
-  \includegraphics[width=\linewidth]{04_noesis_market.tex.figs/04_noesis_market.2.png}
-  \caption{A small example compatibility graph $G_c$ within one tier bucket.}
+  \includegraphics[width=\linewidth]{04_noesis_market.tex.figs/04_noesis_market.3.png}
+  \caption{A small example compatibility graph $G_c$ within one tier bucket, asks at the top and bids at the bottom.}
   \label{fig:compatibility_graph}
 \end{figure}
 % render_images:end
@@ -292,9 +401,52 @@ the classical Walrasian argument for existence of a market-clearing price
 \cite{mcafee1992}.
 \end{proof}
 
-% TODO(ai_gp): Add a figure showing the cumulative demand curve $D(p)$
-% (non-increasing) and supply curve $S(p)$ (non-decreasing) crossing at
-% the clearing price $p^*(c, t)$, illustrating Proposition~\ref{prop:existence}.
+Figure~\ref{fig:supply_demand_curves} illustrates
+Proposition~\ref{prop:existence}: the non-increasing cumulative demand
+curve $D(p)$ and the non-decreasing cumulative supply curve $S(p)$ cross
+at the clearing price $p^*(c, t)$, where the matched volume equals
+$\min(D(p^*), S(p^*))$.
+
+% rendered_images:begin
+% ```tikz
+% \definecolor{axiscolor}{RGB}{74,85,104}
+% \definecolor{demandcolor}{RGB}{163,79,108}
+% \definecolor{supplycolor}{RGB}{65,113,156}
+% \definecolor{crosscolor}{RGB}{192,69,91}
+% 
+% \draw[->, >=stealth, thick, axiscolor] (0,0) -- (8.6,0) node[right, font=\small] {price $p$};
+% \draw[->, >=stealth, thick, axiscolor] (0,0) -- (0,6.3) node[above, font=\small] {quantity};
+% 
+% % Cumulative demand curve D(p), non-increasing (step function).
+% \draw[thick, demandcolor]
+%   (0,5.6) -- (1.4,5.6) -- (1.4,4.8) -- (2.6,4.8) -- (2.6,3.9) -- (3.6,3.9)
+%   -- (3.6,3.0) -- (4.2,3.0) -- (4.2,2.2) -- (5.4,2.2) -- (5.4,1.3)
+%   -- (6.6,1.3) -- (6.6,0.4) -- (8,0.4);
+% \node[demandcolor, font=\small] at (1.6,5.9) {$D(p)$};
+% 
+% % Cumulative supply curve S(p), non-decreasing (step function).
+% \draw[thick, supplycolor]
+%   (0,0.5) -- (1.0,0.5) -- (1.0,1.1) -- (2.0,1.1) -- (2.0,1.8) -- (2.9,1.8)
+%   -- (2.9,2.4) -- (3.6,2.4) -- (3.6,3.0) -- (4.2,3.0) -- (4.2,3.7)
+%   -- (5.2,3.7) -- (5.2,4.5) -- (6.3,4.5) -- (6.3,5.3) -- (7.5,5.3);
+% \node[supplycolor, font=\small] at (6.9,5.55) {$S(p)$};
+% 
+% % Clearing price p*(c,t) and matched volume.
+% \draw[dashed, crosscolor] (4.2,0) -- (4.2,3.0) -- (0,3.0);
+% \filldraw[crosscolor] (4.2,3.0) circle (2.2pt);
+% \node[below, crosscolor, font=\small] at (4.2,-0.05) {$p^*(c,t)$};
+% \node[left, crosscolor, font=\small] at (-0.05,3.0) {$\min(D(p^*),S(p^*))$};
+% ```
+% label=fig:supply_demand_curves
+% caption=The cumulative demand curve $D(p)$ and supply curve $S(p)$ crossing at the clearing price $p^*(c, t)$ (Proposition~\ref{prop:existence}).
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{04_noesis_market.tex.figs/04_noesis_market.4.png}
+  \caption{The cumulative demand curve $D(p)$ and supply curve $S(p)$ crossing at the clearing price $p^*(c, t)$ (Proposition~\ref{prop:existence}).}
+  \label{fig:supply_demand_curves}
+\end{figure}
+% render_images:end
 
 When the compatibility graph is not complete, Problem~\ref{prob:clearing}
 remains a well-posed linear program for any fixed candidate price, but a
@@ -358,49 +510,73 @@ drives the reputation update of Equation~\eqref{eq:reputation_update}, and
 the resulting score gates the seller's eligibility to submit asks in
 future \NoesisMarket{} rounds, closing the loop.
 
-% TODO(ai_gp): Use a flow chart like diagram
-
 % rendered_images:begin
 % ```graphviz
 % digraph ReputationLoop {
-%   bgcolor="white";
-%   rankdir=LR;
+%   // ---------------------------------------------------------------
+%   bgcolor="transparent";
+%   pad="0.10";
 %   splines=spline;
-%   nodesep=0.35;
-%   ranksep=0.70;
-%   pad=0.30;
+%   nodesep=0.45;
+%   ranksep=0.45;
+%   rankdir=TB;
 % 
-%   node [shape=box, style="rounded,filled", fontname="Helvetica",
-%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
-%         color="#7B8794"];
-%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
-%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
+%   node [shape=box,
+%         style="rounded,filled",
+%         fillcolor="#FFFFFF",
+%         color="#9AA9B8",
+%         penwidth=1.8,
+%         fontname="Helvetica",
+%         fontcolor="#243B53",
+%         fontsize=10,
+%         margin="0.20,0.12",
+%         height=0.50,
+%         width=2.6];
 % 
-%   Market      [label="NoesisMarket\nRound t", fillcolor="#A0D6D1"];
-%   Contract    [label="Matched contract κ\nDispatched to NoesisServer", fillcolor="#A6C8F4"];
-%   Measured    [label="Measured reliability\nr(κ, W)", fillcolor="#B2E2B2"];
-%   Reputation  [label="Reputation update\nρ_α(t+1)", fillcolor="#FFD1A6"];
-%   Gate        [label="Gated eligibility\nFuture rounds", fillcolor="#F4A6A6"];
+%   edge [color="#A3B1C0",
+%         penwidth=1.4,
+%         arrowhead=vee,
+%         arrowsize=0.8,
+%         fontname="Helvetica",
+%         fontsize=8.5,
+%         fontcolor="#7B8794"];
 % 
-%   Market -> Contract [label="clears", penwidth=1.5, color="#7B8794"];
+%   // ---------------------------------------------------------------
+%   // Figure: five numbered steps, read top to bottom, closed by a
+%   // dashed feedback edge back to step 1.
+%   // ---------------------------------------------------------------
+%   // process : blue   |   artifact : sage green   |   risk / consequence : red
+% 
+%   Market      [label=<<b>1. NoesisMarket round t</b><br/><font point-size="8.5" color="#41719C">Clears ask α into contract κ</font>>,
+%                fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+%   Contract    [label=<<b>2. Matched contract κ</b><br/><font point-size="8.5" color="#4F7A5A">Dispatched to NoesisServer</font>>,
+%                fillcolor="#DFEDE0", color="#8FB79A", fontcolor="#2E5A3D"];
+%   Measured    [label=<<b>3. Measured reliability</b><br/><font point-size="8.5" color="#4F7A5A">r(κ, W) over window W</font>>,
+%                fillcolor="#DFEDE0", color="#8FB79A", fontcolor="#2E5A3D"];
+%   Reputation  [label=<<b>4. Reputation update</b><br/><font point-size="8.5" color="#41719C">ρ_α(t+1), Eq. reputation_update</font>>,
+%                fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+%   Gate        [label=<<b>5. Gated eligibility</b><br/><font point-size="8.5" color="#A83D3D">Excluded if ρ_α &lt; ρ_min</font>>,
+%                fillcolor="#F8DCDC", color="#D97A7A", fontcolor="#6B1F1F"];
+% 
+%   Market -> Contract [label="clears"];
 %   Contract -> Measured [label="fulfillment window W"];
 %   Measured -> Reputation [label="compare to R_min(κ)"];
-%   Reputation -> Gate;
+%   Reputation -> Gate [label="threshold ρ_min"];
 %   Gate -> Market [
 %     label="future asks",
-%     style=dashed, penwidth=1.5,
-%     color="#B23A48", fontcolor="#B23A48",
+%     style=dashed, penwidth=1.6,
+%     color="#C0455B", fontcolor="#C0455B",
 %     constraint=false
 %   ];
 % }
 % ```
 % label=fig:reputation_loop
-% caption=The \NoesisMarket{} reputation and pricing feedback loop.
+% caption=The \NoesisMarket{} reputation and pricing feedback loop, as a five-step flow chart closed by a feedback edge.
 % rendered_images:end
 % render_images:begin
 \begin{figure}[H]
-  \includegraphics[width=\linewidth]{04_noesis_market.tex.figs/04_noesis_market.3.png}
-  \caption{The \NoesisMarket{} reputation and pricing feedback loop.}
+  \includegraphics[width=\linewidth]{04_noesis_market.tex.figs/04_noesis_market.5.png}
+  \caption{The \NoesisMarket{} reputation and pricing feedback loop, as a five-step flow chart closed by a feedback edge.}
   \label{fig:reputation_loop}
 \end{figure}
 % render_images:end

@@ -2,46 +2,57 @@
 \section{Toward a decentralized, anonymized \NoesisMarket{}}
 \label{sec:decentralized_extension}
 
-Sections~\ref{sec:noesis_market} and \ref{sec:noesis_server} describe
-\Noesis{} as operated by a single, trusted market and gateway. That design
-is deliberately the simplest starting point: it lets the auction
+Sections~\ref{sec:noesis_market} and \ref{sec:noesis_server} describe \Noesis{}
+as operated by a single, trusted market and gateway. That design is
+deliberately the starting point: it lets the auction
 (Section~\ref{sec:noesis_market}) and the fulfillment layer
 (Section~\ref{sec:noesis_server}) be specified without also solving
-distributed-systems and cryptographic-protocol problems. This section
-sketches an alternative in which \NoesisMarket's auction runs on a public
-blockchain rather than inside a single operator's infrastructure, with
-bids and asks kept anonymous until a round closes. The design adapts
-ZK-Tulip \cite{zktulip2023}, an unpublished working note on a stake-based,
-blind-bid marketplace for zero-knowledge proof generation:
-\NoesisMarket's clearing problem (Problem~\ref{prob:clearing}) and
-ZK-Tulip's proof-matching problem share the same shape, matching a
-requester who needs a unit of off-chain computation performed under a
-deadline against a supplier who is paid for performing it, so the
-mechanisms below carry over with only minor changes. Section~\ref{sec:sota_decentralized}
-surveys production systems, Bittensor, Gensyn, and Ritual among them, that
-already run parts of this machinery, validator scoring, proof-of-learning,
+distributed-systems and cryptographic-protocol problems.
+%
+This section sketches an alternative in which \NoesisMarket's auction runs on a
+public blockchain rather than inside a single operator's infrastructure, with
+bids and asks kept anonymous until a round closes. The design adapts ideas
+from stake-based, blind-bid marketplaces for off-chain computation, in
+which a requester who needs a unit of work performed under a deadline is
+matched against a supplier who is paid for performing it:
+\NoesisMarket's clearing problem (Problem~\ref{prob:clearing}) shares the
+same shape as that matching problem, so the mechanisms below carry over
+with only minor changes. Section~\ref{sec:sota_decentralized} surveys
+production systems, Bittensor, Gensyn, and Ritual among them, that already
+run parts of this machinery, validator scoring, proof-of-learning,
 proof-of-execution, at network scale; the question this section asks is
 how far analogous machinery can go when applied to \NoesisMarket's own
 auction and contract, rather than to a network-internal reward schedule.
 
 We treat what follows as a design sketch rather than a specification.
-Section~\ref{sec:decentralized_open_questions} collects the open questions
-it leaves unresolved, most of which are open questions in ZK-Tulip's own
-design notes as well.
+Section~\ref{sec:decentralized_open_questions} collects the open
+questions it leaves unresolved.
+
+The interface \Noesis{} exposes to buyers and sellers, submitting a bid
+or an ask and receiving a contract (Section~\ref{sec:protocol_overview}),
+does not need to change under this extension: what changes is where and
+how a round is cleared and settled, not the shape of what a participant
+submits or receives.
 
 % ==============================================================================
 \subsection{Motivation: censorship resistance and bidder privacy}
 \label{sec:decentralized_motivation}
 
 The centralized design of Section~\ref{sec:noesis_market} concentrates two
-kinds of trust in a single operator. First, the operator sees every bid
-and ask, including a buyer's required capability tier and volume, which
-can reveal competitively sensitive information, for instance that a buyer
-is about to run a large batch job, before the round even clears. Second,
-the operator alone decides which asks are eligible to compete, which
-contracts clear, and which sellers are excluded on reputation grounds
-(Section~\ref{sec:reputation}), with no mechanism for a participant to
-independently verify that this was done correctly.
+kinds of trust in a single operator.
+
+\begin{itemize}
+  \item \textbf{Visibility}: the operator sees every bid and ask,
+    including a buyer's required capability tier and volume, which can
+    reveal competitively sensitive information, for instance that a
+    buyer is about to run a large batch job, before the round even
+    clears.
+  \item \textbf{Discretion}: the operator alone decides which asks are
+    eligible to compete, which contracts clear, and which sellers are
+    excluded on reputation grounds (Section~\ref{sec:reputation}), with
+    no mechanism for a participant to independently verify that this was
+    done correctly.
+\end{itemize}
 
 A blockchain-based \NoesisMarket{} addresses both concerns by moving the
 parts of the mechanism that most need to be trust-minimized, contract
@@ -64,56 +75,84 @@ verifiable on-chain rather than taken on the operator's word.
 % rendered_images:begin
 % ```graphviz
 % digraph TrustBoundaries {
-%   bgcolor="white";
-%   rankdir=TB;
+%   // ---------------------------------------------------------------
+%   bgcolor="transparent";
+%   pad="0.08";
 %   splines=spline;
-%   nodesep=0.60;
-%   ranksep=0.50;
-%   pad=0.30;
+%   nodesep=0.35;
+%   ranksep=0.42;
+%   rankdir=TB;
 % 
-%   node [shape=box, style="rounded,filled", fontname="Helvetica",
-%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
-%         color="#7B8794"];
-%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
-%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
+%   node [shape=box,
+%         style="rounded,filled",
+%         fillcolor="#FFFFFF",
+%         color="#9AA9B8",
+%         penwidth=1.8,
+%         fontname="Helvetica",
+%         fontcolor="#243B53",
+%         fontsize=10,
+%         margin="0.20,0.12",
+%         height=0.42,
+%         width=2.4];
+% 
+%   edge [color="#A3B1C0",
+%         penwidth=1.3,
+%         arrowhead=vee,
+%         arrowsize=0.75,
+%         fontname="Helvetica",
+%         fontsize=8.5,
+%         fontcolor="#7B8794"];
+% 
+%   // ---------------------------------------------------------------
+%   // The two clusters are stacked vertically (via the invisible
+%   // connecting edge below) to keep the figure narrow.
+%   // source : warm sand   |   actor : rose   |   external : violet   |   process : blue
 % 
 %   subgraph cluster_centralized {
 %     label     = "Centralized";
 %     labelloc  = "t";
 %     fontname  = "Helvetica-Bold";
-%     fontsize  = 12;
-%     fontcolor = "#52606D";
+%     fontsize  = 10.5;
+%     fontcolor = "#3A4A5C";
 %     style     = "rounded,filled";
-%     fillcolor = "#F7F9FC";
-%     color     = "#CBD2D9";
+%     fillcolor = "#F7F9FB";
+%     color     = "#C7D0DA";
 %     penwidth  = 1.0;
-%     margin    = 14;
+%     margin    = 12;
 % 
-%     BidsC    [label="Full bid/ask contents\nTier, volume, price", fillcolor="#FFD1A6"];
-%     Operator [label="Single operator", fillcolor="#F4A6A6"];
-%     Decide   [label="Decides eligibility\n& matching", fillcolor="#A0D6D1"];
-%     BidsC -> Operator [label="sees all", penwidth=1.5, color="#7B8794"];
-%     Operator -> Decide [penwidth=1.5, color="#7B8794"];
+%     BidsC    [label=<<b>Full bid/ask contents</b><br/><font point-size="8.5" color="#946A2E">Tier, volume, price</font>>,
+%               fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+%     Operator [label=<<b>Single operator</b>>,
+%               fillcolor="#F6E1E8", color="#D98CA8", fontcolor="#6B2A44"];
+%     Decide   [label=<<b>Decides eligibility</b><br/><font point-size="8.5" color="#41719C">&amp; matching</font>>,
+%               fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+%     BidsC -> Operator [label="Sees all", penwidth=1.6, color="#8592A3"];
+%     Operator -> Decide [penwidth=1.6, color="#8592A3"];
 %   }
 % 
 %   subgraph cluster_decentralized {
 %     label     = "Decentralized";
 %     labelloc  = "t";
 %     fontname  = "Helvetica-Bold";
-%     fontsize  = 12;
-%     fontcolor = "#52606D";
+%     fontsize  = 10.5;
+%     fontcolor = "#3A4A5C";
 %     style     = "rounded,filled";
-%     fillcolor = "#F7F9FC";
-%     color     = "#CBD2D9";
+%     fillcolor = "#F7F9FB";
+%     color     = "#C7D0DA";
 %     penwidth  = 1.0;
-%     margin    = 14;
+%     margin    = 12;
 % 
-%     BidsD  [label="Only addresses visible\nuntil reveal window", fillcolor="#FFD1A6"];
-%     Chain  [label="Public chain\nCommit-reveal", fillcolor="#F4A6A6"];
-%     Verify [label="Matching & eligibility\nverifiable on-chain", fillcolor="#A0D6D1"];
-%     BidsD -> Chain [label="commitments", penwidth=1.5, color="#7B8794"];
-%     Chain -> Verify [penwidth=1.5, color="#7B8794"];
+%     BidsD  [label=<<b>Only addresses visible</b><br/><font point-size="8.5" color="#946A2E">until reveal window</font>>,
+%             fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+%     Chain  [label=<<b>Public chain</b><br/><font point-size="8.5" color="#6B52A8">Commit-reveal</font>>,
+%             fillcolor="#E9E1F7", color="#A88FD9", fontcolor="#45296B"];
+%     Verify [label=<<b>Matching &amp; eligibility</b><br/><font point-size="8.5" color="#41719C">verifiable on-chain</font>>,
+%             fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+%     BidsD -> Chain [label="Commitments", penwidth=1.6, color="#8592A3"];
+%     Chain -> Verify [penwidth=1.6, color="#8592A3"];
 %   }
+% 
+%   Decide -> BidsD [style=invis];
 % }
 % ```
 % label=fig:trust_boundaries
@@ -153,10 +192,10 @@ eligible for the clearing problem (Problem~\ref{prob:clearing}) run at the
 round's close. An ask $\alpha$ is committed and revealed symmetrically.
 \end{definition}
 
-Definition~\ref{def:blind_bid} follows the commit-reveal pattern already
-used by ZK-Tulip's blind-bid mechanism, itself motivated by the same
-concern that motivates frequent batch auctions over continuous limit order
-books (Section~\ref{sec:related_auctions}): a party that can see pending
+Definition~\ref{def:blind_bid} follows the standard commit-reveal pattern
+for blind bidding, motivated by the same concern that motivates frequent
+batch auctions over continuous limit order books
+(Section~\ref{sec:related_auctions}): a party that can see pending
 bids before a round closes can front-run them, either by submitting a
 marginally better ask to snipe a favorable price, or, at the
 block-production layer, by reordering or censoring specific bids.
@@ -186,25 +225,47 @@ clearing problem (Problem~\ref{prob:clearing}) run at the round's close.
 % rendered_images:begin
 % ```graphviz
 % digraph CommitReveal {
-%   bgcolor="white";
-%   rankdir=TB;
+%   // ---------------------------------------------------------------
+%   bgcolor="transparent";
+%   pad="0.06";
 %   splines=spline;
 %   nodesep=0.35;
-%   ranksep=0.60;
-%   pad=0.30;
+%   ranksep=0.50;
 % 
-%   node [shape=box, style="rounded,filled", fontname="Helvetica",
-%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
-%         color="#7B8794"];
-%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
-%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
+%   node [shape=box,
+%         style="rounded,filled",
+%         fillcolor="#FFFFFF",
+%         color="#9AA9B8",
+%         penwidth=1.8,
+%         fontname="Helvetica",
+%         fontcolor="#243B53",
+%         fontsize=10,
+%         margin="0.22,0.14",
+%         height=0.50];
 % 
-%   Commit [label="Commit window\nBidders post h = H(bid || salt)", fillcolor="#FFD1A6"];
-%   Reveal [label="Reveal window\nBidders disclose (bid, salt)", fillcolor="#F0E6FF"];
-%   Match  [label="Commitment check\nOnly matching, revealed bids kept", fillcolor="#B2E2B2"];
-%   Clear  [label="Clearing\nNoesisMarket clearing problem", fillcolor="#A0D6D1"];
+%   edge [color="#A3B1C0",
+%         penwidth=1.3,
+%         arrowhead=vee,
+%         arrowsize=0.75,
+%         fontname="Helvetica",
+%         fontsize=8.5,
+%         fontcolor="#7B8794"];
 % 
-%   Commit -> Reveal -> Match -> Clear [penwidth=1.5, color="#7B8794"];
+%   // ---------------------------------------------------------------
+%   rankdir=TB;
+% 
+%   // source : warm sand   |   process : blue   |   artifact : sage green
+% 
+%   Commit [label=<<b>Commit window</b><br/><font point-size="8.5" color="#946A2E">Bidders post h = H(bid || salt)</font>>,
+%           fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+%   Reveal [label=<<b>Reveal window</b><br/><font point-size="8.5" color="#41719C">Bidders disclose (bid, salt)</font>>,
+%           fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+%   Match  [label=<<b>Commitment check</b><br/><font point-size="8.5" color="#4F7A5A">Only matching, revealed bids kept</font>>,
+%           fillcolor="#DFEDE0", color="#8FB79A", fontcolor="#2E5A3D"];
+%   Clear  [label=<<b>Clearing</b><br/><font point-size="8.5" color="#41719C">NoesisMarket clearing problem</font>>,
+%           fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+% 
+%   Commit -> Reveal -> Match -> Clear [penwidth=1.6, color="#8592A3"];
 % }
 % ```
 % label=fig:commit_reveal_sequence
@@ -263,29 +324,51 @@ at the close of the fulfillment window.
 % rendered_images:begin
 % ```graphviz
 % digraph StakedAskLifecycle {
-%   bgcolor="white";
-%   rankdir=LR;
+%   // ---------------------------------------------------------------
+%   bgcolor="transparent";
+%   pad="0.06";
 %   splines=spline;
 %   nodesep=0.35;
-%   ranksep=0.80;
-%   pad=0.30;
+%   ranksep=0.70;
 % 
-%   node [shape=box, style="rounded,filled", fontname="Helvetica",
-%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
-%         color="#7B8794"];
-%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
-%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
+%   node [shape=box,
+%         style="rounded,filled",
+%         fillcolor="#FFFFFF",
+%         color="#9AA9B8",
+%         penwidth=1.8,
+%         fontname="Helvetica",
+%         fontcolor="#243B53",
+%         fontsize=10,
+%         margin="0.22,0.14",
+%         height=0.50];
 % 
-%   Posted   [label="Posted\nAt reveal", fillcolor="#FFD1A6"];
-%   Locked   [label="Locked\nMatched into contract κ", fillcolor="#F0E6FF"];
-%   Released [label="Released in full\nCompliant", fillcolor="#B2E2B2"];
-%   Slashed  [label="Slashed, in full or in part\nViolated", fillcolor="#F4A6A6"];
+%   edge [color="#A3B1C0",
+%         penwidth=1.3,
+%         arrowhead=vee,
+%         arrowsize=0.75,
+%         fontname="Helvetica",
+%         fontsize=8.5,
+%         fontcolor="#7B8794"];
 % 
-%   Posted -> Locked [label="matched", penwidth=1.5, color="#7B8794"];
-%   Locked -> Released [label="window W closes,\nr_lower >= R_min"];
+%   // ---------------------------------------------------------------
+%   rankdir=LR;
+% 
+%   // source : warm sand   |   artifact : sage green   |   risk : red
+% 
+%   Posted   [label=<<b>Posted</b><br/><font point-size="8.5" color="#946A2E">At reveal</font>>,
+%             fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+%   Locked   [label=<<b>Locked</b><br/><font point-size="8.5" color="#4F7A5A">Matched into contract κ</font>>,
+%             fillcolor="#DFEDE0", color="#8FB79A", fontcolor="#2E5A3D"];
+%   Released [label=<<b>Released in full</b><br/><font point-size="8.5" color="#4F7A5A">Compliant</font>>,
+%             fillcolor="#DFEDE0", color="#8FB79A", fontcolor="#2E5A3D"];
+%   Slashed  [label=<<b>Slashed, in full or in part</b><br/><font point-size="8.5" color="#A83D3D">Violated</font>>,
+%             fillcolor="#F8DCDC", color="#D97A7A", fontcolor="#6B1F1F"];
+% 
+%   Posted -> Locked [label="Matched", penwidth=1.6, color="#8592A3"];
+%   Locked -> Released [label="Window W closes,\nr_lower >= R_min"];
 %   Locked -> Slashed [
-%     label="window W closes,\nr_lower < R_min",
-%     color="#B23A48", fontcolor="#B23A48"
+%     label="Window W closes,\nr_lower < R_min",
+%     color="#C0455B", fontcolor="#C0455B"
 %   ];
 % }
 % ```
@@ -300,9 +383,9 @@ at the close of the fulfillment window.
 \end{figure}
 % render_images:end
 
-Sizing $\sigma_\alpha$ raises the same asymmetry ZK-Tulip's design notes
-flag for its own per-bid stake: a buyer setting the required stake
-unilaterally can grief sellers by demanding collateral far in excess of
+Sizing $\sigma_\alpha$ raises a familiar asymmetry in per-bid staking: a
+buyer setting the required stake unilaterally can grief sellers by
+demanding collateral far in excess of
 the contract's value, while a buyer who is not itself bonded has nothing
 at risk if a matched contract turns out not to be genuine.
 Section~\ref{sec:decentralized_open_questions} returns to this.
@@ -340,10 +423,9 @@ Three placements are possible.
     $|B_c| + |A_c|$ and only then finalizes the round.
 \end{itemize}
 
-The third option is the one ZK-Tulip's design notes gesture at when they
-ask whether the matchmaking engine can run partially off-chain with a
-zero-knowledge property showing the solution is correct, and it is the
-option that preserves both the trust-minimization goal of
+The third option, running the matchmaking engine partially off-chain with
+a zero-knowledge property showing the solution is correct, is the option
+that preserves both the trust-minimization goal of
 Section~\ref{sec:decentralized_motivation} and the practicality of the
 fully-off-chain design. It is also the least developed of the three:
 producing a succinct, efficiently verifiable proof of optimality for a
@@ -359,8 +441,10 @@ gas cost of solving Problem~\ref{prob:clearing} on-chain.
 
 % rendered_images:begin
 % ```tikz
-% \definecolor{ptcolor}{RGB}{74,110,168}
-% \draw[very thick, ->, >=stealth] (0.3,0) -- (10.7,0);
+% \definecolor{axiscolor}{RGB}{133,146,163}
+% \definecolor{ptcolor}{RGB}{31,78,121}
+% \fontfamily{phv}\selectfont
+% \draw[very thick, ->, >=stealth, axiscolor] (0.3,0) -- (10.7,0);
 % \node[anchor=west, align=left, font=\footnotesize] at (0,-0.9) {trust-minimized,\\expensive};
 % \node[anchor=east, align=right, font=\footnotesize] at (11,-0.9) {cheap,\\trusted};
 % \filldraw[ptcolor] (1.2,0) circle (3pt);
@@ -386,11 +470,12 @@ gas cost of solving Problem~\ref{prob:clearing} on-chain.
 \label{sec:decentralized_redundancy}
 
 A single seller's downtime is a single point of failure for the contract
-that seller was matched into. ZK-Tulip's design notes address the
-analogous risk, a single prover failing to deliver a proof in time, with a
-redundancy parameter: a requester can choose to have $k_{\text{red}} \geq
-1$ provers race for the same job, each staking collateral, with only the
-first, or, in an auction variant, the top few, to deliver being paid.
+that seller was matched into, the same risk a redundancy parameter
+addresses in proof-generation marketplaces where a single prover might
+fail to deliver a proof in time: a requester can choose to have
+$k_{\text{red}} \geq 1$ provers race for the same job, each staking
+collateral, with only the first, or, in an auction variant, the top few,
+to deliver being paid.
 
 The same parameter adapts directly to a decentralized \NoesisMarket: a
 contract can be matched against $k_{\text{red}}$ staked asks instead of
@@ -418,55 +503,79 @@ their stake, hedging against any one seller being unavailable or slashed.
 % rendered_images:begin
 % ```graphviz
 % digraph Redundancy {
-%   bgcolor="white";
-%   rankdir=TB;
+%   // ---------------------------------------------------------------
+%   bgcolor="transparent";
+%   pad="0.06";
 %   splines=spline;
 %   nodesep=0.35;
-%   ranksep=0.60;
-%   pad=0.30;
+%   ranksep=0.50;
 % 
-%   node [shape=box, style="rounded,filled", fontname="Helvetica",
-%         fontsize=13, penwidth=1.2, margin="0.20,0.12", height=0.50,
-%         color="#7B8794"];
-%   edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
-%         fontname="Helvetica", fontsize=10, fontcolor="#616E7C"];
+%   node [shape=box,
+%         style="rounded,filled",
+%         fillcolor="#FFFFFF",
+%         color="#9AA9B8",
+%         penwidth=1.8,
+%         fontname="Helvetica",
+%         fontcolor="#243B53",
+%         fontsize=10,
+%         margin="0.22,0.14",
+%         height=0.50];
+% 
+%   edge [color="#A3B1C0",
+%         penwidth=1.3,
+%         arrowhead=vee,
+%         arrowsize=0.75,
+%         fontname="Helvetica",
+%         fontsize=8.5,
+%         fontcolor="#7B8794"];
+% 
+%   // ---------------------------------------------------------------
+%   rankdir=TB;
+% 
+%   // artifact : sage green   |   external (staked ask) : violet
 % 
 %   subgraph cluster_single {
 %     label     = "Single-ask match (k_red = 1)";
 %     labelloc  = "t";
 %     fontname  = "Helvetica-Bold";
-%     fontsize  = 12;
-%     fontcolor = "#52606D";
+%     fontsize  = 10.5;
+%     fontcolor = "#3A4A5C";
 %     style     = "rounded,filled";
-%     fillcolor = "#F7F9FC";
-%     color     = "#CBD2D9";
+%     fillcolor = "#F7F9FB";
+%     color     = "#C7D0DA";
 %     penwidth  = 1.0;
 %     margin    = 14;
 % 
-%     ContractS [label="contract κ", fillcolor="#A6C8F4"];
-%     AskS      [label="one staked ask", fillcolor="#C6A6F4"];
-%     ContractS -> AskS [penwidth=1.5, color="#7B8794"];
+%     ContractS [label=<<b>contract κ</b>>,
+%                fillcolor="#DFEDE0", color="#8FB79A", fontcolor="#2E5A3D"];
+%     AskS      [label=<<b>one staked ask</b>>,
+%                fillcolor="#E9E1F7", color="#A88FD9", fontcolor="#45296B"];
+%     ContractS -> AskS [penwidth=1.6, color="#8592A3"];
 %   }
 % 
 %   subgraph cluster_redundant {
 %     label     = "Redundant match (k_red > 1)";
 %     labelloc  = "t";
 %     fontname  = "Helvetica-Bold";
-%     fontsize  = 12;
-%     fontcolor = "#52606D";
+%     fontsize  = 10.5;
+%     fontcolor = "#3A4A5C";
 %     style     = "rounded,filled";
-%     fillcolor = "#F7F9FC";
-%     color     = "#CBD2D9";
+%     fillcolor = "#F7F9FB";
+%     color     = "#C7D0DA";
 %     penwidth  = 1.0;
 %     margin    = 14;
 % 
-%     ContractR [label="contract κ", fillcolor="#A6C8F4"];
-%     Ask1      [label="staked ask 1", fillcolor="#C6A6F4"];
-%     Ask2      [label="staked ask 2", fillcolor="#C6A6F4"];
-%     Ask3      [label="staked ask k_red", fillcolor="#C6A6F4"];
-%     ContractR -> Ask1 [label="race"];
-%     ContractR -> Ask2 [label="race"];
-%     ContractR -> Ask3 [label="race"];
+%     ContractR [label=<<b>contract κ</b>>,
+%                fillcolor="#DFEDE0", color="#8FB79A", fontcolor="#2E5A3D"];
+%     Ask1      [label=<<b>staked ask 1</b>>,
+%                fillcolor="#E9E1F7", color="#A88FD9", fontcolor="#45296B"];
+%     Ask2      [label=<<b>staked ask 2</b>>,
+%                fillcolor="#E9E1F7", color="#A88FD9", fontcolor="#45296B"];
+%     Ask3      [label=<<b>staked ask k_red</b>>,
+%                fillcolor="#E9E1F7", color="#A88FD9", fontcolor="#45296B"];
+%     ContractR -> Ask1 [label="Race", penwidth=1.6, color="#8592A3"];
+%     ContractR -> Ask2 [label="Race", penwidth=1.6, color="#8592A3"];
+%     ContractR -> Ask3 [label="Race", penwidth=1.6, color="#8592A3"];
 %   }
 % }
 % ```
@@ -521,57 +630,5 @@ in the centralized design. This is the same gap
 Section~\ref{sec:related_dex} identifies relative to Tulip: a token
 transfer settles atomically on-chain, but an LLM response's quality is
 estimated, not settled, whichever design clears the contract that produced
-it.
-
-% ==============================================================================
-\subsection{Open questions specific to the decentralized design}
-\label{sec:decentralized_open_questions}
-
-\begin{enumerate}
-  \item \textbf{Bid and price discovery for a new market}: with no trading
-    history, neither a buyer nor a seller has a reference price to anchor
-    a bid or an ask to; whether the first rounds of a new tier bucket need
-    a different mechanism, e.g., a wider price band or a subsidized
-    bootstrap period, than the steady-state design above is unresolved.
-
-  \item \textbf{Reveal-window griefing}: a blind bid
-    (Definition~\ref{def:blind_bid}) is visible to on-chain observers once
-    revealed; a party monitoring the mempool during the reveal window can
-    still submit a competing bid or ask before the window closes, unless
-    the window is bounded to a single block, which in turn bounds how many
-    participants can feasibly reveal in time.
-
-  \item \textbf{Commitment without capability}: nothing in
-    Definition~\ref{def:blind_bid} stops a seller from committing an ask
-    it cannot actually fulfill within $\lmaxattr$, since the stake
-    $\sigma_\alpha$ is only forfeited after the fact; whether a smaller,
-    non-refundable commitment fee at bid time is needed to discourage
-    speculative asks is open.
-
-  \item \textbf{Stake sizing and asymmetry}: whether the stake
-    $\sigma_\alpha$ required of a seller (Section~\ref{sec:stake_slashing})
-    should be set unilaterally by the buyer's bid, which risks the buyer
-    demanding excessive collateral, or by a market-wide rule tied to the
-    contract's price, and whether the buyer should also be required to
-    post a bond so that an under-collateralized buyer cannot costlessly
-    request contracts it does not intend to honor payment for.
-
-  \item \textbf{Sybil resistance}: whether stake-and-slash
-    (Section~\ref{sec:stake_slashing}) is by itself a sufficient deterrent
-    against a seller re-entering under a new address after being slashed,
-    or whether a Sybil-resistant identity layer is still needed on top, in
-    tension with the anonymity goal of Section~\ref{sec:decentralized_motivation}.
-
-  \item \textbf{Redundancy defaults}: whether $k_{\text{red}}$
-    (Section~\ref{sec:decentralized_redundancy}) should default to 1, as
-    in ZK-Tulip's design notes, and be raised only at the buyer's request
-    and expense, or whether the market itself should raise it
-    automatically in thin, collusion-prone buckets.
-
-  \item \textbf{Verifiable optimality}: whether a succinct proof of
-    clearing-problem optimality, not merely feasibility
-    (Section~\ref{sec:decentralized_matching_engine}), is practical to
-    generate and verify at the scale of a real tier bucket, or whether the
-    design must settle for verified feasibility and accept a centralized
-    operator's word on optimality.
-\end{enumerate}
+it. Section~\ref{sec:decentralized_open_questions} collects the open
+questions specific to this design.
