@@ -125,7 +125,7 @@ class RoundClearResponse(pydantic.BaseModel):
     /rounds/{tier}/latest`.
 
     Field names match `NoesisMarket`'s pricing-dissemination event shape
-    `(tier, round_id, clearing_price, matched_volume)` from `plan.Noesis.md`.
+    `(tier, round_id, clearing_price, matched_volume)`.
     """
 
     tier: str

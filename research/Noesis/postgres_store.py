@@ -1,6 +1,6 @@
 """
 Postgres-backed storage for `NoesisMarket`/`NoesisServer` state (order book,
-contract log, request log), per `research/Noesis/spec.PR_P2b.md`.
+contract log, request log).
 
 Implements the three storage `abc.ABC`s owned by the modules that use them:
 - `batch_call_auction.OrderBookStore` -> `PostgresOrderBookStore`
@@ -41,12 +41,11 @@ _LOG = logging.getLogger(__name__)
 # #############################################################################
 
 
-# `noesis_` prefix on every table, since this may run against a shared
-# Postgres instance alongside other projects' tables (matches the
-# `im_postgres_db_local` style naming already used elsewhere in this
-# ecosystem). One statement per list entry: `init_schema()` runs them one at
-# a time.
+# `noesis_` prefix on every table, since this may run against a shared Postgres
+# instance alongside other projects' tables.
+# One statement per list entry: `init_schema()` runs them one at a time.
 _SCHEMA_DDL = [
+    # noesis_bids.
     """
     CREATE TABLE IF NOT EXISTS noesis_bids (
         id BIGSERIAL PRIMARY KEY,
@@ -58,6 +57,7 @@ _SCHEMA_DDL = [
         p_max DOUBLE PRECISION NOT NULL
     )
     """,
+    # noesis_asks.
     """
     CREATE TABLE IF NOT EXISTS noesis_asks (
         id BIGSERIAL PRIMARY KEY,
@@ -69,6 +69,7 @@ _SCHEMA_DDL = [
         p_min DOUBLE PRECISION NOT NULL
     )
     """,
+    # noesis_contracts.
     """
     CREATE TABLE IF NOT EXISTS noesis_contracts (
         contract_id BIGSERIAL PRIMARY KEY,
@@ -82,11 +83,15 @@ _SCHEMA_DDL = [
         fulfilled BOOLEAN
     )
     """,
+    # noesis_round_id_seq
     # `round_id` is NOT `SERIAL` on `noesis_tier_rounds`: one `clear_round()`
     # call clears every tier under the SAME `round_id` (see
     # `PostgresContractStore.next_round_id()` below), so the id is generated
     # once per round, not once per row.
-    "CREATE SEQUENCE IF NOT EXISTS noesis_round_id_seq",
+    """
+    CREATE SEQUENCE IF NOT EXISTS noesis_round_id_seq
+    """,
+    # noesis_tier_rounds.
     """
     CREATE TABLE IF NOT EXISTS noesis_tier_rounds (
         tier TEXT NOT NULL,
@@ -97,6 +102,7 @@ _SCHEMA_DDL = [
         PRIMARY KEY (tier, round_id)
     )
     """,
+    # noesis_request_log.
     """
     CREATE TABLE IF NOT EXISTS noesis_request_log (
         request_id BIGSERIAL PRIMARY KEY,
@@ -116,9 +122,7 @@ def init_schema(connection: hsqlimpl.DbConnection) -> None:
     Create every `noesis_*` table/sequence that doesn't exist yet.
 
     Idempotent (every statement is `CREATE TABLE/SEQUENCE IF NOT EXISTS`),
-    safe to call on every `main.py` startup; a schema migration/versioning
-    framework (e.g. Alembic) is out of scope for this prototype's first
-    schema (`spec.PR_P2b.md`'s "Out of Scope").
+    safe to call on every `main.py` startup.
 
     :param connection: Postgres connection to run the DDL on
     """
