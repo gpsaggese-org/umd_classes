@@ -35,7 +35,7 @@ class Test_docker(hdoctest.DockerTestCase):
         # Prepare inputs.
         notebook_name = "template.example.ipynb"
         # Run test.
-        self._helper(notebook_name)
+        self.helper(notebook_name)
 
     @pytest.mark.slow
     def test2(self) -> None:
@@ -45,4 +45,4 @@ class Test_docker(hdoctest.DockerTestCase):
         # Prepare inputs.
         notebook_name = "template.API.ipynb"
         # Run test.
-        self._helper(notebook_name)
+        self.helper(notebook_name)
