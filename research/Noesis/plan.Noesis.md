@@ -575,7 +575,7 @@
   ./docs/tools/docker/all.docker.tutorial.md
   ./docs/tools/docker/all.dockerized_flow.explanation.md
 
-### `PR_P2b`: [ ] Cloud Deployment
+### `PR_P2b`: [ ] Use Postgres Backend
 - Externalize the in-memory state of `NoesisMarket` and of `NoesisServer` assume
   (order book, contract log, request log) to a real datastore (e.g Postgres or
   Redis)
