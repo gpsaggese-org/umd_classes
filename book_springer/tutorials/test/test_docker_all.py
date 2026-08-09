@@ -1,6 +1,4 @@
 """
-Run each notebook in class_project/project_template/ inside Docker using docker_cmd.sh.
-
 Import as:
 
 import class_project.project_template.test.test_docker_all as tptdal
@@ -22,7 +20,7 @@ _LOG = logging.getLogger(__name__)
 
 class Test_docker(hdoctest.DockerTestCase):
     """
-    Run all Docker tests for class_project/project_template/.
+    Run all Docker tests in the `tutorial` dir.
     """
 
     _test_file = __file__
