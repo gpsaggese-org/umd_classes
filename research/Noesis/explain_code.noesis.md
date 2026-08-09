@@ -1,5 +1,7 @@
 # File Description
 
+research/Noesis/batch_call_auction.py research/Noesis/contract_dispatch.py research/Noesis/main.py research/Noesis/passthrough_proxy.py research/Noesis/platform_api.py research/Noesis/postgres_store.py
+
 - `batch_call_auction.py`
   - In-memory order book for a batch call auction
   - Queues buy/sell orders, buckets by capability tier
@@ -7,8 +9,7 @@
 - `passthrough_proxy.py`
   - LLM provider gateway
   - Routes a prompt to a registered provider
-  - Times the call, estimates cost, and logs every request/response pair for
-    later query
+  - Times the call, estimates cost, and logs every request/response pair
 - `contract_dispatch.py`
   - Turns a cleared auction round's fills into contracts
   - Then dispatches each contract to a (mocked) fulfillment layer

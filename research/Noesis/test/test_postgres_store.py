@@ -9,10 +9,10 @@ import logging
 import pytest
 
 # `psycopg2` (via `helpers.hsql_implementation`) is only needed to actually
-# talk to Postgres; skip cleanly instead of failing collection where it is
-# not installed (see `research/Noesis/postgres_store.py`'s module
-# docstring). `TestImOmsDbHelper` itself further gates every test class
-# below with `@pytest.mark.requires_docker_in_docker`.
+# talk to Postgres; skip cleanly instead of failing collection where it is not
+# installed.
+# `TestImOmsDbHelper` itself further gates every test class below with
+# `@pytest.mark.requires_docker_in_docker`.
 pytest.importorskip("psycopg2")
 
 import helpers.hsql_test as hsqltest  # noqa: E402 # pylint: disable=wrong-import-position
