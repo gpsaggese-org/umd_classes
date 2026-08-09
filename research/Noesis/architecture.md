@@ -214,7 +214,7 @@ flowchart LR
 | `time`           | `time.perf_counter` default clock for `Gateway`'s latency measurement                                                                        |
 | `typing`         | `Callable`, `Dict`, `List`, `Optional`, `Tuple` type hints throughout                                                                        |
 | `fastapi`        | `platform_api.py`'s HTTP framework: routing, `Depends()`-based auth, request/response validation, `exception_handler()`                     |
-| `pydantic`       | `platform_api.py`'s request/response schemas (`BidRequest`, `ContractResponse`, etc.), pinned in via `fastapi`; neither `fastapi` nor `pydantic` is pinned anywhere in this directory, since no `research/Noesis/requirements.txt` exists yet despite `platform_api.py`'s own docstring pointing callers to one |
+| `pydantic`       | `platform_api.py`'s request/response schemas (`BidRequest`, `ContractResponse`, etc.), pinned in via `fastapi`; neither `fastapi` nor `pydantic` is pinned anywhere in this directory: `research/Noesis` has no `requirements.txt`, `pyproject.toml`, or other dependency-pinning file of its own yet |
 
 # Critique and Improvements
 
