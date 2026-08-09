@@ -1,6 +1,6 @@
 """
-Contract schema and stubbed fulfillment dispatch for the Noesis Market
-batch call-auction (`NoesisMarket` component of `plan.Noesis.md`).
+Contract schema and stubbed fulfillment dispatch for the Noesis Market batch
+call-auction `NoesisMarket` component.
 
 Import as:
 
@@ -20,16 +20,6 @@ _LOG = logging.getLogger(__name__)
 
 
 # #############################################################################
-# Constants
-# #############################################################################
-
-
-# Default probability that `mock_fulfill()` reports success when the caller
-# does not force a fixed outcome or pass a custom `success_rate`.
-DEFAULT_FULFILLMENT_SUCCESS_RATE = 0.9
-
-
-# #############################################################################
 # Contract
 # #############################################################################
 
@@ -39,14 +29,11 @@ class Contract:
     """
     Store one contract produced from a cleared `Fill`.
 
-    `l_max`/`r_min` come from the winning bid, not the `Fill` itself (a
-    `Fill` only carries the settled `n_tasks`/`c_level`/`price`); see
-    `build_contracts()`. `fulfilled` starts `None` and is set once
-    `dispatch_contract()` logs the (mocked) fulfillment outcome.
-
-    E.g., `Contract("buyer_1", "seller_1", 100, "frontier", 2.0, 0.999, 18.0)`
-    is a 100-task frontier-tier contract guaranteeing under 2.0 latency and at
-    least 0.999 reliability, cleared at price 18.0.
+    E.g.,
+        `Contract("buyer_1", "seller_1", 100, "frontier", 2.0, 0.999, 18.0)`
+    means
+        "100-task frontier-tier contract guaranteeing under 2.0 latency and at
+        least 0.999 reliability, cleared at price 18.0"
     """
 
     # Identifier of the buyer this contract was matched for.
@@ -128,10 +115,11 @@ def build_contracts(
 FulfillmentFunc = Callable[[Contract], bool]
 
 
+# TODO(gp): Does it belong to testing?
 def mock_fulfill(
     contract: Contract,
     *,
-    success_rate: float = DEFAULT_FULFILLMENT_SUCCESS_RATE,
+    success_rate: float = 0.9,
     rng: Optional[random.Random] = None,
 ) -> bool:
     """
@@ -145,7 +133,6 @@ def mock_fulfill(
     :param contract: contract being (mock) fulfilled; unused by this stub,
         kept in the signature to match `FulfillmentFunc`
     :param success_rate: probability the mocked fulfillment succeeds
-        - Default: `DEFAULT_FULFILLMENT_SUCCESS_RATE`
     :param rng: random source to draw from
         - Default: a fresh `random.Random()`
         - Tests should pass a seeded `random.Random` for determinism
@@ -171,6 +158,7 @@ def mock_fulfill(
 # #############################################################################
 
 
+# TODO(ai_gp): Do not use a default for fulfillment_func but pass it explicitly
 def dispatch_contract(
     contract: Contract, *, fulfillment_func: FulfillmentFunc = mock_fulfill
 ) -> Contract:
@@ -189,6 +177,7 @@ def dispatch_contract(
     return contract
 
 
+# TODO(ai_gp): Do not use a default for fulfillment_func but pass it explicitly
 def dispatch_contracts(
     contracts: List[Contract], *, fulfillment_func: FulfillmentFunc = mock_fulfill
 ) -> List[Contract]:

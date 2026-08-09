@@ -35,17 +35,12 @@ def _parse_api_keys(raw: str) -> Dict[str, str]:
     """
     Parse `NOESIS_API_KEYS` into the `Dict[str, str]` `create_app()` expects.
 
-    E.g., `_parse_api_keys("key1:account1,key2:account2")` returns
-    `{"key1": "account1", "key2": "account2"}`.
-
-    :param raw: comma-separated `key:account` pairs, e.g.
-        `"key1:account1,key2:account2"`
+    :param raw: comma-separated `key:account` pairs
+        - E.g. `"key1:account1,key2:account2"`
         - Empty string: no keys configured (every write endpoint then
           rejects every caller with `401`, a safe default)
     :return: map from API key to account id
-    :raise AssertionError: if any entry is missing a `:` separator, so a
-        malformed value fails fast at process startup instead of silently
-        starting with zero or the wrong keys
+        - E.g., `{"key1": "account1", "key2": "account2"}`.
     """
     _LOG.debug(hprint.to_str("raw"))
     api_keys: Dict[str, str] = {}
@@ -63,9 +58,7 @@ def _parse_api_keys(raw: str) -> Dict[str, str]:
 
 def _get_db_backend() -> str:
     """
-    Resolve `NOESIS_DB_BACKEND`, isolated as a pure function so it stays
-    testable without `main.py`'s other import-time side effects (mirrors
-    `_parse_api_keys()` above).
+    Resolve `NOESIS_DB_BACKEND` into the backend type.
 
     :return: `"memory"` (default) or `"postgres"`
     """
@@ -79,18 +72,16 @@ def _get_db_backend() -> str:
 
 
 _DB_BACKEND = _get_db_backend()
+
 _LOG.info("NOESIS_DB_BACKEND=%s", _DB_BACKEND)
+
 if _DB_BACKEND == "postgres":
-    # Deferred imports: keep `psycopg2` an optional dependency for the
-    # default `memory` backend, matching `helpers.hsql`'s own
-    # `hmodule.has_module("psycopg2")` optional-import gating (see
-    # `postgres_store.py`'s module docstring).
+    # Deferred imports.
     import helpers.hsql_implementation as hsqlimpl
     import research.Noesis.postgres_store as rnpost
 
-    # Fixed env var names, not `research/Noesis`-specific: they come from
-    # the official Postgres Docker image's own convention, the same five
-    # `hsqlimpl.get_connection_from_env_vars()` already expects.
+    # Fixed env var names, same as `hsqlimpl.get_connection_from_env_vars()`
+    # already expects.
     _host = os.environ["POSTGRES_HOST"]
     _dbname = os.environ["POSTGRES_DB"]
     _port = int(os.environ["POSTGRES_PORT"])
@@ -100,7 +91,9 @@ if _DB_BACKEND == "postgres":
     # connection error if the `noesis_postgres` container is still starting.
     hsqlimpl.wait_db_connection(_host, _dbname, _port, _user, _password)
     _connection = hsqlimpl.get_connection_from_env_vars()
+    # Create schema.
     rnpost.init_schema(_connection)
+    # Build tables.
     order_book = rnbacaau.OrderBook(
         store=rnpost.PostgresOrderBookStore(_connection)
     )
@@ -109,9 +102,7 @@ if _DB_BACKEND == "postgres":
     )
     contract_store = rnpost.PostgresContractStore(_connection)
 else:
-    # Byte-for-byte `spec.PR_P2.md`'s original design: no `store=`/
-    # `contract_store=` argument, so every object defaults to today's
-    # in-process `List`/`Dict` state.
+    # In-memory backedn.
     order_book = rnbacaau.OrderBook()
     gateway = rnopapro.Gateway()
     contract_store = None

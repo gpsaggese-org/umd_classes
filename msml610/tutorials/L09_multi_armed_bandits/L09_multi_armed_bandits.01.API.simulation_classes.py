@@ -16,7 +16,7 @@
 # %% [markdown]
 # # Multi-Armed Bandit Simulation Classes API
 #
-# A guided exploration of the simulation classes used in the Multi-Armed
+# An exploration of the simulation classes used in the Multi-Armed
 # Bandits lesson (`L09_03_multi_armed_bandits_utils.py`):
 # - **Environment**: `MultiArmedBandit`, a K-armed casino with hidden reward
 #   means
@@ -41,18 +41,6 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # %%
-# # The simulation classes live in a sibling tutorial directory, not in this
-# # notebook's own directory. Add it to `sys.path` instead of duplicating the
-# # code.
-# _git_root = subprocess.check_output(
-#     ["git", "rev-parse", "--show-toplevel"], text=True
-# ).strip()
-# _utils_dir = os.path.join(
-#     _git_root, "msml610", "tutorials", "L09_multi_armed_bandits"
-# )
-# if _utils_dir not in sys.path:
-#     sys.path.insert(0, _utils_dir)
-
 import L09_03_multi_armed_bandits_utils as utils
 
 import helpers.hdbg as hdbg
@@ -77,9 +65,9 @@ except ImportError:
 #     environment and compared statistically
 # - **Key abstraction**:
 #   - An environment (`MultiArmedBandit`) is pulled by a policy (`Strategy`)
-#   - A single run is a `BanditExperiment`; many runs (varying seed) form a
-#     `BanditSimulation`; many simulations (varying the hidden means) form a
-#     `BanditEnsemble`
+#   - A single run is a `BanditExperiment`
+#   - Many runs (varying seed) form a `BanditSimulation`
+#   - Many simulations (varying the hidden means) form a `BanditEnsemble`
 # - **Mental model**:
 #
 # | Object | Description | Comments |

@@ -426,7 +426,7 @@ mindmap
 * Measuring Regret Under Change
 
 - @Problem@: "regret against the best fixed arm" is the wrong benchmark when the
-  best arm changes
+  best arm changes over time
 
 - @Definition@: **dynamic regret** compares against the best arm _per round_
   $$
@@ -441,10 +441,8 @@ mindmap
 - @Variants@: two standard budgets of change
   - _Piecewise-stationary_: means are constant except at $\Gamma_T$ change
     points
-    - Best achievable: $\tilde{\Theta}(\sqrt{\Gamma_T T})$
   - _Total variation budget_:
     $V_T = \sum_{t=1}^{T-1} \sum_i |\mu_i(t+1) - \mu_i(t)|$
-    - Best achievable: $\tilde{\Theta}(V_T^{1/3} T^{2/3})$
 
 - @Interpretation@: regret is now _sublinear only relative to the budget_
   - More change $\to$ more regret, unavoidably
@@ -453,6 +451,7 @@ mindmap
 
 - @Definition@: **Discounted UCB (D-UCB)** (Kocsis and Szepesvari, 2006)
   - Weight observation from round $s$ by $\gamma^{t-s}$, with $\gamma \in (0,1)$
+    // TODO(ai_gp): Split them in two chunks
     $$
     N_i(\gamma, t) = \sum_{s \le t} \gamma^{t-s} I[A_s = i],
     \quad
@@ -485,14 +484,12 @@ mindmap
   - _Restart on schedule_: reset everything every $\Delta$ rounds
     - Crude, but needs no detector and is trivially correct to implement
   - _Rexp3_: run EXP3 in batches of length $\Delta$, restarting each batch
-    - Gives $\tilde{O}(V_T^{1/3}T^{2/3})$ under a variation budget
-      (Besbes, Gur, Zeevi, 2014)
 
 - @Comparison@: detection vs discounting
   - _Detection_ is better when change is abrupt and rare (e.g., deploys,
     launches)
   - _Discounting_ is better when change is gradual (e.g., drift, decay)
-  - Detection needs enough post-change data to fire, so it lags
+  - _Detection_ needs enough post-change data to fire, so it lags
 
 - @Remark@: a Bayesian shortcut that works well in practice
   - Run Thompson Sampling but _inflate_ the posterior variance each round, or
@@ -578,26 +575,30 @@ mindmap
 * Bandits vs. Reinforcement Learning
 
 - @Comparison@: the dividing line is whether actions change the future
-  - _Bandit_: the environment is stateless, so an action affects only the
+  - **Bandit**: the environment is stateless, so an action affects only the
     immediate reward
-  - _Contextual bandit_: there is a state $x_t$, but it is **exogenous**, i.e.,
+  - **Contextual bandit**: there is a state $x_t$, but it is _exogenous_, i.e.,
     the agent's action does not influence $x_{t+1}$
-  - _Reinforcement learning_: the action changes the state, so it affects all
+  - **Reinforcement learning**: the action changes the state, so it affects all
     future rewards
 
-- @Fact@: a $K$-armed bandit is an MDP with a single state
-  - And a contextual bandit is an MDP with horizon 1 and iid initial states
+- @Fact@: A $K$-armed bandit is an MDP with a single state
+  - A contextual bandit is an MDP with horizon 1 and iid initial states
 
-- @Key idea@: what RL adds is the **credit assignment** problem
+- @Key idea@: RL adds the **credit assignment** problem
   - In a bandit, the reward observed is the reward of the action taken
   - In RL, a reward at time $t$ may be due to an action at time $t - 50$
-  - This is why RL needs value functions, TD learning, and discounting (L12.1)
+  - This is why RL needs value functions, TD learning, and discounting
 
-- @Remark@: use the simplest model that is still correct
-  - If actions do not change the state distribution, an RL algorithm is strictly
-    more sample-hungry than a bandit for the same problem
+- @Remark@: use the simplest problem formulation that is still correct
+  - If actions do not change the state distribution, an _RL algorithm_ is
+    strictly more sample-hungry than a _bandit_ for the same problem
 
 * When Do You Actually Need RL?
+
+// TODO(ai_gp): Make it vertical
+
+// TODO(ai_gp): Remove the examples, leave only the problem?
 
 ```graphviz
 digraph BanditVsRL {
@@ -641,16 +642,17 @@ digraph BanditVsRL {
 
 * Delayed Feedback
 
-- @Problem@: bandit theory assumes $R_t$ arrives before round $t+1$, but real
-  rewards lag
-  - A click arrives in seconds, a conversion in days, a churn signal in months
+- @Problem@: bandit theory assumes $R_t$ arrives before round $t+1$, but rewards
+  in the real world lag
+  - E.g., a click arrives in seconds, a conversion in days, a churn signal in
+    months
   - Meanwhile the algorithm must keep serving traffic on stale statistics
 
 - @Properties@: with a delay of $d$ rounds
   - Up to $d$ decisions are made with no feedback, so the algorithm behaves as
     if it had a smaller effective sample
-  - For stochastic bandits, regret grows additively by $O(K d)$
-  - For adversarial bandits, regret grows multiplicatively by $\sqrt{d}$
+    - For stochastic bandits, regret grows additively by $O(K d)$
+    - For adversarial bandits, regret grows multiplicatively by $\sqrt{d}$
 
 - @Techniques@
   - _Batching_: update once per batch, accept the delay explicitly
@@ -661,8 +663,8 @@ digraph BanditVsRL {
   - _Attribution window_: define a fixed horizon after which a non-conversion is
     a 0, so rewards stop being pending
 
-- @Remark@: choose the reward that is _fast and correlated_ over the one that is
-  slow and exact
+- @Remark@: reward that is _fast and correlated_ is better than the one that is
+  _slow and exact_
 
 * Offline Evaluation
 
@@ -670,8 +672,8 @@ digraph BanditVsRL {
   - Need to estimate the value of a new policy $\pi$ from logs generated by an
     old policy $\pi_0$
 
-- @Key idea@: this is off-policy evaluation, the same problem as causal
-  inference from observational data (L08.6, L11.1)
+- @Key idea@: this is **off-policy evaluation**, the same problem as causal
+  inference from observational data
   - The logging policy is the "treatment assignment mechanism"
 
 - @Techniques@
@@ -707,7 +709,7 @@ digraph BanditVsRL {
   - _Conservative bandits_: constrain cumulative reward to stay within a
     fraction of a known baseline arm at all times
   - _Constrained / knapsack bandits_: maximize reward subject to budget or
-    resource constraints (BwK)
+    resource constraints
   - _Allocation floors_: force $p_{t,i} \ge \eta$ for every arm
     - Costs a little regret, buys fairness and unbiased logs at once
   - _Human gating_: require approval before a new arm enters the pool

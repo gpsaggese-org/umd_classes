@@ -1,41 +1,39 @@
 """
-Thin HTTP API surface wrapping NoesisMarket (`batch_call_auction.py`,
-`contract_dispatch.py`) and NoesisServer (`passthrough_proxy.py`) for an
-external caller (`NoesisPlatform` component of `plan.Noesis.md`).
+Thin HTTP API surface wrapping NoesisMarket and NoesisServer for an external
+caller (`NoesisPlatform`)
 
-`create_app()` builds a `fastapi.FastAPI` app that round-trips every request
-to the underlying library call, adding no new business logic beyond:
-- Assigning a `contract_id`/`round_id`, since neither `batch_call_auction.py`
-  nor `contract_dispatch.py` track one
-- A per-tier "latest cleared round" cache, standing in for `NoesisMarket`'s
-  pricing-dissemination feed (not implemented yet); `GET
-  /rounds/{tier}/latest` reads this cache instead of that pub/sub
-- A `POST /rounds/clear` endpoint not in `plan.Noesis.md`'s illustrative
-  endpoint list: without it, `GET /contracts/{contract_id}` and `GET
-  /rounds/{tier}/latest` could never be populated by an external caller,
-  since `OrderBook.clear_round()` is the only thing that produces a
-  `Contract`/`TierClearResult` and the plan's list has no endpoint that
-  calls it
+- `create_app()` builds a `fastapi.FastAPI` app that round-trips every request
+  to the underlying library call, adding no new business logic beyond:
+    - Assigning a `contract_id`/`round_id`, since neither `batch_call_auction.py`
+      nor `contract_dispatch.py` track one
+    - A per-tier "latest cleared round" cache, standing in for `NoesisMarket`'s
+      pricing-dissemination feed (not implemented yet);
+      - `GET /rounds/{tier}/latest` reads this cache instead of that pub/sub
+    - A `POST /rounds/clear` endpoint not in `plan.Noesis.md`'s illustrative
+      endpoint list: without it, `GET /contracts/{contract_id}` and `GET
+      /rounds/{tier}/latest` could never be populated by an external caller,
+      since `OrderBook.clear_round()` is the only thing that produces a
+      `Contract`/`TierClearResult` and the plan's list has no endpoint that
+      calls it
 
 Endpoints:
-- NoesisMarket: `POST /bids`, `POST /asks`, `POST /rounds/clear`,
-  `GET /contracts/{contract_id}`, `GET /rounds/{tier}/latest`
-- NoesisServer: `POST /completions`, `GET /logs`
-- Health: `GET /health`, an unauthenticated liveness check that does not
-  read `order_book`/`gateway` state (`spec.PR_P2.md`)
+- NoesisMarket:
+    - `POST /bids`
+    - `POST /asks`
+    - `POST /rounds/clear`
+    - `GET /contracts/{contract_id}`
+    - `GET /rounds/{tier}/latest`
+- NoesisServer:
+    - `POST /completions`
+    - `GET /logs`
+- Health:
+    - `GET /health`, an unauthenticated liveness check that does not read
+      `order_book`/`gateway` state
 
-Auth: `POST /bids`, `POST /asks`, and `POST /completions` require a valid
-`X-API-Key` header, checked before the underlying library call runs (per
-`plan.Noesis.md`: "checked before accepting a bid/ask or a gateway call").
-Read-only `GET` endpoints and `POST /rounds/clear` are unauthenticated
-here; see the `Open questions` note in `plan.Noesis.md`'s
-`NoesisPlatform` section (custody/KYC) for the follow-up this leaves open.
-
-Validation: every `hdbg.dassert_*` check already present in
-`batch_call_auction.py`/`contract_dispatch.py`/`passthrough_proxy.py` raises
-`AssertionError`; the app-level exception handler registered in
-`create_app()` catches it once and returns an HTTP 400 instead of a stack
-trace, rather than duplicating validation at the HTTP layer.
+Auth:
+- `POST /bids`, `POST /asks`, and `POST /completions` require a valid
+  `X-API-Key` header, checked before the underlying library call runs
+- Read-only `GET` endpoints and `POST /rounds/clear` are unauthenticated here
 
 Import as:
 
@@ -121,8 +119,9 @@ class ContractResponse(pydantic.BaseModel):
 
 class RoundClearResponse(pydantic.BaseModel):
     """
-    One cleared tier's outcome, returned by `POST /rounds/clear` and `GET
-    /rounds/{tier}/latest`.
+    One cleared tier's outcome, returned by
+    - `POST /rounds/clear`
+    - `GET /rounds/{tier}/latest`
 
     Field names match `NoesisMarket`'s pricing-dissemination event shape
     `(tier, round_id, clearing_price, matched_volume)`.
@@ -272,11 +271,12 @@ class _MarketState:
     """
     State this API layer adds on top of `OrderBook`.
 
-    Tracks what `batch_call_auction.py`/`contract_dispatch.py` don't: a
-    `contract_id`/`round_id` counter and a per-tier "latest cleared round"
-    cache (see the module docstring). Lives in a pluggable `ContractStore`
-    (in-memory by default, `postgres_store.PostgresContractStore` for
-    persistence; see `spec.PR_P2b.md`), not directly on this class.
+    - Tracks what `batch_call_auction.py`/`contract_dispatch.py` don't:
+        - a `contract_id`/`round_id` counter
+        - a per-tier "latest cleared round" cache
+    - Lives in a pluggable `ContractStore` (in-memory by default,
+      `postgres_store.PostgresContractStore` for persistence), not directly on
+      this class
     """
 
     def __init__(

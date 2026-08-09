@@ -161,6 +161,8 @@ class Fill:
     """
     Record one matched (buyer, seller) trade produced by clearing a tier.
 
+    # TODO(ai_gp): Add example of match inputs and outputs
+
     All fills within a tier's clearing round share the same uniform
     `price`.
     """
@@ -187,6 +189,8 @@ class TierClearResult:
     """
     Store the outcome of clearing one capability tier for one batch round.
 
+    # TODO(ai_gp): Add example of match inputs and outputs
+
     `clearing_price` is `None` when the tier's best bid never crossed its
     best ask, e.g. `TierClearResult("frontier", None, [], 500, 300)` means
     no trade happened and both sides' full quantity went unfilled.
@@ -209,7 +213,7 @@ class TierClearResult:
 # Matching engine
 # #############################################################################
 
-
+# TODO(ai_gp): Make it static if it belongs to OrderBook
 def _match_orders_in_tier(
     c_level: str, bids: List[Bid], asks: List[Ask]
 ) -> TierClearResult:
@@ -337,7 +341,7 @@ class OrderBookStore(abc.ABC):
 
 class _InMemoryOrderBookStore(OrderBookStore):
     """
-    Default `OrderBookStore` using `List[Bid]`/`List[Ask]`.
+    In-memory implementation of `OrderBookStore` using `List[Bid]`/`List[Ask]`.
     """
 
     def __init__(self) -> None:
@@ -370,10 +374,11 @@ class OrderBook:
     """
     Batch call-auction order book for one Noesis Market round.
 
-    Buyers submit `Bid`s and sellers submit `Ask`s via `submit_bid()` /
-    `submit_ask()`; `clear_round()` buckets every pending order by capability
-    tier and clears each tier independently (see `_match_orders_in_tier()`).
-    Pending orders live in a pluggable `OrderBookStore`.
+    - Buyers submit `Bid`s and sellers submit `Ask`s via `submit_bid()` /
+      `submit_ask()`
+    - `clear_round()` buckets every pending order by capability tier and clears
+      each tier independently
+    - Pending orders live in a pluggable `OrderBookStore`.
 
     Simplifications:
     - A bid's `c_level_min` is treated as an exact tier bucket, matched only
@@ -422,6 +427,7 @@ class OrderBook:
         """
         return self._store.get_asks()
 
+    # TODO(gp): is there a better word for clear? Match?
     def clear_round(self) -> Dict[str, TierClearResult]:
         """
         Clear every capability tier present in the book and empty it.
@@ -446,5 +452,7 @@ class OrderBook:
             )
         # A batch round clears the whole book, per the class docstring.
         self._store.clear()
+        # TODO(gp): What happens to the clients that have submit a bid and are
+        # not matched? Do they get a notification?
         _LOG.debug("return=%s", results)
         return results

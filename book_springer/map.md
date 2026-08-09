@@ -201,10 +201,11 @@
 | `msml610/lectures_source/Lesson08.X-Causal_inference.txt`                    
 | `msml610/lectures_source/Lesson09.1-Reasoning_over_time.txt`                 
 | `msml610/lectures_source/Lesson09.2-Hidden_Markov_Models.txt`                
-| `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt`                 |       | 10%    |           | 10%      |
+| `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt`                 | yes   | 10%    |           | 10%      |
 | `msml610/lectures_source/Lesson09.4-gh_Filter.txt`                           |       | 70%    |           | 60%      |
 | `msml610/lectures_source/Lesson09.5-Kalman_Filter.txt`                       |       | 70%    |           | 60%      |
 | `msml610/lectures_source/Lesson09.6-Dynamic_Bayesian_Networks.txt`           
+| `msml610/lectures_source/Lesson09.7-Advanced_Bandits.txt`                    | yes   | 50%    |           | 0%       |
 | `msml610/lectures_source/Lesson10.1-Timeseries_forecasting.txt`              | ?
 | `msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.txt`    | ?
 | `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`  | ?

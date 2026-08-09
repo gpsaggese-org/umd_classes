@@ -23,22 +23,14 @@ _LOG = logging.getLogger(__name__)
 
 
 # #############################################################################
-# Constants
+# ProviderConfig
 # #############################################################################
 
 
 # A provider's call function stands in for the real network call to a
 # provider's SDK/API (e.g., OpenAI, Anthropic). It takes `(model, prompt)`
-# and returns the raw response text. Tests inject a deterministic stand-in
-# so no network call happens; a real deployment would wrap the provider's
-# SDK here.
-# TODO(ai_gp): -> ProviderCallFunc
+# and returns the raw response text.
 ProviderCallFunc = Callable[[str, str], str]
-
-
-# #############################################################################
-# ProviderConfig
-# #############################################################################
 
 
 @dataclasses.dataclass
@@ -53,7 +45,7 @@ class ProviderConfig:
 
     # Short name callers pass to `Gateway.call()` to select this provider.
     name: str
-    # Stand-in for the real provider SDK call (see `ProviderCallFunc`).
+    # Stand-in for the real provider SDK call.
     call_func: ProviderCallFunc
     # Crude placeholder pricing model: $ per character of prompt+response
     # text. This can be swapped for real per-token provider pricing once
@@ -85,8 +77,8 @@ class RequestLogEntry:
     """
     Storage schema for one logged prompt/response pair.
 
-    One entry is appended per `Gateway.call()`, matched or not: every
-    request is logged regardless of provider outcome.
+    One entry is appended per `Gateway.call()`, matched or not: every request
+    is logged regardless of provider outcome.
     """
 
     # Monotonically increasing id, unique within one `Gateway` instance.
@@ -147,6 +139,7 @@ class RequestLogStore(abc.ABC):
         ...
 
 
+# TODO(ai_gp): Make it public.
 class _InMemoryRequestLogStore(RequestLogStore):
     """
     Default `RequestLogStore`: today's `_log`/`_next_request_id`, extracted
@@ -203,11 +196,11 @@ class Gateway:
     """
     Passthrough proxy.
 
-    One `call()` API dispatches a prompt to a registered provider and logs
-    the raw request/response pair; `get_log()` / `query_log()` make every
-    logged pair queryable. The log lives in a pluggable `RequestLogStore`
-    (in-memory by default, `postgres_store.PostgresRequestLogStore` for
-    persistence; see `spec.PR_P2b.md`), not directly on this class.
+    - One `call()` API dispatches a prompt to a registered provider and logs
+      the raw request/response pair
+    - `get_log()` / `query_log()` make every logged pair queryable
+    - The log lives in a pluggable `RequestLogStore`, not directly on this
+      class
     """
 
     def __init__(
@@ -221,12 +214,9 @@ class Gateway:
             - Default: `time.perf_counter`
             - Tests inject a deterministic fake clock instead
         :param store: pluggable storage backend for the request/response log
-            - Default: `_InMemoryRequestLogStore()`; see
-              `OrderBook.__init__()`'s `store` parameter for why this stays
-              an `Optional[...] = None` default rather than a stateful
-              class-level one
         """
         self._providers: Dict[str, ProviderConfig] = {}
+        # TODO(ai_gp): Enforce callers to pass.
         if store is None:
             store = _InMemoryRequestLogStore()
         self._store = store
@@ -252,7 +242,7 @@ class Gateway:
         Route `prompt` to `provider_name`/`model` and log the exchange.
 
         :param provider_name: name of a provider registered via
-            `register_provider()`
+        `register_provider()`
         :param model: model identifier to forward to the provider's
             `call_func`
         :param prompt: raw prompt text to send
