@@ -27,18 +27,15 @@ For each slide, add a reference to the slides in the txt file associated to thos
 concepts, e.g.,
 // msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt:"..."
 
-### [.] Complete the tutorial
+### [x] Complete the tutorial
 
-### [ ] lint the files
+### [x] lint the files
 
-### [ ]
+### [x] Rename
 
 msml610/tutorials/L09_multi_armed_bandits/L09_03_multi_armed_bandit_sim_API.{ipynb,py}
 ->
 msml610/tutorials/L09_multi_armed_bandits/L09_03_01_multi_armed_bandits_sim_API.{ipynb,py}
-
-msml610/tutorials/L09_multi_armed_bandits/L09_03_multi_armed_bandits_sim.py
-msml610/tutorials/L09_multi_armed_bandits/L09_03_multi_armed_bandits_utils.py
 
 msml610/tutorials/L09_multi_armed_bandits/L09_03_multi_armed_bandits.{ipynb,py}
 ->

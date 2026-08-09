@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.5
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -80,7 +80,6 @@ for cls in [
     sim.BanditExperiment,
     sim.BanditSimulation,
 ]:
-    print(f"=== {cls.__name__} ===")
     hintros.print_obj_info(cls)
 
 # %% [markdown]
@@ -411,5 +410,3 @@ utils.cell15_ucb_vs_thompson()
 # - Shrinking the gap $\Delta$ makes the arms harder to distinguish: both
 #   algorithms need more pulls of the suboptimal arms before locking onto the
 #   best one
-
-# %%
