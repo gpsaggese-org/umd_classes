@@ -7,9 +7,6 @@
     book, contract log, request log) to a real datastore (e.g. Postgres or Redis)
   - Result: a `NoesisMarket`/`NoesisServer` instance backed by persistent storage
     instead of the current in-process `List`/`Dict` state
-- This is a specification only: no code in this document has been implemented; it
-  describes what `PR_P2b` needs to add on top of the current `research/Noesis/*.py`
-  code
 - Roadmap position: `PR_P2b` is not listed under any `v0.x` roadmap bullet in
   `plan.Noesis.md`; it is sequenced directly after `PR_P2` (Cloud Deployment) in
   the `NoesisPlatform` PR list, and its own `TODO(gp)` note points at how to
@@ -19,35 +16,56 @@
   `docker-compose.noesis.yml`, `GET /health`) rather than on top of the code
   actually on disk today, since `spec.PR_P2.md` is itself still a specification
   only, per its own header, not implemented code
+- This is a specification only: no code in this document has been implemented;
+  it describes what `PR_P2b` needs to add on top of the current
+  `research/Noesis/*.py` code
 
-## Design Decision: Postgres via `helpers.hsql`, Not Redis or an ORM
-- The plan says "e.g. Postgres or Redis"; this PR's own title ("Use Postgres
-  Backend") already picks Postgres, and this repo ships a first-class Postgres
-  client already used across the wider Causify ecosystem this repo's dev-system
-  is modeled on:
+## Design Decisions
+
+### Postgres via `helpers.hsql`
+- Decision: back the storage layer with Postgres through `helpers.hsql` /
+  `helpers.hsql_implementation`, not a new database client
+- Justification:
+  - The plan says "e.g. Postgres or Redis"; this PR's own title ("Use Postgres
+    Backend") already picks Postgres
   - `helpers.hsql` / `helpers.hsql_implementation` (`psycopg2`-based, function
     style: `get_connection_from_env_vars()`, `wait_db_connection()`,
-    `execute_query_to_df()`, `execute_insert_query()`, etc.), gated so importing
-    `helpers.hsql` does not require `psycopg2` unless it is actually installed
-    (`hsql.py`'s `hmodule.has_module("psycopg2")` check)
-  - `helpers.hsql_test.TestDbHelper` / `TestImOmsDbHelper`: a test harness that
-    spins up an ephemeral Postgres via `docker-compose` for tests that need a
-    real DB (see "Unit Tests" below)
-  - A concrete precedent for wiring a Postgres-backed service into this
+    `execute_query_to_df()`, `execute_insert_query()`, etc.) is already used
+    across the wider Causify ecosystem this repo's dev-system is modeled on,
+    gated so importing `helpers.hsql` does not require `psycopg2` unless it is
+    actually installed (`hsql.py`'s `hmodule.has_module("psycopg2")` check)
+  - `helpers.hsql_test.TestDbHelper` / `TestImOmsDbHelper` provides a test
+    harness that spins up an ephemeral Postgres via `docker-compose` for tests
+    that need a real DB (see "Unit Test Plan" below)
+  - A concrete precedent already wires a Postgres-backed service into this
     ecosystem's `invoke`/Docker flow: `datapull/im_lib_tasks.py` (per-stage env
     file at `devops/env/{stage}.im_db_config.env`, an `im_postgres`
     `docker-compose` service, `im_docker_up`/`im_docker_down` invoke tasks)
-  - No comparable Redis client/test-harness module exists anywhere in
-    `helpers_root`
-- No new ORM (SQLAlchemy, etc.) is introduced: `helpers.hsql_implementation`'s
-  functions operate on `pandas.DataFrame`s and raw SQL strings, not mapped
-  classes, which is a smaller diff on top of this codebase's existing plain
-  dataclasses (`Bid`, `Ask`, `Contract`, `RequestLogEntry`) than introducing a
-  second object-mapping layer on top of them
+
+### Raw SQL via `helpers.hsql_implementation`, Not an ORM
+- Decision: call `helpers.hsql_implementation`'s `DataFrame`/raw-SQL functions
+  directly; do not introduce an ORM (e.g. SQLAlchemy)
+- Justification: `helpers.hsql_implementation`'s functions operate on
+  `pandas.DataFrame`s and raw SQL strings, not mapped classes, which is a
+  smaller diff on top of this codebase's existing plain dataclasses (`Bid`,
+  `Ask`, `Contract`, `RequestLogEntry`) than introducing a second
+  object-mapping layer on top of them
+
+## Trade-off and Alternative Design
+- Redis: the plan allows "Postgres or Redis". Not chosen because no comparable
+  Redis client/test-harness module exists anywhere in `helpers_root` (unlike
+  Postgres's `helpers.hsql` / `helpers.hsql_test.TestDbHelper`), and the PR's
+  own title already commits to Postgres. Trade-off: Redis could be a good fit
+  for the ephemeral pending bid/ask queues, at the cost of building new client
+  and test infrastructure this repo does not already have
+- ORM (e.g. SQLAlchemy): not chosen, per "Raw SQL via `helpers.hsql_implementation`,
+  Not an ORM" above. Trade-off: an ORM would give mapped-class ergonomics and
+  migration tooling, at the cost of a second object-mapping layer on top of the
+  existing dataclasses and a bigger diff
 
 ## Out of Scope
 - Redis as an alternative backend: this spec picks Postgres per the PR's own
-  title (see "Design Decision" above)
+  title (see "Design Decisions" above)
 - A schema migration/versioning framework (e.g. Alembic): `init_schema()`'s
   `CREATE TABLE IF NOT EXISTS` DDL (below) is enough for this prototype's first
   schema; a real migration tool is a follow-up if the schema changes later
@@ -65,11 +83,11 @@
 - `PR_M8`'s real fulfillment wiring: dispatch still calls `mock_fulfill()`;
   persisting a `Contract.fulfilled` value does not make the value itself real
 - A `/ready` endpoint distinct from `PR_P2`'s `GET /health`: this PR keeps
-  `/health` DB-agnostic (a liveness check, not a readiness check per "Risks"
-  below), since adding a DB-probing endpoint is an orthogonal concern `PR_P2`
-  did not scope either
+  `/health` DB-agnostic (a liveness check, not a readiness check per "Risks
+  and Limitations to Call Out" below), since adding a DB-probing endpoint is an
+  orthogonal concern `PR_P2` did not scope either
 
-## Current State (What This PR Builds On)
+## Current State
 - Three separate in-memory state surfaces, matching the plan's "order book,
   contract log, request log" list exactly, all lost on process exit
   (`architecture.md` Weakness 6):
@@ -90,15 +108,15 @@
   plain Python counter starting at `0` on every process start; a naive
   persistence layer that keeps these counters as-is would start reassigning
   colliding ids after every restart, silently corrupting the very persistence
-  this PR is meant to add (see "Risks" below)
+  this PR is meant to add (see "Risks and Limitations to Call Out" below)
 - No Postgres/SQL dependency anywhere in `research/Noesis` today: `helpers.hsql`
   is available repo-wide but unused by any of the four existing modules
 
-## Storage Abstraction
+## Implementation
 - Follows this codebase's existing dependency-injection idiom
   (`architecture.md`'s "Key design decisions": "every side effect that would be
   non-deterministic in a test ... is injected as a callable"), extended from
-  injected *callables* (`FulfillmentFn`, `ProviderCallFn`) to injected *storage
+  injected *callables* (`FulfillmentFunc`, `ProviderCallFunc`) to injected *storage
   objects*: one small `abc.ABC` per state surface, colocated with the class
   that owns it, plus an `_InMemory*Store` default that is today's plain
   `List`/`Dict` code extracted unchanged, so every existing test keeps passing
@@ -171,13 +189,6 @@ class _InMemoryOrderBookStore(OrderBookStore):
   pitfall `contract_dispatch.mock_fulfill()`'s existing `rng: Optional[
   random.Random] = None` parameter already works around the same way in this
   codebase
-- `submit_bid()`/`submit_ask()`/`get_pending_bids()`/`get_pending_asks()`
-  become one-line delegations to `self._store.add_bid()` /
-  `self._store.get_bids()` / etc.
-- `clear_round()` changes minimally: replace `self._bids`/`self._asks` reads
-  with `self._store.get_bids()`/`get_asks()`, and the trailing `self._bids =
-  []; self._asks = []` with `self._store.clear()`; `_match_orders_in_tier()`
-  itself (the pure matching algorithm) is untouched
 
 ### `platform_api.py`: `ContractStore`
 ```python
@@ -224,24 +235,6 @@ class _InMemoryContractStore(ContractStore):
 - `_MarketState.__init__(self, order_book, *, fulfillment_fn=..., store:
   Optional[ContractStore] = None)`: same `None`-default rationale as
   `OrderBook.store` above
-- `clear_round()` changes: `round_id = self._next_round_id; self.
-  _next_round_id += 1` becomes `round_id = self._store.next_round_id()`
-  (called once, before the per-tier loop, exactly where today's counter
-  increment happens); the per-contract `self._contracts_by_id[self.
-  _next_contract_id] = contract; self._next_contract_id += 1` loop becomes
-  `contract_id = self._store.save_contract(contract)` (the store assigns the
-  id); `self._latest_round_by_tier[c_level] = round_response` becomes `self.
-  _store.save_round(round_response)`
-- `get_contract()`/`get_latest_round()` delegate to `self._store.get_contract()`
-  /`get_latest_round()`, raising the same `hdbg.dassert_in(...)`-driven
-  `AssertionError` on an unknown id/tier as today (the `_InMemoryContractStore`
-  keeps the existing `hdbg.dassert_in` checks; `PostgresContractStore` raises
-  the same way on an empty query result, see below)
-- `create_app()`'s signature grows one new keyword parameter,
-  `contract_store: Optional[ContractStore] = None`, threaded through to `
-  _MarketState(order_book, fulfillment_fn=fulfillment_fn, store=contract_store)`
-  so `main.py` (below) can inject `PostgresContractStore` without `_MarketState`
-  needing to be constructed outside `create_app()`
 
 ### `passthrough_proxy.py`: `RequestLogStore`
 ```python
@@ -291,18 +284,14 @@ class _InMemoryRequestLogStore(RequestLogStore):
 ```
 - `Gateway.__init__(self, *, clock_fn=time.perf_counter, store: Optional[
   RequestLogStore] = None)`: same `None`-default rationale as above
-- `call()` changes: the `entry = RequestLogEntry(self._next_request_id, ...);
-  self._next_request_id += 1; self._log.append(entry)` block becomes `entry =
-  self._store.append(provider_name, model, prompt, response, latency_in_secs,
-  cost)`
-- `get_log()`/`query_log()` delegate to `self._store.get_all()`/`query(
-  provider=provider, model=model)`
 
-## Schema
-- One new module, `research/Noesis/postgres_store.py`, owns the DDL, run by
-  `init_schema(connection)` (idempotent: every statement is `CREATE TABLE IF
-  NOT EXISTS`, safe to call on every `main.py` startup, no migration framework
-  needed for this prototype's first schema per "Out of Scope" above)
+### `research/Noesis/postgres_store.py` (new)
+- Module docstring: points back to this file (`spec.PR_P2b.md`) and to the
+  three `ABC`s it implements
+- Owns the DDL, run by `init_schema(connection)` (idempotent: every statement
+  is `CREATE TABLE IF NOT EXISTS`, safe to call on every `main.py` startup, no
+  migration framework needed for this prototype's first schema per "Out of
+  Scope" above)
 - `noesis_` prefix on every table, since this may run against a shared Postgres
   instance alongside other projects' tables (matches the `im_postgres_db_local`
   style naming already used elsewhere in this ecosystem)
@@ -369,12 +358,6 @@ CREATE TABLE IF NOT EXISTS noesis_request_log (
   nextval('noesis_round_id_seq')`) and reused for every tier's row in that
   round, replicating `platform_api.py:238-239`'s current
   "`round_id` assigned once, before the per-tier loop" behavior exactly
-
-## New Python Code
-
-### `research/Noesis/postgres_store.py` (new)
-- Module docstring: points back to this file (`spec.PR_P2b.md`) and to the
-  three `ABC`s it implements
 - `init_schema(connection: hsql.DbConnection) -> None`: runs the DDL above via
   `connection.cursor().execute(...)`, one statement at a time, then `connection.
   commit()` (or relies on the `autocommit=True` connections `hsql.
@@ -390,7 +373,7 @@ CREATE TABLE IF NOT EXISTS noesis_request_log (
     noesis_bids ORDER BY id")`, then one `Bid(**row)` per DataFrame row.
     **The `ORDER BY id` is required, not cosmetic**: `_match_orders_in_tier()`'s
     docstring states "`sorted()` is stable, so ties fall back to submission
-    order" — without an explicit `ORDER BY`, Postgres does not guarantee row
+    order" - without an explicit `ORDER BY`, Postgres does not guarantee row
     order, which would make tie-breaking within a price-tied tier
     nondeterministic and silently diverge from `_InMemoryOrderBookStore`'s
     list-append order
@@ -455,18 +438,17 @@ CREATE TABLE IF NOT EXISTS noesis_request_log (
     connection))`
   - `contract_store = rnpost.PostgresContractStore(connection)`
 - When `"memory"` (default): `order_book = rnbacaau.OrderBook()`, `gateway =
-  rnopapro.Gateway()`, `contract_store = None` — byte-for-byte `PR_P2`'s
+  rnopapro.Gateway()`, `contract_store = None` - byte-for-byte `PR_P2`'s
   existing spec, unchanged
 - `app = rnoplapi.create_app(order_book, gateway, api_keys, contract_store=
   contract_store)`
 - `_LOG.info("NOESIS_DB_BACKEND=%s", _DB_BACKEND)` at startup, so a deployment's
   logs make the active backend obvious without inspecting env vars directly
 
-## Docker
-- Extends `spec.PR_P2.md`'s `research/Noesis/devops/compose/
-  docker-compose.noesis.yml` with one new service and one new volume, modeled
-  on `datapull/im_lib_tasks.py`'s `im_postgres` service and the ecosystem's
-  standard `postgres:<version>` image usage
+### `research/Noesis/devops/compose/docker-compose.noesis.yml` (extends `PR_P2`'s spec)
+- Extends `spec.PR_P2.md`'s compose file with one new service and one new
+  volume, modeled on `datapull/im_lib_tasks.py`'s `im_postgres` service and the
+  ecosystem's standard `postgres:<version>` image usage
   (`helpers_root/dev_scripts_helpers/update_devops_packages/test/db_example/
   docker-compose.yml`):
   ```yaml
@@ -502,23 +484,62 @@ CREATE TABLE IF NOT EXISTS noesis_request_log (
   volumes:
     noesis_postgres_data: {}
   ```
-- `research/Noesis/devops/env/default.env` (`PR_P2` created a placeholder) gets
-  `POSTGRES_DB`/`POSTGRES_USER`/`NOESIS_DB_BACKEND` added for local dev
-  defaults; `POSTGRES_PASSWORD` stays out of the committed file, same treatment
-  `PR_P2` already gives `NOESIS_API_KEYS` (passed via `docker compose run -e` /
-  the shell environment instead)
-- Local persistence caveat: `noesis_postgres_data` is a plain Docker volume, so
-  `docker compose down` (no `-v`) preserves it across a restart, but it is still
-  node-local, not replicated; a host disk failure loses it the same as today's
-  in-memory state would on a crash. This is fine for local dev but not a
-  substitute for a managed DB in production (see below)
+- Local persistence: `noesis_postgres_data` is a plain Docker volume, so
+  `docker compose down` (no `-v`) preserves it across a restart, but it is
+  still node-local, not replicated; a host disk failure loses it the same as
+  today's in-memory state would on a crash (see "Risks and Limitations to Call
+  Out" below)
 - Production (the `PR_P2` "Cloud Target" ECS path): do **not** run
   `noesis_postgres` as a sidecar container in the same ECS task; use AWS RDS
   (managed Postgres) instead, with the five `POSTGRES_*` values set as ECS task
   definition `secrets` entries, the same treatment `PR_P2` already specifies for
   `NOESIS_API_KEYS`. Provisioning the RDS instance itself is one-time AWS infra
-  setup, out of scope here (same caveat `spec.PR_P2.md` raises for the ECS
-  cluster/service themselves)
+  setup, out of scope here (see "Out of Scope" above)
+
+## Interaction with Existing Code
+- `batch_call_auction.py`:
+  - `submit_bid()`/`submit_ask()`/`get_pending_bids()`/`get_pending_asks()`
+    become one-line delegations to `self._store.add_bid()` /
+    `self._store.get_bids()` / etc.
+  - `clear_round()` changes minimally: replace `self._bids`/`self._asks` reads
+    with `self._store.get_bids()`/`get_asks()`, and the trailing `self._bids =
+    []; self._asks = []` with `self._store.clear()`; `_match_orders_in_tier()`
+    itself (the pure matching algorithm) is untouched
+- `platform_api.py`:
+  - `clear_round()` changes: `round_id = self._next_round_id; self.
+    _next_round_id += 1` becomes `round_id = self._store.next_round_id()`
+    (called once, before the per-tier loop, exactly where today's counter
+    increment happens); the per-contract `self._contracts_by_id[self.
+    _next_contract_id] = contract; self._next_contract_id += 1` loop becomes
+    `contract_id = self._store.save_contract(contract)` (the store assigns the
+    id); `self._latest_round_by_tier[c_level] = round_response` becomes `self.
+    _store.save_round(round_response)`
+  - `get_contract()`/`get_latest_round()` delegate to `self._store.
+    get_contract()`/`get_latest_round()`, raising the same `hdbg.
+    dassert_in(...)`-driven `AssertionError` on an unknown id/tier as today
+    (the `_InMemoryContractStore` keeps the existing `hdbg.dassert_in` checks;
+    `PostgresContractStore` raises the same way on an empty query result, per
+    "Implementation" above)
+  - `create_app()`'s signature grows one new keyword parameter,
+    `contract_store: Optional[ContractStore] = None`, threaded through to
+    `_MarketState(order_book, fulfillment_fn=fulfillment_fn,
+    store=contract_store)` so `main.py` can inject `PostgresContractStore`
+    without `_MarketState` needing to be constructed outside `create_app()`
+- `passthrough_proxy.py`:
+  - `call()` changes: the `entry = RequestLogEntry(self._next_request_id, ...);
+    self._next_request_id += 1; self._log.append(entry)` block becomes `entry =
+    self._store.append(provider_name, model, prompt, response, latency_in_secs,
+    cost)`
+  - `get_log()`/`query_log()` delegate to `self._store.get_all()`/`query(
+    provider=provider, model=model)`
+- Data flow: `main.py` picks `NOESIS_DB_BACKEND`, builds `OrderBook`/`Gateway`/
+  `contract_store` from either the in-memory or Postgres store, and
+  `create_app()` wires `contract_store` into `_MarketState`
+- Backward compatibility: `OrderBook()`, `Gateway()`, and `_MarketState(
+  order_book)` called with no `store=` argument default to the extracted
+  `_InMemory*Store`s, byte-for-byte the same list/dict behavior as today;
+  every existing call site and test keeps passing unchanged (see "Unit Test
+  Plan" below)
 
 ## Configuration and Secrets
 - New required env vars when `NOESIS_DB_BACKEND=postgres`: `POSTGRES_HOST`,
@@ -528,11 +549,15 @@ CREATE TABLE IF NOT EXISTS noesis_request_log (
 - `NOESIS_DB_BACKEND` itself defaults to `"memory"`, so an existing `PR_P2`
   deployment that never sets it keeps running exactly as before this PR lands;
   this is the rollback path if the Postgres backend misbehaves in production
-- `POSTGRES_PASSWORD`: local dev via `docker compose run -e` / shell env
-  (never committed); production via ECS `secrets` backed by AWS Secrets
-  Manager or Parameter Store, matching `NOESIS_API_KEYS`'s existing treatment
+- `research/Noesis/devops/env/default.env` (`PR_P2` created a placeholder) gets
+  `POSTGRES_DB`/`POSTGRES_USER`/`NOESIS_DB_BACKEND` added for local dev
+  defaults
+- `POSTGRES_PASSWORD`: stays out of the committed `default.env`, same
+  treatment `PR_P2` already gives `NOESIS_API_KEYS`; local dev via `docker
+  compose run -e` / shell env (never committed); production via ECS `secrets`
+  backed by AWS Secrets Manager or Parameter Store
 
-## Unit Tests
+## Unit Test Plan
 - New file `research/Noesis/test/test_postgres_store.py`, naming per
   `.claude/skills/testing.rules.md`
 - Uses `helpers.hsql_test.TestDbHelper` (or its `TestImOmsDbHelper` concrete
@@ -575,11 +600,10 @@ CREATE TABLE IF NOT EXISTS noesis_request_log (
       raise (idempotency of `CREATE TABLE IF NOT EXISTS`)
 - `research/Noesis/test/test_batch_call_auction.py`,
   `test/test_contract_dispatch.py`, `test/test_passthrough_proxy.py`, and
-  `test/test_platform_api.py`: **no changes expected**. `OrderBook()`,
-  `Gateway()`, and `_MarketState(order_book)` called with no `store=` argument
-  default to the extracted `_InMemory*Store`s, byte-for-byte the same list/dict
-  behavior as today; this is the regression signal that the default backend
-  truly did not change, not just an assumption
+  `test/test_platform_api.py`: no changes expected; this is the regression
+  signal that the default backend truly did not change, not just an
+  assumption (see "Backward compatibility" in "Interaction with Existing Code"
+  above)
 - Extend `research/Noesis/test/test_main.py` (from `PR_P2`'s spec): a case
   covering `NOESIS_DB_BACKEND` defaulting to `"memory"` when unset, exercised
   the same way `PR_P2`'s `Test__parse_api_keys` isolates a pure env-parsing
@@ -609,7 +633,7 @@ CREATE TABLE IF NOT EXISTS noesis_request_log (
   startup, not on every health check
 - Local dev persistence is a single Docker volume, not a replicated/managed
   datastore; production should use RDS, not the compose `noesis_postgres`
-  service, per "Docker" above
+  service, per "Implementation" above
 - No connection pooling: a single shared `psycopg2` connection serves every
   request for the process lifetime; acceptable for this prototype's expected
   load, a bottleneck if concurrent request volume grows (see "Out of Scope")
@@ -618,11 +642,77 @@ CREATE TABLE IF NOT EXISTS noesis_request_log (
   reputation filtering, no rate limiting): it only changes where the three
   state surfaces live, not the business logic operating on them
 
-## Result (to Fill in Once Implemented)
-- A `NoesisMarket`/`NoesisServer` instance backed by persistent Postgres storage
-  instead of the current in-process `List`/`Dict` state, per `plan.Noesis.md`'s
-  `PR_P2b` Result line
-- Record what was actually implemented vs. deferred, e.g. whether
-  `NOESIS_DB_BACKEND=postgres` was exercised against a real cloud Postgres
-  (RDS or otherwise) or only against the local `docker-compose` service, and
-  whether the id-counter correctness point above was implemented as specced
+## Result
+- Implemented as specced:
+  - `OrderBookStore`/`_InMemoryOrderBookStore` (`batch_call_auction.py`),
+    `ContractStore`/`_InMemoryContractStore` (`platform_api.py`),
+    `RequestLogStore`/`_InMemoryRequestLogStore` (`passthrough_proxy.py`):
+    each owning class (`OrderBook`, `_MarketState`, `Gateway`) now takes a
+    keyword-only `store: Optional[...] = None`, defaulting to the extracted
+    in-memory store; every existing call site and unit test (`test/test_
+    batch_call_auction.py`, `test/test_contract_dispatch.py`, `test/test_
+    passthrough_proxy.py`, `test/test_platform_api.py`) passes unchanged
+    (53 passed, run locally), confirming the default-backend behavior did
+    not change
+  - `research/Noesis/postgres_store.py`: `init_schema()` and the DDL above,
+    `PostgresOrderBookStore`, `PostgresContractStore`,
+    `PostgresRequestLogStore`, all implemented exactly as specced
+    (`BIGSERIAL`/`nextval('noesis_round_id_seq')`-assigned ids, not Python
+    counters; explicit `ORDER BY` on every list query)
+  - One deviation from the literal spec text, for correctness: `get_latest_
+    round(tier)` and `query(provider=..., model=...)` bind `tier`/`provider`/
+    `model` as query parameters via a raw parameterized `cursor.execute()`
+    instead of the `hsqlimpl.execute_query_to_df(connection, f"... WHERE
+    tier = '{tier}'")` f-string form the spec's prose suggests:
+    `execute_query_to_df()` has no parameter-binding support, and `tier`/
+    `provider`/`model` are caller-controlled HTTP inputs (`GET /rounds/
+    {tier}/latest`, `GET /logs?provider=&model=`), so f-string interpolation
+    there would be a SQL-injection vector. `get_contract(contract_id)` kept
+    the spec's literal f-string form since `contract_id` is FastAPI-coerced
+    to `int` before reaching this code
+  - `main.py`: written from scratch (did not exist on disk), combining
+    `spec.PR_P2.md`'s baseline (`_parse_api_keys()`, `GET /health`,
+    module-level `app`) with this spec's `NOESIS_DB_BACKEND` switch; the
+    Postgres branch does a deferred (`if`-scoped) `import research.Noesis.
+    postgres_store`/`helpers.hsql_implementation`, so the default `memory`
+    backend has no `psycopg2` import-time dependency, matching `helpers.
+    hsql`'s own optional-import gating
+  - `platform_api.create_app()` gained `GET /health` and the `contract_
+    store: Optional[ContractStore] = None` keyword parameter, threaded to
+    `_MarketState(..., store=contract_store)`
+  - `devops/compose/docker-compose.noesis.yml` and `devops/env/default.env`:
+    added under `research/Noesis/devops/`, combining `spec.PR_P2.md`'s
+    `noesis_api` service with this spec's `noesis_postgres` service/volume
+    and env additions; validated as syntactically-valid YAML
+  - Tests: `test/test_postgres_store.py` (`TestPostgresOrderBookStore`,
+    `TestPostgresContractStore`, `TestPostgresRequestLogStore`, `Test_init_
+    schema`, all against `helpers.hsql_test.TestImOmsDbHelper`, not mocks,
+    per the spec's own tradeoff call) and `test/test_main.py`
+    (`Test__parse_api_keys`, `Test__get_db_backend`); `test/test_platform_
+    api.py` gained `Test_health`
+- Verified against a real Postgres, beyond what collection/import checks
+  alone would catch: with `psycopg2-binary` installed locally and a
+  throwaway `postgres:16` container, every `postgres_store.py` class
+  (`init_schema()` idempotency, all three stores' round-trip/ordering/
+  unknown-id behavior) and the full `main.py` app with `NOESIS_DB_BACKEND=
+  postgres` (`GET /health`, `POST /bids`/`/asks`, `POST /rounds/clear`,
+  `GET /contracts/{id}`, `GET /rounds/{tier}/latest`, including the 400 on
+  an unknown `contract_id`) were exercised end-to-end and passed; the
+  container was removed afterward. `test/test_postgres_store.py` itself was
+  only *collected* successfully in this sandbox (10 tests), not run via
+  `TestImOmsDbHelper`'s own `docker-compose`, since `helpers.hserver.
+  can_run_docker_from_docker()` is `False` here (no docker-in-docker); it
+  should be re-run in an environment where that helper returns `True`
+  before this PR is considered fully verified by its own test suite
+- Deferred, deliberately out of this PR's scope (see "Out of Scope" above):
+  no ECS task definition/service or AWS RDS instance was provisioned;
+  `NOESIS_DB_BACKEND=postgres` was exercised only against a local ad hoc
+  container as described above, never against a managed/cloud Postgres (RDS
+  or otherwise). `research/Noesis` making the full dev-system "runnable dir"
+  scaffolding (`changelog.txt`, `repo_config.yaml`, `.dockerignore`,
+  `devops/docker_build/`, `devops/docker_run/`, the `tasks.py`/`conftest.py`/
+  `invoke.yaml`/`pytest.ini` symlinks) was `spec.PR_P2.md`'s own scope, not
+  this PR's, and has since landed there (see `spec.PR_P2.md`'s "Result");
+  `docker-compose.noesis.yml`'s `extends: tmp.docker-compose.yml` now
+  resolves against that scaffolding, though the ECS/RDS provisioning above
+  remains outstanding

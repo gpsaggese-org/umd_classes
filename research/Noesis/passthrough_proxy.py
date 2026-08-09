@@ -10,10 +10,11 @@ Import as:
 import research.Noesis.passthrough_proxy as rnopapro
 """
 
+import abc
 import dataclasses
 import logging
 import time
-from typing import Callable, Dict, List
+from typing import Callable, Dict, List, Optional
 
 import helpers.hdbg as hdbg
 import helpers.hprint as hprint
@@ -31,7 +32,8 @@ _LOG = logging.getLogger(__name__)
 # and returns the raw response text. Tests inject a deterministic stand-in
 # so no network call happens; a real deployment would wrap the provider's
 # SDK here.
-ProviderCallFn = Callable[[str, str], str]
+# TODO(ai_gp): -> ProviderCallFunc
+ProviderCallFunc = Callable[[str, str], str]
 
 
 # #############################################################################
@@ -44,26 +46,26 @@ class ProviderConfig:
     """
     Register one LLM provider behind the gateway's single `call()` API.
 
-    E.g., `ProviderConfig("openai_mock", echo_fn, 0.01)` registers a provider
+    E.g., `ProviderConfig("openai_mock", echo_func, 0.01)` registers a provider
     named "openai_mock" that charges 0.01 per character of prompt+response
     text.
     """
 
     # Short name callers pass to `Gateway.call()` to select this provider.
     name: str
-    # Stand-in for the real provider SDK call (see `ProviderCallFn`).
-    call_fn: ProviderCallFn
+    # Stand-in for the real provider SDK call (see `ProviderCallFunc`).
+    call_func: ProviderCallFunc
     # Crude placeholder pricing model: $ per character of prompt+response
     # text. This can be swapped for real per-token provider pricing once
     # one is needed.
     cost_per_char: float
 
     def __init__(
-        self, name: str, call_fn: ProviderCallFn, cost_per_char: float
+        self, name: str, call_func: ProviderCallFunc, cost_per_char: float
     ) -> None:
         hdbg.dassert_ne(name, "", "ProviderConfig needs a non-empty name")
         self.name = name
-        self.call_fn = call_fn
+        self.call_func = call_func
         hdbg.dassert_lte(
             0.0,
             cost_per_char,
@@ -104,6 +106,95 @@ class RequestLogEntry:
 
 
 # #############################################################################
+# RequestLogStore
+# #############################################################################
+
+
+class RequestLogStore(abc.ABC):
+    """
+    Pluggable storage backend for `Gateway`'s request/response log.
+    """
+
+    @abc.abstractmethod
+    def append(
+        self,
+        provider: str,
+        model: str,
+        prompt: str,
+        response: str,
+        latency_in_secs: float,
+        cost: float,
+    ) -> RequestLogEntry:
+        """
+        Persist one logged request/response pair.
+
+        :return: the persisted `RequestLogEntry`, with `request_id` assigned
+            by the store
+        """
+        ...
+
+    @abc.abstractmethod
+    def get_all(self) -> List[RequestLogEntry]:
+        """
+        :return: every logged entry, in call order
+        """
+        ...
+
+    @abc.abstractmethod
+    def query(
+        self, *, provider: str = "", model: str = ""
+    ) -> List[RequestLogEntry]:
+        ...
+
+
+class _InMemoryRequestLogStore(RequestLogStore):
+    """
+    Default `RequestLogStore`: today's `_log`/`_next_request_id`, extracted
+    unchanged; `append()` builds the same `RequestLogEntry` `Gateway.call()`
+    builds today and keeps its own counter.
+    """
+
+    def __init__(self) -> None:
+        self._log: List[RequestLogEntry] = []
+        self._next_request_id = 0
+
+    def append(
+        self,
+        provider: str,
+        model: str,
+        prompt: str,
+        response: str,
+        latency_in_secs: float,
+        cost: float,
+    ) -> RequestLogEntry:
+        entry = RequestLogEntry(
+            self._next_request_id,
+            provider,
+            model,
+            prompt,
+            response,
+            latency_in_secs,
+            cost,
+        )
+        self._next_request_id += 1
+        self._log.append(entry)
+        return entry
+
+    def get_all(self) -> List[RequestLogEntry]:
+        return list(self._log)
+
+    def query(
+        self, *, provider: str = "", model: str = ""
+    ) -> List[RequestLogEntry]:
+        entries = self._log
+        if provider:
+            entries = [entry for entry in entries if entry.provider == provider]
+        if model:
+            entries = [entry for entry in entries if entry.model == model]
+        return list(entries)
+
+
+# #############################################################################
 # Gateway
 # #############################################################################
 
@@ -114,21 +205,32 @@ class Gateway:
 
     One `call()` API dispatches a prompt to a registered provider and logs
     the raw request/response pair; `get_log()` / `query_log()` make every
-    logged pair queryable.
+    logged pair queryable. The log lives in a pluggable `RequestLogStore`
+    (in-memory by default, `postgres_store.PostgresRequestLogStore` for
+    persistence; see `spec.PR_P2b.md`), not directly on this class.
     """
 
     def __init__(
-        self, *, clock_fn: Callable[[], float] = time.perf_counter
+        self,
+        *,
+        clock_func: Callable[[], float] = time.perf_counter,
+        store: Optional[RequestLogStore] = None,
     ) -> None:
         """
-        :param clock_fn: monotonic clock used to measure call latency
+        :param clock_func: monotonic clock used to measure call latency
             - Default: `time.perf_counter`
             - Tests inject a deterministic fake clock instead
+        :param store: pluggable storage backend for the request/response log
+            - Default: `_InMemoryRequestLogStore()`; see
+              `OrderBook.__init__()`'s `store` parameter for why this stays
+              an `Optional[...] = None` default rather than a stateful
+              class-level one
         """
         self._providers: Dict[str, ProviderConfig] = {}
-        self._log: List[RequestLogEntry] = []
-        self._next_request_id = 0
-        self._clock_fn = clock_fn
+        if store is None:
+            store = _InMemoryRequestLogStore()
+        self._store = store
+        self._clock_func = clock_func
 
     def register_provider(self, provider_config: ProviderConfig) -> None:
         """
@@ -152,7 +254,7 @@ class Gateway:
         :param provider_name: name of a provider registered via
             `register_provider()`
         :param model: model identifier to forward to the provider's
-            `call_fn`
+            `call_func`
         :param prompt: raw prompt text to send
         :return: raw response text returned by the provider
         """
@@ -166,23 +268,15 @@ class Gateway:
         )
         provider_config = self._providers[provider_name]
         # Time only the provider call itself, not the logging bookkeeping.
-        start_time = self._clock_fn()
-        response = provider_config.call_fn(model, prompt)
-        latency_in_secs = self._clock_fn() - start_time
+        start_time = self._clock_func()
+        response = provider_config.call_func(model, prompt)
+        latency_in_secs = self._clock_func() - start_time
         cost = round(
             provider_config.cost_per_char * (len(prompt) + len(response)), 6
         )
-        entry = RequestLogEntry(
-            self._next_request_id,
-            provider_name,
-            model,
-            prompt,
-            response,
-            latency_in_secs,
-            cost,
+        self._store.append(
+            provider_name, model, prompt, response, latency_in_secs, cost
         )
-        self._next_request_id += 1
-        self._log.append(entry)
         _LOG.debug("return=%s", response)
         return response
 
@@ -190,7 +284,7 @@ class Gateway:
         """
         :return: every logged request/response pair, in call order
         """
-        return list(self._log)
+        return self._store.get_all()
 
     def query_log(
         self, *, provider: str = "", model: str = ""
@@ -204,9 +298,4 @@ class Gateway:
             - Default: "" (no model filter)
         :return: matching entries, in call order
         """
-        entries = self._log
-        if provider:
-            entries = [entry for entry in entries if entry.provider == provider]
-        if model:
-            entries = [entry for entry in entries if entry.model == model]
-        return list(entries)
+        return self._store.query(provider=provider, model=model)

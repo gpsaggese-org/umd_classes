@@ -1,12 +1,12 @@
 """
-In-memory batch call-auction order book for the Intelligence Market
-simulator.
+In-memory batch call-auction order book for the Noesis Market simulator.
 
 Import as:
 
 import research.Noesis.batch_call_auction as rnbacaau
 """
 
+import abc
 import dataclasses
 import logging
 from typing import Dict, List, Optional, Tuple
@@ -33,6 +33,8 @@ DEFAULT_BATCH_INTERVAL_MINUTES = 5
 # #############################################################################
 
 
+# TODO(ai_gp): There should also info about the submitter in terms of an id
+# and a submission timestamp, same thing for Ask
 @dataclasses.dataclass
 class Bid:
     """
@@ -294,18 +296,84 @@ def _match_orders_in_tier(
 
 
 # #############################################################################
+# OrderBookStore
+# #############################################################################
+
+
+class OrderBookStore(abc.ABC):
+    """
+    Pluggable storage backend for `OrderBook`'s pending `Bid`/`Ask` queues.
+    """
+
+    @abc.abstractmethod
+    def add_bid(self, bid: Bid) -> None:
+        ...
+
+    @abc.abstractmethod
+    def add_ask(self, ask: Ask) -> None:
+        ...
+
+    @abc.abstractmethod
+    def get_bids(self) -> List[Bid]:
+        """
+        :return: pending bids, in submission order
+        """
+        ...
+
+    @abc.abstractmethod
+    def get_asks(self) -> List[Ask]:
+        """
+        :return: pending asks, in submission order
+        """
+        ...
+
+    @abc.abstractmethod
+    def clear(self) -> None:
+        """
+        Drop every stored bid/ask.
+        """
+        ...
+
+
+class _InMemoryOrderBookStore(OrderBookStore):
+    """
+    Default `OrderBookStore` using `List[Bid]`/`List[Ask]`.
+    """
+
+    def __init__(self) -> None:
+        self._bids: List[Bid] = []
+        self._asks: List[Ask] = []
+
+    def add_bid(self, bid: Bid) -> None:
+        self._bids.append(bid)
+
+    def add_ask(self, ask: Ask) -> None:
+        self._asks.append(ask)
+
+    def get_bids(self) -> List[Bid]:
+        return list(self._bids)
+
+    def get_asks(self) -> List[Ask]:
+        return list(self._asks)
+
+    def clear(self) -> None:
+        self._bids = []
+        self._asks = []
+
+
+# #############################################################################
 # OrderBook
 # #############################################################################
 
 
 class OrderBook:
     """
-    In-memory batch call-auction order book for one Intelligence Market
-    round.
+    Batch call-auction order book for one Noesis Market round.
 
     Buyers submit `Bid`s and sellers submit `Ask`s via `submit_bid()` /
     `submit_ask()`; `clear_round()` buckets every pending order by capability
     tier and clears each tier independently (see `_match_orders_in_tier()`).
+    Pending orders live in a pluggable `OrderBookStore`.
 
     Simplifications:
     - A bid's `c_level_min` is treated as an exact tier bucket, matched only
@@ -314,9 +382,15 @@ class OrderBook:
     - A cleared round drops every order it processed, matched or not
     """
 
-    def __init__(self) -> None:
-        self._bids: List[Bid] = []
-        self._asks: List[Ask] = []
+    def __init__(self, *, store: Optional[OrderBookStore] = None) -> None:
+        """
+        :param store: pluggable storage backend for pending bids/asks
+        """
+        # TODO(ai_gp): Add a dassert_isinstance(OrderBookStore)
+        # TODO(ai_gp): Force it to specify it.
+        if store is None:
+            store = _InMemoryOrderBookStore()
+        self._store = store
 
     def submit_bid(self, bid: Bid) -> None:
         """
@@ -325,7 +399,7 @@ class OrderBook:
         :param bid: buy order to add to the book
         """
         _LOG.debug(hprint.to_str("bid"))
-        self._bids.append(bid)
+        self._store.add_bid(bid)
 
     def submit_ask(self, ask: Ask) -> None:
         """
@@ -334,19 +408,19 @@ class OrderBook:
         :param ask: sell order to add to the book
         """
         _LOG.debug(hprint.to_str("ask"))
-        self._asks.append(ask)
+        self._store.add_ask(ask)
 
     def get_pending_bids(self) -> List[Bid]:
         """
         :return: buy orders queued for the next `clear_round()`
         """
-        return list(self._bids)
+        return self._store.get_bids()
 
     def get_pending_asks(self) -> List[Ask]:
         """
         :return: sell orders queued for the next `clear_round()`
         """
-        return list(self._asks)
+        return self._store.get_asks()
 
     def clear_round(self) -> Dict[str, TierClearResult]:
         """
@@ -354,22 +428,23 @@ class OrderBook:
 
         :return: map from `c_level` to that tier's `TierClearResult`
         """
-        _LOG.debug("num_bids=%d num_asks=%d", len(self._bids), len(self._asks))
-        # Bucket by tier (see class docstring for the exact-match
-        # simplification).
+        # Fetch pending orders once (not once per tier below) to avoid repeated
+        # round trips to a remote `OrderBookStore`.
+        bids = self._store.get_bids()
+        asks = self._store.get_asks()
+        _LOG.debug("num_bids=%d num_asks=%d", len(bids), len(asks))
+        # Bucket by tier.
         c_levels = sorted(
-            {bid.c_level_min for bid in self._bids}
-            | {ask.c_level for ask in self._asks}
+            {bid.c_level_min for bid in bids} | {ask.c_level for ask in asks}
         )
         results: Dict[str, TierClearResult] = {}
         for c_level in c_levels:
-            tier_bids = [bid for bid in self._bids if bid.c_level_min == c_level]
-            tier_asks = [ask for ask in self._asks if ask.c_level == c_level]
+            tier_bids = [bid for bid in bids if bid.c_level_min == c_level]
+            tier_asks = [ask for ask in asks if ask.c_level == c_level]
             results[c_level] = _match_orders_in_tier(
                 c_level, tier_bids, tier_asks
             )
         # A batch round clears the whole book, per the class docstring.
-        self._bids = []
-        self._asks = []
+        self._store.clear()
         _LOG.debug("return=%s", results)
         return results

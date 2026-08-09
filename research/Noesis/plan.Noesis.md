@@ -266,7 +266,7 @@
 
 ### `PR_M8`: [ ] Real Fulfillment Via NoesisServer's Gateway (swap the `PR_M2` mock)
 - Background: `contract_dispatch.py`'s module docstring says its mocked
-  fulfillment layer "stands in for `Intelligence_Server` ... which does not
+  fulfillment layer "stands in for `NoesisServer` ... which does not
   exist yet"; that is no longer true once `NoesisServer` `PR_S1` (passthrough
   proxy) and `PR_S7` (real OpenRouter-backed liquidity) exist, but no PR
   currently swaps `mock_fulfill()` for a real call — `NoesisServer` `PR_S7`'s own
