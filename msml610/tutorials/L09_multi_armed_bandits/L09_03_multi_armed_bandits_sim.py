@@ -24,9 +24,12 @@ class MultiArmedBandit:
     """
     Multi-armed bandit environment with K machines.
 
-    Each machine has an unknown probability distribution with mean mu_i.
-    Rewards are drawn from a uniform distribution in [mu_i - width, mu_i +
-    width], clipped to [-1, 1].
+    Supports two reward models, selected via `reward_type`:
+    - "uniform": rewards drawn from a uniform distribution in [mu_i - width,
+      mu_i + width], clipped to [-1, 1]
+    - "bernoulli": rewards are 1 with probability mu_i, else 0 (mu_i must be
+      in [0, 1]); used by the UCB, regret, and Bayesian/Thompson Sampling
+      algorithms, which are stated for bounded/Bernoulli rewards
     """
 
     def __init__(
@@ -36,6 +39,7 @@ class MultiArmedBandit:
         mu_values: List[float],
         seed: int,
         width: float = 0.3,
+        reward_type: str = "uniform",
     ) -> None:
         """
         Initialize multi-armed bandit.
@@ -43,7 +47,9 @@ class MultiArmedBandit:
         :param k_machines: number of machines (K)
         :param mu_values: true mean values for each machine
         :param seed: random seed for reproducibility
-        :param width: half-width of uniform distribution around mean
+        :param width: half-width of uniform distribution around mean (only
+            used when `reward_type` is "uniform")
+        :param reward_type: "uniform" or "bernoulli"
         """
         hdbg.dassert_eq(
             len(mu_values),
@@ -54,9 +60,23 @@ class MultiArmedBandit:
         )
         hdbg.dassert_lte(1, k_machines, "Must have at least 1 machine")
         hdbg.dassert_lt(0.0, width, "Width must be positive")
+        hdbg.dassert_in(
+            reward_type,
+            ["uniform", "bernoulli"],
+            "Invalid reward_type:",
+            reward_type,
+        )
+        if reward_type == "bernoulli":
+            hdbg.dassert_lte(
+                0.0, min(mu_values), "Bernoulli mu_values must be in [0, 1]"
+            )
+            hdbg.dassert_lte(
+                max(mu_values), 1.0, "Bernoulli mu_values must be in [0, 1]"
+            )
         self.k_machines = k_machines
         self.mu_values = list(mu_values)
         self.width = width
+        self.reward_type = reward_type
         self.seed = seed
         # Initialize random state.
         self._rng = np.random.RandomState(seed)
@@ -69,7 +89,8 @@ class MultiArmedBandit:
         Pull a specific machine and get reward.
 
         :param machine_idx: index of machine to pull (0 to K-1)
-        :return: reward value in [-1, 1]
+        :return: reward value in [-1, 1] ("uniform") or in {0, 1}
+            ("bernoulli")
         """
         hdbg.dassert_lte(
             0,
@@ -83,13 +104,19 @@ class MultiArmedBandit:
             "Machine index out of range:",
             machine_idx,
         )
-        # Generate reward from uniform distribution.
         true_mean = self.mu_values[machine_idx]
-        reward = np.clip(
-            self._rng.uniform(true_mean - self.width, true_mean + self.width),
-            -1.0,
-            1.0,
-        )
+        if self.reward_type == "bernoulli":
+            # Reward is 1 with probability `true_mean`, else 0.
+            reward = float(self._rng.random_sample() < true_mean)
+        else:
+            # Generate reward from uniform distribution.
+            reward = np.clip(
+                self._rng.uniform(
+                    true_mean - self.width, true_mean + self.width
+                ),
+                -1.0,
+                1.0,
+            )
         # Update statistics.
         self.machine_pulls[machine_idx] += 1
         self.machine_rewards[machine_idx].append(reward)
@@ -311,6 +338,179 @@ class EpsilonGreedyStrategy(Strategy):
 
 
 # #############################################################################
+# UCB helper functions
+# #############################################################################
+
+
+def ucb_bonus(t: int, n: int) -> float:
+    """
+    Compute the UCB1 exploration bonus sqrt(2 log(t) / n).
+
+    :param t: current round (1-indexed)
+    :param n: number of times the arm has been pulled (N_i(t))
+    :return: exploration bonus
+    """
+    hdbg.dassert_lte(1, t, "Round t must be at least 1:", t)
+    hdbg.dassert_lte(1, n, "Number of pulls n must be at least 1:", n)
+    return float(np.sqrt(2.0 * np.log(t) / n))
+
+
+def ucb_index(mu_hat: float, t: int, n: int) -> float:
+    """
+    Compute the UCB1 index: empirical mean plus exploration bonus.
+
+    :param mu_hat: empirical mean of the arm
+    :param t: current round (1-indexed)
+    :param n: number of times the arm has been pulled (N_i(t))
+    :return: UCB index U_i(t) = mu_hat + sqrt(2 log(t) / n)
+    """
+    return mu_hat + ucb_bonus(t, n)
+
+
+def compute_regret(
+    mu_values: List[float], machine_choices: List[int]
+) -> List[float]:
+    """
+    Compute the cumulative pseudo-regret L_t for a sequence of pulls.
+
+    L_t = sum_{tau <= t} (mu* - mu_{A_tau}), where mu* is the best arm's mean.
+
+    :param mu_values: true mean reward of each machine
+    :param machine_choices: index of the machine chosen at each round
+    :return: cumulative regret after each round (same length as
+        `machine_choices`)
+    """
+    mu_star = max(mu_values)
+    instantaneous_regret = [
+        mu_star - mu_values[choice] for choice in machine_choices
+    ]
+    return list(np.cumsum(instantaneous_regret))
+
+
+# #############################################################################
+# UCBStrategy
+# #############################################################################
+
+
+class UCBStrategy(Strategy):
+    """
+    UCB1 strategy (Auer, Cesa-Bianchi, Fischer, 2002).
+
+    Pull each arm once to initialize, then pull the arm with the highest UCB
+    index U_i(t) = mu_hat_i(t) + sqrt(2 log(t) / N_i(t)).
+    """
+
+    def __init__(self) -> None:
+        """
+        Initialize UCB1 strategy.
+        """
+        self.initialized = False
+        # Current round, incremented on every `select_machine()` call.
+        self.t = 0
+
+    def select_machine(
+        self,
+        bandit: MultiArmedBandit,
+    ) -> int:
+        """
+        Select the arm with the highest UCB index.
+
+        Initially pulls each arm once for initialization.
+
+        :param bandit: MultiArmedBandit instance
+        :return: selected machine index
+        """
+        self.t += 1
+        # Initialize by pulling each machine once.
+        if not self.initialized:
+            for machine_idx in range(bandit.k_machines):
+                if bandit.machine_pulls[machine_idx] == 0:
+                    return machine_idx
+            self.initialized = True
+        # Compute the UCB index for each arm and pick the highest.
+        empirical_means = bandit.get_empirical_means()
+        ucb_values = [
+            ucb_index(empirical_means[i], self.t, bandit.machine_pulls[i])
+            for i in range(bandit.k_machines)
+        ]
+        return int(np.argmax(ucb_values))
+
+    def reset(self) -> None:
+        """
+        Reset initialization state and round counter.
+        """
+        self.initialized = False
+        self.t = 0
+
+
+# #############################################################################
+# ThompsonSamplingStrategy
+# #############################################################################
+
+
+class ThompsonSamplingStrategy(Strategy):
+    """
+    Thompson Sampling for Bernoulli bandits with a Beta(1, 1) prior.
+
+    At each round, sample theta_i from the Beta posterior of each arm (derived
+    from its observed successes/failures), then pull the arm with the highest
+    sample. Requires the bandit to use `reward_type="bernoulli"` so that
+    rewards are 0/1 and can be interpreted as failures/successes.
+    """
+
+    def __init__(self, *, seed: int) -> None:
+        """
+        Initialize Thompson Sampling strategy.
+
+        :param seed: random seed for posterior sampling
+        """
+        self.seed = seed
+        self._rng = np.random.RandomState(seed)
+
+    def get_posterior_params(
+        self, bandit: MultiArmedBandit
+    ) -> Tuple[List[float], List[float]]:
+        """
+        Compute the Beta posterior parameters (alpha, beta) for each arm.
+
+        :param bandit: MultiArmedBandit instance with 0/1 rewards
+        :return: tuple of (alphas, betas), one pair per arm
+        """
+        alphas = []
+        betas = []
+        for rewards in bandit.machine_rewards:
+            num_successes = sum(rewards)
+            num_failures = len(rewards) - num_successes
+            # Beta(1, 1) prior updated with observed successes/failures.
+            alphas.append(1.0 + num_successes)
+            betas.append(1.0 + num_failures)
+        return alphas, betas
+
+    def select_machine(
+        self,
+        bandit: MultiArmedBandit,
+    ) -> int:
+        """
+        Sample from each arm's posterior and pull the highest sample.
+
+        :param bandit: MultiArmedBandit instance
+        :return: selected machine index
+        """
+        alphas, betas = self.get_posterior_params(bandit)
+        samples = [
+            self._rng.beta(alphas[i], betas[i])
+            for i in range(bandit.k_machines)
+        ]
+        return int(np.argmax(samples))
+
+    def reset(self) -> None:
+        """
+        Reset random state.
+        """
+        self._rng = np.random.RandomState(self.seed)
+
+
+# #############################################################################
 # BanditExperiment
 # #############################################################################
 
@@ -338,6 +538,10 @@ class BanditExperiment:
         self.bandit = bandit
         self.strategy = strategy
         self.n_coins = n_coins
+        # Populated by `run()`: index of the machine chosen at each round.
+        # Used by callers that need the pull sequence (e.g., to compute
+        # regret via `compute_regret()` or to draw a pull timeline).
+        self.machine_choices: List[int] = []
 
     def run(self) -> Tuple[List[float], List[float], float]:
         """
@@ -350,6 +554,7 @@ class BanditExperiment:
         self.strategy.reset()
         rewards = []
         cumulative_rewards = []
+        self.machine_choices = []
         cumulative = 0.0
         # Run trials.
         for _ in range(self.n_coins):
@@ -358,6 +563,7 @@ class BanditExperiment:
             # Pull machine and get reward.
             reward = self.bandit.pull(machine_idx)
             # Track results.
+            self.machine_choices.append(machine_idx)
             rewards.append(reward)
             cumulative += reward
             cumulative_rewards.append(cumulative)

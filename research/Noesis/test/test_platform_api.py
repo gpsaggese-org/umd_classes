@@ -44,9 +44,7 @@ def _echo_call_func(model: str, prompt: str) -> str:
 def _build_test_client(
     *,
     fulfillment_func: rnocodis.FulfillmentFunc = lambda _contract: True,
-) -> Tuple[
-    fastapi.testclient.TestClient, rnbacaau.OrderBook, rnopapro.Gateway
-]:
+) -> Tuple[fastapi.testclient.TestClient, rnbacaau.OrderBook, rnopapro.Gateway]:
     """
     Build a `fastapi.testclient.TestClient` over a fresh `create_app()`.
 

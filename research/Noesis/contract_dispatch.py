@@ -179,7 +179,9 @@ def dispatch_contract(
 
 # TODO(ai_gp): Do not use a default for fulfillment_func but pass it explicitly
 def dispatch_contracts(
-    contracts: List[Contract], *, fulfillment_func: FulfillmentFunc = mock_fulfill
+    contracts: List[Contract],
+    *,
+    fulfillment_func: FulfillmentFunc = mock_fulfill,
 ) -> List[Contract]:
     """
     Dispatch every contract in `contracts` and log its outcome.

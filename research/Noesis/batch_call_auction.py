@@ -213,6 +213,7 @@ class TierClearResult:
 # Matching engine
 # #############################################################################
 
+
 # TODO(ai_gp): Make it static if it belongs to OrderBook
 def _match_orders_in_tier(
     c_level: str, bids: List[Bid], asks: List[Ask]
@@ -310,12 +311,10 @@ class OrderBookStore(abc.ABC):
     """
 
     @abc.abstractmethod
-    def add_bid(self, bid: Bid) -> None:
-        ...
+    def add_bid(self, bid: Bid) -> None: ...
 
     @abc.abstractmethod
-    def add_ask(self, ask: Ask) -> None:
-        ...
+    def add_ask(self, ask: Ask) -> None: ...
 
     @abc.abstractmethod
     def get_bids(self) -> List[Bid]:
@@ -337,6 +336,11 @@ class OrderBookStore(abc.ABC):
         Drop every stored bid/ask.
         """
         ...
+
+
+# #############################################################################
+# _InMemoryOrderBookStore
+# #############################################################################
 
 
 class _InMemoryOrderBookStore(OrderBookStore):

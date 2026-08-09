@@ -125,7 +125,9 @@ class TestGateway(hunitest.TestCase):
         model independently.
         """
         # Prepare inputs.
-        gateway = rnopapro.Gateway(clock_func=iter([0.0, 0.0, 0.0, 0.0]).__next__)
+        gateway = rnopapro.Gateway(
+            clock_func=iter([0.0, 0.0, 0.0, 0.0]).__next__
+        )
         gateway.register_provider(
             rnopapro.ProviderConfig("openai_mock", _echo_call_func, 0.0)
         )

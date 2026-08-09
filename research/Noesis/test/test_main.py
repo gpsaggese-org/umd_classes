@@ -17,7 +17,7 @@ import pytest
 pytest.importorskip("fastapi")
 
 import helpers.hunit_test as hunitest  # noqa: E402 # pylint: disable=wrong-import-position
-import research.Noesis.main as rnomain  # noqa: E402 # pylint: disable=wrong-import-position
+import research.Noesis.main as rnoemain  # noqa: E402 # pylint: disable=wrong-import-position
 
 _LOG = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ class Test__parse_api_keys(hunitest.TestCase):
         # Prepare outputs.
         expected = {"key1": "acct1", "key2": "acct2"}
         # Run test.
-        actual = rnomain._parse_api_keys(raw)
+        actual = rnoemain._parse_api_keys(raw)
         # Check outputs.
         self.assert_equal(str(actual), str(expected))
 
@@ -54,7 +54,7 @@ class Test__parse_api_keys(hunitest.TestCase):
         # Prepare outputs.
         expected = {}
         # Run test.
-        actual = rnomain._parse_api_keys(raw)
+        actual = rnoemain._parse_api_keys(raw)
         # Check outputs.
         self.assert_equal(str(actual), str(expected))
 
@@ -66,7 +66,7 @@ class Test__parse_api_keys(hunitest.TestCase):
         raw = "key1acct1"
         # Run test and check output.
         with self.assertRaises(AssertionError):
-            rnomain._parse_api_keys(raw)
+            rnoemain._parse_api_keys(raw)
 
 
 # #############################################################################
@@ -90,6 +90,6 @@ class Test__get_db_backend(hunitest.TestCase):
         expected = "memory"
         # Run test.
         with mock.patch.dict(os.environ, env, clear=True):
-            actual = rnomain._get_db_backend()
+            actual = rnoemain._get_db_backend()
         # Check outputs.
         self.assert_equal(actual, expected)

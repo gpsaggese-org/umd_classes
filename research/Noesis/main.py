@@ -9,7 +9,7 @@ var: `"memory"` or `"postgres"`
 
 Import as:
 
-import research.Noesis.main as rnomain
+import research.Noesis.main as rnoemain
 """
 
 import logging
@@ -78,7 +78,7 @@ _LOG.info("NOESIS_DB_BACKEND=%s", _DB_BACKEND)
 if _DB_BACKEND == "postgres":
     # Deferred imports.
     import helpers.hsql_implementation as hsqlimpl
-    import research.Noesis.postgres_store as rnpost
+    import research.Noesis.postgres_store as rnoposto
 
     # Fixed env var names, same as `hsqlimpl.get_connection_from_env_vars()`
     # already expects.
@@ -92,15 +92,13 @@ if _DB_BACKEND == "postgres":
     hsqlimpl.wait_db_connection(_host, _dbname, _port, _user, _password)
     _connection = hsqlimpl.get_connection_from_env_vars()
     # Create schema.
-    rnpost.init_schema(_connection)
+    rnoposto.init_schema(_connection)
     # Build tables.
     order_book = rnbacaau.OrderBook(
-        store=rnpost.PostgresOrderBookStore(_connection)
+        store=rnoposto.PostgresOrderBookStore(_connection)
     )
-    gateway = rnopapro.Gateway(
-        store=rnpost.PostgresRequestLogStore(_connection)
-    )
-    contract_store = rnpost.PostgresContractStore(_connection)
+    gateway = rnopapro.Gateway(store=rnoposto.PostgresRequestLogStore(_connection))
+    contract_store = rnoposto.PostgresContractStore(_connection)
 else:
     # In-memory backedn.
     order_book = rnbacaau.OrderBook()

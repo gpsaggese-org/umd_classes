@@ -19,7 +19,7 @@ import helpers.hsql_test as hsqltest  # noqa: E402 # pylint: disable=wrong-impor
 import research.Noesis.batch_call_auction as rnbacaau  # noqa: E402 # pylint: disable=wrong-import-position
 import research.Noesis.contract_dispatch as rnocodis  # noqa: E402 # pylint: disable=wrong-import-position
 import research.Noesis.platform_api as rnoplapi  # noqa: E402 # pylint: disable=wrong-import-position
-import research.Noesis.postgres_store as rnpost  # noqa: E402 # pylint: disable=wrong-import-position
+import research.Noesis.postgres_store as rnoposto  # noqa: E402 # pylint: disable=wrong-import-position
 
 _LOG = logging.getLogger(__name__)
 
@@ -92,7 +92,7 @@ class _NoesisDbHelper(hsqltest.TestImOmsDbHelper):
         """
         Create the `noesis_*` schema (idempotent) and empty every table.
         """
-        rnpost.init_schema(self.connection)
+        rnoposto.init_schema(self.connection)
         cursor = self.connection.cursor()
         for table_name in _NOESIS_TABLES:
             cursor.execute(f"DELETE FROM {table_name}")
@@ -115,7 +115,7 @@ class TestPostgresOrderBookStore(_NoesisDbHelper):
         round-trip the same fields back.
         """
         # Prepare inputs.
-        store = rnpost.PostgresOrderBookStore(self.connection)
+        store = rnoposto.PostgresOrderBookStore(self.connection)
         bid = rnbacaau.Bid("buyer_1", 100, "frontier", 2.0, 0.99, 20.0)
         ask = rnbacaau.Ask("seller_1", 100, "frontier", 2.5, 0.98, 16.0)
         # Run test.
@@ -131,7 +131,7 @@ class TestPostgresOrderBookStore(_NoesisDbHelper):
         `get_bids()` in that same order.
         """
         # Prepare inputs.
-        store = rnpost.PostgresOrderBookStore(self.connection)
+        store = rnoposto.PostgresOrderBookStore(self.connection)
         bids = [
             rnbacaau.Bid("buyer_1", 100, "frontier", 2.0, 0.99, 20.0),
             rnbacaau.Bid("buyer_2", 100, "frontier", 2.0, 0.99, 19.0),
@@ -148,11 +148,9 @@ class TestPostgresOrderBookStore(_NoesisDbHelper):
         Test that `clear()` empties both tables.
         """
         # Prepare inputs.
-        store = rnpost.PostgresOrderBookStore(self.connection)
+        store = rnoposto.PostgresOrderBookStore(self.connection)
         store.add_bid(rnbacaau.Bid("buyer_1", 100, "frontier", 2.0, 0.99, 20.0))
-        store.add_ask(
-            rnbacaau.Ask("seller_1", 100, "frontier", 2.5, 0.98, 16.0)
-        )
+        store.add_ask(rnbacaau.Ask("seller_1", 100, "frontier", 2.5, 0.98, 16.0))
         # Run test.
         store.clear()
         # Check outputs.
@@ -176,7 +174,7 @@ class TestPostgresContractStore(_NoesisDbHelper):
         resolves back to an equal `Contract`.
         """
         # Prepare inputs.
-        store = rnpost.PostgresContractStore(self.connection)
+        store = rnoposto.PostgresContractStore(self.connection)
         contract = rnocodis.Contract(
             "buyer_1", "seller_1", 100, "frontier", 2.0, 0.999, 18.0, True
         )
@@ -193,13 +191,13 @@ class TestPostgresContractStore(_NoesisDbHelper):
         resolves a `contract_id` saved by a prior instance.
         """
         # Prepare inputs.
-        store1 = rnpost.PostgresContractStore(self.connection)
+        store1 = rnoposto.PostgresContractStore(self.connection)
         contract = rnocodis.Contract(
             "buyer_1", "seller_1", 100, "frontier", 2.0, 0.999, 18.0, True
         )
         contract_id = store1.save_contract(contract)
         # Run test.
-        store2 = rnpost.PostgresContractStore(self.connection)
+        store2 = rnoposto.PostgresContractStore(self.connection)
         actual = store2.get_contract(contract_id)
         # Check outputs.
         self.assert_equal(str(actual), str(contract))
@@ -211,7 +209,7 @@ class TestPostgresContractStore(_NoesisDbHelper):
         round-trip a `RoundClearResponse`.
         """
         # Prepare inputs.
-        store = rnpost.PostgresContractStore(self.connection)
+        store = rnoposto.PostgresContractStore(self.connection)
         # Run test.
         round_id_1 = store.next_round_id()
         round_id_2 = store.next_round_id()
@@ -232,7 +230,7 @@ class TestPostgresContractStore(_NoesisDbHelper):
         Test that `get_contract()` on an unknown id raises `AssertionError`.
         """
         # Prepare inputs.
-        store = rnpost.PostgresContractStore(self.connection)
+        store = rnoposto.PostgresContractStore(self.connection)
         unknown_contract_id = 999999
         # Run test and check output.
         with self.assertRaises(AssertionError):
@@ -255,7 +253,7 @@ class TestPostgresRequestLogStore(_NoesisDbHelper):
         fields, with `request_id` assigned by the store.
         """
         # Prepare inputs.
-        store = rnpost.PostgresRequestLogStore(self.connection)
+        store = rnoposto.PostgresRequestLogStore(self.connection)
         # Run test.
         entry = store.append(
             "openai_mock", "gpt-mock", "hello", "world", 0.5, 0.01
@@ -270,7 +268,7 @@ class TestPostgresRequestLogStore(_NoesisDbHelper):
         matching `Gateway.query_log()`'s existing semantics.
         """
         # Prepare inputs.
-        store = rnpost.PostgresRequestLogStore(self.connection)
+        store = rnoposto.PostgresRequestLogStore(self.connection)
         store.append("provider_a", "model_a", "p1", "r1", 0.1, 0.01)
         entry_b = store.append("provider_b", "model_b", "p2", "r2", 0.2, 0.02)
         # Run test.
@@ -297,5 +295,5 @@ class Test_init_schema(_NoesisDbHelper):
         not raise.
         """
         # Run test and check output: no exception raised.
-        rnpost.init_schema(self.connection)
-        rnpost.init_schema(self.connection)
+        rnoposto.init_schema(self.connection)
+        rnoposto.init_schema(self.connection)

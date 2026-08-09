@@ -68,7 +68,7 @@ API_KEY_HEADER = "X-API-Key"
 
 
 # #############################################################################
-# NoesisMarket schemas
+# BidRequest
 # #############################################################################
 
 
@@ -85,6 +85,11 @@ class BidRequest(pydantic.BaseModel):
     p_max: float
 
 
+# #############################################################################
+# AskRequest
+# #############################################################################
+
+
 class AskRequest(pydantic.BaseModel):
     """
     Request/response body for `POST /asks`, mirrors `batch_call_auction.Ask`.
@@ -96,6 +101,11 @@ class AskRequest(pydantic.BaseModel):
     l_typical: float
     r_typical: float
     p_min: float
+
+
+# #############################################################################
+# ContractResponse
+# #############################################################################
 
 
 class ContractResponse(pydantic.BaseModel):
@@ -117,6 +127,11 @@ class ContractResponse(pydantic.BaseModel):
     fulfilled: Optional[bool]
 
 
+# #############################################################################
+# RoundClearResponse
+# #############################################################################
+
+
 class RoundClearResponse(pydantic.BaseModel):
     """
     One cleared tier's outcome, returned by
@@ -134,7 +149,7 @@ class RoundClearResponse(pydantic.BaseModel):
 
 
 # #############################################################################
-# NoesisServer schemas
+# CompletionRequest
 # #############################################################################
 
 
@@ -149,6 +164,11 @@ class CompletionRequest(pydantic.BaseModel):
     prompt: str
 
 
+# #############################################################################
+# CompletionResponse
+# #############################################################################
+
+
 class CompletionResponse(pydantic.BaseModel):
     """
     Response body for `POST /completions`, mirrors the
@@ -161,6 +181,11 @@ class CompletionResponse(pydantic.BaseModel):
     response: str
     latency_in_secs: float
     cost: float
+
+
+# #############################################################################
+# LogEntryResponse
+# #############################################################################
 
 
 class LogEntryResponse(pydantic.BaseModel):
@@ -197,8 +222,7 @@ class ContractStore(abc.ABC):
         ...
 
     @abc.abstractmethod
-    def get_contract(self, contract_id: int) -> rnocodis.Contract:
-        ...
+    def get_contract(self, contract_id: int) -> rnocodis.Contract: ...
 
     @abc.abstractmethod
     def next_round_id(self) -> int:
@@ -209,12 +233,15 @@ class ContractStore(abc.ABC):
         ...
 
     @abc.abstractmethod
-    def save_round(self, round_response: "RoundClearResponse") -> None:
-        ...
+    def save_round(self, round_response: "RoundClearResponse") -> None: ...
 
     @abc.abstractmethod
-    def get_latest_round(self, tier: str) -> "RoundClearResponse":
-        ...
+    def get_latest_round(self, tier: str) -> "RoundClearResponse": ...
+
+
+# #############################################################################
+# _InMemoryContractStore
+# #############################################################################
 
 
 class _InMemoryContractStore(ContractStore):

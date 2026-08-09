@@ -33,9 +33,6 @@
 # %autoreload 2
 
 import logging
-import os
-import subprocess
-import sys
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -108,9 +105,7 @@ except ImportError:
 
 # %%
 # Smallest possible bandit: 3 machines with distinct hidden means.
-bandit = sim.MultiArmedBandit(
-    k_machines=3, mu_values=[-0.2, 0.0, 0.5], seed=42
-)
+bandit = sim.MultiArmedBandit(k_machines=3, mu_values=[-0.2, 0.0, 0.5], seed=42)
 print("type(bandit)=", type(bandit))
 print("bandit.k_machines=", bandit.k_machines)
 print("bandit.mu_values=", bandit.mu_values)
@@ -235,13 +230,9 @@ print("picks=", picks)
 
 # %%
 hnotebo.get_link_to_code(sim.BanditExperiment)
-bandit = sim.MultiArmedBandit(
-    k_machines=3, mu_values=[-0.2, 0.0, 0.5], seed=42
-)
+bandit = sim.MultiArmedBandit(k_machines=3, mu_values=[-0.2, 0.0, 0.5], seed=42)
 strategy = sim.EpsilonGreedyStrategy(epsilon=0.2, seed=1)
-experiment = sim.BanditExperiment(
-    bandit=bandit, strategy=strategy, n_coins=20
-)
+experiment = sim.BanditExperiment(bandit=bandit, strategy=strategy, n_coins=20)
 print("type(experiment)=", type(experiment))
 
 # %% [markdown]
@@ -375,9 +366,7 @@ print("overall_std=", ensemble_one_policy["overall_std"])
 ensemble_results = ensemble.compare_strategies_ensemble(
     n_trials=5, n_mu_configs=4, epsilon=0.2
 )
-ensemble.plot_ensemble_comparison(
-    ensemble_results=ensemble_results, epsilon=0.2
-)
+ensemble.plot_ensemble_comparison(ensemble_results=ensemble_results, epsilon=0.2)
 
 # %% [markdown]
 # # Part 6: Composition Examples
@@ -435,7 +424,12 @@ mini_stats = mini_simulation.run_trials(
     strategy_params={"epsilon": 0.3, "seed": 0},
     n_trials=20,
 )
-print("mean_final=", mini_stats["mean_final"], "std_final=", mini_stats["std_final"])
+print(
+    "mean_final=",
+    mini_stats["mean_final"],
+    "std_final=",
+    mini_stats["std_final"],
+)
 
 # %% [markdown]
 # # Part 7: API Patterns
@@ -497,8 +491,10 @@ print("strategy_params={'epsilon': 0.2}")
 # - What type does `.select_machine()` return: `int` or `numpy.int64`?
 
 # %%
-print("dir(sim.MultiArmedBandit)=",
-      [a for a in dir(sim.MultiArmedBandit) if not a.startswith("_")])
+print(
+    "dir(sim.MultiArmedBandit)=",
+    [a for a in dir(sim.MultiArmedBandit) if not a.startswith("_")],
+)
 help(sim.EpsilonGreedyStrategy.select_machine)
 
 # %% [markdown]

@@ -16,7 +16,7 @@ branch).
 
 Import as:
 
-import research.Noesis.postgres_store as rnpost
+import research.Noesis.postgres_store as rnoposto
 """
 
 import dataclasses

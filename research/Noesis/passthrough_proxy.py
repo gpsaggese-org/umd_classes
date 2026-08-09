@@ -33,6 +33,11 @@ _LOG = logging.getLogger(__name__)
 ProviderCallFunc = Callable[[str, str], str]
 
 
+# #############################################################################
+# ProviderConfig
+# #############################################################################
+
+
 @dataclasses.dataclass
 class ProviderConfig:
     """
@@ -135,8 +140,12 @@ class RequestLogStore(abc.ABC):
     @abc.abstractmethod
     def query(
         self, *, provider: str = "", model: str = ""
-    ) -> List[RequestLogEntry]:
-        ...
+    ) -> List[RequestLogEntry]: ...
+
+
+# #############################################################################
+# _InMemoryRequestLogStore
+# #############################################################################
 
 
 # TODO(ai_gp): Make it public.
