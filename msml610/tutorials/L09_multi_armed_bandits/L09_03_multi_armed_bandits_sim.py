@@ -300,6 +300,10 @@ class EpsilonGreedyStrategy(Strategy):
         self.seed = seed
         self._rng = np.random.RandomState(seed)
         self.initialized = False
+        # Records, for each `select_machine()` call, whether the round was
+        # "init", "explore", or "exploit"; used by callers that want to
+        # color-code a pull timeline by decision type.
+        self.action_types: List[str] = []
 
     def select_machine(
         self,
@@ -318,14 +322,17 @@ class EpsilonGreedyStrategy(Strategy):
         if not self.initialized:
             for machine_idx in range(bandit.k_machines):
                 if bandit.machine_pulls[machine_idx] == 0:
+                    self.action_types.append("init")
                     return machine_idx
             self.initialized = True
         # Epsilon-greedy selection.
         if self._rng.random() < self.epsilon:
             # Explore.
+            self.action_types.append("explore")
             return self._rng.randint(0, bandit.k_machines)
         else:
             # Exploit.
+            self.action_types.append("exploit")
             empirical_means = bandit.get_empirical_means()
             return int(np.argmax(empirical_means))
 
@@ -335,6 +342,7 @@ class EpsilonGreedyStrategy(Strategy):
         """
         self._rng = np.random.RandomState(self.seed)
         self.initialized = False
+        self.action_types = []
 
 
 # #############################################################################
@@ -466,6 +474,11 @@ class ThompsonSamplingStrategy(Strategy):
         """
         self.seed = seed
         self._rng = np.random.RandomState(seed)
+        # Records, for each `select_machine()` call, the posterior samples
+        # theta_i that were drawn; used by callers that want to draw the
+        # sampled dots on the posterior curves (e.g., for a step-by-step
+        # visualization of Thompson Sampling).
+        self.samples_history: List[List[float]] = []
 
     def get_posterior_params(
         self, bandit: MultiArmedBandit
@@ -501,13 +514,15 @@ class ThompsonSamplingStrategy(Strategy):
             self._rng.beta(alphas[i], betas[i])
             for i in range(bandit.k_machines)
         ]
+        self.samples_history.append(samples)
         return int(np.argmax(samples))
 
     def reset(self) -> None:
         """
-        Reset random state.
+        Reset random state and sample history.
         """
         self._rng = np.random.RandomState(self.seed)
+        self.samples_history = []
 
 
 # #############################################################################

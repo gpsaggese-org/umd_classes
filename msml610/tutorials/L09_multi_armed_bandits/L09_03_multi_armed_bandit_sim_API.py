@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.5
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -43,15 +43,17 @@ import L09_03_multi_armed_bandits_utils as utils
 
 import helpers.hdbg as hdbg
 import helpers.hnotebook as hnotebo
+import helpers.hintrospection as hintros
 
 hdbg.init_logger(verbosity=logging.INFO)
 _LOG = logging.getLogger(__name__)
 hnotebo.config_notebook()
 
 try:
-    from IPython.display import display
+    from IPython.display import display, Markdown
 except ImportError:
     display = print  # type: ignore
+    Markdown = lambda x: x
 
 # %% [markdown]
 # ## Library Overview
@@ -103,20 +105,18 @@ except ImportError:
 # | `.get_empirical_means()` | Observed means so far | `List[float]`, one per machine |
 # | `.reset(seed=None)` | Clear statistics | Keeps `mu_values` |
 
+# %% [markdown]
+# ## Cell 1.2: Inspect the Object
+
+# %%
+hintros.print_obj_info(sim.MultiArmedBandit)
+
 # %%
 # Smallest possible bandit: 3 machines with distinct hidden means.
 bandit = sim.MultiArmedBandit(k_machines=3, mu_values=[-0.2, 0.0, 0.5], seed=42)
 print("type(bandit)=", type(bandit))
 print("bandit.k_machines=", bandit.k_machines)
 print("bandit.mu_values=", bandit.mu_values)
-
-# %% [markdown]
-# ## Cell 1.2: Inspect the Object
-
-# %%
-# Link to the class definition on GitHub, and list its public surface.
-hnotebo.get_link_to_code(sim.MultiArmedBandit)
-print("dir(bandit)=", [a for a in dir(bandit) if not a.startswith("_")])
 
 # %% [markdown]
 # ## Cell 1.3: Pulling Machines
@@ -145,7 +145,7 @@ print("after reset, machine_pulls=", bandit.machine_pulls)
 print("mu_values still=", bandit.mu_values)
 
 # %% [markdown]
-# # Part 2: The Policies: `Strategy` Hierarchy
+# # Part 2: `Strategy` Hierarchy
 
 # %% [markdown]
 # ## Cell 2.1: `Strategy` is Abstract
@@ -160,7 +160,8 @@ print("mu_values still=", bandit.mu_values)
 # | `.reset()` | Clear internal state | Concrete no-op default |
 
 # %%
-hnotebo.get_link_to_code(sim.Strategy)
+hintros.print_obj_info(sim.Strategy)
+
 try:
     sim.Strategy()
 except TypeError as e:
@@ -173,7 +174,9 @@ except TypeError as e:
 # - See that exploration ignores the bandit's statistics entirely
 
 # %%
-hnotebo.get_link_to_code(sim.ExplorationStrategy)
+hintros.print_obj_info(sim.ExplorationStrategy)
+
+# Instantiate strategy.
 exploration = sim.ExplorationStrategy(seed=0)
 bandit.reset()
 picks = [exploration.select_machine(bandit) for _ in range(10)]
@@ -187,7 +190,9 @@ print("random picks=", picks)
 # - See that afterward, the current best empirical machine is always picked
 
 # %%
-hnotebo.get_link_to_code(sim.ExploitationStrategy)
+hintros.print_obj_info(sim.ExploitationStrategy)
+
+# %%
 exploitation = sim.ExploitationStrategy()
 bandit.reset()
 picks = []
@@ -204,7 +209,9 @@ print("picks=", picks, "(first 3 are the warm-up pulls 0, 1, 2)")
 # - See that `epsilon` controls how often a random (exploratory) pull happens
 
 # %%
-hnotebo.get_link_to_code(sim.EpsilonGreedyStrategy)
+hintros.print_obj_info(sim.EpsilonGreedyStrategy)
+
+# %%
 epsilon_greedy = sim.EpsilonGreedyStrategy(epsilon=0.5, seed=0)
 bandit.reset()
 picks = []
@@ -229,7 +236,9 @@ print("picks=", picks)
 # | `.run()` | Play `n_coins` pulls | Returns `(rewards, cumulative_rewards, final_total)` |
 
 # %%
-hnotebo.get_link_to_code(sim.BanditExperiment)
+hintros.print_obj_info(sim.MultiArmedBandit)
+
+# %%
 bandit = sim.MultiArmedBandit(k_machines=3, mu_values=[-0.2, 0.0, 0.5], seed=42)
 strategy = sim.EpsilonGreedyStrategy(epsilon=0.2, seed=1)
 experiment = sim.BanditExperiment(bandit=bandit, strategy=strategy, n_coins=20)
@@ -265,7 +274,9 @@ print("final_total=", final_total)
 # | `.epsilon_sweep(*, n_trials, epsilon_values=None)` | Compare across $\epsilon$ | Also runs pure exploration/exploitation baselines |
 
 # %%
-hnotebo.get_link_to_code(sim.BanditSimulation)
+hintros.print_obj_info(sim.BanditSimulation)
+
+# %%
 simulation = sim.BanditSimulation(
     k_machines=3, mu_values=[-0.2, 0.0, 0.5], n_coins=50, base_seed=0
 )
@@ -337,7 +348,9 @@ utils.plot_epsilon_sweep(sweep_results=sweep_results, n_coins=50)
 # | `.plot_ensemble_comparison(*, ensemble_results, epsilon=0.1)` | Bar chart | Visualizes `.compare_strategies_ensemble()` output |
 
 # %%
-hnotebo.get_link_to_code(sim.BanditEnsemble)
+hintros.print_obj_info(sim.BanditEnsemble)
+
+# %%
 ensemble = sim.BanditEnsemble(k_machines=3, n_coins=50, base_seed=0)
 print("type(ensemble)=", type(ensemble))
 
@@ -472,7 +485,6 @@ except TypeError as e:
 # each trial gets its own seed.
 
 # %%
-hnotebo.get_link_to_code(sim.BanditSimulation.run_trials)
 print("strategy_class=sim.EpsilonGreedyStrategy (a class, not an instance)")
 print("strategy_params={'epsilon': 0.2}")
 
