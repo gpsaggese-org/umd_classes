@@ -1,3 +1,5 @@
+// > open_md.py -i research/Noesis/architecture.md --mode pandoc --github_style
+
 # Rules
 - This document describe the code as it is, without making reference to intermediate
   PRs and how the code evolved
@@ -18,9 +20,9 @@
     to a fulfillment layer
   - `passthrough_proxy.py`: a minimal LLM API gateway that routes prompts to
     registered providers and logs every request/response pair
-  - `platform_api.py`: a `fastapi.FastAPI` app factory (`create_app()`) that wraps
-    both of the above behind HTTP endpoints, so an external caller can reach them
-    without importing the Python modules directly
+  - `platform_api.py`: a `fastapi.FastAPI` app factory that wraps both of the
+    above behind HTTP endpoints, so an external caller can reach them without
+    importing the Python modules directly
   - `postgres_store.py`: Postgres-backed implementations of the storage interfaces
     the three modules above define, so their in-memory state can be swapped for a
     persistent backend
@@ -29,76 +31,46 @@
     `uvicorn research.Noesis.main:app`
   - `devops/`: Docker Compose deployment of `main.py`'s `app` plus a Postgres sidecar
     for local dev
+
 - Problem solved: implements a two-sided market for LLM inference capacity
   (capability tier, latency, reliability, price), a mock fulfillment/dispatch layer
   for matched contracts, and a logging/proxy layer for LLM calls, reachable over HTTP
   by a caller outside the Python process, with an optional persistent (Postgres)
   backend and a containerized deployment path
+
 - Key design decisions visible from the code:
   - Every stateful store (`OrderBook`'s pending orders, `platform_api`'s
     contract/round log, `Gateway`'s request log) sits behind a pluggable `abc.ABC`
     (`OrderBookStore`, `ContractStore`, `RequestLogStore`), each with an in-memory
-    default and a `postgres_store.py` implementation; the three business-logic
-    modules never import `postgres_store.py`, so a caller that never selects the
-    Postgres backend never picks up a `psycopg2` dependency
+    default and a `postgres_store.py` implementation
   - Every side effect that would be non-deterministic in a test (fulfillment outcome,
     provider network call, wall-clock time) is injected as a callable
     (`FulfillmentFunc`, `ProviderCallFunc`, `clock_func`, `rng`), so tests control it
     directly
-  - Dataclasses with hand-written `__init__` methods encode the schema and validate
-    every field with `hdbg.dassert_*` at construction time
+  - Dataclasses encode the schema and validate every field with `hdbg.dassert_*`
+    at construction time
   - `platform_api.py` adds no new validation logic: it reuses the same
     `hdbg.dassert_*` checks already in the three lower modules, catching the
     resulting `AssertionError` once at the app level and returning an HTTP 400
   - `main.py` selects the storage backend once, at import time, from
     `NOESIS_DB_BACKEND` (`"memory"` default or `"postgres"`); every other module is
     unaware which backend is active
+
 - Who uses it: the unit test suites under `research/Noesis/test/`; an HTTP client
   wrapped in a `fastapi.testclient.TestClient` in tests, or a real HTTP client
   against `main.py`'s `app` when run via `uvicorn` or the
   `devops/docker_run/run_docker_noesis.sh` container
-- The two systems are not wired together at the business-logic level:
-  `contract_dispatch.mock_fulfill()` stands in for `NoesisServer`, and
-  `passthrough_proxy.Gateway` has no caller from the market side. `platform_api.py`
-  unifies them only as two independent route groups on one HTTP app, not as a shared
-  dependency graph
 
 # Architecture (C4 Model)
 
 ## C1 (Context)
 - Describes how the Noesis prototype fits with its (simulated) users and the external
   systems it integrates with, some of which are stubbed or optional
-```mermaid
-%%{init: {"c4": {"c4ShapeMargin": 90, "c4ShapePadding": 20, "diagramMarginX": 40, "diagramMarginY": 50, "personFontSize": 16, "personFontWeight": "bold", "external_personFontSize": 16, "systemFontSize": 16, "systemFontWeight": "bold", "external_systemFontSize": 16, "boundaryFontSize": 16, "messageFontSize": 15}}}%%
-C4Context
-  title research/Noesis - System Context
-
-  Person(buyer, "Buyer", "Submits Bids for LLM inference capacity")
-  Person(seller, "Seller", "Submits Asks to sell LLM inference capacity")
-  Person(caller, "External caller", "Any HTTP client with an API key")
-
-  System(noesis, "Noesis Prototype", "Batch call-auction, contract dispatch, and LLM proxy; HTTP surface via platform_api.py, served by main.py")
-
-  System_Ext(noesis_server, "NoesisServer (not implemented)", "Real fulfillment/monitoring layer")
-  System_Ext(llm_providers, "LLM Providers", "OpenAI, Anthropic, etc. (stubbed in tests)")
-  System_Ext(postgres, "Postgres (optional)", "Persistent backend, active only when NOESIS_DB_BACKEND=postgres")
-
-  Rel(buyer, noesis, "submits Bid (Python call or HTTP)", "OrderBook.submit_bid() / POST /bids")
-  Rel(seller, noesis, "submits Ask (Python call or HTTP)", "OrderBook.submit_ask() / POST /asks")
-  Rel(caller, noesis, "reads contracts/prices, calls a model, reads logs", "GET /contracts/{id}, GET /rounds/{tier}/latest, POST /completions, GET /logs")
-  Rel(noesis, noesis_server, "dispatches cleared Contract to (mocked)", "dispatch_contract()")
-  Rel(noesis, llm_providers, "proxies prompt, logs response (stubbed)", "Gateway.call()")
-  Rel(noesis, postgres, "persists bids/asks, contracts, rounds, request log", "postgres_store.py")
-  UpdateRelStyle(noesis, llm_providers, $offsetY="60", $offsetX="60")
-  UpdateRelStyle(noesis, postgres, $offsetY="-30", $offsetX="-140")
-```
 
 - The buyer/seller side is a test harness or an HTTP caller of
-  `POST /bids`/`POST /asks`; either way there is no user-facing UI
-- `External caller` is any HTTP client (`fastapi.testclient.TestClient` in tests, a
-  real client against `main.py`'s `app` otherwise) that reaches `NoesisMarket` and
-  `NoesisServer` without importing the Python modules, gated by an `X-API-Key` header
-  on the write endpoints
+  `POST /bids`/`POST /asks`
+- `External caller` is any HTTP client that reaches `NoesisMarket` and
+  `NoesisServer`, gated by an `X-API-Key` header on the write endpoints
 - `NoesisServer` is the real fulfillment layer described in `plan.Noesis.md`'s
   `NoesisServer` section; `contract_dispatch.mock_fulfill()` is its placeholder in
   this codebase
@@ -108,6 +80,39 @@ C4Context
 - `Postgres` is entirely optional: `main.py` only connects to it, and
   `postgres_store.py` is only imported, when `NOESIS_DB_BACKEND=postgres`; the
   default `NOESIS_DB_BACKEND=memory` path never touches this system
+
+```mermaid
+%%{init: {"c4": {"c4ShapeInRow": 3, "c4ShapeMargin": 60, "c4ShapePadding": 20, "diagramMarginX": 40, "diagramMarginY": 50, "personFontSize": 16, "personFontWeight": "bold", "external_personFontSize": 16, "systemFontSize": 16, "systemFontWeight": "bold", "external_systemFontSize": 16, "boundaryFontSize": 16, "messageFontSize": 14}}}%%
+C4Context
+  Person(buyer, "Buyer", "Submits Bids")
+  Person(seller, "Seller", "Submits Asks")
+  Person(caller, "External caller", "HTTP client with an API key")
+  System(spacer_l, " ", " ")
+  System(noesis, "Noesis", "Batch call-auction, contract dispatch, and LLM proxy")
+  System(spacer_r, " ", " ")
+  System(gap_a, " ", " ")
+  System(gap_b, " ", " ")
+  System(gap_c, " ", " ")
+  System_Ext(llm_providers, "LLM Providers", "OpenAI, Anthropic, etc.")
+  System_Ext(postgres, "Postgres (optional)", "Persistent backend")
+  System_Ext(noesis_server, "NoesisServer", "Real fulfillment/monitoring layer")
+  Rel(buyer, noesis, "Submits Bid", "OrderBook.submit_bid() / POST /bids")
+  Rel(seller, noesis, "Submits Ask", "OrderBook.submit_ask() / POST /asks")
+  Rel(caller, noesis, "Reads contracts, calls a model", "GET / POST")
+  Rel(noesis, llm_providers, "Proxies prompt, logs response", "Gateway.call()")
+  Rel(noesis, postgres, "Persists orders, contracts, rounds", "postgres_store.py")
+  Rel(noesis, noesis_server, "Dispatches cleared Contract", "dispatch_contract()")
+  UpdateElementStyle(spacer_l, $bgColor="transparent", $borderColor="transparent", $fontColor="transparent")
+  UpdateElementStyle(spacer_r, $bgColor="transparent", $borderColor="transparent", $fontColor="transparent")
+  UpdateElementStyle(gap_a, $bgColor="transparent", $borderColor="transparent", $fontColor="transparent")
+  UpdateElementStyle(gap_b, $bgColor="transparent", $borderColor="transparent", $fontColor="transparent")
+  UpdateElementStyle(gap_c, $bgColor="transparent", $borderColor="transparent", $fontColor="transparent")
+  UpdateRelStyle(buyer, noesis, $offsetX="-40", $offsetY="-10")
+  UpdateRelStyle(caller, noesis, $offsetX="40", $offsetY="-10")
+  UpdateRelStyle(noesis, llm_providers, $offsetX="-60", $offsetY="30")
+  UpdateRelStyle(noesis, noesis_server, $offsetX="60", $offsetY="30")
+  UpdateRelStyle(noesis, postgres, $offsetY="40")
+```
 
 ## C2 (Container)
 - Describes the six modules inside `research/Noesis` and the dependencies between
@@ -176,20 +181,6 @@ C4Container
 ## C3 (Component)
 - Describes the runtime call chain from order submission through logged fulfillment
   outcome, the primary multi-module flow in this codebase
-```mermaid
-%%{init: {"themeVariables": {"fontSize": "18px"}, "flowchart": {"nodeSpacing": 45, "rankSpacing": 55}}}%%
-flowchart LR
-    submit_bid["OrderBook.submit_bid()"] --> store[("OrderBookStore<br/>(in-memory or Postgres)")]
-    submit_ask["OrderBook.submit_ask()"] --> store
-    store --> clear_round["OrderBook.clear_round()"]
-    clear_round --> match["_match_orders_in_tier()<br/>(per c_level)"]
-    match --> tier_result["TierClearResult<br/>(fills, clearing_price, unfilled)"]
-    tier_result --> build["build_contracts(bids, tier_results)"]
-    build --> contract["Contract<br/>(fulfilled=None)"]
-    contract --> dispatch["dispatch_contract() /<br/>dispatch_contracts()"]
-    dispatch --> fulfill["fulfillment_func<br/>(default: mock_fulfill())"]
-    fulfill --> save["ContractStore.save_contract()<br/>(_MarketState.clear_round())"]
-```
 
 - `OrderBook.submit_bid()`/`submit_ask()` and `clear_round()` no longer hold
   `List[Bid]`/`List[Ask]` state directly: they delegate to an injected
@@ -219,3 +210,18 @@ flowchart LR
   `ContractStore` (each wired to the same store backend), and passes them to
   `platform_api.create_app()` to produce the module-level `app` object `uvicorn`
   serves
+
+```mermaid
+%%{init: {"themeVariables": {"fontSize": "18px"}, "flowchart": {"nodeSpacing": 45, "rankSpacing": 55}}}%%
+flowchart LR
+    submit_bid["OrderBook.submit_bid()"] --> store[("OrderBookStore<br/>(in-memory or Postgres)")]
+    submit_ask["OrderBook.submit_ask()"] --> store
+    store --> clear_round["OrderBook.clear_round()"]
+    clear_round --> match["_match_orders_in_tier()<br/>(per c_level)"]
+    match --> tier_result["TierClearResult<br/>(fills, clearing_price, unfilled)"]
+    tier_result --> build["build_contracts(bids, tier_results)"]
+    build --> contract["Contract<br/>(fulfilled=None)"]
+    contract --> dispatch["dispatch_contract() /<br/>dispatch_contracts()"]
+    dispatch --> fulfill["fulfillment_func<br/>(default: mock_fulfill())"]
+    fulfill --> save["ContractStore.save_contract()<br/>(_MarketState.clear_round())"]
+```
