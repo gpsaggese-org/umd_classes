@@ -125,6 +125,10 @@ Examples:
   > devops/docker_run/run_docker_noesis.sh 1.2.0
   ```
 
+## Build
+cd /Users/saggese/src/umd_classes2/research/Noesis
+i docker_build_local_image --version 1.0.0
+
 ## Description of Workflows
 - Local, in-memory dev loop
   - `> uvicorn research.Noesis.main:app --reload` serves the API with the default
