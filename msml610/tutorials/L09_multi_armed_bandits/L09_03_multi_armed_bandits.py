@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.5
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -32,6 +32,7 @@ plt.rcParams["figure.figsize"] = (12, 6)
 # %%
 import helpers.hintrospection as hintros
 import helpers.htutorial as ut
+import L09_03_multi_armed_bandits_sim as sim
 import L09_03_multi_armed_bandits_utils as utils
 
 ut.config_notebook()
@@ -74,10 +75,10 @@ utils.cell1_casino_slot_machines()
 # %%
 # Show the public API and GitHub source link of the core classes.
 for cls in [
-    utils.MultiArmedBandit,
-    utils.Strategy,
-    utils.BanditExperiment,
-    utils.BanditSimulation,
+    sim.MultiArmedBandit,
+    sim.Strategy,
+    sim.BanditExperiment,
+    sim.BanditSimulation,
 ]:
     print(f"=== {cls.__name__} ===")
     hintros.get_link_to_code(cls)

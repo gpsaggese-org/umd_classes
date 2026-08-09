@@ -2,6 +2,8 @@
 
 ## Cell 1: Introduction - Casino Slot Machines
 
+// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt:"* What are Multi-Armed Bandits?"
+
 - Type: Interactive
 - Visualization:
   - Draw 3 "slot machines" generating a random number from -1 to 1
@@ -19,6 +21,8 @@
   rate. How do you maximize your winnings?"
 
 ## Cell 2: Exploration vs Exploitation Dilemma
+
+// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt:"* The Exploration-Exploitation Tradeoff"
 
 - Type: Interactive
 - Use the set up from cell1_casino_slot_machines
@@ -41,8 +45,10 @@
   stuck on suboptimal choices. Balance is key."
 - Purpose: Demonstrate the fundamental tradeoff visually
 
-<start>
 ## Cell 3: Greedy Algorithm Failure
+
+// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt:"* Greedy Algorithm" (see @Limitations@ example: arm 1 mu=0.6 vs arm 2 mu=0.7)
+
 - Type: Interactive
 - Visualization:
   - 3 slot machines with true means: mu_1=0.4, mu_2=0.7, mu_3=0.5
@@ -59,9 +65,10 @@
 - Comment box: "Greedy algorithm pulled Machine 1 first, got reward 1, and never
   tried the better Machine 2."
 - Purpose: Show how greedy can get stuck on suboptimal arm
-<end>
 
 ## Cell 5: Epsilon-Greedy Algorithm
+
+// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt:"* $\epsilon$-Greedy Algorithm"
 
 - Type: Interactive
 - Visualization:
@@ -83,6 +90,8 @@
 
 ## Cell 6: Confidence Intervals for Each Arm
 
+// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt:"* Optimism in the Face of Uncertainty" (upper confidence bound / uncertainty radius $c_i(n)$)
+
 - Type: Interactive
 - Visualization:
   - 3 machines with empirical mean and confidence intervals
@@ -101,6 +110,8 @@
 
 ## Cell 7: Upper Confidence Bound (UCB) Intuition
 
+// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt:"* Upper Confidence Bound (UCB1)" (UCB index = exploitation term + exploration bonus)
+
 - Type: Interactive
 - Visualization:
   - 3 machines showing empirical mean + exploration bonus
@@ -118,6 +129,8 @@
 - Purpose: Show how UCB combines exploitation and exploration bonuses
 
 ## Cell 8: UCB Algorithm Simulation
+
+// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt:"* UCB: Worked Example" (also "* UCB: Why It Works")
 
 - Type: Interactive
 - Visualization:
@@ -139,6 +152,8 @@
 
 ## Cell 9: UCB Exploration Bonus Decay
 
+// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt:"* UCB: Why It Works" (@Properties@: bonus $\propto 1/\sqrt{N_i}$ shrinks as arm is pulled)
+
 - Type: Interactive
 - Visualization:
   - Single arm showing exploration bonus over time
@@ -157,6 +172,8 @@
 
 ## Cell 10: Regret Accumulation
 
+// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt:"* Performance Metrics" (instantaneous regret $\ell_t$ and cumulative pseudo-regret $L_T$)
+
 - Type: Interactive
 - Visualization:
   - Show optimal arm (green) vs chosen arm (red/yellow)
@@ -174,6 +191,8 @@
 - Purpose: Visualize regret accumulation for different algorithms
 
 ## Cell 11: Comparing Algorithms - Regret Curves
+
+// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt:"* Regret Comparison: Empirical" and "* Regret Comparison: Summary Table"
 
 - Type: Interactive
 - Visualization:
@@ -195,6 +214,8 @@
 
 ## Cell 12: Bayesian Bandits - Prior and Posterior
 
+// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt:"* Bayesian Bandits: Priors and Posteriors" (also "* Bayesian Bandits")
+
 - Type: Interactive
 - Visualization:
   - Single arm with Beta distribution
@@ -213,6 +234,8 @@
 - Purpose: Introduce Bayesian inference for bandits
 
 ## Cell 13: Thompson Sampling Algorithm
+
+// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt:"* Thompson Sampling"
 
 - Type: Interactive
 - Visualization:
@@ -234,6 +257,8 @@
 
 ## Cell 14: Thompson Sampling - Probability Matching
 
+// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt:"* Thompson Sampling" (@Intuition@: "Probability matching")
+
 - Type: Interactive
 - Visualization:
   - K arms showing Pr(arm i is optimal | data)
@@ -254,6 +279,8 @@
 
 ## Cell 15: UCB vs Thompson Sampling Comparison
 
+// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt:"* Regret Comparison: Summary Table" and "* Which Algorithm Should I Use?" (also "* Thompson Sampling: Practical Performance")
+
 - Type: Interactive
 - Visualization:
   - Split screen showing UCB and Thompson Sampling side-by-side
@@ -271,104 +298,3 @@
 - Comment box: "Both achieve O(log T) regret. Thompson Sampling often has better
   constants in practice."
 - Purpose: Compare the two best algorithms empirically
-
-## Cell 16: Non-Stationary Bandits
-
-- Type: Interactive
-- Visualization:
-  - 3 arms with time-varying means
-  - Show mu_i(t) changing over time (e.g., sinusoidal or drift)
-  - Algorithm must adapt to changing distributions
-- Interactive widget:
-  - Toggle "Stationary" vs "Non-Stationary"
-  - Slider for change rate
-  - Button "Run Algorithm" (UCB, Discounted UCB, Sliding Window)
-  - Display: True means over time vs estimated means
-- Display:
-  - Line plots showing mu_i(t) over time
-  - Overlay estimated means
-  - Show when algorithm fails to adapt
-- Comment box: "When means change over time, standard UCB fails. Need adaptive
-  methods like discounted UCB."
-- Purpose: Introduce non-stationary setting and need for adaptation
-
-## Cell 17: Real-World Application - A/B Testing
-
-- Type: Interactive
-- Visualization:
-  - Website with 3 design variants (A, B, C)
-  - Each variant has unknown click-through rate
-  - Show visitors arriving and clicking/not clicking
-- Interactive widget:
-  - Slider for true CTR of each variant
-  - Button "Run A/B Test" (using Thompson Sampling)
-  - Display: Visitors assigned to each variant
-  - Display: Clicks observed, CTR estimates
-- Display:
-  - Bar chart showing CTR estimates with confidence intervals
-  - Line plot showing cumulative clicks
-  - Highlight winning variant
-- Comment box: "Multi-armed bandits minimize opportunity cost during A/B testing
-  by adaptively allocating traffic."
-- Purpose: Connect theory to real-world application in web optimization
-
-## Cell 18: Real-World Application - Clinical Trials
-
-- Type: Interactive
-- Visualization:
-  - 3 treatment arms with unknown efficacy rates
-  - Show patients arriving and receiving treatment
-  - Success/failure outcomes visualized
-- Interactive widget:
-  - Slider for true efficacy of each treatment
-  - Button "Run Adaptive Trial" (using Thompson Sampling)
-  - Display: Patients assigned to each treatment
-  - Display: Success rates
-  - Ethical metric: Total successes vs fixed allocation
-- Display:
-  - Bar chart showing patient allocation over time
-  - Line plot showing cumulative successes
-  - Comparison with equal allocation baseline
-- Comment box: "Adaptive trials using bandits maximize patient benefit while
-  learning which treatment is best."
-- Purpose: Show ethical importance of bandits in medical applications
-
-## Cell 19: Contextual Bandits Preview
-
-- Type: Interactive
-- Visualization:
-  - Arms have context-dependent rewards
-  - Show context vector (e.g., user features) affecting arm choice
-  - Example: Recommend movie based on user age, genre preference
-- Interactive widget:
-  - Slider for user age, genre preference
-  - Button "Get Recommendation"
-  - Display: Predicted reward for each movie given context
-- Display:
-  - Table showing context features
-  - Bar chart showing predicted rewards
-  - Arrow pointing to selected movie
-- Comment box: "Contextual bandits use side information (context) to make better
-  decisions. This is beyond basic MAB."
-- Purpose: Preview extension to contextual bandits
-
-## Cell 20: Summary and Key Takeaways
-
-- Type: Markdown
-- Content:
-  - Key concepts:
-    - Exploration-exploitation tradeoff is fundamental
-    - Greedy fails, need to explore
-    - Epsilon-greedy is simple but suboptimal (linear regret)
-    - UCB achieves optimal O(log T) regret using optimism
-    - Thompson Sampling achieves optimal regret using Bayesian inference
-    - Regret measures opportunity cost of learning
-  - When to use each algorithm:
-    - Epsilon-greedy: Simple baseline, easy to implement
-    - UCB: Frequentist setting, no tuning needed
-    - Thompson Sampling: When prior knowledge available, often best empirical
-      performance
-  - Applications: Online advertising, A/B testing, clinical trials,
-    recommendation systems
-  - Extensions: Contextual bandits, non-stationary bandits, adversarial bandits
-- Purpose: Consolidate learning and provide practical guidance

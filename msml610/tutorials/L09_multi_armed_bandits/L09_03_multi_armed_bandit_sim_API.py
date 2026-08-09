@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.5
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -17,7 +17,7 @@
 # # Multi-Armed Bandit Simulation Classes API
 #
 # An exploration of the simulation classes used in the Multi-Armed
-# Bandits lesson (`L09_03_multi_armed_bandits_utils.py`):
+# Bandits lesson (`L09_03_multi_armed_bandits_sim.py`):
 # - **Environment**: `MultiArmedBandit`, a K-armed casino with hidden reward
 #   means
 # - **Policy**: `Strategy` and its concrete subclasses, deciding which arm to
@@ -41,6 +41,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # %%
+import L09_03_multi_armed_bandits_sim as sim
 import L09_03_multi_armed_bandits_utils as utils
 
 import helpers.hdbg as hdbg
@@ -107,7 +108,7 @@ except ImportError:
 
 # %%
 # Smallest possible bandit: 3 machines with distinct hidden means.
-bandit = utils.MultiArmedBandit(
+bandit = sim.MultiArmedBandit(
     k_machines=3, mu_values=[-0.2, 0.0, 0.5], seed=42
 )
 print("type(bandit)=", type(bandit))
@@ -119,7 +120,7 @@ print("bandit.mu_values=", bandit.mu_values)
 
 # %%
 # Link to the class definition on GitHub, and list its public surface.
-hnotebo.get_link_to_code(utils.MultiArmedBandit)
+hnotebo.get_link_to_code(sim.MultiArmedBandit)
 print("dir(bandit)=", [a for a in dir(bandit) if not a.startswith("_")])
 
 # %% [markdown]
@@ -164,9 +165,9 @@ print("mu_values still=", bandit.mu_values)
 # | `.reset()` | Clear internal state | Concrete no-op default |
 
 # %%
-hnotebo.get_link_to_code(utils.Strategy)
+hnotebo.get_link_to_code(sim.Strategy)
 try:
-    utils.Strategy()
+    sim.Strategy()
 except TypeError as e:
     print("TypeError=", e)
 
@@ -177,8 +178,8 @@ except TypeError as e:
 # - See that exploration ignores the bandit's statistics entirely
 
 # %%
-hnotebo.get_link_to_code(utils.ExplorationStrategy)
-exploration = utils.ExplorationStrategy(seed=0)
+hnotebo.get_link_to_code(sim.ExplorationStrategy)
+exploration = sim.ExplorationStrategy(seed=0)
 bandit.reset()
 picks = [exploration.select_machine(bandit) for _ in range(10)]
 print("random picks=", picks)
@@ -191,8 +192,8 @@ print("random picks=", picks)
 # - See that afterward, the current best empirical machine is always picked
 
 # %%
-hnotebo.get_link_to_code(utils.ExploitationStrategy)
-exploitation = utils.ExploitationStrategy()
+hnotebo.get_link_to_code(sim.ExploitationStrategy)
+exploitation = sim.ExploitationStrategy()
 bandit.reset()
 picks = []
 for _ in range(6):
@@ -208,8 +209,8 @@ print("picks=", picks, "(first 3 are the warm-up pulls 0, 1, 2)")
 # - See that `epsilon` controls how often a random (exploratory) pull happens
 
 # %%
-hnotebo.get_link_to_code(utils.EpsilonGreedyStrategy)
-epsilon_greedy = utils.EpsilonGreedyStrategy(epsilon=0.5, seed=0)
+hnotebo.get_link_to_code(sim.EpsilonGreedyStrategy)
+epsilon_greedy = sim.EpsilonGreedyStrategy(epsilon=0.5, seed=0)
 bandit.reset()
 picks = []
 for _ in range(20):
@@ -233,12 +234,12 @@ print("picks=", picks)
 # | `.run()` | Play `n_coins` pulls | Returns `(rewards, cumulative_rewards, final_total)` |
 
 # %%
-hnotebo.get_link_to_code(utils.BanditExperiment)
-bandit = utils.MultiArmedBandit(
+hnotebo.get_link_to_code(sim.BanditExperiment)
+bandit = sim.MultiArmedBandit(
     k_machines=3, mu_values=[-0.2, 0.0, 0.5], seed=42
 )
-strategy = utils.EpsilonGreedyStrategy(epsilon=0.2, seed=1)
-experiment = utils.BanditExperiment(
+strategy = sim.EpsilonGreedyStrategy(epsilon=0.2, seed=1)
+experiment = sim.BanditExperiment(
     bandit=bandit, strategy=strategy, n_coins=20
 )
 print("type(experiment)=", type(experiment))
@@ -273,8 +274,8 @@ print("final_total=", final_total)
 # | `.epsilon_sweep(*, n_trials, epsilon_values=None)` | Compare across $\epsilon$ | Also runs pure exploration/exploitation baselines |
 
 # %%
-hnotebo.get_link_to_code(utils.BanditSimulation)
-simulation = utils.BanditSimulation(
+hnotebo.get_link_to_code(sim.BanditSimulation)
+simulation = sim.BanditSimulation(
     k_machines=3, mu_values=[-0.2, 0.0, 0.5], n_coins=50, base_seed=0
 )
 print("type(simulation)=", type(simulation))
@@ -293,7 +294,7 @@ print("type(simulation)=", type(simulation))
 
 # %%
 trial_results = simulation.run_trials(
-    strategy_class=utils.EpsilonGreedyStrategy,
+    strategy_class=sim.EpsilonGreedyStrategy,
     # `seed` is a placeholder: `.run_trials()` overwrites it per trial.
     strategy_params={"epsilon": 0.2, "seed": 0},
     n_trials=10,
@@ -345,8 +346,8 @@ utils.plot_epsilon_sweep(sweep_results=sweep_results, n_coins=50)
 # | `.plot_ensemble_comparison(*, ensemble_results, epsilon=0.1)` | Bar chart | Visualizes `.compare_strategies_ensemble()` output |
 
 # %%
-hnotebo.get_link_to_code(utils.BanditEnsemble)
-ensemble = utils.BanditEnsemble(k_machines=3, n_coins=50, base_seed=0)
+hnotebo.get_link_to_code(sim.BanditEnsemble)
+ensemble = sim.BanditEnsemble(k_machines=3, n_coins=50, base_seed=0)
 print("type(ensemble)=", type(ensemble))
 
 # %% [markdown]
@@ -354,7 +355,7 @@ print("type(ensemble)=", type(ensemble))
 
 # %%
 ensemble_one_policy = ensemble.run_ensemble(
-    strategy_class=utils.EpsilonGreedyStrategy,
+    strategy_class=sim.EpsilonGreedyStrategy,
     # `seed` is a placeholder: `.run_ensemble()` overwrites it per trial.
     strategy_params={"epsilon": 0.2, "seed": 0},
     n_trials=5,
@@ -387,7 +388,7 @@ ensemble.plot_ensemble_comparison(
 # Just the environment, pulled a few times.
 
 # %%
-mini_bandit = utils.MultiArmedBandit(k_machines=2, mu_values=[0.1, 0.3], seed=7)
+mini_bandit = sim.MultiArmedBandit(k_machines=2, mu_values=[0.1, 0.3], seed=7)
 print([mini_bandit.pull(0) for _ in range(3)])
 
 # %% [markdown]
@@ -397,7 +398,7 @@ print([mini_bandit.pull(0) for _ in range(3)])
 # This is exactly what `BanditExperiment.run()` automates.
 
 # %%
-mini_strategy = utils.EpsilonGreedyStrategy(epsilon=0.3, seed=7)
+mini_strategy = sim.EpsilonGreedyStrategy(epsilon=0.3, seed=7)
 mini_bandit.reset()
 total = 0.0
 for _ in range(10):
@@ -413,7 +414,7 @@ print("manual total=", total)
 
 # %%
 mini_bandit.reset()
-mini_experiment = utils.BanditExperiment(
+mini_experiment = sim.BanditExperiment(
     bandit=mini_bandit, strategy=mini_strategy, n_coins=10
 )
 _, _, mini_total = mini_experiment.run()
@@ -426,11 +427,11 @@ print("BanditExperiment total=", mini_total)
 # instead of one anecdote.
 
 # %%
-mini_simulation = utils.BanditSimulation(
+mini_simulation = sim.BanditSimulation(
     k_machines=2, mu_values=[0.1, 0.3], n_coins=10, base_seed=7
 )
 mini_stats = mini_simulation.run_trials(
-    strategy_class=utils.EpsilonGreedyStrategy,
+    strategy_class=sim.EpsilonGreedyStrategy,
     strategy_params={"epsilon": 0.3, "seed": 0},
     n_trials=20,
 )
@@ -446,12 +447,12 @@ print("mean_final=", mini_stats["mean_final"], "std_final=", mini_stats["std_fin
 
 # %%
 for strategy_obj in [
-    utils.ExplorationStrategy(seed=0),
-    utils.ExploitationStrategy(),
-    utils.EpsilonGreedyStrategy(epsilon=0.2, seed=0),
+    sim.ExplorationStrategy(seed=0),
+    sim.ExploitationStrategy(),
+    sim.EpsilonGreedyStrategy(epsilon=0.2, seed=0),
 ]:
     bandit.reset()
-    experiment = utils.BanditExperiment(
+    experiment = sim.BanditExperiment(
         bandit=bandit, strategy=strategy_obj, n_coins=20
     )
     _, _, total = experiment.run()
@@ -465,7 +466,7 @@ for strategy_obj in [
 
 # %%
 try:
-    utils.MultiArmedBandit(3, [-0.2, 0.0, 0.5], 42)
+    sim.MultiArmedBandit(3, [-0.2, 0.0, 0.5], 42)
 except TypeError as e:
     print("TypeError=", e)
 
@@ -477,8 +478,8 @@ except TypeError as e:
 # each trial gets its own seed.
 
 # %%
-hnotebo.get_link_to_code(utils.BanditSimulation.run_trials)
-print("strategy_class=utils.EpsilonGreedyStrategy (a class, not an instance)")
+hnotebo.get_link_to_code(sim.BanditSimulation.run_trials)
+print("strategy_class=sim.EpsilonGreedyStrategy (a class, not an instance)")
 print("strategy_params={'epsilon': 0.2}")
 
 # %% [markdown]
@@ -496,9 +497,9 @@ print("strategy_params={'epsilon': 0.2}")
 # - What type does `.select_machine()` return: `int` or `numpy.int64`?
 
 # %%
-print("dir(utils.MultiArmedBandit)=",
-      [a for a in dir(utils.MultiArmedBandit) if not a.startswith("_")])
-help(utils.EpsilonGreedyStrategy.select_machine)
+print("dir(sim.MultiArmedBandit)=",
+      [a for a in dir(sim.MultiArmedBandit) if not a.startswith("_")])
+help(sim.EpsilonGreedyStrategy.select_machine)
 
 # %% [markdown]
 # # Part 9: Summary

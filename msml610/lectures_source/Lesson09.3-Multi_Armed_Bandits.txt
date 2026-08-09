@@ -6,9 +6,8 @@
 
 # Introduction
 
-// TODO: Check the other material
+// TODO: Check the other material and merge it, if needed
 // ./msml610/lectures_source/Lesson08.7-Causal_experiments.txt
-// ./msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt
 // ./msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt
 
 * What are Multi-Armed Bandits?
