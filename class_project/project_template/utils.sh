@@ -138,11 +138,12 @@ get_docker_engine() {
     #
     # Priority:
     # 1. DOCKER_ENGINE env var if set.
-    # 2. Auto-detect: "apple" on macOS (Darwin), "docker" otherwise.
+    # 2. Auto-detect: "apple" only on gp's macOS laptop (Darwin + hostname
+    #    "gpmac.local"), "docker" otherwise.
     # """
     if [[ -n "$DOCKER_ENGINE" ]]; then
         echo "$DOCKER_ENGINE"
-    elif [[ "$(uname -s)" == "Darwin" ]]; then
+    elif [[ "$(uname -s)" == "Darwin" && "$(uname -n)" == "gpmac.local" ]]; then
         echo "apple"
     else
         echo "docker"
@@ -197,6 +198,8 @@ print_docker_vars() {
     echo "REPO_NAME=$REPO_NAME"
     echo "IMAGE_NAME=$IMAGE_NAME"
     echo "FULL_IMAGE_NAME=$FULL_IMAGE_NAME"
+    echo "DOCKER_ENGINE=$(get_docker_engine)"
+    echo "DOCKER_CMD=$(get_docker_cmd)"
 }
 
 

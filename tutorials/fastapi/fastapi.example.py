@@ -14,130 +14,156 @@
 # ---
 
 # %% [markdown]
-# # Description
+# # FastAPI: Book Catalog API
 #
-# This notebook examines ...
+# This notebook builds and runs a small "Book Catalog" REST API end to end:
+# - `fastapi_utils.create_book_app()` builds the `FastAPI` app
+# - `fastapi_utils.run_server_in_background()` serves it with a real
+#   `uvicorn` server, on a background thread so the rest of the notebook can
+#   keep running
+# - `httpx` drives the app over real HTTP, the same way a browser or another
+#   service would
 #
-# The name of this notebook should follow the format: `<tool>.example.ipynb` (e.g., `pycaret.example.ipynb` for a pycaret example).
+# This is the production-shaped path. `fastapi.API.ipynb` covers the same
+# app's building blocks in-process with `TestClient`, which is faster for
+# exploration but skips the network entirely.
 #
-# References:
-# - Add description of what the notebook does.
-# - Point to references, e.g. (tool.example.md)
-# - Add citations.
-# - Keep the notebook flow clear.
-# - Comments should be imperative and have a period at the end.
-# - Your code should be well commented.
-#
-# Guide: https://github.com/causify-ai/helpers/blob/master/docs/coding/all.jupyter_notebook.how_to_guide.md
-
-# %% [markdown]
-# ## Imports
+# **Must run top to bottom after a kernel restart.**
 
 # %%
 # %load_ext autoreload
 # %autoreload 2
 
-# System libraries.
 import logging
 
-# Third-party libraries.
-# import numpy as np
-# import pandas as pd
-# import seaborn as sns
-# import matplotlib.pyplot as plt
+import httpx
 
-# %%
-# # To install additional packages, use:
-# import helpers.hmodule as hmodule
-# hmodule.install_module_if_not_present(
-#     ["pycaret"],
-#     use_activate=True,
-#     use_sudo=False,
-#     venv_path="/opt/venv",
-# )
+import fastapi_utils
 
-# %%
-# Use this for most notebooks.
-import helpers.hdbg as hdbg
-import helpers.hnotebook as hnotebook
-
+logging.basicConfig(level=logging.INFO)
 _LOG = logging.getLogger(__name__)
 
-# Initialize notebook configuration and logging.
-hdbg.init_logger(verbosity=logging.INFO)
-hnotebook.config_notebook()
-
-# Convert `display` into `print()`.
-try:
-    from IPython.display import display
-except ImportError:
-    display = print  # type: ignore
-
+PORT = 8010
+BASE_URL = f"http://127.0.0.1:{PORT}"
 
 # %% [markdown]
-# ## Make the notebook flow clear
+# ## Part 1: Build the App
 #
-# Each notebook needs to follow a clear and logical flow, e.g:
-# - Load data
-# - Compute stats
-# - Clean data
-# - Compute stats
-# - Do analysis
-# - Show results
-
+# `create_book_app()` wires up the routes and seeds an in-memory catalog.
+# Listing `app.routes` shows exactly what got registered, which is a useful
+# sanity check before starting the server.
 
 # %%
-class Template:
-    """
-    Brief imperative description of what the class does in one line, if needed.
-    """
+app = fastapi_utils.create_book_app()
 
-    def __init__(self) -> None:
-        """
-        Initialize the Template class.
-        """
-        pass
-
-    def method1(self, arg1: int) -> None:
-        """
-        Brief imperative description of what the method does in one line.
-
-        You can elaborate more in the method docstring in this section, for e.g. explaining
-        the formula/algorithm. Every method/function should have a docstring, typehints and include the
-        parameters and return as follows:
-
-        :param arg1: description of arg1
-        :return: description of return
-        """
-        # Code blocks go here.
-        # Make sure to include comments to explain what the code is doing.
-        # No empty lines between code blocks.
-        pass
-
-
-def template_function(arg1: int) -> None:
-    """
-    Brief imperative description of what the function does in one line.
-
-    You can elaborate more in the function docstring in this section, for e.g. explaining
-    the formula/algorithm. Every function should have a docstring, typehints and include the
-    parameters and return as follows:
-
-    :param arg1: description of arg1
-    :return: description of return
-    """
-    # Code blocks go here.
-    # Make sure to include comments to explain what the code is doing.
-    # No empty lines between code blocks.
-    pass
-
+for route in app.routes:
+    methods = ",".join(sorted(getattr(route, "methods", []) or []))
+    _LOG.info("%-6s %s", methods, getattr(route, "path", route))
 
 # %% [markdown]
-# ## The flow should be highlighted using headings in markdown
-# ```
-# # Level 1
-# ## Level 2
-# ### Level 3
-# ```
+# ## Part 2: Start the Server
+#
+# `run_server_in_background()` starts `uvicorn` on a daemon thread.
+# `wait_for_server()` polls `/health` until the socket accepts connections,
+# so the next cell never races the server startup.
 
 # %%
+server, server_thread = fastapi_utils.run_server_in_background(app, port=PORT)
+fastapi_utils.wait_for_server(f"{BASE_URL}/health")
+_LOG.info("Server is up at %s", BASE_URL)
+
+# %% [markdown]
+# ## Part 3: List and Filter Books
+#
+# These are real HTTP requests: `httpx` opens a TCP connection to
+# `127.0.0.1:8010` instead of calling the app object directly.
+
+# %%
+response = httpx.get(f"{BASE_URL}/books")
+response.raise_for_status()
+_LOG.info("All books: %s", [book["title"] for book in response.json()])
+
+response = httpx.get(f"{BASE_URL}/books", params={"in_stock": False})
+_LOG.info("Out-of-stock books: %s", [book["title"] for book in response.json()])
+
+response = httpx.get(f"{BASE_URL}/books", params={"limit": 1})
+_LOG.info("First book only: %s", [book["title"] for book in response.json()])
+
+# %% [markdown]
+# ## Part 4: Create, Update, and Delete a Book
+
+# %%
+response = httpx.post(
+    f"{BASE_URL}/books",
+    json={"title": "The Pragmatic Programmer", "author": "Hunt & Thomas", "year": 1999},
+)
+response.raise_for_status()
+new_book = response.json()
+_LOG.info("Created book %s: %s", new_book["id"], new_book["title"])
+
+# %%
+response = httpx.patch(
+    f"{BASE_URL}/books/{new_book['id']}",
+    json={
+        "title": new_book["title"],
+        "author": new_book["author"],
+        "year": new_book["year"],
+        "in_stock": False,
+    },
+)
+response.raise_for_status()
+_LOG.info("Updated book: %s", response.json())
+
+# %%
+response = httpx.delete(f"{BASE_URL}/books/{new_book['id']}")
+_LOG.info("DELETE status: %s", response.status_code)
+
+response = httpx.get(f"{BASE_URL}/books/{new_book['id']}")
+_LOG.info("GET after delete: %s", response.status_code)
+
+# %% [markdown]
+# ## Part 5: Handle Errors
+#
+# A missing book returns `404`; an invalid payload never reaches the handler
+# and returns `422` with a description of what failed.
+
+# %%
+response = httpx.get(f"{BASE_URL}/books/99999")
+_LOG.info("GET missing book -> %s %s", response.status_code, response.json())
+
+response = httpx.post(f"{BASE_URL}/books", json={"title": "No Author or Year"})
+_LOG.info("POST invalid payload -> %s", response.status_code)
+for error in response.json()["detail"]:
+    _LOG.info("  %s: %s", error["loc"], error["msg"])
+
+# %% [markdown]
+# ## Part 6: Inspect the Live Docs
+#
+# With the server running, `/openapi.json` is reachable over HTTP, and so are
+# the human-facing `/docs` (Swagger UI) and `/redoc` pages. Point a browser at
+# `http://127.0.0.1:8010/docs` while this notebook's server is up to try it
+# interactively.
+
+# %%
+response = httpx.get(f"{BASE_URL}/openapi.json")
+schema = response.json()
+_LOG.info("OpenAPI title: %s", schema["info"]["title"])
+_LOG.info("Registered paths: %s", sorted(schema["paths"].keys()))
+
+# %% [markdown]
+# ## Part 7: Shut Down the Server
+#
+# Always stop the background server before the kernel exits, so the port is
+# freed for the next run.
+
+# %%
+fastapi_utils.stop_server(server, server_thread)
+_LOG.info("Server thread alive: %s", server_thread.is_alive())
+
+# %% [markdown]
+# ## Wrap-up
+#
+# This notebook covered the full lifecycle of a `FastAPI` service: build the
+# app, serve it with `uvicorn`, call it over real HTTP, and shut it down
+# cleanly. See `README.md` for how to run the same app from the command line
+# with `uvicorn fastapi_utils:app --reload` instead of from a notebook.

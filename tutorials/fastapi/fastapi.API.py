@@ -14,126 +14,212 @@
 # ---
 
 # %% [markdown]
-# # Description
+# # FastAPI API Overview
 #
-# This notebook examines ...
+# A runnable walkthrough of the core `FastAPI` building blocks: path
+# operations, request validation, dependency injection, error handling, and
+# the automatic interactive docs. `FastAPI` apps are served by `uvicorn`; this
+# notebook uses `fastapi.testclient.TestClient` instead, which drives the app
+# in-process without opening a real socket, so every cell runs instantly.
 #
-# The name of this notebook should follow the format: `<tool>.API.ipynb` (e.g., `pycaret.API.ipynb` for exploring the pycaret API).
+# **What you will learn:**
+# - How path and query parameters are typed and validated
+# - How request bodies are validated with `pydantic` models
+# - How to share logic across endpoints with `Depends()`
+# - How to return structured errors with `HTTPException`
+# - Where the automatic `/docs`, `/redoc`, and `/openapi.json` come from
 #
-# References:
-# - Add description of what the notebook does.
-# - Point to references, e.g. (tool.API.md)
-# - Add citations.
-# - Keep the notebook flow clear.
-# - Comments should be imperative and have a period at the end.
-# - Your code should be well commented.
-#
-# Guide: https://github.com/causify-ai/helpers/blob/master/docs/coding/all.jupyter_notebook.how_to_guide.md
-
-# %% [markdown]
-# ## Imports
+# Related notebook: `fastapi.example.ipynb` runs a complete app with a real
+# `uvicorn` server and real HTTP calls over the network.
 
 # %%
 # %load_ext autoreload
 # %autoreload 2
 
-# System libraries.
 import logging
 
-# Third-party libraries.
-# import numpy as np
-# import pandas as pd
-# import seaborn as sns
-# import matplotlib.pyplot as plt
+from fastapi import Depends, FastAPI, Query
 
-# %%
-# # To install additional packages, use:
-# import helpers.hmodule as hmodule
-# hmodule.install_module_if_not_present(
-#     ["pycaret"],
-#     use_activate=True,
-#     use_sudo=False,
-#     venv_path="/opt/venv",
-# )
+import fastapi_utils
 
-# %%
-# Use this for most notebooks.
-import helpers.hdbg as hdbg
-import helpers.hnotebook as hnotebook
-
+logging.basicConfig(level=logging.INFO)
 _LOG = logging.getLogger(__name__)
 
-# Initialize notebook configuration and logging.
-hdbg.init_logger(verbosity=logging.INFO)
-hnotebook.config_notebook()
-
-# Convert `display` into `print()`.
-try:
-    from IPython.display import display
-except ImportError:
-    display = print  # type: ignore
-
 # %% [markdown]
-# ## Make the notebook flow clear
-# Each notebook needs to follow a clear and logical flow, e.g:
-# - Load data
-# - Compute stats
-# - Clean data
-# - Compute stats
-# - Do analysis
-# - Show results
-
+# ## 1. Path Operations
+#
+# A path operation is a Python function decorated with an HTTP method and a
+# path, e.g. `@app.get("/items/{item_id}")`. `FastAPI` reads the function's
+# type hints to know how to parse and validate each argument.
 
 # %%
-class Template:
+demo_app = FastAPI()
+
+
+@demo_app.get("/")
+def read_root() -> dict:
     """
-    Brief imperative description of what the class does in one line, if needed.
+    Return a simple greeting.
     """
-
-    def __init__(self) -> None:
-        """
-        Initialize the Template class.
-        """
-        pass
-
-    def method1(self, arg1: int) -> None:
-        """
-        Brief imperative description of what the method does in one line.
-
-        You can elaborate more in the method docstring in this section, for e.g. explaining
-        the formula/algorithm. Every method/function should have a docstring, typehints and include the
-        parameters and return as follows:
-
-        :param arg1: description of arg1
-        :return: description of return
-        """
-        # Code blocks go here.
-        # Make sure to include comments to explain what the code is doing.
-        # No empty lines between code blocks.
-        pass
+    return {"message": "Hello, World"}
 
 
-def template_function(arg1: int) -> None:
+@demo_app.get("/items/{item_id}")
+def read_item(item_id: int) -> dict:
     """
-    Brief imperative description of what the function does in one line.
-
-    You can elaborate more in the function docstring in this section, for e.g. explaining
-    the formula/algorithm. Every function should have a docstring, typehints and include the
-    parameters and return as follows:
-
-    :param arg1: description of arg1
-    :return: description of return
+    Echo back a path parameter, coerced to `int`.
     """
-    # Code blocks go here.
-    # Make sure to include comments to explain what the code is doing.
-    # No empty lines between code blocks.
-    pass
+    return {"item_id": item_id}
 
+
+demo_client = fastapi_utils.make_test_client(demo_app)
+
+response = demo_client.get("/items/42")
+_LOG.info("GET /items/42 -> %s %s", response.status_code, response.json())
+
+# %%
+# A non-integer path segment fails validation before `read_item()` ever runs.
+response = demo_client.get("/items/not_a_number")
+_LOG.info("GET /items/not_a_number -> %s", response.status_code)
+_LOG.info("Validation error detail: %s", response.json()["detail"][0]["msg"])
 
 # %% [markdown]
-# ## The flow should be highlighted using headings in markdown
-# ```
-# # Level 1
-# ## Level 2
-# ### Level 3
-# ```
+# ## 2. Query Parameters
+#
+# Function arguments that are not part of the path become query parameters.
+# A default value makes the parameter optional.
+
+# %%
+@demo_app.get("/items/")
+def list_items(skip: int = 0, limit: int = 10) -> dict:
+    """
+    Report the pagination parameters that were parsed.
+    """
+    return {"skip": skip, "limit": limit}
+
+
+response = demo_client.get("/items/", params={"skip": 5, "limit": 20})
+_LOG.info("GET /items/?skip=5&limit=20 -> %s", response.json())
+
+response = demo_client.get("/items/")
+_LOG.info("GET /items/ (defaults) -> %s", response.json())
+
+# %% [markdown]
+# ## 3. Request Body and Validation
+#
+# A request body is described as a `pydantic` model. `fastapi_utils` defines
+# `BookCreate` and `Book` for the tutorial; reusing them here keeps this
+# notebook and `fastapi.example.ipynb` consistent.
+
+# %%
+@demo_app.post("/books", response_model=fastapi_utils.Book, status_code=201)
+def create_book(payload: fastapi_utils.BookCreate) -> fastapi_utils.Book:
+    """
+    Echo the validated payload back as a `Book` with a fixed ID.
+
+    A real implementation would persist the book; see
+    `fastapi_utils.create_book_app()` for that version.
+    """
+    return fastapi_utils.Book(id=1, **payload.model_dump())
+
+
+response = demo_client.post(
+    "/books", json={"title": "Fluent Python", "author": "Luciano Ramalho", "year": 2015}
+)
+_LOG.info("POST /books (valid) -> %s %s", response.status_code, response.json())
+
+# %%
+# Omitting a required field fails validation before `create_book()` runs.
+response = demo_client.post("/books", json={"title": "Missing Fields"})
+_LOG.info("POST /books (invalid) -> %s", response.status_code)
+for error in response.json()["detail"]:
+    _LOG.info("  %s: %s", error["loc"], error["msg"])
+
+# %% [markdown]
+# ## 4. Dependency Injection
+#
+# `Depends()` lets multiple endpoints share the same parameter-parsing logic
+# instead of repeating it. `FastAPI` calls the dependency function first and
+# passes its return value into the endpoint.
+
+# %%
+def pagination_params(
+    skip: int = Query(0, ge=0), limit: int = Query(10, ge=1, le=100)
+) -> dict:
+    """
+    Parse and validate pagination parameters shared across endpoints.
+    """
+    return {"skip": skip, "limit": limit}
+
+
+@demo_app.get("/books")
+def list_books_demo(pagination: dict = Depends(pagination_params)) -> dict:
+    """
+    Show the pagination values resolved by the shared dependency.
+    """
+    return pagination
+
+
+response = demo_client.get("/books", params={"limit": 5})
+_LOG.info("GET /books?limit=5 -> %s", response.json())
+
+# An out-of-range value is rejected by the dependency's own `Query()` bounds.
+response = demo_client.get("/books", params={"limit": 500})
+_LOG.info("GET /books?limit=500 -> %s", response.status_code)
+
+# %% [markdown]
+# ## 5. Error Handling with HTTPException
+#
+# `fastapi_utils.create_book_app()` builds a small catalog API on top of the
+# same models. Looking up a missing book raises `HTTPException`, which
+# `FastAPI` turns into a JSON error response with the given status code.
+
+# %%
+catalog_app = fastapi_utils.create_book_app()
+catalog_client = fastapi_utils.make_test_client(catalog_app)
+
+response = catalog_client.get("/books/999")
+_LOG.info("GET /books/999 -> %s %s", response.status_code, response.json())
+
+# %% [markdown]
+# ## 6. Automatic Interactive Docs
+#
+# Every `FastAPI` app serves three documentation endpoints for free, derived
+# from the same type hints used for validation:
+# - `/docs`: interactive Swagger UI
+# - `/redoc`: read-only ReDoc reference
+# - `/openapi.json`: the raw OpenAPI schema
+#
+# `fastapi.example.ipynb` opens these in a browser against a real server;
+# here, `TestClient` fetches the schema directly.
+
+# %%
+response = catalog_client.get("/openapi.json")
+schema = response.json()
+_LOG.info("OpenAPI title: %s", schema["info"]["title"])
+_LOG.info("Registered paths: %s", sorted(schema["paths"].keys()))
+
+# %% [markdown]
+# ## 7. Testing with TestClient
+#
+# `TestClient` is not just a notebook convenience: it is the same tool used
+# in automated `pytest` tests, since it drives the app in-process.
+
+# %%
+def test_health_check() -> None:
+    """
+    Confirm the catalog app reports itself as healthy.
+    """
+    result = catalog_client.get("/health")
+    assert result.status_code == 200
+    assert result.json() == {"status": "ok"}
+
+
+test_health_check()
+_LOG.info("test_health_check() passed.")
+
+# %% [markdown]
+# ## Next steps
+#
+# Continue with `fastapi.example.ipynb` for a complete Book Catalog API
+# running behind a real `uvicorn` server, exercised with real HTTP requests.

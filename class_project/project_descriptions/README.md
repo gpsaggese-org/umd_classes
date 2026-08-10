@@ -1,299 +1,295 @@
 # Project Descriptions
 
-// Last update timestamp: "Aug 10 11:20"
-
-- Project name
-  - E.g., `ActiveCampaign`
-- Link
-  - E.g.,
-    `https://github.com/gpsaggese/gpsaggese.github.io/tree/master/class_project/project_descriptions/DATA605/ActiveCampaign_Project_Description.md`
-- Status
-  - `Ready`, `Done`, `In_progress`
-- Assignee
-  - The GitHub user for the student
-- GitHub Issue
-  - The GitHub issue used to do the work
-- Result
-  - Dir in
-    `https://github.com/gpsaggese/gpsaggese.github.io/tree/gp_scratch/class_project/data605`
-    or
-    `https://github.com/gpsaggese/gpsaggese.github.io/tree/gp_scratch/class_project/msml610`
-    with the resul
+- The column of the tables are:
+  - `Project name`: the name of the tutorial / project
+    - E.g., `ActiveCampaign`
+  - `Link`: the link to the tutorial description
+    - E.g.,
+      `https://github.com/gpsaggese/gpsaggese.github.io/tree/master/class_project/project_descriptions/DATA605/ActiveCampaign_Project_Description.md`
+  - Status: if it has been ready to be assigned, completed or it's already
+    assigned
+    - `Ready`, `Done`, `In_progress`
+  - Assignee: The GitHub user for the student
+  - GitHub Issue: The GitHub issue used to do the work
+  - Result: the directory with the result of the project in
+      `https://github.com/gpsaggese/gpsaggese.github.io/tree/gp_scratch/class_project/data605`
+      or
+      `https://github.com/gpsaggese/gpsaggese.github.io/tree/gp_scratch/class_project/msml610`
 
 ## DATA605: Big Data Systems
 
-| File | Status | Assignee | GitHub Issue | Result |
+| Project name | Link | Status | Assignee | GitHub Issue | Result |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| [ActiveCampaign](DATA605/ActiveCampaign_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Altair](DATA605/Altair_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Amundsen](DATA605/Amundsen_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Ansible](DATA605/Ansible_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Anthropic_MCP](DATA605/Anthropic_MCP_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Apache_Beam](DATA605/Apache_Beam_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Apache_Flink](DATA605/Apache_Flink_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Apache_Kafka](DATA605/Apache_Kafka_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Apache_Spark](DATA605/Apache_Spark_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Argo_Workflows](DATA605/Argo_Workflows_Project_Description.md) | Proposed | — | 25% | — | — |
-| [AutoGluon](DATA605/AutoGluon_Project_Description.md) | Proposed | — | 25% | — | — |
-| [AutoKeras](DATA605/AutoKeras_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Autofeat](DATA605/Autofeat_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Avro](DATA605/Avro_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Bonobo](DATA605/Bonobo_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Celery](DATA605/Celery_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Clickhouse](DATA605/Clickhouse_Project_Description.md) | Proposed | — | 25% | — | — |
-| [CouchDB](DATA605/CouchDB_Project_Description.md) | Proposed | — | 25% | — | — |
-| [DVC](DATA605/DVC_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Dagster](DATA605/Dagster_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Darts](DATA605/Darts_Project_Description.md) | Proposed | — | 25% | — | — |
-| [DataHub](DATA605/DataHub_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Dataprep](DATA605/Dataprep_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Django_ORM](DATA605/Django_ORM_Project_Description.md) | Proposed | — | 25% | — | — |
-| [DocsGPT](DATA605/DocsGPT_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Dolibarr](DATA605/Dolibarr_Project_Description.md) | Proposed | — | 25% | — | — |
-| [ERPNext](DATA605/ERPNext_Project_Description.md) | Proposed | — | 25% | — | — |
-| [FLAML](DATA605/FLAML_Project_Description.md) | Proposed | — | 25% | — | — |
-| [FNSPID](DATA605/FNSPID_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Faker](DATA605/Faker_Project_Description.md) | Proposed | — | 25% | — | — |
-| [FastText](DATA605/FastText_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Faust](DATA605/Faust_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Featuretools](DATA605/Featuretools_Project_Description.md) | Proposed | — | 25% | — | — |
-| [FireDucks](DATA605/FireDucks_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Gensim](DATA605/Gensim_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Google_Cloudpickle](DATA605/Google_Cloudpickle_Project_Description.md) | Proposed | — | 25% | — | — |
-| [GraphQL](DATA605/GraphQL_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Graphene](DATA605/Graphene_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Great_Expectations](DATA605/Great_Expectations_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Griptape](DATA605/Griptape_Project_Description.md) | Proposed | — | 25% | — | — |
-| [H2O.ai](DATA605/H2O.ai_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Haystack](DATA605/Haystack_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Huey](DATA605/Huey_Project_Description.md) | Proposed | — | 25% | — | — |
-| [HuggingFace](DATA605/HuggingFace_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Kats](DATA605/Kats_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Kedro](DATA605/Kedro_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Kubeflow](DATA605/Kubeflow_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Kubernetes](DATA605/Kubernetes_Project_Description.md) | Proposed | — | 25% | — | — |
-| [LIME](DATA605/LIME_Project_Description.md) | Proposed | — | 25% | — | — |
-| [LakeFS](DATA605/LakeFS_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Langchain_and_Neo4j](DATA605/Langchain_and_Neo4j_Project_Description.md) | Proposed | — | 25% | — | — |
-| [LlamaIndex](DATA605/LlamaIndex_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Luigi](DATA605/Luigi_Project_Description.md) | Proposed | — | 25% | — | — |
-| [MCP_Python_SDK](DATA605/MCP_Python_SDK_Project_Description.md) | Proposed | — | 25% | — | — |
-| [METL](DATA605/METL_Project_Description.md) | Proposed | — | 25% | — | — |
-| [MLflow_Computational_framework](DATA605/MLflow_Computational_framework_Project_Description.md) | Proposed | — | 25% | — | — |
-| [MLlib](DATA605/MLlib_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Mailchimp_Marketing](DATA605/Mailchimp_Marketing_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Mailgun](DATA605/Mailgun_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Marquez](DATA605/Marquez_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Meltano](DATA605/Meltano_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Metaflow](DATA605/Metaflow_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Metasfresh](DATA605/Metasfresh_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Modin](DATA605/Modin_Project_Description.md) | Proposed | — | 25% | — | — |
-| [NLTK](DATA605/NLTK_Project_Description.md) | Proposed | — | 25% | — | — |
-| [NetworkX](DATA605/NetworkX_Project_Description.md) | Proposed | — | 25% | — | — |
-| [OneBM](DATA605/OneBM_Project_Description.md) | Proposed | — | 25% | — | — |
-| [OpenRefine](DATA605/OpenRefine_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Papermill](DATA605/Papermill_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Petl](DATA605/Petl_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Pika](DATA605/Pika_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Postmark](DATA605/Postmark_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Prefect](DATA605/Prefect_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Presto](DATA605/Presto_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Protocol_Buffers](DATA605/Protocol_Buffers_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Py2neo](DATA605/Py2neo_Project_Description.md) | Proposed | — | 25% | — | — |
-| [PyDBGen](DATA605/PyDBGen_Project_Description.md) | Proposed | — | 25% | — | — |
-| [PyDrive](DATA605/PyDrive_Project_Description.md) | Proposed | — | 25% | — | — |
-| [PyKafka](DATA605/PyKafka_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Pydantic](DATA605/Pydantic_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Pygrametl](DATA605/Pygrametl_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Pyjanitor](DATA605/Pyjanitor_Project_Description.md) | Proposed | — | 25% | — | — |
-| [RandomDataGenerator](DATA605/RandomDataGenerator_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Rasa](DATA605/Rasa_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Ray](DATA605/Ray_Project_Description.md) | Proposed | — | 25% | — | — |
-| [River](DATA605/River_Project_Description.md) | Proposed | — | 25% | — | — |
-| [SHAP](DATA605/SHAP_Project_Description.md) | Proposed | — | 25% | — | — |
-| [SNAP](DATA605/SNAP_Project_Description.md) | Proposed | — | 25% | — | — |
-| [SQLAlchemy](DATA605/SQLAlchemy_Project_Description.md) | Proposed | — | 25% | — | — |
-| [SWE-agent](DATA605/SWE-agent_Project_Description.md) | Proposed | — | 25% | — | — |
-| [SendGrid](DATA605/SendGrid_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Singer](DATA605/Singer_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Snorkel](DATA605/Snorkel_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Snowflake](DATA605/Snowflake_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Socket.IO](DATA605/Socket.IO_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Streamz](DATA605/Streamz_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Synthesized.io](DATA605/Synthesized.io_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Synthetic_Data_Vault](DATA605/Synthetic_Data_Vault_Project_Description.md) | Proposed | — | 25% | — | — |
-| [TPOT](DATA605/TPOT_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Terraform](DATA605/Terraform_Project_Description.md) | Proposed | — | 25% | — | — |
-| [TextBlob](DATA605/TextBlob_Project_Description.md) | Proposed | — | 25% | — | — |
-| [TinyDB](DATA605/TinyDB_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Tonic.ai](DATA605/Tonic.ai_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Trane](DATA605/Trane_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Trifacta_Wrangler](DATA605/Trifacta_Wrangler_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Tryton](DATA605/Tryton_Project_Description.md) | Proposed | — | 25% | — | — |
-| [What-If_Tool](DATA605/What-If_Tool_Project_Description.md) | Proposed | — | 25% | — | — |
-| [XGBoost](DATA605/XGBoost_Project_Description.md) | Proposed | — | 25% | — | — |
-| [YData-profiling](DATA605/YData-profiling_Project_Description.md) | Proposed | — | 25% | — | — |
-| [adtk](DATA605/adtk_Project_Description.md) | Proposed | — | 25% | — | — |
-| [alipy](DATA605/alipy_Project_Description.md) | Proposed | — | 25% | — | — |
-| [auto-sklearn](DATA605/auto-sklearn_Project_Description.md) | Proposed | — | 25% | — | — |
-| [bentoml](DATA605/bentoml_Project_Description.md) | Proposed | — | 25% | — | — |
-| [catboost](DATA605/catboost_Project_Description.md) | Proposed | — | 25% | — | — |
-| [datasets](DATA605/datasets_Project_Description.md) | Proposed | — | 25% | — | — |
-| [factor-analyzer](DATA605/factor-analyzer_Project_Description.md) | Proposed | — | 25% | — | — |
-| [fastapi](DATA605/fastapi_Project_Description.md) | Proposed | — | 25% | — | — |
-| [gradio](DATA605/gradio_Project_Description.md) | Proposed | — | 25% | — | — |
-| [h5py](DATA605/h5py_Project_Description.md) | Proposed | — | 25% | — | — |
-| [hdbscan](DATA605/hdbscan_Project_Description.md) | Proposed | — | 25% | — | — |
-| [hydra-core](DATA605/hydra-core_Project_Description.md) | Proposed | — | 25% | — | — |
-| [hypothesis](DATA605/hypothesis_Project_Description.md) | Proposed | — | 25% | — | — |
-| [igraph](DATA605/igraph_Project_Description.md) | Proposed | — | 25% | — | — |
-| [imbalanced-learn](DATA605/imbalanced-learn_Project_Description.md) | Proposed | — | 25% | — | — |
-| [kmodes](DATA605/kmodes_Project_Description.md) | Proposed | — | 25% | — | — |
-| [libact](DATA605/libact_Project_Description.md) | Proposed | — | 25% | — | — |
-| [lightgbm](DATA605/lightgbm_Project_Description.md) | Proposed | — | 25% | — | — |
-| [llm](DATA605/llm_Project_Description.md) | Proposed | — | 25% | — | — |
-| [mlflow](DATA605/mlflow_Project_Description.md) | Proposed | — | 25% | — | — |
-| [modAL](DATA605/modAL_Project_Description.md) | Proposed | — | 25% | — | — |
-| [msgpack](DATA605/msgpack_Project_Description.md) | Proposed | — | 25% | — | — |
-| [orbit](DATA605/orbit_Project_Description.md) | Proposed | — | 25% | — | — |
-| [pandas-etl](DATA605/pandas-etl_Project_Description.md) | Proposed | — | 25% | — | — |
-| [pandera](DATA605/pandera_Project_Description.md) | Proposed | — | 25% | — | — |
-| [pmdarima](DATA605/pmdarima_Project_Description.md) | Proposed | — | 25% | — | — |
-| [prince](DATA605/prince_Project_Description.md) | Proposed | — | 25% | — | — |
-| [pycaret](DATA605/pycaret_Project_Description.md) | Proposed | — | 25% | — | — |
-| [pycaret-anomaly](DATA605/pycaret-anomaly_Project_Description.md) | Proposed | — | 25% | — | — |
-| [pyod](DATA605/pyod_Project_Description.md) | Proposed | — | 25% | — | — |
-| [pytracking](DATA605/pytracking_Project_Description.md) | Proposed | — | 25% | — | — |
-| [redis-py](DATA605/redis-py_Project_Description.md) | Proposed | — | 25% | — | — |
-| [rich](DATA605/rich_Project_Description.md) | Proposed | — | 25% | — | — |
-| [sktime](DATA605/sktime_Project_Description.md) | Proposed | — | 25% | — | — |
-| [small-text](DATA605/small-text_Project_Description.md) | Proposed | — | 25% | — | — |
-| [spaCy](DATA605/spaCy_Project_Description.md) | Proposed | — | 25% | — | — |
-| [streamlit](DATA605/streamlit_Project_Description.md) | Proposed | — | 25% | — | — |
-| [stumpy](DATA605/stumpy_Project_Description.md) | Proposed | — | 25% | — | — |
-| [tokenizers](DATA605/tokenizers_Project_Description.md) | Proposed | — | 25% | — | — |
-| [tsfresh](DATA605/tsfresh_Project_Description.md) | Proposed | — | 25% | — | — |
-| [tslearn](DATA605/tslearn_Project_Description.md) | Proposed | — | 25% | — | — |
-| [txtai](DATA605/txtai_Project_Description.md) | Proposed | — | 25% | — | — |
-| [umap-learn](DATA605/umap-learn_Project_Description.md) | Proposed | — | 25% | — | — |
+| ActiveCampaign | [Link](DATA605/ActiveCampaign_Project_Description.md) | Proposed | — | — | — |
+| Altair | [Link](DATA605/Altair_Project_Description.md) | Proposed | — | — | — |
+| Amundsen | [Link](DATA605/Amundsen_Project_Description.md) | Proposed | — | — | — |
+| Ansible | [Link](DATA605/Ansible_Project_Description.md) | Proposed | — | — | — |
+| Anthropic_MCP | [Link](DATA605/Anthropic_MCP_Project_Description.md) | Proposed | — | — | — |
+| Apache_Beam | [Link](DATA605/Apache_Beam_Project_Description.md) | Proposed | — | — | — |
+| Apache_Flink | [Link](DATA605/Apache_Flink_Project_Description.md) | Proposed | — | — | — |
+| Apache_Kafka | [Link](DATA605/Apache_Kafka_Project_Description.md) | Proposed | — | — | — |
+| Apache_Spark | [Link](DATA605/Apache_Spark_Project_Description.md) | Proposed | — | — | — |
+| Argo_Workflows | [Link](DATA605/Argo_Workflows_Project_Description.md) | Proposed | — | — | — |
+| AutoGluon | [Link](DATA605/AutoGluon_Project_Description.md) | Proposed | — | — | — |
+| AutoKeras | [Link](DATA605/AutoKeras_Project_Description.md) | Proposed | — | — | — |
+| Autofeat | [Link](DATA605/Autofeat_Project_Description.md) | Proposed | — | — | — |
+| Avro | [Link](DATA605/Avro_Project_Description.md) | Proposed | — | — | — |
+| Bonobo | [Link](DATA605/Bonobo_Project_Description.md) | Proposed | — | — | — |
+| Celery | [Link](DATA605/Celery_Project_Description.md) | Proposed | — | — | — |
+| Clickhouse | [Link](DATA605/Clickhouse_Project_Description.md) | Proposed | — | — | — |
+| CouchDB | [Link](DATA605/CouchDB_Project_Description.md) | Proposed | — | — | — |
+| DVC | [Link](DATA605/DVC_Project_Description.md) | Proposed | — | — | — |
+| Dagster | [Link](DATA605/Dagster_Project_Description.md) | Proposed | — | — | — |
+| Darts | [Link](DATA605/Darts_Project_Description.md) | Proposed | — | — | — |
+| DataHub | [Link](DATA605/DataHub_Project_Description.md) | Proposed | — | — | — |
+| Dataprep | [Link](DATA605/Dataprep_Project_Description.md) | Proposed | — | — | — |
+| Django_ORM | [Link](DATA605/Django_ORM_Project_Description.md) | Proposed | — | — | — |
+| DocsGPT | [Link](DATA605/DocsGPT_Project_Description.md) | Proposed | — | — | — |
+| Dolibarr | [Link](DATA605/Dolibarr_Project_Description.md) | Proposed | — | — | — |
+| ERPNext | [Link](DATA605/ERPNext_Project_Description.md) | Proposed | — | — | — |
+| FLAML | [Link](DATA605/FLAML_Project_Description.md) | Proposed | — | — | — |
+| FNSPID | [Link](DATA605/FNSPID_Project_Description.md) | Proposed | — | — | — |
+| Faker | [Link](DATA605/Faker_Project_Description.md) | Proposed | — | — | — |
+| FastText | [Link](DATA605/FastText_Project_Description.md) | Proposed | — | — | — |
+| Faust | [Link](DATA605/Faust_Project_Description.md) | Proposed | — | — | — |
+| Featuretools | [Link](DATA605/Featuretools_Project_Description.md) | Proposed | — | — | — |
+| FireDucks | [Link](DATA605/FireDucks_Project_Description.md) | Proposed | — | — | — |
+| Gensim | [Link](DATA605/Gensim_Project_Description.md) | Proposed | — | — | — |
+| Google_Cloudpickle | [Link](DATA605/Google_Cloudpickle_Project_Description.md) | Proposed | — | — | — |
+| GraphQL | [Link](DATA605/GraphQL_Project_Description.md) | Proposed | — | — | — |
+| Graphene | [Link](DATA605/Graphene_Project_Description.md) | Proposed | — | — | — |
+| Great_Expectations | [Link](DATA605/Great_Expectations_Project_Description.md) | Proposed | — | — | — |
+| Griptape | [Link](DATA605/Griptape_Project_Description.md) | Proposed | — | — | — |
+| H2O.ai | [Link](DATA605/H2O.ai_Project_Description.md) | Proposed | — | — | — |
+| Haystack | [Link](DATA605/Haystack_Project_Description.md) | Proposed | — | — | — |
+| Huey | [Link](DATA605/Huey_Project_Description.md) | Proposed | — | — | — |
+| HuggingFace | [Link](DATA605/HuggingFace_Project_Description.md) | Proposed | — | — | — |
+| Kats | [Link](DATA605/Kats_Project_Description.md) | Proposed | — | — | — |
+| Kedro | [Link](DATA605/Kedro_Project_Description.md) | Proposed | — | — | — |
+| Kubeflow | [Link](DATA605/Kubeflow_Project_Description.md) | Proposed | — | — | — |
+| Kubernetes | [Link](DATA605/Kubernetes_Project_Description.md) | Proposed | — | — | — |
+| LIME | [Link](DATA605/LIME_Project_Description.md) | Proposed | — | — | — |
+| LakeFS | [Link](DATA605/LakeFS_Project_Description.md) | Proposed | — | — | — |
+| Langchain_and_Neo4j | [Link](DATA605/Langchain_and_Neo4j_Project_Description.md) | Proposed | — | — | — |
+| LlamaIndex | [Link](DATA605/LlamaIndex_Project_Description.md) | Proposed | — | — | — |
+| Luigi | [Link](DATA605/Luigi_Project_Description.md) | Proposed | — | — | — |
+| MCP_Python_SDK | [Link](DATA605/MCP_Python_SDK_Project_Description.md) | Proposed | — | — | — |
+| METL | [Link](DATA605/METL_Project_Description.md) | Proposed | — | — | — |
+| MLflow_Computational_framework | [Link](DATA605/MLflow_Computational_framework_Project_Description.md) | Proposed | — | — | — |
+| MLlib | [Link](DATA605/MLlib_Project_Description.md) | Proposed | — | — | — |
+| Mailchimp_Marketing | [Link](DATA605/Mailchimp_Marketing_Project_Description.md) | Proposed | — | — | — |
+| Mailgun | [Link](DATA605/Mailgun_Project_Description.md) | Proposed | — | — | — |
+| Marquez | [Link](DATA605/Marquez_Project_Description.md) | Proposed | — | — | — |
+| Meltano | [Link](DATA605/Meltano_Project_Description.md) | Proposed | — | — | — |
+| Metaflow | [Link](DATA605/Metaflow_Project_Description.md) | Proposed | — | — | — |
+| Metasfresh | [Link](DATA605/Metasfresh_Project_Description.md) | Proposed | — | — | — |
+| Modin | [Link](DATA605/Modin_Project_Description.md) | Proposed | — | — | — |
+| NLTK | [Link](DATA605/NLTK_Project_Description.md) | Proposed | — | — | — |
+| NetworkX | [Link](DATA605/NetworkX_Project_Description.md) | Proposed | — | — | — |
+| OneBM | [Link](DATA605/OneBM_Project_Description.md) | Proposed | — | — | — |
+| OpenRefine | [Link](DATA605/OpenRefine_Project_Description.md) | Proposed | — | — | — |
+| Papermill | [Link](DATA605/Papermill_Project_Description.md) | Proposed | — | — | — |
+| Petl | [Link](DATA605/Petl_Project_Description.md) | Proposed | — | — | — |
+| Pika | [Link](DATA605/Pika_Project_Description.md) | Proposed | — | — | — |
+| Postmark | [Link](DATA605/Postmark_Project_Description.md) | Proposed | — | — | — |
+| Prefect | [Link](DATA605/Prefect_Project_Description.md) | Proposed | — | — | — |
+| Presto | [Link](DATA605/Presto_Project_Description.md) | Proposed | — | — | — |
+| Protocol_Buffers | [Link](DATA605/Protocol_Buffers_Project_Description.md) | Proposed | — | — | — |
+| Py2neo | [Link](DATA605/Py2neo_Project_Description.md) | Proposed | — | — | — |
+| PyDBGen | [Link](DATA605/PyDBGen_Project_Description.md) | Proposed | — | — | — |
+| PyDrive | [Link](DATA605/PyDrive_Project_Description.md) | Proposed | — | — | — |
+| PyKafka | [Link](DATA605/PyKafka_Project_Description.md) | Proposed | — | — | — |
+| Pydantic | [Link](DATA605/Pydantic_Project_Description.md) | Proposed | — | — | — |
+| Pygrametl | [Link](DATA605/Pygrametl_Project_Description.md) | Proposed | — | — | — |
+| Pyjanitor | [Link](DATA605/Pyjanitor_Project_Description.md) | Proposed | — | — | — |
+| RandomDataGenerator | [Link](DATA605/RandomDataGenerator_Project_Description.md) | Proposed | — | — | — |
+| Rasa | [Link](DATA605/Rasa_Project_Description.md) | Proposed | — | — | — |
+| Ray | [Link](DATA605/Ray_Project_Description.md) | Proposed | — | — | — |
+| River | [Link](DATA605/River_Project_Description.md) | Proposed | — | — | — |
+| SHAP | [Link](DATA605/SHAP_Project_Description.md) | Proposed | — | — | — |
+| SNAP | [Link](DATA605/SNAP_Project_Description.md) | Proposed | — | — | — |
+| SQLAlchemy | [Link](DATA605/SQLAlchemy_Project_Description.md) | Proposed | — | — | — |
+| SWE-agent | [Link](DATA605/SWE-agent_Project_Description.md) | Proposed | — | — | — |
+| SendGrid | [Link](DATA605/SendGrid_Project_Description.md) | Proposed | — | — | — |
+| Singer | [Link](DATA605/Singer_Project_Description.md) | Proposed | — | — | — |
+| Snorkel | [Link](DATA605/Snorkel_Project_Description.md) | Proposed | — | — | — |
+| Snowflake | [Link](DATA605/Snowflake_Project_Description.md) | Proposed | — | — | — |
+| Socket.IO | [Link](DATA605/Socket.IO_Project_Description.md) | Proposed | — | — | — |
+| Streamz | [Link](DATA605/Streamz_Project_Description.md) | Proposed | — | — | — |
+| Synthesized.io | [Link](DATA605/Synthesized.io_Project_Description.md) | Proposed | — | — | — |
+| Synthetic_Data_Vault | [Link](DATA605/Synthetic_Data_Vault_Project_Description.md) | Proposed | — | — | — |
+| TPOT | [Link](DATA605/TPOT_Project_Description.md) | Proposed | — | — | — |
+| Terraform | [Link](DATA605/Terraform_Project_Description.md) | Proposed | — | — | — |
+| TextBlob | [Link](DATA605/TextBlob_Project_Description.md) | Proposed | — | — | — |
+| TinyDB | [Link](DATA605/TinyDB_Project_Description.md) | Proposed | — | — | — |
+| Tonic.ai | [Link](DATA605/Tonic.ai_Project_Description.md) | Proposed | — | — | — |
+| Trane | [Link](DATA605/Trane_Project_Description.md) | Proposed | — | — | — |
+| Trifacta_Wrangler | [Link](DATA605/Trifacta_Wrangler_Project_Description.md) | Proposed | — | — | — |
+| Tryton | [Link](DATA605/Tryton_Project_Description.md) | Proposed | — | — | — |
+| What-If_Tool | [Link](DATA605/What-If_Tool_Project_Description.md) | Proposed | — | — | — |
+| XGBoost | [Link](DATA605/XGBoost_Project_Description.md) | Proposed | — | — | — |
+| YData-profiling | [Link](DATA605/YData-profiling_Project_Description.md) | Proposed | — | — | — |
+| adtk | [Link](DATA605/adtk_Project_Description.md) | Proposed | — | — | — |
+| alipy | [Link](DATA605/alipy_Project_Description.md) | Proposed | — | — | — |
+| auto-sklearn | [Link](DATA605/auto-sklearn_Project_Description.md) | Proposed | — | — | — |
+| bentoml | [Link](DATA605/bentoml_Project_Description.md) | Proposed | — | — | — |
+| catboost | [Link](DATA605/catboost_Project_Description.md) | Proposed | — | — | — |
+| datasets | [Link](DATA605/datasets_Project_Description.md) | Proposed | — | — | — |
+| factor-analyzer | [Link](DATA605/factor-analyzer_Project_Description.md) | Proposed | — | — | — |
+| fastapi | [Link](DATA605/fastapi_Project_Description.md) | Proposed | — | — | — |
+| gradio | [Link](DATA605/gradio_Project_Description.md) | Proposed | — | — | — |
+| h5py | [Link](DATA605/h5py_Project_Description.md) | Proposed | — | — | — |
+| hdbscan | [Link](DATA605/hdbscan_Project_Description.md) | Proposed | — | — | — |
+| hydra-core | [Link](DATA605/hydra-core_Project_Description.md) | Proposed | — | — | — |
+| hypothesis | [Link](DATA605/hypothesis_Project_Description.md) | Proposed | — | — | — |
+| igraph | [Link](DATA605/igraph_Project_Description.md) | Proposed | — | — | — |
+| imbalanced-learn | [Link](DATA605/imbalanced-learn_Project_Description.md) | Proposed | — | — | — |
+| kmodes | [Link](DATA605/kmodes_Project_Description.md) | Proposed | — | — | — |
+| libact | [Link](DATA605/libact_Project_Description.md) | Proposed | — | — | — |
+| lightgbm | [Link](DATA605/lightgbm_Project_Description.md) | Proposed | — | — | — |
+| llm | [Link](DATA605/llm_Project_Description.md) | Proposed | — | — | — |
+| mlflow | [Link](DATA605/mlflow_Project_Description.md) | Proposed | — | — | — |
+| modAL | [Link](DATA605/modAL_Project_Description.md) | Proposed | — | — | — |
+| msgpack | [Link](DATA605/msgpack_Project_Description.md) | Proposed | — | — | — |
+| orbit | [Link](DATA605/orbit_Project_Description.md) | Proposed | — | — | — |
+| pandas-etl | [Link](DATA605/pandas-etl_Project_Description.md) | Proposed | — | — | — |
+| pandera | [Link](DATA605/pandera_Project_Description.md) | Proposed | — | — | — |
+| pmdarima | [Link](DATA605/pmdarima_Project_Description.md) | Proposed | — | — | — |
+| prince | [Link](DATA605/prince_Project_Description.md) | Proposed | — | — | — |
+| pycaret | [Link](DATA605/pycaret_Project_Description.md) | Proposed | — | — | — |
+| pycaret-anomaly | [Link](DATA605/pycaret-anomaly_Project_Description.md) | Proposed | — | — | — |
+| pyod | [Link](DATA605/pyod_Project_Description.md) | Proposed | — | — | — |
+| pytracking | [Link](DATA605/pytracking_Project_Description.md) | Proposed | — | — | — |
+| redis-py | [Link](DATA605/redis-py_Project_Description.md) | Proposed | — | — | — |
+| rich | [Link](DATA605/rich_Project_Description.md) | Proposed | — | — | — |
+| sktime | [Link](DATA605/sktime_Project_Description.md) | Proposed | — | — | — |
+| small-text | [Link](DATA605/small-text_Project_Description.md) | Proposed | — | — | — |
+| spaCy | [Link](DATA605/spaCy_Project_Description.md) | Proposed | — | — | — |
+| streamlit | [Link](DATA605/streamlit_Project_Description.md) | Proposed | — | — | — |
+| stumpy | [Link](DATA605/stumpy_Project_Description.md) | Proposed | — | — | — |
+| tokenizers | [Link](DATA605/tokenizers_Project_Description.md) | Proposed | — | — | — |
+| tsfresh | [Link](DATA605/tsfresh_Project_Description.md) | Proposed | — | — | — |
+| tslearn | [Link](DATA605/tslearn_Project_Description.md) | Proposed | — | — | — |
+| txtai | [Link](DATA605/txtai_Project_Description.md) | Proposed | — | — | — |
+| umap-learn | [Link](DATA605/umap-learn_Project_Description.md) | Proposed | — | — | — |
 
 ## MSML610: Advanced Machine Learning
 
-| File | Status | Assignee | GitHub Issue | Result |
+| Project name | Link | Status | Assignee | GitHub Issue | Result |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| [A2G](MSML610/A2G_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Apache Arrow (PyArrow)](MSML610/Apache Arrow (PyArrow)_Project_Description.md) | Proposed | — | 25% | — | — |
-| [AutoGluon](MSML610/AutoGluon_Project_Description.md) | Proposed | — | 25% | — | — |
-| [AutoKeras](MSML610/AutoKeras_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Autofeat](MSML610/Autofeat_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Ax](MSML610/Ax_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Azua](MSML610/Azua_Project_Description.md) | Proposed | — | 25% | — | — |
-| [BoTorch](MSML610/BoTorch_Project_Description.md) | Proposed | — | 25% | — | — |
-| [CLIP-ViT-Large-Patch14](MSML610/CLIP-ViT-Large-Patch14_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Caffe](MSML610/Caffe_Project_Description.md) | Proposed | — | 25% | — | — |
-| [CausalInference](MSML610/CausalInference_Project_Description.md) | Proposed | — | 25% | — | — |
-| [CausalML](MSML610/CausalML_Project_Description.md) | Proposed | — | 25% | — | — |
-| [CausalNex](MSML610/CausalNex_Project_Description.md) | Proposed | — | 25% | — | — |
-| [CausalPy](MSML610/CausalPy_Project_Description.md) | Proposed | — | 25% | — | — |
-| [CleanRL](MSML610/CleanRL_Project_Description.md) | Proposed | — | 25% | — | — |
-| [CmdStanPy](MSML610/CmdStanPy_Project_Description.md) | Proposed | — | 25% | — | — |
-| [CrewAI](MSML610/CrewAI_Project_Description.md) | Proposed | — | 25% | — | — |
-| [DGL](MSML610/DGL_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Darts](MSML610/Darts_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Dask](MSML610/Dask_Project_Description.md) | Proposed | — | 25% | — | — |
-| [DeepSpeed](MSML610/DeepSpeed_Project_Description.md) | Proposed | — | 25% | — | — |
-| [DoWhy](MSML610/DoWhy_Project_Description.md) | Proposed | — | 25% | — | — |
-| [EconML](MSML610/EconML_Project_Description.md) | Proposed | — | 25% | — | — |
-| [FLAML](MSML610/FLAML_Project_Description.md) | Proposed | — | 25% | — | — |
-| [FairScale](MSML610/FairScale_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Fairlearn](MSML610/Fairlearn_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Flax](MSML610/Flax_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Gensim](MSML610/Gensim_Project_Description.md) | Proposed | — | 25% | — | — |
-| [GluonTS](MSML610/GluonTS_Project_Description.md) | Proposed | — | 25% | — | — |
-| [GraphQL](MSML610/GraphQL_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Gymnasium](MSML610/Gymnasium_Project_Description.md) | Proposed | — | 25% | — | — |
-| [HMMlearn](MSML610/HMMlearn_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Haiku](MSML610/Haiku_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Horovod](MSML610/Horovod_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Hyperopt](MSML610/Hyperopt_Project_Description.md) | Proposed | — | 25% | — | — |
-| [IBM Causal Inference 360](MSML610/IBM Causal Inference 360_Project_Description.md) | Proposed | — | 25% | — | — |
-| [JAX](MSML610/JAX_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Kats](MSML610/Kats_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Keras Tuner](MSML610/Keras Tuner_Project_Description.md) | Proposed | — | 25% | — | — |
-| [LIME](MSML610/LIME_Project_Description.md) | Proposed | — | 25% | — | — |
-| [LakeFS](MSML610/LakeFS_Project_Description.md) | Proposed | — | 25% | — | — |
-| [LiNGAM](MSML610/LiNGAM_Project_Description.md) | Proposed | — | 25% | — | — |
-| [MCP (Model Context Protocol, Python SDK)](MSML610/MCP (Model Context Protocol, Python SDK)_Project_Description.md) | Proposed | — | 25% | — | — |
-| [MLflow](MSML610/MLflow_Project_Description.md) | Proposed | — | 25% | — | — |
-| [MLlib](MSML610/MLlib_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Megatron-LM](MSML610/Megatron-LM_Project_Description.md) | Proposed | — | 25% | — | — |
-| [NLTK](MSML610/NLTK_Project_Description.md) | Proposed | — | 25% | — | — |
-| [NetworkX](MSML610/NetworkX_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Numpyro](MSML610/Numpyro_Project_Description.md) | Proposed | — | 25% | — | — |
-| [ONNX](MSML610/ONNX_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Opacus](MSML610/Opacus_Project_Description.md) | Proposed | — | 25% | — | — |
-| [OpenRefine](MSML610/OpenRefine_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Optuna](MSML610/Optuna_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Polars](MSML610/Polars_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Pomegranate](MSML610/Pomegranate_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Prefect](MSML610/Prefect_Project_Description.md) | Proposed | — | 25% | — | — |
-| [PyTorch Geometric](MSML610/PyTorch Geometric_Project_Description.md) | Proposed | — | 25% | — | — |
-| [RLlib](MSML610/RLlib_Project_Description.md) | Proposed | — | 25% | — | — |
-| [SBert](MSML610/SBert_Project_Description.md) | Proposed | — | 25% | — | — |
-| [SHAP](MSML610/SHAP_Project_Description.md) | Proposed | — | 25% | — | — |
-| [SNAP](MSML610/SNAP_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Scikit-Optimize](MSML610/Scikit-Optimize_Project_Description.md) | Proposed | — | 25% | — | — |
-| [SemanticKernel](MSML610/SemanticKernel_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Snorkel](MSML610/Snorkel_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Stable Baselines3](MSML610/Stable Baselines3_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Statsmodels](MSML610/Statsmodels_Project_Description.md) | Proposed | — | 25% | — | — |
-| [TFLearn](MSML610/TFLearn_Project_Description.md) | Proposed | — | 25% | — | — |
-| [TFX](MSML610/TFX_Project_Description.md) | Proposed | — | 25% | — | — |
-| [TPOT](MSML610/TPOT_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Taskweaver](MSML610/Taskweaver_Project_Description.md) | Proposed | — | 25% | — | — |
-| [TensorFlow Probability](MSML610/TensorFlow Probability_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Tetrad](MSML610/Tetrad_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Tianshou](MSML610/Tianshou_Project_Description.md) | Proposed | — | 25% | — | — |
-| [TorchRL](MSML610/TorchRL_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Vertex AI](MSML610/Vertex AI_Project_Description.md) | Proposed | — | 25% | — | — |
-| [W&B Weave](MSML610/W&B Weave_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Weights & Biases](MSML610/Weights & Biases_Project_Description.md) | Proposed | — | 25% | — | — |
-| [What-If Tool (WIT)](MSML610/What-If Tool (WIT)_Project_Description.md) | Proposed | — | 25% | — | — |
-| [Whisper Large V3](MSML610/Whisper Large V3_Project_Description.md) | Proposed | — | 25% | — | — |
-| [YData-profiling](MSML610/YData-profiling_Project_Description.md) | Proposed | — | 25% | — | — |
-| [accelerate](MSML610/accelerate_Project_Description.md) | Proposed | — | 25% | — | — |
-| [apache-tvm](MSML610/apache-tvm_Project_Description.md) | Proposed | — | 25% | — | — |
-| [auto-sklearn](MSML610/auto-sklearn_Project_Description.md) | Proposed | — | 25% | — | — |
-| [blitz](MSML610/blitz_Project_Description.md) | Proposed | — | 25% | — | — |
-| [bnlearn](MSML610/bnlearn_Project_Description.md) | Proposed | — | 25% | — | — |
-| [causal-learn](MSML610/causal-learn_Project_Description.md) | Proposed | — | 25% | — | — |
-| [fastText](MSML610/fastText_Project_Description.md) | Proposed | — | 25% | — | — |
-| [fastai](MSML610/fastai_Project_Description.md) | Proposed | — | 25% | — | — |
-| [filterpy](MSML610/filterpy_Project_Description.md) | Proposed | — | 25% | — | — |
-| [flash-attn](MSML610/flash-attn_Project_Description.md) | Proposed | — | 25% | — | — |
-| [flwr](MSML610/flwr_Project_Description.md) | Proposed | — | 25% | — | — |
-| [lightning-fabric](MSML610/lightning-fabric_Project_Description.md) | Proposed | — | 25% | — | — |
-| [loralib](MSML610/loralib_Project_Description.md) | Proposed | — | 25% | — | — |
-| [mlxtend](MSML610/mlxtend_Project_Description.md) | Proposed | — | 25% | — | — |
-| [mpi4py](MSML610/mpi4py_Project_Description.md) | Proposed | — | 25% | — | — |
-| [nevergrad](MSML610/nevergrad_Project_Description.md) | Proposed | — | 25% | — | — |
-| [orbit](MSML610/orbit_Project_Description.md) | Proposed | — | 25% | — | — |
-| [owlready2](MSML610/owlready2_Project_Description.md) | Proposed | — | 25% | — | — |
-| [peft](MSML610/peft_Project_Description.md) | Proposed | — | 25% | — | — |
-| [pgmpy](MSML610/pgmpy_Project_Description.md) | Proposed | — | 25% | — | — |
-| [pmdarima](MSML610/pmdarima_Project_Description.md) | Proposed | — | 25% | — | — |
-| [prophet](MSML610/prophet_Project_Description.md) | Proposed | — | 25% | — | — |
-| [pyro](MSML610/pyro_Project_Description.md) | Proposed | — | 25% | — | — |
-| [rdflib](MSML610/rdflib_Project_Description.md) | Proposed | — | 25% | — | — |
-| [seqlearn](MSML610/seqlearn_Project_Description.md) | Proposed | — | 25% | — | — |
-| [skorch](MSML610/skorch_Project_Description.md) | Proposed | — | 25% | — | — |
-| [sktime](MSML610/sktime_Project_Description.md) | Proposed | — | 25% | — | — |
-| [smolagents](MSML610/smolagents_Project_Description.md) | Proposed | — | 25% | — | — |
-| [stumpy](MSML610/stumpy_Project_Description.md) | Proposed | — | 25% | — | — |
-| [torch.distributed](MSML610/torch.distributed_Project_Description.md) | Proposed | — | 25% | — | — |
-| [torch_xla](MSML610/torch_xla_Project_Description.md) | Proposed | — | 25% | — | — |
-| [trl](MSML610/trl_Project_Description.md) | Proposed | — | 25% | — | — |
-| [trlx](MSML610/trlx_Project_Description.md) | Proposed | — | 25% | — | — |
-| [tsfresh](MSML610/tsfresh_Project_Description.md) | Proposed | — | 25% | — | — |
-| [xformers](MSML610/xformers_Project_Description.md) | Proposed | — | 25% | — | — |
-| [xgboost](MSML610/xgboost_Project_Description.md) | Proposed | — | 25% | — | — |
+| A2G | [Link](MSML610/A2G_Project_Description.md) | Proposed | — | — | — |
+| Apache Arrow (PyArrow) | [Link](MSML610/Apache Arrow (PyArrow)_Project_Description.md) | Proposed | — | — | — |
+| AutoGluon | [Link](MSML610/AutoGluon_Project_Description.md) | Proposed | — | — | — |
+| AutoKeras | [Link](MSML610/AutoKeras_Project_Description.md) | Proposed | — | — | — |
+| Autofeat | [Link](MSML610/Autofeat_Project_Description.md) | Proposed | — | — | — |
+| Ax | [Link](MSML610/Ax_Project_Description.md) | Proposed | — | — | — |
+| Azua | [Link](MSML610/Azua_Project_Description.md) | Proposed | — | — | — |
+| BoTorch | [Link](MSML610/BoTorch_Project_Description.md) | Proposed | — | — | — |
+| CLIP-ViT-Large-Patch14 | [Link](MSML610/CLIP-ViT-Large-Patch14_Project_Description.md) | Proposed | — | — | — |
+| Caffe | [Link](MSML610/Caffe_Project_Description.md) | Proposed | — | — | — |
+| CausalInference | [Link](MSML610/CausalInference_Project_Description.md) | Proposed | — | — | — |
+| CausalML | [Link](MSML610/CausalML_Project_Description.md) | Proposed | — | — | — |
+| CausalNex | [Link](MSML610/CausalNex_Project_Description.md) | Proposed | — | — | — |
+| CausalPy | [Link](MSML610/CausalPy_Project_Description.md) | Proposed | — | — | — |
+| CleanRL | [Link](MSML610/CleanRL_Project_Description.md) | Proposed | — | — | — |
+| CmdStanPy | [Link](MSML610/CmdStanPy_Project_Description.md) | Proposed | — | — | — |
+| CrewAI | [Link](MSML610/CrewAI_Project_Description.md) | Proposed | — | — | — |
+| DGL | [Link](MSML610/DGL_Project_Description.md) | Proposed | — | — | — |
+| Darts | [Link](MSML610/Darts_Project_Description.md) | Proposed | — | — | — |
+| Dask | [Link](MSML610/Dask_Project_Description.md) | Proposed | — | — | — |
+| DeepSpeed | [Link](MSML610/DeepSpeed_Project_Description.md) | Proposed | — | — | — |
+| DoWhy | [Link](MSML610/DoWhy_Project_Description.md) | Proposed | — | — | — |
+| EconML | [Link](MSML610/EconML_Project_Description.md) | Proposed | — | — | — |
+| FLAML | [Link](MSML610/FLAML_Project_Description.md) | Proposed | — | — | — |
+| FairScale | [Link](MSML610/FairScale_Project_Description.md) | Proposed | — | — | — |
+| Fairlearn | [Link](MSML610/Fairlearn_Project_Description.md) | Proposed | — | — | — |
+| Flax | [Link](MSML610/Flax_Project_Description.md) | Proposed | — | — | — |
+| Gensim | [Link](MSML610/Gensim_Project_Description.md) | Proposed | — | — | — |
+| GluonTS | [Link](MSML610/GluonTS_Project_Description.md) | Proposed | — | — | — |
+| GraphQL | [Link](MSML610/GraphQL_Project_Description.md) | Proposed | — | — | — |
+| Gymnasium | [Link](MSML610/Gymnasium_Project_Description.md) | Proposed | — | — | — |
+| HMMlearn | [Link](MSML610/HMMlearn_Project_Description.md) | Proposed | — | — | — |
+| Haiku | [Link](MSML610/Haiku_Project_Description.md) | Proposed | — | — | — |
+| Horovod | [Link](MSML610/Horovod_Project_Description.md) | Proposed | — | — | — |
+| Hyperopt | [Link](MSML610/Hyperopt_Project_Description.md) | Proposed | — | — | — |
+| IBM Causal Inference 360 | [Link](MSML610/IBM Causal Inference 360_Project_Description.md) | Proposed | — | — | — |
+| JAX | [Link](MSML610/JAX_Project_Description.md) | Proposed | — | — | — |
+| Kats | [Link](MSML610/Kats_Project_Description.md) | Proposed | — | — | — |
+| Keras Tuner | [Link](MSML610/Keras Tuner_Project_Description.md) | Proposed | — | — | — |
+| LIME | [Link](MSML610/LIME_Project_Description.md) | Proposed | — | — | — |
+| LakeFS | [Link](MSML610/LakeFS_Project_Description.md) | Proposed | — | — | — |
+| LiNGAM | [Link](MSML610/LiNGAM_Project_Description.md) | Proposed | — | — | — |
+| MCP (Model Context Protocol, Python SDK) | [Link](MSML610/MCP (Model Context Protocol, Python SDK)_Project_Description.md) | Proposed | — | — | — |
+| MLflow | [Link](MSML610/MLflow_Project_Description.md) | Proposed | — | — | — |
+| MLlib | [Link](MSML610/MLlib_Project_Description.md) | Proposed | — | — | — |
+| Megatron-LM | [Link](MSML610/Megatron-LM_Project_Description.md) | Proposed | — | — | — |
+| NLTK | [Link](MSML610/NLTK_Project_Description.md) | Proposed | — | — | — |
+| NetworkX | [Link](MSML610/NetworkX_Project_Description.md) | Proposed | — | — | — |
+| Numpyro | [Link](MSML610/Numpyro_Project_Description.md) | Proposed | — | — | — |
+| ONNX | [Link](MSML610/ONNX_Project_Description.md) | Proposed | — | — | — |
+| Opacus | [Link](MSML610/Opacus_Project_Description.md) | Proposed | — | — | — |
+| OpenRefine | [Link](MSML610/OpenRefine_Project_Description.md) | Proposed | — | — | — |
+| Optuna | [Link](MSML610/Optuna_Project_Description.md) | Proposed | — | — | — |
+| Polars | [Link](MSML610/Polars_Project_Description.md) | Proposed | — | — | — |
+| Pomegranate | [Link](MSML610/Pomegranate_Project_Description.md) | Proposed | — | — | — |
+| Prefect | [Link](MSML610/Prefect_Project_Description.md) | Proposed | — | — | — |
+| PyTorch Geometric | [Link](MSML610/PyTorch Geometric_Project_Description.md) | Proposed | — | — | — |
+| RLlib | [Link](MSML610/RLlib_Project_Description.md) | Proposed | — | — | — |
+| SBert | [Link](MSML610/SBert_Project_Description.md) | Proposed | — | — | — |
+| SHAP | [Link](MSML610/SHAP_Project_Description.md) | Proposed | — | — | — |
+| SNAP | [Link](MSML610/SNAP_Project_Description.md) | Proposed | — | — | — |
+| Scikit-Optimize | [Link](MSML610/Scikit-Optimize_Project_Description.md) | Proposed | — | — | — |
+| SemanticKernel | [Link](MSML610/SemanticKernel_Project_Description.md) | Proposed | — | — | — |
+| Snorkel | [Link](MSML610/Snorkel_Project_Description.md) | Proposed | — | — | — |
+| Stable Baselines3 | [Link](MSML610/Stable Baselines3_Project_Description.md) | Proposed | — | — | — |
+| Statsmodels | [Link](MSML610/Statsmodels_Project_Description.md) | Proposed | — | — | — |
+| TFLearn | [Link](MSML610/TFLearn_Project_Description.md) | Proposed | — | — | — |
+| TFX | [Link](MSML610/TFX_Project_Description.md) | Proposed | — | — | — |
+| TPOT | [Link](MSML610/TPOT_Project_Description.md) | Proposed | — | — | — |
+| Taskweaver | [Link](MSML610/Taskweaver_Project_Description.md) | Proposed | — | — | — |
+| TensorFlow Probability | [Link](MSML610/TensorFlow Probability_Project_Description.md) | Proposed | — | — | — |
+| Tetrad | [Link](MSML610/Tetrad_Project_Description.md) | Proposed | — | — | — |
+| Tianshou | [Link](MSML610/Tianshou_Project_Description.md) | Proposed | — | — | — |
+| TorchRL | [Link](MSML610/TorchRL_Project_Description.md) | Proposed | — | — | — |
+| Vertex AI | [Link](MSML610/Vertex AI_Project_Description.md) | Proposed | — | — | — |
+| W&B Weave | [Link](MSML610/W&B Weave_Project_Description.md) | Proposed | — | — | — |
+| Weights & Biases | [Link](MSML610/Weights & Biases_Project_Description.md) | Proposed | — | — | — |
+| What-If Tool (WIT) | [Link](MSML610/What-If Tool (WIT)_Project_Description.md) | Proposed | — | — | — |
+| Whisper Large V3 | [Link](MSML610/Whisper Large V3_Project_Description.md) | Proposed | — | — | — |
+| YData-profiling | [Link](MSML610/YData-profiling_Project_Description.md) | Proposed | — | — | — |
+| accelerate | [Link](MSML610/accelerate_Project_Description.md) | Proposed | — | — | — |
+| apache-tvm | [Link](MSML610/apache-tvm_Project_Description.md) | Proposed | — | — | — |
+| auto-sklearn | [Link](MSML610/auto-sklearn_Project_Description.md) | Proposed | — | — | — |
+| blitz | [Link](MSML610/blitz_Project_Description.md) | Proposed | — | — | — |
+| bnlearn | [Link](MSML610/bnlearn_Project_Description.md) | Proposed | — | — | — |
+| causal-learn | [Link](MSML610/causal-learn_Project_Description.md) | Proposed | — | — | — |
+| fastText | [Link](MSML610/fastText_Project_Description.md) | Proposed | — | — | — |
+| fastai | [Link](MSML610/fastai_Project_Description.md) | Proposed | — | — | — |
+| filterpy | [Link](MSML610/filterpy_Project_Description.md) | Proposed | — | — | — |
+| flash-attn | [Link](MSML610/flash-attn_Project_Description.md) | Proposed | — | — | — |
+| flwr | [Link](MSML610/flwr_Project_Description.md) | Proposed | — | — | — |
+| lightning-fabric | [Link](MSML610/lightning-fabric_Project_Description.md) | Proposed | — | — | — |
+| loralib | [Link](MSML610/loralib_Project_Description.md) | Proposed | — | — | — |
+| mlxtend | [Link](MSML610/mlxtend_Project_Description.md) | Proposed | — | — | — |
+| mpi4py | [Link](MSML610/mpi4py_Project_Description.md) | Proposed | — | — | — |
+| nevergrad | [Link](MSML610/nevergrad_Project_Description.md) | Proposed | — | — | — |
+| orbit | [Link](MSML610/orbit_Project_Description.md) | Proposed | — | — | — |
+| owlready2 | [Link](MSML610/owlready2_Project_Description.md) | Proposed | — | — | — |
+| peft | [Link](MSML610/peft_Project_Description.md) | Proposed | — | — | — |
+| pgmpy | [Link](MSML610/pgmpy_Project_Description.md) | Proposed | — | — | — |
+| pmdarima | [Link](MSML610/pmdarima_Project_Description.md) | Proposed | — | — | — |
+| prophet | [Link](MSML610/prophet_Project_Description.md) | Proposed | — | — | — |
+| pyro | [Link](MSML610/pyro_Project_Description.md) | Proposed | — | — | — |
+| rdflib | [Link](MSML610/rdflib_Project_Description.md) | Proposed | — | — | — |
+| seqlearn | [Link](MSML610/seqlearn_Project_Description.md) | Proposed | — | — | — |
+| skorch | [Link](MSML610/skorch_Project_Description.md) | Proposed | — | — | — |
+| sktime | [Link](MSML610/sktime_Project_Description.md) | Proposed | — | — | — |
+| smolagents | [Link](MSML610/smolagents_Project_Description.md) | Proposed | — | — | — |
+| stumpy | [Link](MSML610/stumpy_Project_Description.md) | Proposed | — | — | — |
+| torch.distributed | [Link](MSML610/torch.distributed_Project_Description.md) | Proposed | — | — | — |
+| torch_xla | [Link](MSML610/torch_xla_Project_Description.md) | Proposed | — | — | — |
+| trl | [Link](MSML610/trl_Project_Description.md) | Proposed | — | — | — |
+| trlx | [Link](MSML610/trlx_Project_Description.md) | Proposed | — | — | — |
+| tsfresh | [Link](MSML610/tsfresh_Project_Description.md) | Proposed | — | — | — |
+| xformers | [Link](MSML610/xformers_Project_Description.md) | Proposed | — | — | — |
+| xgboost | [Link](MSML610/xgboost_Project_Description.md) | Proposed | — | — | — |

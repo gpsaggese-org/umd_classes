@@ -1,3 +1,55 @@
+# FastAPI Tutorial
+- This folder contains the setup for running FastAPI and uvicorn tutorials within
+  a containerized environment
+
+## Quick Start
+- From the root of the repository, change your directory to the FastAPI tutorial
+  folder:
+  ```bash
+  > cd tutorials/fastapi
+  ```
+
+- Once the location has been changed to the repo run the command to build the
+  image to run dockers:
+  ```bash
+  > ./docker_build.sh
+  ```
+
+- Once the docker has been built you can then go ahead and run the container and
+  launch jupyter notebook using the created image using the command:
+  ```bash
+  > ./docker_jupyter.sh
+  ```
+
+- For more information on the Docker build system refer to [Project template
+  README](/class_project/project_template/README.md)
+
+- Once the `./docker_jupyter.sh` script is running, work through the following
+  notebooks in order
+
+## Tutorial Notebooks
+Work through the following notebooks in order:
+
+- [`fastapi.API.ipynb`](fastapi.API.ipynb): Core FastAPI fundamentals
+  - Path and query parameters
+  - Request body validation with `pydantic` models
+  - Dependency injection with `Depends()`
+  - Error handling with `HTTPException`
+  - The automatic `/docs`, `/redoc`, and `/openapi.json`
+
+- [`fastapi.example.ipynb`](fastapi.example.ipynb): End-to-end Book Catalog API
+  - Runs a real `uvicorn` server on a background thread
+  - Exercises the API with real HTTP requests via `httpx`
+  - Covers create, read, update, delete, filtering, and error responses
+
+- [`fastapi_utils.py`](fastapi_utils.py): Utility functions supporting the
+  tutorial notebooks
+
+## Changelog
+- 2026-08-10: Initial release
+
+## TODO
+
 1. In-process, no server, no network (what the test suite does)
 
 fastapi.testclient.TestClient wraps create_app() directly — same interface as requests, but no socket, no uvicorn process needed:

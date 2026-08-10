@@ -1,3 +1,5 @@
+# Use Ubuntu 24.04 and pip to install.
+
 FROM ubuntu:24.04
 ENV DEBIAN_FRONTEND noninteractive
 
