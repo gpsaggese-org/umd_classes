@@ -14,6 +14,9 @@
 # ---
 
 # %% [markdown]
+# # Multi Armed Bandits
+
+# %% [markdown]
 # ## Imports
 
 # %%

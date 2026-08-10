@@ -2,15 +2,60 @@
 version: 1
 project:
   id: 82ac2dcf-4958-4abb-926c-56148276fb75
-  # title:
-  # description:
+  title: MSML610 -- Tutorials
+  description: Hands-on tutorials used in MSML610 (Advanced Machine Learning).
   # keywords: []
   # authors: []
   github: https://github.com/gpsaggese/umd_msml610
-  # To autogenerate a Table of Contents, run "jupyter book init --write-toc"
+  # To regenerate the Table of Contents from disk, run "jupyter-book init --write-toc"
+  # and then re-add the per-lesson titles by hand.
   toc:
     - file: intro.md
-    - file: Bayesian_Coin.ipynb
+    - title: L05 - Statistical Learning
+      children:
+        - file: ../tutorials/L05_statistical_learning/L05_01_01_hoeffding_inequality.ipynb
+        - file: ../tutorials/L05_statistical_learning/L05_01_02_bin_analogy_ml.ipynb
+        - file: ../tutorials/L05_statistical_learning/L05_01_03_vc_dimension.ipynb
+        - file: ../tutorials/L05_statistical_learning/L05_01_04_growth_function.ipynb
+        - file: ../tutorials/L05_statistical_learning/L05_02_01_bias_variance.ipynb
+        - file: ../tutorials/L05_statistical_learning/L05_02_02_overfitting.ipynb
+    - title: L06 - Bayesian Networks
+      children:
+        - file: ../tutorials/L06_bayesian_networks/L06_01_exact_inference.ipynb
+        - file: ../tutorials/L06_bayesian_networks/L06_02_approximate_inference.ipynb
+    - title: L07 - Probabilistic Programming
+      children:
+        - file: ../tutorials/L07_prob_programming/L07_01_bayesian_coin.ipynb
+        - file: ../tutorials/L07_prob_programming/L07_02_probabilistic_programming.ipynb
+        - file: ../tutorials/L07_prob_programming/L07_02_robust_modeling.ipynb
+        - file: ../tutorials/L07_prob_programming/L07_03_hierarchical_models.ipynb
+        - file: ../tutorials/L07_prob_programming/L07_04_generalized_linear_models.ipynb
+        - file: ../tutorials/L07_prob_programming/L07_05_evaluating_models.ipynb
+    - title: L08 - Causal Inference
+      children:
+        - file: ../tutorials/L08_causal_inference/L08_04_01_causal_inference.ipynb
+        - file: ../tutorials/L08_causal_inference/L08_04_02_causal_inference.ipynb
+        - file: ../tutorials/L08_causal_inference/L08_04_05_propensity_score.ipynb
+        - file: ../tutorials/L08_causal_inference/L08_04_07_metalearners.ipynb
+        - file: ../tutorials/L08_causal_inference/L08_04_08_difference_in_difference.ipynb
+    - title: L09 - Kalman Filter
+      children:
+        - file: ../tutorials/L09_kalman_filter/L09_04_gh_filter.ipynb
+        - file: ../tutorials/L09_kalman_filter/L09_05_01_discrete_bayes_dog.ipynb
+        - file: ../tutorials/L09_kalman_filter/L09_05_02_univariate_kalman_filter.ipynb
+        - file: ../tutorials/L09_kalman_filter/L09_05_03_multivariate_kalman_filter.ipynb
+        - file: ../tutorials/L09_kalman_filter/L09_05_04_non_linear_kalman_filter.ipynb
+    - title: L09 - Multi-Armed Bandits
+      children:
+        - file: ../tutorials/L09_multi_armed_bandits/L09_03_01_multi_armed_bandits_sim_API.ipynb
+        - file: ../tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.ipynb
+    - title: L10 - Causal Discovery
+      children:
+        - file: ../tutorials/L10_causal_discovery/L10_2_causal_discovery.ipynb
+    - title: L12 - Reinforcement Learning
+      children:
+        - file: ../tutorials/L12_reinforcement_learning/L12_01_gridworld_4x3.ipynb
+        - file: ../tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipynb
 site:
   template: book-theme
   #options:
@@ -25,7 +70,9 @@ site:
   #  page_width: "960px"
   #  header_spacing: "sm"
 
-# Execution settings to ensure notebook outputs are shown
+# Execution settings to ensure notebook outputs are shown.
+# Unlike the data605/tutorials MyST projects (which rely on stored
+# notebook outputs), this project always re-executes notebooks on build.
 jupyter:
   execute: true
   cache: false

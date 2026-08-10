@@ -26,6 +26,9 @@
 #   `BanditEnsemble`, running one, many, or many-times-many trials
 
 # %% [markdown]
+# # Multi Armed Bandits Sim API
+
+# %% [markdown]
 # ## Imports and Setup
 
 # %%

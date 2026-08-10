@@ -1,4 +1,6 @@
-DIR="~/src/venv/client_venv.jupyter_book2"
+set -e
+
+DIR="$HOME/src/venv/client_venv.jupyter_book2"
 
 source $DIR/bin/activate
 
