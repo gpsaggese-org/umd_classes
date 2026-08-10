@@ -311,7 +311,7 @@ pz.HalfNormal(sigma=1.0).plot_interactive(**params)
 help(pz.Exponential.__init__)
 
 # %%
-pz.Exponential(beta=1.0).plot_interactive(**params)
+pz.Exponential(lam=1.0).plot_interactive(**params)
 
 # %% [markdown]
 # ## Gamma
