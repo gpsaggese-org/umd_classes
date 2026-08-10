@@ -4,25 +4,33 @@
   cutting-edge modern big data technology and write an example of a system using
   it
 
-- There are two types of projects:
-  - **Research projects**
-    - Explore an open research question
-    - Teams of at most 3 students
-    - Examples are in `research/ideas/README.md` and `research/ideas/*.md`
-    - The best projects lead to a blog post or publication, but these are the
-      most challenging projects
-  - **Learn X in 60 mins**
-    - Learn a technology and build a system using that specific technology
-    - The result of each project is a "tutorial" that can teach a curious
-      computer scientist a new technology in 60 minutes
-    - Individual or teams of at most 3 students
-    - The best projects become blog entries and potential publications
-    - Examples are in `class_project/all_projects.md`
-    - Each class project is similar in spirit to the tutorials for various
-      technologies we have looked at and studied in classes
-      - E.g., `Git`, `Docker`, `SQL`, `Mongo`, `Airflow`, `Dask`
+- There are two types of projects: research projects and tutorials
 
-## Choosing a Project
+## Research projects
+- Explore an open research question
+- Teams of at most 3 students
+- Examples are in
+  - `research/ideas/README.md`
+  - `research/ideas/*.md`
+
+- Well done projects lead to a blog post or publication, but these are the most
+  challenging class projects
+
+## Tutorials "Learn X in 60 mins"
+
+- Learn a technology and build a system using that specific technology
+  - The result of each project is a "tutorial" that can teach a curious computer
+    scientist a new technology in 60 minutes
+- Individual or teams of at most 3 students
+- Examples are in :
+  - `class_project/project_descriptions/DATA605`
+  - `class_project/project_descriptions/MSML610`
+  - `class_project/all_projects.md`
+- Each tutorial is similar in spirit to the tutorials for various technologies we
+  have looked at and studied in classes
+  - E.g., `Git`, `Docker`, `SQL`, `Mongo`, `Airflow`, `Dask`
+
+- Well done projects become blog entries and potential publications
 
 ### Selection Rules
 - The project is done by a single student or a group of students
@@ -132,7 +140,7 @@
 - Copy/paste the project description and add a link to the document with
   project specs
   - E.g.,
-    https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/DATA605/Spring2026/projects_descriptions/ActiveCampaign_Project_Description.md
+    https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/projects_descriptions/DATA605/ActiveCampaign_Project_Description.md
 
 - Assign the GitHub issue to yourself (if you have permissions) or tag the
   issue with the individuals working on the project
@@ -249,7 +257,7 @@ project. The goal is to learn how to present your work in a professional manner
   purpose in the examples: see if you find them!
 
 ## Grading Rubric
-- All deliverables delivered (10 points)
+- **All deliverables delivered (10 points)**
   - Are all required components submitted, including code, documentation, and
     any other specified materials
   - Does everything follow the project's standard structure and formatting
@@ -257,7 +265,7 @@ project. The goal is to learn how to present your work in a professional manner
   - Is the submission complete enough for someone else to evaluate or run
     without requesting extra files or explanations
 
-- Working Docker (5 points)
+- **Working Docker (5 points)**
   - Does the Docker container build without errors, following the provided
     instructions
   - Does the project run successfully inside the container and behave as
@@ -265,7 +273,7 @@ project. The goal is to learn how to present your work in a professional manner
   - Are all necessary environment configurations, ports, and dependencies
     correctly set
 
-- Documentation quality (5 points)
+- **Documentation quality (5 points)**
   - Does the documentation clearly explain how to set up, run, and understand
     the project
   - Is it well-written, free from major grammar or formatting issues, and easy
@@ -274,7 +282,7 @@ project. The goal is to learn how to present your work in a professional manner
     examples, API descriptions, or architectural decisions
   - Does it adhere to the formatting and organizational guidelines we provided
 
-- Actual project complexity (5 points)
+- **Actual project complexity (5 points)**
   - How much depth and effort does the project demonstrate beyond the initial
     suggested scope
   - Did the student add significant features, handle edge cases, or show
@@ -282,14 +290,14 @@ project. The goal is to learn how to present your work in a professional manner
   - Is the architecture or technical implementation non-trivial or particularly
     well-considered
 
-- Code quality (5 points)
-  - Is the code clean, modular, and easy to understand
+- **Code quality (5 points)**
+  - Is the code clean, modular, and easy to understand?
   - Are comments and docstrings used appropriately to explain non-obvious logic
   - Is the overall structure of the codebase sensible and maintainable
   - Does it follow consistent style conventions (e.g., PEP 8 or another relevant
     standard)
 
-- PR quality (5 points)
+- **PR quality (5 points)**
   - Was the pull request (PR) well-organized, with meaningful commit messages
     and a clear description
   - Did the student follow good GitHub practices, such as linking issues,
@@ -297,7 +305,7 @@ project. The goal is to learn how to present your work in a professional manner
   - Was the PR free of obvious clutter like unrelated test code or temporary
     debug statements
 
-- Depth and understanding (5 points)
+- **Depth and understanding (5 points)**
   - Does the student show a solid understanding of the tools and techniques they
     used
   - Do the design decisions reflect thoughtful trade-offs and justification,
@@ -305,11 +313,11 @@ project. The goal is to learn how to present your work in a professional manner
   - Is there evidence that the student could explain and defend their
     implementation in a review
 
-- Late submission (-5 points)
+- **Late submission (-5 points)**
   - Was the submission turned in after the deadline without an approved
     extension
 
-- Incomplete work (-5 points)
+- **Incomplete work (-5 points)**
   - Are there major parts of the project that are missing or obviously broken
   - Does the submission fail to meet critical functional or structural
     expectations
