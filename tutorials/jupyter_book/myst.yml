@@ -1,0 +1,190 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  id: 42cfe695-8f9a-43dc-b73b-ee0137cf5950
+  title: UMD Classes -- Tutorials
+  description: Package tutorials used in DATA605 and MSML610.
+  # To regenerate the Table of Contents from disk, run "jupyter-book init --write-toc"
+  # and then re-add the per-tutorial titles and README-as-index entries by hand.
+  toc:
+    - file: intro.md
+    - file: ../Asana/README.md
+      title: Asana
+      children:
+        - file: ../Asana/asana.API.ipynb
+        - file: ../Asana/asana.example.ipynb
+        - file: ../Asana/tutorial_asana.ipynb
+    - file: ../Autogen/README.md
+      title: Autogen
+      children:
+        - file: ../Autogen/AutoGen.example1.ipynb
+        - file: ../Autogen/AutoGen.example2.ipynb
+        - file: ../Autogen/autogen.API.ipynb
+        - file: ../Autogen/autogen.example.ipynb
+    - file: ../Ax_Multi_Objective_Optimization/README.md
+      title: Ax Multi Objective Optimization
+      children:
+        - file: ../Ax_Multi_Objective_Optimization/Ax.example.ipynb
+        - file: ../Ax_Multi_Objective_Optimization/Ax.package.ipynb
+        - file: ../Ax_Multi_Objective_Optimization/dsp-pctr-prediction-model.ipynb
+    - file: ../BambooAI/README.md
+      title: BambooAI
+      children:
+        - file: ../BambooAI/bambooai.API.ipynb
+        - file: ../BambooAI/bambooai.example.ipynb
+        - file: ../BambooAI/bambooai_utils.ipynb
+    - file: ../CausalML_Diabetes_Study/README.md
+      title: CausalML Diabetes Study
+      children:
+        - file: ../CausalML_Diabetes_Study/CausalML.API.ipynb
+        - file: ../CausalML_Diabetes_Study/CausalML.example.ipynb
+    - title: FilterPy
+      children:
+        - file: ../FilterPy/filterpy.api.ipynb
+        - file: ../FilterPy/filterpy.example.ipynb
+    - file: ../GitHub_Stats/README.md
+      title: GitHub Stats
+      children:
+        - file: ../GitHub_Stats/Master_GitHub_analysis.ipynb
+        - file: ../GitHub_Stats/Master_intern_Fulltime_stats.ipynb
+        - file: ../GitHub_Stats/TutorTask569_Compute_stats_from_GH.ipynb
+        - file: ../GitHub_Stats/github.API.ipynb
+        - file: ../GitHub_Stats/github.example.ipynb
+        - file: ../GitHub_Stats/github_stats.ipynb
+    - file: ../GluonTS_COVID19_Prediction/README.md
+      title: GluonTS COVID19 Prediction
+      children:
+        - file: ../GluonTS_COVID19_Prediction/GluonTS.API.ipynb
+        - file: ../GluonTS_COVID19_Prediction/GluonTS.example.ipynb
+    - file: ../Jupyter_Extension_Langchain/README.md
+      title: Jupyter Extension Langchain
+      children:
+        - file: ../Jupyter_Extension_Langchain/jupyter_chat_extension.ipynb
+    - file: ../LangChain/README.md
+      title: LangChain
+      children:
+        - file: ../LangChain/langchain.API.ipynb
+        - file: ../LangChain/langchain.example.ipynb
+    - file: ../LangChain_LangGraph/README.md
+      title: LangChain LangGraph
+      children:
+        - file: ../LangChain_LangGraph/deep_agents.API.ipynb
+        - file: ../LangChain_LangGraph/deep_agents.example.ipynb
+        - file: ../LangChain_LangGraph/langchain.API.ipynb
+        - file: ../LangChain_LangGraph/langchain.example.ipynb
+        - file: ../LangChain_LangGraph/langgraph.example.ipynb
+        - file: ../LangChain_LangGraph/notebook_ops.ipynb
+    - file: ../LangGraph/README.md
+      title: LangGraph
+      children:
+        - file: ../LangGraph/notebooks/tutorial_langgraph.ipynb
+    - file: ../LlamaIndex/README.md
+      title: LlamaIndex
+      children:
+        - file: ../LlamaIndex/llamaindex.API.ipynb
+        - file: ../LlamaIndex/llamaindex.example.ipynb
+    - file: ../Neo4j/README.md
+      title: Neo4j
+      children:
+        - file: ../Neo4j/neo4j.API.ipynb
+        - file: ../Neo4j/neo4j.example.ipynb
+    - file: ../OpenAI/README.md
+      title: OpenAI
+      children:
+        - file: ../OpenAI/hllm.example.ipynb
+        - file: ../OpenAI/openai.example.ipynb
+        - file: ../OpenAI/tutorial_hopenai.ipynb
+        - file: ../OpenAI/tutorial_openai.ipynb
+    - file: ../Prophet/README.md
+      title: Prophet
+      children:
+        - file: ../Prophet/prophet.API.ipynb
+        - file: ../Prophet/prophet.example.ipynb
+    - file: ../TensorFlow/README.md
+      title: TensorFlow
+      children:
+        - file: ../TensorFlow/tensorflow.API.ipynb
+        - file: ../TensorFlow/tensorflow.example.ipynb
+    - file: ../TorchRL_MAC/README.md
+      title: TorchRL MAC
+      children:
+        - file: ../TorchRL_MAC/TorchRL_MAC.API.ipynb
+        - file: ../TorchRL_MAC/TorchRL_MAC.example.ipynb
+    - file: ../causalnex/README.md
+      title: causalnex
+      children:
+        - file: ../causalnex/causalnex.API.ipynb
+        - file: ../causalnex/causalnex.example.ipynb
+    - title: crewai
+      children:
+        - file: ../crewai/crewai.API.ipynb
+        - file: ../crewai/crewai.example.ipynb
+        - file: ../crewai/tutorial_crewai.ipynb
+    - title: data science packages
+      children:
+        - file: ../data_science_packages/tutorial_arviz.ipynb
+        - file: ../data_science_packages/tutorial_xarray.ipynb
+    - file: ../dowhy/README.md
+      title: dowhy
+      children:
+        - file: ../dowhy/dowhy.01_causal_graphs.ipynb
+        - file: ../dowhy/dowhy.02_gcm.ipynb
+        - file: ../dowhy/dowhy.03_causal_tasks.ipynb
+        - file: ../dowhy/dowhy.04_refuting_estimates.ipynb
+    - file: ../fastapi/README.md
+      title: fastapi
+      children:
+        - file: ../fastapi/fastapi.API.ipynb
+        - file: ../fastapi/fastapi.example.ipynb
+    - file: ../gCastle/README.md
+      title: gCastle
+      children:
+        - file: ../gCastle/gCastle.API.ipynb
+        - file: ../gCastle/gCastle.example.ipynb
+    - file: ../gymnasium/README.md
+      title: gymnasium
+      children:
+        - file: ../gymnasium/gymnasium.01.API.Env.ipynb
+        - file: ../gymnasium/gymnasium.02.API.Registry.ipynb
+        - file: ../gymnasium/gymnasium.03.API.Spaces.ipynb
+        - file: ../gymnasium/gymnasium.04.API.Wrappers.ipynb
+        - file: ../gymnasium/gymnasium.05.API.Vector.ipynb
+    - file: ../lime/README.md
+      title: lime
+      children:
+        - file: ../lime/01.API.lime.ipynb
+    - file: ../pgmpy/README.md
+      title: pgmpy
+      children:
+        - file: ../pgmpy/pgmpy.01.API.probabilistic_inference.ipynb
+        - file: ../pgmpy/pgmpy.02.API.datasets.ipynb
+        - file: ../pgmpy/pgmpy.03.API.example_models.ipynb
+        - file: ../pgmpy/pgmpy.04.API.parameter_estimation.ipynb
+        - file: ../pgmpy/probabilistic_inference.ipynb
+    - file: ../shap/README.md
+      title: shap
+      children:
+        - file: ../shap/01.API.shap.ipynb
+    - file: ../tsfresh/README.md
+      title: tsfresh
+      children:
+        - file: ../tsfresh/tsfresh.API.ipynb
+        - file: ../tsfresh/tsfresh.example.ipynb
+        - file: ../tsfresh/tsfresh_example.ipynb
+    - file: ../tutorial_forecast_as_service/README.md
+      title: tutorial forecast as service
+      children:
+        - file: ../tutorial_forecast_as_service/forecast_as_service.tutorial.md
+        - file: ../tutorial_forecast_as_service/forecast_as_service.how_to_guide.md
+        - file: ../tutorial_forecast_as_service/all.forecast_as_service.reference.md
+    - file: ../tutorial_pydanticAI/README.md
+      title: tutorial pydanticAI
+      children:
+        - file: ../tutorial_pydanticAI/pydanticai.API.ipynb
+        - file: ../tutorial_pydanticAI/pydanticai.example.ipynb
+site:
+  template: book-theme
+
+# `jupyter book build` only executes notebooks with --execute, so the
+# stored outputs already in tutorials/**/*.ipynb are rendered as-is.
+# Tutorials pull in mutually incompatible dependencies, so leave this alone.

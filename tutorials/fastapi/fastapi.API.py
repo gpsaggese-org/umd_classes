@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.5
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -16,11 +16,16 @@
 # %% [markdown]
 # # FastAPI API Overview
 #
-# A runnable walkthrough of the core `FastAPI` building blocks: path
-# operations, request validation, dependency injection, error handling, and
-# the automatic interactive docs. `FastAPI` apps are served by `uvicorn`; this
-# notebook uses `fastapi.testclient.TestClient` instead, which drives the app
-# in-process without opening a real socket, so every cell runs instantly.
+# A runnable walkthrough of the core `FastAPI` building blocks:
+# - path operations
+# - request validation
+# - dependency injection
+# - error handling
+# - the automatic interactive docs.
+#
+# `FastAPI` apps are served by `uvicorn`
+# - This notebook uses `fastapi.testclient.TestClient` instead, which drives the
+# app in-process without opening a real socket, so every cell runs instantly.
 #
 # **What you will learn:**
 # - How path and query parameters are typed and validated
@@ -33,35 +38,39 @@
 # `uvicorn` server and real HTTP calls over the network.
 
 # %%
+# !pip install --quiet -r tutorial_requirements.txt
+
+# %%
 # %load_ext autoreload
 # %autoreload 2
 
 import logging
 
+# TODO(ai_gp): Use import fastapi
 from fastapi import Depends, FastAPI, Query
 
 import fastapi_utils
 
+# TODO(ai_gp): Use the official function for the logging.
 logging.basicConfig(level=logging.INFO)
 _LOG = logging.getLogger(__name__)
 
 # %% [markdown]
 # ## 1. Path Operations
 #
-# A path operation is a Python function decorated with an HTTP method and a
-# path, e.g. `@app.get("/items/{item_id}")`. `FastAPI` reads the function's
-# type hints to know how to parse and validate each argument.
+# - A path operation is a Python function decorated with an HTTP method and a path, e.g. `@app.get("/items/{item_id}")`
+# - `FastAPI` reads the function's type hints to know how to parse and validate each argument
 
 # %%
 demo_app = FastAPI()
 
 
-@demo_app.get("/")
-def read_root() -> dict:
-    """
-    Return a simple greeting.
-    """
-    return {"message": "Hello, World"}
+# @demo_app.get("/")
+# def read_root() -> dict:
+#     """
+#     Return a simple greeting.
+#     """
+#     return {"message": "Hello, World"}
 
 
 @demo_app.get("/items/{item_id}")
@@ -74,6 +83,7 @@ def read_item(item_id: int) -> dict:
 
 demo_client = fastapi_utils.make_test_client(demo_app)
 
+# %%
 response = demo_client.get("/items/42")
 _LOG.info("GET /items/42 -> %s %s", response.status_code, response.json())
 
@@ -97,9 +107,10 @@ def list_items(skip: int = 0, limit: int = 10) -> dict:
     """
     return {"skip": skip, "limit": limit}
 
-
+# TODO(ai_gp): Split each call into a cell.
 response = demo_client.get("/items/", params={"skip": 5, "limit": 20})
 _LOG.info("GET /items/?skip=5&limit=20 -> %s", response.json())
+# TODO(ai_gp): Add a comment explaining the output for each cell.
 
 response = demo_client.get("/items/")
 _LOG.info("GET /items/ (defaults) -> %s", response.json())
@@ -107,9 +118,9 @@ _LOG.info("GET /items/ (defaults) -> %s", response.json())
 # %% [markdown]
 # ## 3. Request Body and Validation
 #
-# A request body is described as a `pydantic` model. `fastapi_utils` defines
-# `BookCreate` and `Book` for the tutorial; reusing them here keeps this
-# notebook and `fastapi.example.ipynb` consistent.
+# - A request body is described as a `pydantic` model
+# - `fastapi_utils` defines `BookCreate` and `Book` for the tutorial
+#     - Reusing them here keeps this notebook and `fastapi.example.ipynb` consistent
 
 # %%
 @demo_app.post("/books", response_model=fastapi_utils.Book, status_code=201)
@@ -138,9 +149,8 @@ for error in response.json()["detail"]:
 # %% [markdown]
 # ## 4. Dependency Injection
 #
-# `Depends()` lets multiple endpoints share the same parameter-parsing logic
-# instead of repeating it. `FastAPI` calls the dependency function first and
-# passes its return value into the endpoint.
+# - `Depends()` lets multiple endpoints share the same parameter-parsing logic instead of repeating it
+# - `FastAPI` calls the dependency function first and passes its return value into the endpoint
 
 # %%
 def pagination_params(
@@ -217,9 +227,3 @@ def test_health_check() -> None:
 
 test_health_check()
 _LOG.info("test_health_check() passed.")
-
-# %% [markdown]
-# ## Next steps
-#
-# Continue with `fastapi.example.ipynb` for a complete Book Catalog API
-# running behind a real `uvicorn` server, exercised with real HTTP requests.

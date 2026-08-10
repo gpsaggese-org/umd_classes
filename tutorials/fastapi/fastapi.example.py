@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.5
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -29,6 +29,9 @@
 # exploration but skips the network entirely.
 #
 # **Must run top to bottom after a kernel restart.**
+
+# %%
+# !pip install --quiet -r tutorial_requirements.txt
 
 # %%
 # %load_ext autoreload

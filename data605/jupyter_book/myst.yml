@@ -1,0 +1,69 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  id: d3890ae7-ef64-482c-9bc9-9ffa647a7fb8
+  title: DATA605 -- Tutorials
+  description: Tool tutorials used in DATA605 (Big Data Systems).
+  # To regenerate the Table of Contents from disk, run "jupyter-book init --write-toc"
+  # and then re-add the per-tutorial titles and README-as-index entries by hand.
+  toc:
+    - file: intro.md
+    - title: Dask
+      children:
+        - file: ../tutorials/tutorial_dask/Dask_tutorial.ipynb
+        - file: ../tutorials/tutorial_dask/Dask_advanced_tutorial.ipynb
+        - file: ../tutorials/tutorial_dask/Data_Science_with_Python_and_Dask.2019.ipynb
+        - file: ../tutorials/tutorial_dask/delayed.ipynb
+    - file: ../tutorials/tutorial_jupyter/tutorial_jupyter.md
+      title: Jupyter
+      children:
+        - file: ../tutorials/tutorial_jupyter/tutorial_jupyter.ipynb
+    - file: ../tutorials/tutorial_mongodb/tutorial_mongo.md
+      title: MongoDB
+      children:
+        - file: ../tutorials/tutorial_mongodb/Seven_DBs_in_seven_weeks.mongo.ipynb
+    - title: Pandas
+      children:
+        - file: ../tutorials/tutorial_pandas/pandas.ipynb
+        - file: ../tutorials/tutorial_pandas/pandas_df_wrangling.ipynb
+        - file: ../tutorials/tutorial_pandas/pandas-date_handling.ipynb
+        - file: ../tutorials/tutorial_pandas/pandas-hd5.ipynb
+        - file: ../tutorials/tutorial_pandas/pandas-options.ipynb
+        - file: ../tutorials/tutorial_pandas/PyDataAnalysis-Chap03-ipython.ipynb
+        - file: ../tutorials/tutorial_pandas/PyDataAnalysis-Chap04-numpy_basics.ipynb
+        - file: ../tutorials/tutorial_pandas/PyDataAnalysis-Chap05-Getting_started_with_pandas.ipynb
+        - file: ../tutorials/tutorial_pandas/PyDataAnalysis-Chap06-Data_storage.ipynb
+        - file: ../tutorials/tutorial_pandas/PyDataAnalysis-Chap07-Data_cleaning_and_preparation.ipynb
+        - file: ../tutorials/tutorial_pandas/PyDataAnalysis-Chap08-Data_wrangling_join_combine_reshape.ipynb
+        - file: ../tutorials/tutorial_pandas/PyDataAnalysis-Chap09-Plotting.ipynb
+        - file: ../tutorials/tutorial_pandas/PyDataAnalysis-Chap10-Data_aggregation_grouping.ipynb
+        - file: ../tutorials/tutorial_pandas/PyDataAnalysis-Chap11-Time_series.ipynb
+        - file: ../tutorials/tutorial_pandas/PyDataAnalysis-Chap12-AdvancedPandas.ipynb
+    - title: Parquet
+      children:
+        - file: ../tutorials/tutorial_parquet/tutorial_parquet.ipynb
+    - file: ../tutorials/tutorial_postgres/tutorial_postgres.md
+      title: PostgreSQL
+      children:
+        - title: Seven DBs in Seven Weeks
+          children:
+            - file: ../tutorials/tutorial_postgres/tutorial_seven_dbs/Seven_DBs_in_seven_weeks.sql.ipynb
+        - title: University DB
+          children:
+            - file: ../tutorials/tutorial_postgres/tutorial_university/sql_basics.ipynb
+            - file: ../tutorials/tutorial_postgres/tutorial_university/sql_joins.ipynb
+            - file: ../tutorials/tutorial_postgres/tutorial_university/sql_nulls_and_unknown.ipynb
+    - file: ../tutorials/tutorial_spark/README.md
+      title: Spark
+      children:
+        - file: "../tutorials/tutorial_spark/Introduction to Spark.ipynb"
+        - file: ../tutorials/tutorial_spark/Learning_Spark_2e.Chap2.ipynb
+        - file: ../tutorials/tutorial_spark/Learning_Spark_2e.Chap3.ipynb
+        - file: "../tutorials/tutorial_spark/Spark Assignment.ipynb"
+        - file: ../tutorials/tutorial_spark/Spark_doc.ipynb
+site:
+  template: book-theme
+
+# `jupyter book build` only executes notebooks with --execute, so the
+# stored outputs already in tutorials/**/*.ipynb are rendered as-is.
+# Tutorials pull in mutually incompatible dependencies, so leave this alone.

@@ -142,8 +142,10 @@ get_docker_engine() {
     #    "gpmac.local"), "docker" otherwise.
     # """
     if [[ -n "$DOCKER_ENGINE" ]]; then
+        # Use the variable.
         echo "$DOCKER_ENGINE"
     elif [[ "$(uname -s)" == "Darwin" && "$(uname -n)" == "gpmac.local" ]]; then
+        # Only on GP's laptop use Apple containers.
         echo "apple"
     else
         echo "docker"
@@ -195,6 +197,7 @@ print_docker_vars() {
     # """
     # Print current Docker variables to stdout.
     # """
+    echo "# Docker Vars"
     echo "REPO_NAME=$REPO_NAME"
     echo "IMAGE_NAME=$IMAGE_NAME"
     echo "FULL_IMAGE_NAME=$FULL_IMAGE_NAME"

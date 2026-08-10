@@ -11,6 +11,7 @@ import tutorials.fastapi.fastapi_utils as tfasuti
 """
 
 import logging
+import os
 import threading
 import time
 from typing import Dict, List, Optional, Tuple
@@ -22,6 +23,7 @@ from fastapi.testclient import TestClient
 from pydantic import BaseModel, Field
 
 import helpers.hdbg as hdbg
+import helpers.hsystem as hsystem
 
 _LOG = logging.getLogger(__name__)
 
@@ -190,6 +192,7 @@ def _get_book_or_404(app: FastAPI, book_id: int) -> Book:
 # #############################################################################
 
 
+# TODO(ai_gp): Inline this function
 def make_test_client(app: FastAPI) -> TestClient:
     """
     Wrap `app` in a `TestClient` for in-process calls, without a socket.
