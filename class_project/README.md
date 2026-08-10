@@ -1,30 +1,28 @@
-# Class Project Guidelines: Learn X in 60 Minutes
-- The goal of the class project (e.g., for `DATA605`, `MSML610`) is to learn a
-  cutting-edge modern big data technology and write a (small) example of a
-  system using it
-- The result of each project is a "tutorial" that can teach a curious computer
-  scientist a new technology in 60 minutes
+# Class Project Guidelines
 
-- Each class project is similar in spirit to the tutorials for various
-  technologies we have looked at and studied in classes (e.g., `Git`, `Docker`,
-  `SQL`, `Mongo`, `Airflow`, `Dask`)
-- Through the class projects you will learn how a specific tool fits your data
-  science, data engineering, machine learning workflows
+- The goal of the class project (e.g., for `DATA605`, `MSML610`) is to learn a
+  cutting-edge modern big data technology and write an example of a system using
+  it
+
+- There are two types of projects:
+  - **Research projects**
+    - Explore an open research question
+    - Teams of at most 3 students
+    - Examples are in `research/ideas/README.md` and `research/ideas/*.md`
+    - The best projects lead to a blog post or publication, but these are the
+      most challenging projects
+  - **Learn X in 60 mins**
+    - Learn a technology and build a system using that specific technology
+    - The result of each project is a "tutorial" that can teach a curious
+      computer scientist a new technology in 60 minutes
+    - Individual or teams of at most 3 students
+    - The best projects become blog entries and potential publications
+    - Examples are in `class_project/all_projects.md`
+    - Each class project is similar in spirit to the tutorials for various
+      technologies we have looked at and studied in classes
+      - E.g., `Git`, `Docker`, `SQL`, `Mongo`, `Airflow`, `Dask`
 
 ## Choosing a Project
-
-### Project Types
-There are three types of projects:
-
-- **"Build X using Y"**: Build a system or application using a specific
-  technology — individual or teams of at most 3 students. The best projects
-  become blog entries and potential publications.
-- **Implement examples for the lectures**: Implement tutorial examples that
-  illustrate lecture concepts — individual projects only. The best projects are
-  used as tutorials in future classes.
-- **Research projects**: Explore an open research question — teams of at most 3
-  students. The best projects may lead to a blog post or publication, but these
-  are the most challenging.
 
 ### Selection Rules
 - The project is done by a single student or a group of students
