@@ -22,11 +22,22 @@
 
 | Project name | Link | Status | Assignee | GitHub Issue | Result | Session |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| AWS_Glue | [Link](../data605/Spring2025/project_descriptions/AWS_Glue_Project_Description.md) | Done | — | [TutorTask186](https://github.com/causify-ai/tutorials/issues/186) | [Result](../data605/Spring2025/projects/TutorTask186_Spring2025_Ingest_bitcoin_prices_using_AWS_Glue) | Spring2025 |
 | ActiveCampaign | [Link](DATA605/ActiveCampaign_Project_Description.md) | Proposed | — | — | — | — |
+| Allms | [Link](../data605/Spring2025/project_descriptions/Allms_Project_Description.md) | Done | — | [TutorTask190](https://github.com/causify-ai/tutorials/issues/190) | [Result](../data605/Spring2025/projects/TutorTask190_Spring2025_ALLMS) | Spring2025 |
 | Altair | [Link](DATA605/Altair_Project_Description.md) | Proposed | — | [TutorTask226](https://github.com/causify-ai/tutorials/issues/226) | [Result](../data605/Spring2025/projects/TutorTask226_Spring2025_Altair_Data_Visualization) | Spring2025 |
+| Amazon_Batch | [Link](../data605/Spring2025/project_descriptions/Amazon_Batch_Project_Description.md) | Done | — | [TutorTask126](https://github.com/causify-ai/tutorials/issues/126)<br>[TutorTask126](https://github.com/causify-ai/tutorials/issues/126) | [Result 1](../data605/Spring2025/projects/TutorTask126_Spring2025_RealTime_Bitcoin_Data_Processing_with_Amazon_Batch)<br>[Result 2](../data605/Spring2025/projects/TutorTask126_Spring2025_RealTime_Bitcoin_Data_Processing_with_Amazon_Batch_v2) | Spring2025<br>Spring2025 |
+| Amazon_CloudFormation | [Link](../data605/Spring2025/project_descriptions/Amazon_CloudFormation_Project_Description.md) | Done | — | [TutorTask242](https://github.com/causify-ai/tutorials/issues/242) | [Result](../data605/Spring2025/projects/TutorTask242_Spring2025_Real-Time_Bitcoin_Price_Analysis_Pipeline_with_AWS_CloudFormation) | Spring2025 |
+| Amazon_DynamoDB | [Link](../data605/Spring2025/project_descriptions/Amazon_DynamoDB_Project_Description.md) | Done | — | [TutorTask181](https://github.com/causify-ai/tutorials/issues/181) | [Result](../data605/Spring2025/projects/TutorTask181_Spring2025_Real-Time_Bitcoin_Data_Processing_with_Amazon_DynamoDB) | Spring2025 |
+| Amazon_EMR | [Link](../data605/Spring2025/project_descriptions/Amazon_EMR_Project_Description.md) | Done | — | [TutorTask86](https://github.com/causify-ai/tutorials/issues/86) | [Result](../data605/Spring2025/projects/TutorTask86_Spring2025_Real_Time_Bitcoin_Price_Analysis_Using_Amazon_EMR) | Spring2025 |
+| Amazon_Kinesis | [Link](../data605/Spring2025/project_descriptions/Amazon_Kinesis_Project_Description.md) | Done | — | [TutorTask87](https://github.com/causify-ai/tutorials/issues/87) | [Result](../data605/Spring2025/projects/TutorTask87_Spring2025_Real_Time_Bitcoin_Price_Anomaly_Detection_Using_Amazon_Kinesis) | Spring2025 |
+| Amazon_RDS | [Link](../data605/Spring2025/project_descriptions/Amazon_RDS_Project_Description.md) | Done | — | [TutorTask156](https://github.com/causify-ai/tutorials/issues/156) | [Result](../data605/Spring2025/projects/TutorTask156_Spring2025_Real_time_bitcoin_data_processing_using_Amazon_RDS) | Spring2025 |
+| Amazon_Sagemaker | [Link](../data605/Spring2025/project_descriptions/Amazon_Sagemaker_Project_Description.md) | Done | — | [TutorTask120](https://github.com/causify-ai/tutorials/issues/120) | [Result](../data605/Spring2025/projects/TutorTask120_Spring_2025_Real_Time_Bitcoin_Price_Analysis_with_Amazon_SageMaker) | Spring2025 |
+| Amazon_X-Ray | [Link](../data605/Spring2025/project_descriptions/Amazon_X-Ray_Project_Description.md) | Done | — | [TutorTask197](https://github.com/causify-ai/tutorials/issues/197) | [Result](../data605/Spring2025/projects/TutorTask197_Spring2025_Predictive_Bottleneck_Detection_in_Real-Time_Data_Pipelines_Using_AWS_X-Ray) | Spring2025 |
 | Amundsen | [Link](DATA605/Amundsen_Project_Description.md) | Proposed | — | — | — | — |
 | Analytics_Dashboard_with_Redis | [Link](../data605/Spring2024/SorrTask799_Analytics_Dashboard_with_Redis/README.md) | Done | — | [SorrTask799](https://github.com/causify-ai/kaizenflow/issues/799) | [Result](../data605/Spring2024/SorrTask799_Analytics_Dashboard_with_Redis) | Spring2024 |
 | Ansible | [Link](DATA605/Ansible_Project_Description.md) | Proposed | — | — | — | — |
+| Anthropic | [Link](../data605/Spring2025/project_descriptions/Anthropic_Project_Description.md) | Done | — | [TutorTask135](https://github.com/causify-ai/tutorials/issues/135) | [Result](../data605/Spring2025/projects/TutorTask135_Spring2025_Real_Time_Bitcoin_Transaction_Anomaly_Detection_with_Anthropic_Claude_1) | Spring2025 |
 | Anthropic_MCP | [Link](DATA605/Anthropic_MCP_Project_Description.md) | Proposed | — | [TutorTask147](https://github.com/causify-ai/tutorials/issues/147) | [Result](../data605/Spring2025/projects/TutorTask147_Spring2025_Real-Time_Bitcoin_Price_Monitoring_with_Anthropic_MCP) | Spring2025 |
 | Apache_Beam | [Link](DATA605/Apache_Beam_Project_Description.md) | Proposed | — | — | — | — |
 | Apache_Flink | [Link](DATA605/Apache_Flink_Project_Description.md) | Proposed | — | [SorrTask795](https://github.com/causify-ai/kaizenflow/issues/795) | [Result](../data605/Spring2024/SorrTask795_windowed_aggregation_with_apache_flink) | Spring2024 |
@@ -37,26 +48,35 @@
 | AutoKeras | [Link](DATA605/AutoKeras_Project_Description.md) | Proposed | — | — | — | — |
 | Autofeat | [Link](DATA605/Autofeat_Project_Description.md) | Proposed | — | — | — | — |
 | Avro | [Link](DATA605/Avro_Project_Description.md) | Proposed | — | — | [Result](../data605/Spring2024/Data_Serialization_with_Avro) | Spring2024 |
+| Azure_SDK_for_Python | [Link](../data605/Spring2025/project_descriptions/Azure_SDK_for_Python_Project_Description.md) | Done | — | [TutorTask268](https://github.com/causify-ai/tutorials/issues/268) | [Result](../data605/Spring2025/projects/TutorTask268_Spring2025__Analyze_Real-Time_Bitcoin_Data_with_Azure_SDK_for_Python) | Spring2025 |
+| BigDL | [Link](../data605/Spring2025/project_descriptions/BigDL_Project_Description.md) | Done | — | [TutorTask300](https://github.com/causify-ai/tutorials/issues/300) | [Result](../data605/Spring2025/projects/TutorTask300_Spring2025_Real_Time_Bitcoin_Data_Processing_with_BigDL) | Spring2025 |
 | Bonobo | [Link](DATA605/Bonobo_Project_Description.md) | Proposed | — | [Tutortask301](https://github.com/causify-ai/tutorials/issues/301) | [Result](../data605/Spring2025/projects/Tutortask301_Spring2025_Real-time_Bitcoin_Data_Processing_Using_Bonobo) | Spring2025 |
+| Causal-learn | [Link](../data605/Spring2025/project_descriptions/Causal-learn_Project_Description.md) | Done | — | [TutorTask151](https://github.com/causify-ai/tutorials/issues/151) | [Result](../data605/Spring2025/projects/TutorTask151_Spring2025_Bitcoin_Price_Causality_Analysis_with_Causal-Learn) | Spring2025 |
 | Celery | [Link](DATA605/Celery_Project_Description.md) | Proposed | — | — | — | — |
 | Clickhouse | [Link](DATA605/Clickhouse_Project_Description.md) | Proposed | — | [TutorTask198](https://github.com/causify-ai/tutorials/issues/198) | [Result](../data605/Spring2025/projects/TutorTask198_Spring2025_Real-time_Bitcoin_Data_Analysis_using_ClickHouse) | Spring2025 |
 | CouchDB | [Link](DATA605/CouchDB_Project_Description.md) | Proposed | — | — | — | — |
 | Cross_exchange_arbitrage_CEX_CEX | — | Done | — | — | [Result](../data605/Spring2023/ml_projects/SorrIssue2_Cross_exchange_arbitrage_CEX_CEX) | Spring2023 |
+| Customer.io | [Link](../data605/Spring2025/project_descriptions/Customer.io_Project_Description.md) | Done | — | [TutorTask129](https://github.com/causify-ai/tutorials/issues/129) | [Result](../data605/Spring2025/projects/TutorTask129_Spring2025_Customer_Engagement_Time_Series_Analysis_Using_Customer.io_Event_Data) | Spring2025 |
 | DVC | [Link](DATA605/DVC_Project_Description.md) | Proposed | — | — | — | — |
 | Dagster | [Link](DATA605/Dagster_Project_Description.md) | Proposed | — | [TutorTask102](https://github.com/causify-ai/tutorials/issues/102) | [Result](../data605/Spring2025/projects/TutorTask102_Spring2025_Real-time_Bitcoin_Data_Ingestion_and_Analysis_with_Dagster) | Spring2025 |
 | Darts | [Link](DATA605/Darts_Project_Description.md) | Proposed | — | — | — | — |
 | DataHub | [Link](DATA605/DataHub_Project_Description.md) | Proposed | — | — | — | — |
 | Data_Aggregation_with_Apache_Hadoop | — | Done | — | [SorrTask923](https://github.com/causify-ai/kaizenflow/issues/923) | [Result](../data605/Spring2024/SorrTask923_Data_Aggregation_with_Apache_Hadoop) | Spring2024 |
 | Data_Mining_with_Rapidminer | [Link](../data605/Spring2024/Spring2024_Data_Mining_with_Rapidminer/README.md) | Done | — | — | [Result](../data605/Spring2024/Spring2024_Data_Mining_with_Rapidminer) | Spring2024 |
+| Databricks_CLI | [Link](../data605/Spring2025/project_descriptions/Databricks_CLI_Project_Description.md) | Done | — | [TutorTask92](https://github.com/causify-ai/tutorials/issues/92) | [Result](../data605/Spring2025/projects/TutorTask92_Spring2025_Real_Time_Bitcoin_Price_Analysis_with_Databricks_CLI) | Spring2025 |
 | Dataprep | [Link](DATA605/Dataprep_Project_Description.md) | Proposed | — | [TutorTask210](https://github.com/causify-ai/tutorials/issues/210) | [Result](../data605/Spring2025/projects/TutorTask210_Spring_2025_Real-time_Bitcoin_Data_Processing_using_Dataprep) | Spring2025 |
+| Datasette | [Link](../data605/Spring2025/project_descriptions/llm.datasette_Project_Description.md) | Done | — | [TutorTask99](https://github.com/causify-ai/tutorials/issues/99) | [Result](../data605/Spring2025/projects/TutorTask99_Spring2025_Real-Time_Bitcoin_Data_Processing_with_Datasette) | Spring2025 |
 | Django_ORM | [Link](DATA605/Django_ORM_Project_Description.md) | Proposed | — | [TutorTask340](https://github.com/causify-ai/tutorials/issues/340)<br>[TutorTask94](https://github.com/causify-ai/tutorials/issues/94) | [Result 1](../data605/Spring2025/projects/TutorTask340_Spring2025_Real_Time_Bitcoin_Analysis_Using_Django_ORM)<br>[Result 2](../data605/Spring2025/projects/TutorTask94_Spring2025_Real_Time_Bitcoin_Using_Django_ORM) | Spring2025<br>Spring2025 |
+| DoWhy | [Link](../data605/Spring2025/project_descriptions/DoWhy_Project_Description.md) | Done | — | [TutorTask119](https://github.com/causify-ai/tutorials/issues/119) | [Result](../data605/Spring2025/projects/TutorTask119_Spring2025_Real-Time_Bitcoin_Causal_Analysis_with_DoWhy) | Spring2025 |
 | DocsGPT | [Link](DATA605/DocsGPT_Project_Description.md) | Proposed | — | [TutorTask111](https://github.com/causify-ai/tutorials/issues/111) | [Result](../data605/Spring2025/projects/TutorTask111_Spring2025_Real-Time_Bitcoin_Data_Q&A_Bot_with_DocsGPT) | Spring2025 |
 | Dolibarr | [Link](DATA605/Dolibarr_Project_Description.md) | Proposed | — | — | — | — |
 | ERPNext | [Link](DATA605/ERPNext_Project_Description.md) | Proposed | — | — | — | — |
 | ElasticSearch_WebTraffic | [Link](../data605/Spring2024/SorrTask833_ElasticSearch_WebTraffic/README.md) | Done | — | [SorrTask833](https://github.com/causify-ai/kaizenflow/issues/833) | [Result](../data605/Spring2024/SorrTask833_ElasticSearch_WebTraffic) | Spring2024 |
 | FLAML | [Link](DATA605/FLAML_Project_Description.md) | Proposed | — | — | — | — |
 | FNSPID | [Link](DATA605/FNSPID_Project_Description.md) | Proposed | — | — | — | — |
+| Facebook_prophet | [Link](../data605/Spring2025/project_descriptions/Facebook_prophet_Project_Description.md) | Done | — | [TutorTask137](https://github.com/causify-ai/tutorials/issues/137) | [Result](../data605/Spring2025/projects/TutorTask137_Spring2025_Bitcoin_Forecasting_with_Facebook_Prophet) | Spring2025 |
 | Faker | [Link](DATA605/Faker_Project_Description.md) | Proposed | — | — | — | — |
+| Falcon | [Link](../data605/Spring2025/project_descriptions/Falcon_Project_Description.md) | Done | — | [TutorTask122](https://github.com/causify-ai/tutorials/issues/122) | [Result](../data605/Spring2025/projects/TutorTask122_Spring2025_Scalable_Real-Time_Bitcoin_Analytics_with_Falcon) | Spring2025 |
 | FastText | [Link](DATA605/FastText_Project_Description.md) | Proposed | — | — | — | — |
 | Faust | [Link](DATA605/Faust_Project_Description.md) | Proposed | — | — | — | — |
 | Featuretools | [Link](DATA605/Featuretools_Project_Description.md) | Proposed | — | — | — | — |
@@ -105,15 +125,20 @@
 | Meltano | [Link](DATA605/Meltano_Project_Description.md) | Proposed | — | — | — | — |
 | Metaflow | [Link](DATA605/Metaflow_Project_Description.md) | Proposed | — | — | — | — |
 | Metasfresh | [Link](DATA605/Metasfresh_Project_Description.md) | Proposed | — | — | — | — |
+| Metpy | [Link](../data605/Spring2025/project_descriptions/Metpy_Project_Description.md) | Done | — | [TutorTask177](https://github.com/causify-ai/tutorials/issues/177) | [Result](../data605/Spring2025/projects/TutorTask177_Spring2025_Real-Time_Weather_Data_Analysis_with_MetPy) | Spring2025 |
 | Modin | [Link](DATA605/Modin_Project_Description.md) | Proposed | — | — | — | — |
 | NLTK | [Link](DATA605/NLTK_Project_Description.md) | Proposed | — | [TutorTask98](https://github.com/causify-ai/tutorials/issues/98) | [Result](../data605/Spring2025/projects/TutorTask98_Spring2025_Real-Time_Bitcoin_Sentiment_Analysis_Using_NLTK_and_Selenium) | Spring2025 |
 | NetworkX | [Link](DATA605/NetworkX_Project_Description.md) | Proposed | — | — | — | — |
 | ORM_Integration_with_Data_Mining | [Link](../data605/Spring2024/Spring2024_ORM_Integration_with_Data_Mining/README.md) | Done | — | — | [Result](../data605/Spring2024/Spring2024_ORM_Integration_with_Data_Mining) | Spring2024 |
+| Ollama | [Link](../data605/Spring2025/project_descriptions/Ollama_Project_Description.md) | Done | — | [TutorTask125](https://github.com/causify-ai/tutorials/issues/125) | [Result](../data605/Spring2025/projects/TutorTask125_Spring2025_Local_AI-Powered_Document_Search_Engine_with_Ollama) | Spring2025 |
+| Ollama_Python | [Link](../data605/Spring2025/project_descriptions/Ollama_Python_Project_Description.md) | Done | — | [TutorTask143](https://github.com/causify-ai/tutorials/issues/143)<br>[TutorTask184](https://github.com/causify-ai/tutorials/issues/184) | [Result 1](../data605/Spring2025/projects/TutorTask143_Spring2025_Custom_Bitcoin_Chatbot_with_Ollama_Python)<br>[Result 2](../data605/Spring2025/projects/TutorTask184_Spring2025_Real-Time_Bitcoin_Price_Analysis_and_Forecasting_with_Ollama-Python) | Spring2025<br>Spring2025 |
 | OneBM | [Link](DATA605/OneBM_Project_Description.md) | Proposed | — | — | — | — |
-| OpenRefine | [Link](DATA605/OpenRefine_Project_Description.md) | Proposed | — | — | — | — |
+| OpenRefine | [Link](DATA605/OpenRefine_Project_Description.md) | Done | — | [TutorTask350](https://github.com/causify-ai/tutorials/issues/350) | [Result](../data605/Spring2025/projects/TutorTask350_Spring2025_RealTimeBitcoinPriceAnalysis) | Spring2025 |
 | Papermill | [Link](DATA605/Papermill_Project_Description.md) | Proposed | — | — | — | — |
+| Petastorm | [Link](../data605/Spring2025/project_descriptions/Petastorm_Project_Description.md) | Done | — | [TutorTask188](https://github.com/causify-ai/tutorials/issues/188) | [Result](../data605/Spring2025/projects/TutorTask188_Spring2025_Batch_Processing_of_Bitcoin_Price_Data_with_Petastorm​) | Spring2025 |
 | Petl | [Link](DATA605/Petl_Project_Description.md) | Proposed | — | [TutorTask354](https://github.com/causify-ai/tutorials/issues/354) | [Result](../data605/Spring2025/projects/TutorTask354_Spring2025_Real_Time_Bitcoin_Price_Analysis_with_Petl) | Spring2025 |
 | Pika | [Link](DATA605/Pika_Project_Description.md) | Proposed | — | — | — | — |
+| Plotly | [Link](../data605/Spring2025/project_descriptions/Plotly_Project_Description.md) | Done | — | [TutorTask105](https://github.com/causify-ai/tutorials/issues/105)<br>[TutorTask109](https://github.com/causify-ai/tutorials/issues/109) | [Result 1](../data605/Spring2025/projects/TutorTask105_Spring2025_Real-Time_Bitcoin_Price_Analysis_using_Plotly)<br>[Result 2](../data605/Spring2025/projects/TutorTask109_Spring2025_Real-time_Bitcoin_Data_Ingestion_and_Analysis_with_Plotly) | Spring2025<br>Spring2025 |
 | Postmark | [Link](DATA605/Postmark_Project_Description.md) | Proposed | — | — | — | — |
 | Predict_Intraday_Trading_Volume | — | Done | — | — | [Result](../data605/Spring2023/ml_projects/SorrIssue8_Predict_Intraday_Trading_Volume) | Spring2023 |
 | Predict_bid_ask_movements_with_order_book_data | — | Done | — | — | [Result](../data605/Spring2023/ml_projects/SorrIssue4_Predict_bid_ask_movements_with_order_book_data) | Spring2023 |
@@ -122,16 +147,23 @@
 | Presto | [Link](DATA605/Presto_Project_Description.md) | Proposed | — | — | — | — |
 | Protocol_Buffers | [Link](DATA605/Protocol_Buffers_Project_Description.md) | Proposed | — | [TutorTask115](https://github.com/causify-ai/tutorials/issues/115)<br>— | [Result 1](../data605/Spring2025/projects/TutorTask115_Spring2025_Real-Time_Bitcoin_Analysis_Using_Protocol_Buffers)<br>[Result 2](../data605/Spring2024/Spring2024_gRPC_Basics_with_Protocol_Buffers) | Spring2025<br>Spring2024 |
 | Py2neo | [Link](DATA605/Py2neo_Project_Description.md) | Proposed | — | [TutorTask244](https://github.com/causify-ai/tutorials/issues/244) | [Result](../data605/Spring2025/projects/TutorTask244_Spring2025_Modeling_Bitcoin_Transaction_Networks_with_Py2neo) | Spring2025 |
+| PyArrow | [Link](../data605/Spring2025/project_descriptions/PyArrow_Project_Description.md) | Done | — | [TutorTask175](https://github.com/causify-ai/tutorials/issues/175) | [Result](../data605/Spring2025/projects/TutorTask175_Spring2025_Real_Time_Bitcoin_Data_Processing_with_Pyarrow) | Spring2025 |
 | PyDBGen | [Link](DATA605/PyDBGen_Project_Description.md) | Proposed | — | — | — | — |
 | PyDrive | [Link](DATA605/PyDrive_Project_Description.md) | Proposed | — | — | — | — |
 | PyKafka | [Link](DATA605/PyKafka_Project_Description.md) | Proposed | — | [TutorTask193](https://github.com/causify-ai/tutorials/issues/193) | [Result](../data605/Spring2025/projects/TutorTask193_Spring2025_Real_Time_Bitcoin_Data_Ingestion_and_Analysis_using_PyKafka) | Spring2025 |
+| PyMC3 | [Link](../data605/Spring2025/project_descriptions/PyMC3_Project_Description.md) | Done | — | [TutorTask142](https://github.com/causify-ai/tutorials/issues/142) | [Result](../data605/Spring2025/projects/TutorTask142_Spring2025_Real_time_Bitcoin_Price_Analysis_Using_PyMC3) | Spring2025 |
+| PySpark | [Link](../data605/Spring2025/project_descriptions/PySpark_Project_Description.md) | Done | — | [TutorTask94](https://github.com/causify-ai/tutorials/issues/94) | [Result](../data605/Spring2025/projects/TutorTask94_Spring2025_Real_time_Bitcoin_Data_Processing_with_PySpark) | Spring2025 |
+| PySparkling_Realtime | [Link](../data605/Spring2025/project_descriptions/PySparkling_Realtime_Project_Description.md) | Done | — | [TutorTask169](https://github.com/causify-ai/tutorials/issues/169) | [Result](../data605/Spring2025/projects/TutorTask169_Spring2025_Real_time_Bitcoin_Analysis_with_PySparkling) | Spring2025 |
 | Pydantic | [Link](DATA605/Pydantic_Project_Description.md) | Proposed | — | — | — | — |
 | Pygrametl | [Link](DATA605/Pygrametl_Project_Description.md) | Proposed | — | — | — | — |
 | Pyjanitor | [Link](DATA605/Pyjanitor_Project_Description.md) | Proposed | — | — | — | — |
+| Pyllms | [Link](../data605/Spring2025/project_descriptions/Pyllms_Project_Description.md) | Done | — | [TutorTask381](https://github.com/causify-ai/tutorials/issues/381) | [Result](../data605/Spring2025/projects/TutorTask381_Spring2025_Real_Time_Bitcoin_Sentiment_Analysis_Using_PyLLMs) | Spring2025 |
+| Qlik_Sense | [Link](../data605/Spring2025/project_descriptions/Qlik_Sense_Project_Description.md) | Done | — | [TutorTask146](https://github.com/causify-ai/tutorials/issues/146) | [Result](../data605/Spring2025/projects/TutorTask146_Spring_2025_Real_time_Bitcoin_Price_Analysis_Using_Qlik_Sense) | Spring2025 |
 | RandomDataGenerator | [Link](DATA605/RandomDataGenerator_Project_Description.md) | Proposed | — | — | — | — |
 | Rasa | [Link](DATA605/Rasa_Project_Description.md) | Proposed | — | — | — | — |
 | Rate_Limiting_API_with_Redis | [Link](../data605/Spring2024/Spring2024_Rate_Limiting_API_with_Redis/README.md) | Done | — | — | [Result](../data605/Spring2024/Spring2024_Rate_Limiting_API_with_Redis) | Spring2024 |
 | Ray | [Link](DATA605/Ray_Project_Description.md) | Proposed | — | [TutorTask93](https://github.com/causify-ai/tutorials/issues/93) | [Result](../data605/Spring2025/projects/TutorTask93_Spring2025_Real-Time_Bitcoin_Data_Processing_with_Apache_Ray) | Spring2025 |
+| Redis | [Link](../data605/Spring2025/project_descriptions/Redis_Project_Description.md) | Done | — | [TutorTask163](https://github.com/causify-ai/tutorials/issues/163) | [Result](../data605/Spring2025/projects/TutorTask163_Spring2025_Real-Time_Bitcoin_Price_Analytics_with_Redis) | Spring2025 |
 | Redis_Cache_Optimization | — | Done | — | — | [Result](../data605/Spring2024/Redis_Cache_Optimization) | Spring2024 |
 | Redis_cache_to_fetch_user_profiles | [Link](../data605/Spring2024/SorrTask645_Redis_cache_to_fetch_user_profiles/README.md) | Done | — | [SorrTask645](https://github.com/causify-ai/kaizenflow/issues/645) | [Result](../data605/Spring2024/SorrTask645_Redis_cache_to_fetch_user_profiles) | Spring2024 |
 | River | [Link](DATA605/River_Project_Description.md) | Proposed | — | [TutorTask88](https://github.com/causify-ai/tutorials/issues/88) | [Result](../data605/Spring2025/projects/TutorTask88_Spring2025_Ingest_Bitcoin_Prices_using_River_for_Real_Time_Processing) | Spring2025 |
@@ -139,6 +171,7 @@
 | SNAP | [Link](DATA605/SNAP_Project_Description.md) | Proposed | — | — | — | — |
 | SQLAlchemy | [Link](DATA605/SQLAlchemy_Project_Description.md) | Proposed | — | [TutorTask121](https://github.com/causify-ai/tutorials/issues/121) | [Result](../data605/Spring2025/projects/TutorTask121_Spring2025_Real-Time_Bitcoin_Analysis_with_SQLAlchemy) | Spring2025 |
 | SWE-agent | [Link](DATA605/SWE-agent_Project_Description.md) | Proposed | — | — | — | — |
+| SageMath | [Link](../data605/Spring2025/project_descriptions/SageMath_Project_Description.md) | Done | — | [TutorTask225](https://github.com/causify-ai/tutorials/issues/225) | [Result](../data605/Spring2025/projects/TutorTask225_Spring2025_Analyzing_Bitcoin_Time_Series_with_SageMath) | Spring2025 |
 | SendGrid | [Link](DATA605/SendGrid_Project_Description.md) | Proposed | — | — | — | — |
 | Simple_Chatbot_with_Redis | [Link](../data605/Spring2024/SorrTask780_Simple_Chatbot_with_Redis/README.md) | Done | — | [SorrTask780](https://github.com/causify-ai/kaizenflow/issues/780) | [Result](../data605/Spring2024/SorrTask780_Simple_Chatbot_with_Redis) | Spring2024 |
 | Simple_Task_List_With_Redis | [Link](../data605/Spring2024/Spring2024_Simple_Task_List_With_Redis/README.md) | Done | — | — | [Result](../data605/Spring2024/Spring2024_Simple_Task_List_With_Redis) | Spring2024 |
@@ -147,15 +180,21 @@
 | Snorkel | [Link](DATA605/Snorkel_Project_Description.md) | Proposed | — | — | — | — |
 | Snowflake | [Link](DATA605/Snowflake_Project_Description.md) | Proposed | — | [TutorTask155](https://github.com/causify-ai/tutorials/issues/155) | [Result](../data605/Spring2025/projects/TutorTask155_Spring2025_Real-time_Bitcoin_Data_Processing_with_Amazon_Snowflake) | Spring2025 |
 | Socket.IO | [Link](DATA605/Socket.IO_Project_Description.md) | Proposed | — | [TutorTask175](https://github.com/causify-ai/tutorials/issues/175) | [Result](../data605/Spring2025/projects/TutorTask175_Spring2025_Real_time_Bitcoin_Data_Processing_with_Socket.IO) | Spring2025 |
+| Spark_SQL | [Link](../data605/Spring2025/project_descriptions/Spark_SQL_Project_Description.md) | Done | — | [TutorTask108](https://github.com/causify-ai/tutorials/issues/108) | [Result](../data605/Spring2025/projects/TutorTask108_Spring2025_Implementing_Real-Time_Bitcoin_Price_Analysis_with_Spark_SQL) | Spring2025 |
+| Stable-Baselines3 | [Link](../data605/Spring2025/project_descriptions/Stable-Baselines3_Project_Description.md) | Done | — | [TutorTask128](https://github.com/causify-ai/tutorials/issues/128) | [Result](../data605/Spring2025/projects/TutorTask128_Spring2025_Real-Time_Bitcoin_Price_Trend_Analysis_using_Stable-Baseline3) | Spring2025 |
 | Streamz | [Link](DATA605/Streamz_Project_Description.md) | Proposed | — | — | — | — |
 | Synthesized.io | [Link](DATA605/Synthesized.io_Project_Description.md) | Proposed | — | — | — | — |
 | Synthetic_Data_Vault | [Link](DATA605/Synthetic_Data_Vault_Project_Description.md) | Proposed | — | — | — | — |
 | TPOT | [Link](DATA605/TPOT_Project_Description.md) | Proposed | — | — | — | — |
+| TensorFlow | [Link](../data605/Spring2025/project_descriptions/TensorFlow_Project_Description.md) | Done | — | [TutorTask183](https://github.com/causify-ai/tutorials/issues/183) | [Result](../data605/Spring2025/projects/TutorTask183_Spring2025_Real-time_Bitcoin_Price_Analysis_with_TensorFlow) | Spring2025 |
+| TensorFlow_Agents | [Link](../data605/Spring2025/project_descriptions/TensorFlow_Agents_Project_Description.md) | Done | — | [TutorTask89](https://github.com/causify-ai/tutorials/issues/89) | [Result](../data605/Spring2025/projects/TutorTask89_Spring2025_Reinforcement_Learning_for_Bitcoin_Price_Prediction_Using_TensorFlow_Agents) | Spring2025 |
+| TensorFlow_Probability | [Link](../data605/Spring2025/project_descriptions/TensorFlow_Probability_Project_Description.md) | Done | — | [TutorTask166](https://github.com/causify-ai/tutorials/issues/166) | [Result](../data605/Spring2025/projects/TutorTask166_Spring2025_Implementing_Time_Series_Forecasting_with_TensorFlow_Probability_for_Bitcoin_Prices) | Spring2025 |
 | Terraform | [Link](DATA605/Terraform_Project_Description.md) | Proposed | — | — | — | — |
 | TextBlob | [Link](DATA605/TextBlob_Project_Description.md) | Proposed | — | [TutorTask106](https://github.com/causify-ai/tutorials/issues/106) | [Result](../data605/Spring2025/projects/TutorTask106_Spring2025_Real_Time_Bitcoin_Sentiment_Analysis_Using_TextBlob) | Spring2025 |
 | TinyDB | [Link](DATA605/TinyDB_Project_Description.md) | Proposed | — | — | — | — |
 | Tonic.ai | [Link](DATA605/Tonic.ai_Project_Description.md) | Proposed | — | — | — | — |
 | Trane | [Link](DATA605/Trane_Project_Description.md) | Proposed | — | — | — | — |
+| Transformers | [Link](../data605/Spring2025/project_descriptions/Transformers_Project_Description.md) | Done | — | [TutorTask110](https://github.com/causify-ai/tutorials/issues/110) | [Result](../data605/Spring2025/projects/TutorTask110_Spring2025_Real-Time_Bitcoin_Analysis_Using_Transformers) | Spring2025 |
 | Trifacta_Wrangler | [Link](DATA605/Trifacta_Wrangler_Project_Description.md) | Proposed | — | — | — | — |
 | Tryton | [Link](DATA605/Tryton_Project_Description.md) | Proposed | — | — | — | — |
 | URL_Shortener_Service_with_Redis | [Link](../data605/Spring2024/SorrTask835_URL_Shortener_Service_with_Redis/README.md) | Done | — | [SorrTask835](https://github.com/causify-ai/kaizenflow/issues/835) | [Result](../data605/Spring2024/SorrTask835_URL_Shortener_Service_with_Redis) | Spring2024 |
@@ -168,6 +207,8 @@
 | basic_rate_limiting_middleware_with_Redis | [Link](../data605/Spring2024/Trask_basic_rate_limiting_middleware_with_Redis/README.md) | Done | — | — | [Result](../data605/Spring2024/Trask_basic_rate_limiting_middleware_with_Redis) | Spring2024 |
 | bentoml | [Link](DATA605/bentoml_Project_Description.md) | Proposed | — | — | — | — |
 | catboost | [Link](DATA605/catboost_Project_Description.md) | Proposed | — | — | — | — |
+| cryptography | [Link](../data605/Spring2025/project_descriptions/cryptography_Project_Description.md) | Done | — | [TutorTask264](https://github.com/causify-ai/tutorials/issues/264) | [Result](../data605/Spring2025/projects/TutorTask264_Spring2025_Secure_Bitcoin_Price_Ingestion_using_Cryptography) | Spring2025 |
+| cuDF | [Link](../data605/Spring2025/project_descriptions/cuDF_Project_Description.md) | Done | — | [TutorTask154](https://github.com/causify-ai/tutorials/issues/154) | [Result](../data605/Spring2025/projects/TutorTask154_Spring2025_Real-Time_Bitcoin_Data_Processing_using_cuDF) | Spring2025 |
 | datasets | [Link](DATA605/datasets_Project_Description.md) | Proposed | — | — | — | — |
 | factor-analyzer | [Link](DATA605/factor-analyzer_Project_Description.md) | Proposed | — | — | — | — |
 | fastapi | [Link](DATA605/fastapi_Project_Description.md) | Proposed | — | — | — | — |
@@ -184,6 +225,7 @@
 | lightgbm | [Link](DATA605/lightgbm_Project_Description.md) | Proposed | — | [TutorTask298](https://github.com/causify-ai/tutorials/issues/298) | [Result](../data605/Spring2025/projects/TutorTask298_Spring2025_Real_Time_Bitcoin_Price_Analysis_using_LightGBM) | Spring2025 |
 | llm | [Link](DATA605/llm_Project_Description.md) | Proposed | — | [TutorTask132](https://github.com/causify-ai/tutorials/issues/132) | [Result](../data605/Spring2025/projects/TutorTask132_Spring2025_Real-time_Bitcoin_Sentiment_Analysis_and_Price_Prediction_with_llm) | Spring2025 |
 | mlflow | [Link](DATA605/mlflow_Project_Description.md) | Proposed | — | — | — | — |
+| mock | [Link](../data605/Spring2025/project_descriptions/mock_Project_Description.md) | Done | — | [TutorTask191](https://github.com/causify-ai/tutorials/issues/191) | [Result](../data605/Spring2025/projects/TutorTask191_Spring2025_Testing_Crypto_API_with_mock) | Spring2025 |
 | modAL | [Link](DATA605/modAL_Project_Description.md) | Proposed | — | — | — | — |
 | msgpack | [Link](DATA605/msgpack_Project_Description.md) | Proposed | — | — | — | — |
 | orbit | [Link](DATA605/orbit_Project_Description.md) | Proposed | — | — | — | — |
@@ -200,6 +242,7 @@
 | sktime | [Link](DATA605/sktime_Project_Description.md) | Proposed | — | — | — | — |
 | small-text | [Link](DATA605/small-text_Project_Description.md) | Proposed | — | — | — | — |
 | spaCy | [Link](DATA605/spaCy_Project_Description.md) | Proposed | — | [TutorTask204](https://github.com/causify-ai/tutorials/issues/204) | [Result](../data605/Spring2025/projects/TutorTask204_Spring2025_RealTime_Bitcoin_Sentiment_Analysis_spaCy_Selenium) | Spring2025 |
+| statsmodels | [Link](../data605/Spring2025/project_descriptions/statsmodels_Project_Description.md) | Done | — | [TutorTask113](https://github.com/causify-ai/tutorials/issues/113) | [Result](../data605/Spring2025/projects/TutorTask113_Spring2025_Analyzing_Bitcoin_Trends_Using_Statsmodels) | Spring2025 |
 | streamlit | [Link](DATA605/streamlit_Project_Description.md) | Proposed | — | [TutorTask152](https://github.com/causify-ai/tutorials/issues/152) | [Result](../data605/Spring2025/projects/TutorTask152_Spring2025_Real_Time_Bitcoin_Price_Monitoring_with_Streamlit) | Spring2025 |
 | stumpy | [Link](DATA605/stumpy_Project_Description.md) | Proposed | — | — | — | — |
 | tokenizers | [Link](DATA605/tokenizers_Project_Description.md) | Proposed | — | — | — | — |
@@ -338,55 +381,8 @@
 ### DATA605
 
 - `class_project/data605/Spring2023/altdata_notebooks`
-- `class_project/data605/Spring2025/projects/TutorTask105_Spring2025_Real-Time_Bitcoin_Price_Analysis_using_Plotly`
-- `class_project/data605/Spring2025/projects/TutorTask108_Spring2025_Implementing_Real-Time_Bitcoin_Price_Analysis_with_Spark_SQL`
-- `class_project/data605/Spring2025/projects/TutorTask109_Spring2025_Real-time_Bitcoin_Data_Ingestion_and_Analysis_with_Plotly`
-- `class_project/data605/Spring2025/projects/TutorTask110_Spring2025_Real-Time_Bitcoin_Analysis_Using_Transformers`
 - `class_project/data605/Spring2025/projects/TutorTask112a`
-- `class_project/data605/Spring2025/projects/TutorTask113_Spring2025_Analyzing_Bitcoin_Trends_Using_Statsmodels`
-- `class_project/data605/Spring2025/projects/TutorTask119_Spring2025_Real-Time_Bitcoin_Causal_Analysis_with_DoWhy`
-- `class_project/data605/Spring2025/projects/TutorTask120_Spring_2025_Real_Time_Bitcoin_Price_Analysis_with_Amazon_SageMaker`
-- `class_project/data605/Spring2025/projects/TutorTask122_Spring2025_Scalable_Real-Time_Bitcoin_Analytics_with_Falcon`
-- `class_project/data605/Spring2025/projects/TutorTask125_Spring2025_Local_AI-Powered_Document_Search_Engine_with_Ollama`
-- `class_project/data605/Spring2025/projects/TutorTask126_Spring2025_RealTime_Bitcoin_Data_Processing_with_Amazon_Batch`
-- `class_project/data605/Spring2025/projects/TutorTask126_Spring2025_RealTime_Bitcoin_Data_Processing_with_Amazon_Batch_v2`
-- `class_project/data605/Spring2025/projects/TutorTask128_Spring2025_Real-Time_Bitcoin_Price_Trend_Analysis_using_Stable-Baseline3`
-- `class_project/data605/Spring2025/projects/TutorTask129_Spring2025_Customer_Engagement_Time_Series_Analysis_Using_Customer.io_Event_Data`
-- `class_project/data605/Spring2025/projects/TutorTask135_Spring2025_Real_Time_Bitcoin_Transaction_Anomaly_Detection_with_Anthropic_Claude_1`
-- `class_project/data605/Spring2025/projects/TutorTask137_Spring2025_Bitcoin_Forecasting_with_Facebook_Prophet`
-- `class_project/data605/Spring2025/projects/TutorTask142_Spring2025_Real_time_Bitcoin_Price_Analysis_Using_PyMC3`
-- `class_project/data605/Spring2025/projects/TutorTask143_Spring2025_Custom_Bitcoin_Chatbot_with_Ollama_Python`
-- `class_project/data605/Spring2025/projects/TutorTask146_Spring_2025_Real_time_Bitcoin_Price_Analysis_Using_Qlik_Sense`
-- `class_project/data605/Spring2025/projects/TutorTask151_Spring2025_Bitcoin_Price_Causality_Analysis_with_Causal-Learn`
-- `class_project/data605/Spring2025/projects/TutorTask154_Spring2025_Real-Time_Bitcoin_Data_Processing_using_cuDF`
-- `class_project/data605/Spring2025/projects/TutorTask156_Spring2025_Real_time_bitcoin_data_processing_using_Amazon_RDS`
-- `class_project/data605/Spring2025/projects/TutorTask163_Spring2025_Real-Time_Bitcoin_Price_Analytics_with_Redis`
-- `class_project/data605/Spring2025/projects/TutorTask166_Spring2025_Implementing_Time_Series_Forecasting_with_TensorFlow_Probability_for_Bitcoin_Prices`
-- `class_project/data605/Spring2025/projects/TutorTask169_Spring2025_Real_time_Bitcoin_Analysis_with_PySparkling`
-- `class_project/data605/Spring2025/projects/TutorTask175_Spring2025_Real_Time_Bitcoin_Data_Processing_with_Pyarrow`
-- `class_project/data605/Spring2025/projects/TutorTask177_Spring2025_Real-Time_Weather_Data_Analysis_with_MetPy`
-- `class_project/data605/Spring2025/projects/TutorTask181_Spring2025_Real-Time_Bitcoin_Data_Processing_with_Amazon_DynamoDB`
-- `class_project/data605/Spring2025/projects/TutorTask183_Spring2025_Real-time_Bitcoin_Price_Analysis_with_TensorFlow`
-- `class_project/data605/Spring2025/projects/TutorTask184_Spring2025_Real-Time_Bitcoin_Price_Analysis_and_Forecasting_with_Ollama-Python`
-- `class_project/data605/Spring2025/projects/TutorTask186_Spring2025_Ingest_bitcoin_prices_using_AWS_Glue`
-- `class_project/data605/Spring2025/projects/TutorTask188_Spring2025_Batch_Processing_of_Bitcoin_Price_Data_with_Petastorm​`
-- `class_project/data605/Spring2025/projects/TutorTask190_Spring2025_ALLMS`
-- `class_project/data605/Spring2025/projects/TutorTask191_Spring2025_Testing_Crypto_API_with_mock`
-- `class_project/data605/Spring2025/projects/TutorTask197_Spring2025_Predictive_Bottleneck_Detection_in_Real-Time_Data_Pipelines_Using_AWS_X-Ray`
-- `class_project/data605/Spring2025/projects/TutorTask225_Spring2025_Analyzing_Bitcoin_Time_Series_with_SageMath`
-- `class_project/data605/Spring2025/projects/TutorTask242_Spring2025_Real-Time_Bitcoin_Price_Analysis_Pipeline_with_AWS_CloudFormation`
-- `class_project/data605/Spring2025/projects/TutorTask264_Spring2025_Secure_Bitcoin_Price_Ingestion_using_Cryptography`
-- `class_project/data605/Spring2025/projects/TutorTask268_Spring2025__Analyze_Real-Time_Bitcoin_Data_with_Azure_SDK_for_Python`
-- `class_project/data605/Spring2025/projects/TutorTask300_Spring2025_Real_Time_Bitcoin_Data_Processing_with_BigDL`
-- `class_project/data605/Spring2025/projects/TutorTask350_Spring2025_RealTimeBitcoinPriceAnalysis`
-- `class_project/data605/Spring2025/projects/TutorTask381_Spring2025_Real_Time_Bitcoin_Sentiment_Analysis_Using_PyLLMs`
-- `class_project/data605/Spring2025/projects/TutorTask86_Spring2025_Real_Time_Bitcoin_Price_Analysis_Using_Amazon_EMR`
-- `class_project/data605/Spring2025/projects/TutorTask87_Spring2025_Real_Time_Bitcoin_Price_Anomaly_Detection_Using_Amazon_Kinesis`
-- `class_project/data605/Spring2025/projects/TutorTask89_Spring2025_Reinforcement_Learning_for_Bitcoin_Price_Prediction_Using_TensorFlow_Agents`
-- `class_project/data605/Spring2025/projects/TutorTask92_Spring2025_Real_Time_Bitcoin_Price_Analysis_with_Databricks_CLI`
-- `class_project/data605/Spring2025/projects/TutorTask94_Spring2025_Real_time_Bitcoin_Data_Processing_with_PySpark`
 - `class_project/data605/Spring2025/projects/TutorTask95_Spring2025_Real_time_Bitcoin_Data_processing_with_airflow`
-- `class_project/data605/Spring2025/projects/TutorTask99_Spring2025_Real-Time_Bitcoin_Data_Processing_with_Datasette`
 
 ### MSML610
 

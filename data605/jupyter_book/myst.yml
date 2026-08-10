@@ -63,6 +63,9 @@ project:
         - file: ../tutorials/tutorial_spark/Spark_doc.ipynb
 site:
   template: book-theme
+  parts:
+    # Empty file removes default "Made with MyST" sidebar footer.
+    primary_sidebar_footer: _static/empty.md
 
 # `jupyter book build` only executes notebooks with --execute, so the
 # stored outputs already in tutorials/**/*.ipynb are rendered as-is.

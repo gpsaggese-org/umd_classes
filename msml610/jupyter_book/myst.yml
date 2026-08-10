@@ -58,6 +58,9 @@ project:
         - file: ../tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipynb
 site:
   template: book-theme
+  parts:
+    # Empty file removes default "Made with MyST" sidebar footer.
+    primary_sidebar_footer: _static/empty.md
   #options:
     # reduces spacing between headings/paragraphs
     #body_max_width: "100px"
