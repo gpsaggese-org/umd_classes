@@ -3,7 +3,7 @@
 - Create the skeleton of the project
   ```bash
   > export PROJ=...
-  > class_project/create_project.py ---dst_dir tutorials/${PROJ}
+  > class_project/create_project.py --dst_dir tutorials/${PROJ}
   ```
 
 - Commit the changes
