@@ -1,12 +1,14 @@
 # Use Python 3.12 slim (already has Python and pip).
+
 FROM python:3.12-slim
 
 # Avoid interactive prompts during apt operations.
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install CA certificates (needed for HTTPS).
+# Install CA certificates (needed for HTTPS) and git.
 RUN apt-get update && apt-get install -y \
     ca-certificates \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 # Install project specific packages.

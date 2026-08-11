@@ -27,6 +27,9 @@
 #   - Learn it without knowing the model (Q-learning)
 
 # %% [markdown]
+# # Gridworld 4x3
+
+# %% [markdown]
 # ## Imports
 
 # %%
