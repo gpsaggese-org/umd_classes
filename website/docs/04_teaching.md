@@ -1,8 +1,9 @@
 # Teaching
 
-<div style="display: flex; align-items: center; gap: 15px;" markdown="span">
-  ![UMD Logo](assets/umd_logo.png){ width="150" }
-  <span style="font-size: 1.5em; font-weight: bold;">DATA605: Big Data Systems</span>
+<div style="display: flex; align-items: center; gap: 15px;" markdown="1">
+![UMD Logo](assets/umd_logo.png){ width="150" }
+
+## DATA605: Big Data Systems
 </div>
 
 **Graduate-level course covering distributed computing, big data technologies,
@@ -26,9 +27,10 @@ Spark, NoSQL databases, and cloud computing platforms.
 - [Spring 2024](https://app.testudo.umd.edu/soc/202401/DATA/DATA605)
 - [Spring 2023](https://app.testudo.umd.edu/soc/202301/DATA/DATA605)
 
-<div style="display: flex; align-items: center; gap: 15px;" markdown="span">
-  ![UMD Logo](assets/umd_logo.png){ width="150" }
-  <span style="font-size: 1.5em; font-weight: bold;">MSML610: Advanced Machine Learning</span>
+<div style="display: flex; align-items: center; gap: 15px;" markdown="1">
+![UMD Logo](assets/umd_logo.png){ width="150" }
+
+## MSML610: Advanced Machine Learning
 </div>
 
 **Graduate-level course covering advanced ML techniques, deep learning, and
@@ -46,9 +48,10 @@ to deploy production-grade machine learning systems.
 - [Lectures](https://github.com/gpsaggese/umd_classes/tree/master/msml610/lectures)
 - [ELMS](https://umd.instructure.com/courses/1391619)
 
-<div style="display: flex; align-items: center; gap: 15px;" markdown="span">
-  ![NSF Logo](assets/nsf_logo.png){ width="150" }
-  <span style="font-size: 1.5em; font-weight: bold;">NSF I-Corps: Instructor of Entrepreneurship</span>
+<div style="display: flex; align-items: center; gap: 15px;" markdown="1">
+![NSF Logo](assets/nsf_logo.png){ width="150" }
+
+## NSF I-Corps: Instructor of Entrepreneurship
 </div>
 
 Teaching entrepreneurship and customer discovery to research teams

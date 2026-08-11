@@ -1,5 +1,15 @@
 # Noesis marketing plan
 
+- TODO(gp):
+  - Supply:
+    - Talk to token providers to get blocks
+  - Demand
+    - Google adsense OpenRouter, tokens
+    - Students
+    - Promo
+    - Refer and get discount
+    - Crypto people from my linkedin
+
 ## Goal
 - Lay out how to get initial supply and demand liquidity into \Noesis{} once
   [[plan.Noesis]]'s Milestone 9 (`NoesisPlatform`) exposes a public API, so

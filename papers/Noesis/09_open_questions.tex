@@ -115,3 +115,56 @@ double auction in place of the call auction of Section~\ref{sec:noesis_market}
 without touching \NoesisServer{}, requires pinning down the exact inputs,
 outputs, and invariants each interface guarantees, which is left as
 future specification work rather than resolved here.
+
+% ==============================================================================
+\subsection{Open questions specific to the decentralized design}
+\label{sec:decentralized_open_questions}
+
+\begin{enumerate}
+  \item \textbf{Bid and price discovery for a new market}: with no trading
+    history, neither a buyer nor a seller has a reference price to anchor
+    a bid or an ask to; whether the first rounds of a new tier bucket need
+    a different mechanism, e.g., a wider price band or a subsidized
+    bootstrap period, than the steady-state design above is unresolved.
+
+  \item \textbf{Reveal-window griefing}: a blind bid
+    (Definition~\ref{def:blind_bid}) is visible to on-chain observers once
+    revealed; a party monitoring the mempool during the reveal window can
+    still submit a competing bid or ask before the window closes, unless
+    the window is bounded to a single block, which in turn bounds how many
+    participants can feasibly reveal in time.
+
+  \item \textbf{Commitment without capability}: nothing in
+    Definition~\ref{def:blind_bid} stops a seller from committing an ask
+    it cannot actually fulfill within $\lmaxattr$, since the stake
+    $\sigma_\alpha$ is only forfeited after the fact; whether a smaller,
+    non-refundable commitment fee at bid time is needed to discourage
+    speculative asks is open.
+
+  \item \textbf{Stake sizing and asymmetry}: whether the stake
+    $\sigma_\alpha$ required of a seller (Section~\ref{sec:stake_slashing})
+    should be set unilaterally by the buyer's bid, which risks the buyer
+    demanding excessive collateral, or by a market-wide rule tied to the
+    contract's price, and whether the buyer should also be required to
+    post a bond so that an under-collateralized buyer cannot costlessly
+    request contracts it does not intend to honor payment for.
+
+  \item \textbf{Sybil resistance}: whether stake-and-slash
+    (Section~\ref{sec:stake_slashing}) is by itself a sufficient deterrent
+    against a seller re-entering under a new address after being slashed,
+    or whether a Sybil-resistant identity layer is still needed on top, in
+    tension with the anonymity goal of Section~\ref{sec:decentralized_motivation}.
+
+  \item \textbf{Redundancy defaults}: whether $k_{\text{red}}$
+    (Section~\ref{sec:decentralized_redundancy}) should default to 1 and
+    be raised only at the buyer's request and expense, or whether the
+    market itself should raise it automatically in thin, collusion-prone
+    buckets.
+
+  \item \textbf{Verifiable optimality}: whether a succinct proof of
+    clearing-problem optimality, not merely feasibility
+    (Section~\ref{sec:decentralized_matching_engine}), is practical to
+    generate and verify at the scale of a real tier bucket, or whether the
+    design must settle for verified feasibility and accept a centralized
+    operator's word on optimality.
+\end{enumerate}
