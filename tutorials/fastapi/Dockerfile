@@ -7,6 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install CA certificates (needed for HTTPS).
 RUN apt-get update && apt-get install -y \
     ca-certificates \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 # Install project specific packages.

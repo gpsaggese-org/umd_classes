@@ -24,9 +24,9 @@
 # - `httpx` drives the app over real HTTP, the same way a browser or another
 #   service would
 #
-# This is the production-shaped path. `fastapi.API.ipynb` covers the same
-# app's building blocks in-process with `TestClient`, which is faster for
-# exploration but skips the network entirely.
+# This is the production-shaped path.
+# - `fastapi.API.ipynb` covers the same app's building blocks in-process with
+#     `TestClient`, which is faster for exploration but skips the network entirely.
 #
 # **Must run top to bottom after a kernel restart.**
 
@@ -42,8 +42,10 @@ import logging
 import httpx
 
 import fastapi_utils
+import helpers.hdbg as hdbg
+import helpers.hintrospection as hintros
 
-logging.basicConfig(level=logging.INFO)
+hdbg.init_logger(verbosity=logging.INFO)
 _LOG = logging.getLogger(__name__)
 
 PORT = 8010
@@ -57,11 +59,18 @@ BASE_URL = f"http://127.0.0.1:{PORT}"
 # sanity check before starting the server.
 
 # %%
+hintros.print_obj_info(fastapi_utils.create_book_app)
+
+# %%
+# Build the app: wires up the routes and seeds the in-memory catalog.
 app = fastapi_utils.create_book_app()
 
 for route in app.routes:
     methods = ",".join(sorted(getattr(route, "methods", []) or []))
     _LOG.info("%-6s %s", methods, getattr(route, "path", route))
+# Outcome: `app` is a ready-to-serve `FastAPI` instance; the log lists every
+# registered route, including the built-in `/docs`, `/redoc`, and
+# `/openapi.json`, plus the catalog's `/health` and `/books` routes.
 
 # %% [markdown]
 # ## Part 2: Start the Server
@@ -71,9 +80,11 @@ for route in app.routes:
 # so the next cell never races the server startup.
 
 # %%
+# Start `uvicorn` on a daemon thread, then block until `/health` responds.
 server, server_thread = fastapi_utils.run_server_in_background(app, port=PORT)
 fastapi_utils.wait_for_server(f"{BASE_URL}/health")
 _LOG.info("Server is up at %s", BASE_URL)
+# Outcome: the server is accepting real TCP connections at `BASE_URL`.
 
 # %% [markdown]
 # ## Part 3: List and Filter Books
@@ -82,20 +93,28 @@ _LOG.info("Server is up at %s", BASE_URL)
 # `127.0.0.1:8010` instead of calling the app object directly.
 
 # %%
+# List every book in the catalog.
 response = httpx.get(f"{BASE_URL}/books")
 response.raise_for_status()
 _LOG.info("All books: %s", [book["title"] for book in response.json()])
+# Outcome: all 3 seeded books, in insertion order.
 
+# Filter to only out-of-stock books via the `in_stock` query parameter.
 response = httpx.get(f"{BASE_URL}/books", params={"in_stock": False})
 _LOG.info("Out-of-stock books: %s", [book["title"] for book in response.json()])
+# Outcome: just "Designing Data-Intensive Applications", the only seed book
+# marked out of stock.
 
+# Cap the result to one book via the `limit` query parameter.
 response = httpx.get(f"{BASE_URL}/books", params={"limit": 1})
 _LOG.info("First book only: %s", [book["title"] for book in response.json()])
+# Outcome: only "Fluent Python", the first seeded book.
 
 # %% [markdown]
 # ## Part 4: Create, Update, and Delete a Book
 
 # %%
+# Create a new book; the server assigns the `id`.
 response = httpx.post(
     f"{BASE_URL}/books",
     json={"title": "The Pragmatic Programmer", "author": "Hunt & Thomas", "year": 1999},
@@ -103,8 +122,11 @@ response = httpx.post(
 response.raise_for_status()
 new_book = response.json()
 _LOG.info("Created book %s: %s", new_book["id"], new_book["title"])
+# Outcome: 201 Created; `new_book["id"]` is 4, the next free ID after the
+# 3 seeded books.
 
 # %%
+# Replace the new book's fields, flipping it to out of stock.
 response = httpx.patch(
     f"{BASE_URL}/books/{new_book['id']}",
     json={
@@ -116,13 +138,18 @@ response = httpx.patch(
 )
 response.raise_for_status()
 _LOG.info("Updated book: %s", response.json())
+# Outcome: 200 OK; the same book is returned with `in_stock` now `False`.
 
 # %%
+# Delete the book that was just created and updated.
 response = httpx.delete(f"{BASE_URL}/books/{new_book['id']}")
 _LOG.info("DELETE status: %s", response.status_code)
+# Outcome: 204 No Content; the book is removed from the catalog.
 
+# Confirm the deletion: the same ID should no longer resolve.
 response = httpx.get(f"{BASE_URL}/books/{new_book['id']}")
 _LOG.info("GET after delete: %s", response.status_code)
+# Outcome: 404 Not Found.
 
 # %% [markdown]
 # ## Part 5: Handle Errors
@@ -131,13 +158,18 @@ _LOG.info("GET after delete: %s", response.status_code)
 # and returns `422` with a description of what failed.
 
 # %%
+# Look up a book ID that was never created.
 response = httpx.get(f"{BASE_URL}/books/99999")
 _LOG.info("GET missing book -> %s %s", response.status_code, response.json())
+# Outcome: 404 Not Found with {"detail": "Book 99999 not found"}.
 
+# Send a payload missing the required `author` and `year` fields.
 response = httpx.post(f"{BASE_URL}/books", json={"title": "No Author or Year"})
 _LOG.info("POST invalid payload -> %s", response.status_code)
 for error in response.json()["detail"]:
     _LOG.info("  %s: %s", error["loc"], error["msg"])
+# Outcome: 422 Unprocessable Entity; the handler never runs, and the
+# response lists both missing fields.
 
 # %% [markdown]
 # ## Part 6: Inspect the Live Docs
@@ -148,10 +180,13 @@ for error in response.json()["detail"]:
 # interactively.
 
 # %%
+# Fetch the OpenAPI schema `FastAPI` generated automatically.
 response = httpx.get(f"{BASE_URL}/openapi.json")
 schema = response.json()
 _LOG.info("OpenAPI title: %s", schema["info"]["title"])
 _LOG.info("Registered paths: %s", sorted(schema["paths"].keys()))
+# Outcome: title "Book Catalog API"; paths are /books, /books/{book_id},
+# and /health.
 
 # %% [markdown]
 # ## Part 7: Shut Down the Server
@@ -160,8 +195,10 @@ _LOG.info("Registered paths: %s", sorted(schema["paths"].keys()))
 # freed for the next run.
 
 # %%
+# Stop the background `uvicorn` server and join its thread.
 fastapi_utils.stop_server(server, server_thread)
 _LOG.info("Server thread alive: %s", server_thread.is_alive())
+# Outcome: `False`; the server thread has exited and the port is freed.
 
 # %% [markdown]
 # ## Wrap-up

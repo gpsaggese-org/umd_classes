@@ -36,6 +36,19 @@
 # Related notebook: `fastapi.example.ipynb` runs a complete app with a real
 # `uvicorn` server and real HTTP calls over the network.
 
+# %% [markdown]
+# ## Mental Model
+#
+# | Object | Description | Additional Info |
+# |--------|-------------|-----------------|
+# | `FastAPI()` | Application instance | Holds every registered route; passed to `TestClient` or `uvicorn` |
+# | `@app.get(path)` / `@app.post(path)` | Path operation decorator | Registers a function as the handler for one HTTP method + path |
+# | `TestClient(app)` | In-process test client | Drives the app without opening a real socket |
+# | `pydantic.BaseModel` subclass | Request/response schema | Field types define validation rules and the `/openapi.json` shape |
+# | `fastapi.Query(default, ...)` | Query parameter declaration | Adds constraints (`ge`, `le`, ...) beyond a plain default value |
+# | `fastapi.Depends(func)` | Dependency injection | Shares parsing/validation logic across multiple endpoints |
+# | `fastapi.HTTPException(status_code, detail)` | Structured error | Raised inside a handler; `FastAPI` turns it into a JSON error response |
+
 # %%
 # !pip install --quiet -r tutorial_requirements.txt
 
@@ -47,8 +60,8 @@ import logging
 
 import fastapi
 import fastapi.testclient
+import pydantic
 
-import fastapi_utils
 import helpers.hdbg as hdbg
 
 hdbg.init_logger(verbosity=logging.INFO)
@@ -61,11 +74,13 @@ _LOG = logging.getLogger(__name__)
 # - `FastAPI` reads the function's type hints to know how to parse and validate each argument
 
 # %%
-# Create a FastAPI application.
+# Create a `FastAPI` application: an empty app with no routes yet.
 demo_app = fastapi.FastAPI()
 
-# Create a client that connects to the API directly, without going through sockets and HTTP (useful for unit testing).
-demo_client = fastapi.testclient.TestClient(demo_app) 
+# Create a client that calls `demo_app` directly, without opening a real
+# socket (useful for unit testing).
+demo_client = fastapi.testclient.TestClient(demo_app)
+# `demo_client` can now issue requests against any route on `demo_app`.
 
 # - A path operation is an "endpoint":
 #   - One URL path: `/`
@@ -77,35 +92,39 @@ def read_root() -> dict:
     Return a simple greeting.
     """
     return {"message": "Hello, World"}
+# Outcome: GET / is now registered on `demo_app`, handled by `read_root()`.
 
 
 # %%
-# Call the API.
+# Call GET / and confirm the greeting comes back.
 response = demo_client.get("/")
 _LOG.info("GET / -> %s %s", response.status_code, response.json())
 
 
 # %%
-# An API "items" accepting an integer id.
+# Register an "items" endpoint accepting an integer path parameter.
 @demo_app.get("/items/{item_id}")
 def read_item(item_id: int) -> dict:
     """
     Echo back a path parameter, coerced to `int`.
     """
     return {"item_id": item_id}
+# Outcome: GET /items/{item_id} is now registered, handled by `read_item()`.
 
 
 # %%
-# Call the API.
+# Call GET /items/42; `"42"` in the URL is coerced to the `int` 42.
 path = "/items/42"
 response = demo_client.get(path)
 _LOG.info("GET %s -> %s %s", path, response.status_code, response.json())
+# Outcome: 200 OK with {"item_id": 42}.
 
 # %%
-# A non-integer path segment fails validation before `read_item()` ever runs.
+# Call GET /items/not_a_number: the path segment cannot be coerced to `int`.
 response = demo_client.get("/items/not_a_number")
 _LOG.info("GET /items/not_a_number -> %s", response.status_code)
 _LOG.info("Validation error detail: %s", response.json()["detail"][0]["msg"])
+# Outcome: 422 Unprocessable Entity; `read_item()` never runs.
 
 # %% [markdown]
 # ## 2. Query Parameters
@@ -114,55 +133,97 @@ _LOG.info("Validation error detail: %s", response.json()["detail"][0]["msg"])
 # A default value makes the parameter optional.
 
 # %%
+# Register an endpoint whose non-path arguments become query parameters.
 @demo_app.get("/items/")
 def list_items(skip: int = 0, limit: int = 10) -> dict:
     """
     Report the pagination parameters that were parsed.
     """
     return {"skip": skip, "limit": limit}
+# Outcome: GET /items/ is now registered, handled by `list_items()`.
 
 # %%
-# Explicit `skip` and `limit` values are parsed from the query string.
+# Call GET /items/ with explicit `skip` and `limit` query parameters.
 response = demo_client.get("/items/", params={"skip": 5, "limit": 20})
 _LOG.info("GET /items/?skip=5&limit=20 -> %s", response.json())
+# Outcome: {"skip": 5, "limit": 20}, parsed straight from the query string.
 
 # %%
-# Omitting both parameters falls back to the function's default values.
+# Call GET /items/ with no query parameters at all.
 response = demo_client.get("/items/")
 _LOG.info("GET /items/ (defaults) -> %s", response.json())
+# Outcome: {"skip": 0, "limit": 10}, falling back to the function's defaults.
 
 # %% [markdown]
 # ## 3. Request Body and Validation
 #
-# // TODO(ai_gp): Do not use utils but create all the needed code here
-#
 # - A request body is described as a `pydantic` model
-# - `fastapi_utils` defines `BookCreate` and `Book` for the tutorial
-#     - Reusing them here keeps this notebook and `fastapi.example.ipynb` consistent
+# - `BookCreate` and `Book` are defined directly below (not imported from
+#   `fastapi_utils`), so the full request/response shape is visible here
 
 # %%
-@demo_app.post("/books", response_model=fastapi_utils.Book, status_code=201)
-def create_book(payload: fastapi_utils.BookCreate) -> fastapi_utils.Book:
+# Payload accepted when creating a book: no `id` yet, the server assigns it.
+class BookCreate(pydantic.BaseModel):
+    """
+    Payload accepted when creating a book.
+    """
+
+    title: str = pydantic.Field(..., description="Book title.")
+    author: str = pydantic.Field(..., description="Book author.")
+    year: int = pydantic.Field(..., ge=0, description="Publication year.")
+    in_stock: bool = True
+
+
+# A book as returned by the API, including its server-assigned ID.
+class Book(pydantic.BaseModel):
+    """
+    A book as stored and returned by the API, including its ID.
+    """
+
+    id: int = pydantic.Field(..., description="Unique book identifier.")
+    title: str = pydantic.Field(..., description="Book title.")
+    author: str = pydantic.Field(..., description="Book author.")
+    year: int = pydantic.Field(..., ge=0, description="Publication year.")
+    in_stock: bool = True
+
+
+# %% [markdown]
+# - The route registration's arguments each control a different thing:
+#   - `"/books"`: the path this handler responds to
+#   - `response_model=Book`: the return value is validated and serialized
+#     against `Book`, and the shape is documented in `/docs`
+#   - `status_code=201`: the HTTP status returned on success ("Created")
+# - `payload: BookCreate` is the request body: `FastAPI` parses and validates
+#   the incoming JSON against `BookCreate` before `create_book()` ever runs
+
+# %%
+# Register POST /books; `payload` is validated against `BookCreate` first.
+@demo_app.post("/books", response_model=Book, status_code=201)
+def create_book(payload: BookCreate) -> Book:
     """
     Echo the validated payload back as a `Book` with a fixed ID.
 
     A real implementation would persist the book; see
     `fastapi_utils.create_book_app()` for that version.
     """
-    return fastapi_utils.Book(id=1, **payload.model_dump())
+    return Book(id=1, **payload.model_dump())
+# Outcome: POST /books is now registered, handled by `create_book()`.
 
 
+# Call POST /books with a complete, valid payload.
 response = demo_client.post(
     "/books", json={"title": "Fluent Python", "author": "Luciano Ramalho", "year": 2015}
 )
 _LOG.info("POST /books (valid) -> %s %s", response.status_code, response.json())
+# Outcome: 201 Created with the echoed `Book`, `id` set to 1.
 
 # %%
-# Omitting a required field fails validation before `create_book()` runs.
+# Call POST /books with a payload missing required fields.
 response = demo_client.post("/books", json={"title": "Missing Fields"})
 _LOG.info("POST /books (invalid) -> %s", response.status_code)
 for error in response.json()["detail"]:
     _LOG.info("  %s: %s", error["loc"], error["msg"])
+# Outcome: 422 Unprocessable Entity; `create_book()` never runs.
 
 # %% [markdown]
 # ## 4. Dependency Injection
@@ -171,6 +232,9 @@ for error in response.json()["detail"]:
 # - `FastAPI` calls the dependency function first and passes its return value into the endpoint
 
 # %%
+# `pagination_params()` is a plain function, not a route: `FastAPI` calls it
+# before the endpoint runs, parsing and validating `skip`/`limit` from the
+# query string the same way it would for a path operation's own arguments.
 def pagination_params(
     skip: int = fastapi.Query(0, ge=0),
     limit: int = fastapi.Query(10, ge=1, le=100),
@@ -181,6 +245,9 @@ def pagination_params(
     return {"skip": skip, "limit": limit}
 
 
+# `fastapi.Depends(pagination_params)` wires the dependency into the
+# endpoint: the `pagination` argument below is `pagination_params()`'s
+# *return value*, already parsed and validated, not the function itself.
 @demo_app.get("/books")
 def list_books_demo(
     pagination: dict = fastapi.Depends(pagination_params),
@@ -189,28 +256,65 @@ def list_books_demo(
     Show the pagination values resolved by the shared dependency.
     """
     return pagination
+# Outcome: GET /books is now registered, handled by `list_books_demo()`.
 
 
+# %%
+# Call GET /books?limit=5; the dependency parses and validates `limit`.
 response = demo_client.get("/books", params={"limit": 5})
 _LOG.info("GET /books?limit=5 -> %s", response.json())
+# Outcome: {"skip": 0, "limit": 5}.
 
+# %%
 # An out-of-range value is rejected by the dependency's own `Query()` bounds.
 response = demo_client.get("/books", params={"limit": 500})
 _LOG.info("GET /books?limit=500 -> %s", response.status_code)
+# Outcome: 422 Unprocessable Entity; `list_books_demo()` never runs.
 
 # %% [markdown]
 # ## 5. Error Handling with HTTPException
 #
-# `fastapi_utils.create_book_app()` builds a small catalog API on top of the
-# same models. Looking up a missing book raises `HTTPException`, which
-# `FastAPI` turns into a JSON error response with the given status code.
+# Raising `fastapi.HTTPException(status_code, detail)` inside a handler
+# short-circuits it: `FastAPI` turns the exception into a JSON error
+# response with the given status code, instead of running the rest of the
+# function.
 
 # %%
-catalog_app = fastapi_utils.create_book_app()
-catalog_client = fastapi.testclient.TestClient(catalog_app)
+# A tiny in-memory catalog, keyed by ID.
+books_by_id = {
+    1: Book(id=1, title="Fluent Python", author="Luciano Ramalho", year=2015)
+}
 
-response = catalog_client.get("/books/999")
+
+# Register GET /books/{book_id}; a missing ID raises `HTTPException(404)`.
+@demo_app.get("/books/{book_id}", response_model=Book)
+def get_book(book_id: int) -> Book:
+    """
+    Fetch a book by ID, or raise a 404 if it is missing.
+    """
+    if book_id not in books_by_id:
+        raise fastapi.HTTPException(
+            status_code=404, detail=f"Book {book_id} not found"
+        )
+    return books_by_id[book_id]
+# Outcome: GET /books/{book_id} is now registered, handled by `get_book()`.
+
+
+# Register a `/health` endpoint, used later to test that the app is up.
+@demo_app.get("/health")
+def health() -> dict:
+    """
+    Report that the service is up.
+    """
+    return {"status": "ok"}
+# Outcome: GET /health is now registered, handled by `health()`.
+
+
+# %%
+# Call GET /books/999; no book with that ID exists in `books_by_id`.
+response = demo_client.get("/books/999")
 _LOG.info("GET /books/999 -> %s %s", response.status_code, response.json())
+# Outcome: 404 Not Found with {"detail": "Book 999 not found"}.
 
 # %% [markdown]
 # ## 6. Automatic Interactive Docs
@@ -225,10 +329,12 @@ _LOG.info("GET /books/999 -> %s %s", response.status_code, response.json())
 # here, `TestClient` fetches the schema directly.
 
 # %%
-response = catalog_client.get("/openapi.json")
+# Call GET /openapi.json to fetch the schema `FastAPI` generated automatically.
+response = demo_client.get("/openapi.json")
 schema = response.json()
 _LOG.info("OpenAPI title: %s", schema["info"]["title"])
 _LOG.info("Registered paths: %s", sorted(schema["paths"].keys()))
+# Outcome: 200 OK; the schema lists every route registered on `demo_app` above.
 
 # %% [markdown]
 # ## 7. Testing with TestClient
@@ -239,12 +345,14 @@ _LOG.info("Registered paths: %s", sorted(schema["paths"].keys()))
 # %%
 def test_health_check() -> None:
     """
-    Confirm the catalog app reports itself as healthy.
+    Confirm the demo app reports itself as healthy.
     """
-    result = catalog_client.get("/health")
+    result = demo_client.get("/health")
     assert result.status_code == 200
     assert result.json() == {"status": "ok"}
 
 
+# Run the test the same way `pytest` would: call it directly.
 test_health_check()
 _LOG.info("test_health_check() passed.")
+# Outcome: both assertions held; no `AssertionError` was raised.
