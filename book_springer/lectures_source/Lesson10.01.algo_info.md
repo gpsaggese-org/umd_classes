@@ -205,6 +205,10 @@
   - `bandit` (Python Bandit)
   - `ml-logger` (Experiment tracking for bandits)
 
+Alternative libraries: mabwiser (for parallelizable contextual multi-armed
+bandits), coba (for online contextual bandit research), and space-bandits (for
+deep Bayesian approximation)
+
 ## 4. Planning and Search Algorithms
 
 ### MCTS (Monte Carlo Tree Search)

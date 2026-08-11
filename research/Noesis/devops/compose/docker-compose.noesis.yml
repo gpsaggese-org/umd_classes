@@ -1,0 +1,50 @@
+version: '3'
+services:
+  noesis_api:
+    extends:
+      file: tmp.docker-compose.yml
+      service: app
+    command: >
+      uvicorn research.Noesis.main:app
+      --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    # `PR_P2b`: connection info for `NOESIS_DB_BACKEND=postgres`; harmless
+    # when `NOESIS_DB_BACKEND` is unset/`memory` (`main.py` never reads
+    # these env vars on that path). `POSTGRES_PASSWORD` is never committed;
+    # set it via `docker compose run -e` or the shell environment.
+    environment:
+      - POSTGRES_HOST=noesis_postgres
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - NOESIS_DB_BACKEND=${NOESIS_DB_BACKEND}
+    depends_on:
+      noesis_postgres:
+        condition: service_healthy
+
+  # `PR_P2b`: local dev Postgres. Do NOT run this as a sidecar in the ECS
+  # prod path (see `spec.PR_P2b.md`'s "Implementation" /
+  # "Risks and Limitations to Call Out"); use AWS RDS there instead, with
+  # the same five `POSTGRES_*` values set as ECS task definition `secrets`.
+  noesis_postgres:
+    image: postgres:16
+    restart: "no"
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - noesis_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  # Plain Docker volume: survives `docker compose down` (no `-v`) but is
+  # node-local, not replicated (`spec.PR_P2b.md`'s "Risks and Limitations to
+  # Call Out").
+  noesis_postgres_data: {}

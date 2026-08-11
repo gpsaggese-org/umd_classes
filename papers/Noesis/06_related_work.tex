@@ -7,17 +7,16 @@
 \label{sec:related_gateways}
 
 Multi-provider gateways such as OpenRouter unify access to many LLM
-providers behind a single API, which is the architectural starting point
-for \NoesisServer{} (Section~\ref{sec:gateway_architecture}); unlike
-\Noesis, they typically set prices unilaterally rather than clearing an
-auction, and do not meter delivered quality against a contract.
-RouteLLM \cite{routellm2024} and FrugalGPT \cite{frugalgpt2023} address
-the difficulty-aware routing problem of Section~\ref{sec:routing}
-directly, learning to route or cascade requests across models of
-different cost to reduce spend while controlling quality loss; \Noesis{}
-adopts a similar routing formalization but ties the resulting cost
-savings to contract fulfillment and to a market that prices the tiers
-being routed between.
+providers behind a single API, which is the starting point for \NoesisServer{}
+(Section~\ref{sec:gateway_architecture}); unlike \Noesis, they typically set
+prices unilaterally rather than clearing an auction, and do not meter delivered
+quality against a contract. RouteLLM \cite{routellm2024} and FrugalGPT
+\cite{frugalgpt2023} address the difficulty-aware routing problem of
+Section~\ref{sec:routing} directly, learning to route or cascade requests
+across models of different cost to reduce spend while controlling quality loss;
+\Noesis{} adopts a similar routing formalization but ties the resulting cost
+savings to contract fulfillment and to a market that prices the tiers being
+routed between.
 
 % ==============================================================================
 \subsection{Model fusion and distillation}
@@ -92,26 +91,29 @@ the only point combining both axes for machine intelligence.
 
 % rendered_images:begin
 % ```tikz
-% \definecolor{ptcolor}{RGB}{74,110,168}
-% \definecolor{noesiscolor}{RGB}{178,58,72}
-% \draw[->, >=stealth, thick] (0,0) -- (9.6,0) node[right, font=\footnotesize, align=left] {auction-based\\price discovery};
-% \draw[->, >=stealth, thick] (0,0) -- (0,7.4) node[above, font=\footnotesize, align=center] {metered, verifiable\\fulfillment};
-% \draw[dashed, gray] (4.6,-0.3) -- (4.6,7.4);
-% \draw[dashed, gray] (-0.3,3.6) -- (9.6,3.6);
-% \node[font=\footnotesize] at (2.3,-0.5) {no};
-% \node[font=\footnotesize] at (7.0,-0.5) {yes};
-% \node[font=\footnotesize] at (-0.6,1.8) {no};
-% \node[font=\footnotesize] at (-0.6,5.6) {yes};
-% \filldraw[ptcolor] (1.7,1.0) circle (2.4pt);
-% \node[anchor=west, align=left, font=\footnotesize] at (0.3,1.9) {LLM routing \& fusion\\(RouteLLM, FrugalGPT,\\self-consistency, MoA)};
-% \filldraw[ptcolor] (7.3,1.0) circle (2.4pt);
-% \node[anchor=west, align=left, font=\footnotesize] at (6.3,1.9) {auction theory\\(McAfee, Budish,\\Myerson)};
-% \filldraw[ptcolor] (3.9,1.0) circle (2.4pt);
-% \node[anchor=west, align=left, font=\footnotesize] at (2.9,0.3) {decentralized exchange\\(Tulip, Uniswap)};
-% \filldraw[ptcolor] (7.2,5.4) circle (2.4pt);
-% \node[anchor=east, align=right, font=\footnotesize] at (6.6,6.0) {commodity \& capacity\\markets (electricity)};
-% \filldraw[noesiscolor] (8.8,6.6) circle (3pt);
-% \node[anchor=west, align=left, font=\footnotesize\bfseries, text=noesiscolor] at (8.3,7.05) {Noesis};
+% \definecolor{axiscolor}{RGB}{133,146,163}
+% \definecolor{dividercolor}{RGB}{199,208,218}
+% \definecolor{ptcolor}{RGB}{31,78,121}
+% \definecolor{noesiscolor}{RGB}{192,69,91}
+% \fontfamily{phv}\selectfont
+% \draw[->, >=stealth, thick, axiscolor] (0,0) -- (7.2,0) node[right, font=\small, align=left] {Auction-based\\price discovery};
+% \draw[->, >=stealth, thick, axiscolor] (0,0) -- (0,5.55) node[above, font=\small, align=center] {Metered, verifiable\\fulfillment};
+% \draw[dashed, dividercolor] (3.45,-0.225) -- (3.45,5.55);
+% \draw[dashed, dividercolor] (-0.225,2.7) -- (7.2,2.7);
+% \node[font=\small] at (1.725,-0.375) {No};
+% \node[font=\small] at (5.25,-0.375) {Yes};
+% \node[font=\small] at (-0.45,1.35) {No};
+% \node[font=\small] at (-0.45,4.2) {Yes};
+% \filldraw[ptcolor] (1.275,0.75) circle (2.4pt);
+% \node[anchor=west, align=left, font=\small] at (0.225,1.425) {LLM routing \& fusion\\(RouteLLM, FrugalGPT,\\self-consistency, MoA)};
+% \filldraw[ptcolor] (5.475,0.75) circle (2.4pt);
+% \node[anchor=west, align=left, font=\small] at (4.725,1.425) {Auction theory\\(McAfee, Budish,\\Myerson)};
+% \filldraw[ptcolor] (2.925,0.75) circle (2.4pt);
+% \node[anchor=west, align=left, font=\small] at (2.175,0.225) {Decentralized exchange\\(Tulip, Uniswap)};
+% \filldraw[ptcolor] (5.4,4.05) circle (2.4pt);
+% \node[anchor=east, align=right, font=\small] at (4.95,4.5) {Commodity \& capacity\\markets (electricity)};
+% \filldraw[noesiscolor] (6.6,4.95) circle (3pt);
+% \node[anchor=west, align=left, font=\small\bfseries, text=noesiscolor] at (6.225,5.29) {Noesis};
 % ```
 % label=fig:related_landscape
 % caption=Related work positioned by auction-based price discovery and metered fulfillment.
@@ -123,20 +125,3 @@ the only point combining both axes for machine intelligence.
   \label{fig:related_landscape}
 \end{figure}
 % render_images:end
-
-% ==============================================================================
-\subsection{Companion research directions}
-\label{sec:related_companion}
-
-Three ongoing, unpublished research notes are directly relevant and are
-referenced throughout this paper without being cited as external
-publications. A blockchain-based prediction market shares
-\NoesisMarket's matching-and-settlement problem, without the
-capability-verification problem that motivates
-\NoesisServer. A pairwise preference arena for LLMs would supply the
-independent, ground-truth quality judgments that
-Definition~\ref{def:agreement_label}'s agreement label only approximates,
-and could be used to score routing and fusion decisions directly. A
-dataset-construction effort for training and distilling LLMs would be a
-direct consumer of the corpus logged by \NoesisServer{}
-(Section~\ref{sec:distillation}).

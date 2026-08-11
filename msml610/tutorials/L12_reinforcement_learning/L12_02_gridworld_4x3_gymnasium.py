@@ -28,6 +28,9 @@
 #   - `gymnasium` calls `reset()` and `step()` instead of direct model access
 
 # %% [markdown]
+# # Gridworld 4x3 Gymnasium
+
+# %% [markdown]
 # ## Imports
 
 # %%

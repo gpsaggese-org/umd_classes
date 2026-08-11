@@ -1,8 +1,48 @@
 # Publications
 
 ## Books
-- [Big Data Systems](https://github.com/gpsaggese/umd_classes/blob/master/data605/lectures_commentary/book.pdf)
-- [Advanced Machine Learning](https://github.com/gpsaggese/umd_classes/blob/master/msml610/book/book.pdf)
+
+<div style="display: flex; align-items: center; gap: 15px;" markdown="1">
+![Causal Machine Learning for Decisions cover](assets/springer_causal_ml_cover_small.png){ width="120" }
+
+<div markdown="1">
+### Causal Machine Learning for Decisions: Reasoning Under Uncertainty, Springer 2026
+
+- **Chapters:** [Links](class_links/book_springer.links.html)
+</div>
+</div>
+
+<div style="display: flex; align-items: center; gap: 15px;" markdown="1">
+![DATA605: Big Data Systems cover](assets/data605_cover_small.png){ width="120" }
+
+<div markdown="1">
+### DATA605: Big Data Systems Book
+
+- **Chapters:** [Links](class_links/data605.links.html)
+- **Tutorials:** [Links](../jupyter_books/data605/)
+</div>
+</div>
+
+<div style="display: flex; align-items: center; gap: 15px;" markdown="1">
+![MSML610: Advanced Machine Learning cover](assets/msml610_cover_small.png){ width="120" }
+
+<div markdown="1">
+### MSML610: Advanced Machine Learning Book
+
+- **Chapters:** [Links](class_links/msml610.links.html)
+- **Tutorials:** [Links](../jupyter_books/msml610/)
+</div>
+</div>
+
+<div style="display: flex; align-items: center; gap: 15px;" markdown="1">
+![Learn X in 60 Minutes cover](assets/umd_logo.png){ width="120" }
+
+<div markdown="1">
+### Learn X in 60 Minutes
+
+- **Tutorials:** [Links](../jupyter_books/tutorials/)
+</div>
+</div>
 
 ## Blogs
 - [Causify Blog](https://blog.causify.ai)

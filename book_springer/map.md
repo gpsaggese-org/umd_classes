@@ -201,10 +201,11 @@
 | `msml610/lectures_source/Lesson08.X-Causal_inference.txt`                    
 | `msml610/lectures_source/Lesson09.1-Reasoning_over_time.txt`                 
 | `msml610/lectures_source/Lesson09.2-Hidden_Markov_Models.txt`                
-| `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt`                 |       | 10%    |           | 10%      |
+| `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt`                 | yes   | 10%    |           | 10%      |
 | `msml610/lectures_source/Lesson09.4-gh_Filter.txt`                           |       | 70%    |           | 60%      |
 | `msml610/lectures_source/Lesson09.5-Kalman_Filter.txt`                       |       | 70%    |           | 60%      |
 | `msml610/lectures_source/Lesson09.6-Dynamic_Bayesian_Networks.txt`           
+| `msml610/lectures_source/Lesson09.7-Advanced_Bandits.txt`                    | yes   | 50%    |           | 0%       |
 | `msml610/lectures_source/Lesson10.1-Timeseries_forecasting.txt`              | ?
 | `msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.txt`    | ?
 | `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`  | ?
@@ -253,7 +254,7 @@ msml610/tutorials/L09_kalman_filter/L09_05_01_discrete_bayes_dog.ipynb
 msml610/tutorials/L09_kalman_filter/L09_05_02_univariate_kalman_filter.ipynb
 msml610/tutorials/L09_kalman_filter/L09_05_03_multivariate_kalman_filter.ipynb
 msml610/tutorials/L09_kalman_filter/L09_05_04_non_linear_kalman_filter.ipynb
-msml610/tutorials/L09_multi_armed_bandits/L09_03_multi_armed_bandits.ipynb
+msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.ipynb
 msml610/tutorials/L10_causal_discovery/L10_2_causal_discovery.ipynb
 msml610/tutorials/L12_reinforcement_learning/L12_01_gridworld_4x3.ipynb
 msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipynb

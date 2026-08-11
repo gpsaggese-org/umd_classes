@@ -14,6 +14,9 @@
 # ---
 
 # %% [markdown]
+# # Probabilistic Programming
+
+# %% [markdown]
 # ## Imports
 
 # %% [markdown]
