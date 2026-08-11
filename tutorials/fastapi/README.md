@@ -28,22 +28,22 @@
   notebooks in order
 
 ## Tutorial Notebooks
-Work through the following notebooks in order:
+- Work through the following notebooks in order:
 
-- [`fastapi.API.ipynb`](fastapi.API.ipynb): Core FastAPI fundamentals
-  - Path and query parameters
-  - Request body validation with `pydantic` models
-  - Dependency injection with `Depends()`
-  - Error handling with `HTTPException`
-  - The automatic `/docs`, `/redoc`, and `/openapi.json`
+  - [`fastapi.API.ipynb`](fastapi.API.ipynb): Core FastAPI fundamentals
+    - Path and query parameters
+    - Request body validation with `pydantic` models
+    - Dependency injection with `Depends()`
+    - Error handling with `HTTPException`
+    - The automatic `/docs`, `/redoc`, and `/openapi.json`
 
-- [`fastapi.example.ipynb`](fastapi.example.ipynb): End-to-end Book Catalog API
-  - Runs a real `uvicorn` server on a background thread
-  - Exercises the API with real HTTP requests via `httpx`
-  - Covers create, read, update, delete, filtering, and error responses
+  - [`fastapi_utils.py`](fastapi_utils.py): Utility functions supporting the
+    tutorial notebooks
 
-- [`fastapi_utils.py`](fastapi_utils.py): Utility functions supporting the
-  tutorial notebooks
+  - [`fastapi.example.ipynb`](fastapi.example.ipynb): End-to-end Book Catalog API
+    - Runs a real `uvicorn` server on a background thread
+    - Exercises the API with real HTTP requests via `httpx`
+    - Covers create, read, update, delete, filtering, and error responses
 
 ## Changelog
 - 2026-08-10: Initial release

@@ -17,15 +17,14 @@
 # # FastAPI API Overview
 #
 # A runnable walkthrough of the core `FastAPI` building blocks:
-# - path operations
-# - request validation
-# - dependency injection
-# - error handling
-# - the automatic interactive docs.
+# - Path operations
+# - Request validation
+# - Dependency injection
+# - Error handling
+# - The automatic interactive docs
 #
 # `FastAPI` apps are served by `uvicorn`
-# - This notebook uses `fastapi.testclient.TestClient` instead, which drives the
-# app in-process without opening a real socket, so every cell runs instantly.
+# - This notebook uses `fastapi.testclient.TestClient` instead, which drives the app in-process without opening a real socket, so every cell runs instantly.
 #
 # **What you will learn:**
 # - How path and query parameters are typed and validated
@@ -46,13 +45,13 @@
 
 import logging
 
-# TODO(ai_gp): Use import fastapi
-from fastapi import Depends, FastAPI, Query
+import fastapi
+import fastapi.testclient
 
 import fastapi_utils
+import helpers.hdbg as hdbg
 
-# TODO(ai_gp): Use the official function for the logging.
-logging.basicConfig(level=logging.INFO)
+hdbg.init_logger(verbosity=logging.INFO)
 _LOG = logging.getLogger(__name__)
 
 # %% [markdown]
@@ -62,17 +61,32 @@ _LOG = logging.getLogger(__name__)
 # - `FastAPI` reads the function's type hints to know how to parse and validate each argument
 
 # %%
-demo_app = FastAPI()
+# Create a FastAPI application.
+demo_app = fastapi.FastAPI()
+
+# Create a client that connects to the API directly, without going through sockets and HTTP (useful for unit testing).
+demo_client = fastapi.testclient.TestClient(demo_app) 
+
+# - A path operation is an "endpoint":
+#   - One URL path: `/`
+#   - One HTTP method: `get`
+#   - The function that handles it: `read_root()`
+@demo_app.get("/")
+def read_root() -> dict:
+    """
+    Return a simple greeting.
+    """
+    return {"message": "Hello, World"}
 
 
-# @demo_app.get("/")
-# def read_root() -> dict:
-#     """
-#     Return a simple greeting.
-#     """
-#     return {"message": "Hello, World"}
+# %%
+# Call the API.
+response = demo_client.get("/")
+_LOG.info("GET / -> %s %s", response.status_code, response.json())
 
 
+# %%
+# An API "items" accepting an integer id.
 @demo_app.get("/items/{item_id}")
 def read_item(item_id: int) -> dict:
     """
@@ -81,11 +95,11 @@ def read_item(item_id: int) -> dict:
     return {"item_id": item_id}
 
 
-demo_client = fastapi_utils.make_test_client(demo_app)
-
 # %%
-response = demo_client.get("/items/42")
-_LOG.info("GET /items/42 -> %s %s", response.status_code, response.json())
+# Call the API.
+path = "/items/42"
+response = demo_client.get(path)
+_LOG.info("GET %s -> %s %s", path, response.status_code, response.json())
 
 # %%
 # A non-integer path segment fails validation before `read_item()` ever runs.
@@ -107,16 +121,20 @@ def list_items(skip: int = 0, limit: int = 10) -> dict:
     """
     return {"skip": skip, "limit": limit}
 
-# TODO(ai_gp): Split each call into a cell.
+# %%
+# Explicit `skip` and `limit` values are parsed from the query string.
 response = demo_client.get("/items/", params={"skip": 5, "limit": 20})
 _LOG.info("GET /items/?skip=5&limit=20 -> %s", response.json())
-# TODO(ai_gp): Add a comment explaining the output for each cell.
 
+# %%
+# Omitting both parameters falls back to the function's default values.
 response = demo_client.get("/items/")
 _LOG.info("GET /items/ (defaults) -> %s", response.json())
 
 # %% [markdown]
 # ## 3. Request Body and Validation
+#
+# // TODO(ai_gp): Do not use utils but create all the needed code here
 #
 # - A request body is described as a `pydantic` model
 # - `fastapi_utils` defines `BookCreate` and `Book` for the tutorial
@@ -154,7 +172,8 @@ for error in response.json()["detail"]:
 
 # %%
 def pagination_params(
-    skip: int = Query(0, ge=0), limit: int = Query(10, ge=1, le=100)
+    skip: int = fastapi.Query(0, ge=0),
+    limit: int = fastapi.Query(10, ge=1, le=100),
 ) -> dict:
     """
     Parse and validate pagination parameters shared across endpoints.
@@ -163,7 +182,9 @@ def pagination_params(
 
 
 @demo_app.get("/books")
-def list_books_demo(pagination: dict = Depends(pagination_params)) -> dict:
+def list_books_demo(
+    pagination: dict = fastapi.Depends(pagination_params),
+) -> dict:
     """
     Show the pagination values resolved by the shared dependency.
     """
@@ -186,7 +207,7 @@ _LOG.info("GET /books?limit=500 -> %s", response.status_code)
 
 # %%
 catalog_app = fastapi_utils.create_book_app()
-catalog_client = fastapi_utils.make_test_client(catalog_app)
+catalog_client = fastapi.testclient.TestClient(catalog_app)
 
 response = catalog_client.get("/books/999")
 _LOG.info("GET /books/999 -> %s %s", response.status_code, response.json())

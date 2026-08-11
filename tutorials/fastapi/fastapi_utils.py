@@ -19,7 +19,6 @@ from typing import Dict, List, Optional, Tuple
 import httpx
 import uvicorn
 from fastapi import FastAPI, HTTPException, Query
-from fastapi.testclient import TestClient
 from pydantic import BaseModel, Field
 
 import helpers.hdbg as hdbg
@@ -190,17 +189,6 @@ def _get_book_or_404(app: FastAPI, book_id: int) -> Book:
 # #############################################################################
 # Test / server helpers
 # #############################################################################
-
-
-# TODO(ai_gp): Inline this function
-def make_test_client(app: FastAPI) -> TestClient:
-    """
-    Wrap `app` in a `TestClient` for in-process calls, without a socket.
-
-    :param app: `FastAPI` app to wrap
-    :return: a ready-to-use `TestClient`
-    """
-    return TestClient(app)
 
 
 def run_server_in_background(
