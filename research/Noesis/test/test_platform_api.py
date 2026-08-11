@@ -30,9 +30,9 @@ _TEST_API_KEY = "test-api-key"
 _TEST_ACCOUNT_ID = "account_1"
 
 
-def _echo_call_fn(model: str, prompt: str) -> str:
+def _echo_call_func(model: str, prompt: str) -> str:
     """
-    Stand-in provider `call_fn` that echoes `model` and `prompt` back.
+    Stand-in provider `call_func` that echoes `model` and `prompt` back.
 
     :param model: model identifier passed to the provider
     :param prompt: prompt text passed to the provider
@@ -43,14 +43,12 @@ def _echo_call_fn(model: str, prompt: str) -> str:
 
 def _build_test_client(
     *,
-    fulfillment_fn: rnocodis.FulfillmentFn = lambda _contract: True,
-) -> Tuple[
-    fastapi.testclient.TestClient, rnbacaau.OrderBook, rnopapro.Gateway
-]:
+    fulfillment_func: rnocodis.FulfillmentFunc = lambda _contract: True,
+) -> Tuple[fastapi.testclient.TestClient, rnbacaau.OrderBook, rnopapro.Gateway]:
     """
     Build a `fastapi.testclient.TestClient` over a fresh `create_app()`.
 
-    :param fulfillment_fn: injected into `create_app()` so `POST
+    :param fulfillment_func: injected into `create_app()` so `POST
         /rounds/clear` dispatches deterministically
         - Default: report every contract as fulfilled
     :return: `(test_client, order_book, gateway)`; `order_book`/`gateway`
@@ -58,10 +56,10 @@ def _build_test_client(
         directly, alongside driving the API
     """
     order_book = rnbacaau.OrderBook()
-    gateway = rnopapro.Gateway(clock_fn=iter([0.0, 1.0] * 20).__next__)
+    gateway = rnopapro.Gateway(clock_func=iter([0.0, 1.0] * 20).__next__)
     api_keys = {_TEST_API_KEY: _TEST_ACCOUNT_ID}
     app = rnoplapi.create_app(
-        order_book, gateway, api_keys, fulfillment_fn=fulfillment_fn
+        order_book, gateway, api_keys, fulfillment_func=fulfillment_func
     )
     test_client = fastapi.testclient.TestClient(app)
     return test_client, order_book, gateway
@@ -446,12 +444,12 @@ class Test_get_contract(hunitest.TestCase):
 
     def test3(self) -> None:
         """
-        Test that a contract reported as unfulfilled by `fulfillment_fn`
+        Test that a contract reported as unfulfilled by `fulfillment_func`
         round-trips `fulfilled=False`.
         """
         # Prepare inputs.
         test_client, _, _ = _build_test_client(
-            fulfillment_fn=lambda _contract: False
+            fulfillment_func=lambda _contract: False
         )
         headers = {rnoplapi.API_KEY_HEADER: _TEST_API_KEY}
         test_client.post(
@@ -505,7 +503,7 @@ class Test_create_completion(hunitest.TestCase):
         # Prepare inputs.
         test_client, _, gateway = _build_test_client()
         gateway.register_provider(
-            rnopapro.ProviderConfig("openai_mock", _echo_call_fn, 0.01)
+            rnopapro.ProviderConfig("openai_mock", _echo_call_func, 0.01)
         )
         completion_payload = {
             "provider": "openai_mock",
@@ -574,7 +572,7 @@ class Test_get_logs(hunitest.TestCase):
         # Prepare inputs.
         test_client, _, gateway = _build_test_client()
         gateway.register_provider(
-            rnopapro.ProviderConfig("openai_mock", _echo_call_fn, 0.0)
+            rnopapro.ProviderConfig("openai_mock", _echo_call_func, 0.0)
         )
         test_client.post(
             "/completions",
@@ -611,10 +609,10 @@ class Test_get_logs(hunitest.TestCase):
         # Prepare inputs.
         test_client, _, gateway = _build_test_client()
         gateway.register_provider(
-            rnopapro.ProviderConfig("openai_mock", _echo_call_fn, 0.0)
+            rnopapro.ProviderConfig("openai_mock", _echo_call_func, 0.0)
         )
         gateway.register_provider(
-            rnopapro.ProviderConfig("anthropic_mock", _echo_call_fn, 0.0)
+            rnopapro.ProviderConfig("anthropic_mock", _echo_call_func, 0.0)
         )
         headers = {rnoplapi.API_KEY_HEADER: _TEST_API_KEY}
         test_client.post(
@@ -729,3 +727,30 @@ class Test_require_api_key(hunitest.TestCase):
         }
         # Run test.
         self.helper(path, payload)
+
+
+# #############################################################################
+# Test_health
+# #############################################################################
+
+
+class Test_health(hunitest.TestCase):
+    """
+    Test `platform_api.create_app()`'s `GET /health` endpoint.
+    """
+
+    def test1(self) -> None:
+        """
+        Test that `GET /health` returns `200` and `{"status": "ok"}` without
+        an `X-API-Key` header.
+        """
+        # Prepare inputs.
+        test_client, _, _ = _build_test_client()
+        # Prepare outputs.
+        expected_status_code = 200
+        expected_body = {"status": "ok"}
+        # Run test.
+        response = test_client.get("/health")
+        # Check outputs.
+        self.assertEqual(response.status_code, expected_status_code)
+        self.assertEqual(response.json(), expected_body)

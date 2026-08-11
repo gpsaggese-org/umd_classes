@@ -251,7 +251,7 @@ class Test_dispatch_contract(hunitest.TestCase):
         )
         # Run test.
         actual = rnocodis.dispatch_contract(
-            contract, fulfillment_fn=lambda _contract: True
+            contract, fulfillment_func=lambda _contract: True
         )
         # Check outputs.
         self.assertTrue(actual.fulfilled)
@@ -269,7 +269,7 @@ class Test_dispatch_contract(hunitest.TestCase):
         )
         # Run test.
         actual = rnocodis.dispatch_contract(
-            contract, fulfillment_fn=lambda _contract: False
+            contract, fulfillment_func=lambda _contract: False
         )
         # Check outputs.
         self.assertFalse(actual.fulfilled)
@@ -327,7 +327,7 @@ class Test_dispatch_contracts(hunitest.TestCase):
         """
         # Run test.
         actual = rnocodis.dispatch_contracts(
-            contracts, fulfillment_fn=lambda _contract: True
+            contracts, fulfillment_func=lambda _contract: True
         )
         # Check outputs.
         self.assert_equal(pprint.pformat(actual), expected, dedent=True)
@@ -342,7 +342,7 @@ class Test_dispatch_contracts(hunitest.TestCase):
         expected: List[rnocodis.Contract] = []
         # Run test.
         actual = rnocodis.dispatch_contracts(
-            contracts, fulfillment_fn=lambda _contract: True
+            contracts, fulfillment_func=lambda _contract: True
         )
         # Check outputs.
         self.assert_equal(str(actual), str(expected))
