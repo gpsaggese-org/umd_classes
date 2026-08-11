@@ -30,6 +30,15 @@ clearinghouse for censorship resistance and bidder anonymity, at the cost
 of the gas, latency, and stake-sizing questions consolidated in
 Section~\ref{sec:open_questions}.
 
+% TODO(gp): Add empirical validation, even at minimal scale, before the
+% next revision: build the auction simulator and logging proxy mentioned
+% below and actually run them, e.g., simulate clearing-price convergence
+% and reputation-score dynamics under a misbehaving seller, and measure
+% real $ savings from difficulty-aware routing (Equation~\eqref{eq:routing_saving_condition})
+% against a real gateway such as OpenRouter. This is the single biggest
+% gap for the paper's impact: right now every claim is design-only, and
+% the paragraph below admits as much.
+
 We have not, however, evaluated this
 design against real traffic, real providers, or strategic sellers, and
 Section~\ref{sec:mechanism_design_risks} makes clear that the mechanism's

@@ -97,7 +97,7 @@ except ImportError:
 from gymnasium import spaces
 
 # Inspect the public interface of the base Space class.
-hintros.print_public_methods(spaces.Space)
+hintros.print_obj_info(spaces.Space)
 
 # %%
 # Confirm that all concrete spaces are subclasses of Space.

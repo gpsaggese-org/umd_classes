@@ -5,73 +5,104 @@
 Section~\ref{sec:related_work} positions \Noesis{} against academic work on
 routing, fusion, distillation, and auction theory. This section instead
 surveys currently operating startups and projects that address, piece by
-piece, the same problem \Noesis{} targets: buying and selling machine
-intelligence, trading raw compute, or verifying that a delivered service met
-its promise. The goal is to locate the specific combination of properties,
+piece, a similar problem \Noesis{} targets:
+
+\begin{itemize}
+  \item Buying and selling machine intelligence.
+  \item Trading raw compute.
+  \item Verifying that a delivered service met its promise.
+\end{itemize}
+
+The goal is to locate the specific combination of properties,
 auction-based price discovery for a capability/latency/reliability bundle,
 metered fulfillment, and reputation feedback into pricing, that no surveyed
 system currently occupies. The industry moves quickly, so the picture below
-reflects the state of the market at the time of writing and should be read
-as illustrative of the categories rather than exhaustive within any one of
-them.
+reflects the state of the market at the time of writing (August 2026) and
+should be read as illustrative of the categories rather than exhaustive within
+any one of them.
+
+% TODO(gp): Add a cluster (and matching related-work citation) for
+% agent-to-agent payment / commerce protocols, e.g., Coinbase's x402 and
+% Google's Agent Payments Protocol (AP2), which target the same buyer
+% Noesis targets, autonomous agents that need to pay for a service
+% programmatically. These are the most directly comparable, currently-live
+% infrastructure and are missing from every cluster below. Positioning
+% Noesis against them sharpens the "autonomous agents" framing and may
+% reveal a natural integration point, Noesis as the discovery/settlement
+% layer running under those payment rails rather than a competitor to them.
 
 % ==============================================================================
 \subsection{Posted-price multi-provider gateways}
 \label{sec:sota_gateways}
 
-OpenRouter, introduced in Section~\ref{sec:protocol_overview}, is one of
+\emph{OpenRouter}, introduced in Section~\ref{sec:protocol_overview}, is one of
 several gateways that unify access to hundreds of models behind a single
-API and bill at or near the underlying provider's price. Portkey,
-LiteLLM, Requesty, TrueFoundry's AI Gateway, Cloudflare AI Gateway, and the
-Vercel AI Gateway occupy the same niche, adding a fixed platform fee, a
-flat markup, or no markup at all on top of pass-through provider pricing,
-together with observability, caching, and automatic failover across
-providers. A single-vendor gateway such as AWS Bedrock offers the same
-unified-API convenience without the multi-seller pooling. OpenRouter
-additionally ships a mixture-of-agents feature, Fusion, that fans a prompt
-out to several models and synthesizes one answer, which is the closest
-commercial analog to the answer-fusion strategy of
-Section~\ref{sec:fusion} that this survey identified.
+API and bill at or near the underlying provider's price. \emph{Portkey},
+\emph{LiteLLM}, \emph{Requesty}, \emph{TrueFoundry}'s AI Gateway, \emph{Cloudflare}
+AI Gateway, and the \emph{Vercel} AI Gateway occupy the same niche, adding a
+fixed platform fee, a flat markup, or no markup at all on top of
+pass-through provider pricing, together with observability, caching, and
+automatic failover across providers. A single-vendor gateway such as
+\emph{AWS Bedrock} offers the same unified-API convenience without the
+multi-seller pooling. \emph{OpenRouter} additionally ships a
+mixture-of-agents feature, Fusion, that fans a prompt out to several
+models and synthesizes one answer, which is the closest commercial
+analog to the answer-fusion strategy of Section~\ref{sec:fusion} that
+this survey identified.
 Table~\ref{tab:sota_gateways_companies} lists the systems in this cluster.
 
 \begin{samepage}
   \begin{table}[H]
     \centering
     \footnotesize
-    \begin{tabular}{l|l|p{5.8cm}|}
-                                & \emph{URL} & \emph{Distinguishing feature} \\
+    \begin{tabular}{l|l|l|p{4.4cm}|}
+                                                    & \emph{Pooling} & \emph{Pricing} & \emph{Notable feature} \\
       \hline
-      OpenRouter                & \url{https://openrouter.ai} & Multi-vendor pooling; ships Fusion mixture-of-agents synthesis \\
+      \makecell[l]{OpenRouter \\ {\scriptsize\url{https://openrouter.ai}}}
+        & Multi-vendor & Pass-through & Ships Fusion mixture-of-agents synthesis \\
       \hline
-      Portkey                   & \url{https://portkey.ai} & Pass-through pricing + platform fee/markup$^\dagger$ \\
+      \makecell[l]{Portkey \\ {\scriptsize\url{https://portkey.ai}}}
+        & Multi-vendor & Pass-through + fee/markup & Observability, caching, automatic failover \\
       \hline
-      LiteLLM                   & \url{https://litellm.ai} & Pass-through pricing + platform fee/markup$^\dagger$ \\
+      \makecell[l]{LiteLLM \\ {\scriptsize\url{https://litellm.ai}}}
+        & Multi-vendor & Pass-through + fee/markup & Observability, caching, automatic failover \\
       \hline
-      Requesty                  & \url{https://requesty.ai} & Pass-through pricing + platform fee/markup$^\dagger$ \\
+      \makecell[l]{Requesty \\ {\scriptsize\url{https://requesty.ai}}}
+        & Multi-vendor & Pass-through + fee/markup & Observability, caching, automatic failover \\
       \hline
-      TrueFoundry AI Gateway     & \url{https://truefoundry.com} & Pass-through pricing + platform fee/markup$^\dagger$ \\
+      \makecell[l]{TrueFoundry AI Gateway \\ {\scriptsize\url{https://truefoundry.com}}}
+        & Multi-vendor & Pass-through + fee/markup & Observability, caching, automatic failover \\
       \hline
-      Cloudflare AI Gateway      & \url{https://developers.cloudflare.com/ai-gateway} & Pass-through pricing + platform fee/markup$^\dagger$ \\
+      \makecell[l]{Cloudflare AI Gateway \\ {\scriptsize\url{https://developers.cloudflare.com/ai-gateway}}}
+        & Multi-vendor & Pass-through + fee/markup & Observability, caching, automatic failover \\
       \hline
-      Vercel AI Gateway          & \url{https://vercel.com/ai-gateway} & Pass-through pricing + platform fee/markup$^\dagger$ \\
+      \makecell[l]{Vercel AI Gateway \\ {\scriptsize\url{https://vercel.com/ai-gateway}}}
+        & Multi-vendor & Pass-through + fee/markup & Observability, caching, automatic failover \\
       \hline
-      AWS Bedrock                & \url{https://aws.amazon.com/bedrock} & Single-vendor; unified API without multi-seller pooling \\
+      \makecell[l]{AWS Bedrock \\ {\scriptsize\url{https://aws.amazon.com/bedrock}}}
+        & Single-vendor & Provider pricing & Unified API without multi-seller pooling \\
       \hline
     \end{tabular}
     \caption{Posted-price multi-provider gateways surveyed in
-      Section~\ref{sec:sota_gateways}. $^\dagger$Also bundles
-      observability, caching, and automatic failover across providers.}
+      Section~\ref{sec:sota_gateways}.}
     \label{tab:sota_gateways_companies}
   \end{table}
 \end{samepage}
 
-None of these gateways clears an auction: every price is posted or passed
-through unilaterally, so there is no price discovery in the sense of
-Section~\ref{sec:comparison_table}. None meters whether a request's
-capability, latency, or reliability matched a stated contract beyond a
-standard infrastructure uptime SLA, and none turns a delivered shortfall
-into a reputation signal that changes a provider's standing in future
-transactions.
+None of these gateways combines the three properties that motivate
+\NoesisMarket:
+
+\begin{itemize}
+  \item \textbf{Auction-based price discovery}: every price is posted or
+    passed through unilaterally, so there is no price discovery in the
+    sense of Section~\ref{sec:comparison_table}.
+  \item \textbf{Metered fulfillment}: none meters whether a request's
+    capability, latency, or reliability matched a stated contract beyond a
+    standard infrastructure uptime SLA.
+  \item \textbf{Reputation feedback}: none turns a delivered shortfall into
+    a reputation signal that changes a provider's standing in future
+    transactions.
+\end{itemize}
 
 % ==============================================================================
 \subsection{Learned model routers}
@@ -80,27 +111,31 @@ transactions.
 A second cluster of startups routes each individual request to the model
 expected to give the best cost/quality trade-off, which is the commercial
 counterpart to the difficulty-aware routing of Section~\ref{sec:routing}.
-Martian routes on an interpretability-derived model of what each request
-needs. Not Diamond and Unify learn or benchmark a routing policy across
-models on standard evaluation suites. Arch, an open-source, Envoy-based
-prompt gateway, routes from a natural-language policy description rather
-than hardcoded rules. Table~\ref{tab:sota_routing_companies} lists the
-systems in this cluster.
+\emph{Martian} routes on an interpretability-derived model of what each
+request needs. \emph{Not Diamond} and \emph{Unify} learn or benchmark a
+routing policy across models on standard evaluation suites. \emph{Arch},
+an open-source, Envoy-based prompt gateway, routes from a natural-language
+policy description rather than hardcoded rules.
+Table~\ref{tab:sota_routing_companies} lists the systems in this cluster.
 
 \begin{samepage}
   \begin{table}[H]
     \centering
     \footnotesize
-    \begin{tabular}{l|l|p{5.8cm}|}
-                    & \emph{URL} & \emph{Distinguishing feature} \\
+    \begin{tabular}{l|p{3.4cm}|p{3.1cm}|}
+                    & \emph{Routing approach} & \emph{Notes} \\
       \hline
-      Martian        & \url{https://withmartian.com} & Routes on an interpretability-derived model of request needs \\
+      \makecell[l]{Martian \\ {\scriptsize\url{https://withmartian.com}}}
+        & Interpretability-derived model of request needs & \\
       \hline
-      Not Diamond    & \url{https://notdiamond.ai} & Learns/benchmarks a routing policy on standard evaluation suites \\
+      \makecell[l]{Not Diamond \\ {\scriptsize\url{https://notdiamond.ai}}}
+        & Learned/benchmarked policy on standard evaluation suites & \\
       \hline
-      Unify          & \url{https://unify.ai} & Learns/benchmarks a routing policy on standard evaluation suites \\
+      \makecell[l]{Unify \\ {\scriptsize\url{https://unify.ai}}}
+        & Learned/benchmarked policy on standard evaluation suites & \\
       \hline
-      Arch           & \url{https://github.com/katanemo/archgw} & Open-source, Envoy-based; routes from a natural-language policy description \\
+      \makecell[l]{Arch \\ {\scriptsize\url{https://github.com/katanemo/archgw}}}
+        & Natural-language policy description & Open-source, Envoy-based \\
       \hline
     \end{tabular}
     \caption{Learned model routers surveyed in Section~\ref{sec:sota_routing}.}
@@ -120,35 +155,44 @@ reliability fell short of what was routed for.
 \label{sec:sota_compute_markets}
 
 A third cluster trades raw compute, rather than model access, through
-genuine bidding mechanisms. Akash Network runs a reverse auction in which
-a tenant posts a workload specification and a budget and providers bid to
-fill it. Vast.ai runs a continuous bid/ask market for GPU-hours in which
-an underbid spot instance can be reclaimed by a higher bidder. RunPod,
-io.net, Golem Network, CoreWeave, and Prime Intellect offer spot, reserved,
-or brokered tiers over pooled GPU capacity, with pricing that ranges from
-genuinely biddable to posted with a spot discount. Table~\ref{tab:sota_compute_markets_companies}
-lists the systems in this cluster.
+genuine bidding mechanisms. \emph{Akash Network} runs a reverse auction in
+which a tenant posts a workload specification and a budget and providers
+bid to fill it. \emph{Vast.ai} runs a continuous bid/ask market for
+GPU-hours in which an underbid spot instance can be reclaimed by a higher
+bidder. \emph{RunPod}, \emph{io.net}, \emph{Golem Network},
+\emph{CoreWeave}, and \emph{Prime Intellect} offer spot, reserved, or
+brokered tiers over pooled GPU capacity, with pricing that ranges from
+genuinely biddable to posted with a spot discount.
+Table~\ref{tab:sota_compute_markets_companies} lists the systems in this
+cluster.
 
 \begin{samepage}
   \begin{table}[H]
     \centering
     \footnotesize
-    \begin{tabular}{l|l|c|p{4.3cm}|}
-                       & \emph{URL} & \emph{Bid-based} & \emph{Distinguishing feature} \\
+    \begin{tabular}{l|c|p{2.9cm}|p{2.9cm}|}
+                       & \emph{Bid-based} & \emph{Mechanism} & \emph{Notes} \\
       \hline
-      Akash Network     & \url{https://akash.network} & \ngood & Reverse auction: tenant posts workload + budget, providers bid \\
+      \makecell[l]{Akash Network \\ {\scriptsize\url{https://akash.network}}}
+        & \ngood & Reverse auction & Tenant posts workload + budget, providers bid \\
       \hline
-      Vast.ai           & \url{https://vast.ai} & \ngood & Continuous bid/ask GPU-hour market; underbid spot instances reclaimable \\
+      \makecell[l]{Vast.ai \\ {\scriptsize\url{https://vast.ai}}}
+        & \ngood & Continuous bid/ask & Underbid spot instances reclaimable \\
       \hline
-      RunPod            & \url{https://runpod.io} & \npartial & Spot/reserved/brokered GPU tiers$^\dagger$ \\
+      \makecell[l]{RunPod \\ {\scriptsize\url{https://runpod.io}}}
+        & \npartial & Spot\slash{}reserved\slash{}brokered$^\dagger$ & \\
       \hline
-      io.net            & \url{https://io.net} & \npartial & Spot/reserved/brokered GPU tiers$^\dagger$ \\
+      \makecell[l]{io.net \\ {\scriptsize\url{https://io.net}}}
+        & \npartial & Spot\slash{}reserved\slash{}brokered$^\dagger$ & \\
       \hline
-      Golem Network     & \url{https://golem.network} & \npartial & Spot/reserved/brokered GPU tiers$^\dagger$ \\
+      \makecell[l]{Golem Network \\ {\scriptsize\url{https://golem.network}}}
+        & \npartial & Spot\slash{}reserved\slash{}brokered$^\dagger$ & \\
       \hline
-      CoreWeave         & \url{https://coreweave.com} & \npartial & Spot/reserved/brokered GPU tiers$^\dagger$ \\
+      \makecell[l]{CoreWeave \\ {\scriptsize\url{https://coreweave.com}}}
+        & \npartial & Spot\slash{}reserved\slash{}brokered$^\dagger$ & \\
       \hline
-      Prime Intellect    & \url{https://primeintellect.ai} & \npartial & Spot/reserved/brokered GPU tiers$^\dagger$ \\
+      \makecell[l]{Prime Intellect \\ {\scriptsize\url{https://primeintellect.ai}}}
+        & \npartial & Spot\slash{}reserved\slash{}brokered$^\dagger$ & \\
       \hline
     \end{tabular}
     \caption{Reverse-auction and spot compute marketplaces surveyed in
@@ -176,17 +220,17 @@ decentralized compute network, which is the closest analog to the
 fulfillment-monitoring and reputation loop that connects \NoesisServer{}
 and \NoesisMarket{} (Sections~\ref{sec:fulfillment_monitoring} and
 \ref{sec:reputation}).
-Bittensor organizes miners and validators into subnets; in its
+\emph{Bittensor} organizes miners and validators into subnets; in its
 inference-oriented subnets, validators send prompts to many miners, score
 the returned completions for quality and latency, and an on-chain
 consensus mechanism aggregates the stake-weighted scores into recurring
 reward emissions, with a serverless-inference subnet layered on top for
-pay-per-query access. Gensyn verifies distributed training work through a
-probabilistic proof-of-learning protocol rather than scoring inference
-output. Ritual runs a network of inference oracles that attach a
-cryptographic proof of correct execution to each computation. Nosana and
-the Fetch.ai / ASI Alliance pool idle compute and agent-to-agent
-transactions for AI workloads more broadly.
+pay-per-query access. \emph{Gensyn} verifies distributed training work
+through a probabilistic proof-of-learning protocol rather than scoring
+inference output. \emph{Ritual} runs a network of inference oracles that
+attach a cryptographic proof of correct execution to each computation.
+\emph{Nosana} and the \emph{Fetch.ai} / \emph{ASI Alliance} pool idle
+compute and agent-to-agent transactions for AI workloads more broadly.
 Table~\ref{tab:sota_decentralized_companies} lists the systems in this
 cluster.
 
@@ -233,15 +277,15 @@ notion of trust.
 
 A fifth, more recent cluster builds explicit auction or index
 infrastructure on top of the raw-compute markets of
-Section~\ref{sec:sota_compute_markets}. SF Compute operates an
-order-book-style market for GPU-time blocks. Compute Exchange runs spot
-auctions over standardized compute contracts explicitly modeled on a
-commodity exchange. Andromeda brokers capacity across many providers on
-standardized, benchmarked contracts to avoid multi-year lock-in. Ornn's
-Compute Price Index publishes a transaction-based benchmark price for GPU
-rental, feeding into early cash-settled compute futures.
-Table~\ref{tab:sota_exchanges_companies} lists the systems in this
-cluster.
+Section~\ref{sec:sota_compute_markets}. \emph{SF Compute} operates an
+order-book-style market for GPU-time blocks. \emph{Compute Exchange} runs
+spot auctions over standardized compute contracts explicitly modeled on a
+commodity exchange. \emph{Andromeda} brokers capacity across many
+providers on standardized, benchmarked contracts to avoid multi-year
+lock-in. \emph{Ornn}'s Compute Price Index publishes a transaction-based
+benchmark price for GPU rental, feeding into early cash-settled compute
+futures.
+Table~\ref{tab:sota_exchanges_companies} lists the systems in this cluster.
 
 \begin{samepage}
   \begin{table}[H]
@@ -265,21 +309,21 @@ cluster.
   \end{table}
 \end{samepage}
 
-This cluster is the strongest evidence that the pairing of an open auction
-with a standardized contract, the structural bet underlying
-\NoesisMarket, is a fundable design for AI infrastructure: it did not exist
-a few years ago and now spans spot auctions, brokered standardized
-contracts, and price indices. Every instance found, however, prices raw
-compute capacity rather than a verified LLM answer, so none of them closes
-the fulfillment-to-reputation loop that Section~\ref{sec:noesis_server}
-adds on top of the market.
+This cluster is the strongest evidence that the pairing of an open auction with
+a standardized contract, the structural bet underlying \NoesisMarket, is a
+fundable design for AI infrastructure: it did not exist a few years ago and now
+spans spot auctions, brokered standardized contracts, and price indices. Every
+instance found, however, prices raw compute capacity rather than a verified LLM
+answer, so none of them closes the fulfillment-to-reputation loop that
+Section~\ref{sec:noesis_server} adds on top of the market.
 
 % ==============================================================================
 \subsection{Serverless inference providers as prospective sellers}
 \label{sec:sota_sellers}
 
-A final cluster, serverless inference providers such as Together AI,
-Fireworks AI, Groq, Baseten, and Fal.ai (Table~\ref{tab:sota_sellers_companies}),
+A final cluster, serverless inference providers such as \emph{Together AI},
+\emph{Fireworks AI}, \emph{Groq}, \emph{Baseten}, and \emph{Fal.ai}
+(Table~\ref{tab:sota_sellers_companies}),
 sell inference at posted per-token or per-second rates at a given
 capability tier. These are not competitors to \Noesis{} so much as its
 prospective sellers: each already meters its own delivered latency and
@@ -320,7 +364,11 @@ reputation signal that follows the seller into a future transaction.
 
 Table~\ref{tab:sota_comparison} extends the comparison of
 Table~\ref{tab:comparison} to the six clusters surveyed above, each
-represented by its most characteristic mechanism.
+represented by its most characteristic mechanism. ``Bundled quality''
+denotes a purchasable (capability, latency, reliability) contract rather
+than a raw compute quantity or a single posted price; ``metered
+fulfillment'' denotes verification of delivered quality against that
+contract, rather than a generic infrastructure SLA.
 
 Figure~\ref{fig:sota_landscape} plots the six clusters on these two
 axes: gateways, learned routers, and serverless providers set prices
@@ -332,30 +380,35 @@ surveyed cluster combines both properties for machine intelligence, and
 
 % rendered_images:begin
 % ```tikz
-% \definecolor{ptcolor}{RGB}{74,110,168}
-% \definecolor{noesiscolor}{RGB}{178,58,72}
-% \draw[->, >=stealth, thick] (0,0) -- (9.6,0) node[right, font=\footnotesize, align=left] {auction-based\\price discovery};
-% \draw[->, >=stealth, thick] (0,0) -- (0,7.4) node[above, font=\footnotesize, align=center] {bundled, metered\\quality};
-% \draw[dashed, gray] (4.6,-0.3) -- (4.6,7.4);
-% \draw[dashed, gray] (-0.3,3.6) -- (9.6,3.6);
-% \node[font=\footnotesize] at (2.3,-0.5) {no};
-% \node[font=\footnotesize] at (7.0,-0.5) {yes};
-% \node[font=\footnotesize] at (-0.6,1.8) {no};
-% \node[font=\footnotesize] at (-0.6,5.5) {yes};
+% \definecolor{axiscolor}{RGB}{133,146,163}
+% \definecolor{dividercolor}{RGB}{199,208,218}
+% \definecolor{ptcolor}{RGB}{31,78,121}
+% \definecolor{noesiscolor}{RGB}{192,69,91}
+% \fontfamily{phv}\selectfont
+% \begin{scope}[scale=0.72]
+% \draw[->, >=stealth, thick, axiscolor] (0,0) -- (9.6,0) node[right, font=\scriptsize, align=left] {Auction-based\\price discovery};
+% \draw[->, >=stealth, thick, axiscolor] (0,0) -- (0,7.4) node[above, font=\scriptsize, align=center] {Bundled, metered\\quality};
+% \draw[dashed, dividercolor] (4.6,-0.3) -- (4.6,7.4);
+% \draw[dashed, dividercolor] (-0.3,3.6) -- (9.6,3.6);
+% \node[font=\scriptsize] at (2.3,-0.5) {No};
+% \node[font=\scriptsize] at (7.0,-0.5) {Yes};
+% \node[font=\scriptsize] at (-0.6,1.8) {No};
+% \node[font=\scriptsize] at (-0.6,5.5) {Yes};
 % \filldraw[ptcolor] (0.9,0.9) circle (2.4pt);
-% \node[anchor=west, align=left, font=\footnotesize] at (1.3,0.9) {learned routers\\(Martian, Not Diamond,\\Unify, Arch)};
+% \node[anchor=west, align=left, font=\scriptsize] at (1.3,0.9) {Learned routers};
 % \filldraw[ptcolor] (0.9,2.4) circle (2.4pt);
-% \node[anchor=west, align=left, font=\footnotesize] at (1.3,2.4) {posted-price gateways\\(OpenRouter, Portkey,\\LiteLLM, ...)};
+% \node[anchor=west, align=left, font=\scriptsize] at (1.3,2.4) {Posted-price gateways};
 % \filldraw[ptcolor] (0.9,3.3) circle (2.4pt);
-% \node[anchor=west, align=left, font=\footnotesize] at (1.3,3.3) {serverless inference providers\\(Together, Fireworks, Groq, ...)};
+% \node[anchor=west, align=left, font=\scriptsize] at (1.3,3.3) {Serverless inference providers};
 % \filldraw[ptcolor] (0.9,4.9) circle (2.4pt);
-% \node[anchor=west, align=left, font=\footnotesize] at (1.3,4.9) {token-incentivized\\inference networks\\(Bittensor, Gensyn, Ritual)};
+% \node[anchor=west, align=left, font=\scriptsize] at (1.3,4.9) {Token-incentivized\\inference networks};
 % \filldraw[ptcolor] (5.2,0.9) circle (2.4pt);
-% \node[anchor=west, align=left, font=\footnotesize] at (5.6,0.9) {reverse-auction \& spot compute\\(Akash, Vast.ai, RunPod, ...)};
+% \node[anchor=west, align=left, font=\scriptsize] at (5.6,0.9) {Reverse-auction \& spot compute};
 % \filldraw[ptcolor] (5.2,2.1) circle (2.4pt);
-% \node[anchor=west, align=left, font=\footnotesize] at (5.6,2.1) {compute exchanges \& derivatives\\(SF Compute, Compute Exchange, ...)};
+% \node[anchor=west, align=left, font=\scriptsize] at (5.6,2.1) {Compute exchanges \& derivatives};
 % \filldraw[noesiscolor] (8.8,6.6) circle (3pt);
-% \node[anchor=west, align=left, font=\footnotesize\bfseries, text=noesiscolor] at (8.3,7.05) {Noesis};
+% \node[anchor=west, align=left, font=\scriptsize\bfseries, text=noesiscolor] at (8.3,7.05) {Noesis};
+% \end{scope}
 % ```
 % label=fig:sota_landscape
 % caption=The six industry clusters positioned by price discovery and bundled quality.
@@ -392,11 +445,7 @@ surveyed cluster combines both properties for machine intelligence, and
       \hline
     \end{tabular}
     \caption{Comparison of \Noesis{} against the six industry clusters
-      surveyed in Section~\ref{sec:state_of_the_art}. ``Bundled quality''
-      denotes a purchasable (capability, latency, reliability) contract
-      rather than a raw compute quantity or a single posted price;
-      ``metered fulfillment'' denotes verification of delivered quality
-      against that contract, rather than a generic infrastructure SLA.}
+      surveyed in Section~\ref{sec:state_of_the_art}.}
     \label{tab:sota_comparison}
   \end{table}
 \end{samepage}

@@ -6,10 +6,6 @@ This section fixes the notation used throughout the rest of the paper: the
 capability tier set, the task unit, the contract, and the bid/ask tuples
 submitted to \NoesisMarket.
 
-% ==============================================================================
-\subsection{Capability tiers}
-\label{sec:capability_tiers}
-
 \begin{definition}[Capability tiers]
 \label{def:capability_tiers}
 Let
@@ -28,11 +24,7 @@ informative but is harder for a seller to credibly commit to ex ante and
 harder for a buyer to reason about ex post; Section~\ref{sec:open_questions}
 returns to this trade-off.
 
-% ==============================================================================
-\subsection{The task unit}
-\label{sec:task_unit}
-
-\begin{definition}[Task]
+\begin{definition}[Task unit]
 \label{def:task}
 A \emph{task} is an abstract, normalized unit of inference work, denoted
 $u \in \calU$, used as the unit of quantity in a contract. Throughout the
@@ -51,9 +43,13 @@ remainder of the formalization only requires that $\calU$ support addition
 and a total order, both of which hold for any of the candidate
 definitions above.
 
-% ==============================================================================
-\subsection{Contracts}
-\label{sec:contract}
+% TODO(gp): Pin down one concrete instantiation of the task unit $\calU$
+% (e.g., a benchmark-normalized task-equivalent computed against a reference
+% model) instead of leaving it fully abstract. Every worked example in the
+% paper (100 tasks, 10,000 tasks, etc.) already treats $\calU$ as settled, so
+% the abstraction is undermining the concreteness of the notation it is
+% supposed to support. Show that the chosen definition satisfies addition and
+% total order, and discuss its cross-provider comparability.
 
 \begin{definition}[Intelligence contract]
 \label{def:contract}
@@ -74,18 +70,19 @@ where
 \end{itemize}
 \end{definition}
 
-The quantities are ordered to read naturally: ``deliver $\ntasksattr$
-tasks at capability $\clevelattr$ or better, within $\lmaxattr$ latency,
-with at least $\rminattr$ reliability, for a total price of
-$\priceattr$.''
+The quantities are ordered to read naturally: 
+
+\emph{``deliver $\ntasksattr$ tasks at capability $\clevelattr$ or better,
+within $\lmaxattr$ latency, with at least $\rminattr$ reliability, for a total
+price of $\priceattr$.''}
 
 \begin{example}[Intelligence contract]
 \label{ex:contract}
 The contract
 $$
-  \kappa_1 = (10{,}000,\ \texttt{frontier},\ 2\text{s},\ 0.999,\ P)
+  \kappa_1 = (100,\ \texttt{frontier},\ 2\text{s},\ 0.999,\ P)
 $$
-reads: ``deliver 10,000 tasks at frontier-class capability or better,
+reads: ``deliver 100 tasks at frontier-class capability or better,
 within 2 seconds of latency, with at least 99.9\% reliability, for a total
 price of $P$.''
 \end{example}
@@ -94,10 +91,15 @@ price of $P$.''
 \subsection{Bids and asks}
 \label{sec:bids_asks}
 
-A contract $\kappa$ is the outcome of matching a bid against one or more
-asks in a \NoesisMarket{} auction round (Section~\ref{sec:noesis_market}).
-Bids and asks share the contract's attributes, plus the buy/sell-specific
-role of the price attribute as a limit rather than a fixed value.
+A contract $\kappa$ is the outcome of \NoesisMarket{} matching a bid
+against one or more compatible asks. This paper instantiates matching as
+a periodic call auction (Section~\ref{sec:noesis_market}), but the
+contract definition itself does not depend on how bids and asks are
+matched: a continuous double auction or a posted-price mechanism
+(Section~\ref{sec:modularity}) would produce a contract of the same
+shape. Bids and asks share the contract's attributes, plus the
+buy/sell-specific role of the price attribute as a limit rather than a
+fixed value.
 
 \begin{definition}[Bid]
 \label{def:bid}
@@ -141,8 +143,65 @@ sense. Section~\ref{sec:compatibility} defines when a bid and an ask are
 compatible, i.e., when the ask's descriptive attributes satisfy the bid's
 required attributes.
 
-% TODO(gp): Add a figure showing the contract lifecycle: a bid and one or
-% more compatible asks (Definitions~\ref{def:bid} and \ref{def:ask}) are
-% matched by NoesisMarket into a single intelligence contract
-% (Definition~\ref{def:contract}), which is then dispatched to
-% NoesisServer for execution.
+Figure~\ref{fig:contract_lifecycle} summarizes the resulting lifecycle: a
+bid (Definition~\ref{def:bid}) and one or more compatible asks
+(Definition~\ref{def:ask}) are matched by \NoesisMarket{} into a single
+intelligence contract (Definition~\ref{def:contract}), which is then
+dispatched to \NoesisServer{} for execution.
+
+% rendered_images:begin
+% ```graphviz
+% digraph ContractLifecycle {
+%   bgcolor="transparent";
+%   pad="0.12";
+%   splines=spline;
+%   nodesep=0.40;
+%   ranksep=0.55;
+%   rankdir=LR;
+% 
+%   node [shape=box,
+%         style="rounded,filled",
+%         fillcolor="#FFFFFF",
+%         color="#9AA9B8",
+%         penwidth=1.8,
+%         fontname="Helvetica",
+%         fontcolor="#243B53",
+%         fontsize=11,
+%         margin="0.20,0.14",
+%         height=0.50];
+% 
+%   edge [color="#A3B1C0",
+%         penwidth=1.3,
+%         arrowhead=vee,
+%         arrowsize=0.75,
+%         fontname="Helvetica",
+%         fontsize=9,
+%         fontcolor="#7B8794"];
+% 
+%   Bid [label=<<b>Bid</b><br/><font point-size="9" color="#A34F6C">Buyer</font>>,
+%        fillcolor="#F6E1E8", color="#D98CA8", fontcolor="#6B2A44"];
+%   Ask [label=<<b>Ask(s)</b><br/><font point-size="9" color="#946A2E">Seller(s)</font>>,
+%        fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+%   Matching [label=<<b>NoesisMarket</b><br/><font point-size="9" color="#41719C">Matches bid against asks</font>>,
+%             fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+%   Contract [label=<<b>Intelligence contract</b><br/><font point-size="9" color="#2E7C74">(n, c, L_max, R_min, P)</font>>,
+%             fillcolor="#D4EEEB", color="#7FC2B9", fontcolor="#1F5A54"];
+%   Server [label=<<b>NoesisServer</b><br/><font point-size="9" color="#41719C">Executes contract</font>>,
+%           fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+% 
+%   Bid -> Matching [label="bid"];
+%   Ask -> Matching [label="compatible ask(s)"];
+%   Matching -> Contract [label="clears"];
+%   Contract -> Server [label="dispatched"];
+% }
+% ```
+% label=fig:contract_lifecycle
+% caption=The contract lifecycle: a bid and one or more compatible asks are matched by \NoesisMarket{} into an intelligence contract, dispatched to \NoesisServer{} for execution.
+% rendered_images:end
+% render_images:begin
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{03_contracts_and_notation.tex.figs/03_contracts_and_notation.1.png}
+  \caption{The contract lifecycle: a bid and one or more compatible asks are matched by \NoesisMarket{} into an intelligence contract, dispatched to \NoesisServer{} for execution.}
+  \label{fig:contract_lifecycle}
+\end{figure}
+% render_images:end

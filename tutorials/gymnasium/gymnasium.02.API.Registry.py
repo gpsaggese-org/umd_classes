@@ -141,7 +141,7 @@ print("type(spec):", type(spec))
 print()
 
 # List all public methods.
-hintros.print_public_methods(spec)
+hintros.print_obj_info(spec)
 
 # %%
 # Build a DataFrame comparing multiple EnvSpecs.

@@ -31,6 +31,9 @@
 #   reference that every estimate is compared against
 
 # %% [markdown]
+# # Approximate Inference
+
+# %% [markdown]
 # ## Imports
 
 # %%
