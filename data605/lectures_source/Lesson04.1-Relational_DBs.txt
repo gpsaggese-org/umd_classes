@@ -212,26 +212,6 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=75%}
 - Marital status
-<<<<<<< HEAD
-  - Married(@person1\_ssn, person2\_ssn, date\_married@, date\_divorced)
-
-- Bank account
-  - Account(cust\_ssn, @account\_number@, cust\_name, balance, cust\_address)
-
-- Research assistantship at UMD
-  - RA(@student\_id, project\_id@, supervisor\_id, appt\_time,
-    @appt\_start\_date@, appt\_end\_date)
-
-- Information typically found on Wikipedia
-  - Person(@Name, Born, Died, Citizenship, Education, ...@)
-
-- Info about US President on Wikipedia
-  - President(@name, start\_date@, end\_date, vice\_president, preceded\_by,
-    succeeded\_by)
-
-- Tour de France: historical rider participation information
-  - Rider(@Name, Born, Team-name,@ Coach, Sponsor, @Year@)
-=======
   - Married(**`person1_ssn`, `person2_ssn`, `date_married`**, `date_divorced`)
 
 - Bank account
@@ -251,7 +231,6 @@ UMD DATA605 - Big Data Systems
 
 - Tour de France: historical rider participation information
   - Rider(**`name`, `born`, `team_name`**, `coach`, `sponsor`, **`year`**)
->>>>>>> master
 ::::
 :::: {.column width=25%}
 ![](data605/lectures_source/images/lecture_4_1/lec_4_1_slide_9_image_1.png)
