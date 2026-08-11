@@ -10,6 +10,8 @@
 // ./msml610/lectures_source/Lesson08.7-Causal_experiments.txt
 // ./msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt
 
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-1:-Introduction---Casino-Slot-Machines
+
 * What are Multi-Armed Bandits?
 
 - @Definition@: **Multi-Armed Bandit** is a sequential decision-making problem
@@ -85,6 +87,8 @@
   - Each asset has unknown future returns
   - Balance risk and reward
   - Market conditions are non-stationary
+
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-2:-Exploration-vs-Exploitation-Dilemma
 
 * The Exploration-Exploitation Tradeoff
 
@@ -185,6 +189,8 @@ digraph ExploitationExploration {
   - Agent must estimate these from observed rewards
   - Must balance learning (exploration) and earning (exploitation)
 
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-10:-Regret-Accumulation
+
 * Performance Metrics
 
 - @Question@: How do we measure algorithm performance when rewards are random?
@@ -256,6 +262,8 @@ digraph ExploitationExploration {
 
 # Algorithms
 
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-3:-Greedy-Algorithm-Failure
+
 * Greedy Algorithm
 
 - @Definition@: **Greedy Algorithm**
@@ -322,6 +330,8 @@ digraph ExploitationExploration {
   - Tuning $n \approx (4/\Delta^2)\log(T\Delta^2/4)$ needs the unknown $\Delta$
   - Best _gap-free_ tuning gives only $\EE[L_T] = \Theta(T^{2/3} K^{1/3})$
   - The split into "learn" then "earn" is exactly what adaptive algorithms avoid
+
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-5:-Epsilon-Greedy-Algorithm
 
 * $\epsilon$-Greedy Algorithm
 
@@ -513,6 +523,8 @@ digraph ExploitationExploration {
 
 # Optimism and UCB
 
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-6:-Confidence-Intervals-for-Each-Arm
+
 * Optimism in the Face of Uncertainty
 
 ::: columns
@@ -582,6 +594,8 @@ digraph OptimismConcept {
 ::::
 :::
 
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-7:-Upper-Confidence-Bound-(UCB)-Intuition
+
 * Upper Confidence Bound (UCB1)
 
 - @Definition@: **UCB1 Algorithm** (Auer, Cesa-Bianchi, Fischer, 2002)
@@ -601,6 +615,9 @@ digraph OptimismConcept {
 - @Remark@: the bonus uses the _current round_ $t$, not the horizon $T$
   - So UCB1 is _anytime_: it needs no knowledge of when the run stops
   - A variant uses $\log T$ instead, but then $T$ must be known in advance
+
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-8:-UCB-Algorithm-Simulation
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-9:-UCB-Exploration-Bonus-Decay
 
 * UCB: Why It Works
 
@@ -626,6 +643,8 @@ digraph OptimismConcept {
   - Unlike $\epsilon$-greedy, no schedule and no knowledge of $\Delta_i$
   - In practice the constant 2 in the bonus is often lowered (e.g., to 0.5),
     which reduces over-exploration at the cost of the theoretical guarantee
+
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-8:-UCB-Algorithm-Simulation
 
 * UCB: Worked Example
 
@@ -720,6 +739,8 @@ digraph OptimismConcept {
 
 # Bayesian Approaches
 
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-12:-Bayesian-Bandits:-Prior-and-Posterior
+
 * Bayesian Bandits
 
 - @Recap@: so far **frequentist** approach (e.g., UCB, $\epsilon$-greedy)
@@ -739,6 +760,8 @@ digraph OptimismConcept {
     - E.g., $R \sim Bernoulli(\mu_i)$
   - Posterior (by Bayes' rule):
     $p(\mu_i | R_{1:t}) \propto p(R_{1:t} | \mu_i) \, p(\mu_i)$
+
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-12:-Bayesian-Bandits:-Prior-and-Posterior
 
 * Bayesian Bandits: Priors and Posteriors
 
@@ -789,6 +812,9 @@ digraph OptimismConcept {
 
 - @Thompson Sampling@: Sample from posteriors and play best sample (next slide)
 
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-13:-Thompson-Sampling-Algorithm
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-14:-Thompson-Sampling:-Probability-Matching
+
 * Thompson Sampling
 
 - @Definition@: **Thompson Sampling** (Thompson, 1933)
@@ -829,6 +855,8 @@ digraph OptimismConcept {
 - @Key idea@: the width of the posterior _is_ the exploration bonus
   - UCB adds it explicitly, Thompson Sampling gets it from the posterior draw
 
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-15:-UCB-vs-Thompson-Sampling-Comparison
+
 * Thompson Sampling: Practical Performance
 
 - @Theoretical Guarantees@
@@ -856,6 +884,8 @@ digraph OptimismConcept {
 
 # Putting It Together
 
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-11:-Comparing-Algorithms:-Regret-Curves
+
 * Regret Comparison: Empirical
 
 - @Example@: 5 Bernoulli arms with $\mu = (0.9, 0.7, 0.5, 0.3, 0.1)$, regret
@@ -871,6 +901,9 @@ digraph OptimismConcept {
 - @Remark@: greedy is _worse_ than fixed-$\epsilon$, even though it "wastes"
   nothing on exploration
   - A permanent commitment to a wrong arm costs more than 10% random pulls
+
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-11:-Comparing-Algorithms:-Regret-Curves
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-15:-UCB-vs-Thompson-Sampling-Comparison
 
 * Regret Comparison: Summary Table
 
@@ -906,6 +939,8 @@ digraph OptimismConcept {
   heuristics for stationary problems
   - Between the two, Thompson Sampling usually wins empirically, UCB is easier
     to analyze and is deterministic
+
+// https://raw.githack.com/gpsaggese/gpsaggese.github.io/gp_scratch/msml610/tutorials/L09_multi_armed_bandits/L09_03_02_multi_armed_bandits.html#Cell-15:-UCB-vs-Thompson-Sampling-Comparison
 
 * Which Algorithm Should I Use?
 
