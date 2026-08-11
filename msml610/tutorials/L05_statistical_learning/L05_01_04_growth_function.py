@@ -14,6 +14,9 @@
 # ---
 
 # %% [markdown]
+# # Growth Function
+
+# %% [markdown]
 # ## Imports
 
 # %%

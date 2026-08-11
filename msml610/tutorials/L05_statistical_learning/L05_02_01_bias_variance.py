@@ -14,6 +14,9 @@
 # ---
 
 # %% [markdown]
+# # Bias Variance
+
+# %% [markdown]
 # ## Imports
 
 # %%

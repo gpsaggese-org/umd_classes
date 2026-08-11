@@ -677,7 +677,7 @@ import helpers.hintrospection as hintros
 
 for cls in [Wrapper, ObservationWrapper, ActionWrapper, RewardWrapper]:
     print(f"\n=== {cls.__name__} ===")
-    hintros.print_public_methods(cls, use_markdown=True)
+    hintros.print_obj_info(cls)
 
 # %%
 # Experiment: what happens when you change the order of wrappers?

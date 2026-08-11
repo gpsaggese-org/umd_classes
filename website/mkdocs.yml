@@ -5,6 +5,17 @@ site_description: Personal website of GP Saggese - Startup Boy and AI Researcher
 
 strict: true
 
+# The Jupyter Book sub-sites copied under docs/jupyter_books/ by
+# publish_jupyter_books.sh embed raw copies of their own source *.md files
+# (used as "view source" download links) with relative links MkDocs can't
+# resolve, since those files are static assets for mystmd, not MkDocs pages.
+# Downgrading this one check to a no-op avoids aborting the build on that
+# expected noise, while `strict: true` still hard-fails on every other
+# validation category (nav omissions, absolute links, bad anchors, etc.).
+validation:
+  links:
+    not_found: ignore
+
 theme:
   name: material
   custom_dir: docs/overrides
@@ -88,7 +99,6 @@ nav:
   - CV/Resume: 02_cv.md
   - Education: 03_education.md
   - Teaching: 04_teaching.md
-  - Books: books.md
   - Publications: 05_publications.md
   - Research: 06_research.md
   - Coding: 07_coding.md
@@ -123,7 +133,6 @@ markdown_extensions:
   - tables
   - toc:
       permalink: "#"
-      baselevel: 2
       separator: "_"
 
 extra_css:

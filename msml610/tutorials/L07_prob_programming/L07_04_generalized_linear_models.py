@@ -14,6 +14,9 @@
 # ---
 
 # %% [markdown]
+# # Generalized Linear Models
+
+# %% [markdown]
 # ## Imports
 
 # %% [markdown]
