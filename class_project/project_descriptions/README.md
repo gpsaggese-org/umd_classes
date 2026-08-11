@@ -94,18 +94,6 @@
 | Haystack | [Link](DATA605/Haystack_Project_Description.md) | 🟢 Done | [Priyam chhonkar](https://github.com/pchhonkar) | [TutorTask112](https://github.com/causify-ai/tutorials/issues/112) | [Result](../data605/Spring2025/projects/TutorTask112_Spring_2025_Real_Time_Bitcoin_News_Analysis_&_Q&A_System_with_Haystack) | Spring2025 |
 | Huey | [Link](DATA605/Huey_Project_Description.md) |  | — | — | — | — |
 | HuggingFace | [Link](DATA605/HuggingFace_Project_Description.md) | 🟢 Done | [SHRUTHI RAJ GANGAPURI](https://github.com/shruthi0914) | [TutorTask138](https://github.com/causify-ai/tutorials/issues/138) | [Result](../data605/Spring2025/projects/TutorTask138_Spring2025_Real_time_Bitcoin_News_Summarization_and_Trend_Prediction_with_HuggingFace) | Spring2025 |
-| Implement_Avellaneda_model | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/SorrIssue3_Implement_Avellaneda_model) | Spring2023 |
-| Implement_sandbox_for_Alpha_Vantage | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/Issue24_Team5_Implement_sandbox_for_Alpha_Vantage) | Spring2023 |
-| Implement_sandbox_for_Bitquery_and_Uniswap | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/Issue25_Team6_Implement_sandbox_for_Bitquery_and_Uniswap) | Spring2023 |
-| Implement_sandbox_for_Blockchain | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/Issue23_Team4_Implement_sandbox_for_Blockchain) | Spring2023 |
-| Implement_sandbox_for_Blockchain_2 | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/Issue23_Team4_Implement_sandbox_for_Blockchain_2) | Spring2023 |
-| Implement_sandbox_for_Chainlink | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/Issue26_Team7_Implement_sandbox_for_Chainlink) | Spring2023 |
-| Implement_sandbox_for_Coinmarketcap | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/Issue22_Team3_Implement_sandbox_for_Coinmarketcap) | Spring2023 |
-| Implement_sandbox_for_GitHub_2 | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/SorrIssue21_Team2_Implement_sandbox_for_GitHub_2) | Spring2023 |
-| Implement_sandbox_for_Google_Trends | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/SorrIssue14_Team1_Implement_sandbox_for_Google_Trends) | Spring2023 |
-| Implement_sandbox_for_Kaiko | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/Issue28_Team9_Implement_sandbox_for_Kaiko) | Spring2023 |
-| Implement_sandbox_for_Yahoo_Finance | [Link](../data605/Spring2023/ml_projects/Issue27_Team8_Implement_sandbox_for_Yahoo_Finance/README.md) | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/Issue27_Team8_Implement_sandbox_for_Yahoo_Finance) | Spring2023 |
-| Implement_sandbox_for_coingecko | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/Issue29_Team10_Implement_sandbox_for_coingecko) | Spring2023 |
 | Kats | [Link](DATA605/Kats_Project_Description.md) |  | — | — | — | — |
 | Kedro | [Link](DATA605/Kedro_Project_Description.md) |  | — | — | — | — |
 | Kubeflow | [Link](DATA605/Kubeflow_Project_Description.md) |  | — | — | — | — |
@@ -140,9 +128,6 @@
 | Pika | [Link](DATA605/Pika_Project_Description.md) |  | — | — | — | — |
 | Plotly | [Link](../data605/Spring2025/project_descriptions/Plotly_Project_Description.md) | 🟢 Done | [@dhruv2009](https://github.com/dhruv2009)<br>[@Varun-22](https://github.com/Varun-22) | [TutorTask105](https://github.com/causify-ai/tutorials/issues/105)<br>[TutorTask109](https://github.com/causify-ai/tutorials/issues/109) | [Result 1](../data605/Spring2025/projects/TutorTask105_Spring2025_Real-Time_Bitcoin_Price_Analysis_using_Plotly)<br>[Result 2](../data605/Spring2025/projects/TutorTask109_Spring2025_Real-time_Bitcoin_Data_Ingestion_and_Analysis_with_Plotly) | Spring2025<br>Spring2025 |
 | Postmark | [Link](DATA605/Postmark_Project_Description.md) |  | — | — | — | — |
-| Predict_Intraday_Trading_Volume | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/SorrIssue8_Predict_Intraday_Trading_Volume) | Spring2023 |
-| Predict_bid_ask_movements_with_order_book_data | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/SorrIssue4_Predict_bid_ask_movements_with_order_book_data) | Spring2023 |
-| Predict_large_asset_movements_with_NLP | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/SorrIssue1_Predict_large_asset_movements_with_NLP) | Spring2023 |
 | Prefect | [Link](DATA605/Prefect_Project_Description.md) | 🟢 Done | [@Sahithi102302](https://github.com/Sahithi102302) | [TutorTask213](https://github.com/causify-ai/tutorials/issues/213) | [Result](../data605/Spring2025/projects/TutorTask213_Spring2025_Real_Time_Bitcoin_Price_Analysis_Using_Prefect) | Spring2025 |
 | Presto | [Link](DATA605/Presto_Project_Description.md) |  | — | — | — | — |
 | Protocol_Buffers | [Link](DATA605/Protocol_Buffers_Project_Description.md) | 🟢 Done | [Mohit Saluru](https://github.com/mohitsalur)<br>— | [TutorTask115](https://github.com/causify-ai/tutorials/issues/115)<br>— | [Result 1](../data605/Spring2025/projects/TutorTask115_Spring2025_Real-Time_Bitcoin_Analysis_Using_Protocol_Buffers)<br>[Result 2](../data605/Spring2024/Spring2024_gRPC_Basics_with_Protocol_Buffers) | Spring2025<br>Spring2024 |
@@ -175,7 +160,7 @@
 | SendGrid | [Link](DATA605/SendGrid_Project_Description.md) |  | — | — | — | — |
 | Simple_Chatbot_with_Redis | [Link](../data605/Spring2024/SorrTask780_Simple_Chatbot_with_Redis/README.md) | 🟢 Done | [Swathi Baskaran](https://github.com/11swathi) | [SorrTask780](https://github.com/causify-ai/kaizenflow/issues/780) | [Result](../data605/Spring2024/SorrTask780_Simple_Chatbot_with_Redis) | Spring2024 |
 | Simple_Task_List_With_Redis | [Link](../data605/Spring2024/Spring2024_Simple_Task_List_With_Redis/README.md) | 🟢 Done | — | — | [Result](../data605/Spring2024/Spring2024_Simple_Task_List_With_Redis) | Spring2024 |
-| Simple_request_reply_pattern_with_ZeroMQ | [Link](../data605/Spring2024/SorrTask888_Simple_request_reply_pattern_with_ZeroMQ/README.md) | 🟢 Done | [Youjin Park](https://github.com/thepeanutbasket) | [SorrTask888](https://github.com/causify-ai/kaizenflow/issues/888) | [Result](../data605/Spring2024/SorrTask888_Simple_request_reply_pattern_with_ZeroMQ) | Spring2024 |
+| Request_reply_pattern_with_ZeroMQ | [Link](../data605/Spring2024/SorrTask888_Simple_request_reply_pattern_with_ZeroMQ/README.md) | 🟢 Done | [Youjin Park](https://github.com/thepeanutbasket) | [SorrTask888](https://github.com/causify-ai/kaizenflow/issues/888) | [Result](../data605/Spring2024/SorrTask888_Simple_request_reply_pattern_with_ZeroMQ) | Spring2024 |
 | Singer | [Link](DATA605/Singer_Project_Description.md) |  | — | — | — | — |
 | Snorkel | [Link](DATA605/Snorkel_Project_Description.md) |  | — | — | — | — |
 | Snowflake | [Link](DATA605/Snowflake_Project_Description.md) | 🟢 Done | [palak02](https://github.com/Pallak02) | [TutorTask155](https://github.com/causify-ai/tutorials/issues/155) | [Result](../data605/Spring2025/projects/TutorTask155_Spring2025_Real-time_Bitcoin_Data_Processing_with_Amazon_Snowflake) | Spring2025 |
@@ -213,7 +198,7 @@
 | factor-analyzer | [Link](DATA605/factor-analyzer_Project_Description.md) |  | — | — | — | — |
 | fastapi | [Link](DATA605/fastapi_Project_Description.md) |  | — | — | — | — |
 | gradio | [Link](DATA605/gradio_Project_Description.md) |  | — | — | — | — |
-| graph_data_loading_and_querying_with_neo4j | [Link](../data605/Spring2024/SorrTask816_graph_data_loading_and_querying_with_neo4j/README.md) | 🟢 Done | [@mSorak](https://github.com/mSorak) | [SorrTask816](https://github.com/causify-ai/kaizenflow/issues/816) | [Result](../data605/Spring2024/SorrTask816_graph_data_loading_and_querying_with_neo4j) | Spring2024 |
+| graph_data_with_neo4j | [Link](../data605/Spring2024/SorrTask816_graph_data_loading_and_querying_with_neo4j/README.md) | 🟢 Done | [@mSorak](https://github.com/mSorak) | [SorrTask816](https://github.com/causify-ai/kaizenflow/issues/816) | [Result](../data605/Spring2024/SorrTask816_graph_data_loading_and_querying_with_neo4j) | Spring2024 |
 | h5py | [Link](DATA605/h5py_Project_Description.md) |  | — | — | — | — |
 | hdbscan | [Link](DATA605/hdbscan_Project_Description.md) |  | — | — | — | — |
 | hydra-core | [Link](DATA605/hydra-core_Project_Description.md) |  | — | — | — | — |
@@ -257,7 +242,7 @@
 | Project name | Description | Status | Authors | GitHub Issue | Result | Session |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | A2G | [Link](MSML610/A2G_Project_Description.md) |  | — | — | — | — |
-| Apache Arrow (PyArrow) | [Link](MSML610/Apache Arrow (PyArrow)_Project_Description.md) |  | — | — | — | — |
+| Apache Arrow (PyArrow) | [Link](MSML610/Apache%20Arrow%20%28PyArrow%29_Project_Description.md) |  | — | — | — | — |
 | AutoGluon | [Link](MSML610/AutoGluon_Project_Description.md) |  | — | — | — | — |
 | AutoKeras | [Link](MSML610/AutoKeras_Project_Description.md) | 🟢 Done | [Krishna Taduri](https://github.com/tkpratardan)<br>[Akhil Shekkari](https://github.com/shekkari1999) | [TutorTask_67](https://github.com/causify-ai/tutorials/issues/67)<br>[UmdTask123](https://github.com/gpsaggese/gpsaggese.github.io/issues/123) | [Result 1](../msml610/Fall2025/projects/TutorTask_67_Fall2025_AutoKeras_Electricity_Load_Forecasting)<br>[Result 2](../msml610/Fall2025/projects/UmdTask123_Fall2025_Fashion_Product_Image_Classification_AutoKeras) | Fall2025<br>Fall2025 |
 | Autofeat | [Link](MSML610/Autofeat_Project_Description.md) |  | — | — | — | — |
@@ -291,14 +276,14 @@
 | Haiku | [Link](MSML610/Haiku_Project_Description.md) |  | — | — | — | — |
 | Horovod | [Link](MSML610/Horovod_Project_Description.md) | 🟢 Done | [Vikranth Reddimasu](https://github.com/vikranthreddimasu) | [UmdTask31](https://github.com/gpsaggese/gpsaggese.github.io/issues/31) | [Result](../msml610/Fall2025/projects/UmdTask31_Horovod_Distributed_Training_of_a_Transformer_Model_for_Text_Generation) | Fall2025 |
 | Hyperopt | [Link](MSML610/Hyperopt_Project_Description.md) |  | — | — | — | — |
-| IBM Causal Inference 360 | [Link](MSML610/IBM Causal Inference 360_Project_Description.md) |  | — | — | — | — |
+| IBM Causal Inference 360 | [Link](MSML610/IBM%20Causal%20Inference%20360_Project_Description.md) |  | — | — | — | — |
 | JAX | [Link](MSML610/JAX_Project_Description.md) | 🟢 Done | [Krishna Taduri](https://github.com/tkpratardan) | [TutorTask72](https://github.com/causify-ai/tutorials/issues/72) | [Result](../msml610/Fall2025/projects/TutorTask72_Fall2025_JAX_Wildlife_Image_Classification) | Fall2025 |
 | Kats | [Link](MSML610/Kats_Project_Description.md) |  | — | — | — | — |
-| Keras Tuner | [Link](MSML610/Keras Tuner_Project_Description.md) | 🟢 Done | [harshit_g](https://github.com/HarshitGadge), [Mohit Saluru](https://github.com/mohitsalur) | [UmdTask124](https://github.com/gpsaggese/gpsaggese.github.io/issues/124) | [Result](../msml610/Fall2025/projects/UmdTask124_Keras_Tuner_Electricity_Consumption_Prediction_LSTMs_Hard) | Fall2025 |
+| Keras Tuner | [Link](MSML610/Keras%20Tuner_Project_Description.md) | 🟢 Done | [harshit_g](https://github.com/HarshitGadge), [Mohit Saluru](https://github.com/mohitsalur) | [UmdTask124](https://github.com/gpsaggese/gpsaggese.github.io/issues/124) | [Result](../msml610/Fall2025/projects/UmdTask124_Keras_Tuner_Electricity_Consumption_Prediction_LSTMs_Hard) | Fall2025 |
 | LIME | [Link](MSML610/LIME_Project_Description.md) | 🟢 Done | [Dhanush Garikapati](https://github.com/Dhanush3620)<br>[damith](https://github.com/imbulana), [Kumar Vaibhav](https://github.com/KumarVaibhav27) | [UmdTask62](https://github.com/gpsaggese/gpsaggese.github.io/issues/62)<br>[UmdTask85](https://github.com/gpsaggese/gpsaggese.github.io/issues/85) | [Result 1](../msml610/Fall2025/projects/UmdTask62_Fall2025_LIME_Employee_Attrition_Prediction)<br>[Result 2](../msml610/Fall2025/projects/UmdTask85_Fall2025_LIME_Food_Image_Classification_with_LIME_Explanations) | Fall2025<br>Fall2025 |
 | LakeFS | [Link](MSML610/LakeFS_Project_Description.md) | 🟢 Done | [@Oja999](https://github.com/Oja999) | [UmdTask45](https://github.com/gpsaggese/gpsaggese.github.io/issues/45) | [Result](../msml610/Fall2025/projects/UmdTask45_Fall2025_LakeFS_Anomaly_Detection_in_Financial_Transactions) | Fall2025 |
 | LiNGAM | [Link](MSML610/LiNGAM_Project_Description.md) |  | — | — | — | — |
-| MCP (Model Context Protocol, Python SDK) | [Link](MSML610/MCP (Model Context Protocol, Python SDK)_Project_Description.md) |  | — | — | — | — |
+| MCP (Model Context Protocol, Python SDK) | [Link](MSML610/MCP%20%28Model%20Context%20Protocol,%20Python%20SDK%29_Project_Description.md) |  | — | — | — | — |
 | MLflow | [Link](MSML610/MLflow_Project_Description.md) |  | — | — | — | — |
 | MLlib | [Link](MSML610/MLlib_Project_Description.md) |  | — | — | — | — |
 | Megatron-LM | [Link](MSML610/Megatron-LM_Project_Description.md) |  | — | — | — | — |
@@ -312,7 +297,7 @@
 | Polars | [Link](MSML610/Polars_Project_Description.md) |  | — | — | — | — |
 | Pomegranate | [Link](MSML610/Pomegranate_Project_Description.md) |  | — | — | — | — |
 | Prefect | [Link](MSML610/Prefect_Project_Description.md) |  | — | — | — | — |
-| PyTorch Geometric | [Link](MSML610/PyTorch Geometric_Project_Description.md) | 🟢 Done | [Madhumitha Rajagopal](https://github.com/madhusomethingg), [@SreyaVarma](https://github.com/SreyaVarma) | [UmdTask23](https://github.com/gpsaggese/gpsaggese.github.io/issues/23) | [Result](../msml610/Fall2025/projects/UmdTask23_Fall2025_PyTorch_Geometric_Drug_Drug_Interaction_Prediction) | Fall2025 |
+| PyTorch Geometric | [Link](MSML610/PyTorch%20Geometric_Project_Description.md) | 🟢 Done | [Madhumitha Rajagopal](https://github.com/madhusomethingg), [@SreyaVarma](https://github.com/SreyaVarma) | [UmdTask23](https://github.com/gpsaggese/gpsaggese.github.io/issues/23) | [Result](../msml610/Fall2025/projects/UmdTask23_Fall2025_PyTorch_Geometric_Drug_Drug_Interaction_Prediction) | Fall2025 |
 | RLlib | [Link](MSML610/RLlib_Project_Description.md) |  | — | — | — | — |
 | SBert | [Link](MSML610/SBert_Project_Description.md) | 🟢 Done | — | — | [Result](../msml610/Fall2025/projects/Fall2025_SBert_Sentiment_Analysis_with_Sentence_Embeddings) | Fall2025 |
 | SHAP | [Link](MSML610/SHAP_Project_Description.md) | 🟢 Done | [Prahar Modi](https://github.com/Prahar08modi) | [TutorTask_28](https://github.com/causify-ai/tutorials/issues/28) | [Result](../msml610/Fall2025/projects/TutorTask_28_Fall2025_SHAP_Credit_Scoring_Model_with_SHAP_for_Interpretability) | Fall2025 |
@@ -320,21 +305,21 @@
 | Scikit-Optimize | [Link](MSML610/Scikit-Optimize_Project_Description.md) |  | — | — | — | — |
 | SemanticKernel | [Link](MSML610/SemanticKernel_Project_Description.md) |  | — | — | — | — |
 | Snorkel | [Link](MSML610/Snorkel_Project_Description.md) |  | — | — | — | — |
-| Stable Baselines3 | [Link](MSML610/Stable Baselines3_Project_Description.md) |  | — | — | — | — |
+| Stable Baselines3 | [Link](MSML610/Stable%20Baselines3_Project_Description.md) |  | — | — | — | — |
 | Statsmodels | [Link](MSML610/Statsmodels_Project_Description.md) | 🟢 Done | [@HarshiniKarella](https://github.com/HarshiniKarella) | [UmdTask36](https://github.com/gpsaggese/gpsaggese.github.io/issues/36) | [Result](../msml610/Fall2025/projects/UmdTask36_Fall2025_Statsmodels_Anomaly_Detection_in_Financial_Transactions) | Fall2025 |
 | TFLearn | [Link](MSML610/TFLearn_Project_Description.md) |  | — | — | — | — |
 | TFX | [Link](MSML610/TFX_Project_Description.md) | 🟢 Done | [Serjius Infanto S](https://github.com/serjiusinfanto) | [UmdTask56](https://github.com/gpsaggese/gpsaggese.github.io/issues/56) | [Result](../msml610/Fall2025/projects/UmdTask56_Fall2025_TFX_Predicting_House_Prices_with_Feature_Engineering) | Fall2025 |
 | TPOT | [Link](MSML610/TPOT_Project_Description.md) |  | — | — | — | — |
 | Taskweaver | [Link](MSML610/Taskweaver_Project_Description.md) |  | — | — | — | — |
-| TensorFlow Probability | [Link](MSML610/TensorFlow Probability_Project_Description.md) | 🟢 Done | [Aayush Verma](https://github.com/aver81) | [UmdTask76](https://github.com/gpsaggese/gpsaggese.github.io/issues/76) | [Result](../msml610/Fall2025/projects/UmdTask76_TensorFlow_Probability_Time_Series_Forecasting) | Fall2025 |
+| TensorFlow Probability | [Link](MSML610/TensorFlow%20Probability_Project_Description.md) | 🟢 Done | [Aayush Verma](https://github.com/aver81) | [UmdTask76](https://github.com/gpsaggese/gpsaggese.github.io/issues/76) | [Result](../msml610/Fall2025/projects/UmdTask76_TensorFlow_Probability_Time_Series_Forecasting) | Fall2025 |
 | Tetrad | [Link](MSML610/Tetrad_Project_Description.md) | 🟢 Done | [Krishna Taduri](https://github.com/tkpratardan) | [TutorTask69](https://github.com/causify-ai/tutorials/issues/69) | [Result](../msml610/Fall2025/projects/TutorTask69_Fall2025_Tetrad_Causal_Inference_in_Social_Media_Sentiment_Analysis) | Fall2025 |
 | Tianshou | [Link](MSML610/Tianshou_Project_Description.md) |  | — | — | — | — |
 | TorchRL | [Link](MSML610/TorchRL_Project_Description.md) | 🟢 Done | [Saransh Kumar](https://github.com/saranshkr), [Inesh Tandon](https://github.com/Ineshtandy) | [UmdTask21](https://github.com/gpsaggese/gpsaggese.github.io/issues/21) | [Result](../msml610/Fall2025/projects/UmdTask21_Fall2025_TorchRL_Multi-Agent_Cooperation) | Fall2025 |
-| Vertex AI | [Link](MSML610/Vertex AI_Project_Description.md) | 🟢 Done | [Abhinav Kumar](https://github.com/AbhinavKumar333), [@CoderAd1](https://github.com/CoderAd1), [@bala2306](https://github.com/bala2306) | [UmdTask79](https://github.com/gpsaggese/gpsaggese.github.io/issues/79) | [Result](../msml610/Fall2025/projects/UmdTask79_Fall2025_Vertex_AI_Sentiment_Analysis_on_Social_Media_Posts) | Fall2025 |
-| W&B Weave | [Link](MSML610/W&B Weave_Project_Description.md) |  | — | — | — | — |
-| Weights & Biases | [Link](MSML610/Weights & Biases_Project_Description.md) |  | — | — | — | — |
-| What-If Tool (WIT) | [Link](MSML610/What-If Tool (WIT)_Project_Description.md) |  | — | — | — | — |
-| Whisper Large V3 | [Link](MSML610/Whisper Large V3_Project_Description.md) | 🟢 Done | [sriyank sagi](https://github.com/Sriyank-s) | [UmdTask40](https://github.com/gpsaggese/gpsaggese.github.io/issues/40) | [Result](../msml610/Fall2025/projects/UmdTask40_Fall2025_Whisper-Large-V3_Multilingual_Customer_Support_Chatbot) | Fall2025 |
+| Vertex AI | [Link](MSML610/Vertex%20AI_Project_Description.md) | 🟢 Done | [Abhinav Kumar](https://github.com/AbhinavKumar333), [@CoderAd1](https://github.com/CoderAd1), [@bala2306](https://github.com/bala2306) | [UmdTask79](https://github.com/gpsaggese/gpsaggese.github.io/issues/79) | [Result](../msml610/Fall2025/projects/UmdTask79_Fall2025_Vertex_AI_Sentiment_Analysis_on_Social_Media_Posts) | Fall2025 |
+| W&B Weave | [Link](MSML610/W&B%20Weave_Project_Description.md) |  | — | — | — | — |
+| Weights & Biases | [Link](MSML610/Weights%20&%20Biases_Project_Description.md) |  | — | — | — | — |
+| What-If Tool (WIT) | [Link](MSML610/What-If%20Tool%20%28WIT%29_Project_Description.md) |  | — | — | — | — |
+| Whisper Large V3 | [Link](MSML610/Whisper%20Large%20V3_Project_Description.md) | 🟢 Done | [sriyank sagi](https://github.com/Sriyank-s) | [UmdTask40](https://github.com/gpsaggese/gpsaggese.github.io/issues/40) | [Result](../msml610/Fall2025/projects/UmdTask40_Fall2025_Whisper-Large-V3_Multilingual_Customer_Support_Chatbot) | Fall2025 |
 | YData-profiling | [Link](MSML610/YData-profiling_Project_Description.md) | 🟢 Done | [LakshmisaivenkatasivanagamaniCharan Kankanala](https://github.com/CharanKankanala) | [UmdTask38](https://github.com/gpsaggese/gpsaggese.github.io/issues/38) | [Result](../msml610/Fall2025/projects/UmdTask38_Fall2025_YData-profiling_Sentiment_Analysis_on_Social_Media_Posts) | Fall2025 |
 | accelerate | [Link](MSML610/accelerate_Project_Description.md) |  | — | — | — | — |
 | apache-tvm | [Link](MSML610/apache-tvm_Project_Description.md) |  | — | — | — | — |
@@ -397,3 +382,21 @@
 - `class_project/msml610/Fall2025/projects/UmdTask51_Fall2025_MCP (Model Context Protocol, Python SDK)_Real_Estate_Price_Prediction`
 - `class_project/msml610/Fall2025/projects/UmdTask77_Retail_Sales_Forecasting_with_LSTMs`
 - `class_project/msml610/Fall2025/projects/UmdTask87_Fall2025_Predicting_House_Prices`
+
+| Project name | Description | Status | Authors | GitHub Issue | Result | Session |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| Implement_Avellaneda_model | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/SorrIssue3_Implement_Avellaneda_model) | Spring2023 |
+| Implement_sandbox_for_Alpha_Vantage | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/Issue24_Team5_Implement_sandbox_for_Alpha_Vantage) | Spring2023 |
+| Implement_sandbox_for_Bitquery_and_Uniswap | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/Issue25_Team6_Implement_sandbox_for_Bitquery_and_Uniswap) | Spring2023 |
+| Implement_sandbox_for_Blockchain | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/Issue23_Team4_Implement_sandbox_for_Blockchain) | Spring2023 |
+| Implement_sandbox_for_Blockchain_2 | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/Issue23_Team4_Implement_sandbox_for_Blockchain_2) | Spring2023 |
+| Implement_sandbox_for_Chainlink | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/Issue26_Team7_Implement_sandbox_for_Chainlink) | Spring2023 |
+| Implement_sandbox_for_Coinmarketcap | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/Issue22_Team3_Implement_sandbox_for_Coinmarketcap) | Spring2023 |
+| Implement_sandbox_for_GitHub_2 | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/SorrIssue21_Team2_Implement_sandbox_for_GitHub_2) | Spring2023 |
+| Implement_sandbox_for_Google_Trends | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/SorrIssue14_Team1_Implement_sandbox_for_Google_Trends) | Spring2023 |
+| Implement_sandbox_for_Kaiko | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/Issue28_Team9_Implement_sandbox_for_Kaiko) | Spring2023 |
+| Implement_sandbox_for_Yahoo_Finance | [Link](../data605/Spring2023/ml_projects/Issue27_Team8_Implement_sandbox_for_Yahoo_Finance/README.md) | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/Issue27_Team8_Implement_sandbox_for_Yahoo_Finance) | Spring2023 |
+| Implement_sandbox_for_coingecko | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/Issue29_Team10_Implement_sandbox_for_coingecko) | Spring2023 |
+| Predict_large_asset_movements_with_NLP | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/SorrIssue1_Predict_large_asset_movements_with_NLP) | Spring2023 |
+| Predict_Intraday_Trading_Volume | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/SorrIssue8_Predict_Intraday_Trading_Volume) | Spring2023 |
+| Predict_bid_ask_with_order_book_data | — | 🟢 Done | — | — | [Result](../data605/Spring2023/ml_projects/SorrIssue4_Predict_bid_ask_movements_with_order_book_data) | Spring2023 |
