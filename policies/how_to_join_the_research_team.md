@@ -1,29 +1,45 @@
 # How to Join GP's AI Research Group
 
-- Take one of GP's classes DATA605 and MSML610 and do a good job
+## Take a Class
 
-- Take a look at the kind of work we do
-  - [Papers](https://gpsaggese.github.io/06_research/)
-  - [Blog](https://gpsaggese.github.io/blog/)
+- Take one of GP's classes, DATA605 or MSML610, and do a good job
+
+## Learn About Our Research
+
+- Review the kind of research we do:
+  - [GP's AI research](https://github.com/gpsaggese/gpsaggese.github.io)
+  - [Papers](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/website/docs/06_research.md)
+  - [Blog](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/website/docs/blog/posts)
+  - [Past projects](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/project_descriptions/README.md)
+
+## Read the Policies
 
 - Read the [policies](/policies)
-  - Make sure you can dedicate time to the projects
+- Make sure you can dedicate time to the projects
 
-- Join the Research team [Slack channel](https://join.slack.com/t/umdresearch/shared_invite/zt-3r5n86n8n-shQn627VgjZ6NKfAU5b_ZQ)
+## Join the Team
 
-- Join one or both weekly office hours
-  - Wed morning [Join](https://calendar.google.com/calendar/u/0/r/eventedit/ZnUzdGs5MjZ1MDc3c2JkYmN0aW1idTRhZmdfMjAyNjAzMThUMTUzMDAwWiBnc2FnZ2VzZUB1bWQuZWR1)
-  - Thur afternoon [Join](https://calendar.google.com/calendar/u/0/r/eventedit/M2VxMnN1YWV1OThldGtwOHR2N2owYmYyanJfMjAyNjAzMTlUMjAwMDAwWiBnc2FnZ2VzZUB1bWQuZWR1)
+- Join the Research team Slack channel:
+  - [Slack invite](https://join.slack.com/t/umdresearch/shared_invite/zt-3r5n86n8n-shQn627VgjZ6NKfAU5b_ZQ)
+  - [Direct channel link](https://umdresearch.slack.com/archives/C0AHRE551LM)
+    (once you have joined)
+- Join our weekly research office hours:
+  - **Team Sync**: 4:30-5:15pm ET every Friday
+  - Join with [Google Meet](https://meet.google.com/dkz-mzcc-gvv)
 
-- Ask to be added to the [big board](https://docs.google.com/spreadsheets/d/1FpBI4tysk2kMSNeTc3WTGOw8KZkr4yG85nfDwqu8Fdo/edit?gid=1349922149#gid=1349922149)
-  sending all the information
+## Show Your Work
 
-- Work on a blog / tutorial to show you can do a good job
-  - [Links](/tutorials)
-  - [Examples](https://gpsaggese.github.io/blog)
+## Pick a Project
 
-- Pick one of the research projects
-  - [Links](/research/ideas)
+- Review available projects:
+  [project ideas](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/research/ideas/README.md)
+- Pick one of the research projects: [links](/research/ideas)
+- Work on a blog / tutorial to show you can do a good job:
+  - [Tutorial links](/tutorials)
+  - [Blog examples](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/website/docs/blog/posts)
 
-- Work on the Book projects
-  - [FAQs](/policies/book_project.md)
+
+## Complete the Form to be Added
+
+- Complete the [form](https://forms.gle/Rrt76FpkZ2L9fUFTA) so we can add you to
+  the meeting
