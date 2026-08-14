@@ -1,0 +1,185 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "panels": [
+    {
+      "datasource": "Ecommerce",
+
+      "description": "This panel answers:\n“Which model better identifies potential buyers while minimizing false predictions?”",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 50,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "pointShape": "circle",
+            "pointSize": {
+              "fixed": 5
+            },
+            "pointStrokeWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "show": "lines"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "mapping": "manual",
+        "series": [
+          {
+            "frame": {
+              "matcher": {
+                "id": "byIndex",
+                "options": 0
+              }
+            },
+            "name": {
+              "fixed": "logreg"
+            },
+            "x": {
+              "matcher": {
+                "id": "byName",
+                "options": "logreg_recall"
+              }
+            },
+            "y": {
+              "matcher": {
+                "id": "byName",
+                "options": "logreg_precision"
+              }
+            }
+          },
+          {
+            "frame": {
+              "matcher": {
+                "id": "byIndex",
+                "options": 0
+              }
+            },
+            "name": {
+              "fixed": "xgboost"
+            },
+            "x": {
+              "matcher": {
+                "id": "byName",
+                "options": "xgboost_recall"
+              }
+            },
+            "y": {
+              "matcher": {
+                "id": "byName",
+                "options": "xgboost_precision"
+              }
+            }
+          }
+        ],
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "PA8E5B746C030013E"
+          },
+          "editorType": "sql",
+          "format": 1,
+          "meta": {
+            "builderOptions": {
+              "columns": [],
+              "database": "",
+              "limit": 1000,
+              "mode": "list",
+              "queryType": "table",
+              "table": ""
+            }
+          },
+          "pluginVersion": "4.17.0",
+          "queryType": "table",
+          "rawSql": "WITH joined AS\n(\n    SELECT\n        p.model_name,\n        p.p_purchase,\n        t.has_purchase_in_session\n    FROM session_purchase_predictions AS p\n    INNER JOIN training_sessions_n5 AS t\n        ON p.user_session = t.user_session\n),\nscored AS\n(\n    SELECT\n        model_name,\n        p_purchase,\n        has_purchase_in_session,\n        arrayJoin([\n            0.05, 0.10, 0.15, 0.20, 0.25,\n            0.30, 0.35, 0.40, 0.45, 0.50,\n            0.55, 0.60, 0.65, 0.70, 0.75,\n            0.80, 0.85, 0.90, 0.95\n        ]) AS threshold\n    FROM joined\n),\nmetrics AS\n(\n    SELECT\n        model_name,\n        threshold,\n        sum(if(p_purchase >= threshold AND has_purchase_in_session = 1, 1, 0)) AS tp,\n        sum(if(p_purchase >= threshold AND has_purchase_in_session = 0, 1, 0)) AS fp,\n        sum(if(p_purchase < threshold AND has_purchase_in_session = 1, 1, 0)) AS fn,\n        tp / nullIf(tp + fp, 0) AS precision,\n        tp / nullIf(tp + fn, 0) AS recall\n    FROM scored\n    GROUP BY model_name, threshold\n)\nSELECT\n    threshold,\n\n    maxIf(recall, model_name = 'logreg') AS logreg_recall,\n    maxIf(precision, model_name = 'logreg') AS logreg_precision,\n\n    maxIf(recall, model_name = 'xgboost') AS xgboost_recall,\n    maxIf(precision, model_name = 'xgboost') AS xgboost_precision\n\nFROM metrics\nGROUP BY threshold\nORDER BY threshold;",
+          "refId": "A"
+        }
+      ],
+      "title": "Precision–Recall Curve",
+      "type": "xychart"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 42,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Model Performance",
+  "uid": "adhfm5d",
+  "version": 4,
+  "weekStart": ""
+}

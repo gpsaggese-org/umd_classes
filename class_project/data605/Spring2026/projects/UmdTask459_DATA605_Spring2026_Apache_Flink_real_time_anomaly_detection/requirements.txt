@@ -1,0 +1,10 @@
+pandas
+numpy
+scikit-learn
+joblib
+matplotlib
+seaborn
+plotly
+apache-flink==2.0.0
+requests
+python-dotenv

@@ -1,0 +1,54 @@
+name: project605
+
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: clickhouse
+    ports:
+      - "8123:8123"   
+      - "9000:9000"  
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      - ./data:/data:ro
+    environment:
+      - CLICKHOUSE_USER=default
+      - CLICKHOUSE_PASSWORD=password
+      - CLICKHOUSE_DB=ecomm
+
+  notebook:
+    build: .
+    image: jupyter:latest
+    container_name: jupyter_notebook
+    ports:
+      - "8888:8888"
+    depends_on:
+      - clickhouse
+    volumes:
+      - .:/app
+    environment:
+      - CLICKHOUSE_HOST=clickhouse
+      - CLICKHOUSE_PORT=9000
+      - CLICKHOUSE_USER=default
+      - CLICKHOUSE_PASSWORD=password
+      - CLICKHOUSE_DB=ecomm
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - clickhouse
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=grafana-clickhouse-datasource
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./artifacts/datasources/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml:ro
+      - ./artifacts/provisioning/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml:ro
+      - ./artifacts/dashboards:/etc/grafana/dashboards:ro
+
+volumes:
+  clickhouse_data:
+  grafana_data:
