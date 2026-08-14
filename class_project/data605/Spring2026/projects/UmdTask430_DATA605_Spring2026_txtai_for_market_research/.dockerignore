@@ -1,0 +1,53 @@
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Git / tooling
+.git/
+.gitignore
+.gitattributes
+.claude/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Secrets and local env
+.env
+.env.local
+*.pem
+*.key
+
+# Generated / regenerable artifacts
+data/
+logs/
+*.log
+collection_stats.json
+storage_status.json
+docker_build.version.log
+tmp.pytest.log
+
+# Docker build scripts (not needed inside the image)
+docker_*.sh
+docker_name.sh
+Dockerfile.python_slim
+Dockerfile.uv
+
+# Docs (the runtime doesn't read these)
+*.md

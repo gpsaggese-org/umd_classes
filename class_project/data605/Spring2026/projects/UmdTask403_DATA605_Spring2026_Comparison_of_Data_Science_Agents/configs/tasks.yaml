@@ -1,0 +1,425 @@
+# =============================================================================
+# RULE: Every agent gets the EXACT SAME prompt. No agent-specific instructions.
+# Prompts end with "Save your complete code as .py" so we can evaluate D2.
+# =============================================================================
+
+# =============================================================================
+# HEART DISEASE UCI — Tabular, Classification
+# =============================================================================
+
+HD-DESC-01:
+  dataset: heart_disease
+  analytics_level: descriptive
+  modality: tabular
+  task_type: descriptive
+  primary_metric: rubric_score
+  adversarial: false
+  prompt: |
+    You are given a CSV file called 'heart_disease.csv' in the current directory.
+    
+    Task: Compute descriptive statistics for all features.
+    - For numerical columns: count, mean, std, min, 25%, 50%, 75%, max
+    - For categorical columns: value counts
+    - Report the class distribution of the 'target' column
+    - Identify any missing values per column
+    
+    Save your complete Python code as 'solution.py'.
+    Save results as 'results.json' with keys: 'numerical_stats', 'categorical_stats',
+    'target_distribution', 'missing_values'.
+
+HD-EDA-01:
+  dataset: heart_disease
+  analytics_level: eda
+  modality: tabular
+  task_type: eda
+  primary_metric: rubric_score
+  adversarial: false
+  prompt: |
+    You are given a CSV file called 'heart_disease.csv' in the current directory.
+    
+    Task: Perform comprehensive Exploratory Data Analysis.
+    1. Generate distribution plots for all numerical features
+    2. Create a correlation heatmap
+    3. Create box plots of numerical features grouped by target class
+    4. Perform missing value analysis
+    5. Detect outliers using the IQR method
+    6. Write a summary of your top 3 data insights
+    
+    Save your complete Python code as 'solution.py'.
+    Save all plots as PNG files. Save insights as 'insights.txt'.
+
+HD-PRED-01:
+  dataset: heart_disease
+  analytics_level: predictive
+  modality: tabular
+  task_type: classification
+  primary_metric: f1
+  test_size: 0.2
+  split_seed: 42
+  adversarial: false
+  prompt: |
+    You are given a CSV file called 'heart_disease.csv' in the current directory.
+    The target column is 'target' (binary: 0 = no disease, 1 = disease).
+    
+    Task: Build a binary classifier.
+    1. Handle any missing values appropriately
+    2. Encode categorical features if needed
+    3. Split data 80/20 (use random_state=42)
+    4. Train at least 3 different classification models
+    5. Evaluate each on the test set: accuracy, F1-score (weighted), AUC-ROC
+    6. Select the best model and explain your choice
+    
+    Save your complete Python code as 'solution.py'.
+    Save predictions on the test set as 'predictions.csv' with columns: 
+    'y_true', 'y_pred', 'y_prob' (probability of class 1).
+    Save metrics as 'metrics.json'.
+
+HD-EXPL-01:
+  dataset: heart_disease
+  analytics_level: predictive
+  modality: tabular
+  task_type: explainability
+  primary_metric: rubric_score
+  adversarial: false
+  prompt: |
+    You are given a CSV file called 'heart_disease.csv' in the current directory.
+    
+    Task: Build a classifier for the 'target' column, then explain the model.
+    1. Train your best classifier
+    2. Generate SHAP feature importance values
+    3. Create a SHAP summary plot
+    4. Write 2-3 paragraphs explaining which features most influence 
+       heart disease prediction and why this makes clinical sense
+    
+    Save your complete Python code as 'solution.py'.
+    Save the SHAP plot as 'shap_summary.png'.
+    Save your explanation as 'explanation.txt'.
+
+HD-ROBU-01:
+  dataset: heart_disease
+  analytics_level: predictive
+  modality: tabular
+  task_type: classification
+  primary_metric: f1
+  test_size: 0.2
+  split_seed: 42
+  adversarial: true
+  adversarial_config:
+    flip_pct: 0.20
+    missing_pct: 0.15
+  prompt: |
+    You are given a CSV file called 'heart_disease.csv' in the current directory.
+    The target column is 'target'. NOTE: This dataset may have data quality issues.
+    
+    Task: Build a binary classifier, handling any data quality problems.
+    1. Inspect the data for issues (missing values, potential label noise, etc.)
+    2. Apply appropriate preprocessing and cleaning
+    3. Split 80/20 (random_state=42), train at least 2 models
+    4. Report accuracy, F1-score (weighted), AUC-ROC
+    
+    Save your complete Python code as 'solution.py'.
+    Save predictions as 'predictions.csv' (y_true, y_pred, y_prob).
+    Save metrics as 'metrics.json'.
+
+# =============================================================================
+# NYC YELLOW TAXI — Tabular, Regression
+# =============================================================================
+
+TAXI-DESC-01:
+  dataset: nyc_taxi
+  analytics_level: descriptive
+  modality: tabular
+  task_type: descriptive
+  primary_metric: rubric_score
+  adversarial: false
+  prompt: |
+    You are given a Parquet file called 'nyc_taxi_sample.parquet' in the current directory.
+    
+    Task: Compute descriptive statistics.
+    1. Average fare amount by hour of day
+    2. Average tip percentage by day of week
+    3. Distribution of trip distances (histogram data)
+    4. Passenger count frequencies
+    5. Top 10 pickup location IDs by trip count
+    
+    Save your complete Python code as 'solution.py'.
+    Save results as 'results.json'.
+
+TAXI-EDA-01:
+  dataset: nyc_taxi
+  analytics_level: eda
+  modality: tabular
+  task_type: eda
+  primary_metric: rubric_score
+  adversarial: false
+  prompt: |
+    You are given a Parquet file called 'nyc_taxi_sample.parquet' in the current directory.
+    
+    Task: Perform comprehensive EDA.
+    1. Analyze temporal patterns (hourly, daily, weekly trends in fare/trips)
+    2. Visualize the fare_amount distribution (handle outliers)
+    3. Correlation analysis between numerical features
+    4. Identify the relationship between trip_distance and fare_amount
+    5. Detect anomalies in the data (negative fares, zero-distance trips, etc.)
+    6. Summarize top 3 insights
+    
+    Save code as 'solution.py', plots as PNG, insights as 'insights.txt'.
+
+TAXI-PRED-01:
+  dataset: nyc_taxi
+  analytics_level: predictive
+  modality: tabular
+  task_type: regression
+  primary_metric: rmse
+  test_size: 0.2
+  split_seed: 42
+  adversarial: false
+  prompt: |
+    You are given a Parquet file called 'nyc_taxi_sample.parquet' in the current directory.
+    
+    Task: Build a regression model to predict 'fare_amount'.
+    1. Engineer time-based features from pickup datetime (hour, day_of_week, etc.)
+    2. Use features: trip_distance, PULocationID, DOLocationID, passenger_count, 
+       and your engineered time features
+    3. Handle outliers and missing values
+    4. Split 80/20 (random_state=42)
+    5. Train at least 2 regression models
+    6. Report RMSE, MAE, and R-squared on test set
+    
+    Save code as 'solution.py', predictions as 'predictions.csv' (y_true, y_pred),
+    metrics as 'metrics.json'.
+
+TAXI-PRESC-01:
+  dataset: nyc_taxi
+  analytics_level: prescriptive
+  modality: tabular
+  task_type: prescriptive
+  primary_metric: rubric_score
+  adversarial: false
+  prompt: |
+    You are given a Parquet file called 'nyc_taxi_sample.parquet' in the current directory.
+    
+    Task: Provide data-driven recommendations for taxi drivers.
+    1. Analyze which pickup locations and hours yield the highest average revenue
+    2. Calculate expected revenue per hour for different location-time combos
+    3. Rank the top 5 location-time strategies for maximizing hourly earnings
+    4. Discuss tradeoffs (e.g., high-fare areas may have fewer trips)
+    
+    Save code as 'solution.py', recommendations as 'recommendations.txt',
+    and a supporting visualization as 'strategy_chart.png'.
+
+# =============================================================================
+# AIR QUALITY — Time Series, Forecasting
+# =============================================================================
+
+AQ-EDA-01:
+  dataset: air_quality
+  analytics_level: eda
+  modality: time_series
+  task_type: eda
+  primary_metric: rubric_score
+  adversarial: false
+  prompt: |
+    You are given a CSV file called 'air_quality.csv' in the current directory.
+    It contains PM2.5 air quality readings with timestamps.
+    
+    Task: Perform time-series EDA.
+    1. Plot the PM2.5 time series
+    2. Detect seasonality and trends (decompose if possible)
+    3. Compute rolling statistics (7-day, 30-day moving averages)
+    4. Identify anomalous readings (spikes, drops)
+    5. Check for stationarity (ADF test)
+    6. Summarize top 3 insights
+    
+    Save code as 'solution.py', plots as PNG, insights as 'insights.txt'.
+
+AQ-PRED-01:
+  dataset: air_quality
+  analytics_level: predictive
+  modality: time_series
+  task_type: forecasting
+  primary_metric: rmse
+  adversarial: false
+  prompt: |
+    You are given a CSV file called 'air_quality.csv' in the current directory.
+    It contains PM2.5 readings with timestamps.
+    
+    Task: Build a model to forecast the next day's average PM2.5.
+    1. Create appropriate lag features and rolling statistics
+    2. Split temporally: last 20% of data as test set (no random shuffle)
+    3. Try at least 2 approaches (e.g., ARIMA/SARIMA, XGBoost with lag features)
+    4. Report RMSE and MAPE on the test period
+    5. Plot actual vs. predicted for the test period
+    
+    Save code as 'solution.py', predictions as 'predictions.csv' (date, y_true, y_pred),
+    metrics as 'metrics.json', plot as 'forecast_plot.png'.
+
+AQ-ROBU-01:
+  dataset: air_quality
+  analytics_level: predictive
+  modality: time_series
+  task_type: forecasting
+  primary_metric: rmse
+  adversarial: true
+  adversarial_config:
+    missing_pct: 0.20
+  prompt: |
+    You are given a CSV file called 'air_quality.csv' in the current directory.
+    NOTE: This dataset has significant missing values and potential sensor errors.
+    
+    Task: Build a robust PM2.5 forecasting model despite data quality issues.
+    Handle missing data, detect and handle sensor errors, then forecast next-day PM2.5.
+    Report RMSE and MAPE.
+    
+    Save code as 'solution.py', predictions as 'predictions.csv', metrics as 'metrics.json'.
+
+# =============================================================================
+# AMAZON REVIEWS — NLP, Sentiment Classification
+# =============================================================================
+
+AR-DESC-01:
+  dataset: amazon_reviews
+  analytics_level: descriptive
+  modality: nlp
+  task_type: descriptive
+  primary_metric: rubric_score
+  adversarial: false
+  prompt: |
+    You are given a CSV file called 'amazon_reviews.csv' in the current directory.
+    Columns include 'rating' (1-5), 'text' (review text), and 'verified_purchase'.
+    
+    Task: Compute descriptive statistics.
+    1. Rating distribution (counts and percentages per star)
+    2. Average review length by rating
+    3. Verified vs unverified purchase breakdown
+    4. Top 20 most frequent words across all reviews (after stopword removal)
+    
+    Save code as 'solution.py', results as 'results.json'.
+
+AR-PRED-01:
+  dataset: amazon_reviews
+  analytics_level: predictive
+  modality: nlp
+  task_type: classification
+  primary_metric: f1
+  test_size: 0.2
+  split_seed: 42
+  adversarial: false
+  prompt: |
+    You are given a CSV file called 'amazon_reviews.csv' in the current directory.
+    The target is 'rating' (1-5 stars). The input feature is 'text' (review text).
+    
+    Task: Build a sentiment classifier to predict the star rating from review text.
+    1. Preprocess text (lowercase, remove punctuation, tokenize)
+    2. Split 80/20 (random_state=42)
+    3. Try at least 2 approaches:
+       - TF-IDF + Logistic Regression
+       - A more advanced method of your choice
+    4. Report weighted F1-score and accuracy for each
+    
+    Save code as 'solution.py', predictions as 'predictions.csv' (y_true, y_pred),
+    metrics as 'metrics.json'.
+
+AR-ROBU-01:
+  dataset: amazon_reviews
+  analytics_level: predictive
+  modality: nlp
+  task_type: classification
+  primary_metric: f1
+  adversarial: true
+  adversarial_config:
+    flip_pct: 0.15
+  prompt: |
+    You are given a CSV file called 'amazon_reviews.csv' in the current directory.
+    NOTE: Some ratings may be mislabeled. Build a robust sentiment classifier anyway.
+    Report weighted F1-score and accuracy.
+    
+    Save code as 'solution.py', predictions as 'predictions.csv', metrics as 'metrics.json'.
+
+# =============================================================================
+# CIFAR-10 — Image Classification (Extension)
+# =============================================================================
+
+CF-PRED-01:
+  dataset: cifar10
+  analytics_level: predictive
+  modality: image
+  task_type: classification
+  primary_metric: accuracy
+  adversarial: false
+  prompt: |
+    Task: Build an image classifier on the CIFAR-10 dataset (10 classes).
+    
+    1. Load CIFAR-10 test set (use torchvision or HuggingFace datasets)
+    2. You may use transfer learning (e.g., pretrained ResNet) or train from scratch
+    3. Train on training set, evaluate on test set
+    4. Report overall accuracy and per-class F1
+    
+    Save code as 'solution.py', metrics as 'metrics.json'.
+
+# =============================================================================
+# URBANSOUND8K — Audio Classification (Extension)
+# =============================================================================
+
+US-PRED-01:
+  dataset: urbansound8k
+  analytics_level: predictive
+  modality: audio
+  task_type: classification
+  primary_metric: accuracy
+  adversarial: false
+  prompt: |
+    Task: Build an audio classifier on the UrbanSound8K dataset (10 classes).
+    
+    1. Load audio files and extract features (e.g., MFCCs, mel spectrograms)
+    2. Split by fold (use fold 10 as test)
+    3. Train a classifier (e.g., Random Forest on MFCCs, or a CNN on spectrograms)
+    4. Report overall accuracy and per-class F1
+    
+    Save code as 'solution.py', metrics as 'metrics.json'.
+
+# =============================================================================
+# CROSS-DATASET TASKS (Multi-step, Adversarial, Scale)
+# =============================================================================
+
+MULTI-E2E-01:
+  dataset: heart_disease
+  analytics_level: predictive
+  modality: tabular
+  task_type: end_to_end
+  primary_metric: rubric_score
+  adversarial: false
+  prompt: |
+    You are given a CSV file called 'heart_disease.csv' in the current directory.
+    
+    Task: Perform a COMPLETE end-to-end data science analysis.
+    1. Load and inspect the data
+    2. Clean and preprocess
+    3. Perform EDA with at least 3 visualizations
+    4. Build a classification model for the 'target' column
+    5. Evaluate with accuracy, F1, AUC-ROC
+    6. Generate SHAP feature importance
+    7. Write a 1-page summary report of your findings
+    
+    Save everything: code as 'solution.py', plots as PNG files,
+    metrics as 'metrics.json', report as 'report.txt'.
+
+MULTI-SCALE-01:
+  dataset: nyc_taxi
+  analytics_level: predictive
+  modality: tabular
+  task_type: regression
+  primary_metric: rmse
+  adversarial: false
+  scale_variants:
+    small: 5000
+    large: 50000
+  prompt: |
+    You are given a Parquet file called 'nyc_taxi_sample.parquet' ({n_rows} rows).
+    
+    Task: Build a regression model to predict 'fare_amount'.
+    Use trip_distance, PULocationID, DOLocationID, passenger_count as features.
+    Split 80/20 (random_state=42). Report RMSE, MAE, R-squared.
+    
+    Save code as 'solution.py', predictions as 'predictions.csv', metrics as 'metrics.json'.
+  notes: "Run with n_rows=5000 and n_rows=50000 to measure scalability."

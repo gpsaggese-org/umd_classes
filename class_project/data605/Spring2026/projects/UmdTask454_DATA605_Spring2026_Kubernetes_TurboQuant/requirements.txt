@@ -1,0 +1,5 @@
+numpy<2
+open-clip-torch
+turboquant
+huggingface_hub
+matplotlib
