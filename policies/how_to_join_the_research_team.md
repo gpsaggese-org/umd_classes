@@ -9,7 +9,7 @@
 - Review the kind of research we do:
   - [GP's AI research](https://github.com/gpsaggese/gpsaggese.github.io)
   - [Papers](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/website/docs/06_research.md)
-  - [Blog](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/website/docs/blog/posts)
+  - [Blog](https://gpsaggese.github.io/blog/)
   - [Past projects](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/project_descriptions/README.md)
 
 ## Read the Policies
