@@ -4,9 +4,8 @@
 
 - A running list of my biggest mistakes
 - Keeps the ego in check and shows how difficult it is to make the right decisions
-- Ex-post, my general strategy for becoming successful was apparently:
-  - Be very close to extremely good decisions
-  - Then do the opposite
+- Ex-post my general strategy for becoming successful is apparently: be very
+  close to extremely good decisions, then do the opposite
 
 ### 2004 — Crypto Hardware Paper
 

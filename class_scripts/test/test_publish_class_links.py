@@ -14,7 +14,7 @@ from unittest import mock
 import helpers.hio as hio
 import helpers.hunit_test as hunitest
 
-import class_scripts.publish_class_links as cspucli
+import class_scripts.publish_class_links as cspuclli
 
 _ALL_LABELS = [
     "Slides (PDF)",
@@ -100,7 +100,7 @@ class Test_parse(hunitest.TestCase):
             `argparse.Namespace` attribute, keyed by attribute name
         """
         # Run test.
-        parser = cspucli._parse()
+        parser = cspuclli._parse()
         args = parser.parse_args(arg_list)
         # Check outputs.
         actual = {key: getattr(args, key) for key in expected}
@@ -189,7 +189,7 @@ class Test_find_lesson_names(hunitest.TestCase):
             "Lesson02.1-Git",
         ]
         # Run test.
-        actual = cspucli._find_lesson_names(class_dir)
+        actual = cspuclli._find_lesson_names(class_dir)
         # Check outputs.
         self.assertEqual(actual, expected)
 
@@ -202,7 +202,7 @@ class Test_find_lesson_names(hunitest.TestCase):
         class_dir = os.path.join(self.get_scratch_space(), "data605")
         # Run test and check output.
         with self.assertRaises(AssertionError):
-            cspucli._find_lesson_names(class_dir)
+            cspuclli._find_lesson_names(class_dir)
 
 
 # #############################################################################
@@ -233,7 +233,7 @@ class Test_get_lesson_artifacts(hunitest.TestCase):
             artifact label to whether it exists
         """
         # Run test.
-        actual = cspucli._get_lesson_artifacts(
+        actual = cspuclli._get_lesson_artifacts(
             class_dir,
             lesson_name,
             do_not_fail_on_warnings=do_not_fail_on_warnings,
@@ -301,7 +301,7 @@ class Test_get_lesson_artifacts(hunitest.TestCase):
         expected = f"Lesson '{lesson_name}': missing 'Slides (PDF)'"
         # Run test.
         with self.assertRaises(FileNotFoundError) as cm:
-            cspucli._get_lesson_artifacts(
+            cspuclli._get_lesson_artifacts(
                 class_dir, lesson_name, do_not_fail_on_warnings=False
             )
         # Check outputs.
@@ -320,7 +320,7 @@ class Test_generate_html_page(hunitest.TestCase):
 
     def _build_single_pdf_lesson(
         self, exists: bool
-    ) -> Tuple[str, str, str, List[cspucli.LessonPage]]:
+    ) -> Tuple[str, str, str, List[cspuclli.LessonPage]]:
         """
         Build a single lesson page with one `Slides (PDF)` artifact.
 
@@ -330,11 +330,9 @@ class Test_generate_html_page(hunitest.TestCase):
         class_dir = os.path.join(self.get_scratch_space(), "data605")
         lesson_name = "Lesson01.1-Intro"
         label = "Slides (PDF)"
-        pdf_path = os.path.join(
-            class_dir, "lectures_pdf", f"{lesson_name}.pdf"
-        )
-        artifact = cspucli.LessonArtifact(label, pdf_path, exists)
-        lessons = [cspucli.LessonPage(lesson_name, [artifact])]
+        pdf_path = os.path.join(class_dir, "lectures_pdf", f"{lesson_name}.pdf")
+        artifact = cspuclli.LessonArtifact(label, pdf_path, exists)
+        lessons = [cspuclli.LessonPage(lesson_name, [artifact])]
         return class_dir, pdf_path, label, lessons
 
     def test1(self) -> None:
@@ -349,17 +347,15 @@ class Test_generate_html_page(hunitest.TestCase):
             exists
         )
         # Prepare outputs.
-        github_url = _mock_github_url(
-            file_path=pdf_path, use_master=use_master
-        )
-        short_label = cspucli._get_short_label(label)
+        github_url = _mock_github_url(file_path=pdf_path, use_master=use_master)
+        short_label = cspuclli._get_short_label(label)
         expected = f'<a href="{github_url}">{short_label}</a>'
         # Run test.
         with mock.patch(
             "class_scripts.publish_class_links.dshgtogi._get_github_url",
             side_effect=_mock_github_url,
         ) as mock_get_url:
-            actual = cspucli._generate_html_page(
+            actual = cspuclli._generate_html_page(
                 class_dir, lessons, use_master=use_master
             )
         # Check outputs.
@@ -376,15 +372,13 @@ class Test_generate_html_page(hunitest.TestCase):
         # Prepare inputs.
         exists = True
         use_master = True
-        class_dir, pdf_path, _, lessons = self._build_single_pdf_lesson(
-            exists
-        )
+        class_dir, pdf_path, _, lessons = self._build_single_pdf_lesson(exists)
         # Run test.
         with mock.patch(
             "class_scripts.publish_class_links.dshgtogi._get_github_url",
             side_effect=_mock_github_url,
         ) as mock_get_url:
-            cspucli._generate_html_page(
+            cspuclli._generate_html_page(
                 class_dir, lessons, use_master=use_master
             )
         # Check outputs.
@@ -401,10 +395,10 @@ class Test_generate_html_page(hunitest.TestCase):
         use_master = False
         class_dir, _, label, lessons = self._build_single_pdf_lesson(exists)
         # Prepare outputs.
-        short_label = cspucli._get_short_label(label)
+        short_label = cspuclli._get_short_label(label)
         expected = f'<td class="missing">{short_label}</td>'
         # Run test.
-        actual = cspucli._generate_html_page(
+        actual = cspuclli._generate_html_page(
             class_dir, lessons, use_master=use_master
         )
         # Check outputs.
@@ -418,12 +412,12 @@ class Test_generate_html_page(hunitest.TestCase):
         # Prepare inputs.
         course_name = "data605"
         class_dir = os.path.join(self.get_scratch_space(), course_name)
-        lessons: List[cspucli.LessonPage] = []
+        lessons: List[cspuclli.LessonPage] = []
         use_master = False
         # Prepare outputs.
         expected = f"<title>{course_name} - Class Links</title>"
         # Run test.
-        actual = cspucli._generate_html_page(
+        actual = cspuclli._generate_html_page(
             class_dir, lessons, use_master=use_master
         )
         # Check outputs.
@@ -441,27 +435,22 @@ class Test_generate_html_page(hunitest.TestCase):
         html_label = "Commentary (HTML)"
         exists = True
         use_master = False
-        pdf_path = os.path.join(
-            class_dir, "lectures_pdf", f"{lesson_name}.pdf"
-        )
+        pdf_path = os.path.join(class_dir, "lectures_pdf", f"{lesson_name}.pdf")
         html_path = os.path.join(
             class_dir,
             "lectures_commentary",
             f"{lesson_name}.book_chapter.html",
         )
-        pdf_artifact = cspucli.LessonArtifact(pdf_label, pdf_path, exists)
-        html_artifact = cspucli.LessonArtifact(html_label, html_path, exists)
+        pdf_artifact = cspuclli.LessonArtifact(pdf_label, pdf_path, exists)
+        html_artifact = cspuclli.LessonArtifact(html_label, html_path, exists)
         lessons = [
-            cspucli.LessonPage(lesson_name, [pdf_artifact, html_artifact])
+            cspuclli.LessonPage(lesson_name, [pdf_artifact, html_artifact])
         ]
         # Prepare outputs.
         pdf_url = _mock_github_url(file_path=pdf_path, use_master=use_master)
-        html_url = _mock_github_url(
-            file_path=html_path, use_master=use_master
-        )
+        html_url = _mock_github_url(file_path=html_path, use_master=use_master)
         expected_pdf_href = (
-            f'<a href="{pdf_url}">'
-            f"{cspucli._get_short_label(pdf_label)}</a>"
+            f'<a href="{pdf_url}">{cspucli._get_short_label(pdf_label)}</a>'
         )
         expected_html_href = (
             f'<a href="https://htmlpreview.github.io/?{html_url}">'
@@ -472,7 +461,7 @@ class Test_generate_html_page(hunitest.TestCase):
             "class_scripts.publish_class_links.dshgtogi._get_github_url",
             side_effect=_mock_github_url,
         ):
-            actual = cspucli._generate_html_page(
+            actual = cspuclli._generate_html_page(
                 class_dir, lessons, use_master=use_master
             )
         # Check outputs.
@@ -497,9 +486,9 @@ class Test_main(hunitest.TestCase):
         :param argv: command-line argument list to inject via
             `mock.patch("sys.argv", ...)`
         """
-        parser = cspucli._parse()
+        parser = cspuclli._parse()
         with mock.patch("sys.argv", argv):
-            cspucli._main(parser)
+            cspuclli._main(parser)
 
     def test1(self) -> None:
         """

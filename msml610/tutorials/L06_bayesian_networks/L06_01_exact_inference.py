@@ -27,6 +27,9 @@
 #   - Complexity and limits
 
 # %% [markdown]
+# # Exact Inference
+
+# %% [markdown]
 # ## Imports
 
 # %%

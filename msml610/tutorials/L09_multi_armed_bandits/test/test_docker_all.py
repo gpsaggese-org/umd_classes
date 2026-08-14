@@ -31,9 +31,9 @@ class Test_docker(hdoctest.DockerTestCase):
     @pytest.mark.slow
     def test1(self) -> None:
         """
-        Test that L09_03_multi_armed_bandits.ipynb runs without error.
+        Test that L09_03_02_multi_armed_bandits.ipynb runs without error.
         """
         # Prepare inputs.
-        notebook_name = "L09_03_multi_armed_bandits.ipynb"
+        notebook_name = "L09_03_02_multi_armed_bandits.ipynb"
         # Run test.
         self.helper(notebook_name)

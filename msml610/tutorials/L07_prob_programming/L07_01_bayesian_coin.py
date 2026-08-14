@@ -14,6 +14,9 @@
 # ---
 
 # %% [markdown]
+# # Bayesian Coin
+
+# %% [markdown]
 # ## Imports
 
 # %% [markdown]

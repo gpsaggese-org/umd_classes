@@ -90,7 +90,7 @@ import gymnasium as gym
 import helpers.hintrospection as hintros
 
 # Inspect what Env exposes as a markdown list.
-hintros.print_public_methods(gym.Env, use_markdown=True)
+hintros.print_obj_info(gym.Env)
 
 # %% [markdown]
 # ### Constructing an `Env` via `gym.make()`
