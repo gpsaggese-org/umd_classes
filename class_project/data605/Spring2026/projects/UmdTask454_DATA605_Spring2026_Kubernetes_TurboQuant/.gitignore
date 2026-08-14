@@ -1,0 +1,13 @@
+# Generated data — written by ingester pods, fetched for visualization
+data/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# OS
+.DS_Store
+Thumbs.db
