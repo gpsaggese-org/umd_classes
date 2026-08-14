@@ -14,6 +14,9 @@
 # ---
 
 # %% [markdown]
+# # Bin Analogy ML
+
+# %% [markdown]
 # ## Imports
 
 # %%

@@ -229,7 +229,7 @@ print("SHAP values = deviations from this baseline for each feature.")
 # Display all public methods with their signatures and docstrings.
 import helpers.hintrospection as hintros
 
-hintros.print_public_methods(linear_explainer, use_markdown=True)
+hintros.print_obj_info(linear_explainer)
 
 # %% [markdown]
 # # Part 3: Primitive 2 - The Explanation Object

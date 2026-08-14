@@ -14,6 +14,9 @@
 # ---
 
 # %% [markdown]
+# # Discrete Bayes Dog
+
+# %% [markdown]
 # ## Imports
 
 # %%

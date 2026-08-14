@@ -26,10 +26,10 @@
 % Table icons for the comparison tables, reused across sections.
 % Use darker color mixes instead of the raw xcolor names so the symbols stay
 % readable against a white background (plain "yellow" in particular is too
-% light to read).
-\newcommand{\ngood}{\textcolor{green!50!black}{+}}
-\newcommand{\npartial}{\textcolor{orange!70!black}{o}}
-\newcommand{\nbad}{\textcolor{red!70!black}{-}}
+% light to read), and bold them for legibility at table font sizes.
+\newcommand{\ngood}{\textbf{\textcolor{green!50!black}{+}}}
+\newcommand{\npartial}{\textbf{\textcolor{yellow!85!black}{o}}}
+\newcommand{\nbad}{\textbf{\textcolor{red!70!black}{-}}}
 
 \begin{document}
   \input{papers/Noesis/01_introduction.tex}

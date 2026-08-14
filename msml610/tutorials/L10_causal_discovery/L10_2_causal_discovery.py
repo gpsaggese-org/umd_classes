@@ -22,6 +22,9 @@
 # incremental examples, building intuition about how algorithms infer causal
 # structure from observational data.
 
+# %% [markdown]
+# # Causal Discovery
+
 # %%
 # %load_ext autoreload
 # %autoreload 2

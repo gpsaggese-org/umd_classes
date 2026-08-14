@@ -14,6 +14,9 @@
 # ---
 
 # %% [markdown]
+# # Hierarchical Models
+
+# %% [markdown]
 # ## Imports
 
 # %% [markdown]

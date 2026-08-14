@@ -16,7 +16,7 @@ import helpers.hio as hio
 import helpers.hunit_test as hunitest
 import helpers.hunit_test_utils as hunteuti
 
-import class_scripts.slide_reduce as clslredu
+import class_scripts.slide_reduce as cscslred
 
 
 def _create_lecture_source(self) -> str:
@@ -53,7 +53,7 @@ class Test_parse(hunitest.TestCase):
         expected_lesson = "01.1"
         expected_extra_opts: list = []
         # Run test.
-        parser = clslredu._parse()
+        parser = cscslred._parse()
         args = parser.parse_args(arg_list)
         # Check outputs.
         self.assert_equal(args.dir, expected_dir)
@@ -69,7 +69,7 @@ class Test_parse(hunitest.TestCase):
         # Prepare outputs.
         expected_extra_opts = ["extra_arg1", "extra_arg2"]
         # Run test.
-        parser = clslredu._parse()
+        parser = cscslred._parse()
         args = parser.parse_args(arg_list)
         # Check outputs.
         self.assert_equal(str(args.extra_opts), str(expected_extra_opts))
@@ -115,7 +115,7 @@ class Test_main(hunitest.TestCase):
         # Run test.
         with hunteuti.capture_sys_calls() as sys_calls:
             with mock.patch("sys.argv", ["slide_reduce.py"] + arg_list):
-                clslredu._main(clslredu._parse())
+                cscslred._main(cscslred._parse())
         # Check outputs.
         actual_str = pprint.pformat(sys_calls)
         self.assert_equal(actual_str, expected_str)
@@ -149,7 +149,7 @@ class Test_main(hunitest.TestCase):
         # Run test.
         with hunteuti.capture_sys_calls() as sys_calls:
             with mock.patch("sys.argv", ["slide_reduce.py"] + arg_list):
-                clslredu._main(clslredu._parse())
+                cscslred._main(cscslred._parse())
         # Check outputs.
         actual_str = pprint.pformat(sys_calls)
         self.assert_equal(actual_str, expected_str)

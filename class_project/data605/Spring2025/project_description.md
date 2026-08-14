@@ -52,8 +52,6 @@ This project introduces students to working with ActiveCampaign’s API to extra
 - **statsmodels** (optional): For advanced time series modeling.  
 - **requests**: For direct API calls if not using the client.
 
-### 
-
 ### **Allms**
 
 **Title**: Real-time Bitcoin Sentiment Analysis and Predictive Modeling with allms

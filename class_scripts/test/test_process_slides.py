@@ -16,7 +16,7 @@ import helpers.hio as hio
 import helpers.hunit_test as hunitest
 import helpers.hunit_test_utils as hunteuti
 
-import class_scripts.process_slides as csprsl
+import class_scripts.process_slides as cscprsli
 
 
 # #############################################################################
@@ -38,7 +38,7 @@ class Test__extract_slides_from_markdown(hunitest.TestCase):
         # Prepare outputs.
         expected: list = []
         # Run test.
-        actual = csprsl._extract_slides_from_markdown(txt)
+        actual = cscprsli._extract_slides_from_markdown(txt)
         # Check outputs.
         self.assert_equal(str(actual), str(expected))
 
@@ -49,11 +49,9 @@ class Test__extract_slides_from_markdown(hunitest.TestCase):
         # Prepare inputs.
         txt = "* Slide 1\nContent line 1\nContent line 2"
         # Prepare outputs.
-        expected = [
-            ("Slide 1", "* Slide 1\nContent line 1\nContent line 2")
-        ]
+        expected = [("Slide 1", "* Slide 1\nContent line 1\nContent line 2")]
         # Run test.
-        actual = csprsl._extract_slides_from_markdown(txt)
+        actual = cscprsli._extract_slides_from_markdown(txt)
         # Check outputs.
         self.assert_equal(str(actual), str(expected))
 
@@ -69,7 +67,7 @@ class Test__extract_slides_from_markdown(hunitest.TestCase):
             ("Slide 2", "* Slide 2\nContent 2"),
         ]
         # Run test.
-        actual = csprsl._extract_slides_from_markdown(txt)
+        actual = cscprsli._extract_slides_from_markdown(txt)
         # Check outputs.
         self.assert_equal(str(actual), str(expected))
 
@@ -85,7 +83,7 @@ class Test__extract_slides_from_markdown(hunitest.TestCase):
             ("Slide 2", "* Slide 2\nContent 2\nMore content"),
         ]
         # Run test.
-        actual = csprsl._extract_slides_from_markdown(txt)
+        actual = cscprsli._extract_slides_from_markdown(txt)
         # Check outputs.
         self.assert_equal(str(actual), str(expected))
 
@@ -115,7 +113,7 @@ class Test__get_system_prompt_from_tag(hunitest.TestCase):
         prompt_tag = "text_check_fix"
         # Run test.
         with self.assertRaises(NameError) as cm:
-            csprsl._get_system_prompt_from_tag(prompt_tag)
+            cscprsli._get_system_prompt_from_tag(prompt_tag)
         # Check outputs.
         self.assertIn(prompt_tag, str(cm.exception))
 
@@ -127,7 +125,7 @@ class Test__get_system_prompt_from_tag(hunitest.TestCase):
         prompt_tag = "slide_improve"
         # Run test.
         with self.assertRaises(NameError) as cm:
-            csprsl._get_system_prompt_from_tag(prompt_tag)
+            cscprsli._get_system_prompt_from_tag(prompt_tag)
         # Check outputs.
         self.assertIn(prompt_tag, str(cm.exception))
 
@@ -139,7 +137,7 @@ class Test__get_system_prompt_from_tag(hunitest.TestCase):
         prompt_tag = "slide_reduce"
         # Run test.
         with self.assertRaises(NameError) as cm:
-            csprsl._get_system_prompt_from_tag(prompt_tag)
+            cscprsli._get_system_prompt_from_tag(prompt_tag)
         # Check outputs.
         self.assertIn(prompt_tag, str(cm.exception))
 
@@ -152,7 +150,7 @@ class Test__get_system_prompt_from_tag(hunitest.TestCase):
         prompt_tag = "not_a_real_tag"
         # Run test.
         with self.assertRaises(AssertionError) as cm:
-            csprsl._get_system_prompt_from_tag(prompt_tag)
+            cscprsli._get_system_prompt_from_tag(prompt_tag)
         # Check outputs.
         self.assertIn(prompt_tag, str(cm.exception))
 
@@ -200,7 +198,7 @@ class Test__process_slide_with_llm_transform(hunitest.TestCase):
             return_value=llm_transform_script,
         ):
             with hunteuti.capture_sys_calls() as sys_calls:
-                actual = csprsl._process_slide_with_llm_transform(
+                actual = cscprsli._process_slide_with_llm_transform(
                     slide_content, action
                 )
         # Check outputs.
@@ -248,7 +246,7 @@ class Test__process_single_slide(hunitest.TestCase):
             return_value=llm_transform_script,
         ):
             with hunteuti.capture_sys_calls():
-                actual = csprsl._process_single_slide(
+                actual = cscprsli._process_single_slide(
                     slide_title,
                     slide_content,
                     action,
@@ -318,7 +316,7 @@ class Test__process_slides(hunitest.TestCase):
             return_value=llm_transform_script,
         ):
             with hunteuti.capture_sys_calls():
-                actual = csprsl._process_slides(
+                actual = cscprsli._process_slides(
                     slides, action, use_llm_transform=True
                 )
         # Check outputs.
@@ -350,7 +348,7 @@ class Test__process_slides(hunitest.TestCase):
             return_value=llm_transform_script,
         ):
             with hunteuti.capture_sys_calls():
-                actual = csprsl._process_slides(
+                actual = cscprsli._process_slides(
                     slides,
                     action,
                     limit_range=limit_range,
@@ -378,7 +376,7 @@ class Test_parse(hunitest.TestCase):
         :param expected_values: dict of expected argument values
         """
         # Run test.
-        parser = csprsl._parse()
+        parser = cscprsli._parse()
         args = parser.parse_args(arg_list)
         # Check outputs.
         for key, value in expected_values.items():
@@ -477,7 +475,7 @@ class Test_main(hunitest.TestCase):
         ):
             with hunteuti.capture_sys_calls():
                 with mock.patch("sys.argv", arg_list):
-                    csprsl._main(csprsl._parse())
+                    cscprsli._main(cscprsli._parse())
         # Check outputs.
         actual = hio.from_file(out_file)
         self.assert_equal(actual, expected)
