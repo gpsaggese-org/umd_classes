@@ -31,7 +31,7 @@ UMD DATA605 - Big Data Systems
 
 - **Instructor**: Dr. GP Saggese, [](gsaggese@umd.edu)
 
-- **Reference**
+- @Reference@
   - [Pandas tutorial](https://github.com/gpsaggese-org/umd_classes/tree/master/data605/tutorials/tutorial_pandas)
   - Web
     - Many free resources (e.g., [official docs](https://pandas.pydata.org))
@@ -47,10 +47,10 @@ UMD DATA605 - Big Data Systems
 #### Data Wrangling and Data Cleaning
 ::: columns
 :::: {.column width=50%}
-- **Data wrangling and cleaning**
+- **\textcolor{red}{Data wrangling and cleaning}**
   - Turn _messy, inconsistent, incomplete_ data into a _coherent_ dataset
 
-- **Most effort** in data science is spent here, not on modeling
+- **\textcolor{orange}{Most effort}** in data science is spent here, not on modeling
   - It is iterative work
   - Clean $\to$ Model $\to$ Clean $\to$ ...
 ::::
@@ -59,28 +59,28 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Data wrangling**
+- **\textcolor{darkgreen}{Data wrangling}**
   - Transform data into a useful structure
   - Reshape tables, merge sources, create new variables
 
-- **Data cleaning**
+- **\textcolor{teal}{Data cleaning}**
   - Correct or remove incorrect, corrupt, or irrelevant data
   - Handle missing values, outliers, inconsistent formats
 
-- **Often done together**
+- **\textcolor{cyan}{Often done together}**
 
 #### Typical Data Wrangling Workflow
 ::: columns
 :::: {.column width=50%}
-- **Inspect data**
+- **\textcolor{red}{Inspect data}**
   - Look at column names, data types
   - Look at a few rows
   - Basic summaries
 
-- **Diagnose problems**
+- **\textcolor{orange}{Diagnose problems}**
   - Missing values, unusual codes, inconsistent units, strange distributions
 
-- **Decide strategy**, based on project
+- **\textcolor{darkgreen}{Decide strategy}**, based on project
   - What to keep
   - What to fix
   - What to drop
@@ -90,14 +90,14 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Apply transformations**
+- **\textcolor{teal}{Apply transformations}**
   - Filter, join, reshape, recode, aggregate
 
-- **Validate results**
+- **\textcolor{cyan}{Validate results}**
   - Check that changes make sense and that key statistics are reasonable
 
 #### Data Extraction
-- **Web scraping**
+- **\textcolor{red}{Web scraping}**
   - Use APIs or scrape data explicitly
   - Scraping is challenging
     - Fragile (page changes can break your parser)
@@ -107,7 +107,7 @@ UMD DATA605 - Big Data Systems
   - Tools for automated scraping
     - E.g., \textcolor{blue}{\texttt{import.io}}, \textcolor{blue}{\texttt{portia}}, ..
 
-- **Various sources of data**
+- **\textcolor{darkgreen}{Various sources of data}**
   - Files (e.g., CSV, JSON, XML)
   - Databases
   - Spreadsheets
@@ -116,15 +116,15 @@ UMD DATA605 - Big Data Systems
   - Logs
   - ...
 
-- Raw data reflects **collection needs, not analysis needs**
+- Raw data reflects **\textcolor{blue}{collection needs, not analysis needs}**
 
 #### Tidy Data
 
-- **Definition**: Tidy data is a structured format for datasets that makes them
+- **\textcolor{red}{Definition}**: Tidy data is a structured format for datasets that makes them
   easier to manipulate, analyze, and visualize
   - [Tidy data, Wickham, 2014](https://vita.had.co.nz/papers/tidy-data.pdf)
 
-- **Core Principles**
+- **\textcolor{blue}{Core Principles}**
   - Each variable forms a _column_
   - Each observation forms a _row_
   - Each type of observational unit forms a _table_
@@ -145,13 +145,13 @@ _Tidy data_
 :::
 
 #### Reshaping data
-- **Wide to long**
+- **\textcolor{red}{Wide to long}**
   - Turn similar columns into key-value pairs
 
-- **Long to wide**
+- **\textcolor{darkgreen}{Long to wide}**
   - Turn key-value pairs into separate columns
 
-- **What is the best shape?**
+- **\textcolor{blue}{What is the best shape?}**
   - Choose the shape that simplifies analysis and visualization
 
 ::: columns
@@ -169,7 +169,7 @@ _Long format_
 
 #### Split-Apply-Combine
 
-- **Common data analysis pattern**
+- **\textcolor{red}{Common data analysis pattern}**
   - _Split_: break data into smaller pieces
   - _Apply_: operate on each piece independently
   - _Combine_: combine pieces back together
@@ -177,16 +177,16 @@ _Long format_
 
 ::: columns
 :::: {.column width=55%}
-- **Examples**
+- **\textcolor{darkgreen}{Examples}**
   - Group-wise ranking
   - Group statistics (sums, means, counts)
   - Create separate models per group
 
-- **Pros**
+- **\textcolor{blue}{Pros}**
   - Code is compact
   - Easy to parallelize
 
-- **Supported by many systems**
+- **\textcolor{violet}{Supported by many systems}**
   - Pandas
   - \textcolor{blue}{\texttt{SQL GROUP BY}} operator
   - Map-Reduce
@@ -268,21 +268,21 @@ digraph DataQualityProblems {
 }
 ```
 
-- Several problems **reduce trust and usability of data**
+- Several problems **\textcolor{red}{reduce trust and usability of data}**
   - _Single-Source_: Occur within a single dataset
   - _Multi-Source_: Arise when integrating data from multiple sources
   - _Schema-Level_: Related to the structure or design of data
   - _Instance-Level_: Related to actual data values stored
 
 #### Single-Source Problems
-- **Depends largely on source**
+- **\textcolor{red}{Depends largely on source}**
   - _Databases_ often enforce schema / instance constraints
   - _Spreadsheet data_ is often "clean"
     - Schema exists
   - _Logs_ are messy
   - _Web-page data_ is messier
 
-- **Types of problems**
+- **\textcolor{blue}{Types of problems}**
   - Ill-formatted data
   - Missing/illegal values, misspellings, wrong fields, extraction issues
   - Duplicated records, contradicting information, referential integrity
@@ -293,7 +293,7 @@ digraph DataQualityProblems {
 
 #### Single-Source Problems: Example
 
-- **Sources of errors in data**
+- **\textcolor{red}{Sources of errors in data}**
   - Data entry errors: arbitrary values entered
   - Measurement errors: sensor data inaccuracies
   - Distillation errors: processing and summarization issues
@@ -302,22 +302,22 @@ digraph DataQualityProblems {
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_25_image_1.png)
 
 #### Multi-Source Problems
-- **Different data sources**
+- **\textcolor{red}{Different data sources}**
   - Developed separately
   - Maintained by different people
   - Stored in different systems
 
-- **Schema mapping / transformation**
+- **\textcolor{darkgreen}{Schema mapping / transformation}**
   - Map information across sources
   - Naming conflicts
     - Same name for different objects
     - Different names for same objects
   - Different representations across sources
 
-- **Entity resolution**
+- **\textcolor{blue}{Entity resolution}**
   - Match entities across sources
 
-- **Data quality issues**
+- **\textcolor{violet}{Data quality issues}**
   - Contradicting information
   - Mismatched information
 
@@ -325,10 +325,10 @@ digraph DataQualityProblems {
 ::: columns
 :::: {.column width=50%}
 
-- **Problems with outliers**
+- **\textcolor{red}{Problems with outliers}**
   - Extreme outliers may alter metrics, masking others
 
-- Use statistics to **identify outliers**
+- Use statistics to **\textcolor{blue}{identify outliers}**
   - Robust statistics: minimize effect of corrupted data
   - Robust center metrics
     - Median
@@ -345,11 +345,11 @@ digraph DataQualityProblems {
 :::
 
 #### Outlier Detection
-- **For Gaussian data**
+- **\textcolor{red}{For Gaussian data}**
   - Data points 1.5x MAD from median
   - Plot histogram to confirm
 
-- **For non-Gaussian data**
+- **\textcolor{darkgreen}{For non-Gaussian data}**
   - Estimate generating distribution (parametric or not)
   - Distance-based: find points with few neighbors
   - Density-based:
@@ -358,7 +358,7 @@ digraph DataQualityProblems {
 
 ::: columns
 :::: {.column width=50%}
-- **Curse of dimensionality**
+- **\textcolor{blue}{Curse of dimensionality}**
   - _"In high-dimensional spaces, data is sparse"_
   - Techniques break down as data dimensionality increases
   - Need $O(e^n)$ points with $n$ dimensions to estimate
@@ -374,11 +374,11 @@ digraph DataQualityProblems {
 ::: columns
 :::: {.column width=70%}
 
-- **Mean/covariance not robust**
+- **\textcolor{red}{Mean/covariance not robust}**
   - Sensitive to outliers
   - Use robust statistics
 
-- Assume **multivariate Gaussian data**
+- Assume **\textcolor{blue}{multivariate Gaussian data}**
   - Defined by _mean_ $\vmu$ and _covariance matrix_ $\mSigma$
   - _Iterative approach_
     - Mahalanobis distance: $\sqrt{(\vx - \vmu)^T\mSigma^{-1}(\vx - \vmu)}$
@@ -403,9 +403,9 @@ digraph DataQualityProblems {
 ::: columns
 :::: {.column width=60%}
 
-- Often data is in the form of a **time series**
+- Often data is in the form of a **\textcolor{red}{time series}**
 
-- A **time series** is a sequence of data points recorded at regular intervals
+- A **\textcolor{darkgreen}{time series}** is a sequence of data points recorded at regular intervals
   - Stock prices
   - Sales revenue
   - Website traffic
@@ -422,8 +422,7 @@ digraph DataQualityProblems {
 ::::
 :::
 
-- Rich literature on **forecasting** in time series data
+- Rich literature on **\textcolor{blue}{forecasting}** in time series data
 
-- Use historical patterns to flag **outliers**
+- Use historical patterns to flag **\textcolor{violet}{outliers}**
   - Rolling MAD (median absolute variation)
-

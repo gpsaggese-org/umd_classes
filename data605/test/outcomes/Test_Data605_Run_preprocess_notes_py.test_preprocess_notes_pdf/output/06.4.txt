@@ -30,7 +30,7 @@ UMD DATA605 - Big Data Systems
 
 **Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
 
-- **References**:
+- @References@:
   - All concepts in slides
   - Seven Databases in Seven Weeks, 2e
 ::::
@@ -73,7 +73,7 @@ UMD DATA605 - Big Data Systems
 - **Architecture**
 ::: columns
 ::::{.column width=50%}
-- Every Couchbase node consists of **different services**:
+- Every Couchbase node consists of @different services@:
   - Data service
   - Index service
   - Query service
@@ -81,11 +81,11 @@ UMD DATA605 - Big Data Systems
 
 - Services can run on separate nodes
 
-- **Data replication**
+- @Data replication@
   - Across nodes
   - Across data centers
 
-- **Data service**
+- @Data service@
   - Writes data asynchronously to disk after acknowledging to client
   - Optionally synchronous: ensure data is written to more than one server
     before acknowledging a write
@@ -98,20 +98,20 @@ UMD DATA605 - Big Data Systems
 :::
 
 - **Queries**
-- **Can create multiple views over documents**
+- @Can create multiple views over documents@
   - Views optimized/indexed by Couchbase for fast queries
   - Re-indexed when documents change
   - Perform full-text searches using indexes
 
-- **Perform well when:**
+- @Perform well when:@
   - Infrequent changes to document structure
   - Know query types in advance
 
-- **Query**
+- @Query@
   - Uses custom query language N1QL ("nickel")
   - Extends SQL to JSON documents
   - Queries over multiple documents using server-side joins
 
-- **Map-reduce support**
+- @Map-reduce support@
   - (Map) Define a view with document columns of interest
   - (Reduce) Optionally define aggregate functions over data

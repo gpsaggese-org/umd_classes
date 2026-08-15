@@ -36,37 +36,37 @@ UMD DATA605 - Big Data Systems
 ## Typical graph analysis tasks
 
 #### Queries vs Analysis Tasks
-- **Queries**
+- **\textcolor{red}{Queries}**
   - Explore data
   - Result is small graph portion (often a node)
   - Challenges
     - Minimize explored graph portion
     - Use indexes (auxiliary data structures)
 
-- **Analysis tasks**
+- **\textcolor{blue}{Analysis tasks}**
   - Process entire graph
   - Challenges
     - Handle large data efficiently
     - Parallelize if data doesn't fit in memory/disk
 
 #### Graph Algorithms
-- **Graph algorithms** are general algorithms applicable to various graph types
+- **\textcolor{red}{Graph algorithms}** are general algorithms applicable to various graph types
   - Network flows (e.g., max flow, min cut)
   - Spanning trees (e.g., minimal connectivity)
   - ...
 
-- **Applications**
+- **\textcolor{blue}{Applications}**
   - Logistics and supply chain optimization
   - Electric grid design
   - Telecommunications (e.g., bandwidth allocation)
 
 #### Subgraph Matching
-- **Subgraph Matching** = find matching instances of a small pattern in a larger
+- **\textcolor{red}{Subgraph Matching}** = find matching instances of a small pattern in a larger
   graph
   - Patterns are typically small and fixed
   - Matching can be _approximate_
 
-- **Applications**
+- **\textcolor{blue}{Applications}**
   - Fraud detection (e.g., detecting fraudulent transaction patterns)
   - Bioinformatics (e.g., finding protein interaction motifs)
   - Social network analysis (e.g., community pattern detection)
@@ -75,10 +75,10 @@ UMD DATA605 - Big Data Systems
 ![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_40_image_1.png){width=60%}
 
 #### Shortest Path Queries
-- **Shortest Path Queries** = find the shortest or optimal path between two nodes
+- **\textcolor{red}{Shortest Path Queries}** = find the shortest or optimal path between two nodes
   - May consider edge weights (e.g., distance, cost)
 
-- **Applications**
+- **\textcolor{blue}{Applications}**
   - GPS navigation (e.g., Google Maps)
   - Network routing (e.g., Internet traffic routing)
   - Robotics (e.g., path planning)
@@ -87,10 +87,10 @@ UMD DATA605 - Big Data Systems
 ![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_40_image_2.png){width=70%}
 
 #### Reachability
-- **Reachability** = determine if a path exists between two nodes
+- **\textcolor{red}{Reachability}** = determine if a path exists between two nodes
   - May include constraints (e.g., edge types, direction)
 
-- **Applications**
+- **\textcolor{blue}{Applications}**
   - Access control (e.g., "can user X reach resource Y?")
   - Dependency analysis (e.g., package installation)
   - Workflow engines (e.g., task progression)
@@ -98,9 +98,9 @@ UMD DATA605 - Big Data Systems
 #### Keyword Search
 :::columns
 ::::{.column width=45%}
-- **Keyword Search** = find smallest subgraph containing all specified keywords
+- **\textcolor{red}{Keyword Search}** = find smallest subgraph containing all specified keywords
 
-- **Applications**
+- **\textcolor{blue}{Applications}**
   - Knowledge graphs (e.g., question answering)
   - Enterprise search (e.g., documents linked by shared entities)
   - Academic citation networks
@@ -111,10 +111,10 @@ UMD DATA605 - Big Data Systems
 :::
 
 #### Historical Queries
-- **Historical Queries** = find nodes with similar evolution or temporal behavior
+- **\textcolor{red}{Historical Queries}** = find nodes with similar evolution or temporal behavior
   - Typically on dynamic or time-stamped graphs
 
-- **Applications**
+- **\textcolor{blue}{Applications}**
   - Stock market analysis (e.g., similar price movement)
   - Social media trends (e.g., user behavior over time)
   - Epidemiology (e.g., disease spread patterns)
@@ -127,7 +127,7 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=60%}
 
-- **Computation is organized into supersteps**
+- **\textcolor{red}{Computation is organized into supersteps}**
   - _Local computation_
   - _Message passing_
     - Parallel processors to exchange data
@@ -140,16 +140,16 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Pros**
+- **\textcolor{darkgreen}{Pros}**
   - Deterministic and predictable behavior
   - Simple abstraction for reasoning about parallelism
   - Suitable for graph computations with regular communication patterns
-- **Cons**
+- **\textcolor{blue}{Cons}**
   - Global synchronization can cause idle time (stragglers)
   - Inefficient for highly irregular workloads or dynamic computation patterns
 
 #### Pregel
-- **Pregel** is a graph processing framework inspired by the BSP model
+- **\textcolor{red}{Pregel}** is a graph processing framework inspired by the BSP model
   - Pregel = Parallel + Graph + Google
   - Designed for large-scale distributed graph computations
   - Uses a vertex-centric programming model
@@ -160,23 +160,23 @@ UMD DATA605 - Big Data Systems
     - Update state based on received messages
     - Can vote to halt; computation ends when all are inactive
 
-- **PageRank example**
+- **\textcolor{darkgreen}{PageRank example}**
   - Each vertex divides its rank among neighbors
   - In each superstep, vertices update rank from incoming messages
 
-- **Connected components example**
+- **\textcolor{blue}{Connected components example}**
   - Each vertex propagates smallest ID seen to neighbors
   - Repeats until no changes occur
 
 #### Apache Giraph
 ::: columns
 :::: {.column width=70%}
-- **Apache Giraph** is an open-source implementation of Pregel
+- **\textcolor{red}{Apache Giraph}** is an open-source implementation of Pregel
   - Written in Java for high scalability
 
 - Suitable for batch-processing large graphs
 
-- **Integrates with Hadoop ecosystem**
+- **\textcolor{darkgreen}{Integrates with Hadoop ecosystem}**
   - Runs on Hadoop MapReduce
   - Uses HDFS for storage and YARN for resource management
 ::::
@@ -185,7 +185,7 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Example use cases**:
+- **\textcolor{blue}{Example use cases}**:
   - Social network analysis (e.g., friend recommendation)
   - Web graph analysis (e.g., PageRank)
   - Biological network exploration (e.g., gene interaction)
@@ -193,7 +193,7 @@ UMD DATA605 - Big Data Systems
 #### Apache Spark GraphX
 ::: columns
 :::: {.column width=70%}
-- **GraphX** is Spark's API for graph-parallel computation
+- **\textcolor{red}{GraphX}** is Spark's API for graph-parallel computation
 
 - Seamless integration with Spark ecosystem and pipelines
 
@@ -210,10 +210,10 @@ UMD DATA605 - Big Data Systems
   - Enables iterative message-passing computations
   - Preserves immutability and functional programming style
 
-- **Strengths vs traditional graph DBs**
+- **\textcolor{darkgreen}{Strengths vs traditional graph DBs}**
   - Scalable to very large graphs
   - Efficient for batch analytics and machine learning workflows
 
-- **Limitations**
+- **\textcolor{blue}{Limitations}**
   - Less suitable for real-time queries and transactional workloads
   - Requires understanding of Spark internals for tuning performance

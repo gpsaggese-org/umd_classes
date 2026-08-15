@@ -7,6 +7,7 @@ import msml610.tutorials.L9x_refreshers.L94_04_information_theory_utils as mtlrl
 """
 
 import logging
+import os
 import textwrap
 import warnings
 from typing import Any, List, Optional, Union
@@ -191,6 +192,9 @@ def cell2_plot_distribution_with_stats(
     )
     # Save figure if requested.
     if save_fig is not None and fig is not None:
+        save_dir = os.path.dirname(save_fig)
+        if save_dir:
+            os.makedirs(save_dir, exist_ok=True)
         fig.savefig(save_fig, dpi=150, bbox_inches="tight")
         _LOG.info("Saved figure to: %s", save_fig)
     # Show plot if not using existing axis.

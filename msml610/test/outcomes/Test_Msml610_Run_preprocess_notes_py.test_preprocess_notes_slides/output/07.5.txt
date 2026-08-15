@@ -4,6 +4,24 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
+::: columns
+:::: {.column width=20%}
+![](msml610/lectures_source/figures/UMD_Logo.png)
+::::
+:::: {.column width=80%}
+
+MSML610: Advanced Machine Learning
+::::
+:::
+
+\vspace{2cm}
+
+**$$\text{\textcolor{blue}{\text{L07.5: Bayesian Model Comparison}}}$$**
+
+\vspace{3cm}
+
+**Instructor**: Dr. GP Saggese - gsaggese@umd.edu
+
 
 # Bayesian Model Comparison
 
@@ -580,5 +598,4 @@ fontsize: 10pt
   - MAP of posterior using Laplace priors for coefficients
   - Because Laplace distribution looks like Gaussian with a sharp peak at zero,
     it provides "variable selection" since it induces sparsity of model
-
 

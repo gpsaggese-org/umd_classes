@@ -4,6 +4,24 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
+::: columns
+:::: {.column width=20%}
+![](msml610/lectures_source/figures/UMD_Logo.png)
+::::
+:::: {.column width=80%}
+
+MSML610: Advanced Machine Learning
+::::
+:::
+
+\vspace{2cm}
+
+**$$\text{\textcolor{blue}{\text{L06.1: Bayesian Networks}}}$$**
+
+\vspace{3cm}
+
+**Instructor**: Dr. GP Saggese - gsaggese@umd.edu
+
 
 
 # Logic-Based AI Under Uncertainty
@@ -12,16 +30,16 @@ fontsize: 10pt
 
 #### Logic-Based AI Under Uncertainty: Problem
 
-- @Definition@: **Logic-based AI systems**:
+- **\textcolor{red}{Definition}**: **Logic-based AI systems**:
   - Are based on propositional logic
   - Represent actions using rules
     - E.g., _"If preconditions P hold, then action A causes effect E"_
 
-- @Example@:
+- **\textcolor{darkgreen}{Example}**:
   - _"If I turn the car key, the engine starts"_
   - But the battery might be dead, there's no fuel, the starter is broken, ...
 
-- @Problem@: Real-world agents face _uncertainty_ from:
+- **\textcolor{blue}{Problem}**: Real-world agents face _uncertainty_ from:
   1. _Partial observability_
      - Agent can't see the full state of the world
   2. _Non-determinism_
@@ -31,7 +49,7 @@ fontsize: 10pt
 
 #### Logic-Based Under Uncertainty: Naive Solution
 
-- @Naive Solution@: A possible solution to logic-based AI under uncertainty is to
+- **\textcolor{red}{Naive Solution}**: A possible solution to logic-based AI under uncertainty is to
   use:
   1. **Belief state**, i.e., set of all possible current world states
      - _Cons_: difficult to enumerate and track
@@ -45,22 +63,22 @@ fontsize: 10pt
 
 #### Naive Solution: Example of Starting a Car
 
-- @Goal@: build a system to start a car by turning the car key
+- **\textcolor{red}{Goal}**: build a system to start a car by turning the car key
 
-- @Remark@: Obvious preconditions
+- **\textcolor{darkgreen}{Remark}**: Obvious preconditions
   - Car has fuel
   - Car battery is charged
   - Car key is the right one
   - ...
 
-- @Remark@: Less obvious preconditions
+- **\textcolor{blue}{Remark}**: Less obvious preconditions
   - Electrical system is intact
   - Fuel pump is working
   - Fuel lines are not clogged
   - Engine oil level is sufficient
   - ...
 
-- @Problem@: Every precondition requires something else to achieve the goal
+- **\textcolor{violet}{Problem}**: Every precondition requires something else to achieve the goal
 
 ## Why Logic Fails Under Uncertainty
 
@@ -68,12 +86,12 @@ fontsize: 10pt
 
 #### Causal and Exhaustive Augmentation
 
-- @Definition@: Causal and exhaustive augmentation of logic-rules
+- **\textcolor{red}{Definition}**: Causal and exhaustive augmentation of logic-rules
   - To use propositional logic under uncertainty, need to augment left-side of
     rules $X \implies Y$ to make it:
     1. _Causal_: identify true causal-effect relationships
     2. _Exhaustive_: identify all possible conditions $X$ leading to outcome $Y$
-- @Limitations@:
+- **\textcolor{blue}{Limitations}**:
   - Every action can have more hidden conditions needed to succeed
     - E.g., start the engine $\implies$ turn car key $\implies$ starter motor is
       working $\implies$ battery is charged $\implies$ ...
@@ -83,10 +101,10 @@ fontsize: 10pt
 
 #### Limitations of Logical Qualification
 
-- @Definition@: **Logical qualification problem** is the need to enumerate all
+- **\textcolor{red}{Definition}**: **Logical qualification problem** is the need to enumerate all
   preconditions necessary for an action to succeed
 
-- @Limitations@: It is not possible to solve the logical qualification problem
+- **\textcolor{darkgreen}{Limitations}**: It is not possible to solve the logical qualification problem
   for several reasons
   1. **Laziness**: Too much effort required to create all possible rules
   2. **Theoretical ignorance**: Science doesn't always have complete theory of
@@ -97,7 +115,7 @@ fontsize: 10pt
      - E.g., not all required medical tests can be performed for particular
        patient
 
-- @Consequence@: **AI winter (mid-1980s, 1990s)**
+- **\textcolor{blue}{Consequence}**: **AI winter (mid-1980s, 1990s)**
   - Researchers believed that expert systems could achieve AGI
   - Real world is complex and open-ended
   - Logical rules can't capture all necessary and sufficient conditions
@@ -112,7 +130,7 @@ fontsize: 10pt
   - $Rain$ = _"it rains"_
   - $WetGrass$ = _"the grass is wet"_
 
-- @Question@: Is it true that $Rain \implies WetGrass$?
+- **\textcolor{red}{Question}**: Is it true that $Rain \implies WetGrass$?
   - "$Rain \implies WetGrass$" is not true in general
   - If it rains but there is a cover over grass, grass will not be wet
   - If it rains but temperature is high, wet grass might dry quickly
@@ -123,12 +141,12 @@ fontsize: 10pt
 ::::
 :::
 
-- @Question@: What about converse "$WetGrass \implies Rain$?
+- **\textcolor{darkgreen}{Question}**: What about converse "$WetGrass \implies Rain$?
   - "$WetGrass \implies Rain$" is not true in general
     - Grass could be wet because of sprinkler system
     - Grass could be wet because of morning dew
 
-- @Answer@: you also need to consider propositions:
+- **\textcolor{blue}{Answer}**: you also need to consider propositions:
   - $Cover$ = _"there is a protective cover over the grass"_
   - $Evaporate$ = _"the water evaporates quickly"_
   - $Sprinkler$ = _"the sprinkler system is on"_
@@ -183,15 +201,15 @@ digraph BayesianFlow {
 
 #### Acting Under Uncertainty: Proper Solution
 
-- @Conclusion@: We can't use propositional logic under uncertainty
+- **\textcolor{red}{Conclusion}**: We can't use propositional logic under uncertainty
 
-- @Solution@: Acting under uncertainty requires combining:
+- **\textcolor{darkgreen}{Solution}**: Acting under uncertainty requires combining:
   - **Probability**: handle uncertainty and partial knowledge
     - E.g., agent's internal estimate of outcome likelihoods
   - **Utility functions**: evaluate desirability of each outcome
     - E.g., combine goals like punctuality, comfort, legal compliance
 
-- @Key idea@: **Rational choice** = plan that maximizes expected utility
+- **\textcolor{blue}{Key idea}**: **Rational choice** = plan that maximizes expected utility
   - Evaluate plans based on performance on average, given known info
   - Still success is not guaranteed
 
@@ -199,14 +217,14 @@ digraph BayesianFlow {
 
 #### The Paradox of Probability and Knowledge
 
-- @Paradox@: There is **no uncertainty in the actual world!**
+- **\textcolor{red}{Paradox}**: There is **no uncertainty in the actual world!**
   - E.g., the grass is wet, but either it rained or not
 
-- @Answer@: **Knowledge is subjective**:
+- **\textcolor{darkgreen}{Answer}**: **Knowledge is subjective**:
   - Probabilities relate to knowledge state, not to the real world
   - Updating knowledge changes probability statements
 
-- @Example@
+- **\textcolor{blue}{Example}**
   - Initially, observe _"wet grass"_
     - From past data: $\Pr(Rain | WetGrass) = 0.8$
     - Current belief: _"80% chance it rained if grass is wet"_ (Bayesian prior)
@@ -228,7 +246,7 @@ digraph BayesianFlow {
 
 #### Full Joint Probability Distribution
 
-- @Definition@: Consider The **full joint probability distribution** of a set of
+- **\textcolor{red}{Definition}**: Consider The **full joint probability distribution** of a set of
   random variables $X_1, X_2, \dots, X_n$ assigns probability to every possible
   world:
   $$
@@ -236,14 +254,14 @@ digraph BayesianFlow {
   $$
   where _possible world_ is any assignment of values to all variables
 
-- @Fact@: Full joint probability can answer any probabilistic query about domain
+- **\textcolor{darkgreen}{Fact}**: Full joint probability can answer any probabilistic query about domain
 
-- @Cons@
+- **\textcolor{blue}{Cons}**
   - Size grows exponentially $k^n$ with number of variables $n$ and values $k$
   - Impractical for real-world problems with many variables
   - Manually specifying each entry is tedious or impossible
 
-- @Remark@: In the real world, many variables are **not fully dependent** from
+- **\textcolor{violet}{Remark}**: In the real world, many variables are **not fully dependent** from
   all others
 - _Conditional and absolute independence_ of random variables:
   - Reduces number of variables needed in model
@@ -254,7 +272,7 @@ digraph BayesianFlow {
 
 #### Independence of Random Variables: Definition
 
-- @Definition@: Two random variables $X$ and $Y$ are **independent** iff:
+- **\textcolor{red}{Definition}**: Two random variables $X$ and $Y$ are **independent** iff:
   $$
   \Pr(X, Y) = \Pr(X) \cdot \Pr(Y)
   $$
@@ -268,7 +286,7 @@ digraph BayesianFlow {
     \Pr(Coin=Heads | Weather=Rainy) = \Pr(Coin=Heads)
     $$
 
-- @Consequence@: Independence of random variables:
+- **\textcolor{blue}{Consequence}**: Independence of random variables:
   - Reduces number of parameters needed to model system
     $$
     \Pr(X_1 | X_2, X_3) = \Pr(X_1)
@@ -284,14 +302,14 @@ digraph BayesianFlow {
 
 #### Conditional Independence: Definition
 
-- @Definition@: Two random variables $X$ and $Y$ are **conditionally
+- **\textcolor{red}{Definition}**: Two random variables $X$ and $Y$ are **conditionally
   independent** given a random variable $Z$ iff knowing $Z$ makes $X$ and $Y$
   independent:
   $$
   X \perp Y | Z \iff \Pr(X, Y | Z) = \Pr(X | Z) \cdot \Pr(Y | Z)
   $$
 
-- @Example@:
+- **\textcolor{darkgreen}{Example}**:
   - $X$ = _"it is raining today"_
   - $Y$ = _"a person is carrying an umbrella"_
   - $Z$ = _"the weather forecast"_
@@ -300,7 +318,7 @@ digraph BayesianFlow {
     umbrella $Y$ gives no info about rain $X$
   - Thus, $X$ and $Y$ are conditionally independent given $Z$
 
-- @Pros@
+- **\textcolor{blue}{Pros}**
   - Conditional independence more common than absolute independence
   - Simplify probabilistic models by factorizing joint conditional distribution
     into product of individual conditional distributions
@@ -352,7 +370,7 @@ digraph BayesianFlow {
   - Once alarm rang, the specific cause doesn't affect whether friend calls
     $$\Pr(Call | Alarm, Fire, Toast) = \Pr(Call | Alarm)$$
 
-- @Interpretation@: Knowing alarm rang "blocks" path of influence from $Fire$ and
+- **\textcolor{red}{Interpretation}**: Knowing alarm rang "blocks" path of influence from $Fire$ and
   $Toast$ to $Call$
 
 ### Conditional Independence in Garden World
@@ -400,12 +418,12 @@ digraph BayesianFlow {
 ::::
 :::
 
-- @Interpretation@
+- **\textcolor{red}{Interpretation}**
   - Without $WetGrass$: $Rain$ and $Sprinkler$ affect each other because both
     explain $WetGrass$
   - With $WetGrass$: once $WetGrass$ is observed, effect is "explained away"
 
-- @Definition@: _"Explaining away"_ (collider) occurs when:
+- **\textcolor{blue}{Definition}**: _"Explaining away"_ (collider) occurs when:
   - Two variables (causes) influence third variable (effect)
   - Observing effect creates dependence between causes
   - Evidence for one explains effect and reduces need to believe in other
@@ -419,7 +437,7 @@ digraph BayesianFlow {
 - Aka: "Bayes nets", "Belief networks", "Probabilistic networks", "Graphical
   models" (broader class), "Causal networks" (arrows have special meaning)
 
-- @Definition@: A _Bayesian network_ is a Directed Acyclic Graph (DAG)
+- **\textcolor{red}{Definition}**: A _Bayesian network_ is a Directed Acyclic Graph (DAG)
   1. _Nodes_ $X_i$ correspond to random variables (discrete or continuous)
   2. _Edges_ $X \to Y$ connect nodes and represent dependencies among variables
      - E.g., $X = Parent(Y)$, $Y = Child(X)$, ancestors, spouses, ...
@@ -430,27 +448,27 @@ digraph BayesianFlow {
 
 #### Bayesian Network: Intuition
 
-- @Remark@: Bayesian networks analogous for uncertain knowledge to propositional
+- **\textcolor{red}{Remark}**: Bayesian networks analogous for uncertain knowledge to propositional
   logic for definite knowledge
   - Propositional logic = rigid rules (\textcolor{blue}{\texttt{True}} or \textcolor{blue}{\texttt{False}})
   - Bayesian networks = flexible, degrees of belief
   - Replace $X \implies Y$ with $\Pr(Y | X)$
 
-- @Example@: Garden world
+- **\textcolor{darkgreen}{Example}**: Garden world
   - $R$ = "It is raining", $W$ = "The grass is wet"
   - Propositional logic: If $R \rightarrow W$ and $R$ is true, then $W$ must be
     true
   - Bayesian network:
     $\Pr(R = True) = 0.2$, $\Pr(W | R) = 0.9$, $\Pr(W | \neg R) = 0.1$
 
-- @Example@: Medical diagnosis
+- **\textcolor{blue}{Example}**: Medical diagnosis
   - Propositional logic: _"Patient has disease $D$" $\implies$ "Patient has
     symptom $S$"_
   - Bayesian network: _"Probability of $S$ given $D$ is high, but not certain"_
 
 #### Bayesian Network and Full-joint Distribution
 
-- @Theorem@: **Graph topology** and **conditional probabilities** are sufficient
+- **\textcolor{red}{Theorem}**: **Graph topology** and **conditional probabilities** are sufficient
   to specify any full joint distribution, (often) very concisely
 
 - Topology of network (nodes and edges) specifies conditional independence
@@ -632,7 +650,7 @@ digraph BayesianFlow {
 
 #### Conditional Probability Table
 
-- @Definition@: _Conditional Probability Table_ (CPT) encodes probability of node $X_i$ given parents $Parents(X_i)$
+- **\textcolor{red}{Definition}**: _Conditional Probability Table_ (CPT) encodes probability of node $X_i$ given parents $Parents(X_i)$
   $$
   \Pr(X_i | Parents(X_i))
   $$

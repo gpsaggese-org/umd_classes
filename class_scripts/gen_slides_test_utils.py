@@ -51,7 +51,7 @@ def _get_lesson_numbers(course_dir: str) -> List[str]:
     for file in os.listdir(lectures_source_dir):
         # Match lesson numbers from filenames like "Lesson01.1-BigData.txt"
         # -> "01.1".
-        match = re.match(r"Lesson(\d+(?:\.\d+)?)", file)
+        match = re.match(r"Lesson(\d+(?:\.[0-9A-Za-z]+)?)", file)
         if match:
             lesson_num = match.group(1)
             lessons.append(lesson_num)
@@ -98,7 +98,7 @@ def collect_all_lessons() -> Dict[str, List[str]]:
     """
     all_lessons = {}
     # TODO(ai_gp): Look for all dirs that have a lectures_source.
-    valid_dirs = ["data605", "msml610", "book.springer"]
+    valid_dirs = ["data605", "msml610", "book_springer"]
     for course_dir in valid_dirs:
         all_lessons[course_dir] = _get_lesson_numbers(course_dir)
     _LOG.debug("return=%s", all_lessons)
@@ -162,7 +162,7 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
         """
         _LOG.debug(hprint.to_str("self.COURSE_DIR"))
         hdbg.dassert_ne(self.COURSE_DIR, "")
-        valid_lesson_pattern = r"^\d+(\.\d+)?$"
+        valid_lesson_pattern = r"^\d+(\.[0-9A-Za-z]+)?$"
         lessons = _get_lesson_numbers(self.COURSE_DIR)
         for lesson in lessons:
             self.assertRegex(

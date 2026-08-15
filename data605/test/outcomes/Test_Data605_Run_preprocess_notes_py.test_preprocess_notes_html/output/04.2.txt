@@ -38,13 +38,13 @@ UMD DATA605 - Big Data Systems
 
 - **SQL Overview**
 
-- **Relational algebra**: mathematical language to manipulate _relations_
+- @Relational algebra@: mathematical language to manipulate _relations_
 
-- **SQL**: language to describe and transform data in a relational DB
+- @SQL@: language to describe and transform data in a relational DB
   - Originally Sequel
   - Changed to Structured Query Language
 
-- **SQL statements grouped by goal**
+- @SQL statements grouped by goal@
   - Data definition language (DDL)
     - Define schema (tables, attributes, indices)
     - Specify integrity constraints (primary key, foreign key, not null)
@@ -101,7 +101,7 @@ where:
 - \textcolor{blue}{\texttt{D\_i}} domain of attribute \textcolor{blue}{\texttt{A\_i}}
 ::::
 :::
-- **Constraints**
+- @Constraints@
   - SQL prevents changes violating integrity constraints
   - Primary key
     - Must be non-null and unique
@@ -318,7 +318,7 @@ WITH max_budget(value) as (
 - Readme\*\* \*\*
   - Explains how to run the tutorial
 - Three notebooks in tutorial_university
-- **How to learn from a tutorial **
+- @How to learn from a tutorial @
   - Reset the notebook
   - Execute each cell one at the time
   - Ideally create a new file and retype (!) everything
@@ -468,7 +468,7 @@ Studio(name, address, presC\#)
           FROM movie
           GROUP BY year;
   ```
-- **GROUP BY:** is a very important concept that shows up in many data
+- @GROUP BY:@ is a very important concept that shows up in many data
   processing platforms
   - What it does:
     - Partition the tuples by the group attributes (_year_ in this case)
@@ -560,7 +560,7 @@ Studio(name, address, presC\#)
           GROUP BY title, year, producerC#
   ```
   - What about movies with no stars?
-  - Need to use **outer joins**
+  - Need to use @outer joins@
 
   ```sql
       SELECT title, year, producerC#, count(starName)

@@ -4,15 +4,33 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
+::: columns
+:::: {.column width=20%}
+![](msml610/lectures_source/figures/UMD_Logo.png)
+::::
+:::: {.column width=80%}
+
+MSML610: Advanced Machine Learning
+::::
+:::
+
+\vspace{2cm}
+
+**$$\text{\textcolor{blue}{\text{L08.1: Intro to Causal AI}}}$$**
+
+\vspace{3cm}
+
+**Instructor**: Dr. GP Saggese - gsaggese@umd.edu
+
 
 # Introduction and Motivation
 
 #### Big Data and Traditional AI
-- @Background@: focus for past 10 years
+- **\textcolor{red}{Background}**: focus for past 10 years
   - Collect and organize massive data volumes
   - Run analytics (dashboards, models, reports) on data
 
-- @Definition@: **Data Analytics** encompasses organized data and insights
+- **\textcolor{blue}{Definition}**: **Data Analytics** encompasses organized data and insights
 
 \begingroup \footnotesize
 ```{=typst}
@@ -30,7 +48,7 @@ fontsize: 10pt
 \endgroup
 
 #### Data Analytics Sophistication
-- @Comparison@: business questions drive methodology choice
+- **\textcolor{red}{Comparison}**: business questions drive methodology choice
 
 \begingroup \footnotesize
 ```{=typst}
@@ -51,7 +69,7 @@ fontsize: 10pt
 \end{center}
 
 #### Analytics Sophistication Ladder
-- @Definition@: **Analytics sophistication** increases with business value
+- **\textcolor{red}{Definition}**: **Analytics sophistication** increases with business value
   - Level 0: Descriptive (what happened)
   - Level 1: Predictive (what will happen)
   - Level 2: Prescriptive (what should we do)
@@ -62,19 +80,19 @@ fontsize: 10pt
 ## What ML Systems Can and Cannot Tell You
 
 #### The Illusion of Understanding
-- @Comparison@: Prediction vs. Explanation
+- **\textcolor{red}{Comparison}**: Prediction vs. Explanation
   - Models find patterns in historical data
   - Cannot explain mechanisms or answer _"what if?"_ scenarios
 
-- @Problem@: High accuracy $\neq$ understanding causation
+- **\textcolor{darkgreen}{Problem}**: High accuracy $\neq$ understanding causation
   - A model with 95% churn prediction accuracy won't tell what _causes_ churn
   - Accurate sales forecasts cannot predict effects of _pricing changes_
 
-- @Implication@: Without causation, you react to past events
+- **\textcolor{blue}{Implication}**: Without causation, you react to past events
   - Cannot proactively _change outcomes_
 
 #### Association, Correlation, and Causation
-- @Fact@: Association $\to$ Correlation $\to$ Causation
+- **\textcolor{red}{Fact}**: Association $\to$ Correlation $\to$ Causation
   - Each level adds specificity about variable relationships
 
   - **Association** means that variables co-occur or are
@@ -91,12 +109,12 @@ fontsize: 10pt
     - E.g., _"Asbestos causes cancer"_
     - Requires causal model or experimental evidence
 
-- @Key idea@: high correlation _feels like_ understanding but isn't
+- **\textcolor{blue}{Key idea}**: high correlation _feels like_ understanding but isn't
   - Real understanding means knowing what happens when you _intervene_
 
 #### What ML Systems Can Tell You
 
-- @Characteristics@: Traditional ML excels at three capabilities
+- **\textcolor{red}{Characteristics}**: Traditional ML excels at three capabilities
 
 - **Pattern recognition**
   - Find correlations in data
@@ -113,7 +131,7 @@ fontsize: 10pt
 
 #### What ML Systems Cannot Tell You
 
-- @Limitations@: Traditional ML struggles with five critical problems
+- **\textcolor{red}{Limitations}**: Traditional ML struggles with five critical problems
 
 - **Understanding causation** from observational data alone
   - Strong correlations can derive from confounding, reverse causation, or
@@ -141,7 +159,7 @@ fontsize: 10pt
 
 #### Problem 1: Correlation is Not Causation!
 
-- @Definition@: **Correlation** is statistical relationships between variables
+- **\textcolor{red}{Definition}**: **Correlation** is statistical relationships between variables
   - Pros
     - Find patterns in past data to predict future
 
@@ -149,34 +167,34 @@ fontsize: 10pt
     - Cannot explain cause
     - Variables move together by coincidence or hidden factors
 
-- @Definition@: **Causation** explains how changing one variable influences
+- **\textcolor{darkgreen}{Definition}**: **Causation** explains how changing one variable influences
   another
   - Cannot be concluded from correlation alone
 
-- @Key idea@: Data **cannot distinguish** causes from effects
+- **\textcolor{blue}{Key idea}**: Data **cannot distinguish** causes from effects
   - _Only humans_ identify variables and relationships from context
   - Without causation, cannot make intelligent decisions
 
 #### Correlation is Not Causation: Intuitive Examples
 
-- @Examples@: Humans routinely confuse association with causation
+- **\textcolor{red}{Examples}**: Humans routinely confuse association with causation
   - _"You eat X, get stomachaches"_ $\to$ infer _"X is bad for you"_
   - _"Buy stock before price spikes"_ $\to$ infer _"you can time markets"_
 
-- @Problem@: Bidirectional causality can be plausible
+- **\textcolor{blue}{Problem}**: Bidirectional causality can be plausible
   - _"Does top-notch consulting improve businesses?"_ or
   - _"Do successful businesses hire top consultants?"_
 
 #### Correlation is Not Causation: Business Examples
 
-- @Example@: **Hotel pricing paradox**
+- **\textcolor{red}{Example}**: **Hotel pricing paradox**
   - Prices are low when hotel is empty
   - Prices are high when demand is high and hotel full
   - Naive prediction: _"increase prices to sell more rooms"_
   - Causal reality: high prices reflect demand, not cause it
 
 
-- @Example@: **Online marketplace pricing**
+- **\textcolor{blue}{Example}**: **Online marketplace pricing**
   - Decision: how to set prices and when to have sales
   - Causal question: _"What is impact of lowering prices on units sold?"_
   - Gain from volume must compensate for price reduction
@@ -186,22 +204,22 @@ fontsize: 10pt
 
 #### Problem 2: Decision Making
 
-- @Problem@: Businesses need **decisions, not just predictions**
+- **\textcolor{red}{Problem}**: Businesses need **decisions, not just predictions**
 
-- @Example@: Price reduction scenario
+- **\textcolor{darkgreen}{Example}**: Price reduction scenario
   - _"What happens if a product price is reduced by 10%?"_
   - Will more customers buy the product?
   - Will revenue decrease? What to do then?
   - Why are customers leaving? Quality issue? Emerging competitor?
 
-- @Examples@: Policy questions require causal reasoning
+- **\textcolor{blue}{Examples}**: Policy questions require causal reasoning
   - _"Low-sugar vs low-fat diet: which works?"_
   - _"If we increase credit lines, how does bank margin change?"_
   - _"Build a library or give tablets to boost test scores?"_
 
 #### Problem 3: ML Explainability
 
-- @Problem@: Regulators require **defense of ML/AI decisions**
+- **\textcolor{red}{Problem}**: Regulators require **defense of ML/AI decisions**
   - E.g., hiring decisions, policy setup
   - Many ML systems are black boxes
     - E.g., neural networks
@@ -209,21 +227,21 @@ fontsize: 10pt
     - Cannot explain decisions to shareholders
     - Features like age, race, sex introduce bias
 
-- @Cons@
+- **\textcolor{darkgreen}{Cons}**
   - Fines from regulatory violations
   - Customer backlash
   - Activist pressure
 
-- @Solution@: **Explainable AI** enables comprehension and trust
+- **\textcolor{blue}{Solution}**: **Explainable AI** enables comprehension and trust
   - Users can understand, explain, and verify model results
 
 #### Problem 4: How ML Systems Make Decisions Today
 
-- @Workflow@: Typical ML deployment pipeline
+- **\textcolor{red}{Workflow}**: Typical ML deployment pipeline
   - Collect data $\to$ Train model $\to$ Make predictions
   - Deploy: _"If model predicts X, take action Y"_
 
-- @Problem@: Systems optimize for wrong objectives
+- **\textcolor{blue}{Problem}**: Systems optimize for wrong objectives
   - Optimize for prediction accuracy, not decision quality
   - Ignore business outcomes
   - E.g., fraud detector with 95% accuracy that blocks 50% legitimate
@@ -231,7 +249,7 @@ fontsize: 10pt
 
 #### Data Science for Decisions: Examples
 
-- @Example@: **Recommendation systems** (Netflix, Amazon, TikTok)
+- **\textcolor{red}{Example}**: **Recommendation systems** (Netflix, Amazon, TikTok)
   - Model predicts which items users will click based on historical clicks
   - System recommends top-N items based on predicted clicks
   - _Problem_: Cannot run counterfactual experiments offline
@@ -239,33 +257,33 @@ fontsize: 10pt
     - Optimizing purely for clicks may harm long-term engagement
       (users get bored, echo chambers, filter bubbles)
 
-- @Example@: **Hiring pipelines**
+- **\textcolor{darkgreen}{Example}**: **Hiring pipelines**
   - Model scores candidates
   - HR uses scores to rank applicants
   - _Problem_: Training data encodes historical hiring bias
 
-- @Example@: **Fraud detection**
+- **\textcolor{blue}{Example}**: **Fraud detection**
   - Model flags suspicious transactions
   - System blocks transactions automatically
   - _Problem_: High false positive rate without knowing how to improve
 
 #### Problem 5: Feedback Loops
 
-- @Problem@: Prediction systems change the world through **feedback loops**
+- **\textcolor{red}{Problem}**: Prediction systems change the world through **feedback loops**
 
-- @Example@: **Recommendation systems**
+- **\textcolor{darkgreen}{Example}**: **Recommendation systems**
   - Model recommends sensational content $\to$ users click more
   - Future training data has more clicks on sensational content
   - Model recommends even more sensational content
   - Consequence: Radicalization, echo chambers, mental health issues
 
-- @Example@: **Criminal justice relapse prediction**
+- **\textcolor{blue}{Example}**: **Criminal justice relapse prediction**
   - Minorities policed more $\to$ arrested more $\to$ data biased
   - Model trained on arrest data (biased against minorities)
   - Judges use models for bail/sentencing
   - Consequence: Model becomes increasingly biased over time
 
-- @Example@: **College admissions**
+- **\textcolor{violet}{Example}**: **College admissions**
   - Model trained on past acceptance decisions (encode historical racism, sexism)
   - Model used to screen applications
   - Filter for applicants becomes biased
@@ -273,7 +291,7 @@ fontsize: 10pt
 
 #### Problem 6: Distribution Shift
 
-- @Problem@: Real-world distributions shift over time, breaking trained models
+- **\textcolor{red}{Problem}**: Real-world distributions shift over time, breaking trained models
 
   - **Concept drift**: link between inputs and predictions 
     $\Pr(Y | X)$ changes
@@ -289,7 +307,7 @@ fontsize: 10pt
     - E.g., fraud rate increases from new tactics $\to$ model from old rate becomes
       less effective
 
-- @Solution@: Causal models provide stability
+- **\textcolor{blue}{Solution}**: Causal models provide stability
   - Encode mechanisms, not just patterns
   - Mechanisms are more stable across distribution shifts
   - Understand _"why"_ to predict in new contexts
@@ -298,7 +316,7 @@ fontsize: 10pt
 
 #### Optimization vs. Inference vs. Decision Theory
 
-- @Comparison@: traditional machine learning conflates three paradigms
+- **\textcolor{red}{Comparison}**: traditional machine learning conflates three paradigms
 
   - **Statistical inference** estimates parameters from data
     - Learns from observations given model structure
@@ -317,9 +335,9 @@ fontsize: 10pt
 
 #### Where ML Falls Short
 
-- @Problem@: Traditional ML focuses on **inference and optimization** only
+- **\textcolor{red}{Problem}**: Traditional ML focuses on **inference and optimization** only
 
-- @Key idea@: Real business problems require **decision theory**
+- **\textcolor{darkgreen}{Key idea}**: Real business problems require **decision theory**
   - Must act under uncertainty with causal knowledge
 
 \begingroup \footnotesize
@@ -335,7 +353,7 @@ fontsize: 10pt
 ```
 \endgroup
 
-- @Solution@: **Causal probabilistic AI** inference and decision theory
+- **\textcolor{blue}{Solution}**: **Causal probabilistic AI** inference and decision theory
   - _Inference_: what the world looks like
   - _Causal models_: what happens when you act
   - _Decision theory_: which action to choose
@@ -344,21 +362,21 @@ fontsize: 10pt
 
 #### The Cost of Ignoring Causality (1/2)
 
-- @Problem@: Wrong decisions and wasted resources occur when organizations
+- **\textcolor{red}{Problem}**: Wrong decisions and wasted resources occur when organizations
   ignore causality
 
-- @Example@: **Simpson's Paradox**
+- **\textcolor{darkgreen}{Example}**: **Simpson's Paradox**
   - Aggregate data shows opposite trend from subgroups
   - E.g., Berkeley admissions show overall bias, but no bias within
     departments
   - _Solution_: Condition on right variables using DAG
 
-- @Example@: **Confounding bias**
+- **\textcolor{blue}{Example}**: **Confounding bias**
   - Hidden variable drives both treatment and outcome
   - E.g., ice cream sales and drowning deaths both rise in summer
   - _Solution_: Identify and control for confounders
 
-- @Example@: **Collider bias**
+- **\textcolor{violet}{Example}**: **Collider bias**
   - Conditioning on common effect creates false associations
   - E.g., in hospitalized patients, unrelated diseases appear correlated
     (both cause hospitalization)
@@ -366,13 +384,13 @@ fontsize: 10pt
 
 #### The Cost of Ignoring Causality (2/2)
 
-- @Example@: **Feedback loop amplification**
+- **\textcolor{red}{Example}**: **Feedback loop amplification**
   - Biased predictions reinforce bias in future training data
   - E.g., more police to minorities $\to$ more arrests $\to$ model learns
     neighborhoods dangerous $\to$ send more police
   - _Solution_: Model feedback loops explicitly
 
-- @Example@: **Intervention backfire**
+- **\textcolor{blue}{Example}**: **Intervention backfire**
   - Acting on correlation leads to wrong actions
   - E.g., hospitals with more staff have higher mortality rates
     - Confounded by patient severity: sicker patients need more staff
@@ -382,43 +400,42 @@ fontsize: 10pt
 
 #### Causal AI
 
-- @Capabilities@: Causal AI unlocks five key abilities
+- **Causal** AI unlocks five key abilities
 
-- **Understand the why**
-  - Determines cause-and-effect between variables
-  - Example: _"Did marketing campaign increase sales?"_
+  - **\textcolor{red}{Understand the why}**
+    - Determines cause-and-effect between variables
+    - E.g., _"Did marketing campaign increase sales?"_
 
-- **Identify interventions**
-  - Identifies variables and interventions to change outcomes
-  - Example: _"Which lifestyle changes reduce blood pressure?"_
+  - **\textcolor{orange}{Identify interventions}**
+    - Identifies variables and interventions to change outcomes
+    - E.g., _"Which lifestyle changes reduce blood pressure?"_
 
-- **Predict counterfactuals**
-  - Hypothesize outcomes under different circumstances
-  - Example: student grades if they attended a different school
+  - **\textcolor{darkgreen}{Predict counterfactuals}**
+    - Hypothesize outcomes under different circumstances
+    - E.g., student grades if they attended a different school
 
-- **Avoid bias**
-  - Ensure fairness beyond training data biases
-  - Account for confounding variables explicitly
+  - **\textcolor{teal}{Avoid bias}**
+    - Ensure fairness beyond training data biases
+    - Account for confounding variables explicitly
 
-- **Improve decisions**
-  - Understand relationships for better choices
-  - Example: improve supply chain by understanding impact of decisions on logistics
+  - **\textcolor{cyan}{Improve decisions}**
+    - Understand relationships for better choices
+    - E.g., improve supply chain by understanding impact of decisions on logistics
 
 #### Causal AI vs Traditional AI
 
-- @Comparison@: **Current AI** focuses on correlation
+- **\textcolor{red}{Traditional AI}**
+  - Focuses on correlation
+  - Uses correlation to:
+    - Analyze data
+    - Identify patterns
+    - Make predictions
+    - Model quality depends on data quality (biased or unclean data $\to$ poor model)
 
-- Uses correlation to:
-  - Analyze data
-  - Identify patterns
-  - Make predictions
-  - Model quality depends on data quality (biased or unclean data $\to$ poor model)
+- **\textcolor{darkgreen}{Causal AI}** infers causation from association
+  - Science of inferring causation from association
+  - Understanding when and why causation and association differ
+  - Understand cause-and-effect relationships to intervene for desired effect
 
-- @Comparison@: **Causal AI** infers causation from association
-
-- Science of inferring causation from association
-- Understanding when and why causation and association differ
-- Understand cause-and-effect relationships to intervene for desired effect
-
-- @Quote@: _"The next revolution of data science is the science of
-  interpreting reality, not of summarizing data"_ (Judea Pearl, 2021)
+- **\textcolor{blue}{Quote}**: _"The next revolution of data science is the science of interpreting
+  reality, not of summarizing data"_ (Judea Pearl, 2021)

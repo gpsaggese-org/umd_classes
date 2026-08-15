@@ -1,0 +1,509 @@
+// Pandoc Typst template producing Touying slides.
+//
+// Used by `notes_to_pdf.py --type slides --slides_engine typst`.
+//
+// - Pandoc maps markdown headings to Typst headings, e.g.,
+//   - `#` -> `=`
+//   - `####` -> `====`
+// - `config-common(slide-level: 4)` makes level-4 headings (`####`) start a
+//   new slide, mirroring the beamer `--slide-level 4` convention. Headings of
+//   level 1-3 become section/structure slides
+// - See https://github.com/touying-typ/touying
+#import "@preview/touying:0.6.1": *
+#import themes.simple: *
+
+//#include "/helpers_root/dev_scripts_helpers/documentation/typst_abbrevs.typ"
+#include "/helpers_root/dev_scripts_helpers/documentation/typst_abbrevs.typ"
+
+// Configure theme to match beamer's 4:3 aspect ratio.
+// Note: Touying's simple-theme controls page size internally;
+// exact beamer dimensions (362.835 x 272.126 pts) cannot be overridden.
+#show: simple-theme.with(
+  aspect-ratio: "4-3",
+  config-common(slide-level: 4),
+  subslide-preamble: block(below: 1em)[
+    #v(-0.6em)
+    #text(1.2em, weight: "bold", fill: rgb("#003366"),
+      utils.display-current-heading(level: 4))
+    #v(-0.5em)
+    #line(length: 100%, stroke: 2.0pt + rgb("#003366"))
+  ],
+  config-info(
+  ),
+)
+
+// Make the inline math font bigger.
+//#show math.equation.where(block: false): set text(size: 1.15em)
+
+// Scale display math to match slide text size (not oversized).
+#show math.equation.where(block: true): set text(size: 0.95em)
+
+// Make the inline verbatim font bigger.
+//#show raw.where(block: false): set text(size: 1.15em)
+#show raw.where(block: false): set text(size: 0.95em)
+
+// Styled table with zebra striping, lateral lines, and configurable width.
+#let styled-table(headers: (), rows: (), caption: none, col-widths: none, bold-first-col: true, size: 0.8em, width: 80%) = {
+  let n = headers.len()
+  let widths = if col-widths != none { col-widths } else { (1fr,) * n }
+
+  // Zebra striping: alternate white and darker gray backgrounds on full rows
+  let processed-rows = rows.enumerate().map(((idx, row)) => {
+    let bg-color = if calc.rem(idx, 2) == 0 { white } else { rgb("#e8e8e8") }
+    if bold-first-col {
+      (
+        table.cell(fill: bg-color, text(fill: black, weight: "bold", row.at(0))),
+        ..row.slice(1).map(cell => table.cell(fill: bg-color, text(fill: rgb("#555555"), cell)))
+      )
+    } else {
+      row.map(cell => table.cell(fill: bg-color, text(fill: rgb("#555555"), cell)))
+    }
+  })
+
+  text(size: size,
+    figure(
+      align(center,
+        block(width: width,
+          table(
+            columns: widths,
+            align: (left,) * n,
+            stroke: none,
+            table.vline(x: 0, stroke: 2pt),
+            table.hline(stroke: 2pt),
+            table.header(
+              ..headers.map(h => table.cell(fill: black, text(fill: white, weight: "bold", h)))
+            ),
+            table.hline(stroke: 1.5pt),
+            ..processed-rows.flatten(),
+            table.hline(stroke: 2pt),
+            table.vline(x: n, stroke: 2pt),
+          )
+        )
+      ),
+      kind: table,
+      caption: caption,
+    )
+  )
+}
+
+// Use Computer Modern Sans - standard TeX font (sans-serif variant).
+// Fails if Computer Modern not available in container (no fallback).
+#set text(font: "CMU Sans Serif", size: 22pt, fill: black)
+#show heading: set text(font: "CMU Sans Serif", size: 28pt)
+// Use DejaVu Sans (available in Alpine) with reduced size.
+// Applied AFTER theme to override theme defaults.
+//#set text(font: "DejaVu Sans", size: 20pt, fill: black)
+//#show heading: set text(font: "DejaVu Sans", size: 28pt)
+
+// Track list nesting depth with counter
+#let list-nesting = counter("list-nesting")
+
+// Use en-dashes for all bullet points (override default circle/triangle markers).
+#show list: set list(marker: "–")
+
+// Reduce font size for nested list levels.
+#show list: it => {
+  list-nesting.step()
+  let depth = list-nesting.get().first()
+  let size = if depth == 1 { 1em } else if depth == 2 { 0.95em } else { 0.90em }
+  set text(size: size)
+  [#it]
+  list-nesting.update(n => n - 1)
+}
+
+// Make footer text smaller.
+#let footer-text(body) = text(size: 0.8em, fill: black, body)
+
+
+====
+
+#slide[
+  #grid(
+    columns: (20%, 80%),
+    gutter: 0.5cm,
+    align(top + left)[#image("/msml610/lectures_source/figures/UMD_Logo.png", width: 3.5cm)],
+    align(top + left)[
+      #v(0.2cm)
+      #text(size: 28pt)[MSML610: Advanced Machine Learning]
+    ]
+  )
+
+  #v(1.5cm)
+  #align(center)[#text(size: 32pt, weight: "bold", fill: rgb("#0066CC"))[L01.1: AI and Machine Learning]]
+
+  #v(2.5cm)
+  #text(size: 24pt)[Instructor: Dr. GP Saggese - #link("mailto:gsaggese@umd.edu")[_gsaggese\@umd.edu_]]
+]
+==== Table of Content
+<table-of-content>
+- #text(fill: red, weight: "bold")[#emph[AI and Machine Learning]]
+  - What is AI?
+  - What is Machine Learning?
+
+==== Table of Content
+<table-of-content-1>
+- AI and Machine Learning
+  - #text(fill: red, weight: "bold")[#emph[What is AI?]]
+  - What is Machine Learning?
+
+==== ML, AI, and Intelligence
+<ml-ai-and-intelligence>
+- #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Machine
+  Learning] is a subset of AI
+  - Often confused with deep learning, large-language models, predictive
+    analytics, and other related fields
+- #text(fill: black, weight: "bold")[Questions to explore]
+  - What is artificial intelligence?
+  - What is intelligence?
+
+==== Human Intelligence
+<human-intelligence>
+- We call ourselves "homo sapiens" because intelligence sets us apart
+  from animals
+
+- For thousands of years, we tried to understand how we think
+
+- One of the biggest mysteries
+
+  - Brain is a small mass of matter
+  - Our brain can understand nature secrets, e.g., theory of relativity,
+    quantum mechanics, black holes in the universe
+  - How can brain understand, predict, and manipulate a world more
+    complicated than itself?
+
+==== Artificial Intelligence
+<artificial-intelligence>
+- #text(fill: red, weight: "bold")[Definition]: The term
+  #emph["Artificial Intelligence"] was coined in 1956
+
+- #text(fill: green, weight: "bold")[Goal]
+
+  - Understand human intelligence
+  - Create intelligent entities
+  - #emph["What I cannot create, I do not understand"] (Feynman, 1988)
+
+- #text(fill: blue, weight: "bold")[Characteristics]
+
+  - Universal and applicable to any human activity and task
+  - Its impact is greater than any previous historical event
+  - Currently generates trillions of dollars annually in revenue
+  - Presents many unresolved problems
+    - E.g., major concepts in physics might be established
+
+==== AI Formal Definition
+<ai-formal-definition>
+- #text(fill: red, weight: "bold")[Definition]: AI is characterized
+  along #text(fill: black, weight: "bold")[two key axes]
+
+  - Thinking vs.~Acting
+  - Human vs.~Rational (ideal performance)
+
+- This yields four possible definitions of AI as a machine that can:
+
+  + Think humanly
+  + Think rationally
+  + Act humanly
+  + Act rationally
+
+- #text(fill: black, weight: "bold")[Question];: Which definition best captures what AI should aim
+  for?
+
+- #text(fill: black, weight: "bold")[Key insight];: Building machines that #text(fill: black, weight: "bold")[act rationally]
+  should be the ultimate goal of AI
+
+==== 1. AI as Thinking Humanly
+<ai-as-thinking-humanly>
+- #text(fill: red, weight: "bold")[Problem]: To build machines that
+  think like humans, we need to first #text(fill: black, weight: "bold")[determine how humans
+  think]
+
+- #text(fill: black, weight: "bold")[Pros]
+
+  - Express precise theory of the human mind as a computer program
+
+- #text(fill: black, weight: "bold")[Cons]
+
+  - Unknown workings of the human mind
+  - Anthropocentric definition
+
+==== 2. AI as Thinking Rationally
+<ai-as-thinking-rationally>
+- #text(fill: red, weight: "bold")[Question]: What are the rules of
+  #text(fill: black, weight: "bold")[correct thinking];?
+  - Given correct premises, yield correct conclusions
+- #text(fill: green, weight: "bold")[Approach]: #text(fill: black, weight: "bold")[Logic] studies
+  the "laws of thought"
+  - Formalize statements about objects and their relations
+- #text(fill: blue, weight: "bold")[Technique]: #text(fill: black, weight: "bold")[Automatic
+  theorem proving]
+  - Programs solve problems in logical notation
+  - Run indefinitely if no solution exists (related to the halting
+    problem)
+
+==== Thinking Rationally: Cons
+<thinking-rationally-cons>
++ #text(fill: black, weight: "bold")[Formalizing informal knowledge is difficult]
+  - #text(fill: red, weight: "bold")[Example]: #emph["A handshake occurs
+    when two people extend, grip, shake hands, then release."]
+  - Formal logic representation:
+    $ exists x \, y thin \( upright("Person") \( x \) and upright("Person") \( y \) and x eq.not y and upright("Hand") \( x \, h_x \) and upright("Hand") \( y \, h_y \) and upright("MoveToward") \( h_x \, h_y \) and upright("Contact") \( h_x \, h_y \) and upright("Shake") \( h_x \, h_y \) and upright("Release") \( h_x \, h_y \) \) $
++ #text(fill: black, weight: "bold")[Probabilistic nature of knowledge]
+  - #text(fill: blue, weight: "bold")[Example]: In medicine,
+    #emph["Fever, cough, and fatigue could indicate flu, COVID-19, or
+    another illness."]
++ #text(fill: black, weight: "bold")[Scalability challenges]
+  - Large problems may need heuristics for practical solutions
++ #text(fill: black, weight: "bold")[Intelligence requires more than rational thinking]
+  - Importance of agent interaction with the world
+  - Problem of the "body"
+
+==== 3. AI as Acting Humanly
+<ai-as-acting-humanly>
+- #text(fill: red, weight: "bold")[Definition]: An #text(fill: black, weight: "bold")[agent] is
+  something that perceives and acts to reach a goal
+
+- #text(fill: green, weight: "bold")[Goal]: AI designs #text(fill: black, weight: "bold")[agents
+  that can act like humans]
+
+- #text(fill: blue, weight: "bold")[Approach]: #text(fill: black, weight: "bold")[Turing test]
+
+  - #emph["A computer passes the Turing test if a human cannot tell
+    whether the answers to questions came from a person or a computer"]
+
+#grid(
+  columns: (65%, 30%),
+  gutter: 0.5em,
+  [
+  - #text(fill: rgb("#8B00FF"), weight: "bold")[Requirements]: Passing the
+    (embodied) Turing test requires
+    + Natural language processing to communicate
+    + Knowledge representation to store information
+    + Automated reasoning to use stored knowledge and answer questions
+    + Machine learning to detect patterns
+    + Computer vision and speech recognition to perceive objects and
+      understand speech
+    + Robotics to manipulate objects and move
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L01.1.Ex_machina.jpg"))
+  ]
+)
+==== Turing Test: Pros and Cons
+<turing-test-pros-and-cons>
+- #text(fill: black, weight: "bold")[Pros]
+  - Operational definition of intelligence
+  - Sidestep philosophical vagueness
+    - What is consciousness?
+    - Can a machine think?
+- #text(fill: black, weight: "bold")[Cons]
+  - Intelligence defined by #text(fill: black, weight: "bold")[anthropomorphic] criteria in human
+    terms
+    - Multiple forms of non-human intelligence exist
+  - Intelligence by Turing test means #text(fill: black, weight: "bold")[fooling humans] into
+    thinking it is human
+  - #text(fill: red, weight: "bold")[Example]: Aeronautical engineering
+    is about
+    - Correct: Focus on wind tunnels and aerodynamics
+    - Incorrect: Designing machines that imitate birds
+
+==== 4. AI as Acting Rationally
+<ai-as-acting-rationally>
+- #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Rational agents]
+  are agents that do the "right thing" given what they know
+
+- #text(fill: blue, weight: "bold")[Characteristics]: Agents that
+  #text(fill: black, weight: "bold")[act rationally] should
+
+  + Operate autonomously
+  + Perceive environment
+  + Persist over a prolonged time period
+  + Adapt to change
+  + Create and pursue goals
+
+==== Acting Rationally as Ultimate Goal of AI
+<acting-rationally-as-ultimate-goal-of-ai>
+- #text(fill: red, weight: "bold")[Question]: Which definition of AI
+  best captures what we should build?
+  - Acting vs.~Thinking
+  - Rational vs.~Human
+- #text(fill: black, weight: "bold")[Acting is more fundamental than Thinking]
+  - Acting rationally is broader than just thinking rationally
+- #text(fill: black, weight: "bold")[Rational is more objective than Human]
+  - Rationality can be mathematically defined
+  - Human behavior is shaped by evolutionary conditions
+- #text(fill: blue, weight: "bold")[Conclusion]: AI should focus on
+  #text(fill: black, weight: "bold")[agents acting rationally]
+
+==== Rationally is Not Absolute
+<rationally-is-not-absolute>
+- #text(fill: red, weight: "bold")[Problem]: AI aims to build agents
+  that #text(fill: black, weight: "bold")[do the right thing];, but what is the right thing?
+
+- #text(fill: green, weight: "bold")[Example]: You leave the house and a
+  branch strikes you
+
+  - Did you act rationally?
+  - Probably
+
+- #text(fill: blue, weight: "bold")[Example]: You cross the street and a
+  car knocks you over
+
+  - Did you act rationally?
+  - It depends, but probably not
+
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Challenge]: Moral issues
+  with self-driving cars
+
+  - Should a car swerve and hit a pedestrian to avoid a frontal crash
+    that would kill two people?
+
+==== Problems of a Rational Agent
+<problems-of-a-rational-agent>
+- #text(fill: red, weight: "bold")[Challenge]: #text(fill: black, weight: "bold")[Probabilistic
+  environment]
+  - A rational agent aims for
+    - The best outcome in a deterministic setup
+    - The best expected outcome under uncertainty
+- #text(fill: orange, weight: "bold")[Problem]: What does
+  #text(fill: black, weight: "bold")["best"] mean? It is determined by the objective function
+  - E.g., cost function, sum of rewards, loss function, utility
+- #text(fill: green, weight: "bold")[Consideration]: #text(fill: black, weight: "bold")[Omniscience
+  vs no-regrets]
+  - Best is based on available information, not perfect knowledge
+- #text(fill: teal, weight: "bold")[Constraint]: Sometimes #text(fill: black, weight: "bold")[no
+  provably correct action] exists
+  - Yet, an action must be taken
+- #text(fill: rgb("#00FFFF"), weight: "bold")[Limitation]: Even
+  #text(fill: black, weight: "bold")[with perfect information] rationality may not be feasible due
+  to
+  - Cost of acquiring all data (e.g., in medicine)
+  - Computational demands
+- #text(fill: blue, weight: "bold")[Solution]: #text(fill: black, weight: "bold")["Satisficing"
+  (perfect good enough vs perfect)]
+  - Acting appropriately given computational constraints
+
+==== Table of Content
+<table-of-content-2>
+- AI and Machine Learning
+  - What is AI?
+  - #text(fill: red, weight: "bold")[#emph[What is Machine Learning?]]
+
+==== Machine Learning: Definitions
+<machine-learning-definitions>
+- #text(fill: red, weight: "bold")[Question]: How should we define
+  machine learning?
+
+- #text(fill: orange, weight: "bold")[Definition]: #emph["Machine
+  learning is the field of study that gives computers the ability to
+  learn without being explicitly programmed"] (Samuel, 1959)
+
+- #text(fill: green, weight: "bold")[Alternative]: #text(fill: black, weight: "bold")[Machine
+  learning] builds machines to do #text(fill: black, weight: "bold")[useful things] without being
+  #text(fill: black, weight: "bold")[explicitly programmed]
+
+  - #text(fill: teal, weight: "bold")[Example]: A computer learns to
+    play checkers by playing against itself, memorizing positions that
+    lead to winning
+
+- #text(fill: rgb("#00FFFF"), weight: "bold")[Formal]: #emph["A computer
+  program is said to learn from experience $E$ with respect to some task
+  $T$ and some performance measure $P$, if $P \( T \)$ improves with
+  experience $E$"] (Mitchell, 1998)
+
+- #text(fill: blue, weight: "bold")[Applications]: Common examples
+  include
+
+  - Computer vision
+  - Speech recognition
+  - Natural language processing
+
+==== Limits of ML Compared to Human Intelligence
+<limits-of-ml-compared-to-human-intelligence>
+- #text(fill: red, weight: "bold")[Problem]: #text(fill: black, weight: "bold")[AI differs from
+  human intelligence]
+  - Machines do not learn like humans (e.g., LLMs)
+- #text(fill: orange, weight: "bold")[Limitation]: #text(fill: black, weight: "bold")[Fragility to
+  input variations]
+  - ML models fail with slight input distortions
+    - Adversarial attacks cause misclassification by altering one pixel
+    - A model trained on a video game fails if the screen rotates
+      slightly; humans continue effortlessly
+- #text(fill: green, weight: "bold")[Limitation]: #text(fill: black, weight: "bold")[Lack of
+  transfer learning]
+  - ML systems cannot apply knowledge across domains without retraining
+- #text(fill: teal, weight: "bold")[Challenge]: #text(fill: black, weight: "bold")[Massive data and
+  compute requirements]
+  - ML requires enormous datasets and computational resources
+    - A teenager learns to drive in hours
+    - Self-driving systems need billions of compute hours and extensive
+      data
+- #text(fill: rgb("#00FFFF"), weight: "bold")[Limitation]: #text(fill: black, weight: "bold")[Poor
+  common sense and reasoning]
+  - ML lacks built-in world knowledge and intuitive logic
+
+==== Limits of ML Compared to Human Intelligence (cont.)
+<limits-of-ml-compared-to-human-intelligence-cont.>
+- #text(fill: red, weight: "bold")[Limitation]: #text(fill: black, weight: "bold")[Opaque
+  decision-making]
+  - Many ML models offer little transparency into decision processes
+    - Limits trust, interpretability, and accountability in critical
+      applications
+- #text(fill: orange, weight: "bold")[Limitation]: #text(fill: black, weight: "bold")[Dependence on
+  narrow objectives]
+  - ML systems excel at optimizing narrow tasks but fail with ambiguous
+    goals
+    - #text(fill: green, weight: "bold")[Example]: An algorithm
+      maximizing user engagement may promote harmful content
+- #text(fill: teal, weight: "bold")[Limitation]: #text(fill: black, weight: "bold")[Susceptibility
+  to bias and data quality]
+  - Models inherit and amplify biases in training data
+- #text(fill: rgb("#00FFFF"), weight: "bold")[Limitation]: #text(fill: black, weight: "bold")[Lack
+  of embodiment and physical interaction]
+  - Human cognition is grounded in physical and sensory experience
+
+==== The 3 Machine Learning Assumptions
+<the-3-machine-learning-assumptions>
+- #text(fill: red, weight: "bold")[Context]: In practice, ML involves
+  solving a practical problem by
+  - Gathering a dataset
+  - Building a statistical model from the dataset algorithmically
+- #text(fill: green, weight: "bold")[Definition]: The #text(fill: black, weight: "bold")[three core
+  assumptions] of machine learning
+  - A #text(fill: black, weight: "bold")[pattern exists]
+  - Pattern cannot be #text(fill: black, weight: "bold")[precisely defined mathematically]
+  - #text(fill: black, weight: "bold")[Data is available]
+- #text(fill: blue, weight: "bold")[Question]: Which assumption is
+  #text(fill: black, weight: "bold")[essential];?
+  - A pattern exists: If no pattern exists, learning fails
+  - Pattern cannot be precisely defined: Even direct solutions can use
+    ML
+  - Data is available: #text(fill: black, weight: "bold")[Without data, no progress is possible]
+    - Data is the most crucial assumption
+
+==== AI vs ML vs Deep-Learning
+<ai-vs-ml-vs-deep-learning>
+#grid(
+  columns: (65%, 30%),
+  gutter: 0.5em,
+  [
+  - #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[AI (Artificial
+    Intelligence)]
+    - Machines programmed to reason, learn, and act in a rational way
+  - #text(fill: orange, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[ML (Machine
+    Learning)]
+    - Machines capable of performing tasks without being explicitly
+      programmed
+  - #text(fill: green, weight: "bold")[Example]: #text(fill: black, weight: "bold")[AI without ML]
+    - Rule-based systems (e.g., IBM Deep Blue playing chess)
+  - #text(fill: teal, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[DL (Deep
+    Learning)]
+    - ML using neural networks with many layers
+  - #text(fill: rgb("#00FFFF"), weight: "bold")[Definition]: #text(fill: black, weight: "bold")[LLM
+    (Large Language Models)]
+    - Neural networks trained on massive text datasets and reinforcement
+      learning from human feedback
+  ],
+  [
+  #box(image("/msml610/test/outcomes/Test_Msml610_Run_notes_to_pdf_py.test_typ_output/tmp.scratch/lesson_01.1/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.1.png"))
+  ]
+)

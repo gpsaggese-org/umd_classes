@@ -30,7 +30,7 @@ UMD DATA605 - Big Data Systems
 
 - **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
-- **References**:
+- @References@:
   - Online tutorials
   - Silbershatz: Chap 10.2
   - Seven Databases in Seven Weeks, 2e
@@ -45,7 +45,7 @@ UMD DATA605 - Big Data Systems
 #### From SQL to NoSQL
 :::columns
 ::::{.column width=70%}
-- **DBs are central tools to big data**
+- **\textcolor{red}{DBs are central tools to big data}**
   - New applications, data/storage constraints
   - ~2000s NoSQL "movement" started
     - Initially "No SQL" $\to$ then "Not Only SQL"
@@ -55,7 +55,7 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Different DB types make different trade-offs**
+- **\textcolor{darkgreen}{Different DB types make different trade-offs}**
   - Different worldviews
   - Schema vs schema-less
   - Rich vs fast query ability
@@ -65,32 +65,32 @@ UMD DATA605 - Big Data Systems
   - Indexing vs no indexing
   - Tuned for reads or writes, control over tuning
 
-- **User base/applications have expanded**
+- **\textcolor{blue}{User base/applications have expanded}**
   - Postgres + Mongo cover 99% of use cases
   - Data scientists/engineers need familiarity with both
   - _"Which DB solves my problem best?"_
 
-- **Polyglot model**
+- **\textcolor{violet}{Polyglot model}**
   - Use more than one DB per project
   - Relational DBs won't disappear soon
 
 #### Issues with Relational Dbs
 
-- **Relational DBs have drawbacks**
+- **\textcolor{red}{Relational DBs have drawbacks}**
   1. Application-DB impedance mismatch
   2. Schema flexibility
   3. Consistency in distributed set-up
   4. Limited scalability
 
 - For each drawback a slide with:
-  - **Problem**
-  - **Solutions**
+  - **\textcolor{darkgreen}{Problem}**
+  - **\textcolor{blue}{Solutions}**
     - Within relational SQL paradigm
     - With NoSQL approach
 
 #### 1) App / DB Impedance Mismatch: Problem
 
-- **Mismatch between data representation in code and relational DB**
+- **\textcolor{red}{Mismatch between data representation in code and relational DB}**
   - Code uses:
     - Data structures (e.g., lists, dictionaries, sets)
     - Objects
@@ -99,7 +99,7 @@ UMD DATA605 - Big Data Systems
     - Rows (instances of entities)
     - Relationships between tables
 
-- **Example of app-DB mismatch**:
+- **\textcolor{blue}{Example of app-DB mismatch}**:
   - Application stores a Python dictionary
     \begingroup \footnotesize
     ```python
@@ -116,14 +116,14 @@ UMD DATA605 - Big Data Systems
 
 #### 1) App / DB Impedance Mismatch: Solutions
 
-- **Ad-hoc mapping layer**
+- **\textcolor{red}{Ad-hoc mapping layer}**
   - Translate objects and data structures into DB model
     - Implement "Name to Tags" storage
     - Code uses a simple map, DB has 3 tables
   - Cons
     - Requires writing and maintaining code
 
-- **Object-relational mapping (ORM)**
+- **\textcolor{darkgreen}{Object-relational mapping (ORM)}**
   - Pros
     - Automatic data conversion between object code and DB
     - Implement \textcolor{blue}{\texttt{Person}} object using DB
@@ -131,25 +131,25 @@ UMD DATA605 - Big Data Systems
   - Cons
     - Handling complex types, polymorphism, and inheritance can be challenging
 
-- **NoSQL approach**
+- **\textcolor{blue}{NoSQL approach}**
   - No schema
     - Objects can be flat or complex (e.g., nested JSON)
     - Stored objects (documents) can vary in structure
 
 #### 2) Schema Flexibility
 
-- **Problem**
+- **\textcolor{red}{Problem}**
   - Data may not fit into a schema
   - E.g., nested or dis-homogeneous data (\textcolor{blue}{\texttt{List[Obj]}})
 
-- **Within relational DB**
+- **\textcolor{darkgreen}{Within relational DB}**
   - Use a general schema covering all cases
   - Cons
     - Complicated schema with implicit relations
     - Sparse DB tables
     - Violates relational DB assumptions
 
-- **NoSQL approach**
+- **\textcolor{blue}{NoSQL approach}**
   - E.g., MongoDB does not enforce schema
   - Pros
     - No schema concerns when writing data
@@ -161,20 +161,20 @@ UMD DATA605 - Big Data Systems
 :::columns
 ::::{.column width=65%}
 
-- **All systems fail**
+- **\textcolor{red}{All systems fail}**
   - Application error (corner case, internal error)
   - Application crash (OS issue)
   - Hardware failure (RAM ECC error, disk)
   - Power failure
 
-- **Relational DBs enforce ACID properties**
+- **\textcolor{orange}{Relational DBs enforce ACID properties}**
   - Guarantee for system reliability
 
-- **Atomicity**
+- **\textcolor{darkgreen}{Atomicity}**
   - Transactions are "all or nothing"
   - Transaction succeeds completely or fails
 
-- **Consistency**
+- **\textcolor{teal}{Consistency}**
   - Transaction moves DB from one valid state to another
   - Maintain DB invariants (primary, foreign key constraints)
 ::::
@@ -190,10 +190,10 @@ _Hardware failure_
 ::::
 :::
 
-- **Isolation**
+- **\textcolor{cyan}{Isolation}**
   - Concurrent transactions yield the same result as sequential execution
 
-- **Durability**
+- **\textcolor{blue}{Durability}**
   - Committed transaction content preserved after system failure
   - Record data in non-volatile memory
 
@@ -201,14 +201,14 @@ _Hardware failure_
 :::columns
 ::::{.column width=70%}
 
-- Scale data or clients $\to$ **distributed setup**
+- Scale data or clients $\to$ **\textcolor{red}{distributed setup}**
 
-- **Goals**:
+- **\textcolor{darkgreen}{Goals}**:
   - Performance (transactions per second)
   **- Availability (up-time guarantee)
   - Fault-tolerance (recover from faults)
 
-- **Achieving ACID consistency:**
+- **\textcolor{blue}{Achieving ACID consistency:}**
   - _Not easy_ in single DB
     - E.g., PostgreSQL guarantees ACID
     - E.g., MongoDB doesn't
@@ -226,12 +226,12 @@ _Hardware failure_
 :::columns
 ::::{.column width=45%}
 
-- **CAP theorem**: Any distributed DB can have at most two of the following
-  - **Consistency**:
+- **\textcolor{red}{CAP theorem}**: Any distributed DB can have at most two of the following
+  - **\textcolor{darkgreen}{Consistency}**:
     - All clients see the same data
     - Writes are atomic; subsequent reads retrieve the new value
-  - **Availability**: Returns a value if at least one server is running
-  - **Partition tolerance**: The system works even if communication is
+  - **\textcolor{blue}{Availability}**: Returns a value if at least one server is running
+  - **\textcolor{violet}{Partition tolerance}**: The system works even if communication is
     temporarily lost (network is partitioned)
 ::::
 ::::{.column width=50%}
@@ -246,17 +246,17 @@ _Hardware failure_
 :::columns
 ::::{.column width=45%}
 
-- **CAP Theorem**: pick 2 among consistency, availability, partition tolerance
+- **\textcolor{red}{CAP Theorem}**: pick 2 among consistency, availability, partition tolerance
 
-- **Network partitions**
+- **\textcolor{darkgreen}{Network partitions}**
   - Cannot be prevented in large-scale distributed systems
   - Can be reduced in probability using redundancy and fault tolerance
 
 - You must sacrifice either:
-  - **Availability**
+  - **\textcolor{blue}{Availability}**
     - Allow system downtime
     - E.g., banking system
-  - **Consistency**
+  - **\textcolor{violet}{Consistency}**
     - Allow different system views
     - E.g., social network
 ::::
@@ -273,7 +273,7 @@ _Hardware failure_
   - Client (_Node0_)
   - Two DB replicas (_Node1_, _Node2_)
 
-- **Network partition occurs**
+- **\textcolor{red}{Network partition occurs}**
   - DB servers (_Node1_, _Node2_) can't communicate
   - Users (_Node0_) access only one (_Node2_)
   - _Reads_: Access data on the same partition
@@ -284,13 +284,13 @@ _Hardware failure_
 ::::
 :::
 
-- **CAP theorem**: Sacrifice consistency or availability
+- **\textcolor{darkgreen}{CAP theorem}**: Sacrifice consistency or availability
 
-- **Available, not consistent**
+- **\textcolor{blue}{Available, not consistent}**
   - Inconsistency acceptable (e.g., social networking)
   - Allow updates on accessible replica
 
-- **Consistent, not available**
+- **\textcolor{violet}{Consistent, not available}**
   - Inconsistency unacceptable (e.g., banking)
   - Stop service to maintain consistency
 
@@ -298,18 +298,18 @@ _Hardware failure_
 :::columns
 ::::{.column width=60%}
 
-- **Replication schemes**: Organize multiple servers for a distributed DB
+- **\textcolor{red}{Replication schemes}**: Organize multiple servers for a distributed DB
 
-- **Primary-secondary replication**
+- **\textcolor{darkgreen}{Primary-secondary replication}**
   - Application communicates with the primary
   - Replicas require the primary for updates
   - Single point of failure
 
-- **Update-anywhere replication**
+- **\textcolor{blue}{Update-anywhere replication}**
   - Aka "multi-master replication"
   - Every replica can update data, which is propagated to others
 
-- **Quorum-based replication**
+- **\textcolor{violet}{Quorum-based replication}**
   - _N_: Total replicas
   - Write to _W_ replicas
   - Read from _R_ replicas, pick the latest update (timestamps)
@@ -330,14 +330,14 @@ _Update-anywhere replication_
 :::columns
 ::::{.column width=50%}
 
-- **Synchronous replication**: updates propagate to replicas in a single
+- **\textcolor{red}{Synchronous replication}**: updates propagate to replicas in a single
   transaction
 
 - Implementations
-  - **2-Phase Commit (2PC)**: original method
+  - **\textcolor{darkgreen}{2-Phase Commit (2PC)}**: original method
     - Single point of failure
     - Can't handle primary server failure
-  - **Paxos**: widely used
+  - **\textcolor{blue}{Paxos}**: widely used
     - No primary required
     - More fault tolerant
   - Both are complex/expensive
@@ -348,7 +348,7 @@ _Update-anywhere replication_
 ::::
 :::
 
-- **CAP theorem**: only one of Consistency or Availability can be guaranteed
+- **\textcolor{violet}{CAP theorem}**: only one of Consistency or Availability can be guaranteed
   during a network partition
   - Many systems use relaxed consistency models
 
@@ -356,12 +356,12 @@ _Update-anywhere replication_
 :::columns
 ::::{.column width=50%}
 
-- **Asynchronous replication**
+- **\textcolor{red}{Asynchronous replication}**
   - Primary node updates replicas
   - Transaction completes before replicas update
   - Quick commits, less consistency
 
-- **Eventual consistency**
+- **\textcolor{darkgreen}{Eventual consistency}**
   - Popularized by AWS DynamoDB
   - Consistency only on eventual outcome
   - "Eventual" may mean after server/network fix
@@ -371,7 +371,7 @@ _Update-anywhere replication_
 ::::
 :::
 
-- **"Freshness" property**
+- **\textcolor{blue}{"Freshness" property}**
   - Read from replica may not be latest
   - Request version with specific "freshness"
     - E.g., "data from not more than 10 minutes ago"
@@ -383,12 +383,12 @@ _Update-anywhere replication_
 
 - Sources of SQL DB scalability issues:
 
-1. **Locking data**
+1. **\textcolor{red}{Locking data}**
     - DB engine locks rows/tables for ACID
     - When locked higher latency $\to$ Fewer updates/second $\to$ Slower
       application
 
-2. **Worse in distributed set-up**
+2. **\textcolor{blue}{Worse in distributed set-up}**
   - Requires data replication over multiple servers (scaling out)
   - Slower application due to:
     - Network delays
@@ -399,18 +399,18 @@ _Update-anywhere replication_
 :::columns
 ::::{.column width=70%}
 
-- **Table denormalization**
+- **\textcolor{red}{Table denormalization}**
   - Increase performance by adding redundant data
   - Pros
     - Faster reads: Lock one table, no joins
   - Cons
     - Slower writes: More data to update
     - Loss of table relations
-- **Relax consistency**
+- **\textcolor{darkgreen}{Relax consistency}**
   - Compromise on ACID
   - Weaken consistency (e.g., eventual consistency)
 
-- **NoSQL**
+- **\textcolor{blue}{NoSQL}**
 ::::
 ::::{.column width=25%}
 \centering \scriptsize
@@ -426,19 +426,19 @@ _Denormalized data_
 
 #### NoSQL Stores
 
-- **Use cases of large-scale web applications**
+- **\textcolor{red}{Use cases of large-scale web applications}**
   - Real-time access with ms latencies
     - E.g., facebook: 4ms for reads
   - No need for ACID properties
   - MongoDB started at DoubleClick (AdTech), acquired by Google
 
-- **Solve problems with relational databases**
+- **\textcolor{darkgreen}{Solve problems with relational databases}**
   - Application-DB impedance mismatch
   - Schema flexibility
   - Consistency in distributed setup
   - Scalability
 
-- **To scale out, give up something**
+- **\textcolor{blue}{To scale out, give up something}**
   - Consistency
   - Joins
     - Most NoSQL stores don't allow server-side joins

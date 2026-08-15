@@ -56,24 +56,24 @@ UMD DATA605 - Big Data Systems
 :::
 
 - **Graph Data Model in Neo4j: Intuition**
-- **Nodes**
+- @Nodes@
   - Represent entities or objects
   - Connected via _relationships_
   - Have _properties_ (key/value pairs)
 
-- **Relationships**
+- @Relationships@
   - Represent (directional) connections between nodes
   - Relationship types give semantic meaning to edges
   - Multiple relationships per node
   - Have _properties_ (key/value pairs)
 
-- **Properties**
+- @Properties@
   - Store key–value information on nodes and relationships
     - Named values (key is a string)
   - Indexed and constrained
   - Composite indexes from multiple properties
 
-- **Labels**
+- @Labels@
   - Group nodes into sets with similar roles
   - Nodes may have multiple labels
   - Labels indexed for faster node retrieval
@@ -166,7 +166,7 @@ UMD DATA605 - Big Data Systems
   ```
 
 - **Wine Suggestion Engine: Example 1/2**
-- **Create a wine suggestion engine**
+- @Create a wine suggestion engine@
   - Wines categorized by:
     - Varieties (e.g., Chardonnay, Pinot Noir)
     - Regions (e.g., Bordeaux, Napa, Tuscany)
@@ -178,7 +178,7 @@ UMD DATA605 - Big Data Systems
 - **Wine Suggestion Engine: Example 2/2**
 :::columns
 ::::{.column width=50%}
-- **Relational approach**
+- @Relational approach@
 - Create various tables
   - \textcolor{blue}{\texttt{wines}}: (id, name, year)
   - \textcolor{blue}{\texttt{wines\_categories}} (wine_id, category_id)
@@ -195,14 +195,14 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Problem with relational approach**
+- @Problem with relational approach@
   - There isn't much of a schema
   - Lots of incomplete data
   - An old saying in relational DB world: _"On a long enough timeline all fields
     become optional"_
 
 - **Cypher Example**
-- **Graph DB approach**: provide values and structure only where necessary
+- @Graph DB approach@: provide values and structure only where necessary
 
   \footnotesize
   ```cypher

@@ -1,0 +1,1065 @@
+// Pandoc Typst template producing Touying slides.
+//
+// Used by `notes_to_pdf.py --type slides --slides_engine typst`.
+//
+// - Pandoc maps markdown headings to Typst headings, e.g.,
+//   - `#` -> `=`
+//   - `####` -> `====`
+// - `config-common(slide-level: 4)` makes level-4 headings (`####`) start a
+//   new slide, mirroring the beamer `--slide-level 4` convention. Headings of
+//   level 1-3 become section/structure slides
+// - See https://github.com/touying-typ/touying
+#import "@preview/touying:0.6.1": *
+#import themes.simple: *
+
+//#include "/helpers_root/dev_scripts_helpers/documentation/typst_abbrevs.typ"
+#include "/helpers_root/dev_scripts_helpers/documentation/typst_abbrevs.typ"
+
+// Configure theme to match beamer's 4:3 aspect ratio.
+// Note: Touying's simple-theme controls page size internally;
+// exact beamer dimensions (362.835 x 272.126 pts) cannot be overridden.
+#show: simple-theme.with(
+  aspect-ratio: "4-3",
+  config-common(slide-level: 4),
+  subslide-preamble: block(below: 1em)[
+    #v(-0.6em)
+    #text(1.2em, weight: "bold", fill: rgb("#003366"),
+      utils.display-current-heading(level: 4))
+    #v(-0.5em)
+    #line(length: 100%, stroke: 2.0pt + rgb("#003366"))
+  ],
+  config-info(
+  ),
+)
+
+// Make the inline math font bigger.
+//#show math.equation.where(block: false): set text(size: 1.15em)
+
+// Scale display math to match slide text size (not oversized).
+#show math.equation.where(block: true): set text(size: 0.95em)
+
+// Make the inline verbatim font bigger.
+//#show raw.where(block: false): set text(size: 1.15em)
+#show raw.where(block: false): set text(size: 0.95em)
+
+// Styled table with zebra striping, lateral lines, and configurable width.
+#let styled-table(headers: (), rows: (), caption: none, col-widths: none, bold-first-col: true, size: 0.8em, width: 80%) = {
+  let n = headers.len()
+  let widths = if col-widths != none { col-widths } else { (1fr,) * n }
+
+  // Zebra striping: alternate white and darker gray backgrounds on full rows
+  let processed-rows = rows.enumerate().map(((idx, row)) => {
+    let bg-color = if calc.rem(idx, 2) == 0 { white } else { rgb("#e8e8e8") }
+    if bold-first-col {
+      (
+        table.cell(fill: bg-color, text(fill: black, weight: "bold", row.at(0))),
+        ..row.slice(1).map(cell => table.cell(fill: bg-color, text(fill: rgb("#555555"), cell)))
+      )
+    } else {
+      row.map(cell => table.cell(fill: bg-color, text(fill: rgb("#555555"), cell)))
+    }
+  })
+
+  text(size: size,
+    figure(
+      align(center,
+        block(width: width,
+          table(
+            columns: widths,
+            align: (left,) * n,
+            stroke: none,
+            table.vline(x: 0, stroke: 2pt),
+            table.hline(stroke: 2pt),
+            table.header(
+              ..headers.map(h => table.cell(fill: black, text(fill: white, weight: "bold", h)))
+            ),
+            table.hline(stroke: 1.5pt),
+            ..processed-rows.flatten(),
+            table.hline(stroke: 2pt),
+            table.vline(x: n, stroke: 2pt),
+          )
+        )
+      ),
+      kind: table,
+      caption: caption,
+    )
+  )
+}
+
+// Use Computer Modern Sans - standard TeX font (sans-serif variant).
+// Fails if Computer Modern not available in container (no fallback).
+#set text(font: "CMU Sans Serif", size: 22pt, fill: black)
+#show heading: set text(font: "CMU Sans Serif", size: 28pt)
+// Use DejaVu Sans (available in Alpine) with reduced size.
+// Applied AFTER theme to override theme defaults.
+//#set text(font: "DejaVu Sans", size: 20pt, fill: black)
+//#show heading: set text(font: "DejaVu Sans", size: 28pt)
+
+// Track list nesting depth with counter
+#let list-nesting = counter("list-nesting")
+
+// Use en-dashes for all bullet points (override default circle/triangle markers).
+#show list: set list(marker: "–")
+
+// Reduce font size for nested list levels.
+#show list: it => {
+  list-nesting.step()
+  let depth = list-nesting.get().first()
+  let size = if depth == 1 { 1em } else if depth == 2 { 0.95em } else { 0.90em }
+  set text(size: size)
+  [#it]
+  list-nesting.update(n => n - 1)
+}
+
+// Make footer text smaller.
+#let footer-text(body) = text(size: 0.8em, fill: black, body)
+
+
+====
+
+#slide[
+  #grid(
+    columns: (20%, 80%),
+    gutter: 0.5cm,
+    align(top + left)[#image("/msml610/lectures_source/figures/UMD_Logo.png", width: 3.5cm)],
+    align(top + left)[
+      #v(0.2cm)
+      #text(size: 28pt)[MSML610: Advanced Machine Learning]
+    ]
+  )
+
+  #v(1.5cm)
+  #align(center)[#text(size: 32pt, weight: "bold", fill: rgb("#0066CC"))[L04.2: Machine Learning Models]]
+
+  #v(2.5cm)
+  #text(size: 24pt)[Instructor: Dr. GP Saggese - #link("mailto:gsaggese@umd.edu")[_gsaggese\@umd.edu_]]
+]
+==== Table of Content
+<table-of-content>
+- #text(fill: red, weight: "bold")[#emph[Logistic Regression]]
+- LDA, QDA
+- Kernel Methods
+- Support Vector Machines (Optional)
+
+==== Logistic Regression Is a Probabilistic Classifier
+<logistic-regression-is-a-probabilistic-classifier>
+- #text(fill: black, weight: "bold")[Logistic regression] learns:
+
+  - The probability of each class $Pr \( y \| bold(underline(x)) \)$
+    given input $bold(underline(x))$
+  - Instead of predicting class $y$ directly
+
+- #text(fill: black, weight: "bold")[Parametric approach];: assume
+  $Pr \( y \| bold(underline(x)) ; bold(underline(w)) \)$ has a known
+  functional form
+  $ Pr \( y = 1 \| bold(underline(x)) ; bold(underline(w)) \) = upright("logit") \( bold(underline(w))^T bold(underline(x)) \) $
+
+- #text(fill: black, weight: "bold")[Optimize parameters] $bold(underline(w))$ using maximum
+  likelihood
+  $ bold(underline(w))^(\*) = sans("argmax")_(bold(underline(w))) Pr \( cal(D) ; bold(underline(w)) \) $
+
+- #text(fill: black, weight: "bold")[Predict] by outputting class with highest probability
+  $ h_(bold(underline(w))) \( bold(underline(x)) \) = cases(delim: "{", + 1 & Pr \( y = 1 \| bold(underline(x)) ; bold(underline(w)) \) gt.eq 0.5, - 1 & Pr \( y = 1 \| bold(underline(x)) ; bold(underline(w)) \) < 0.5, ) $
+
+==== Logistic Regression: Example
+<logistic-regression-example>
+- Assume $y$ is:
+  - The event $y_i$ #emph["patient with characteristics
+    $bold(underline(x))$ had heart attack"]
+  - Function of parameters $bold(underline(x))$ (e.g., age, gender,
+    diet)
+- In data set $cal(D)$:
+  - No samples of $Pr \( y \| bold(underline(x)) \)$
+  - Have realizations:
+    - #emph["Patient with $bold(underline(x))_1$ had a heart attack"]
+    - #emph["Patient with $bold(underline(x))_2$ didn't"]
+    - …
+- Learn $Pr \( y \| bold(underline(x)) \)$
+  - Find best parameters $bold(underline(w))$ for logistic regression
+    model to explain data $cal(D)$
+
+==== Logistic Function
+<logistic-function>
+- Aka "sigmoid"
+- #text(fill: black, weight: "bold")[Logistic function] $upright("logit") \( s \)$ is defined as
+  $ upright("logit") \( s \) eq.delta frac(e^s, 1 + e^s) = frac(1, 1 + e^(- s)) $
+  - Varies in \[0, 1\]
+  - Crosses the origin at 0.5
+  - Asymptotes at 0 and 1
+  - It is a soft version of $sans("sign") \( \)$
+
+==== Logistic Regression vs Linear Classifier
+<logistic-regression-vs-linear-classifier>
+- #text(fill: black, weight: "bold")[Functional form is similar]
+  - #text(fill: black, weight: "bold")[Logistic regression];:
+    $h \( bold(underline(w)) \) = upright("logit") \( bold(underline(w))^T bold(underline(x))$)
+  - #text(fill: black, weight: "bold")[Linear classifier] (perceptron):
+    $h \( bold(underline(w)) \) = sans("sign") \( bold(underline(w))^T bold(underline(x)) \)$
+- #text(fill: black, weight: "bold")[Difference] in probabilistic interpretation and fitting method
+  - Logistic regression\*\* lacks samples of probability function to
+    interpolate
+    - Uses realizations of random variable
+    - Seeks model parameters maximizing data likelihood
+  - #text(fill: black, weight: "bold")[Linear classification] assumes class value is linear
+    function of inputs
+
+==== Error for Probabilistic Binary Classifiers
+<error-for-probabilistic-binary-classifiers>
+- For probabilistic binary classification, use #text(fill: black, weight: "bold")[log-probability
+  error] as point-wise error
+  $ e \( h \( bold(underline(x)) \) \, y \) eq.delta - log \( Pr \( y = h \( bold(underline(x)) \) \| bold(underline(x)) ; bold(underline(w)) \) \) $
+  - Negate for positive errors:
+    $log \( \[ 0 \, 1 \] \) in \[ - oo \, 0 \)$
+- Log probability generalizes 0-1 error
+  - Case $y = 1$
+    - Output $h \( bold(underline(x)) \)$ close to 1
+      $arrow.r.double.long$ probability 1
+      $arrow.r.double.long log \( 1 \) = 0$
+      $arrow.r.double.long e \( dot.op \) = 0$
+    - Output close to 0
+      $arrow.r.double.long e \( \) = - log \( 0 \) arrow.r + oo$
+  - Similar behavior for $y = 0$
+
+==== One-Liner Error for Probabilistic Binary Classifiers
+<one-liner-error-for-probabilistic-binary-classifiers>
+- #text(fill: black, weight: "bold")[Point-wise error] for example $\( bold(underline(x)) \, y \)$
+  for probabilistic binary classifiers is defined as:
+
+- Any function of a binary variable:
+  $ y & = cases(delim: "{", a & x = 1, b & x = 0, )\
+   $ can be written as one-liner:
+  $y = x dot.op a + \( 1 - x \) dot.op b$
+
+- Point-wise error can be written independently of
+  $Pr \( y = 1 \| bold(underline(x)) \)$:
+  $ e \( h \( bold(underline(x)) \) \, y \) = - y log \( Pr \( y = 1 \| bold(underline(x)) \) - \( 1 - y \) log \( 1 - Pr \( y = 1 \| bold(underline(x)) \) \) $
+
+==== One-Liner Error for Logistic Regression
+<one-liner-error-for-logistic-regression>
+- The point-wise error for a binary classifier is:
+  $ e \( h \( bold(underline(x)) \) \, y \) = - y log \( Pr \( y = 1 \| bold(underline(x)) \) - \( 1 - y \) log \( 1 - Pr \( y = 1 \| bold(underline(x)) \) \) $
+
+- Simplify further #text(fill: black, weight: "bold")[with logit function];:
+
+- Point-wise error for logistic regression equals #text(fill: black, weight: "bold")[cross-entropy
+  error]
+
+==== Cross-Entropy Error
+<cross-entropy-error>
+- #text(fill: black, weight: "bold")[Point-wise error for logistic regression] has expression:
+  $ e \( h \( bold(underline(x)) \) \, y \) = log \( 1 + exp \( - y dot.op bold(underline(w))^T bold(underline(x)) \) \) $
+  - It is called #text(fill: black, weight: "bold")[cross-entropy error]
+  - Note: no $-$ before $log \( dot.op \)$ but before
+    $y dot.op bold(underline(w))^T bold(underline(x))$
+- Cross-entropy error #text(fill: black, weight: "bold")[generalizes 0-1 error]
+  - If $bold(underline(w))^T bold(underline(x))$ agrees with $y$ in sign
+    and $\| bold(underline(w))^T bold(underline(x)) \|$ is large
+    $arrow.r.double.long$ error goes to 0
+  - If they disagree in sign $arrow.r.double.long$ error goes towards
+    $oo$
+- Define #text(fill: black, weight: "bold")[in-sample error on training set] as average of
+  point-wise errors:
+  $ E_(i n) eq.delta 1 / N sum_n e \( h \( bold(underline(x))_n \) \, y_n \) $
+
+==== Fitting Logistic Regression
+<fitting-logistic-regression>
+- A plausible error measure of a hypothesis is based on
+  #text(fill: black, weight: "bold")[likelihood of data] $ Pr \( cal(D) \| h = f \) $
+
+  - #emph["How likely is the data $cal(D)$ under the assumption that
+    $h = f$?"]
+  - #emph["How likely is that the data $cal(D)$ was generated by $h$?"]
+
+- #text(fill: black, weight: "bold")[Maximize likelihood] $cal(D)$ generated from logistic
+  regression
+  $ Pr \( y = 1 \| bold(underline(x)) ; bold(underline(w)) \) $
+
+- It can be proved that this is equivalent to #text(fill: black, weight: "bold")[minimizing
+  in-sample error] on training set #text(fill: black, weight: "bold")[using cross-entropy error]
+
+==== Fitting Logistic Regression (Optional)
+<fitting-logistic-regression-optional>
+- Find $bold(underline(w))$ that maximizes likelihood for data set
+  $cal(D) = { \( bold(underline(x))_1 \, y_1 \) \, . . . \, \( bold(underline(x))_N \, y_N \) }$
+  generated by model $h \( bold(underline(x)) \)$:
+  $ Pr \( D \| bold(underline(w)) \) = Pr \( y_1 = h \( bold(underline(x))_1 \) and . . . and y_N = h \( bold(underline(x))_N \) \) = Pr \( y_1 = y_(1') and . . . and y_N = y_(N') \) $
+
+- Model form:
+  $ y' = h \( bold(underline(x)) \) = cases(delim: "{", + 1 & upright(" if logit") \( bold(underline(w))^T bold(underline(x)) \) > 0.5, - 1 & upright(" otherwise")) $
+
+- Assuming independence among training examples:
+  $ Pr \( D \| bold(underline(w)) \) = product_(i = 1)^N Pr \( y_i = y_(i') \| bold(underline(x))_i \) $
+
+- Fold $y_n$ in expression:
+
+  - When $y_n = 1$,
+    $Pr \( y_n = y_(n') \) = upright("logit") \( bold(underline(w))^T bold(underline(x))_n \)$
+  - When $y_n = - 1$,
+    $Pr \( y_n = y_(n') \) = upright("logit") \( - bold(underline(w))^T bold(underline(x))_n \)$
+
+- Thus,
+  $Pr \( y_n = y_(n') \) = upright("logit") \( y_n bold(underline(w))^T bold(underline(x))_n \)$
+
+==== Fitting Logistic Regression (Optional)
+<fitting-logistic-regression-optional-1>
+- Given:
+  $ Pr \( D \| bold(underline(w)) \) = product_(i = 1)^N upright("logit") \( y_n bold(underline(w))^T bold(underline(x))_n \) $
+
+- Re-write optimization as minimizing sum of point-wise errors
+  $E_(i n) = sum e \( h \( bold(underline(x))_n \) \, y_n \)$
+
+  - Maximize $log \( . . . \)$ with respect to $bold(underline(w))$
+    since log argument $> 0$ and $log \( \)$ is monotone
+
+- Equivalently, minimize:
+
+==== Gradient Descent for Logistic Regression
+<gradient-descent-for-logistic-regression>
+- Gradient descent requires two inputs:
+
+  - Gradient of the cost function
+    $frac(partial E, w_j) upright(" for all ") j$
+  - Cost function $E_(i n) \( bold(underline(w)) \)$
+
+- The cost function is:
+  $ E_(i n) \( bold(underline(w)) \) = 1 / N sum_i e \( h \( bold(underline(x))_i ; bold(underline(w)) \) \, y_i \) $
+
+- The cost function for logistic regression:
+  $ E_(i n) \( bold(underline(w)) \) = 1 / N sum_i log \( 1 + exp \( - y_i bold(underline(w))^T bold(underline(x))_i \) \) $
+
+- Thus gradient descent converges to global minimum
+
+  - It can be shown that $E_(i n) \( bold(underline(w)) \)$ is convex in
+    $bold(underline(w))$
+  - In fact sum of exponentials and flipped exponentials is convex and
+    log is monotone
+
+==== One-Vs-All Multi-Class Classification
+<one-vs-all-multi-class-classification>
+- Aka "one-vs-rest" classifier
+
+- #text(fill: black, weight: "bold")[Problem];: you have $n$ classes $c_1 \, . . . \, c_n$ to
+  distinguish given $bold(underline(x))$
+
+- #text(fill: black, weight: "bold")[Learn]
+
+  - Create $n$ binary classification problems where we classify $c_i$ vs
+    $c_(- i)$ (everything but $i$)
+  - Learn $n$ classifiers with optimal $bold(underline(w))_i$, each
+    estimating
+    $Pr \( y = i \| bold(underline(x)) ; bold(underline(w))_i \)$
+
+- #text(fill: black, weight: "bold")[Predict]
+
+  - Evaluate the $n$ classifiers
+  - Pick the class $y = i$ with the maximum
+    $Pr \( y = i \| bold(underline(x)) \)$
+
+==== Cost Function for Multi-Class Classification (Opt)
+<cost-function-for-multi-class-classification-opt>
+- The cost function for logistic regression is:
+  $ E_(i n) \( bold(underline(w)) \) = - 1 / N sum_(i = 1)^N \( y_i log Pr \( y = 1 \| bold(underline(x))_i \) + \( 1 - y_i \) log \( 1 - Pr \( y = 1 \| bold(underline(x))_i \) \) \) $
+
+- Encode expected outputs $bold(underline(y))_i$ one-hot
+
+  - $j$-th element $bold(underline(y))_i \|_j$ is 1 if correct class is
+    $j$-th
+  - E.g., for $k = 4$ #text(fill: blue)[1000]
+
+- Using $bold(underline(h)) \( bold(underline(x)) \)$ as model outputs
+  and
+  $Pr \( y = 1 \| bold(underline(x)) \) = p \( bold(underline(x)) \)$:
+  $ E_(i n) \( bold(underline(w)) \) = - 1 / N sum_(i = 1)^N sum_(k = 1)^K (bold(underline(y))_i log \( bold(underline(p)) \( bold(underline(x))_i \) \) + \( 1 - bold(underline(y))_i \) log \( 1 - bold(underline(p)) \( bold(underline(x))_i \) \)) #scale(x: 120%, y: 120%)[\|]_k $
+
+- Innermost summation considers error on each class/digit
+
+  - E.g., for $k = 4$ #text(fill: blue)[1000] vs #text(fill: blue)[0100]
+  - Equal digits don't contribute to error
+  - Different digits give positive contribution
+
+==== Table of Content
+<table-of-content-1>
+- Logistic Regression
+- #text(fill: red, weight: "bold")[#emph[LDA, QDA]]
+- Kernel Methods
+- Support Vector Machines (Optional)
+
+==== Basic Idea of Parametric Models
+<basic-idea-of-parametric-models>
+- Assume a model generates data
+  - Known functional form
+  - Parametrized with unknown parameters to estimate
+- #text(fill: black, weight: "bold")[Pros]
+  - Utilize data structure
+  - Easy to fit: few parameters
+  - Accurate predictions if assumptions correct
+- #text(fill: black, weight: "bold")[Cons]
+  - Strong data assumptions
+  - Low accuracy if assumptions incorrect
+
+==== Linear and Quadratic Discriminant Analysis
+<linear-and-quadratic-discriminant-analysis>
+- Aka LDA and QDA
+
+- #text(fill: black, weight: "bold")[Parametric models]
+
+  - Assume each class generating process is multivariate Gaussian
+  - Classifiers with linear and quadratic decision surface
+
+- #text(fill: black, weight: "bold")[Pros]
+
+  - Closed-form solutions easy to compute (sample mean and covariance)
+  - Inherently multiclass
+  - No hyperparams to tune
+
+- #text(fill: black, weight: "bold")[Cons]
+
+  - Strong assumptions about the data
+
+==== LDA / QDA: Model Form
+<lda-qda-model-form>
+- Both LDA and QDA assume class generating process
+  $f_k \( bold(underline(x)) ; bold(underline(mu_k)) \, bold(underline(underline(Sigma_k))) \)$
+  is #text(fill: black, weight: "bold")[multivariate Gaussian]
+
+- #text(fill: black, weight: "bold")[Linear discriminant analysis (LDA)] model:
+  $ f_k \( bold(underline(x)) ; bold(underline(mu_k)) \, bold(underline(underline(Sigma_k))) \) tilde.op cal(N) \( bold(underline(mu_k)) \, bold(underline(underline(Sigma))) \) \) $
+
+  - Means $bold(underline(mu_k))$ differ for all $k$ classes
+  - Covariance matrix $bold(underline(underline(Sigma)))$ same for all
+    $k$ classes
+  - Classes separated by linear decision boundaries
+
+- #text(fill: black, weight: "bold")[Quadratic discriminant analysis (QDA)] model:
+
+  - Classes $k$ have different covariance matrix
+    $bold(underline(underline(Sigma_k)))$
+  - Classes separated by quadratic boundaries
+
+==== Bayes Theorem for LDA / QDA
+<bayes-theorem-for-lda-qda>
+- Consider a classification setup with multi-class output
+  $Y in { 1 \, . . . \, K }$
+
+- Build a #text(fill: black, weight: "bold")[parametric model for the conditional distribution];:
+  $ Pr \( Y = k \| X = bold(underline(x)) \) $
+
+- Use #text(fill: black, weight: "bold")[Bayes theorem];:
+  $ Pr \( Y = k \| X = bold(underline(x)) \) = frac(Pr \( X = bold(underline(x)) \| Y = k \) dot.op Pr \( Y = k \), Pr \( X = bold(underline(x)) \)) $
+  where:
+
+  - $Pr \( X = bold(underline(x)) \| Y = k \)$: given a class, estimate
+    probability of $bold(underline(x))$
+  - $Pr \( Y = k \) = pi_k$: probability of each class (prior)
+  - $Pr \( X = bold(underline(x)) \)$: probability of each input
+
+- #text(fill: black, weight: "bold")[Estimate probabilities] from data
+
+==== LDA / QDA: Boundary Decision (Optional)
+<lda-qda-boundary-decision-optional>
+- Consider the ratio between the probabilities of $Y = k$ vs $Y = j$:
+  $ r = frac(Pr \( Y = k \| X = bold(underline(x)) \), Pr \( Y = j \| X = bold(underline(x)) \)) $
+
+- Using the model assumption and Bayes theorem: where:
+  $ f_k \( bold(underline(x)) \) = c dot.op exp (- 1 / 2 \( bold(underline(x)) - bold(underline(mu_k)) \)^T bold(underline(underline(Sigma)))^(- 1) \( bold(underline(x)) - bold(underline(mu_k)) \)) $
+
+- Apply $log \( dot.op \)$ as a monotone transformation
+  $ r = log frac(f_k \( bold(underline(x)) \), f_j \( bold(underline(x)) \)) + log pi_k / pi_j $
+
+==== LDA / QDA: Boundary Decision (Optional)
+<lda-qda-boundary-decision-optional-1>
+- Apply $log \( dot.op \)$ as a monotone transformation
+  $ r = log frac(f_k \( bold(underline(x)) \), f_j \( bold(underline(x)) \)) + log pi_k / pi_j $
+
+- #text(fill: black, weight: "bold")[Second term] independent of $bold(underline(x))$ so you can
+  ignore it
+
+- #text(fill: black, weight: "bold")[First term] proportional to:
+  $ \( bold(underline(x)) - bold(underline(mu_k)) \)^T bold(underline(underline(Sigma)))^(- 1) \( bold(underline(x)) - bold(underline(mu_k)) \) - \( bold(underline(x)) - bold(underline(mu_j)) \)^T bold(underline(underline(Sigma)))^(- 1) \( bold(underline(x)) - bold(underline(mu_j)) \) $
+
+- Expand, simplify
+  $bold(underline(x))^T bold(underline(underline(Sigma)))^(- 1) bold(underline(x))$,
+  and note:
+  $ 2 bold(underline(x))^T bold(underline(underline(Sigma)))^(- 1) \( bold(underline(mu_k)) - bold(underline(mu_j)) \) $
+  Resulting in a linear relationship in $bold(underline(x))$
+  $ - 1 / 2 \( bold(underline(mu_k)) + bold(underline(mu_j)) \)^T bold(underline(underline(Sigma)))^(- 1) \( bold(underline(mu_k)) - bold(underline(mu_j)) \) + bold(underline(x))^T bold(underline(underline(Sigma)))^(- 1) \( bold(underline(mu_k)) - bold(underline(mu_j)) \) $
+
+==== LDA / QDA: Learn Model (Optional)
+<lda-qda-learn-model-optional>
+- In practice:
+
+  - Ignore $Pr \( X = bold(underline(x)) \)$; it's common for all
+    classes
+  - Know or estimate prior $Pr \( Y = k \) = pi_k$ from data
+  - Estimate conditional probability
+    $Pr \( X = bold(underline(x)) \| Y = k \)$
+
+- Model assumes Gaussian distribution for conditional probability:
+  $ Pr \( X = bold(underline(x)) \| Y = k \) = f_k \( bold(underline(x)) ; bold(underline(mu_k)) \, bold(underline(underline(Sigma_k))) \) $
+  where:
+  $ f_k \( bold(underline(x)) \) = frac(1, \( 2 pi \)^n \| bold(underline(underline(Sigma_k))) \|^(1 \/ 2)) exp (- 1 / 2 \( bold(underline(x)) - bold(underline(mu_k)) \)^T bold(underline(underline(Sigma_k)))^(- 1) \( bold(underline(x)) - bold(underline(mu_k)) \)) $
+
+- Estimate parameters $bold(underline(mu_k))$,
+  $bold(underline(underline(Sigma_k)))$ using sample mean and covariance
+
+==== Evaluating LDA / QDA
+<evaluating-lda-qda>
+- For new $bold(underline(x)) = bold(underline(x))'$, compute for each
+  class $Y = k$
+  $ Pr \( Y = k \| X = bold(underline(x)) \) prop f_k \( bold(underline(x)) ; bold(underline(mu_k)) \, bold(underline(underline(Sigma_k))) \) dot.op pi_k $
+
+- Choose $k$ that maximizes posterior probability
+
+- If $f_i \( bold(underline(x)) \)$ is from a multivariate Gaussian
+  distribution with diagonal $bold(underline(underline(Sigma)))$
+  (feature independence), you can simplify expressions further
+
+==== Table of Content
+<table-of-content-2>
+- Logistic Regression
+- LDA, QDA
+- #text(fill: red, weight: "bold")[#emph[Kernel Methods]]
+- Support Vector Machines (Optional)
+
+==== Kernel: Definition
+<kernel-definition>
+- Consider a transformation $Phi : cal(X) arrow.r cal(Z)$
+  - E.g., transform features in space $cal(X)$ non-linearly into
+    higher-dimensional space $cal(Z)$
+- #text(fill: black, weight: "bold")[Kernel of transformation] $Phi$ yields inner product of two
+  points $bold(underline(x)) \, bold(underline(x))' in cal(X)$ in
+  transformed space $cal(Z)$
+  $ K_Phi \( bold(underline(x)) \, bold(underline(x))' \) eq.delta angle.l Phi \( bold(underline(x)) \) \, Phi \( bold(underline(x))' \) angle.r = Phi \( bold(underline(x)) \)^T Phi \( bold(underline(x))' \) = bold(underline(z))^T bold(underline(z))' $
+
+#grid(
+  columns: (50%, 45%),
+  gutter: 0.5em,
+  [
+  - Why doing this?
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L04.2.Kernel_Trick.png"))
+  ]
+)
+==== Kernel: Expression From the Transform
+<kernel-expression-from-the-transform>
+- If you have an expression for $Phi$, compute a closed formula for the
+  kernel
+
+- E.g., if transformation is $Phi : bb(R)^2 arrow.r bb(R)^6$, it
+  introduces interaction terms:
+  $ bold(underline(z)) = Phi \( bold(underline(x)) \) = Phi \( x_1 \, x_2 \) = \( 1 \, x_1 \, x_2 \, x_1^2 \, x_2^2 \, x_1 x_2 \) $
+
+- Kernel of $Phi$ is:
+
+==== Gaussian Kernel
+<gaussian-kernel>
+- Aka "exponential kernel" or "Radial Basis Function" (RBF) kernel
+- A #text(fill: black, weight: "bold")[Gaussian kernel] has the form:
+  $ K \( bold(underline(x)) \, bold(underline(x))' \) = exp \( - gamma parallel bold(underline(x)) - bold(underline(x))' parallel^2 \) = exp \( - frac(parallel bold(underline(x)) - bold(underline(x))' parallel^2, sigma^2) \) $
+- It can be shown to be an inner product in an infinite dimension
+  $cal(Z)$
+
+==== Kernel as Way to Measure Similarity
+<kernel-as-way-to-measure-similarity>
+- #text(fill: black, weight: "bold")[Intuition];: The Gaussian kernel
+  $ K \( bold(underline(x)) \, bold(underline(x))' \) = exp \( - gamma parallel bold(underline(x)) - bold(underline(x))' parallel^2 \) $
+  measures "similarity" of point $bold(underline(x))$ to point
+  $bold(underline(x))_i$:
+  - $K \( bold(underline(x)) \, bold(underline(x))' \)$ is 1 when points
+    are the same
+  - Value is 0 when points are distant
+  - Effect strength depends on $gamma$
+- Using kernels to compute features:
+  - Kernels often rely on distance between vectors
+    - E.g., euclidean norm
+      $parallel bold(underline(x)) - bold(underline(x))' parallel^2$
+  - Need to scale features for similar effects among coordinates
+
+==== Linear Kernel
+<linear-kernel>
+- Consider the transformation $Phi$ as the identity function
+  $Phi \( bold(underline(x)) \) = bold(underline(x))$
+- The kernel function is:
+  $ K_Phi \( bold(underline(x)) \, bold(underline(x))' \) = bold(underline(x))^T bold(underline(x))' $
+  - A #text(fill: black, weight: "bold")[linear kernel] means using no kernel
+  - It is just a "pass-through"
+
+==== Polynomial Kernel
+<polynomial-kernel>
+- Given a point $bold(underline(x)) in bb(R)^n$, consider the function
+  with two parameters $k$ and $d$
+  $ K_Phi \( bold(underline(x)) \, bold(underline(x))' \) = \( k + bold(underline(x))^T bold(underline(x))' \)^d $
+- It is called #text(fill: black, weight: "bold")[polynomial] since if you expand the dot product
+  you get a polynomial
+- It can be proved that this is always a kernel
+
+==== Kernel: Identifying a Function as a Kernel
+<kernel-identifying-a-function-as-a-kernel>
+- #text(fill: black, weight: "bold")[Problem];:
+  - You have a certain function
+    $K \( bold(underline(x)) \, bold(underline(x))' \)$ and you want to
+    show that $K \( dot.op \)$ is an inner product in the form for some
+    function $Phi \( dot.op \)$
+    $ K \( bold(underline(x)) \, bold(underline(x))' \) = Phi \( bold(underline(x)) \)^T Phi \( bold(underline(x))' \) quad forall bold(underline(x)) \, bold(underline(x))' $
+    for a certain $Phi$ and $cal(Z)$
+- In theory, a given function
+  $K \( bold(underline(x)) \, bold(underline(x))' \)$ is a valid kernel
+  iff:
+  - It is a symmetric, and
+  - Satisfies the Mercer's condition: the matrix
+    $K \( bold(underline(x))_i \, bold(underline(x))_j \)$ is definite
+    semi-positive
+
+==== Kernel: Example of Identifying a Kernel
+<kernel-example-of-identifying-a-kernel>
+- Let's show that:
+  $ K \( bold(underline(x)) \, bold(underline(x))' \) = \( k + bold(underline(x))^T bold(underline(x))' \)^d $
+  is a #text(fill: black, weight: "bold")[kernel] for any $n \, k \, d$
+
+- According to the definition you need to show that there is always a
+  transform $Phi$: $ Phi : cal(X) = bb(R)^n arrow.r cal(Z) = bb(R)^q $
+  with $q gt.double d$, such that
+  $K_Phi = \( k + bold(underline(x))^T bold(underline(x))' \)^d$
+
+- #text(fill: black, weight: "bold")[Example]
+
+  - $cal(X) = bb(R)^2$,
+    $K \( bold(underline(x)) \, bold(underline(x))' \) = \( 1 + bold(underline(x))^T bold(underline(x))' \)^2 = \( 1 + x_1 x'_1 + x_2 x'_2 \)^2$
+  - Compute the full expression in terms of the coordinates:
+    $ K \( bold(underline(x)) \, bold(underline(x))' \) = \( 1 + x_1^2 x'_1^2 + x_2^2 x'_2^2 + 2 x_1 x'_1 + 2 x_2 x'_2 + 2 x_1 x'_1 x_2 x'_2 \) $
+  - Choose:
+    - $cal(Z) = bb(R)^6$
+    - $Phi \( x_1 \, x_2 \) = \( 1 \, x_1^2 \, x_2^2 \, sqrt(2) x_1 \, sqrt(2) x_2 \, sqrt(2) x_1 x_2 \)$
+  - This is a particular case of the polynomial kernel
+
+==== A Kernel Is a Computational Shortcut
+<a-kernel-is-a-computational-shortcut>
+- In literature, the #text(fill: black, weight: "bold")[kernel trick] is a #text(fill: black, weight: "bold")[computational
+  shortcut] for the dot product of transformed vectors
+
+- Compare 2 ways to compute the inner product of transformed vectors for
+  a polynomial kernel
+
+  + #text(fill: black, weight: "bold")[Using definition];: compute images of vectors, then inner
+    product in transformed space:
+    $ \( 1 \, x_1 \, x_2 \, sqrt(2) x_1 x_2 \, x_1^2 \, x_2^2 \, . . . \)^T dot.op \( 1 \, x'_1 \, . . . \) $
+    - Requires combinatorial powers and a large dot product
+  + #text(fill: black, weight: "bold")[Kernel trick];: use kernel function for dot product in
+    transformed space
+    $ \( k + bold(underline(x))^T bold(underline(x))' \)^d $
+    - Requires inner product of small vectors, then power of a number
+
+- Kernel trick is more computationally efficient for inner product
+  computation
+
+==== Table of Content
+<table-of-content-3>
+- Logistic Regression
+- LDA, QDA
+- Kernel Methods
+- #text(fill: red, weight: "bold")[#emph[Support Vector Machines (Optional)]]
+
+==== Support Vector Machines (SVM)
+<support-vector-machines-svm>
+- Arguably one of the most successful classification algorithm, together
+  with neural networks and random forests
+
+- #text(fill: black, weight: "bold")[Idea];: find a separating hyperplane that maximizes the
+  distance from the class points (aka "margin")
+
+- #text(fill: black, weight: "bold")[All the rage in 2005-2015]
+
+  - Robust classifier handling outliers automatically
+  - Strong theoretical justification of out-of-bound error
+  - Strong link with VC dimension
+  - Cool geometric interpretation
+  - Solve a very complex optimization problem with some neat tricks
+  - Works for both regression and classification
+
+- SVM for classification:
+
+  - Does not output probabilities (like logistic regression), but
+    predicts directly the class
+  - Has a notion of confidence, as distance from the margin
+
+==== SVM Is a Large Margin Classifier
+<svm-is-a-large-margin-classifier>
+#grid(
+  columns: (50%, 50%),
+  gutter: 0.5em,
+  [
+  - Why #text(fill: black, weight: "bold")[large margin] classifier is good?
+  
+  - Given a linearly separable data set, the optimal separating line
+    maximizes the margin:
+  
+    - More robust to noise
+    - Large margin reduces VC dimension of hypothesis set
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L04.2.SVM.png"))
+  ]
+)
+==== SVM: Notation and Conventions
+<svm-notation-and-conventions>
+- Assume that:
+  + Outputs are encoded as $y_i in { - 1 \, 1 }$
+  + Pull out $w_0$ from $bold(underline(w))$
+    - The bias $w_0 = b$ plays a different role
+    - $bold(underline(w)) = \( w_1 \, . . . \, w_d \)$ and there is no
+      $x_0 = 1$
+    - $bold(underline(w))^T bold(underline(x)) + b = 0$ is the equation
+      of the separating hyperplane
+  + $bold(underline(x))_n$ is the closest point to the hyperplane
+    - It can be multiple points from different classes
+- Normalize $bold(underline(w))$ and $b$ to get a canonical
+  representation of the hyperplane imposing
+  $\| bold(underline(w))^T bold(underline(x))_n + b \| = 1$
+
+==== SVM: Original Form of Problem
+<svm-original-form-of-problem>
+- The SVM problem is:
+
+- This problem is not friendly to optimization since it has norm, min,
+  and absolute value
+
+==== Primal Form of SVM Problem
+<primal-form-of-svm-problem>
+- You can rewrite it as:
+
+  $ upright("find ") bold(underline(w)) \, b #h(2em) & \
+  upright("minimize ") #h(2em) & 1 / 2 bold(underline(w))^T bold(underline(w))\
+  upright("subject to ") #h(2em) & y_i \( bold(underline(w))^T bold(underline(x))_i + b \) gt.eq 1 #h(0em) forall i = 1 \, . . . \, n\
+   $
+
+- Note that under $bold(underline(w))$ minimal and linear separable
+  classes, it is guaranteed that for at least one $bold(underline(x))_i$
+  in the second equation will be equal to $1$ (as in the original
+  problem)
+
+  - In fact otherwise we could scale down $bold(underline(w))$ and $b$
+    (which does not change the plane) to use the slack, against the
+    hypothesis of minimality of $bold(underline(w))$
+
+==== Dual (Lagrangian) Form of SVM Problem
+<dual-lagrangian-form-of-svm-problem>
+$ upright("minimize with respect to ") bold(underline(alpha)) #h(2em) & cal(L) \( bold(underline(alpha)) \) = sum_(i = 1)^N alpha_i - 1 / 2 sum_(i = 1)^N sum_(j = 1)^N y_i y_j alpha_i alpha_j bold(underline(x))_i^T bold(underline(x))_j\
+upright("subject to ") #h(2em) & bold(underline(alpha)) gt.eq bold(underline(0)) \, sum_(i = 1)^N alpha_i y_i = 0\
+ & bold(underline(w)) = sum_(i = 1)^N alpha_i y_i bold(underline(x))_i\
+ $
+
+- The equation for $bold(underline(w))$ is not a constraint, but it
+  computes $bold(underline(w))$ (the plane) given
+  $bold(underline(alpha))$, while $b$ is given by
+  $sans("min") \| bold(underline(w))^T bold(underline(x))_i + b \| = 1$
+
+==== Dual Form of SVM as QP Problem
+<dual-form-of-svm-as-qp-problem>
+- The dual form of SVM problem is a convex quadratic programming
+  problem, in the form:
+
+  $ upright("minimize with respect to ") bold(underline(alpha)) #h(2em) & bold(underline(1))^T bold(underline(alpha)) - 1 / 2 bold(underline(alpha))^T bold(underline(underline(Q))) bold(underline(alpha))\
+  upright("subject to ") #h(2em) & bold(underline(alpha)) gt.eq 0 \, bold(underline(y))^T bold(underline(alpha)) = 0\
+   $
+
+  where:
+
+  - the matrix is
+    $bold(underline(underline(Q))) = { y_i y_j bold(underline(x))_i^T bold(underline(x))_j }_(i j)$
+  - $bold(underline(alpha))$ is the column vector
+    $\( alpha_1 \, dots.h \, alpha_N \)$
+
+==== Solving Dual Formulation of SVM Problem (1/2)
+<solving-dual-formulation-of-svm-problem-12>
+- #text(fill: black, weight: "bold")[Solving convex problem] for $alpha$
+
+  - Feeding this problem to a QP solver, you get the optimal vector
+    $bold(underline(alpha))$
+
+- #text(fill: black, weight: "bold")[Compute hyperplane] $bold(underline(w))$
+
+  - From $bold(underline(alpha))$ recover the plane $bold(underline(w))$
+    from the equation:
+    $bold(underline(w)) = sum_(i = 1)^N alpha_i y_i bold(underline(x))_i$
+  - Looking at the optimal $alpha_i$, you can observe that many of them
+    are $0$
+  - This is because when you applied the Lagrange multipliers to the
+    inequalities:
+    $y_i \( bold(underline(w))^T bold(underline(x))_i + b \) gt.eq 1$,
+    you got the KKT condition:
+    $ alpha_i \( y_i \( bold(underline(w))^T bold(underline(x))_i + b \) - 1 \) = 0 $
+  - From these equations, either
+    - $alpha_i = 0$ and $bold(underline(x))_i$ is an #emph[interior
+      point] since it has non-null distance from the plane (i.e., slack)
+      from the plane; or
+    - $alpha_i eq.not 0$ and the slack is $0$, which implies that the
+      $bold(underline(x))_i$ point touches the margin, i.e., it is a
+      #emph[support vector]
+
+==== Solving Dual Formulation of SVM Problem (2/2)
+<solving-dual-formulation-of-svm-problem-22>
+#grid(
+  columns: (50%, 50%),
+  gutter: 0.5em,
+  [
+  - Thus the hyperplane is only function of the support vectors:
+    $ bold(underline(w)) = sum_(i = 1)^N alpha_i y_i bold(underline(x))_i = sum_(bold(underline(x))_i in upright("SV")) alpha_i y_i bold(underline(x))_i $
+    since only for the support vectors $alpha eq.not 0$
+    - The $alpha_i eq.not 0$ are the real degree of freedom
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L04.2.Support_Vectors.png"))
+  ]
+)
+- #text(fill: black, weight: "bold")[Compute] $b$
+  - Once $bold(underline(w))$ is known, you can use any support vector
+    to compute $b$:
+    $ y_i \( bold(underline(w))^T bold(underline(x))_i + b \) = 1 $
+
+==== Support Vectors and Degrees of Freedom for SVM
+<support-vectors-and-degrees-of-freedom-for-svm>
+- The number of support vectors is related to the degrees of freedom of
+  the model
+- Because of the VC dimension, you have an in-sample quantity to bound
+  the out-of-sample error:
+  $ E_(o u t) lt.eq E_(i n) + c frac(upright("num of SVs"), N - 1) $
+- You are "guaranteed" to not overfit
+
+==== Non-Linear Transform for SVM
+<non-linear-transform-for-svm>
+- $Phi : cal(X) arrow.r cal(Z)$ transforms $bold(underline(x))_i$ into
+  $bold(underline(z))_i = Phi \( bold(underline(x))_i \) in bb(R)^(tilde(d))$
+  with $tilde(d) > d$
+
+- Transform vectors through $Phi$ and apply SVM machinery
+
+- Dual SVM formulation in $cal(Z)$ space:
+  $ cal(L) \( bold(underline(alpha)) \) = sum_(i = 1)^N alpha_i - 1 / 2 sum_(i = 1)^N sum_(j = 1)^N alpha_i alpha_j y_i y_j bold(underline(z))_i^T bold(underline(z))_j $
+
+- Note:
+
+  - Optimization problem has same number of unknowns as original space
+    (number of points $N$)
+  - Support vectors live in $cal(Z)$: they have $alpha = 0$. In
+    $cal(X)$, they are pre-images of support vectors
+  - Decision boundary and margin can be represented in original space
+    (not linear)
+
+==== Non-Linear Transforms for SVM vs Others
+<non-linear-transforms-for-svm-vs-others>
+#grid(
+  columns: (40%, 60%),
+  gutter: 0.5em,
+  [
+  - In SVM the non-linear transform does not change the number of unknowns
+    and degrees of freedom of the model
+  - This is different from transforming the variables in a linear problem,
+    since in that case the number of unknowns changes
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L04.2.Non_linear_SVM1.png", width: 4cm))
+  #box(image("/msml610/lectures_source/figures/L04.2.Non_linear_SVM2.png", width: 4cm))
+  #box(image("/msml610/lectures_source/figures/L04.2.Non_linear_SVM3.png", width: 4cm))
+  #box(image("/msml610/lectures_source/figures/L04.2.Non_linear_SVM4.png", width: 4cm))
+  ]
+)
+==== SVM in Higher Dimensional Space
+<svm-in-higher-dimensional-space>
+- #text(fill: black, weight: "bold")[Pros]
+  - You don't pay the price in terms of complexity of optimization
+    problem
+    - Number of unknowns is still $N$ (different than a linear problem)
+  - You don't pay the price in terms of increased generalization bounds
+    - Number of support vectors is $lt.eq N$
+    - This is because each hypothesis $h$ can be complex but the
+      cardinality of the hypothesis set $cal(H)$ is the same
+- #text(fill: black, weight: "bold")[Cons]
+  - You pay a price to compute
+    $Phi \( bold(underline(x))_i \)^T Phi \( bold(underline(x))_j \)$,
+    since $Phi$ could be very complex
+    - The kernel trick will remove this extra complexity by doing
+      $Phi \( bold(underline(x))_i \)^T Phi \( bold(underline(x))_j \) = K_Phi \( bold(underline(x))_i \, bold(underline(x))_j \)$
+
+==== Non-Linear Transform in SVM vs Kernel Trick
+<non-linear-transform-in-svm-vs-kernel-trick>
+- The trivial approach is:
+  - Transform vectors with $Phi \( dot.op \)$
+  - Apply all SVM machinery to the transformed vectors
+  - #text(fill: black, weight: "bold")[Cons];: $Phi$ might be very complex, e.g., potentially
+    exponential number of terms
+- You can express the SVM problem formulation and the prediction in
+  terms of a kernel
+  $ K_Phi \( bold(underline(x)) \, bold(underline(x))' \) = Phi \( bold(underline(x)) \)^T Phi \( bold(underline(x))' \) = bold(underline(z))^T bold(underline(z))' $
+  - You only need the kernel
+    $K_Phi \( bold(underline(x)) \, bold(underline(x))' \)$ of the
+    transformation $Phi \( dot.op \)$ and not $Phi \( dot.op \)$ itself
+
+==== SVM in Terms of Kernel: Optimization Step
+<svm-in-terms-of-kernel-optimization-step>
+- When you build the QP formulation for the Lagrangian to compute the
+  $alpha$ we can use
+  $K_Phi \( bold(underline(x))_i \, bold(underline(x))_j \)$ instead of
+  $bold(underline(z))_i^T bold(underline(z))_j$
+  $ cal(L) \( bold(underline(alpha)) \) = sum_(n = 1)^N alpha_n - 1 / 2 sum_(n = 1)^N sum_(m = 1)^N y_n y_m alpha_n alpha_m K_Phi \( bold(underline(x))_n \, bold(underline(x))_m \) $
+
+- $bold(underline(z))_n$ does not appear in the constraints
+
+  $ bold(underline(alpha)) gt.eq bold(underline(0)) \, bold(underline(alpha))^T bold(underline(y)) = 0 $
+
+==== SVM in Terms of Kernel: Prediction Step
+<svm-in-terms-of-kernel-prediction-step>
+- You need only inner products to compute a prediction for a given
+  $bold(underline(z))$
+
+- In fact to make predictions, you replace the expression of
+  $tilde(bold(underline(w))) = sum_(i : alpha_i > 0) alpha_i y_i bold(underline(z))_i$
+  in
+  $h \( bold(underline(x)) \) = sans("sign") \( bold(underline(w))^T Phi \( bold(underline(x)) \) + b \)$,
+  yielding:
+
+  $ h \( bold(underline(x)) \) = sans("sign") \( sum_(i : alpha_i > 0) alpha_i y_i K_Phi \( bold(underline(x))_i \, bold(underline(x)) \) + b \) $
+
+  where $b$ is given by
+  $y_i \( bold(underline(w))^T bold(underline(z))_i + b \) = 1$ for any
+  support vector $bold(underline(x))_m$ and thus
+
+  $ b = 1 / y_m - sum_(i : alpha_i > 0) alpha_i y_i K_Phi \( bold(underline(x))_i \, bold(underline(x))_m \) $
+
+==== Implications of Kernel Trick in SVM
+<implications-of-kernel-trick-in-svm>
+- The "kernel trick" is a computational shortcut:
+
+  - Use the kernel of the transformation instead of the transformation
+    itself
+
+- To use SVMs, compute inner products between transformed vectors
+  $bold(underline(z))$
+
+- The kernel trick implies:
+
+  - No need to compute $Phi \( \)$
+    - Use the kernel $K_Phi$, not the transformation $Phi$
+  - No need to know $Phi$
+    - With function $K_Phi$ as an inner product, use SVM machinery
+      without knowing $cal(Z)$ space or transformation $Phi$
+  - $Phi$ can be impossible to compute
+    - $K_Phi$ can correspond to a transformation $Phi$ to an infinite
+      dimensional space (e.g., Gaussian kernel)
+
+==== Non-Linearly Separable SVM Problem
+<non-linearly-separable-svm-problem>
+#grid(
+  columns: (50%, 40%),
+  gutter: 0.5em,
+  [
+  - In general there are different types of #text(fill: black, weight: "bold")[non-linearly separable
+    data sets]
+  
+  - #text(fill: black, weight: "bold")[Slightly non-separable]
+  
+    - Few points crossing the boundary
+    - $arrow.r.double.long$ use soft margin SVMs
+  
+  - #text(fill: black, weight: "bold")[Seriously non-separable]
+  
+    - E.g., the class inside the circle
+    - $arrow.r.double.long$ use non-linear kernels
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L04.2.Slightly_non_separable_dataset.png", width: 40.0%))
+  
+  #box(image("/msml610/lectures_source/figures/L04.2.Slightly_non_separable_dataset2.png", width: 40.0%))
+  
+  #box(image("/msml610/lectures_source/figures/L04.2.Non_separable_dataset.png", width: 40.0%))
+  ]
+)
+- In practice, both issues are present
+  - Combine soft margin SVM and non-linear kernel transforms
+
+==== Soft-Margin SVM: Advantages
+<soft-margin-svm-advantages>
+#grid(
+  columns: (50%, 45%),
+  gutter: 0.5em,
+  [
+  - Even with linearly separable data, improve $E_(o u t)$ using soft
+    margin SVM at the cost of worse $E_(i n)$
+    - Trade-off between in-sample and out-of-sample performance
+  - E.g., outliers force a smaller margin
+    - Ignoring outliers could increase margin
+  - Large $C$ parameter in SVM requires minimizing error, trading off
+    large margin for correct classification
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L04.2.Hard_vs_Soft_margin.png"))
+  
+  #box(image("/msml610/lectures_source/figures/L04.2.Hard_vs_Soft_margin2.png"))
+  ]
+)
+==== Primal Formulation for Soft Margin SVM
+<primal-formulation-for-soft-margin-svm>
+- You want to introduce an error measure based on the margin violation
+  for each point, so instead of the constraint:
+  $ y_i \( bold(underline(w))^T bold(underline(x))_i + b \) gt.eq 1 upright(" (hard margin)") $
+
+- You can use:
+  $ y_i \( bold(underline(w))^T bold(underline(x))_i + b \) gt.eq 1 - xi_i \, upright(" where ") xi_i gt.eq 0 upright(" (soft margin)") $
+
+- The cumulative margin violation is $C sum_(i = 1)^N xi_i$
+
+- The soft margin SVM optimization (primal form) is:
+
+  $ upright("find ") bold(underline(w)) \, b \, bold(underline(xi)) & \
+  upright("minimize ") #h(2em) & 1 / 2 bold(underline(w))^T bold(underline(w)) + C sum_(i = 1)^N xi_i\
+  upright("subject to ") #h(2em) & y_i \( bold(underline(w))^T bold(underline(x))_i + b \) gt.eq 1 - xi_i #h(0em) forall i\
+   & xi_i gt.eq 0 $
+
+==== Classes of Support Vectors for Soft Margin SVM
+<classes-of-support-vectors-for-soft-margin-svm>
+- There are 3 classes of points:
+  - #text(fill: black, weight: "bold")[Margin support vectors];: they are exactly on the margin and
+    define it
+    - In primal form:
+      $y_i \( bold(underline(w))^T bold(underline(x))_i + b \) = 1 arrow.l.r.double xi_i = 0$
+    - In dual form: $0 < alpha_i < C$
+  - #text(fill: black, weight: "bold")[Non-margin support vectors];: they are inside the margin and
+    classified correctly or not
+    - In primal form:
+      $y_i \( bold(underline(w))^T bold(underline(x))_i + b \) < 1 arrow.l.r.double xi_i > 0$
+    - In dual form: $alpha_i = C$
+  - #text(fill: black, weight: "bold")[Non-support vectors];, i.e., interior points:
+    - In primal form:
+      $y_i \( bold(underline(w))^T bold(underline(x))_i + b \) > 1$
+    - In dual form: $alpha_i = 0$
+
+==== Intuition for C in SVM
+<intuition-for-c-in-svm>
+- $C$ represents how much penalty you incur for passing the margin
+  - If $C$ is large, then SVM will try to fit all the points to avoid
+    being penalized
+    - Lower bias / higher variance
+    - $C arrow.r oo$ which yields hard-margin SVM
+  - If $C$ is small, then you allow margin violations
+    - Higher bias / lower variance
+- From another point of view $C prop 1 / lambda$, so large $C$ means
+  small $lambda$ and thus small regularization
+  - $C$ is chosen through cross validation, like any regularization
+    parameter
+
+#box(image("/msml610/lectures_source/figures/L04.2.Varying_C_in_SVM.png"))
+
+==== Multi-Class Classification for SVM
+<multi-class-classification-for-svm>
+- Often SVM packages have built-in multi-class classification
+
+- Otherwise use the one-vs-all method:
+
+  - Train $K$ SVMs distinguishing each class from the rest using one-hot
+    encoding
+    - Get SVM parameters
+      $\( bold(underline(w))_1 \, b_1 \) \, . . . \, \( bold(underline(w))_K \, b_k \)$
+  - For a new example $bold(underline(x))$ compute
+    $bold(underline(w))_i^T bold(underline(x)) + b_i$ for all the models
+  - Pick the model that gives the largest positive value
+    - I.e., more confident about its class vs the rest of the classes
