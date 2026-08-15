@@ -11,41 +11,38 @@ model: opus
 # Workflow
 
 ## Read Inputs
-- Read the research idea passed by the user (a file under
-  `research/ideas/*.md`, e.g. `research/ideas/in_progress.RL_for_auto_EDA.md`,
+- Read the research idea passed by the user (a file under `research/ideas/*.md`,
   or idea text pasted directly)
 - Read the paper template `papers/template/paper.md`, including the comment
   block at the top, for usage and section structure
-- Read an existing paper for style and depth, e.g.
+- Read an existing paper for style and depth, e.g
   `papers/Optimal_strategy_for_racket_sports/paper.md`
 
 ## Set Up the Paper Directory
-- Derive a short Title_Case name for the paper from the idea (e.g.
-  `RL_for_Automated_EDA`); ask the user if the idea does not suggest an
-  obvious name
+- Derive a short Title_Case name for the paper from the idea (e.g
+  `RL_for_Automated_EDA`); ask the user if the idea does not suggest an obvious
+  name
 - Create `papers/<Paper_Name>/` if it does not exist
-- Copy `Makefile`, `references.bib`, `ieee-template.typ`, and `figures/`
-  from `papers/template/` into the new directory
+- Copy `Makefile`, `references.bib`, `ieee-template.typ`, and `figures/` from
+  `papers/template/` into the new directory
 - Do not overwrite an existing `paper.md` without confirming with the user
 
 ## Write `paper.md`
-- Fill in every `<...>` placeholder with content derived from the idea:
-  title, author(s) (use the assignee(s) listed in
-  `research/ideas/README.md` for this idea, plus GP Saggese), abstract,
-  keywords, and all body sections
-- Keep the template's section structure (Introduction, Related Work,
-  Problem Formulation, core methodology, Discussion/Limitations,
-  Conclusion); add, remove, or rename sections only where the template
-  says it's allowed
-- Turn the idea's "Core Idea", "Formalization", "Key Examples", and
-  "Research Topics" into the Introduction and Problem Formulation sections
-- Turn the idea's "Questions" and "Next steps" into Discussion/Limitations
-  and Conclusion/Future Work material
+- Fill in every `<...>` placeholder with content derived from the idea: title,
+  author(s) (use the assignee(s) listed in `research/ideas/README.md` for this
+  idea, plus GP Saggese), abstract, keywords, and all body sections
+- Keep the template's section structure (Introduction, Related Work, Problem
+  Formulation, core methodology, Discussion/Limitations, Conclusion); add,
+  remove, or rename sections only where the template says it's allowed
+- Turn the idea's "Core Idea", "Formalization", "Key Examples", and "Research
+  Topics" into the Introduction and Problem Formulation sections
+- Turn the idea's "Questions" and "Next steps" into Discussion/Limitations and
+  Conclusion/Future Work material
 - State plainly, per the template, what has not been validated (e.g. no
-  computational implementation or empirical evaluation) instead of
-  fabricating results the idea does not support
-- Delete the template's guidance bullets and HTML comment once replaced
-  with real content
+  computational implementation or empirical evaluation) instead of fabricating
+  results the idea does not support
+- Delete the template's guidance bullets and HTML comment once replaced with
+  real content
 
 ## Conventions
 - Follow the conventions in `.claude/skills/markdown.rules.md` and
