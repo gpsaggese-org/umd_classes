@@ -318,8 +318,8 @@
 - **Precision** measures how often there is a true positive _given that pred =
   1_
   \begingroup \small
-  $$
   \vspace{-0.2cm}
+  $$
   \text{precision}
   \defeq \Pr(\text{TP} | \text{pred == 1})
   = \frac{|\text{pred == 1} \land \text{act == 1}|}{|\text{pred == 1}|}
@@ -329,8 +329,8 @@
 
 - **Recall** measures how often there is a true positive _given that act = 1_
   \begingroup \small
-  $$
   \vspace{-0.2cm}
+  $$
   \text{recall}
   \defeq \Pr(\text{TP} | \text{act == 1})
   = \frac{\text{TP}}{|\text{act == 1}|}

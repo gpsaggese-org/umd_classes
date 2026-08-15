@@ -292,7 +292,7 @@
 * Example: Spam Filter Classification
 - You use $N = 5$ words in an email to distinguish spam / non-spam emails using
   logistic regression
-  - Words are `buy`, `now`, `deal`, `discount`, `<your name>`
+  - Words are `buy`, `now`, `deal`, `discount`, `your name`
 
 - **Goal**: improve classifier performance
   1. **Collect more data**

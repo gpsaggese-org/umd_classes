@@ -4,11 +4,29 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
+::: columns
+:::: {.column width=20%}
+![](msml610/lectures_source/figures/UMD_Logo.png)
+::::
+:::: {.column width=80%}
+
+MSML610: Advanced Machine Learning
+::::
+:::
+
+\vspace{2cm}
+
+**$$\text{\textcolor{blue}{\text{Class Mechanics}}}$$**
+
+\vspace{3cm}
+
+**Instructor**: Dr. GP Saggese - gsaggese@umd.edu
+
 
 # MSML610
 
 #### Invariants of a Class Lecture
-- @Invariants@
+- **\textcolor{red}{Invariants}**
   - Focus on intuition over math (unless necessary)
   - Emphasize realistic assumptions and numerical methods
     - Analytical solutions are so 1800s
@@ -16,7 +34,7 @@ fontsize: 10pt
     - Tutorials are mainly done at home
     - Videos of each tutorial will be added over time
 
-- @Class flow@
+- **\textcolor{blue}{Class flow}**
   - Lessons alternate between slides, whiteboard, tutorials
   - 2:45 hours per class lessons
     - Alternating 50 mins of discussion and 10 mins break
@@ -24,7 +42,7 @@ fontsize: 10pt
 #### Books of the Class
 ::: columns
 :::: {.column width=80%}
-- @Goal@: make the slides self-sufficient, and recommend books if you want to dig
+- **\textcolor{red}{Goal}**: make the slides self-sufficient, and recommend books if you want to dig
   deeper
   - **Simple**
     - Burkov: _"The Hundred-Page Machine Learning Book"_ (2019)
@@ -59,11 +77,11 @@ fontsize: 10pt
 :::
 
 #### Grading
-- @Quizzes@ (40%)
+- **\textcolor{red}{Quizzes}** (40%)
   - Multi-choice quizzes on previous 2 lessons
   - 4-5 quizzes to make you study during the semester and don't cram
 
-- @Final Project@ (60%)
+- **\textcolor{blue}{Final Project}** (60%)
   - A comprehensive application of course concepts
   - Python project selected from a list of topics
   - Small AI / ML research topics
@@ -96,29 +114,29 @@ fontsize: 10pt
 
 #### Links
 
-- @Course Management@: [ELMS](https://umd.instructure.com/courses/1391619/pages/homepage)
+- **\textcolor{red}{Course Management}**: [ELMS](https://umd.instructure.com/courses/1391619/pages/homepage)
 
-- @Syllabus@: [\textcolor{blue}{\underline{Google Doc}}](TBD)
+- **\textcolor{darkgreen}{Syllabus}**: [\textcolor{blue}{\underline{Google Doc}}](TBD)
   - Schedule, GitHub project, Class FAQs
 
-- @Project Specifications@: [\textcolor{blue}{\underline{TBD}}](TBD)
+- **\textcolor{blue}{Project Specifications}**: [\textcolor{blue}{\underline{TBD}}](TBD)
 
 #### Yours Truly
 ::: columns
 :::: {.column width=60%}
 
-- @Bio@
+- **\textcolor{red}{Bio}**
   - PhD / Postdoc, University of Illinois at Urbana-Champaign (2001-2006)
 
-- @Current Role@
+- **\textcolor{darkgreen}{Current Role}**
   - Lecturer, UMD DATA605: Big Data Systems (2023-)
   - Lecturer, UMD MSML610: Advanced Machine Learning (2025-)
 
-- @Industry@
+- **\textcolor{blue}{Industry}**
   - Research scientist: NVIDIA, Synopsys, Teza, Engineers' Gate
   - 3x startup founder: ZeroSoft, June, Causify AI
 
-- @Academic@
+- **\textcolor{violet}{Academic}**
   - 20+ papers, 2 US patents
   - [\textcolor{blue}{\underline{LinkedIn}}]\
 (https://www.linkedin.com/in/gpsaggese/)

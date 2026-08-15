@@ -4,6 +4,24 @@ fontsize: 10pt
 \let\emph\textit
 \let\uline\underline
 \let\ul\underline
+::: columns
+:::: {.column width=20%}
+![](msml610/lectures_source/figures/UMD_Logo.png)
+::::
+:::: {.column width=80%}
+
+MSML610: Advanced Machine Learning
+::::
+:::
+
+\vspace{2cm}
+
+**$$\text{\textcolor{blue}{\text{L08.2: Causal Inference}}}$$**
+
+\vspace{3cm}
+
+**Instructor**: Dr. GP Saggese - gsaggese@umd.edu
+
 
 # Causal Networks
 
@@ -11,19 +29,20 @@ fontsize: 10pt
 
 
 - **(Non-Causal) Bayesian Networks**
-- **Bayesian networks** represent a joint distribution function
+- @Definition@: **Bayesian networks** represent a joint distribution function
   - The direction of the arrow represent _conditional dependence_ (not
     causality)
-  - $A \to B$ requires to estimate $\Pr(A | B)$
+  - An edge $A \to B$ requires to estimate $\Pr(A | B)$
 
-- **Many possible Bayesian networks** with same nodes, different edges to explain
-  the same phenomenon
+- @Fact@: **Several possible Bayesian networks** to explain the same phenomenon
+  can have same nodes, but different edges 
+  - Are _equivalent_ and convey the same information
+  - Have different difficulties to be estimated
 
 ::: columns
-:::: {.column width=60%}
+:::: {.column width=65%}
 
-- **Example**
-  - A Bayesian network with $Fire$ and $Smoke$, which are dependent
+- @Example@: A Bayesian network with $Fire$ and $Smoke$ (which are dependent)
   - $Fire \to Smoke$
     - Need $\Pr(Fire)$ and $\Pr(Smoke | Fire)$ to compute $\Pr(Fire, Smoke)$
   - $Smoke \to Fire$
@@ -46,7 +65,7 @@ digraph BayesianNetwork1 {
 }
 ```
 
-\vspace{1cm}
+\vspace{1.5cm}
 
 ```graphviz
 digraph BayesianNetwork1 {
@@ -66,80 +85,63 @@ digraph BayesianNetwork1 {
 ::::
 :::
 
-- **Different Bayesian networks**:
-  - Are equivalent and convey the same information
-  - Have different difficulties to be estimated
-
-- There is an **asymmetry in nature**
+- @Key idea@: **Asymmetry in nature** reveals causality
   - Extinguishing fire stops smoke
   - Clearing smoke doesn't affect fire
 
 - **Causal (Bayesian) Networks**
-- **Causal networks are Bayesian networks with only causal edges**
-  - Use judgment based on nature instead of just statistics
-  - E.g., you need to go from
-    - _"Are random variables $Smoke$ and $Fire$ correlated?"_
-    to
-    - _"What causes what, $Smoke$ or $Fire$?"_
+- @Definition@: **Causal networks** are Bayesian networks with _only_ causal
+  edges
+  - Use common sense and domain expertise instead of only statistics
+  - Go from _"Are $Smoke$ and $Fire$ correlated?"_ to _"What causes what?"_
 
-- **"Dependency in nature"** is like assignment in programming
-  - E.g., nature assigns $Smoke$ based on $Fire$:
-    - ![](assets/emoji/check_mark.png){ width=12px } $Smoke := f(Fire)$
-    - ![](assets/emoji/wrong.png){ width=12px } $Fire := f(Smoke)$
+- @Intuition@: **"Dependency in nature"** is like assignment in programming
+  - Nature assigns $Smoke$ based on $Fire$: $Smoke := f(Fire)$
+  - Not $Fire := f(Smoke)$
 
-- **Structural equations** describe "assignment mechanism" in causal graphs
+- @Definition@: **Structural equations** describe causal mechanisms
   $$
   X_i := f(X_j) \iff X_j \to X_i
   $$
 
 - **Causal DAG**
-- **Causal DAG**
-  - _Directed_: Arrows show cause $\rightarrow$ effect
-  - _Acyclic_: No feedback loops
-    - Causal relationships assume temporal order: cause before effect
-    - A cycle implies a variable is both cause and effect of itself
+- @Property@: **Causal DAG** has two key properties
+  - _Directed_: Arrows show cause $\to$ effect
+  - _Acyclic_: No feedback loops (causality assumes temporal order)
 
-- **Benefits**
-  - DAGs makes explicit _causal_ links
-  - Support explainable AI models
-  - Stability in conditional probability estimation
+- @Pros@
+  - Make explicit _causal_ links
+  - Support explainable models
+  - Stable conditional probability estimation
   - Reason about interventions and counterfactuals
 
-- **Limitations**
+- @Challenges@
   - Requires domain knowledge for structure
   - Assumes all relevant variables included (no hidden confounders)
 
 - **Causal Edges are Stable**
 
-- **Causal edges reflect stable relationship**
+- @Characteristics@: Causal edges reflect **stable relationships** across
+  contexts
 
   - _Mechanistic stability_
-    - Causal relationships show system function, not just behavior in one dataset
-    - E.g., _"Temperature $\rightarrow$ ice melting rate"_ holds true in Alaska
-      and Arizona
+    - Causal relationships show system function, not just dataset behavior
+    - E.g., _"Temperature $\to$ ice melting"_ holds in Alaska and Arizona
 
   - _Invariance under interventions_
-    - If $X$ causes $Y$, intervening on $X$ affects $Y$ consistently, despite
-      confounders or context changes
+    - If $X$ causes $Y$, intervening on $X$ affects $Y$ consistently
+    - Despite confounders or context changes
 
-  - _Easier estimation through causal modeling_
-    - Identifying causal direction focuses estimation on effect size (e.g.,
-      regression of $Y$ on $X$ under intervention)
-
-- **Example**: study $Exercise \rightarrow Health$:
-  - Correlation may differ in young or elderly populations
-  - Causal effect remains stable, as physiological mechanism doesn't change
+- @Example@: _Exercise $\to$ Health_ remains stable across datasets
+  - Correlation values may differ in young or elderly populations
+  - Causal effect stable because physiological mechanism doesn't change
 
 - **Causal DAG: Example**
 ::: columns
 :::: {.column width=50%}
-- **Explanatory variables**
-  - You can manipulate or observe when changes are applied
-  - E.g., _"does a large cup of coffee before an exam help with a test?"_
-
-- **Outcome variables**
-  - Result of the action
-  - E.g., _"by how much did the score test improve?"_
+- @Definition@: **Explanatory variables** (aka treatment) can be manipulated or
+  observed when changes applied
+  - E.g., _"does coffee before exam help test score?"_
 ::::
 :::: {.column width=45%}
 ```graphviz
@@ -161,27 +163,29 @@ digraph SCMExample {
 ::::
 :::
 
-- **Unobserved variables**
-  - Not seen or more difficult to account
-  - E.g., _"temperature of the room makes students sleepy and less alert"_
+- @Definition@: **Outcome variables** (aka effect) is the result of the action
+  - E.g., _"by how much did test score improve?"_
 
-### Example of ladder of causation
+- @Definition@: **Unobserved variables** (latent/hidden) is not measured or
+  difficult to account
+  - E.g., _"room temperature makes students sleepy"_
+
+### Ladder of Causation: Example
 
 - **Example: Tornado Warning**
 ::: columns
 :::: {.column width=50%}
-- **Example**: Severe weather alert to the public
+- Consider a **severe weather alert system**
+  - The _causal diagram_ has the following nodes and structure:
+    - $T$: _"Tornado forms"_
+    - $W$: _"Tornado warning is issued"_
+    - $A, B$: _"Radio and TV broadcast emergency"_
+    - $R$: _"Residents are warned"_
 
-- **Causal diagram**:
-  - $T$: Tornado forms
-  - $W$: National Weather Service issues tornado warning
-  - $A, B$: Radio and TV broadcast emergency
-  - $R$: Residents warned
-
-- **Assumptions**
+- @Assumptions@
   - Channels broadcast only on official order
   - Delivery systems never fail
-  - If either channel activates, residents warned
+  - If either channel activates, then the residents warned
 ::::
 :::: {.column width=45%}
 ```graphviz
@@ -216,20 +220,21 @@ digraph Tornado_Warning {
 ::::
 :::
 
+- @Goal@: We want to look at this examples using the ladder of causation
+  - Association $\to$ intevention $\to$ counterfactual
+
 - **Tornado Warning: Level 1 (Association)**
 ::: columns
 :::: {.column width=50%}
-- **Use causal graph to understand how one fact informs another**
-  - Use predicate logic to answer
+- **Association** (observational quantity) understands how one fact informs
+  another
 
-- **If residents are warned, was a warning issued?**
-  - Does $R \implies W$? 
-  - Yes
+- @Question@: _If residents warned, was warning issued?_
+  - Does $R \implies W$? Yes
 
-- **If radio $A$ broadcast, did TV $B$ also broadcast?**
-  - Yes
-  - True even though $A$ doesn't cause $B$
-  - Correlated through common cause $W$ (confounder)
+- @Question@: _If radio $A$ broadcast, did TV $B$ also?_
+  - Yes, true even though $A$ doesn't cause $B$
+  - $A$ and $B$ are correlated through common cause $W$ (aka confounder)
 ::::
 :::: {.column width=45%}
 ```graphviz
@@ -267,7 +272,7 @@ digraph Tornado_Warning {
 - **Tornado Warning: Level 2 (Intervention)**
 ::: columns
 :::: {.column width=50%}
-- **If you make radio broadcast, will residents be warned?**
+- @Question@: _If you make radio broadcast, will residents be warned?_
   - Yes
   - Breaks "rules of nature" as $A$ broadcasts only if $W$ is issued
     - Like removing edge $W \to A$ in graph
@@ -312,27 +317,27 @@ digraph Tornado_Warning {
 ::::
 :::
 
-- **Key difference between "seeing" and "doing"**
-  - If _see_ $A$ broadcast, conclude $B$ broadcast too
-  - If _make_ $A$ broadcast, expect $B$ didn't
+- @Key idea@: Difference between **seeing and doing**
+  - _See_ $A$ broadcast $\implies$ conclude $B$ broadcast too
+  - _Make_ $A$ broadcast $\implies$ expect $B$ didn't
 
-- **Observational data wouldn't reveal causal structure**
-  - Either all variables $T,W,A,B,R$ are true or all are false
-  - Correlations alone are uninformative
+- @Key idea@: Observational **data alone doesn't reveal causality**
+  - Either all variables $T,W,A,B,R$ true or all false
+  - Correlations alone uninformative
 
 - **Tornado Warning: Level 3 (Counterfactual)**
 ::: columns
 :::: {.column width=50%}
-- **Assume that residents are warned $R=1$**
-  - You know $A$ and $B$ broadcast because
-  - ... a warning $W$ was issued
-  - ... after a tornado formed $T$
+- @Definition@: **Counterfactual** reasoning
+  - Assume residents warned: $R=1$
+  - Know $A, B$ broadcast because $W$ issued, after $T$ formed
 
-- **Would residents be warned if $A$ had not broadcast?**
-  - Remove the edge into $A$
-  - Set $do(A=0)$
-  - TV $B$ still broadcasts (due to $W$), and $R=(A \lor B)$ remains
-    true
+- @Question@: _Would residents be warned if radio $A$ didn't broadcast?_
+  - Remove edge into $A$, set $do(A=0)$
+  - TV $B$ still broadcasts (due to $W$)
+  - $R=(A \lor B)$ remains true
+
+- @Answer@
   - Yes, $R=1$
 ::::
 :::: {.column width=45%}
@@ -375,51 +380,42 @@ digraph Tornado_Warning {
 ## Structural Causal Model
 
 - **Structural Causal Model**
-- A **Structural Causal Model** (SCM) translates a causal DAG into mathematical
-  equations to define how variables interact
+- @Definition@: **Structural Causal Model** (SCM)
+  - Translates causal DAG into mathematical equations
+  - Defines how variables interact
 
-- **Structure of SCMs**
-  - _Variables_ $X_1, X_2, ..., X_n$ represent quantities in the system
-  - _Equations_ model each variable as a function of its direct causes
-  - Formally, $X_i$ is modeled as:
+- @Components@
+  - _Variables_ $X_1, X_2, ..., X_n$ represent system quantities
+  - _Equations_ model each as function of direct causes
     $$X_i = f_i(Parents(X_i), \varepsilon_i)$$
     where:
-    - $Parents(X_i)$ are direct causes of $X_i$
-    - $\varepsilon_i$ is an exogenous (external, unobserved) noise term
+    - $Parents(X_i)$ are direct causes
+    - $\varepsilon_i$ is noise
 
-- **Properties**
-  - Same properties of causal networks
-    - Explain causal relationships between variables
-    - Provide a foundation for causal reasoning and simulation
-    - ...
-  - Quantify effect
+- @Properties@
+  - Explain causal relationships
+  - Quantify causal effects
+  - Foundation for reasoning and simulation
 
-- Used in econometrics and genetics for a long time (even before theory of
-  causality)
+- @Remark@: Used in econometrics/genetics long before modern causal theory
 
 - **Structural Causal Model: Sprinkler Example**
 ::: columns
 :::: {.column width=70%}
-- **Structural equations** for this causal DAG:
-  \begingroup \small
+- @Example@: _Structural equations for sprinkle example_
   $$
-  \left\{
-  \begin{aligned}
-    & C := f_C(\varepsilon_C) \\
-    & R := f_R(C, \varepsilon_R) \\
-    & S := f_S(C, \varepsilon_S) \\
-    & W := f_W(R, S, \varepsilon_W) \\
-    & G := f_G(W, \varepsilon_G) \\
-  \end{aligned}
-  \right.
+  \begin{cases}
+  C := f_C(\varepsilon_C) \\
+  R := f_R(C, \varepsilon_R) \\
+  S := f_S(C, \varepsilon_S) \\
+  W := f_W(R, S, \varepsilon_W) \\
+  G := f_G(W, \varepsilon_G)
+  \end{cases}
   $$
-  \endgroup
 
-- **Unmodeled variables** $\varepsilon_x$ represent error terms
-  - E.g., $\varepsilon_W$ is another source of wetness (e.g., $MorningDew$)
-    besides $Sprinkler$ and $Rain$
-  - Assume unmodeled variables are exogenous, independent, with a certain
-    distribution (prior)
+- @Definition@: **Exogenous noise** $\varepsilon_x$ are unobserved,
+  independent with prior distribution
+  - E.g., error terms like $\varepsilon_W$ = other wetness sources ($MorningDew$)
 
 ::::
 :::: {.column width=25%}
@@ -450,11 +446,11 @@ digraph BayesianFlow {
 ::::
 :::
 
-- Express **joint distribution** of all variables as a product of conditional
-  distributions using causal DAG topology:
+- @Remark@: _Joint distribution_ from causal DAG topology
   \begingroup \small
   $$
-  \Pr(C, R, S, W, G) = \Pr(W|R,S) \Pr(G|W) \Pr(S|C) \Pr(R|C) \Pr(C)
+  \Pr(C, R, S, W, G)
+  = \Pr(W|R,S) \cdot \Pr(G|W) \cdot \Pr(S|C) \cdot \Pr(R|C) \cdot \Pr(C)
   $$
   \endgroup
 
@@ -463,12 +459,9 @@ digraph BayesianFlow {
 - **Observed Vs. Unobserved Variables**
 ::: columns
 :::: {.column width=45%}
-- **Observed variables**
-  - Aka "measurable" or "visible"
-  - Variables directly measured or collected in a dataset
-  - E.g.,
-    - Education
-    - Income
+- @Definition@: **Observed variables** (measurable/visible) are directly measured
+  or collected in dataset
+  - E.g., Education, Income
 
 ::::
 :::: {.column width=50%}
@@ -526,26 +519,20 @@ digraph EducationIncomeModel_ObservedUnobserved_Vertical {
 ::::
 :::
 
-- **Unobserved variables**
-  - Aka "latent" or "hidden"
-  - Exist but not measured or included in data
-  - E.g.,
-    - Natural talent
-    - Motivation
-  - Ignoring unobserved variables leads to incorrect conclusions
-    - E.g., $IceCreamSales$ $\leftarrow$ $Temperature$ $\rightarrow$
-      $DrowningRates$
+- @Definition@: **Unobserved variables** (latent/hidden) exist but not measured
+  or included in data
+  - E.g., Natural talent, Motivation
+  - Ignoring them leads to spurious conclusions
+    - E.g., $IceCreamSales \leftarrow Temperature \to DrowningRates$
 
 - **Endogenous Vs. Exogenous Variables**
 ::: columns
 :::: {.column width=45%}
-- **Endogenous variables**
-  - Values determined _within_ the model
-    - Dependent on other variables in the system
-  - Represent system's internal behavior and outcomes
-  - E.g.,
-    - Motivation
-    - Income
+- @Definition@: **Endogenous variables** have their values determined _within_
+  model
+  - Dependent on other system variables
+  - Represent internal behavior/outcomes
+  - E.g., Motivation, Income
 
 ::::
 :::: {.column width=50%}
@@ -602,25 +589,19 @@ digraph EducationIncomeModel_EndoExo{
 ```
 ::::
 :::
-- **Exogenous variables**
-  - Originate _outside_ the system being modeled
-    - Not caused by other variables in the model
-  - Represent background conditions or external shocks
-  - E.g.,
-    - Natural talent
-    - Economic policy
-    - Weather
-    - News
+- @Definition@: **Exogenous variables**
+  - Originate _outside_ model
+  - Not caused by other system variables
+  - Represent background conditions/external shocks
+  - E.g., Natural talent, Economic policy, Weather, News
 
 - **Endo / Exogenous, Observed / Unobserved Vars**
 ::: columns
 :::: {.column width=40%}
-- **Typically**
-  - _Exogenous / unobserved variables_: capture randomness or unknown external
-    factors
-  - _Exogenous / observed variables_: potential intervention
-    factors
-  - _Endogenous / observed variables_: focus for prediction and intervention
+- @Characteristics@:
+  - _Exogenous + unobserved_: capture randomness, unknown factors
+  - _Exogenous + observed_: potential intervention targets
+  - _Endogenous + observed_: focus for prediction, intervention
 
 ::::
 :::: {.column width=55%}
@@ -691,36 +672,26 @@ digraph EducationIncomeModel_EndoExo{
 :::
 
 - **Building a Causal DAG**
-- **Causal models** visually represent complex environments and relationships
-  - Nodes are like "nouns":
-    - E.g., "price", "sales", "revenue", "birth weight", "gestation period"
-    - Variables can be endogenous/exogenous and observed/unobserved
-  - Relationships between variables are "verbs":
-    - Parents, children (direct relationships)
-    - Descendants, ancestors (along the path)
-    - Neighbors
+- Causal models **visually represent systems**
+  - Nodes ("nouns"): price, sales, revenue, weight, period, etc.
+  - Variables can be endogenous/exogenous, observed/unobserved
+  - Edges ("verbs"): Parents, children, descendants, ancestors, neighbors
 
-- **Modeling as a Communication Tool**:
-  - Shared language bridges gaps between technical and non-technical team
-    members
+- **Modeling as communication tool**
+  - Shared language bridges technical and non-technical team members
+  - Iterative refinement: continuously update with new variables and insights
 
-- **Iterative Refinement**:
-  - Continuously update models with new variables and insights
-
-- **Heart Attack: Example**
 ::: columns
-:::: {.column width=50%}
-- Research question: _What's the relationship between stress and heart attacks_?
+:::: {.column width=60%}
+- @Question@: What is the relationship between stress and heart attacks?
 
-- **Build a causal DAG**
-  - _Stress_ is the treatment
-  - _Heart attack_ is the outcome
-  - Stress is _not a direct cause_ of heart attack
-    - E.g., a stressed person tend to have poor eating habits and tends not to
-      exercise
-  - _Genetics_ is unobserved
+- @Answer@: Causal DAG with nodes and edges
+  - Treatment: _Stress_
+  - Outcome: _Heart attack_
+  - Stress not direct cause; acts through Diet and Exercise
+  - Unobserved: _Genetics_
 ::::
-:::: {.column width=45%}
+:::: {.column width=40%}
 
 ```graphviz
 digraph CausalGraph {
@@ -747,8 +718,10 @@ digraph CausalGraph {
 :::
 
 - **Weights**
-- Assign weights to paths to represent causal strength
-- Sign indicates direction
+- @Definition@: **Edge weights** represent causal strength
+  - Sign indicates direction of interaction:
+  -E.g., positive means that an increase in source variable implies an increase in
+   the value of the destination variable
 
 ```graphviz
 digraph RiskFactors {
@@ -773,20 +746,19 @@ digraph RiskFactors {
 }
 ```
 
-- **How to estimate sign and weight**
-  - Estimate using correlation
-  - Use priors and then estimate using Bayesian approach
+- Relationships can be estimated in several ways:
+  - Correlation-based
+  - Bayesian approach with priors
 
 ## Type of Variables in Causal AI
 
 - **Mediator Variable**
 ::: columns
 :::: {.column width=50%}
-- A **mediator variable** $M$
-  - Is an intermediate variable that _transmits_ the causal effect from $X$
-    (treatment) to $Y$ (outcome)
-  - Lies **on the causal path** between $X$ and $Y$
-  - Captures the **mechanism or process** through which $X$ influences $Y$
+- @Definition@: **Mediator variable** $M$ is an intermediate variable that
+  _transmits_ causal effect from $X$ to $Y$
+  - Lies on causal path between $X$ and $Y$
+  - Captures mechanism through which $X$ influences $Y$
 
 ::::
 :::: {.column width=45%}
@@ -810,27 +782,48 @@ digraph CausalFlow {
 ::::
 :::
 
+::: columns
+:::: {.column width=50%}
+- @Remark@: **Direct vs. indirect effects**
+  - Indirect: $X$ affects $Y$ through $M$
+  - Direct: $X$ affects $Y$ not through $M$
+  - Controlling for $M$ separates effects
+::::
+:::: {.column width=45%}
+```graphviz
+digraph CausalFlow {
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+    rankdir=LR;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    X [fillcolor="#A6C8F4", label="Treatment\n(X)"];
+    M [fillcolor="#F4A6A6", label="Mediator\n(M)"];
+    Y [fillcolor="#A6C8F4", label="Outcome\n(Y)"];
+
+    X -> M;
+    M -> Y;
+    X -> Y;
+}
+```
+::::
+:::
+
 - **Mediator Variable: Example**
 
 ::: columns
 :::: {.column width=65%}
-- **Research question**: _"Does a training program increase employee
-  productivity?"_
+- @Question@: Does training increase employee productivity?
 
-- Causal effect may be indirect, through a **mediator**
-  - Training might not immediately boost productivity
-  - Could enhance job satisfaction, raising productivity
-
-- **Causal interpretation**
-  - $X$: Training Program (cause)
-  - $M$: Job Satisfaction (mediator)
-  - $Y$: Employee Productivity (effect)
-  - Path: $X \rightarrow M \rightarrow Y$
-
-- **Direct vs. Indirect effects**
-  - _Indirect effect_: $X$ affects $Y$ through $M$
-  - _Direct effect_: $X$ affects $Y$ not through $M$
-  - Controlling for $M$ separates effects, clarifying training impact
+- @Answer@: There is an indirect causal effect through mediator
+  - $Training$ doesn't immediately boost $Productivity$
+  - Enhances $Job satisfaction$ $\implies$ raises $Productivity$
+  - Path: $X \to M \to Y$
+    - $X$: Training Program
+    - $M$: Job Satisfaction (mediator)
+    - $Y$: Employee Productivity
 
 ::::
 :::: {.column width=30%}
@@ -862,10 +855,9 @@ digraph CausalFlow {
 - **Moderator Variable**
 ::: columns
 :::: {.column width=50%}
-- A **moderator variable** $M$
-  - Changes the _strength_ or _direction_ of the relationship between an
-    independent variable $(X)$ and a dependent variable $(Y)$
-  - Is not part of the causal chain but conditions the relationship
+- @Definition@: A **moderator variable** $M$ changes _strength_ or _direction_ of
+  relationship between $X$ and $Y$
+  - Not part of causal chain, but _conditions_ the relationship
 ::::
 :::: {.column width=45%}
 ```graphviz
@@ -889,16 +881,13 @@ digraph ModeratorModel {
 ::::
 :::
 
-- **Moderator Variable: Example**
-
 ::: columns
 :::: {.column width=50%}
-- **Research question**: _"Study relationship between stress and job
-  performance"_
+- @Question@: What is the relationship between stress and job performance?
 
-- **Social support** $M$ as a moderator
-  - High social support weakens stress's negative effect on performance
-  - Low social support strengthens stress's negative effect on performance
+- @Answer@: Social support acts as a moderator
+  - High support weakens stress's negative effect
+  - Low support strengthens stress's negative effect
 ::::
 :::: {.column width=45%}
 ```graphviz
@@ -926,9 +915,9 @@ digraph ModeratorModel {
 ::: columns
 :::: {.column width=50%}
 
-- A **confounder** $C$
-  - Affects both treatment (cause) and outcome (effect)
-  - Creates misleading association, if not controlled
+- @Definition@: **Confounder** $C$ is a variable that affects both treatment
+  (cause) and outcome (effect)
+  - Creates spurious association if not controlled
 
 ::::
 :::: {.column width=45%}
@@ -955,20 +944,14 @@ digraph CausalTriangle {
 :::
 
 - **Confounder Variable: Example**
-
-- $IceCreamSales$ and $Drowning$ **move together**
-  - Correlation-based model claims association
-  - Is it true?
-  - You can always find an explanation (e.g., from ChatGPT)
-    - Eating ice cream may distract children or guardians:
-    - Cold food shock reflex causes hyperventilation in water
-    - Sugar spike $\to$ hyperactivity near pools
-
-- **How to use this relationship?**
-  - Ban ice cream to prevent drowning?
-  - Ice cream maker increase drowning to boost sales?
-
 ::: columns
+:::: {.column width=60%}
+- @Example@: _Ice cream sales and drowning correlate_
+  - Is it causality?
+
+- Spurious explanations abound
+  - E.g., distraction, sugar spike, hyperventilation, etc.
+::::
 :::: {.column width=40%}
 ```tikz
 \begin{axis}[
@@ -992,8 +975,6 @@ digraph CausalTriangle {
 %\addplot[samples=2,domain=0.2:6.2, very thick, color=red!60, dashed] {1.25*x-0.9};
 \end{axis}
 ```
-::::
-:::: {.column width=40%}
 
 ```graphviz
 digraph CausalTriangle {
@@ -1016,12 +997,46 @@ digraph CausalTriangle {
 ::::
 :::
 
+
+- @Question@: How to act on this relationship?
+  - Ban ice cream to reduce drowning?
+  - Suspicious reasoning hides confounding
+
 - **Confounder Variable: Example**
 
-- In reality, **no cause-effect** between $IceCreamSales$ and $Drowning$
-  - $Temperature$ is a confounder
-- In fact, when control for temperature (in regression or intervention),
-  association disappears
+::: columns
+:::: {.column width=60%}
+
+- @Key idea@: **No cause-effect** between $IceCreamSales$ and $Drowning$
+  - $Temperature$ is the confounder
+
+::::
+:::: {.column width=40%}
+
+```graphviz
+digraph CausalTriangle {
+    rankdir=TB;
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Temperature [label="Temperature", fillcolor="#FFD1A6"];
+    IceCreamSales [label="IceCreamSales", fillcolor="#A6C8F4"];
+    Drowning [label="Drowning", fillcolor="#F4A6A6"];
+
+    {rank=same; IceCreamSales; Drowning;}
+
+    Temperature -> IceCreamSales;
+    Temperature -> Drowning;
+}
+```
+
+::::
+:::
+
+- In fact controlling for temperature removes association
 
 ::: columns
 :::: {.column width=50%}
@@ -1056,6 +1071,9 @@ digraph CausalTriangle {
 \end{axis}
 ```
 
+::::
+:::: {.column width=50%}
+
 ```tikz
 \begin{axis}[
     xlabel={Ice Cream Sales},
@@ -1079,45 +1097,21 @@ digraph CausalTriangle {
 {Flat: no causal effect};
 \end{axis}
 ```
-
-::::
-:::: {.column width=40%}
-```graphviz
-digraph CausalTriangle {
-    rankdir=TB;
-    splines=true;
-    nodesep=0.5;
-    ranksep=0.5;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-
-    Temperature [label="Temperature", fillcolor="#FFD1A6"];
-    IceCreamSales [label="IceCreamSales", fillcolor="#A6C8F4"];
-    Drowning [label="Drowning", fillcolor="#F4A6A6"];
-
-    {rank=same; IceCreamSales; Drowning;}
-
-    Temperature -> IceCreamSales;
-    Temperature -> Drowning;
-}
-```
-
 ::::
 :::
 
 - **Collider**
 ::: columns
-:::: {.column width=60%}
-- A **collider** $A$
-  - Is a variable influenced by multiple variables $B$, $C$
-  - Complicates understanding relationships between variables $B, C$ and those it
-    influences, $Y$
+:::: {.column width=50%}
+- @Definition@: **Collider** $A$ is a variable influenced by multiple sources
+  $B$, $C$
+  - Complicates reasoning about relationships $B, C \to Y$
 ::::
-:::: {.column width=35%}
+:::: {.column width=50%}
 ```graphviz
 digraph ColliderDiagram {
   layout=dot;
-  rankdir=TB;
+  rankdir=LR;
   node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
   B [label="Cause 1 (B)", fillcolor="#A6C8F4"];
@@ -1135,15 +1129,14 @@ digraph ColliderDiagram {
 ::::
 :::
 
-- **Collider: Examples**
 ::: columns
-:::: {.column width=60%}
-- Study the relationship between $Exercise$ and $Heart Disease$
+:::: {.column width=70%}
+- @Example@: Exercise vs. Heart Disease
   - $Diet$ and $Exercise$ influence $Body Weight$
   - $Body Weight$ influences $Heart Disease$
-  - $Body Weight$ is a collider
+  - $Body Weight$ is collider
 ::::
-:::: {.column width=35%}
+:::: {.column width=30%}
 ```graphviz
 digraph ColliderDiagram {
   layout=dot;
@@ -1166,24 +1159,19 @@ digraph ColliderDiagram {
 :::
 
 - **Collider Bias**
-- Aka "Berkson's paradox"
-
-- **Conditioning on a collider** can introduce a spurious association between its
-  parents by _"opening a path that is blocked"_
+- @Definition@: **Collider bias** (aka Berkson's paradox)
+  - Conditioning on collider opens blocked path
+  - Introduces spurious association between parents
 
 ::: columns
 :::: {.column width=70%}
-- **Example**
-  - $Diet$ (D)
-  - $Exercise$ (E)
-  - $BodyWeight$ (W)
-  - $HeartDisease$ (D)
+- @Example@: Consider the causal graph with the following variables
+  - $D$ = Diet, $E$ = Exercise, $W$ = Body Weight, $H$ = Heart Disease
 
-- **Without conditioning on $W$**
-  - $E$ and $D$ are independent
-    - E.g., knowing exercise level $E$ doesn't inform about diet $D$, and vice
-      versa
-  - Collider $W$ blocks association between $E$ and $D$
+- _Without conditioning on $W$_
+  - $E$ and $D$ independent
+  - Knowing $E$ doesn't inform $D$
+  - Collider $W$ blocks association
 ::::
 :::: {.column width=25%}
 ```graphviz
@@ -1207,26 +1195,81 @@ digraph ColliderDiagram {
 ::::
 :::
 
-- **After conditioning on $W$**
-  - E.g., individuals with specific body weight
-  - Introduce dependency between $E$ and $D$
-  - With $W$ fixed, changes in $E$ balanced by changes in $D$, inducing spurious
-    correlation between $E$ and $D$
-  - In Bayesian network it was called _"explaining away"_
-
+- _After conditioning on $W$_
+  - Fix $W$ at specific value
+  - Creates dependency between $E$ and $D$
+  - Changes in $E$ balanced by changes in $D$
+  - Induces spurious correlation (called "explaining away")
 
 ## Types of Paths in Causal AI
 
-- **Fork Structure**
+- **Chain**
+
 ::: columns
 :::: {.column width=60%}
-- A **fork** $D \leftarrow X \rightarrow C$ occurs when a single variable
-  causally influences two or more variables
-  - $X$ is a **confounder** (common cause) of $C$ and $D$
-  - Forks induce statistical dependence between $C$ and $D$
-    even if $C$ and $D$ are not causally linked
+- @Definition@: **Chain** $X \to M \to Y$ is sequential causal path
+  - $X$ affects $M$, which affects $Y$
+  - Represents mediation or transmission of causal effect
+  - $M$ is intermediate (mediator) variable
 
-- **Conditioning** on $X$ _blocks the path_ and removes spurious correlation
+- _Conditioning on $M$ blocks path_ and interrupts causal effect
+::::
+:::: {.column width=40%}
+```graphviz
+digraph ChainStructure {
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+    rankdir=LR;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    X [fillcolor="#FFD1A6"];
+    M [fillcolor="#F4A6A6"];
+    Y [fillcolor="#A6C8F4"];
+
+    X -> M;
+    M -> Y;
+}
+```
+::::
+:::
+
+::: columns
+:::: {.column width=40%}
+- @Example@:
+  - $Education$ influences $Income$, which influences $LifeQuality$
+  - Education's effect on quality passes through income
+  - Path: $Education \to Income \to LifeQuality$
+::::
+:::: {.column width=35%}
+```graphviz
+digraph EducationChain {
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+    rankdir=LR;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    Education [fillcolor="#FFD1A6"];
+    Income [fillcolor="#F4A6A6"];
+    LifeQuality [fillcolor="#A6C8F4"];
+    Education -> Income;
+    Income -> LifeQuality;
+}
+```
+::::
+:::
+
+
+- **Fork**
+::: columns
+:::: {.column width=60%}
+- @Definition@: **Fork** $D \leftarrow X \to C$ is when a single variable $X$
+  influences multiple targets
+  - $X$ is confounder (common cause) of $C$ and $D$
+  - Induces dependence even without direct link
+
+- _Conditioning on $X$ blocks path_ and removes spurious correlation
 ::::
 :::: {.column width=35%}
 ```graphviz
@@ -1250,31 +1293,25 @@ digraph CausalDAG {
 ::::
 :::
 
-\vspace{1cm}
-
 ::: columns
 :::: {.column width=60%}
-- **Example**
-  - $Lifestyle$ is a confounder that affects both $Weight$ and $BloodPressure$
-  - These outcomes may appear correlated due to shared cause
+- @Example@:
+  - $Lifestyle$ confounds $Weight$ and $BloodPressure$
+  - Outcomes correlated due to shared cause
 ::::
 :::: {.column width=35%}
 ```graphviz
-digraph CausalDAG {
+digraph LifestyleFork {
     splines=true;
     nodesep=0.5;
     ranksep=0.5;
-
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-
-    Lifestyle [label="Lifestyle", fillcolor="#F4A6A6"];
-    Weight [label="Weight", fillcolor="#A6C8F4"];
-    BP [label="Blood\nPressure", fillcolor="#A6C8F4"];
-
-    {rank=same; Weight; BP;}
-
+    Lifestyle [fillcolor="#F4A6A6"];
+    Weight [fillcolor="#A6C8F4"];
+    BloodPressure [fillcolor="#A6C8F4"];
+    {rank=same; Weight; BloodPressure;}
     Lifestyle -> Weight;
-    Lifestyle -> BP;
+    Lifestyle -> BloodPressure;
 }
 ```
 ::::
@@ -1284,57 +1321,55 @@ digraph CausalDAG {
 
 ::: columns
 :::: {.column width=60%}
-- An **inverted fork** occurs when two or more arrows converge on a common node
-  - **Colliders** block associations unless the collider or its descendants are
-    conditioned on
+- @Definition@: **Inverted fork** $B \to A \leftarrow C$ is when two or more
+  arrows converge on common node
+  - Colliders block associations (unless conditioned on)
 
-- **Conditioning on a collider** _opens a path_, inducing spurious correlations
-  - This is the basis of selection bias
+- _Conditioning on collider opens path_ and induces spurious correlations
+  - Basis of selection bias
 ::::
-:::: {.column width=35%}
+:::: {.column width=40%}
 ```graphviz
-digraph ColliderExample {
+digraph ColliderStructure {
     splines=true;
     nodesep=0.5;
     ranksep=0.5;
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    X [label="X", fillcolor="#A6C8F4"];
-    Y [label="Y", fillcolor="#A6C8F4"];
-    Z [label="Z", fillcolor="#F4A6A6"];
+    B [fillcolor="#A6C8F4"];
+    A [fillcolor="#F4A6A6"];
+    C [fillcolor="#A6C8F4"];
 
-    {rank=same; X; Y;}
+    {rank=same; B; C;}
 
-    X -> Z;
-    Y -> Z;
+    B -> A;
+    C -> A;
 }
 ```
 ::::
 :::
 
-\vspace{0.5cm}
-
 ::: columns
-:::: {.column width=60%}
-- **Example**
-  - Sales influenced by multiple independent causes
-  - $MarketingSpend$ and $ProductQuality$ both influence $Sales$
-  - Conditioning on $Sales$ can induce false dependence between $MarketingSpend$
-    and $ProductQuality$
+:::: {.column width=70%}
+- @Example@: **Sales collider**
+  - $MarketingSpend$ and $ProductQuality$ influence $Sales$
+  - Before observing sales: spend and quality independent
+  - After conditioning on sales: spend and quality become dependent
+  - High sales with low quality suggests high marketing spend
 ::::
-:::: {.column width=35%}
+:::: {.column width=30%}
 ```graphviz
-digraph ImprovedDiagram {
+digraph SalesCollider {
     splines=true;
     nodesep=0.5;
     ranksep=0.5;
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    Marketing [label="Marketing Spend", fillcolor="#A6C8F4"];
-    Quality [label="Product Quality", fillcolor="#A6C8F4"];
-    Sales [label="Sales", fillcolor="#F4A6A6"];
+    Marketing [fillcolor="#A6C8F4"];
+    Sales [fillcolor="#F4A6A6"];
+    Quality [fillcolor="#A6C8F4"];
 
     {rank=same; Marketing; Quality;}
 

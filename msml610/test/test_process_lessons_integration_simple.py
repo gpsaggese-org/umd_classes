@@ -107,7 +107,7 @@ class Test__generate_tex(hunitest.TestCase):
         cmd_str = self.helper(msml610_dir, source_path, source_name)
         # Check outputs.
         self.assertIn("notes_to_pdf.py", cmd_str)
-        self.assertIn("--tex_only", cmd_str)
+        self.assertIn("--no_pdf", cmd_str)
         self.assertIn(source_path, cmd_str)
         self.assertIn("--skip_action open", cmd_str)
 
@@ -122,7 +122,7 @@ class Test__generate_tex(hunitest.TestCase):
         # Run test.
         cmd_str = self.helper(msml610_dir, source_path, source_name, limit=limit)
         # Check outputs.
-        self.assertIn(f"--limit {limit}", cmd_str)
+        self.assertIn(f"--filter_by_slides {limit}", cmd_str)
 
 
 # #############################################################################
@@ -197,7 +197,7 @@ class Test__generate_pdf(hunitest.TestCase):
         # Run test.
         cmd_str = self.helper(msml610_dir, source_path, source_name, limit=limit)
         # Check outputs.
-        self.assertIn(f"--limit {limit}", cmd_str)
+        self.assertIn(f"--filter_by_slides {limit}", cmd_str)
 
 
 # #############################################################################
