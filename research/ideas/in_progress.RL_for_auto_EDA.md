@@ -1,7 +1,7 @@
 # Reinforcement Learning for Automated Exploratory Data Analysis
 
 ## Status
-**Status:**: draft
+**Status:**: in_progress
 **Complete Specs:**: 15%
 **Assignee:**: — 
 

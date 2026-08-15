@@ -1,7 +1,7 @@
 # RL for Tennis / Pickleball Rally Strategy
 
 ## Status
-**Status:**: draft
+**Status:**: in_progress
 **Complete Specs:**: 50%
 **Assignee:**: TBD
 

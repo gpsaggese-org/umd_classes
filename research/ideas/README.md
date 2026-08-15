@@ -8,8 +8,6 @@
 
 ## Active Projects
 
-- 7 active projects, each referencing its research paper and code
-
 | Project | Paper | Code | Assignee |
 | :------ | :---- | :--- | :------- |
 | Noesis (core platform) | [`papers/Noesis/`](../../papers/Noesis/) | [`research/Noesis/`](../../research/Noesis/) | gpsaggese |
@@ -40,6 +38,7 @@
 | `in_progress.Build_A_Conversational_Diagram_Designer.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/in_progress.Build_A_Conversational_Diagram_Designer.md) | in progress | - | 80% | [#440](https://github.com/gpsaggese/gpsaggese.github.io/issues/440) | - |
 | `in_progress.Comparison_of_Coding_Agents.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/in_progress.Comparison_of_Coding_Agents.md) | in progress | - | 80% | - | - |
 | `in_progress.Comparison_of_Data_Science_Agents.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/in_progress.Comparison_of_Data_Science_Agents.md) | in progress | - | 80% | [#403](https://github.com/gpsaggese/gpsaggese.github.io/issues/403) | - |
+| `in_progress.RL_for_pickleball.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/in_progress.RL_for_pickleball.md) | in progress | PranavShashidhara + gpsaggese | 50% | - | - |
 | `draft.Causal_Analysis_of_GPs_law.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Causal_Analysis_of_GPs_law.md) | draft | - | 70% | - | - |
 | `draft.Analysis_of_Apple_Containers.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Analysis_of_Apple_Containers.md) | draft | - | 60% | - | - |
 | `draft.Analysis_of_Venture_Capital_Predictive_Power.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Analysis_of_Venture_Capital_Predictive_Power.md) | draft | - | 60% | [#385](https://github.com/gpsaggese/gpsaggese.github.io/issues/385) | - |
@@ -72,8 +71,9 @@
 | `draft.Train_LLM_on_simple_language.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Train_LLM_on_simple_language.md) | draft | - | 30% | - | - |
 | `draft.Validity_of_LLM_Agents_as_Human_Simulacra.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Validity_of_LLM_Agents_as_Human_Simulacra.md) | draft | - | 30% | - | - |
 | `draft.Code_Visualization.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Code_Visualization.md) | draft | - | 20% | - | - |
-| `draft.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.md) | draft | - | 20% | - | - |
+| `in_progress.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/in_progress.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.md) | in progress | Eyepatch0 + gpsaggese | 20% | - | - |
 | `draft.Intelligence_Market.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Intelligence_Market.md) | draft | - | 20% | - | - |
+| `in_progress.RL_for_auto_EDA.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/in_progress.RL_for_auto_EDA.md) | in progress | Delvitron1019 + gpsaggese | 15% | - | - |
 | `draft.Intelligence_Server.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Intelligence_Server.md) | draft | - | 15% | - | - |
 | `draft.Noesis_Reputation_Detection_Bound.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Noesis_Reputation_Detection_Bound.md) | draft | - | 15% | - | - |
 | `draft.Noesis_Task_Unit_Definition.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Noesis_Task_Unit_Definition.md) | draft | - | 15% | - | - |
@@ -102,8 +102,6 @@
 | `draft.MDL_Extensions_with_Research_Process.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.MDL_Extensions_with_Research_Process.md) | draft | - | 10% | - | - |
 | `draft.Mean_Variance_Optimization_with_NN.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Mean_Variance_Optimization_with_NN.md) | draft | - | 10% | - | - |
 | `draft.Minimizing_N_Dimensional_Functions_with_NN.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Minimizing_N_Dimensional_Functions_with_NN.md) | draft | - | 10% | - | - |
-| `draft.RL_for_auto_EDA.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.RL_for_auto_EDA.md) | draft | - | 10% | - | - |
-| `draft.RL_for_pickleball.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.RL_for_pickleball.md) | draft | - | 10% | - | - |
 | `draft.Solve_TSP_with_LLM.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Solve_TSP_with_LLM.md) | draft | - | 10% | - | - |
 | `draft.Solving_Differential_Equations_with_NN.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Solving_Differential_Equations_with_NN.md) | draft | - | 10% | - | - |
 | `draft.Text_to_Sign_Language_Video.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Text_to_Sign_Language_Video.md) | draft | - | 10% | - | - |
@@ -117,4 +115,4 @@
 - If the specs are not complete for a task you are interested in, before starting
   the work, ask GP to improve them so that there is clarity on what's the goal
 
-// Last update timestamp: "Aug 14 22:50"
+// Last update timestamp: "Aug 14 23:01"

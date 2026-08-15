@@ -1,7 +1,7 @@
 # Implementing Monte Carlo Tree Search and AlphaZero
 
 ## Status
-- **Status**: draft
+- **Status**: in_progress
 - **Complete Specs**: 20%
 - **Assignee**: TBD
 
