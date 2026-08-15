@@ -1,48 +1,48 @@
-https://aigrant.com/
-Grantmatch	https://www.grants.gov/search-grants
-Seedfund	https://seedfund.nsf.gov/topics/artificial-intelligence/
-Aigrant	https://aigrant.org/
-USgrants	https://www.usgrants.org/business/artificial-intelligence-researchers
-USAID Program	https://www.ictworks.org/how-find-usaid-contracts-and-grants-funding/
-Maryland Department of Commerce	https://commerce.maryland.gov/fund/build-our-future-grant-program
+https://aigrant.com/ Grantmatch https://www.grants.gov/search-grants Seedfund
+https://seedfund.nsf.gov/topics/artificial-intelligence/ Aigrant
+https://aigrant.org/ USgrants
+https://www.usgrants.org/business/artificial-intelligence-researchers USAID
+Program https://www.ictworks.org/how-find-usaid-contracts-and-grants-funding/
+Maryland Department of Commerce
+https://commerce.maryland.gov/fund/build-our-future-grant-program
 
 # Summary Table
 
 ## AI
 
-| Program                             | Who it's for                                                   | Amount                                         | Difficulty                        |
-| ------------------------------------ | -------------------------------------------------------------- | ----------------------------------------------- | --------------------------------- |
-| NSF National AI Research Institutes | University-led consortia                                       | ~$20M each                                     | Very hard: between solicitations |
-| NSF ExpandAI (NSF 23-506)           | MSIs only (HBCU, HSI, ANSI, PBI)                               | Up to $400K / 2 yr (Track 1); $7.5M FY26 pool  | Moderate                          |
-| AI Forge (DARPA + NSF)              | US universities & service academies only                       | $750K–$3M, one-year terms                      | Hard                              |
-| DOE Genesis Mission AI              | Universities, nonprofits, national labs                        | Varies by FOA                                  | Hard                              |
-| NAIRR Pilot                         | US academics, nonprofits, agencies, startups w/ federal grants | Compute + data, not cash                       | Easy                              |
-| NSF SBIR/STTR                       | Startups only                                                  | $250K–$1M+ by phase                            | Hard                              |
-| NVIDIA Inception                    | Startups only                                                  | GPU credits, technical access                  | Easy                              |
-| Google Academic Research Awards     | Faculty at degree-granting institutions                        | Up to $100K                                    | Moderate                          |
-| Amazon Research Awards              | Faculty/researchers at universities or nonprofits               | $50K–$250K+ (cash + AWS credits), by track      | Moderate                          |
-| Cisco Research University Gifts     | Full-time faculty/research staff (PI); rolling RFPs              | $50K–$100K, sometimes more                     | Moderate                          |
-| Schmidt Sciences AI2050 Fellowship  | Early-career researchers, worldwide                             | $300K–$500K over 3 years                       | Hard                              |
-| Schmidt Sciences Trustworthy AI RFP | Researchers/institutions, worldwide                             | $1M–$5M+                                       | Hard                              |
-| Coefficient Giving (ex–Open Phil.)  | Academics, grad students, nonprofits, worldwide                 | $100K (exploratory)–$10M                       | Hard                              |
-| ASPIRE / ATRC (Abu Dhabi, UAE)      | Researchers via a UAE host institution or int'l partnership      | AED 297M awarded across 114 projects to date   | Hard                              |
-| Sandooq Al Watan (UAE)              | UAE + int'l experts (SWARD); any innovator (Grants programme)    | AED 5K–25K individual; AED 1M+ SWARD           | Moderate                          |
-| Dubai RDI Grant Initiative (UAE)    | PI at Dubai-based HEI; int'l co-investigators allowed            | AED 500K–1.5M per project                      | Moderate–Hard                     |
-| MBZUAI research funding (UAE)       | Own grad students/postdocs; PIs via philanthropic partners       | Varies, e.g. $1M Google.org award              | Moderate                          |
+| Program                             | Who it's for                                                   | Amount                                        | Difficulty                       |
+| ----------------------------------- | -------------------------------------------------------------- | --------------------------------------------- | -------------------------------- |
+| NSF National AI Research Institutes | University-led consortia                                       | ~$20M each                                    | Very hard: between solicitations |
+| NSF ExpandAI (NSF 23-506)           | MSIs only (HBCU, HSI, ANSI, PBI)                               | Up to $400K / 2 yr (Track 1); $7.5M FY26 pool | Moderate                         |
+| AI Forge (DARPA + NSF)              | US universities & service academies only                       | $750K–$3M, one-year terms                     | Hard                             |
+| DOE Genesis Mission AI              | Universities, nonprofits, national labs                        | Varies by FOA                                 | Hard                             |
+| NAIRR Pilot                         | US academics, nonprofits, agencies, startups w/ federal grants | Compute + data, not cash                      | Easy                             |
+| NSF SBIR/STTR                       | Startups only                                                  | $250K–$1M+ by phase                           | Hard                             |
+| NVIDIA Inception                    | Startups only                                                  | GPU credits, technical access                 | Easy                             |
+| Google Academic Research Awards     | Faculty at degree-granting institutions                        | Up to $100K                                   | Moderate                         |
+| Amazon Research Awards              | Faculty/researchers at universities or nonprofits              | $50K–$250K+ (cash + AWS credits), by track    | Moderate                         |
+| Cisco Research University Gifts     | Full-time faculty/research staff (PI); rolling RFPs            | $50K–$100K, sometimes more                    | Moderate                         |
+| Schmidt Sciences AI2050 Fellowship  | Early-career researchers, worldwide                            | $300K–$500K over 3 years                      | Hard                             |
+| Schmidt Sciences Trustworthy AI RFP | Researchers/institutions, worldwide                            | $1M–$5M+                                      | Hard                             |
+| Coefficient Giving (ex–Open Phil.)  | Academics, grad students, nonprofits, worldwide                | $100K (exploratory)–$10M                      | Hard                             |
+| ASPIRE / ATRC (Abu Dhabi, UAE)      | Researchers via a UAE host institution or int'l partnership    | AED 297M awarded across 114 projects to date  | Hard                             |
+| Sandooq Al Watan (UAE)              | UAE + int'l experts (SWARD); any innovator (Grants programme)  | AED 5K–25K individual; AED 1M+ SWARD          | Moderate                         |
+| Dubai RDI Grant Initiative (UAE)    | PI at Dubai-based HEI; int'l co-investigators allowed          | AED 500K–1.5M per project                     | Moderate–Hard                    |
+| MBZUAI research funding (UAE)       | Own grad students/postdocs; PIs via philanthropic partners     | Varies, e.g. $1M Google.org award             | Moderate                         |
 
 ## Crypto
 
-| Program                             | Who it's for                                                   | Amount                                         | Difficulty                        |
-| ------------------------------------ | -------------------------------------------------------------- | ----------------------------------------------- | --------------------------------- |
-| Ethereum Foundation Academic Grants | Academic researchers globally                                  | $2M pool per round                             | Moderate                          |
-| EF PhD Fellowship                   | Enrolled PhD students                                          | $24K/yr, 9–10 awarded                          | Hard                              |
-| EF Ecosystem Support (ESP)          | Anyone advancing Ethereum                                      | Varies                                         | Moderate                          |
-| Ripple UBRI                         | Universities (partnership model)                               | $80M+ since 2018, 60+ universities             | Hard to enter                     |
-| NLnet / NGI Zero                    | Individuals, researchers, nonprofits, small teams              | Typically up to €50,000                        | Moderate                          |
-| Filecoin Grants                     | Any builder                                                    | $5K–$10K Builder Next Step; Open Grants + RFPs | Easy–moderate                     |
-| Solana Foundation Grants / Superteam| Any builder, open-source on Solana                               | Milestone-based; microgrants up to $10K        | Easy–moderate                     |
-| Optimism Retro Funding (RetroPGF)   | Builders who already shipped public goods on OP                 | Share of 850M OP token pool                    | Moderate                          |
-| Polygon Community Grants            | AI-agent / verifiable-compute / on-chain infra builders          | Varies                                         | Moderate                          |
+| Program                              | Who it's for                                            | Amount                                         | Difficulty    |
+| ------------------------------------ | ------------------------------------------------------- | ---------------------------------------------- | ------------- |
+| Ethereum Foundation Academic Grants  | Academic researchers globally                           | $2M pool per round                             | Moderate      |
+| EF PhD Fellowship                    | Enrolled PhD students                                   | $24K/yr, 9–10 awarded                          | Hard          |
+| EF Ecosystem Support (ESP)           | Anyone advancing Ethereum                               | Varies                                         | Moderate      |
+| Ripple UBRI                          | Universities (partnership model)                        | $80M+ since 2018, 60+ universities             | Hard to enter |
+| NLnet / NGI Zero                     | Individuals, researchers, nonprofits, small teams       | Typically up to €50,000                        | Moderate      |
+| Filecoin Grants                      | Any builder                                             | $5K–$10K Builder Next Step; Open Grants + RFPs | Easy–moderate |
+| Solana Foundation Grants / Superteam | Any builder, open-source on Solana                      | Milestone-based; microgrants up to $10K        | Easy–moderate |
+| Optimism Retro Funding (RetroPGF)    | Builders who already shipped public goods on OP         | Share of 850M OP token pool                    | Moderate      |
+| Polygon Community Grants             | AI-agent / verifiable-compute / on-chain infra builders | Varies                                         | Moderate      |
 
 # Detail
 
@@ -52,8 +52,10 @@ Maryland Department of Commerce	https://commerce.maryland.gov/fund/build-our-fut
 
 **NSF National AI Research Institutes**
 
-- _Website_: https://www.nsf.gov/funding/opportunities/national-artificial-intelligence-research-institutes
-- _Submission_: https://www.research.gov/ (proposals prepared and submitted through Research.gov per the program solicitation)
+- _Website_:
+  https://www.nsf.gov/funding/opportunities/national-artificial-intelligence-research-institutes
+- _Submission_: https://www.research.gov/ (proposals prepared and submitted
+  through Research.gov per the program solicitation)
 - _Award size_: ~$20M each
 - _Eligibility_: Multidisciplinary, multi-stakeholder university-led teams
 - _Status_: The program page shows no upcoming due dates: waiting on a new
@@ -62,12 +64,13 @@ Maryland Department of Commerce	https://commerce.maryland.gov/fund/build-our-fut
 
 **NSF ExpandAI (NSF 23-506)**
 
-- _Website_: https://www.nsf.gov/funding/opportunities/expandai-expanding-ai-innovation-through-capacity-building/506090/nsf23-506/solicitation
+- _Website_:
+  https://www.nsf.gov/funding/opportunities/expandai-expanding-ai-innovation-through-capacity-building/506090/nsf23-506/solicitation
 - _Submission_: N/A. Proposers must first submit a Concept Outline and receive
-  an official NSF invitation before a full proposal can be submitted; no
-  direct public application page
-- _Award size_: Track 1 (Capacity Building Pilots) up to $400,000 over two years;
-  Track 2 (Partnerships) connects MSIs with existing AI Institutes. $7.5M
+  an official NSF invitation before a full proposal can be submitted; no direct
+  public application page
+- _Award size_: Track 1 (Capacity Building Pilots) up to $400,000 over two
+  years; Track 2 (Partnerships) connects MSIs with existing AI Institutes. $7.5M
   allocated for FY 2026
 - _Eligibility_: Minority-serving institutions only: HBCUs, HSIs, Alaska Native
   Serving Institutions, Predominantly Black Institutions
@@ -78,7 +81,8 @@ Maryland Department of Commerce	https://commerce.maryland.gov/fund/build-our-fut
 **AI Forge (DARPA + NSF)**
 
 - _Website_: https://www.darpa.mil/research/programs/ai-forge
-- _Submission_: https://sam.gov/workspace/contract/opp/a077021d13f843a5aa5f0baee00b1097/view
+- _Submission_:
+  https://sam.gov/workspace/contract/opp/a077021d13f843a5aa5f0baee00b1097/view
   (RFI response submitted via SAM.gov)
 - _Award size_: $750,000–$3M per Project Venture, one-year terms
 - _Focus areas_: AI interpretability, AI control, adversarial robustness
@@ -86,13 +90,15 @@ Maryland Department of Commerce	https://commerce.maryland.gov/fund/build-our-fut
   authorized submission per institution
 - _Status_: Announced June 1, 2026. Administered by a nonprofit launching
   summer 2026. The initial RFI has closed
-- _Note_: IP is expected to be shared across forum participants, preferably under
-  open-source licensing
+- _Note_: IP is expected to be shared across forum participants, preferably
+  under open-source licensing
 
 **DOE Genesis Mission AI**
 
-- _Website_: https://www.energy.gov/undersecretaryforscience/genesis-mission/genesis-mission
-- _Submission_: https://simpler.grants.gov/opportunity/0228b895-9cb3-4160-8acc-58709e75c3c7
+- _Website_:
+  https://www.energy.gov/undersecretaryforscience/genesis-mission/genesis-mission
+- _Submission_:
+  https://simpler.grants.gov/opportunity/0228b895-9cb3-4160-8acc-58709e75c3c7
 - _Award size_: Varies by funding opportunity announcement
 - _Eligibility_: Depends on the specific FOA: universities, nonprofits, and
   national labs are typical; some announcements are lab-restricted
@@ -111,8 +117,8 @@ Maryland Department of Commerce	https://commerce.maryland.gov/fund/build-our-fut
   (including grad students with a faculty support letter), nonprofits, federal
   agencies, FFRDCs, state/local/tribal agencies, and startups with federal
   grants
-- _Tracks_: Start-Up Projects (3 months, one resource, decision in ~2 weeks), full
-  Resource Allocations (12 months), education calls, deep partnerships
+- _Tracks_: Start-Up Projects (3 months, one resource, decision in ~2 weeks),
+  full Resource Allocations (12 months), education calls, deep partnerships
 - _Difficulty_: Easiest entry point on this list. Rolling, open until resources
   are exhausted
 - _Requirement_: Project results must be open and shared with the community. PI
@@ -122,8 +128,10 @@ Maryland Department of Commerce	https://commerce.maryland.gov/fund/build-our-fut
 
 **Google Academic Research Awards**
 
-- _Website_: https://research.google/programs-and-events/google-academic-research-awards/
-- _Submission_: https://google.submittable.com/submit/b1fa9f63-c58c-4a70-a838-ec01ed6083c1/google-academic-research-awards-gara-application
+- _Website_:
+  https://research.google/programs-and-events/google-academic-research-awards/
+- _Submission_:
+  https://google.submittable.com/submit/b1fa9f63-c58c-4a70-a838-ec01ed6083c1/google-academic-research-awards-gara-application
 - _Award size_: Up to $100,000
 - _Eligibility_: Professors at degree-granting institutions who advise students
   and do research in technology/computing
@@ -133,7 +141,8 @@ Maryland Department of Commerce	https://commerce.maryland.gov/fund/build-our-fut
 **Google.org Impact Challenge: AI for Science**
 
 - _Website_: https://www.google.org/impact-challenges/ai-science/
-- _Submission_: https://googlenewaccount2.submittable.com/submit/2eacc5bf-5e78-4f06-b14e-546c8a895981/google-org-impact-challenge-ai-for-science
+- _Submission_:
+  https://googlenewaccount2.submittable.com/submit/2eacc5bf-5e78-4f06-b14e-546c8a895981/google-org-impact-challenge-ai-for-science
 - _Award size_: $500K–$3M per grantee, $30M total pool
 - _Eligibility_: Nonprofits, social enterprises, and academic institutions using
   AI for health or climate science
@@ -184,7 +193,8 @@ Maryland Department of Commerce	https://commerce.maryland.gov/fund/build-our-fut
 **Schmidt Sciences: Science of Trustworthy AI RFP**
 
 - _Website_: https://www.schmidtsciences.org/trustworthy-ai-research-agenda/
-- _Submission_: https://schmidtsciences.smapply.io/prog/science_of_trustworthy_ai_rfp_2026/
+- _Submission_:
+  https://schmidtsciences.smapply.io/prog/science_of_trustworthy_ai_rfp_2026/
 - _Award size_: Tier 1 up to $1M for focused work; Tier 2 $1M–$5M+ for
   multi-year interdisciplinary teams
 - _Eligibility_: Individual researchers, teams, or multi-institution
@@ -196,47 +206,48 @@ Maryland Department of Commerce	https://commerce.maryland.gov/fund/build-our-fut
 
 **Coefficient Giving (formerly Open Philanthropy): Technical AI Safety**
 
-- _Website_: https://coefficientgiving.org/funds/navigating-transformative-ai/request-for-proposals-technical-ai-safety-research/
+- _Website_:
+  https://coefficientgiving.org/funds/navigating-transformative-ai/request-for-proposals-technical-ai-safety-research/
 - _Submission_: https://airtable.com/app1NkoJMO9OvaGYS/pagDeq1lbSlmYdJRG/form
-- _Award size_: Exploratory grants under $100K; standard $100K–$1M; large
-  grants $1M–$10M
+- _Award size_: Exploratory grants under $100K; standard $100K–$1M; large grants
+  $1M–$10M
 - _Eligibility_: Academic researchers, grad students, independent researchers,
   and nonprofits with demonstrated ML experience
-- _Process_: Start with a 300-word expression of interest via the general
-  "Apply for Funding" pathway
+- _Process_: Start with a 300-word expression of interest via the general "Apply
+  for Funding" pathway
 - _Status_: The dedicated $40M Technical AI Safety RFP has closed, but general
   AI-safety funding recommendations remain open
 - _Difficulty_: Hard
 
-### International — UAE
+### International: UAE
 
-Outside the US, the UAE is the most active government-backed AI-grant
-ecosystem, split between Abu Dhabi (ATRC/ASPIRE, TII, MBZUAI) and Dubai
-(Dubai Future Foundation). Most tracks require a UAE-based host institution
-or PI; a few (small individual grants, fellowships) are open directly to
-applicants worldwide.
+Outside the US, the UAE is the most active government-backed AI-grant ecosystem,
+split between Abu Dhabi (ATRC/ASPIRE, TII, MBZUAI) and Dubai (Dubai Future
+Foundation). Most tracks require a UAE-based host institution or PI; a few
+(small individual grants, fellowships) are open directly to applicants
+worldwide
 
-**ASPIRE / Advanced Technology Research Council (ATRC) — Abu Dhabi**
+**ASPIRE / Advanced Technology Research Council (ATRC): Abu Dhabi**
 
 - _Website_: https://www.aspireuae.ae/
 - _Submission_: N/A. AARE/AYIA/VRI/ViP grants are awarded via periodic
-  competitive calls announced to Abu Dhabi research institutions, not a
-  standing public application portal; inquiries via hello@aspireuae.ae
+  competitive calls announced to Abu Dhabi research institutions, not a standing
+  public application portal; inquiries via hello@aspireuae.ae
 - _What it is_: ATRC's program-management arm. Four standing tracks: ASPIRE
-  Award for Research Excellence (AARE), ASPIRE Young Investigator Award
-  (AYIA), Virtual Research Institutes (VRIs), and Visiting International
-  Professorship (ViPs). Plus challenge programs like ASPIRE Vantage (2026:
-  autonomous systems, front-loaded co-development funding)
-- _Track record_: AED 297M (~$81M) awarded across 114 research projects to
-  date; AED 10M+ used specifically to build international research networks
-- _Eligibility_: VRIs and ViPs are explicitly designed to bring in
-  international researchers/institutes as partners or visiting appointments.
-  AARE/AYIA typically route through a UAE host institution (e.g., Khalifa
-  University, NYU Abu Dhabi)
+  Award for Research Excellence (AARE), ASPIRE Young Investigator Award (AYIA),
+  Virtual Research Institutes (VRIs), and Visiting International Professorship
+  (ViPs). Plus challenge programs like ASPIRE Vantage (2026: autonomous systems,
+  front-loaded co-development funding)
+- _Track record_: AED 297M (~$81M) awarded across 114 research projects to date;
+  AED 10M+ used specifically to build international research networks
+- _Eligibility_: VRIs and ViPs are explicitly designed to bring in international
+  researchers/institutes as partners or visiting appointments. AARE/AYIA
+  typically route through a UAE host institution (e.g., Khalifa University, NYU
+  Abu Dhabi)
 - _Focus areas_: ICT (incl. AI), aerospace, energy, environment, food &
   agriculture, health, manufacturing
-- _Difficulty_: Hard. No public rolling portal; entry is usually via an
-  existing UAE partner institution or direct outreach to hello@aspireuae.ae
+- _Difficulty_: Hard. No public rolling portal; entry is usually via an existing
+  UAE partner institution or direct outreach to hello@aspireuae.ae
 
 **Sandooq Al Watan (SWARD, Fellowship, Grants programmes)**
 
@@ -244,32 +255,30 @@ applicants worldwide.
 - _Submission_: https://www.researcher.ae/
 - _SWARD programme_: Co-funded, institution-level research. Example: AED 1M
   Khalifa University/UAEU project on phase-change-material nanowires for
-  AI/in-memory computing. Explicitly supports "international and Emirati
-  experts from universities and research institutions in the country"
+  AI/in-memory computing. Explicitly supports "international and Emirati experts
+  from universities and research institutions in the country"
 - _Grants programme_: Small individual grants, AED 5,000–25,000, open to any
   innovator, academic, entrepreneur, or scientist with a research idea
 - _Fellowship programme_: Separate track for individual researchers
-- _Portal_: researcher.ae, Sandooq Al Watan's national research-support
-  platform
+- _Portal_: researcher.ae, Sandooq Al Watan's national research-support platform
 - _Difficulty_: Moderate for the small Grants track; harder for SWARD, which
   needs a UAE institutional host
 
-**Dubai Future Foundation — Dubai RDI Grant Initiative**
+**Dubai Future Foundation: Dubai RDI Grant Initiative**
 
 - _Website_: https://dubairdi.ae/
 - _Submission_: https://dubairdi.ae/application/
-- _Award size_: AED 500,000–1.5M per project (annual budget capped at AED
-  500K), 1–3 year projects
+- _Award size_: AED 500,000–1.5M per project (annual budget capped at AED 500K),
+  1–3 year projects
 - _Eligibility_: PI must be fully affiliated with a Dubai-based HEI, research
   centre, or institute, and hold a PhD. International co-investigators are
-  explicitly permitted, but at least 50% of grant funds must be spent in
-  Dubai
-- _Focus areas_: Cognitive Cities and Health & Life Sciences, with AI,
-  robotics, IoT, quantum computing, and AR/VR as cross-cutting technologies
+  explicitly permitted, but at least 50% of grant funds must be spent in Dubai
+- _Focus areas_: Cognitive Cities and Health & Life Sciences, with AI, robotics,
+  IoT, quantum computing, and AR/VR as cross-cutting technologies
 - _Related track_: International Collaborative Research Funding runs bilateral
-  calls with a foreign funder (first partner: South Korea's National
-  Research Foundation) — a model a US collaboration could piggyback on if a
-  similar bilateral call opens with a US funder
+  calls with a foreign funder (first partner: South Korea's National Research
+  Foundation): a model a US collaboration could piggyback on if a similar
+  bilateral call opens with a US funder
 - _Also_: Dubai Resilience Challenge Fund (TRL 4–7, commercialization-focused)
   and Dubai Future Accelerators (no equity taken)
 - _Difficulty_: Moderate–Hard. Needs a Dubai-based PI/host; a US researcher
@@ -280,29 +289,28 @@ applicants worldwide.
 - _Website_: https://mbzuai.ac.ae/ugrip/
 - _Submission_: https://apply.mbzuai.ac.ae/ApplicantPortal
 - _Primarily funds its own grad students_: fully funded MSc/PhD scholarships,
-  plus the Undergraduate Research Internship Program (UGRIP), fully funded,
-  open to undergrads worldwide, runs roughly May–June
-- Faculty-level research funding flows mainly through philanthropic
-  partners: Google.org gave $1M in February 2026 to fund an MBZUAI-led
-  research initiative
+  plus the Undergraduate Research Internship Program (UGRIP), fully funded, open
+  to undergrads worldwide, runs roughly May–June
+- Faculty-level research funding flows mainly through philanthropic partners:
+  Google.org gave $1M in February 2026 to fund an MBZUAI-led research initiative
 - Not a standing open grants program for outside PIs, but worth watching for
-  future funder partnerships, and as a potential UAE-side collaborator for
-  joint proposals (e.g., to Dubai RDI or ASPIRE)
+  future funder partnerships, and as a potential UAE-side collaborator for joint
+  proposals (e.g., to Dubai RDI or ASPIRE)
 - _Difficulty_: Hard to access directly as an external PI; easier as a partner
   institution
 
-**Technology Innovation Institute (TII) / AI71 — Abu Dhabi**
+**Technology Innovation Institute (TII) / AI71: Abu Dhabi**
 
 - _Website_: https://www.tii.ae/partnership-and-programmes
 - _Submission_: N/A. No public grant application portal; collaboration/funding
   inquiries routed through the "Let's talk" contact form at
   https://www.tii.ae/contact-us
-- Not a grants program. TII is ATRC's applied-research arm (9 centers, incl.
-  AI & Digital Science) and gives away its Falcon LLM family as open-weight
-  models; AI71 is the commercial spin-off for enterprise deployment
-- Relevant mainly as (a) a source of free, capable open models for research,
-  and (b) a potential collaboration/co-PI partner for postgrad placements and
-  joint projects, not as a source of direct cash grants to external teams
+- Not a grants program. TII is ATRC's applied-research arm (9 centers, incl. AI
+  & Digital Science) and gives away its Falcon LLM family as open-weight models;
+  AI71 is the commercial spin-off for enterprise deployment
+- Relevant mainly as (a) a source of free, capable open models for research, and
+  (b) a potential collaboration/co-PI partner for postgrad placements and joint
+  projects, not as a source of direct cash grants to external teams
 - _Difficulty_: N/A, no application process. Relationship-driven
 
 ### Startup-only (listed for Completeness: Not Applicable to University Applicants)
@@ -311,15 +319,14 @@ applicants worldwide.
 
 - _Website_: https://seedfund.nsf.gov/
 - _Submission_: https://seedfund.nsf.gov/apply/get-started/
-- _Award_: $250,000 to $1M+ depending on phase, for early-stage small
-  businesses
+- _Award_: $250,000 to $1M+ depending on phase, for early-stage small businesses
 
 **NVIDIA Inception**
 
 - _Website_: https://www.nvidia.com/en-us/startups/
 - _Submission_: https://programs.nvidia.com/phoenix/application
-- _Award_: GPU credits, technology access, and network support. No
-  application deadlines
+- _Award_: GPU credits, technology access, and network support. No application
+  deadlines
 
 ## Crypto
 
@@ -395,8 +402,8 @@ applicants worldwide.
 
 - _Website_: https://fil.org/grants
 - _Submission_: https://github.com/filecoin-project/devgrants/issues/new/choose
-- _Tiers_: Open Grants, Builder Next Step Grants ($5K–$10K), and RFPs with defined
-  deliverables and milestones
+- _Tiers_: Open Grants, Builder Next Step Grants ($5K–$10K), and RFPs with
+  defined deliverables and milestones
 - _Focus_: Developer and data tooling, integrations, research and protocols,
   storage and retrieval, Filecoin Virtual Machine
 
@@ -415,15 +422,16 @@ applicants worldwide.
 - _Website_: https://www.optimism.io/blog/retro-funding-2025
 - _Submission_: https://atlas.optimism.io/missions
 - _Model_: Retroactive. Build and ship first, then apply for a share of OP
-  tokens based on demonstrated value. 850M OP (20% of total supply)
-  permanently earmarked for public goods
+  tokens based on demonstrated value. 850M OP (20% of total supply) permanently
+  earmarked for public goods
 - _Structure_: Restructured into themed "Retro Funding Missions" (e.g., Dev
   Tooling) with monthly application checkpoints instead of one annual round
 - _Difficulty_: Moderate. Requires an existing track record on Optimism/OP Stack
 
 **Polygon Community Grants**
 
-- _Website_: https://polygon.technology/blog/polygon-community-grants-program-announces-season-2-with-35m-pol-and-ai-leading-the-pack
+- _Website_:
+  https://polygon.technology/blog/polygon-community-grants-program-announces-season-2-with-35m-pol-and-ai-leading-the-pack
 - _Submission_: https://polygon.questbook.xyz/
 - Focus for 2026: Explicitly prioritizes projects at the intersection of AI
   agents, verifiable compute, and on-chain infrastructure
@@ -440,8 +448,8 @@ responsible AI considerations. NSF AI programs run roughly 15–25% success rate
 - _Generic project descriptions_: be specific about what it does, who it serves,
   what's novel
 - _Closed-source code_: most Web3 grants require open source
-- _Mismatched ecosystem commitment_: applying to one foundation while building on
-  another chain
+- _Mismatched ecosystem commitment_: applying to one foundation while building
+  on another chain
 - _No track record_: zero GitHub activity or ecosystem presence gets
   deprioritized
 - _Asking too much_: grants under $100K are meaningfully easier than those over
@@ -452,16 +460,15 @@ responsible AI considerations. NSF AI programs run roughly 15–25% success rate
 **UAE grants:**
 
 - _No local host_: AARE/AYIA and Dubai RDI both require a UAE-based PI or
-  institution. A US-only team without a Dubai/Abu Dhabi partner is
-  disqualified before review. Sandooq Al Watan's small Grants programme and
-  MBZUAI's student fellowships are the main exceptions open directly to
-  individuals
+  institution. A US-only team without a Dubai/Abu Dhabi partner is disqualified
+  before review. Sandooq Al Watan's small Grants programme and MBZUAI's student
+  fellowships are the main exceptions open directly to individuals
 - _Budget mismatch_: Dubai RDI requires at least 50% of funds spent inside
   Dubai, so a proposal built around foreign-only spending fails eligibility
   screening
-- _Cold outreach_: ASPIRE has no public rolling portal. Applications that skip
-  a warm introduction (existing UAE partner institution or direct outreach
-  to ATRC/ASPIRE) rarely get traction
+- _Cold outreach_: ASPIRE has no public rolling portal. Applications that skip a
+  warm introduction (existing UAE partner institution or direct outreach to
+  ATRC/ASPIRE) rarely get traction
 
 # Suggested Sequence
 
@@ -474,6 +481,6 @@ responsible AI considerations. NSF AI programs run roughly 15–25% success rate
    spring round
 5. **Watch:** NSF AI Institutes solicitation, AI Forge nonprofit launch
 6. **If pursuing UAE:** identify a Dubai- or Abu Dhabi-based host institution
-   first (e.g., Khalifa University, MBZUAI, NYU Abu Dhabi) — Dubai RDI and
-   ASPIRE both gate eligibility on having one — then approach Dubai RDI's
-   next Research Projects Funding round or ASPIRE via a warm introduction
+   first (e.g., Khalifa University, MBZUAI, NYU Abu Dhabi): Dubai RDI and
+   ASPIRE both gate eligibility on having one: then approach Dubai RDI's next
+   Research Projects Funding round or ASPIRE via a warm introduction
