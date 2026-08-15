@@ -1,0 +1,1597 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{\textbf{#1}}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+\usepackage{listings}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{1cm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+\newcommand{\black}[1]{\textcolor{black}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\brown}[1]{\textcolor{brown}{#1}}
+\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
+\newcommand{\gray}[1]{\textcolor{gray}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\olive}[1]{\textcolor{olive}{#1}}
+\newcommand{\orange}[1]{\textcolor{orange}{#1}}
+\newcommand{\purple}[1]{\textcolor{purple}{#1}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\teal}[1]{\textcolor{teal}{#1}}
+\newcommand{\violet}[1]{\textcolor{violet}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+% fallback for those not using the hyperref driver hyperxmp:
+\makeatletter
+\@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
+\makeatother
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+\begin{columns}[T]
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/UMD_Logo.png}}
+\end{column}
+
+\begin{column}{0.75\linewidth}
+\vspace{0.4cm}
+\begingroup \large
+
+UMD DATA605 - Big Data Systems \endgroup
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begingroup \Large
+
+\textbf{\[\text{\textcolor{blue}{\text{05.1: NoSQL Databases}}}\]}
+\endgroup
+
+\begin{columns}[T]
+\begin{column}{0.75\linewidth}
+\vspace{1cm}
+
+\begin{itemize}
+\item
+  \textbf{Instructor}: Dr.~GP Saggese, \url{gsaggese@umd.edu}
+\item
+  @References@:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Online tutorials
+  \item
+    Silbershatz: Chap 10.2
+  \item
+    Seven Databases in Seven Weeks, 2e
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.2\linewidth}
+\includegraphics[width=2cm,height=\textheight,keepaspectratio]{data605/lectures_source/images/Silberschatz_book.png}
+\includegraphics[width=2cm,height=\textheight,keepaspectratio]{data605/lectures_source/images/lecture_5_0/lec_5_0_slide_4_image_1.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{From SQL to NoSQL}
+\protect\phantomsection\label{from-sql-to-nosql}
+\begin{columns}[T]
+\begin{column}{0.7\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{DBs are central tools to big data}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    New applications, data/storage constraints
+  \item
+    \textasciitilde2000s NoSQL ``movement'' started
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Initially ``No SQL'' \(\to\) then ``Not Only SQL''
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.2\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_5_0/lec_5_0_slide_5_image_1.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{darkgreen}{Different DB types make different trade-offs}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Different worldviews
+  \item
+    Schema vs schema-less
+  \item
+    Rich vs fast query ability
+  \item
+    Strong consistency (ACID), weak, eventual consistency
+  \item
+    APIs (SQL, JS, REST)
+  \item
+    Horizontal vs vertical scaling, sharding, replication
+  \item
+    Indexing vs no indexing
+  \item
+    Tuned for reads or writes, control over tuning
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{User base/applications have expanded}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Postgres + Mongo cover 99\% of use cases
+  \item
+    Data scientists/engineers need familiarity with both
+  \item
+    \emph{``Which DB solves my problem best?''}
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Polyglot model}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use more than one DB per project
+  \item
+    Relational DBs won't disappear soon
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Issues with Relational Dbs}
+\protect\phantomsection\label{issues-with-relational-dbs}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Relational DBs have drawbacks}}
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Application-DB impedance mismatch
+  \item
+    Schema flexibility
+  \item
+    Consistency in distributed set-up
+  \item
+    Limited scalability
+  \end{enumerate}
+\item
+  For each drawback a slide with:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{darkgreen}{Problem}}
+  \item
+    \textbf{\textcolor{blue}{Solutions}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Within relational SQL paradigm
+    \item
+      With NoSQL approach
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{1) App / DB Impedance Mismatch: Problem}
+\protect\phantomsection\label{app-db-impedance-mismatch-problem}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Mismatch between data representation in code and relational DB}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Code uses:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Data structures (e.g., lists, dictionaries, sets)
+    \item
+      Objects
+    \end{itemize}
+  \item
+    Relational DB uses:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Tables (entities)
+    \item
+      Rows (instances of entities)
+    \item
+      Relationships between tables
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Example of app-DB mismatch}}:
+
+  \begin{itemize}
+  \item
+    Application stores a Python dictionary \begingroup \footnotesize
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Store a dictionary from name (string) to tags (list of strings)}
+\NormalTok{tag\_dict: Dict[}\BuiltInTok{str}\NormalTok{, List[}\BuiltInTok{str}\NormalTok{]]}
+\end{Highlighting}
+\end{Shaded}
+
+    \endgroup
+  \item
+    Relational DB needs 3 tables:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \textcolor{blue}{\texttt{Names(nameId, name)}} for keys
+    \item
+      \textcolor{blue}{\texttt{Tags(tagId, tag)}} for values
+    \item
+      \textcolor{blue}{\texttt{Names\_To\_Tags(nameId, tagId)}} to map
+      keys to values
+    \end{itemize}
+  \item
+    Denormalize using a single table:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \textcolor{blue}{\texttt{Names(name, tag)}}
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{1) App / DB Impedance Mismatch: Solutions}
+\protect\phantomsection\label{app-db-impedance-mismatch-solutions}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Ad-hoc mapping layer}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Translate objects and data structures into DB model
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Implement ``Name to Tags'' storage
+    \item
+      Code uses a simple map, DB has 3 tables
+    \end{itemize}
+  \item
+    Cons
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Requires writing and maintaining code
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Object-relational mapping (ORM)}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Pros
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Automatic data conversion between object code and DB
+    \item
+      Implement \textcolor{blue}{\texttt{Person}} object using DB
+    \item
+      Use SQLAlchemy for Python and SQL
+    \end{itemize}
+  \item
+    Cons
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Handling complex types, polymorphism, and inheritance can be
+      challenging
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{NoSQL approach}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    No schema
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Objects can be flat or complex (e.g., nested JSON)
+    \item
+      Stored objects (documents) can vary in structure
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{2) Schema Flexibility}
+\protect\phantomsection\label{schema-flexibility}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Problem}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Data may not fit into a schema
+  \item
+    E.g., nested or dis-homogeneous data
+    (\textcolor{blue}{\texttt{List[Obj]}})
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Within relational DB}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use a general schema covering all cases
+  \item
+    Cons
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Complicated schema with implicit relations
+    \item
+      Sparse DB tables
+    \item
+      Violates relational DB assumptions
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{NoSQL approach}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., MongoDB does not enforce schema
+  \item
+    Pros
+
+    \begin{itemize}
+    \tightlist
+    \item
+      No schema concerns when writing data
+    \end{itemize}
+  \item
+    Cons
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Handle various schemas during data processing
+    \item
+      Related to ETL vs ELT data pipelines
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{3) Consistency in Relational DBs}
+\protect\phantomsection\label{consistency-in-relational-dbs}
+\begin{columns}[T]
+\begin{column}{0.65\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{All systems fail}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Application error (corner case, internal error)
+  \item
+    Application crash (OS issue)
+  \item
+    Hardware failure (RAM ECC error, disk)
+  \item
+    Power failure
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Relational DBs enforce ACID properties}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Guarantee for system reliability
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Atomicity}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Transactions are ``all or nothing''
+  \item
+    Transaction succeeds completely or fails
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Consistency}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Transaction moves DB from one valid state to another
+  \item
+    Maintain DB invariants (primary, foreign key constraints)
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.3\linewidth}
+\footnotesize \centering
+
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_5_0/lec_5_0_slide_10_image_2.png}}
+\emph{Application error}
+
+\vspace{1cm}
+
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_5_0/lec_5_0_slide_10_image_1.png}}
+
+\emph{Hardware failure}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{cyan}{Isolation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Concurrent transactions yield the same result as sequential
+    execution
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Durability}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Committed transaction content preserved after system failure
+  \item
+    Record data in non-volatile memory
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{3) Consistency in Distributed DB}
+\protect\phantomsection\label{consistency-in-distributed-db}
+\begin{columns}[T]
+\begin{column}{0.7\linewidth}
+\begin{itemize}
+\item
+  Scale data or clients \(\to\)
+  \textbf{\textcolor{red}{distributed setup}}
+\item
+  \textbf{\textcolor{darkgreen}{Goals}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Performance (transactions per second) **- Availability (up-time
+    guarantee)
+  \item
+    Fault-tolerance (recover from faults)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Achieving ACID consistency:}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Not easy} in single DB
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., PostgreSQL guarantees ACID
+    \item
+      E.g., MongoDB doesn't
+    \end{itemize}
+  \item
+    \emph{Impossible} in distributed DB
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Due to CAP theorem
+    \item
+      Even weak consistency is difficult
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.25\linewidth}
+\vspace{1cm}
+
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_5_0/lec_5_0_slide_11_image_1.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{CAP Theorem}
+\protect\phantomsection\label{cap-theorem}
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{CAP theorem}}: Any distributed DB can have at
+  most two of the following
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{darkgreen}{Consistency}}:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      All clients see the same data
+    \item
+      Writes are atomic; subsequent reads retrieve the new value
+    \end{itemize}
+  \item
+    \textbf{\textcolor{blue}{Availability}}: Returns a value if at least
+    one server is running
+  \item
+    \textbf{\textcolor{violet}{Partition tolerance}}: The system works
+    even if communication is temporarily lost (network is partitioned)
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_5_0/lec_5_0_slide_12_image_1.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  Originally a conjecture (Eric Brewer)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Proved formally (Gilbert, Lynch, 2002)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{CAP Corollary}
+\protect\phantomsection\label{cap-corollary}
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{CAP Theorem}}: pick 2 among consistency,
+  availability, partition tolerance
+\item
+  \textbf{\textcolor{darkgreen}{Network partitions}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Cannot be prevented in large-scale distributed systems
+  \item
+    Can be reduced in probability using redundancy and fault tolerance
+  \end{itemize}
+\item
+  You must sacrifice either:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{blue}{Availability}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Allow system downtime
+    \item
+      E.g., banking system
+    \end{itemize}
+  \item
+    \textbf{\textcolor{violet}{Consistency}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Allow different system views
+    \item
+      E.g., social network
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_5_0/lec_5_0_slide_13_image_2.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{CAP Theorem: Intuition}
+\protect\phantomsection\label{cap-theorem-intuition}
+\begin{columns}[T]
+\begin{column}{0.7\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  Consider:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Client (\emph{Node0})
+  \item
+    Two DB replicas (\emph{Node1}, \emph{Node2})
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Network partition occurs}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    DB servers (\emph{Node1}, \emph{Node2}) can't communicate
+  \item
+    Users (\emph{Node0}) access only one (\emph{Node2})
+  \item
+    \emph{Reads}: Access data on the same partition
+  \item
+    \emph{Writes}: Can't update due to potential inconsistency
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.25\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_5_0/lec_5_0_slide_14_image_1.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{CAP theorem}}: Sacrifice consistency or
+  availability
+\item
+  \textbf{\textcolor{blue}{Available, not consistent}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Inconsistency acceptable (e.g., social networking)
+  \item
+    Allow updates on accessible replica
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Consistent, not available}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Inconsistency unacceptable (e.g., banking)
+  \item
+    Stop service to maintain consistency
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Replication Schemes}
+\protect\phantomsection\label{replication-schemes}
+\begin{columns}[T]
+\begin{column}{0.6\linewidth}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Replication schemes}}: Organize multiple
+  servers for a distributed DB
+\item
+  \textbf{\textcolor{darkgreen}{Primary-secondary replication}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Application communicates with the primary
+  \item
+    Replicas require the primary for updates
+  \item
+    Single point of failure
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Update-anywhere replication}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Aka ``multi-master replication''
+  \item
+    Every replica can update data, which is propagated to others
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Quorum-based replication}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{N}: Total replicas
+  \item
+    Write to \emph{W} replicas
+  \item
+    Read from \emph{R} replicas, pick the latest update (timestamps)
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.35\linewidth}
+\scriptsize \centering
+
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_5_0/lec_5_0_slide_15_image_1.png}}
+\emph{Primary-secondary replication}
+
+\vspace{1.5cm}
+
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_5_0/lec_5_0_slide_15_image_2.png}}
+\emph{Update-anywhere replication}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Synchronous Replication}
+\protect\phantomsection\label{synchronous-replication}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Synchronous replication}}: updates propagate
+  to replicas in a single transaction
+\item
+  Implementations
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{darkgreen}{2-Phase Commit (2PC)}}: original
+    method
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Single point of failure
+    \item
+      Can't handle primary server failure
+    \end{itemize}
+  \item
+    \textbf{\textcolor{blue}{Paxos}}: widely used
+
+    \begin{itemize}
+    \tightlist
+    \item
+      No primary required
+    \item
+      More fault tolerant
+    \end{itemize}
+  \item
+    Both are complex/expensive
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_5_0/lec_5_0_slide_16_image_1.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{violet}{CAP theorem}}: only one of Consistency or
+  Availability can be guaranteed during a network partition
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Many systems use relaxed consistency models
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Asynchronous Replication}
+\protect\phantomsection\label{asynchronous-replication}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Asynchronous replication}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Primary node updates replicas
+  \item
+    Transaction completes before replicas update
+  \item
+    Quick commits, less consistency
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Eventual consistency}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Popularized by AWS DynamoDB
+  \item
+    Consistency only on eventual outcome
+  \item
+    ``Eventual'' may mean after server/network fix
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_5_0/lec_5_0_slide_17_image_1.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{"Freshness" property}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Read from replica may not be latest
+  \item
+    Request version with specific ``freshness''
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., ``data from not more than 10 minutes ago''
+    \item
+      E.g., show airplane ticket price a few minutes old
+    \end{itemize}
+  \item
+    Replicas use timestamps for data versioning
+  \item
+    Use local replica if fresh, else request primary node
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{4) Scalability Issues with RDMS: Problem}
+\protect\phantomsection\label{scalability-issues-with-rdms-problem}
+\begin{itemize}
+\tightlist
+\item
+  Sources of SQL DB scalability issues:
+\end{itemize}
+
+\begin{enumerate}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Locking data}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    DB engine locks rows/tables for ACID
+  \item
+    When locked higher latency \(\to\) Fewer updates/second \(\to\)
+    Slower application
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Worse in distributed set-up}}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Requires data replication over multiple servers (scaling out)
+\item
+  Slower application due to:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Network delays
+  \item
+    Locks across networks for DB consistency
+  \item
+    Overhead of replica consistency (2PC, Paxos)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{4) Scalability Issues with RDMS: Solutions}
+\protect\phantomsection\label{scalability-issues-with-rdms-solutions}
+\begin{columns}[T]
+\begin{column}{0.7\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Table denormalization}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Increase performance by adding redundant data
+  \item
+    Pros
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Faster reads: Lock one table, no joins
+    \end{itemize}
+  \item
+    Cons
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Slower writes: More data to update
+    \item
+      Loss of table relations
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Relax consistency}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Compromise on ACID
+  \item
+    Weaken consistency (e.g., eventual consistency)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{NoSQL}}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.25\linewidth}
+\centering \scriptsize
+
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_5_0/lec_5_0_slide_19_image_1.png}}
+\emph{Normalized data}
+
+\vspace{1cm}
+
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_5_0/lec_5_0_slide_19_image_2.png}}
+\emph{Denormalized data}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{NoSQL Stores}
+\protect\phantomsection\label{nosql-stores}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Use cases of large-scale web applications}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Real-time access with ms latencies
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., facebook: 4ms for reads
+    \end{itemize}
+  \item
+    No need for ACID properties
+  \item
+    MongoDB started at DoubleClick (AdTech), acquired by Google
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Solve problems with relational databases}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Application-DB impedance mismatch
+  \item
+    Schema flexibility
+  \item
+    Consistency in distributed setup
+  \item
+    Scalability
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{To scale out, give up something}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Consistency
+  \item
+    Joins
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Most NoSQL stores don't allow server-side joins
+    \item
+      Require data denormalization and duplication
+    \end{itemize}
+  \item
+    Restricted transactions
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Most NoSQL stores allow single-object transactions
+    \item
+      E.g., one document/key
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\end{document}

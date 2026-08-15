@@ -1,10 +1,10 @@
 """
-Run each notebook in msml610/tutorials/L08_causal_inference/ inside Docker
+Run each notebook in msml610/tutorials/L10_causal_discovery/ inside Docker
 using docker_cmd.sh.
 
 Import as:
 
-import msml610.tutorials.L08_causal_inference.test.test_docker_all as mtl08tdal
+import msml610.tutorials.L10_causal_discovery.test.test_docker_all as mtl10tdal
 """
 
 import logging
@@ -23,7 +23,7 @@ _LOG = logging.getLogger(__name__)
 
 class Test_docker(hdoctest.DockerTestCase):
     """
-    Run all Docker tests for msml610/tutorials/L08_causal_inference/.
+    Run all Docker tests for msml610/tutorials/L10_causal_discovery/.
     """
 
     _test_file = __file__
@@ -31,19 +31,9 @@ class Test_docker(hdoctest.DockerTestCase):
     @pytest.mark.slow
     def test1(self) -> None:
         """
-        Test that L08_04_01_causal_inference.ipynb runs without error.
+        Test that L10_2_causal_discovery.ipynb runs without error.
         """
         # Prepare inputs.
-        notebook_name = "L08_04_01_causal_inference.ipynb"
+        notebook_name = "L10_2_causal_discovery.ipynb"
         # Run test.
-        self._helper(notebook_name)
-
-    @pytest.mark.slow
-    def test2(self) -> None:
-        """
-        Test that L08_04_02_causal_inference.ipynb runs without error.
-        """
-        # Prepare inputs.
-        notebook_name = "L08_04_02_causal_inference.ipynb"
-        # Run test.
-        self._helper(notebook_name)
+        self.helper(notebook_name)

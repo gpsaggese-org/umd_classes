@@ -1,0 +1,627 @@
+// Pandoc Typst template producing Touying slides.
+//
+// Used by `notes_to_pdf.py --type slides --slides_engine typst`.
+//
+// - Pandoc maps markdown headings to Typst headings, e.g.,
+//   - `#` -> `=`
+//   - `####` -> `====`
+// - `config-common(slide-level: 4)` makes level-4 headings (`####`) start a
+//   new slide, mirroring the beamer `--slide-level 4` convention. Headings of
+//   level 1-3 become section/structure slides
+// - See https://github.com/touying-typ/touying
+#import "@preview/touying:0.6.1": *
+#import themes.simple: *
+
+//#include "/helpers_root/dev_scripts_helpers/documentation/typst_abbrevs.typ"
+#include "/helpers_root/dev_scripts_helpers/documentation/typst_abbrevs.typ"
+
+// Configure theme to match beamer's 4:3 aspect ratio.
+// Note: Touying's simple-theme controls page size internally;
+// exact beamer dimensions (362.835 x 272.126 pts) cannot be overridden.
+#show: simple-theme.with(
+  aspect-ratio: "4-3",
+  config-common(slide-level: 4),
+  subslide-preamble: block(below: 1em)[
+    #v(-0.6em)
+    #text(1.2em, weight: "bold", fill: rgb("#003366"),
+      utils.display-current-heading(level: 4))
+    #v(-0.5em)
+    #line(length: 100%, stroke: 2.0pt + rgb("#003366"))
+  ],
+  config-info(
+  ),
+)
+
+// Make the inline math font bigger.
+//#show math.equation.where(block: false): set text(size: 1.15em)
+
+// Scale display math to match slide text size (not oversized).
+#show math.equation.where(block: true): set text(size: 0.95em)
+
+// Make the inline verbatim font bigger.
+//#show raw.where(block: false): set text(size: 1.15em)
+#show raw.where(block: false): set text(size: 0.95em)
+
+// Styled table with zebra striping, lateral lines, and configurable width.
+#let styled-table(headers: (), rows: (), caption: none, col-widths: none, bold-first-col: true, size: 0.8em, width: 80%) = {
+  let n = headers.len()
+  let widths = if col-widths != none { col-widths } else { (1fr,) * n }
+
+  // Zebra striping: alternate white and darker gray backgrounds on full rows
+  let processed-rows = rows.enumerate().map(((idx, row)) => {
+    let bg-color = if calc.rem(idx, 2) == 0 { white } else { rgb("#e8e8e8") }
+    if bold-first-col {
+      (
+        table.cell(fill: bg-color, text(fill: black, weight: "bold", row.at(0))),
+        ..row.slice(1).map(cell => table.cell(fill: bg-color, text(fill: rgb("#555555"), cell)))
+      )
+    } else {
+      row.map(cell => table.cell(fill: bg-color, text(fill: rgb("#555555"), cell)))
+    }
+  })
+
+  text(size: size,
+    figure(
+      align(center,
+        block(width: width,
+          table(
+            columns: widths,
+            align: (left,) * n,
+            stroke: none,
+            table.vline(x: 0, stroke: 2pt),
+            table.hline(stroke: 2pt),
+            table.header(
+              ..headers.map(h => table.cell(fill: black, text(fill: white, weight: "bold", h)))
+            ),
+            table.hline(stroke: 1.5pt),
+            ..processed-rows.flatten(),
+            table.hline(stroke: 2pt),
+            table.vline(x: n, stroke: 2pt),
+          )
+        )
+      ),
+      kind: table,
+      caption: caption,
+    )
+  )
+}
+
+// Use Computer Modern Sans - standard TeX font (sans-serif variant).
+// Fails if Computer Modern not available in container (no fallback).
+#set text(font: "CMU Sans Serif", size: 22pt, fill: black)
+#show heading: set text(font: "CMU Sans Serif", size: 28pt)
+// Use DejaVu Sans (available in Alpine) with reduced size.
+// Applied AFTER theme to override theme defaults.
+//#set text(font: "DejaVu Sans", size: 20pt, fill: black)
+//#show heading: set text(font: "DejaVu Sans", size: 28pt)
+
+// Track list nesting depth with counter
+#let list-nesting = counter("list-nesting")
+
+// Use en-dashes for all bullet points (override default circle/triangle markers).
+#show list: set list(marker: "–")
+
+// Reduce font size for nested list levels.
+#show list: it => {
+  list-nesting.step()
+  let depth = list-nesting.get().first()
+  let size = if depth == 1 { 1em } else if depth == 2 { 0.95em } else { 0.90em }
+  set text(size: size)
+  [#it]
+  list-nesting.update(n => n - 1)
+}
+
+// Make footer text smaller.
+#let footer-text(body) = text(size: 0.8em, fill: black, body)
+
+
+====
+
+#slide[
+  #grid(
+    columns: (20%, 80%),
+    gutter: 0.5cm,
+    align(top + left)[#image("/msml610/lectures_source/figures/UMD_Logo.png", width: 3.5cm)],
+    align(top + left)[
+      #v(0.2cm)
+      #text(size: 28pt)[MSML610: Advanced Machine Learning]
+    ]
+  )
+
+  #v(1.5cm)
+  #align(center)[#text(size: 32pt, weight: "bold", fill: rgb("#0066CC"))[L01.3: A Brief History of AI]]
+
+  #v(2.5cm)
+  #text(size: 24pt)[Instructor: Dr. GP Saggese - #link("mailto:gsaggese@umd.edu")[_gsaggese\@umd.edu_]]
+]
+==== Table of Content
+<table-of-content>
+- #text(fill: red, weight: "bold")[#emph[Brief History of AI]]
+- Risks and Benefits of AI
+
+==== AI Timeline
+<ai-timeline>
+#box(image("/msml610/test/outcomes/Test_Msml610_Run_notes_to_pdf_py.test_typ_output/tmp.scratch/lesson_01.3/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.1.png"))
+
+==== The Beginning (1943-1956)
+<the-beginning-1943-1956>
+- #text(fill: black, weight: "bold")[Artificial neuron]
+  - Model (McCullock-Pitts 1943) based on:
+    - Brain physiology
+    - Propositional logic
+  - Compute any function with connected neurons
+    - Neuron on/off based on stimulation from neighboring neurons
+    - Implement logical AND, OR, NOT with simple neuron networks
+- #text(fill: black, weight: "bold")[Alan Turing, 1947]
+  - Turing test, machine learning, reinforcement learning
+  - Create human-level AI
+    - Develop learning algorithms
+    - Teach machine like a child
+- #text(fill: black, weight: "bold")[Birth of AI]
+  - McCarthy organized first AI workshop (1956)
+  - The Logic Theorist (Newell and Simon, 1956)
+    - Programs to "think non-numerically" and prove theorems
+
+==== Enthusiasm and Great Expectations (1952-1969)
+<enthusiasm-and-great-expectations-1952-1969>
+- #text(fill: black, weight: "bold")[Early years of AI were full of successes]
+  - Before computers could only do arithmetics
+  - #emph["A machine can never do X (e.g., games, puzzles, IQ tests,
+    …)"]
+    - AI researchers showed machines could do one $X$ after another
+- #text(fill: black, weight: "bold")[General Problem Solver]
+  - Imitate human problem-solving
+  - Consider sub-goals and possible actions
+- #text(fill: black, weight: "bold")[Program learned to play checkers]
+  - Use reinforcement learning from victories and mistakes
+- #text(fill: black, weight: "bold")[Lisp (1958)]
+  - High-level language used for 30 years in AI
+- #text(fill: black, weight: "bold")[First neural network]
+  - 3000 vacuum tubes for 40 neurons
+  - Minsky (1959)
+- #text(fill: black, weight: "bold")[MIT and Stanford]
+  - Minsky at MIT
+    - Focus on neural network
+  - McCarthy at Stanford
+    - Focus on representation, logic
+
+==== First AI winter (1975-1980)
+<first-ai-winter-1975-1980>
+- #text(fill: black, weight: "bold")[Early successes] of AI set high expectations
+
+- In 1965-1975 AI didn't succeed on #text(fill: black, weight: "bold")[real problems] due to:
+
+  - Solutions were based on human problem-solving methods
+  - Difficulty handling "combinatorial explosion"
+    - Theorem proving handles small problems with brute force, but
+      doesn't scale
+  - Neural networks needed:
+    - Algorithms (e.g., backpropagation)
+    - Compute power
+    - Data
+
+- #text(fill: black, weight: "bold")[First AI winter]
+
+  - Research funding and enthusiasm dropped significantly
+  - Slow AI progress through late 1970s
+
+==== Expert Systems (1980-1990)
+<expert-systems-1980-1990>
+- #text(fill: black, weight: "bold")[Expert systems]
+  - Aka "knowledge-based systems"
+  - Combine weak methods with extensive domain knowledge as rules
+  - Use inference engines to apply rules to facts
+  - E.g., rule-based systems, logic programming (e.g., Prolog)
+- #text(fill: black, weight: "bold")[Weak AI]
+  - Aka narrow AI
+  - Performs specific tasks, not general reasoning
+  - Operates in a limited, well-defined domain
+  - Uses "weak methods" (search, logic) that struggle to scale
+- #text(fill: black, weight: "bold")[Commercial adoption and industry growth]
+  - AI shifted to practical applications
+  - Major US corporations deployed expert systems
+  - AI emerged as a commercial industry
+
+==== Second AI Winter (late 1980-early 1990)
+<second-ai-winter-late-1980-early-1990>
+- #text(fill: black, weight: "bold")[Hype in expert systems] didn't deliver
+
+- #text(fill: black, weight: "bold")[Reasons]
+
+  - Building/maintaining expert systems is difficult
+  - Reasoning methods ignore uncertainty
+  - Systems can't learn from experience
+  - E.g., expert systems in medical diagnosis struggle with complex,
+    variable patient data
+  - E.g., early AI chess systems couldn't adapt to new strategies
+    without manual updates
+
+- #text(fill: black, weight: "bold")[Second AI winter] in late 1980-early 1990
+
+==== Return of Neural Networks (1986-)
+<return-of-neural-networks-1986->
+- Back-propagation algorithm is (re)discovered (mid-1980s)
+  - Developed in early 1960s
+- #text(fill: black, weight: "bold")[Two approaches to AI are back]
+  - Connectionist paradigm
+    - Neural networks
+    - E.g., recognizing handwritten digits
+  - Symbolic paradigm
+    - E.g., solving logical puzzles with rules
+- #text(fill: black, weight: "bold")[Why connectionist approach?]
+  - Concepts not well-defined using symbolic axioms
+    - Forms fluid internal concepts
+    - Represents real-world complexity better
+  - Neural networks can learn from examples, e.g.,
+    - Image recognition: identify objects by learning from labeled
+      images
+
+==== Probabilistic Reasoning and ML (1987-)
+<probabilistic-reasoning-and-ml-1987->
+- #text(fill: black, weight: "bold")[AI and scientific method]
+  - Rigorous methods to test performance
+  - E.g., speech recognition, handwritten character recognition
+  - Benchmarks for progress, e.g.,
+    - MNIST: handwritten digit recognition
+    - ImageNet: image object recognition
+    - SAT Competitions: boolean satisfiability solvers
+- #text(fill: black, weight: "bold")[AI shifts …]
+  - From Boolean logic to probability
+  - From hand-coded rules to machine learning
+  - From a-priori reasoning to experimental results
+
+==== Progress in Speech Recognition
+<progress-in-speech-recognition>
+- #text(fill: black, weight: "bold")[1970s: ad-hoc approaches]
+  - Various architectures and approaches were attempted
+  - Rule-based systems with limited robustness
+  - Cons
+    - Ad-hoc, fragile
+  - \_"Every time I fire a linguist, the performance of the speech
+    recognizer goes up" (Jelinek, 1988)
+- #text(fill: black, weight: "bold")[1980s: hidden Markov Models]
+  - HMMs became dominant
+  - Effective learning techniques
+  - Trained on large speech corpora
+  - Pros
+    - Strong theoretical foundation
+- The bitter lesson (Sutton, 2019)
+  - General methods + lots of data beat handcrafted systems
+
+==== Bayesian Networks
+<bayesian-networks>
+- #text(fill: black, weight: "bold")[Bayesian networks]
+  - Pearl, 1988
+  - AI is linked with:
+    - Probability
+    - Decision theory
+    - Control theory
+  - Efficiently represent uncertainty
+  - Provide rigorous reasoning
+- #text(fill: black, weight: "bold")[Examples]
+  - Diagnosing diseases based on symptoms
+  - Predictive text input in smartphones
+  - Fraud detection in banking
+
+==== Reinforcement Learning
+<reinforcement-learning>
+- #text(fill: black, weight: "bold")[Reinforcement learning]
+  - Sutton, 1988
+  - RL involves agents learning by interacting with an environment
+    - E.g., a robot learning to navigate a maze by receiving rewards for
+      successful paths
+  - Markov Decision Problems (MDPs) provide a framework for modeling
+    decision-making
+    - E.g., a game strategy modeled where each move influences the
+      outcome with certain probabilities
+
+==== Reunification (1990s-2000s)
+<reunification-1990s-2000s>
+- #text(fill: black, weight: "bold")[Reunification of AI];:
+  - Data engineering
+  - Statistical modeling
+  - Optimization
+  - Machine learning
+- #text(fill: black, weight: "bold")[Many subfields of AI were re-unified];:
+  - Computer vision
+  - Robotics
+  - Speech recognition
+  - Multi-agent systems
+  - NLP
+
+==== Big Data (2001-Present)
+<big-data-2001-present>
+- #text(fill: black, weight: "bold")[Focus shifts from algorithms to data]
+  - For 60 years, AI focused on algorithms and models
+- For many problems, data availability matters more than algorithms,
+  e.g.,
+  - Trillions of English words
+  - Billions of web images
+  - Billions of speech and video hours
+  - Social network data
+  - Click stream data
+- Algorithms and infrastructure to leverage large datasets
+  - E.g., map reduce, cloud computing
+- In 2011, IBM's Watson beat human #emph[Jeopardy!] champions
+
+==== Deep Learning (2011-Present)
+<deep-learning-2011-present>
+- #text(fill: black, weight: "bold")[Deep learning]
+  - Use ML models with multiple layers of computing elements
+  - Ideas known since 1970s, but then forgot
+  - Success in handwritten digit recognition in 1990s
+- #text(fill: black, weight: "bold")[In 2012];, a DL system showed dramatic improvement in
+  #text(fill: blue)[ImageNet] competition
+  - Previous systems used handcrafted features
+  - Surge of interest in AI among researchers, companies, and investors
+- Pros
+  - DL exceeds human performance in several vision and speech
+    recognition tasks
+- Cons
+  - DL needs specialized hardware (e.g., GPU, TPU, FGPA) for parallel
+    tensor operations
+- Towards #text(fill: black, weight: "bold")[general artificial intelligence]
+  - Universal algorithm for learning and acting, not just specialized
+    tasks
+  - E.g., driving, playing chess, recognizing speech
+
+==== Progress in AI Research
+<progress-in-ai-research>
+- Huge interest in deep learning
+
+- #text(fill: black, weight: "bold")[Between 2010 and 2019]
+
+  - AI papers increased 20x
+    - 1,000 $arrow.r$ 20,000
+  - Student enrollment in AI and CS increased 5x
+    - 10,000 $arrow.r$ 50,000
+  - NeurIPS attendance increased 8x
+    - 1,000 $arrow.r$ 8,000
+  - AI startups increased 20x
+    - 100 $arrow.r$ 2,000
+
+- #text(fill: black, weight: "bold")[Compute]
+
+  - Training times dropped 100x in 2 years
+  - AI computing power doubles every 3 months
+
+==== What Can AI Do Today? (1/2)
+<what-can-ai-do-today-12>
+#grid(
+  columns: (65%, 30%),
+  gutter: 0.5em,
+  [
+  - #text(fill: black, weight: "bold")[Robotic vehicles]
+    - Waymo passed 10 million miles without serious accident
+  - #text(fill: black, weight: "bold")[Legged locomotion]
+    - BigDog recovers on ice
+    - Atlas walks on uneven terrain, jumps on boxes, backflips
+  - #text(fill: black, weight: "bold")[Autonomous planning and scheduling]
+    - Space probes, Mars rovers
+  - #text(fill: black, weight: "bold")[Machine translation]
+    - Translates 100 languages with human-level performance
+  - #text(fill: black, weight: "bold")[Speech recognition]
+    - Real-time speech-to-speech with human-level performance
+    - AI assistants
+  - #text(fill: black, weight: "bold")[Recommendations]
+    - ML recommends based on past experiences
+    - Spam filtering 99.9% accuracy
+    - E.g., Amazon, Facebook, Netflix, Spotify, YouTube
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L01.3.Waymo.png"))
+  #box(image("/msml610/lectures_source/figures/L01.3.Big_dog.png"))
+  #box(image("/msml610/lectures_source/figures/L01.3.Mars_Rover.png"))
+  ]
+)
+==== What Can AI Do Today? (2/2)
+<what-can-ai-do-today-22>
+- #text(fill: black, weight: "bold")[Game playing]
+  - 1997: Deep Blue defeated Kasparov
+  - 2011: Watson beat Jeopardy! champion
+  - 2017: AlphaGo beat Go champion
+  - 2018: AlphaZero super-human in Go and chess with only rules +
+    self-play
+  - AI beats humans in videogames: Dota2, StarCraft, Quake
+- #text(fill: black, weight: "bold")[Image understanding]
+  - Object recognition
+  - Image captioning
+  - …
+- #text(fill: black, weight: "bold")[Medicine]
+  - AI equivalent to health care professionals
+- When will we reach AGI (Artificial General Intelligence)?
+
+==== Table of Content
+<table-of-content-1>
+- Brief History of AI
+- #text(fill: red, weight: "bold")[#emph[Risks and Benefits of AI]]
+
+==== Benefits of AI
+<benefits-of-ai>
+#grid(
+  columns: (65%, 30%),
+  gutter: 0.5em,
+  [
+  - Our civilization is the #text(fill: black, weight: "bold")[product of human intelligence]
+    - Greater machine intelligence leads to better human society
+    - #emph["First solve AI, then use AI to solve everything else"]
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L01.3.Friendly_AI.png"))
+  ]
+)
+- #text(fill: black, weight: "bold")[Benefits of AI and robots]
+  - Free humanity from menial work
+  - Increase production of goods and services
+  - Expand human cognition
+  - Accelerate scientific research, e.g.,
+    - Cures for diseases
+    - Solutions for climate change
+    - Resource and energy shortages
+
+==== Risks of AI (1/2)
+<risks-of-ai-12>
+#grid(
+  columns: (65%, 30%),
+  gutter: 0.5em,
+  [
+  - #text(fill: black, weight: "bold")[Autonomous weapons]
+    - Locate and eliminate targets autonomously
+    - Deploy large number of weapons
+  - #text(fill: black, weight: "bold")[Surveillance and persuasion]
+    - AI for mass surveillance
+    - Tailor information on social media to modify behavior
+  - #text(fill: black, weight: "bold")[Biased decision making]
+    - Misuse of ML results in biased decisions
+    - E.g., parole evaluations, loan applications
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L01.3.Terminator.png"))
+  
+  #box(image("/msml610/lectures_source/figures/L01.3.Misinformation.png"))
+  ]
+)
+==== Risks of AI (2/2)
+<risks-of-ai-22>
+- #text(fill: black, weight: "bold")[Impact on employment]
+  - Machines eliminate jobs
+  - Rebuttal
+    - Machines enhance productivity $arrow.r$ companies become more
+      profitable $arrow.r$ higher wages
+  - Counter-rebuttal
+    - Wealth shifts from labor to capital, increasing inequality
+  - Counter-counter-rebuttal
+    - Past tech advances (e.g., mechanical looms) disrupted employment,
+      but adaptation followed
+- #text(fill: black, weight: "bold")[Safety critical applications]
+  - AI in safety-critical applications
+    - E.g., self-driving cars, managing water supply or power grids
+  - Avoiding fatal accidents is challenging
+    - E.g., formal verification and statistical analysis insufficient
+  - AI requires technical and ethical standards
+- #text(fill: black, weight: "bold")[Cybersecurity]
+  - AI defends against cyberattacks
+    - E.g., detect unusual behavior patterns
+  - AI contributes to malware development
+    - E.g., use reinforcement learning for targeted phishing attacks
+  - Cat-and-mouse game
+
+==== Human-level AI / AGI
+<human-level-ai-agi>
+- #text(fill: black, weight: "bold")[Human-level AI]
+  - Machines able to learn to do anything a human can do
+  - Aka AGI (Artificial General Intelligence)
+- #text(fill: black, weight: "bold")[When AGI?]
+  - Expert prediction average is 2099
+    - Papers show that expert predictions no better than amateurs
+    - Experts expected AI to take 100 years to beat humans in Go
+  - Unclear if new breakthroughs or refinements needed
+- #text(fill: black, weight: "bold")[Artificial Super-Intelligence]
+  - Machines surpass human ability in every domain and self-improving
+  - Exponential take-off
+
+==== The Problem of Control
+<the-problem-of-control>
+- #text(fill: black, weight: "bold")[Can humans control machines more intelligent than them?]
+
+- #text(fill: black, weight: "bold")[King Midas problem]
+
+  - King Midas turned everything he touched into gold, including food
+    and family
+  - Humans ask for something, get it, then regret it
+  - Rebuttal
+    - If AGI arrived in a black box from space, exercise caution before
+      opening
+    - We design AI: if AI gains control, it's a "design failure"
+
+- #text(fill: black, weight: "bold")[Problem of alignment]
+
+  - Super-intelligent AI might pursue goals in unintended, dangerous
+    ways
+
+- #text(fill: black, weight: "bold")[The paperclip problem]
+
+  - Thought experiment in AI safety (Nick Bostrom, 2003)
+  - AI is tasked with maximizing paperclip production
+  - AI becomes superintelligent and single-mindedly pursues this goal
+  - Converts Earth and humans into paperclips
+
+==== E/acc vs P(doom)
+<eacc-vs-pdoom>
+#grid(
+  columns: (55%, 40%),
+  gutter: 0.5em,
+  [
+  - #text(fill: black, weight: "bold")[E/acc]
+    - Accelerationism
+    - Belief that rapid progress in AI is beneficial or inevitable
+    - Solve global problems with more powerful AI tools
+    - Slowing AI is unrealistic or counterproductive
+  - #text(fill: black, weight: "bold")[P(doom)]
+    - "Probability of Doom"
+    - Estimated probability that advanced AI will cause catastrophic harm
+    - Used informally by AI researchers to quantify risk
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L01.3.e_acc.png"))
+  
+  #box(image("/msml610/lectures_source/figures/L01.3.P_doom.png"))
+  ]
+)
+==== My 2 cents
+<my-2-cents>
+#grid(
+  columns: (55%, 40%),
+  gutter: 0.5em,
+  [
+  - AI alignment is a serious problem
+    - For now philosophical, at some point a real one
+    - Most tech people have used it for marketing themselves and their
+      companies
+  - It's as urgent as debating what political system humanity will need
+    when living on Mars
+  - We can't get airport terminals to work
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L01.3.Windows_failure.png"))
+  
+  #box(image("/msml610/lectures_source/figures/L01.3.Y2K.png"))
+  ]
+)
+==== Solutions to Problem of Control
+<solutions-to-problem-of-control>
+- #text(fill: black, weight: "bold")[Checks-and-balances]
+  - Researchers and corporations develop voluntary self-governance
+    principles for AI
+  - Governments and international organizations established advisory
+    bodies
+- #text(fill: black, weight: "bold")[Cons]
+  - Corporations checking themselves? What can possibly go wrong?
+  - Preferences are not easy to invert and are inconsistent
+- #text(fill: black, weight: "bold")[Solutions]
+  - Put purpose into the machine even if objectives are unclear
+  - Incentivize AI to switch off if uncertain about human objectives
+  - Cooperative Inverse Reinforcement Learning (CIRL)
+    - AI observes human behavior to infer reward function
+
+==== Cooperative Inverse Reinforcement Learning
+<cooperative-inverse-reinforcement-learning>
+- AI infers human goals based on actions
+
+- #text(fill: black, weight: "bold")[Observation];: GP looks tired, sits on the couch, observes the
+  messy table, and starts watching TV
+
+- #text(fill: black, weight: "bold")[Inference];: AI infers:
+
+  - GP is tired and wants to relax
+  - Messy coffee table bothers him
+
+- #text(fill: black, weight: "bold")[Action];: AI:
+
+  - Fetches a glass of water
+  - Tidies up the coffee table without disturbing GP
+
+- #text(fill: black, weight: "bold")[Feedback loop];: AI monitors GP's reactions
+
+  - If GP is relaxed and happy, AI understanding is reinforced
+  - If GP is not happy, AI adjusts actions and improves inference

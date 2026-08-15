@@ -684,8 +684,10 @@ def posterior_predictive_check(
             random_seed=random_seed,
             progressbar=False,
         )
-    # ppc["y_obs"] has shape (chains, draws, n) or (draws, n) depending on PyMC version.
-    y_sim = np.asarray(ppc["y_obs"])
+    # `ppc` is an `arviz.InferenceData`; `y_obs` lives inside the
+    # `posterior_predictive` group and has shape (chains, draws, n) or
+    # (draws, n) depending on PyMC version.
+    y_sim = np.asarray(ppc.posterior_predictive["y_obs"])
     if y_sim.ndim == 3:
         # (chains, draws, n) -> (chains * draws, n).
         y_sim = y_sim.reshape(-1, y_sim.shape[-1])

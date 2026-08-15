@@ -204,7 +204,7 @@ class Test_parse_first_arg(hunitest.TestCase):
         # Prepare inputs.
         arg = "invalid/08.1"
         # Prepare outputs.
-        expected_error_msg = "Invalid directory"
+        expected_error_msg = "doesn't exist"
         # Run test.
         self._assert_parse_first_arg_raises(arg, expected_error_msg)
 

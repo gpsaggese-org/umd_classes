@@ -28,7 +28,7 @@ UMD DATA605 - Big Data Systems
 :::: {.column width=75%}
 - **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
-- **References**:
+- @References@:
   - Key concepts discussed in the slides
   - Academic paper
     - "Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory
@@ -45,7 +45,7 @@ UMD DATA605 - Big Data Systems
 - **Transformations vs Actions**
 ::: columns
 :::: {.column width=45%}
-- **Transformations**
+- @Transformations@
   - Transform a Spark RDD into a new RDD without modifying input data
   - Immutability like functional programming
   - E.g., \textcolor{blue}{\texttt{select()}}, \textcolor{blue}{\texttt{filter()}}, \textcolor{blue}{\texttt{join()}}, \textcolor{blue}{\texttt{orderBy()}}
@@ -56,13 +56,13 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- Transformations are **evaluated lazily**
+- Transformations are @evaluated lazily@
   - Spark optimizes the computation by analyzing the workload
     - E.g., joining, pipeline operations, breaking into stages
   - Record results as "lineage"
     - The sequence of stages is rearranged and optimized without changing the results
 
-- **Actions**
+- @Actions@
   - Trigger computation evaluation
   - E.g., \textcolor{blue}{\texttt{show(), take(), count(), collect(), save()}}
 
@@ -184,7 +184,7 @@ From [here](https://spark.apache.org/docs/latest/rdd-programming-guide.html)
 :::: {.column width=50%}
 - Spark leverages _immutability_ and _lineage_ for fault tolerance
 
-- In case of **failure**
+- In case of @failure@
   - Reproduce RDD by replaying the lineage
   - Checkpoints aren't needed 
   - Keep data in memory for increased performance
@@ -199,7 +199,7 @@ From [here](https://spark.apache.org/docs/latest/rdd-programming-guide.html)
 - **Spark: RDD Persistence**
 ::: columns
 :::: {.column width=60%}
-- **Users explicitly cache an RDD**
+- @Users explicitly cache an RDD@
   - I.e., \textcolor{blue}{\texttt{persist()}}, \textcolor{blue}{\texttt{unpersist()}}
   - Cache if RDD is expensive to compute
     - E.g., filtering large data
@@ -213,11 +213,11 @@ From [here](https://spark.apache.org/docs/latest/rdd-programming-guide.html)
 ::::
 :::
 
-- **Cache**
+- @Cache@
   - Enhances speed of future actions (often by >10x)
   - Managed by Spark using LRU policy + garbage collector
 
-- **Users can choose the storage level**
+- @Users can choose the storage level@
   - \textcolor{blue}{\texttt{MEMORY\_ONLY}} (default)
   - \textcolor{blue}{\texttt{DISK\_ONLY}} (e.g., Python Pickle)
   - \textcolor{blue}{\texttt{MEMORY\_AND\_DISK}}
@@ -230,7 +230,7 @@ From [here](https://spark.apache.org/docs/latest/rdd-programming-guide.html)
 :::: {.column width=55%}
 - Spark unifies persistence and fault-tolerance through RDD lineage
 
-- **Caching and Persistence**
+- @Caching and Persistence@
   - Store RDDs in memory or disk to avoid repeated computation
   - Useful for iterative algorithms and interactive queries
   - E.g., \textcolor{blue}{\texttt{cache()}} (memory only) or \textcolor{blue}{\texttt{persist()}} (custom storage level)
@@ -240,12 +240,12 @@ From [here](https://spark.apache.org/docs/latest/rdd-programming-guide.html)
 ::::
 :::
 
-- **Fault-Tolerance Mechanism**
+- @Fault-Tolerance Mechanism@
   - RDDs are immutable and record lineage of transformations
   - If a partition is lost, Spark reconstructs it using lineage
   - No need to checkpoint unless lineage is too long
 
-- **Persistence is Fault-Tolerant**
+- @Persistence is Fault-Tolerant@
   - Cached RDDs can be recomputed from lineage if data is lost
   - Ensures recovery without manual intervention
 
@@ -253,20 +253,20 @@ From [here](https://spark.apache.org/docs/latest/rdd-programming-guide.html)
 ::: columns
 :::: {.column width=60%}
 - Certain Spark operations trigger a data shuffle
-- E.g., **reduceByKey()**
+- E.g., @reduceByKey()@
   - Combine values \textcolor{blue}{\texttt{[v1, ..., vn]}} for key \textcolor{blue}{\texttt{k}} into \textcolor{blue}{\texttt{(k, v)}} where
     \textcolor{blue}{\texttt{v = reduce(v1, ..., vn)}}
   - Values for a key must be on the same partition/machine
 
-- **Data shuffle** = re-distribute data across partitions/machines
+- @Data shuffle@ = re-distribute data across partitions/machines
 
-- **Data shuffle is expensive** because of:
+- @Data shuffle is expensive@ because of:
   - Data serialization (pickle)
   - Disk I/O (saving to disk)
   - Network I/O (copying across Executors)
   - Deserialization and memory allocation
 
-- **Spark schedules general task graphs**
+- @Spark schedules general task graphs@
   - Automatic function pipelining
   - Data locality aware
   - Partitioning aware to avoid shuffles
@@ -279,15 +279,15 @@ From [here](https://spark.apache.org/docs/latest/rdd-programming-guide.html)
 :::
 
 - **Broadcast Variables**
-- **Challenge**
+- @Challenge@
   - Sending common variables to nodes with code can be costly
   - Involves serialization, network transfer, deserialization
   - Sending large, constant data repeatedly increases costs
 
-- **Solution**
+- @Solution@
   - Cache read-only variables on each node, to avoid repeated transfers
 
-- **Example**
+- @Example@
   \small
   ```python
   # \textcolor{blue}{\texttt{var}} is large variable.
@@ -299,17 +299,17 @@ From [here](https://spark.apache.org/docs/latest/rdd-programming-guide.html)
   ```
 
 - **Spark: Accumulators**
-- **Accumulator** is a shared variable used for aggregating values across tasks
+- @Accumulator@ is a shared variable used for aggregating values across tasks
   - Updated using associative and commutative operations (e.g., sum, max)
   - Efficient in parallel systems like MapReduce
 
-- **Usage Example**
+- @Usage Example@
   - Accumulator initialized on the driver
   - Updated inside transformations (e.g., \textcolor{blue}{\texttt{foreach}}) across workers
   - Value is collected back to the driver
   - Accumulator only guaranteed to update once per action
 
-- **Example**
+- @Example@
   \small
   ```python
   >>> accum = sc.accumulator(0)
@@ -319,18 +319,18 @@ From [here](https://spark.apache.org/docs/latest/rdd-programming-guide.html)
   ```
 
 - **Spark vs Hadoop MapReduce**
-- **Performance**: Spark faster
+- @Performance@: Spark faster
   - Processes data in-memory
   - Outperforms MapReduce, needs lots of memory
   - Hadoop MapReduce persists to disk after actions
 
-- **Ease of use**: Spark easier to program
+- @Ease of use@: Spark easier to program
 
-- **Data processing**: Spark more general
+- @Data processing@: Spark more general
 
 - **Gray Sort Competition**
 \begingroup \scriptsize
-|       | **Hadoop MR Record** | **Spark Record (2014)** |
+|       | @Hadoop MR Record@ | @Spark Record (2014)@ |
 |---------|-------------------|-----------------------|
 | Data Size | 102.5 TB        | 100 TB              |
 | Elapsed Time | 72 mins          | 23 mins               |

@@ -1,0 +1,760 @@
+// Pandoc Typst template producing Touying slides.
+//
+// Used by `notes_to_pdf.py --type slides --slides_engine typst`.
+//
+// - Pandoc maps markdown headings to Typst headings, e.g.,
+//   - `#` -> `=`
+//   - `####` -> `====`
+// - `config-common(slide-level: 4)` makes level-4 headings (`####`) start a
+//   new slide, mirroring the beamer `--slide-level 4` convention. Headings of
+//   level 1-3 become section/structure slides
+// - See https://github.com/touying-typ/touying
+#import "@preview/touying:0.6.1": *
+#import themes.simple: *
+
+//#include "/helpers_root/dev_scripts_helpers/documentation/typst_abbrevs.typ"
+#include "/helpers_root/dev_scripts_helpers/documentation/typst_abbrevs.typ"
+
+// Configure theme to match beamer's 4:3 aspect ratio.
+// Note: Touying's simple-theme controls page size internally;
+// exact beamer dimensions (362.835 x 272.126 pts) cannot be overridden.
+#show: simple-theme.with(
+  aspect-ratio: "4-3",
+  config-common(slide-level: 4),
+  subslide-preamble: block(below: 1em)[
+    #v(-0.6em)
+    #text(1.2em, weight: "bold", fill: rgb("#003366"),
+      utils.display-current-heading(level: 4))
+    #v(-0.5em)
+    #line(length: 100%, stroke: 2.0pt + rgb("#003366"))
+  ],
+  config-info(
+  ),
+)
+
+// Make the inline math font bigger.
+//#show math.equation.where(block: false): set text(size: 1.15em)
+
+// Scale display math to match slide text size (not oversized).
+#show math.equation.where(block: true): set text(size: 0.95em)
+
+// Make the inline verbatim font bigger.
+//#show raw.where(block: false): set text(size: 1.15em)
+#show raw.where(block: false): set text(size: 0.95em)
+
+// Styled table with zebra striping, lateral lines, and configurable width.
+#let styled-table(headers: (), rows: (), caption: none, col-widths: none, bold-first-col: true, size: 0.8em, width: 80%) = {
+  let n = headers.len()
+  let widths = if col-widths != none { col-widths } else { (1fr,) * n }
+
+  // Zebra striping: alternate white and darker gray backgrounds on full rows
+  let processed-rows = rows.enumerate().map(((idx, row)) => {
+    let bg-color = if calc.rem(idx, 2) == 0 { white } else { rgb("#e8e8e8") }
+    if bold-first-col {
+      (
+        table.cell(fill: bg-color, text(fill: black, weight: "bold", row.at(0))),
+        ..row.slice(1).map(cell => table.cell(fill: bg-color, text(fill: rgb("#555555"), cell)))
+      )
+    } else {
+      row.map(cell => table.cell(fill: bg-color, text(fill: rgb("#555555"), cell)))
+    }
+  })
+
+  text(size: size,
+    figure(
+      align(center,
+        block(width: width,
+          table(
+            columns: widths,
+            align: (left,) * n,
+            stroke: none,
+            table.vline(x: 0, stroke: 2pt),
+            table.hline(stroke: 2pt),
+            table.header(
+              ..headers.map(h => table.cell(fill: black, text(fill: white, weight: "bold", h)))
+            ),
+            table.hline(stroke: 1.5pt),
+            ..processed-rows.flatten(),
+            table.hline(stroke: 2pt),
+            table.vline(x: n, stroke: 2pt),
+          )
+        )
+      ),
+      kind: table,
+      caption: caption,
+    )
+  )
+}
+
+// Use Computer Modern Sans - standard TeX font (sans-serif variant).
+// Fails if Computer Modern not available in container (no fallback).
+#set text(font: "CMU Sans Serif", size: 22pt, fill: black)
+#show heading: set text(font: "CMU Sans Serif", size: 28pt)
+// Use DejaVu Sans (available in Alpine) with reduced size.
+// Applied AFTER theme to override theme defaults.
+//#set text(font: "DejaVu Sans", size: 20pt, fill: black)
+//#show heading: set text(font: "DejaVu Sans", size: 28pt)
+
+// Track list nesting depth with counter
+#let list-nesting = counter("list-nesting")
+
+// Use en-dashes for all bullet points (override default circle/triangle markers).
+#show list: set list(marker: "–")
+
+// Reduce font size for nested list levels.
+#show list: it => {
+  list-nesting.step()
+  let depth = list-nesting.get().first()
+  let size = if depth == 1 { 1em } else if depth == 2 { 0.95em } else { 0.90em }
+  set text(size: size)
+  [#it]
+  list-nesting.update(n => n - 1)
+}
+
+// Make footer text smaller.
+#let footer-text(body) = text(size: 0.8em, fill: black, body)
+
+
+====
+
+#slide[
+  #grid(
+    columns: (20%, 80%),
+    gutter: 0.5cm,
+    align(top + left)[#image("/msml610/lectures_source/figures/UMD_Logo.png", width: 3.5cm)],
+    align(top + left)[
+      #v(0.2cm)
+      #text(size: 28pt)[MSML610: Advanced Machine Learning]
+    ]
+  )
+
+  #v(1.5cm)
+  #align(center)[#text(size: 32pt, weight: "bold", fill: rgb("#0066CC"))[L04.3: Machine Learning Models]]
+
+  #v(2.5cm)
+  #text(size: 24pt)[Instructor: Dr. GP Saggese - #link("mailto:gsaggese@umd.edu")[_gsaggese\@umd.edu_]]
+]
+==== Table of Content
+<table-of-content>
+- #text(fill: red, weight: "bold")[#emph[Similarity-Based Models]]
+- Clustering
+- Anomaly Detection
+
+==== Similarity-Based Models: Intuition
+<similarity-based-models-intuition>
+- #text(fill: black, weight: "bold")[Idea];: the model evaluated in one point
+  $h \( bold(underline(x)) \)$ is affected by:
+  - Other data points in the training set
+    $\( bold(underline(x))_n \, y_n \) in cal(D)$
+  - The effect is based on the distance
+    $d \( bold(underline(x)) \, bold(underline(x))_n \) = parallel bold(underline(x)) - bold(underline(x))_n parallel$
+- The model is a #text(fill: black, weight: "bold")[superposition of effects]
+  - Sum of the effect of each point in the training set, scaled down by
+    the distance
+    $ h \( bold(underline(x)) \) = sum_i upright(" effect of ") h \( bold(underline(x))_i \) upright(" scaled by ") d \( bold(underline(x)) \, bold(underline(x))_i \) $
+- This approach allows to define complex decision boundaries
+
+==== Similarity-Based Models: Gaussian Kernels
+<similarity-based-models-gaussian-kernels>
+- Consider a Gaussian kernel with a "landmark" point
+  $bold(underline(x))_i$ and a similarity distance defined as:
+  $ K \( bold(underline(x)) \, bold(underline(x))_i \) = exp \( - frac(parallel bold(underline(x)) - bold(underline(x))_i parallel^2, 2 sigma^2) \) $
+
+- E.g., the hypothesis model has the form:
+  $ h \( bold(underline(x)) \) = sum_(i = 1)^3 y_i K \( bold(underline(x)) \, bold(underline(x))_i \) = y_1 K \( bold(underline(x)) \, bold(underline(x))_1 \) + y_2 K \( bold(underline(x)) \, bold(underline(x))_2 \) + y_3 K \( bold(underline(x)) \, bold(underline(x))_3 \) $
+
+  - The response is weighting the responses $y_i = { 0 \, 1 }$ through
+    the similarity of $bold(underline(x))$ from the landmark points
+  - This can be seen by plotting $h \( bold(underline(x)) \)$ on a plane
+
+==== Radial Basis Function Model for Regression
+<radial-basis-function-model-for-regression>
+- Aka RBF
+
+- The model form for #text(fill: black, weight: "bold")[regression] is:
+  $ h \( bold(underline(x)) \) = sum_(i = 1)^N w_i exp \( - gamma parallel bold(underline(x)) - bold(underline(x))_i parallel^2 \) $
+  where:
+
+  - If $gamma$ is small $arrow.r.double.long$ the exponential falls off
+    slowly, and multiple training points affect a point between them
+  - If $gamma$ is large $arrow.r.double.long$ there are spikes centered
+    in the training points and nothing outside
+
+==== Radial Basis Function Model for Classification
+<radial-basis-function-model-for-classification>
+- For #text(fill: black, weight: "bold")[classification] use a similar approach to "linear
+  regression for classification"
+  - Fit a regression model:
+    $ s \( bold(underline(x)) \) = sum_(i = 1)^N w_i exp \( - gamma parallel bold(underline(x)) - bold(underline(x))_i parallel^2 \) $
+  - Take the sign to make predictions:
+    $ h \( bold(underline(x)) \) = sans("sign") \( s \( bold(underline(x)) \) \) $
+
+==== RBF: Block Diagram
+<rbf-block-diagram>
+#grid(
+  columns: (50%, 50%),
+  gutter: 0.5em,
+  [
+  - The params(fixed by learning) are one for each training point
+    - The weights depending on the distance of the input to the examples
+    - The weighted params are summed together
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L04.3.RBF_Model.png"))
+  ]
+)
+==== RBF: Number of Parameters
+<rbf-number-of-parameters>
+- Some variants for RBF:
+  - Add bias term
+  - Use different $gamma_i$ for each point
+  - Increase degrees of freedom
+- RBF has lots of parameters
+  - Parameters $bold(underline(w))$ equal data points $N$ (e.g.,
+    $N = 10^9$)
+  - One parameter $w_i$ per training point (e.g., $N = 10^6$)
+  - #text(fill: black, weight: "bold")[Cons];: Negative impact on generalization error
+
+==== RBF: Reducing Model VC Dimension
+<rbf-reducing-model-vc-dimension>
+- #text(fill: black, weight: "bold")[To reduce number of parameters]
+  - Pick $K lt.double N$ centers
+    $bold(underline(mu))_1 \, . . . \, bold(underline(mu))_K$ instead of
+    $bold(underline(x))_1 \, . . . \, bold(underline(x))_N$
+    - Use $k$-means clustering to find centers
+    - Unsupervised learning; doesn't use labels
+  - Same as RBF model using distances from cluster centers:
+    $ h \( bold(underline(x)) \) = sum_(i = 1)^K w_i exp \( - gamma parallel bold(underline(x)) - bold(underline(mu))_i parallel^2 \) $
+- #text(fill: black, weight: "bold")[Still many parameters] because:
+  - $K$ (scalar) weights $w_k$
+  - $K$ reference points $bold(underline(mu))_k$ ($d$-dimensional
+    vectors)
+
+==== RBF: Learning Models (1/2)
+<rbf-learning-models-12>
+- #text(fill: black, weight: "bold")[Learn] $w_i \, gamma$, with fixed centers
+  $bold(underline(mu))_i$, for an RBF model:
+  $ h \( bold(underline(x)) \) = sum_(i = 1)^K w_i exp \( - gamma parallel bold(underline(x)) - bold(underline(mu))_i parallel^2 \) $
+
+- #text(fill: black, weight: "bold")[Minimize:]
+  $ E_(i n) = sum_i \( h_(bold(underline(w)) \, gamma) \( bold(underline(x))_i \) - y_i \)^2 = f \( bold(underline(w)) \, gamma \) $
+
+  - Use an iterative approach (e.g., EM, coordinate descent)
+
+==== RBF: Learning Models (2/2)
+<rbf-learning-models-22>
+- Use iterative approach (similar to EM algorithm):
+  - Fix $gamma$, solve for $bold(underline(w))$ (one-step learning)
+  - Fix $bold(underline(w))$, solve for $gamma$ (gradient descent)
+- #text(fill: black, weight: "bold")[Step 1]
+  - Assume $gamma$ is known and fixed
+  - Learn $bold(underline(w))$
+- Impose perfect interpolation:
+  $ E_(i n) = 1 / n sum \( h \( bold(underline(x))_i \) - y_i \)^2 = 0 $
+- #text(fill: black, weight: "bold")[Problem];:
+  $ h \( bold(underline(x))_j \) = sum_i w_i exp \( - gamma parallel bold(underline(x))_i - bold(underline(x))_j parallel^2 \) = sum_i w_i phi.alt_(i \, j) = bold(underline(phi.alt))_j^T bold(underline(w)) = y_i $
+  - $N$ equations (one per point) and $N$ unknowns $bold(underline(w))$
+  - $bold(underline(underline(Phi)))$ is known, function of data set and
+    $gamma$
+
+==== Learning RBF Models
+<learning-rbf-models>
+- The problem in matrix form is:
+  $ bold(underline(underline(Phi))) dot.op bold(underline(w)) = bold(underline(y)) $
+  - If $bold(underline(underline(Phi)))$ is invertible, then
+    $bold(underline(w)) = bold(underline(underline(Phi)))^(- 1) bold(underline(y))$
+    - Desired values on training points
+    - Exponential interpolates other points
+  - If $bold(underline(underline(Phi)))$ is not invertible, optimize in
+    least square sense:
+    $ sans("argmin")_(bold(underline(w))) E_(i n) = sum_i \( h \( bold(underline(x))_j \) - y_i \)^2 $
+    - Compute pseudo-inverse (assuming
+      $bold(underline(underline(Phi)))^T bold(underline(underline(Phi)))$
+      is invertible)
+    - Assign weights:
+      $ bold(underline(w)) = \( bold(underline(underline(Phi)))^T bold(underline(underline(Phi))) \)^(- 1) bold(underline(underline(Phi)))^T bold(underline(y)) $
+- #text(fill: black, weight: "bold")[Step 2]
+  - Assume $bold(underline(w))$ is known and fixed
+  - Learn $gamma$
+
+==== RBF Network vs Neural Networks
+<rbf-network-vs-neural-networks>
+- The regression model for Neural Networks and RBF model is
+  #text(fill: black, weight: "bold")[similar];:
+  - #text(fill: black, weight: "bold")[RBF];:
+    $ h \( bold(underline(x)) \) = sum_i w_i e^(- gamma parallel bold(underline(x)) - bold(underline(x))_i parallel^2) = bold(underline(w))^T bold(underline(bold(underline(phi.alt)))) $
+  - #text(fill: black, weight: "bold")[Neural networks];:
+    $ h \( bold(underline(x)) \) = Theta \( bold(underline(w))^(\( L \) T) bold(underline(x))^(\( L \)) \) = Theta \( bold(underline(w))^(\( L \) T) bold(underline(Theta)) \( bold(underline(underline(W)))^(\( L - 1 \)) . . . \) \) $
+- #text(fill: black, weight: "bold")[Difference];:
+  - RBF has a single layer
+  - Neural networks have multiple layers
+- #text(fill: black, weight: "bold")[Similarities];:
+  - Combine features with weights using dot product
+  - Extract features from inputs
+    - RBF features:
+      $e^(- gamma parallel bold(underline(x)) - bold(underline(x))_i parallel^2)$,
+      always $> 0$
+    - NN hidden layers: features can be $> 0$ or $< 0$
+
+==== RBF Network vs SVM
+<rbf-network-vs-svm>
+- The #text(fill: black, weight: "bold")[model form] is the same:
+  - RBF:
+    $ h \( bold(underline(x)) \) = sans("sign") \( sum_i w_i e^(- gamma parallel bold(underline(x)) - bold(underline(x))_i parallel^2) $
+  - SVM:
+    $ h \( bold(underline(x)) \) = sans("sign") \( bold(underline(w))^T bold(underline(x)) + b \) $
+- The interpretation is completely different (interpolation vs large
+  margin)
+  - RBF: all vectors (or centers of few clusters) contribute to the
+    model
+  - SVM: only support vectors contribute to the model
+
+==== K-Nearest Neighbor (KNN) Model
+<k-nearest-neighbor-knn-model>
+- The #text(fill: black, weight: "bold")[model form] is like:
+  $ h_(bold(underline(w))) \( bold(underline(x)) \) = 1 / n sum_(bold(underline(x))_i upright("closest to ") bold(underline(x))) w_i $
+
+#grid(
+  columns: (60%, 40%),
+  gutter: 0.5em,
+  [
+  - #text(fill: black, weight: "bold")[Idea];:
+    - Closeness implies a distance (e.g., euclidean metric) or similarity
+      (e.g., a kernel)
+    - Consider the $k$ closest points to the evaluation point
+      $bold(underline(x))$
+    - Take an average of their response
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L04.3.KNN_Model.png"))
+  ]
+)
+==== KNN: Intuition of Number Degrees of Freedom
+<knn-intuition-of-number-degrees-of-freedom>
+#grid(
+  columns: (60%, 40%),
+  gutter: 0.5em,
+  [
+  - Nearest neighbor model ($k = 1$)
+    - Use response of closest point to $bold(underline(x))$
+    - Similar to Voronoi tessellations: each point has a region where it
+      is the closest and assigns its output to that region
+  - $k$ is #text(fill: black, weight: "bold")[the only parameter] for KNN
+    - For $k = 1$ $arrow.r.double.long$ $N$ neighborhoods, one around each
+      training point
+    - For $k = N$ $arrow.r.double.long$ single neighborhood
+    - Effective number of parameters: $N / k$, imagining $N \/ k$
+      non-overlapping neighborhoods
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L04.3.Voronoi.png"))
+  ]
+)
+==== KNN: Assumptions on the Data
+<knn-assumptions-on-the-data>
+- KNN makes #text(fill: black, weight: "bold")[no assumption on data]
+  - Opposite of linear model with strong data assumption
+- KNN assumes #text(fill: black, weight: "bold")[locality in parameter space]
+  - Model is constant in example's neighborhood
+  - E.g., $k = 1$: Voronoi tessellation (low-bias/high-variance)
+  - E.g., $k = N$: Average value (high-bias/low-variance)
+
+==== KNN: Training and Test Error
+<knn-training-and-test-error>
+- For $k = 1$
+  - No error on training set (low bias / high variance) assuming
+    non-noisy target
+  - $E_(o u t)$ larger than $E_(i n)$
+- Increasing $k$
+  - Training error $E_(i n)$ increases
+  - Test error $E_(o u t)$ decreases, then increases
+  - Typical model complexity behavior in bias-variance diagrams
+
+==== KNN vs RBF Models
+<knn-vs-rbf-models>
+- #text(fill: black, weight: "bold")[Similarities]
+  - K-Nearest Neighbor is a #emph[discrete] version of the RBF model
+- #text(fill: black, weight: "bold")[Differences:]
+  - Consider only the $k$ #emph[closest examples] to the point
+    $bold(underline(x))$ (not all examples in the training set)
+  - Use a #emph[constant kernel] (responses are not weighted by
+    distance)
+
+==== Table of Content
+<table-of-content-1>
+- Similarity-Based Models
+- #text(fill: red, weight: "bold")[#emph[Clustering]]
+- Anomaly Detection
+
+==== K-Means Clustering: Problem Formulation
+<k-means-clustering-problem-formulation>
+- $N$ #emph[unlabeled] points
+  ${ bold(underline(x))_1 \, bold(underline(x))_2 \, . . . \, bold(underline(x))_N }$
+
+- Partition points into $K$ clusters $S_1 \, . . . \, S_K$
+
+  - Each cluster defined by center $bold(underline(mu))_k$
+  - Each point $bold(underline(x))_i$ assigned to cluster
+    $c \( bold(underline(x))_i \)$
+  - Unknowns are
+    $c \( bold(underline(x))_1 \) \, . . . \, c \( bold(underline(x))_N \) \, bold(underline(mu))_1 \, . . . \, bold(underline(mu))_K$
+
+- Minimize distance between each $bold(underline(x))_i$ and assigned
+  center $bold(underline(mu))_k$ where
+  $k = c \( bold(underline(x))_i \)$
+
+- #text(fill: black, weight: "bold")[K-means clustering is NP-hard] (combinatorial) and thus
+  intractable
+
+  - In fact there are $K^N$ possible assignments
+
+==== K-Means Clustering: Lloyd's Algorithm
+<k-means-clustering-lloyds-algorithm>
+- #text(fill: black, weight: "bold")[Start with a random assignment] of $N$ points to $K$ clusters
+
+  - Better than picking random centroids
+
+- #text(fill: black, weight: "bold")[Each iteration] has 2 steps
+
+  - #text(fill: black, weight: "bold")[Step 1];: Move centroid
+    - Move each cluster's centroid to the mean point
+    - Iterate over $K$ clusters
+    - $bold(underline(mu))_k arrow.l frac(1, \| S_k \|) sum_(bold(underline(x))_n in S_k) bold(underline(x))_n$
+  - #text(fill: black, weight: "bold")[Step 2];: Cluster assignment
+    - Assign each $bold(underline(x))_n$ to the closest cluster center
+    - Iterate over $N$ points
+    - $S_k arrow.l { bold(underline(x))_n : parallel bold(underline(x))_n - bold(underline(mu))_k parallel lt.eq parallel bold(underline(x))_n - bold(underline(mu))_l parallel #h(0em) forall l eq.not k }$
+
+==== K-Means Clustering: Convergence
+<k-means-clustering-convergence>
+- #text(fill: black, weight: "bold")[K-means algorithm converges] since:
+  - Finite number of possible partitions (and values of objective
+    functions)
+  - Objective function $J \( dot.op \)$ always decreases
+- #text(fill: black, weight: "bold")[Objective function always decreases]
+  - Cost function
+    $J \( bold(underline(mu))_1 \, . . . \, bold(underline(mu))_K \, c_1 \, . . . \, c_N \)$
+    depends on:
+    - Centroids $c_1 \, . . \, c_N$
+    - Point assignments
+      $bold(underline(mu))_1 \, . . . \, bold(underline(mu))_K$
+  - K-means minimizes $J$ by:
+    - Adjusting centroids (fixed assignments)
+    - Adjusting assignments (fixed centroids)
+  - Similar to coordinate descent
+- Generally converges to a #text(fill: black, weight: "bold")[local minimum]
+  - Run K-means multiple times with different random initializations
+  - Choose best result
+
+==== K-Means Clustering: Non-Separable Clusters
+<k-means-clustering-non-separable-clusters>
+#grid(
+  columns: (60%, 40%),
+  gutter: 0.5em,
+  [
+  - For simplicity, you tend to imagine a clear separation between
+    clusters
+    - Clusters, especially in high dimensions, are not obviously separable
+  - Using K-means on data not obviously separated
+    - E.g., market segmentation
+    - E.g., t-shirt sizing
+      - Collect height and width of customers
+      - Run K-means
+      - Find optimal way to split population into 3 sizes (S, M, L)
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L04.3.Clustering.png"))
+  ]
+)
+==== Choosing the Number of Clusters
+<choosing-the-number-of-clusters>
+- Often unclear how many clusters $K$ exist
+  - Visual analysis can be inconclusive in 2D or 3D
+  - More difficult in high dimensions
+
+#grid(
+  columns: (60%, 40%),
+  gutter: 0.5em,
+  [
+  - #text(fill: black, weight: "bold")[Elbow Method]
+    - Vary clusters $K$
+    - Compute optimal cost function $J \( dot.op \)$
+    - Choose $K$ at "elbow" point if visible
+    - Elbow absent if curve resembles hyperbole $approx 1 \/ K$
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L04.3.Elbow_method.png"))
+  ]
+)
+- #text(fill: black, weight: "bold")[End-to-end approach]
+  - Choose $K$ to optimize later stages
+  - E.g., more t-shirt sizes (more clusters) $arrow.r.double.long$
+    - Satisfy customers
+    - Complicates manufacturing
+    - Increases inventory management
+
+==== Interpretation of Clusters
+<interpretation-of-clusters>
+- Cluster meaning #text(fill: black, weight: "bold")[often interpreted manually] (difficult to
+  automate)
+  - Examine cluster centroids
+    - Centroid values show "typical" point in each cluster
+    - High, low, or zero feature values highlight key characteristics
+  - Analyze distribution of features per cluster
+    - Plot histograms or boxplots for each feature
+    - Identify features that vary sharply across clusters
+  - Visualize clusters in 2D or 3D
+    - E.g., PCA, t-SNE, UMAP
+    - Understand separation and internal structure
+  - Compare clusters to external labels if available
+    - See if clusters align with known real-world groups
+  - Train a classifier like decision tree
+    - Important features for predicting cluster reveal their meaning
+- #text(fill: black, weight: "bold")[Example: Customer Segmentation]
+
+#figure(
+  align(center)[#table(
+    columns: (13.04%, 11.96%, 17.39%, 17.39%, 40.22%),
+    align: (auto,auto,auto,auto,auto,),
+    table.header([Cluster], [Age], [Annual Income], [Spending
+      Score], [Label],),
+    table.hline(),
+    [Cluster 1], [25 yrs], [30K], [90], [Young Big Spenders],
+    [Cluster 2], [50 yrs], [80K], [40], [Comfortable Mid-Lifers],
+    [Cluster 3], [35 yrs], [120K], [20], [High Income, Low Spending
+    Customers],
+  )]
+  , kind: table
+  )
+
+==== Table of Content
+<table-of-content-2>
+- Similarity-Based Models
+- Clustering
+- #text(fill: red, weight: "bold")[#emph[Anomaly Detection]]
+
+==== Anomaly Detection: Problem Formulation
+<anomaly-detection-problem-formulation>
+- #text(fill: black, weight: "bold")[Problem];:
+  - ${ bold(underline(x))_1 \, . . . \, bold(underline(x))_N }$ examples
+    with features $bold(underline(x)) in bb(R)^P$ for good instances
+  - Detect bad/anomalous instances
+- #text(fill: black, weight: "bold")[Algorithm];:
+  - Unknown characteristics of #emph["bad instances"]
+  - Learn common traits of #emph["good instances"] using unsupervised
+    learning
+    - Find distribution for $bold(underline(x))_i$:
+      $Pr \( bold(underline(x)) upright(" is good") \)$
+  - Pick features
+    - Find "sensitive" features, e.g., ratio between CPU load and
+      network traffic
+  - Estimate distribution
+    $Pr \( bold(underline(x)) upright(" is good") \)$
+  - Choose threshold $epsilon$
+  - For new instance $bold(underline(x))_(n e w)$, if
+    $Pr \( bold(underline(x))_(n e w) upright(" is good") \) lt.eq epsilon$
+    flag as anomaly
+
+==== Anomaly Detection: Example of Aircraft Engines
+<anomaly-detection-example-of-aircraft-engines>
+- #text(fill: black, weight: "bold")[Problem]
+  - Test aircraft engines to identify anomalies in a new engine
+- #text(fill: black, weight: "bold")[Solution];:
+  - Features $bold(underline(x))_i$ can be:
+    - Heat generated
+    - Vibration intensity
+    - …
+  - Collect data for all engines
+  - Model $Pr \( bold(underline(x)) upright(" is good") \)$
+  - Decide if a new engine is acceptable
+    $Pr \( bold(underline(x))_(n e w) upright(" is good") \) lt.eq epsilon$
+    or needs more testing
+
+==== Anomaly Detection: Example of Hacked Account
+<anomaly-detection-example-of-hacked-account>
+- #text(fill: black, weight: "bold")[Problem]
+  - Find if an account for a given user $i$ was hacked
+- #text(fill: black, weight: "bold")[Solution];:
+  - Model features that represent "user $i$ activity"
+  - Features $bold(underline(x))_i$ can be:
+    - How many times s/he logs a day
+    - How many times s/he fails to enter the password
+    - How fast s/he types
+    - How many pages s/he visits
+    - How many times s/he posts comments
+    - …
+  - Model $Pr \( bold(underline(x)) upright(" is good") \)$
+  - Identify unusual users by checking
+    $Pr \( bold(underline(x))_(n e w) upright(" is good") \) lt.eq epsilon$
+
+==== Anomaly Detection: Example of Data Center
+<anomaly-detection-example-of-data-center>
+- #text(fill: black, weight: "bold")[Problem]
+  - Monitor servers in a data center to find malfunctioning or hanged
+    servers
+- #text(fill: black, weight: "bold")[Solution];:
+  - Features $bold(underline(x))_i$ can be:
+    - Memory in use
+    - CPU load
+    - Network traffic
+    - Number of reads/writes per sec
+    - CPU load / network activity
+    - …
+  - Model $Pr \( bold(underline(x)) upright(" is good") \)$
+  - Identify unusual systems by checking
+    $Pr \( bold(underline(x))_(n e w) upright(" is good") \) lt.eq epsilon$
+
+==== Using a Gaussian Model for Anomaly Detection
+<using-a-gaussian-model-for-anomaly-detection>
+- Aka "density estimation"
+
+- Given $N$ examples
+  $bold(underline(x))_1 \, . . . \, bold(underline(x))_N in bb(R)^p$
+
+- Ensure that the #text(fill: black, weight: "bold")[features have a Gaussian distribution]
+
+  - If not, apply some transformations, e.g., $log \( x_i + k \)$
+
+- #text(fill: black, weight: "bold")[Estimate the parameters] of the Gaussian model
+  $f_X \( bold(underline(x)) \)$
+
+- Given a new example $bold(underline(x))_(n e w)$ #text(fill: black, weight: "bold")[compute]
+  $Pr \( bold(underline(x))_(n e w) upright(" is good") \) lt.eq epsilon$
+  to flag an anomaly
+
+==== Estimate Univariate Gaussian Model
+<estimate-univariate-gaussian-model>
+#grid(
+  columns: (60%, 1fr),
+  gutter: 0.5em,
+  [
+  - You have $N$ (scalar) examples
+    $bold(underline(x))_1 \, . . . \, bold(underline(x))_N in bb(R)$
+    representing #emph["good instances"]
+  
+  - Assume the data is generated by a Gaussian distribution
+    $ X tilde.op cal(N) \( mu \, sigma \) $ which has a PDF:
+    $ f_X \( x ; mu \, sigma \) = frac(1, sqrt(2 pi) sigma) exp \( - frac(\( x - mu \)^2, 2 sigma^2) \) $
+  
+  - Estimate mean and sigma with maximum likelihood:
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L04.3.1D_Gaussian.png"))
+  ]
+)
+==== Estimate Multivariate Independent Gaussian Model
+<estimate-multivariate-independent-gaussian-model>
+- You have $N$ examples
+  $bold(underline(x))_1 \, . . . \, bold(underline(x))_N in bb(R)^p$ for
+  #emph["good instances"]
+
+- Assume independence of the features, the PDF of a multi-variate
+  Gaussian $X$ is:
+  $ f_X \( bold(underline(x)) ; bold(underline(mu)) \, bold(underline(sigma)) \) = product_(i = 1)^p f_(X_i) \( x_i ; mu_i \, sigma_i \) $
+
+- Infer the parameters $mu_i$ and $sigma_i$ using discrete formulas to
+  get the complete model
+
+==== Estimate a Multi-Variate Gaussian Model
+<estimate-a-multi-variate-gaussian-model>
+#grid(
+  columns: (60%, 1fr),
+  gutter: 0.5em,
+  [
+  - #text(fill: black, weight: "bold")[Problem];:
+    - Often features vary together (e.g., network use and CPU load),
+      causing mis-classifications with independent assumptions
+    - Components of $bold(underline(x))_(n e w)$ are within range but
+      nonsensical together
+      - E.g., low network use with high CPU load
+  - #text(fill: black, weight: "bold")[Solution 1];:
+    - Engineer features to highlight anomalies
+    - Address variable correlation not modeled in independent Gaussian
+      models
+  - #text(fill: black, weight: "bold")[Solution 2];:
+    - Estimate the entire multivariate model instead of assuming
+      independence
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L04.3.2D_Gaussian.png"))
+  ]
+)
+==== Estimate a Multi-Variate Gaussian Model
+<estimate-a-multi-variate-gaussian-model-1>
+- The PDF of a multi-variate Gaussian is:
+  $ f_X \( bold(underline(x)) ; bold(underline(mu)) \, bold(underline(underline(Sigma))) \) = frac(1, \( 2 pi \)^(n / 2) \| bold(underline(underline(Sigma))) \|^(1 / 2)) exp \( - 1 / 2 \( bold(underline(x)) - bold(underline(mu)) \)^T bold(underline(underline(Sigma)))^(- 1) \( bold(underline(x)) - bold(underline(mu)) \) \) $
+
+- Estimate:
+  $ bold(underline(mu)) in bb(R)^d = 1 / N sum_(k = 1)^N bold(underline(x))_k $
+  $ bold(underline(underline(Sigma))) in bb(R)^(d times d) = { s_(i j) } = frac(1, N - 1) sum_(k = 1)^N \( bold(underline(x))_k - bold(underline(mu)) \) \( bold(underline(x))_k - bold(underline(mu)) \)^T $
+
+- Model requires more examples to train due to more parameters
+
+- Independence between variables decomposes multivariate Gaussian into
+  product of Gaussian distributions
+
+==== Evaluate Anomaly Detection Systems
+<evaluate-anomaly-detection-systems>
+- To evaluate models one needs to:
+  - Compare different models
+  - Tune hyperparameters (e.g., $epsilon$) of models
+  - Estimate out-of-sample error
+- As always we should use a single real number for comparison
+  - Use any classification metric, e.g.,
+    - True/false positive/negative rate
+    - Precision or recall
+  - F-score
+- #emph[Labeled] data is still needed to rate models
+
+==== Evaluate Anomaly Detection Systems
+<evaluate-anomaly-detection-systems-1>
+- Often, anomalous examples $y = 1$ are much fewer than good examples
+  $y = 0$
+  - E.g., 10,000 good vs 20 bad examples
+  - Address class imbalance for accurate model performance
+- #text(fill: black, weight: "bold")[Algorithm];:
+  - Pick 60% of $y = 0$ data to train (only on good examples)
+  - Split remaining $y = 0$ and $y = 1$ into validation and test sets
+    - Ensure both sets represent the overall dataset
+    - Train, validation, and test sets should not overlap but have the
+      same characteristics
+    - Helps evaluate model performance accurately
+  - Use validation set to compare models, estimate hyperparameters
+    - E.g., $epsilon$ is the threshold for anomaly detection
+  - Use test set to evaluate final model
+    - Train on normal data, test on both normal and anomalous data
+- #text(fill: black, weight: "bold")[Aircraft engine example]
+
+#figure(
+  align(center)[#table(
+    columns: 3,
+    align: (auto,auto,auto,),
+    table.header([#text(fill: black, weight: "bold")[Dataset];], [$y = 0$ (Good Engines)], [$y = 1$
+      (Bad Engines)],),
+    table.hline(),
+    [Total Example], [10,000], [20],
+    [Train Set], [6,000], [0],
+    [Validation Set], [2,000], [10],
+    [Test Set], [2,000], [10],
+  )]
+  , kind: table
+  )
+
+==== Anomaly Detection vs Supervised Learning
+<anomaly-detection-vs-supervised-learning>
+- Even in unsupervised learning, you need labeled data for model
+  evaluation
+
+- Difference with supervised learning:
+
+  - Anomaly detection/unsupervised learning: Train only on good examples
+  - Supervised learning: Train on both good and bad examples
+
+- Use:
+
+  - Anomaly detection/unsupervised learning:
+    - Learn from good examples due to few anomalous examples
+    - Strong prior on the model
+    - Future anomalous examples unknown
+  - Supervised learning: Less skewed classes in training set
+  - Not a clear-cut decision

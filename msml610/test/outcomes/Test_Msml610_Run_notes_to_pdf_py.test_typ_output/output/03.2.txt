@@ -1,0 +1,733 @@
+// Pandoc Typst template producing Touying slides.
+//
+// Used by `notes_to_pdf.py --type slides --slides_engine typst`.
+//
+// - Pandoc maps markdown headings to Typst headings, e.g.,
+//   - `#` -> `=`
+//   - `####` -> `====`
+// - `config-common(slide-level: 4)` makes level-4 headings (`####`) start a
+//   new slide, mirroring the beamer `--slide-level 4` convention. Headings of
+//   level 1-3 become section/structure slides
+// - See https://github.com/touying-typ/touying
+#import "@preview/touying:0.6.1": *
+#import themes.simple: *
+
+//#include "/helpers_root/dev_scripts_helpers/documentation/typst_abbrevs.typ"
+#include "/helpers_root/dev_scripts_helpers/documentation/typst_abbrevs.typ"
+
+// Configure theme to match beamer's 4:3 aspect ratio.
+// Note: Touying's simple-theme controls page size internally;
+// exact beamer dimensions (362.835 x 272.126 pts) cannot be overridden.
+#show: simple-theme.with(
+  aspect-ratio: "4-3",
+  config-common(slide-level: 4),
+  subslide-preamble: block(below: 1em)[
+    #v(-0.6em)
+    #text(1.2em, weight: "bold", fill: rgb("#003366"),
+      utils.display-current-heading(level: 4))
+    #v(-0.5em)
+    #line(length: 100%, stroke: 2.0pt + rgb("#003366"))
+  ],
+  config-info(
+  ),
+)
+
+// Make the inline math font bigger.
+//#show math.equation.where(block: false): set text(size: 1.15em)
+
+// Scale display math to match slide text size (not oversized).
+#show math.equation.where(block: true): set text(size: 0.95em)
+
+// Make the inline verbatim font bigger.
+//#show raw.where(block: false): set text(size: 1.15em)
+#show raw.where(block: false): set text(size: 0.95em)
+
+// Styled table with zebra striping, lateral lines, and configurable width.
+#let styled-table(headers: (), rows: (), caption: none, col-widths: none, bold-first-col: true, size: 0.8em, width: 80%) = {
+  let n = headers.len()
+  let widths = if col-widths != none { col-widths } else { (1fr,) * n }
+
+  // Zebra striping: alternate white and darker gray backgrounds on full rows
+  let processed-rows = rows.enumerate().map(((idx, row)) => {
+    let bg-color = if calc.rem(idx, 2) == 0 { white } else { rgb("#e8e8e8") }
+    if bold-first-col {
+      (
+        table.cell(fill: bg-color, text(fill: black, weight: "bold", row.at(0))),
+        ..row.slice(1).map(cell => table.cell(fill: bg-color, text(fill: rgb("#555555"), cell)))
+      )
+    } else {
+      row.map(cell => table.cell(fill: bg-color, text(fill: rgb("#555555"), cell)))
+    }
+  })
+
+  text(size: size,
+    figure(
+      align(center,
+        block(width: width,
+          table(
+            columns: widths,
+            align: (left,) * n,
+            stroke: none,
+            table.vline(x: 0, stroke: 2pt),
+            table.hline(stroke: 2pt),
+            table.header(
+              ..headers.map(h => table.cell(fill: black, text(fill: white, weight: "bold", h)))
+            ),
+            table.hline(stroke: 1.5pt),
+            ..processed-rows.flatten(),
+            table.hline(stroke: 2pt),
+            table.vline(x: n, stroke: 2pt),
+          )
+        )
+      ),
+      kind: table,
+      caption: caption,
+    )
+  )
+}
+
+// Use Computer Modern Sans - standard TeX font (sans-serif variant).
+// Fails if Computer Modern not available in container (no fallback).
+#set text(font: "CMU Sans Serif", size: 22pt, fill: black)
+#show heading: set text(font: "CMU Sans Serif", size: 28pt)
+// Use DejaVu Sans (available in Alpine) with reduced size.
+// Applied AFTER theme to override theme defaults.
+//#set text(font: "DejaVu Sans", size: 20pt, fill: black)
+//#show heading: set text(font: "DejaVu Sans", size: 28pt)
+
+// Track list nesting depth with counter
+#let list-nesting = counter("list-nesting")
+
+// Use en-dashes for all bullet points (override default circle/triangle markers).
+#show list: set list(marker: "–")
+
+// Reduce font size for nested list levels.
+#show list: it => {
+  list-nesting.step()
+  let depth = list-nesting.get().first()
+  let size = if depth == 1 { 1em } else if depth == 2 { 0.95em } else { 0.90em }
+  set text(size: size)
+  [#it]
+  list-nesting.update(n => n - 1)
+}
+
+// Make footer text smaller.
+#let footer-text(body) = text(size: 0.8em, fill: black, body)
+
+
+====
+
+#slide[
+  #grid(
+    columns: (20%, 80%),
+    gutter: 0.5cm,
+    align(top + left)[#image("/msml610/lectures_source/figures/UMD_Logo.png", width: 3.5cm)],
+    align(top + left)[
+      #v(0.2cm)
+      #text(size: 28pt)[MSML610: Advanced Machine Learning]
+    ]
+  )
+
+  #v(1.5cm)
+  #align(center)[#text(size: 32pt, weight: "bold", fill: rgb("#0066CC"))[L03.2: Propositional and First Order Logic]]
+
+  #v(2.5cm)
+  #text(size: 24pt)[Instructor: Dr. GP Saggese - #link("mailto:gsaggese@umd.edu")[_gsaggese\@umd.edu_]]
+]
+==== Table of Content
+<table-of-content>
+- #text(fill: red, weight: "bold")[#emph[Propositional logic]]
+  - Syntax
+  - Semantics
+- First-order Logic
+  - Syntax
+  - Semantics
+
+==== Table of Content
+<table-of-content-1>
+- Propositional logic
+  - #text(fill: red, weight: "bold")[#emph[Syntax]]
+  - Semantics
+- First-order Logic
+  - Syntax
+  - Semantics
+
+==== Propositional Logic
+<propositional-logic>
+- #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Propositional
+  logic] is a formal system for reasoning about statements that can be
+  true or false
+  - #text(fill: black, weight: "bold")[Syntax] defines the allowable sentences
+    - Consists of proposition symbol and logical connectives
+    - E.g., $P and Q$
+  - #text(fill: black, weight: "bold")[Semantics] is the way in which the truth of sentences is
+    determined
+    - Truth tables or deduction rules evaluate the truth value of
+      complex sentences
+    - E.g., if $P$ is true and $Q$ is false then $P and Q$ is false
+- #text(fill: blue, weight: "bold")[Applications]:
+  - #emph[SAT solvers]
+    - Tools for determining if a propositional logic formula can be
+      satisfied
+    - E.g., used in hardware verification and scheduling problems
+  - #emph[Expert systems]
+    - Use logic rules to mimic human decision-making
+    - E.g., medical diagnosis systems
+  - #emph[Rule-based agents]
+    - Agents that operate based on a set of predefined rules
+    - E.g., automated customer service chatbots
+
+==== Proposition Symbol
+<proposition-symbol>
+- #text(fill: red, weight: "bold")[Definition]: A #text(fill: black, weight: "bold")[proposition
+  symbol] is an atomic sentence consisting of a single symbol
+  - E.g., $P$, $Q$, $N o r t h$
+  - Doesn't have truth value, it is just a symbol for a real-world
+    statement (needs grounding for semantics)
+  - Stands for a proposition that can be true or false
+    - E.g., $K_(E \, 5)$ = "the Knight is in E5"
+    - $K_(E \, 5)$ is not composed of any other symbol, it is an atomic
+      symbol
+  - #text(fill: black, weight: "bold")[Built-in symbols];: $T r u e$ and $F a l s e$ are
+    proposition symbols with inherent truth values
+- #text(fill: blue, weight: "bold")[Fact]: Propositional logic is an
+  #emph[atomic representation] since propositions have no internal
+  structure
+
+==== Sentences
+<sentences>
+- #text(fill: red, weight: "bold")[Definition]: An #text(fill: black, weight: "bold")[atomic
+  sentence] is a sentence composed of a single proposition symbol
+  - E.g., $P$
+- #text(fill: green, weight: "bold")[Definition]: A #text(fill: black, weight: "bold")[complex
+  sentence] is constructed from simpler sentences using parentheses and
+  logical connectives
+  - E.g., $\( P and Q \) or R$
+  - Recursive definition allows building more complex sentences
+- #text(fill: blue, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Logical
+  connectives] are:
+  - Not: $not$
+  - And: $and$ (looks like an "A" for "and")
+  - Or: $or$ (comes from Latin "vel" which means "or")
+  - Implies: $arrow.r.double.long$
+  - If and only if: $arrow.l.r.double$
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Key principle]: Each
+  sentence (atomic or complex) can be only true or false
+
+==== Proposition Logic: Weather Example
+<proposition-logic-weather-example>
+- #text(fill: black, weight: "bold")[Atomic sentences];:
+  - $R a i n$ = #emph["it's raining"]
+  - $C o l d$ = #emph["it's cold"]
+  - $S u n n y$ = #emph["it's sunny"]
+  - $S n o w$ = #emph["it's snowing"]
+  - $C l o u d y$ = #emph["it's cloudy"]
+- #emph[Atomic sentence] can be positive or negated
+  - E.g., $R a i n$, $not R a i n$ = #emph["it's not raining"]
+- #text(fill: black, weight: "bold")[Negation]
+  - E.g., $not \( R a i n or C l o u d y \)$ = #emph["it's not the case
+    that it's raining or cloudy"]
+- #text(fill: black, weight: "bold")[Conjunction / Disjunction]
+  - E.g., $R a i n and C o l d$ = #emph["it's raining and it's cold"]
+  - E.g., $R a i n or S n o w$ = #emph["it's either raining or snowing"]
+- #text(fill: black, weight: "bold")[Implication] is a sentence containing "premise
+  $arrow.r.double.long$ conclusion"
+  - Aka #emph["if-then statements"];, #emph["rules"]
+  - E.g., $R a i n arrow.r.double.long not S n o w$ = #emph["if it's
+    raining, it's not snowing"]
+- #text(fill: black, weight: "bold")[Biconditional];:
+  $\( A arrow.r.double.long B \) and \( B arrow.r.double.long A \)$
+  - E.g., $S u n n y arrow.l.r.double not C l o u d y$ = #emph["it's
+    sunny if and only if it's not cloudy"]
+
+==== Grammar in BNF form
+<grammar-in-bnf-form>
+#grid(
+  columns: (50%, 45%),
+  gutter: 0.5em,
+  [
+  - #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Backus Normal
+    Form] formally represents the grammar of propositional logic
+  
+  - #text(fill: green, weight: "bold")[Problem]: #emph[Ambiguity];: the
+    same sentence can be parsed in multiple ways
+  
+    - E.g., $not A or B = \( not A \) or B$ or $not \( A or B \)$ ?
+  
+  - #text(fill: blue, weight: "bold")[Solution]: Eliminate ambiguity by
+    defining operator precedence
+  
+    - E.g., $not$ has higher precedence than $and \, or$
+    - So $not A or B$ means $\( not A \) or B$
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L03.propositional_logic_BNF.png", height: 40.0%))
+  ]
+)
+==== Table of Content
+<table-of-content-2>
+- Propositional logic
+  - Syntax
+  - #text(fill: red, weight: "bold")[#emph[Semantics]]
+- First-order Logic
+  - Syntax
+  - Semantics
+
+==== Semantics of Propositional Logic
+<semantics-of-propositional-logic>
+- #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Semantics] are
+  rules for determining the truth of a sentence $alpha$ with respect to
+  a model $m$
+  - Determine if a sentence is true or false, given a possible world
+- #text(fill: blue, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Model
+  definition];: In propositional logic, a model $m$ fixes the truth
+  value (true or false) for every atomic sentence
+  - The models are #text(fill: black, weight: "bold")[abstractions] of the real world and have no
+    a-priori connection to a specific world, e.g.,
+    - $P_(1 \, 2)$ is just a symbol and can mean:
+      - #emph["There is a pit in \[1, 2\]"] or
+      - #emph["I'm in Paris today and tomorrow"]
+    - Need grounding
+
+==== Computing the Truth Value of a Sentence
+<computing-the-truth-value-of-a-sentence>
+- #text(fill: red, weight: "bold")[Algorithm]: the #text(fill: black, weight: "bold")[truth value
+  of a sentence] is derived from the truth of the proposition symbols
+  (recursively from the model $m$)
+  $ m = { P_(1 \, 2) = F \, P_(2 \, 2) = F \, P_(3 \, 1) = T } $
+
+- All sentences $alpha$ are constructed from atomic sentences (assigned
+  by model $m$) and connectives:
+
+  - $not P$ is true iff $P$ is false in $m$
+  - $P and Q$ is true iff $P$ and $Q$ are both true in $m$
+  - $P or Q$ is true iff $P$ or $Q$ are true in $m$
+  - $P arrow.r.double.long Q$ is true unless $P$ is true and $Q$ is
+    false in $m$
+  - $P arrow.l.r.double Q$ is true iff $P$ and $Q$ are both true or both
+    false in $m$
+
+- #text(fill: blue, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Truth table]
+  contains truth value of a sentence for each possible model $m$
+
+  - E.g., $X = A and B or C$
+
+    ```
+    A   B   C   X
+    F   F   F   F
+    F   F   F   T
+    ...
+    ```
+
+==== Interpretation of Implication
+<interpretation-of-implication>
+- #text(fill: red, weight: "bold")[Fact]: in a logical implication
+  "$P arrow.r.double.long Q$" there is #text(fill: black, weight: "bold")[no causation] between $P$
+  and $Q$
+  - "$P arrow.r.double.long Q$" says #emph["If $P$ is true, I claim that
+    $Q$ is true. Otherwise I am making no claim"]
+    - E.g., #emph["5 is odd implies that Tokyo is the capital of Japan"]
+      is a true sentence in propositional logic (although very odd)
+  - An implication is true whenever the antecedent is false
+    - E.g., #emph["5 is even implies pigs fly"] is true
+
+==== Model Checking is Sound and Complete
+<model-checking-is-sound-and-complete>
+- #text(fill: red, weight: "bold")[Remember]: #text(fill: black, weight: "bold")[Model checking
+  algorithm]
+  - Enumerates all the models (truth tables)
+  - Checks if $alpha$ is true for every model where $K B$ is true
+- #text(fill: black, weight: "bold")[Fact];: in propositional logic, the model checking algorithm
+  is:
+  - #text(fill: black, weight: "bold")[Sound]
+    - "Any inference made by the algorithm is correct"
+    - Implements the definition of entailment
+  - #text(fill: black, weight: "bold")[Complete]
+    - "Any true sentence is inferred correctly by the algorithm"
+    - Works for any $K B$ and $alpha$
+    - Always terminates (finite number of models)
+- #text(fill: black, weight: "bold")[Fact];: complexity of model checking with $n$ variables
+  - #emph[Time complexity] is $O \( 2^n \)$ (NP-complete)
+    - Worst case is exponential
+    - Average case is better than exponential
+  - #emph[Space complexity] is $O \( n \)$ since enumeration is
+    depth-first
+
+==== Inference in Propositional Logic
+<inference-in-propositional-logic>
+- #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Inference rules]
+  are rules of reasoning (i.e., deriving correct statements from the
+  statements of the knowledge base)
+  - #emph[Modus Ponens];: if $p arrow.r.double.long q$ and $p$, infer
+    $q$
+    - #emph["If it rains, the ground will be wet"]
+    - \_"It rains. Therefore, the ground is wet\_"
+  - #emph[Modus Tollens];: if $p arrow.r.double.long q$ and $not q$,
+    infer $not p$
+    - \_"If it rains, the ground will be wet. The ground is not wet.
+      Therefore, it did not rain.\_"
+  - #emph[Syllogism] (aka transitivity)
+    - If $p arrow.r.double.long q$ and $q arrow.r.double.long r$, then
+      $p arrow.r.double.long r$
+  - #emph[Disjunctive Syllogism]
+    - If $p or q$ and $not p$, infer $q$
+  - #emph[Addition];: if $p$, then $p or q$
+  - #emph[Simplification];: from $p and q$, infer $p$ (or $q$)
+  - #emph[Conjunction];: from $p$ and $q$, infer $p and q$
+  - #emph[Resolution Rule]
+    - From $\( p or q \)$ and $\( not p or r \)$, infer $\( q or r \)$
+
+==== Propositional Theorem Proving
+<propositional-theorem-proving>
+- #text(fill: red, weight: "bold")[Algorithm]: #text(fill: black, weight: "bold")[Prove a sentence]
+  $alpha$ under a knowledge base KB in propositional logic
+  - Apply rules of inference to construct a proof of $alpha$
+  - Any sentence can have only one of the following truth values:
+    + True
+    + False
+    + Undecidable under the KB
+- #text(fill: blue, weight: "bold")[Comparison]
+  - #emph[Model checking] involves enumerating all models to show the
+    sentence is true/false in all models where KB is true
+  - #emph[Propositional theorem proving] builds a proof
+  - If the proof is short, theorem proving can be more efficient than
+    model checking
+
+==== Logical Equivalence of Sentences
+<logical-equivalence-of-sentences>
+- #text(fill: black, weight: "bold")[Logical equivalence];: Two sentences $alpha$ and $beta$ are
+  logically equivalent $alpha equiv beta$
+  - Iff they are true in the same set of models:
+    $ M \( alpha \) = M \( beta \) $
+  - Iff they entail each other:
+    $ alpha tack.r.double beta and beta tack.r.double alpha $
+- #text(fill: black, weight: "bold")[Example];: $P or Q equiv Q or P$
+
+==== Logical Equivalences (1/2)
+<logical-equivalences-12>
+- #text(fill: black, weight: "bold")[Commutativity] of $and$ and $or$
+  $ \( alpha and beta \) equiv \( beta and alpha \) $
+  $ \( alpha or beta \) equiv \( beta or alpha \) $
+- #text(fill: black, weight: "bold")[Associativity] of $and$ and $or$
+  $ \( alpha and beta \) and gamma equiv alpha and \( beta and gamma \) equiv alpha and beta and gamma $
+  $ \( alpha or beta \) or gamma equiv alpha or \( beta or gamma \) equiv alpha or beta or gamma $
+- #text(fill: black, weight: "bold")[Distributivity] of $and$ over $or$
+  $ alpha and \( beta or gamma \) equiv \( alpha and beta \) or \( alpha and gamma \) $
+- #text(fill: black, weight: "bold")[Distributivity (dual)] of $or$ over $and$
+  $ alpha or \( beta and gamma \) equiv \( alpha or beta \) and \( alpha or gamma \) $
+- #text(fill: black, weight: "bold")[Double negation] elimination:
+  $ not \( not alpha \) equiv alpha $
+
+==== Logical Equivalences (2/2)
+<logical-equivalences-22>
+- #text(fill: black, weight: "bold")[Contraposition];:
+  $ \( alpha arrow.r.double.long beta \) equiv \( not beta arrow.r.double.long not alpha \) $
+- #text(fill: black, weight: "bold")[Implication elimination];:
+  $ \( alpha arrow.r.double.long beta \) equiv \( not alpha or beta \) $
+- #text(fill: black, weight: "bold")[Biconditional elimination];:
+  $ \( alpha arrow.l.r.double beta \) equiv \( alpha arrow.r.double.long beta \) and \( beta arrow.r.double.long alpha \) $
+- #text(fill: black, weight: "bold")[De Morgan laws];:
+  $ not \( alpha and beta \) equiv \( not alpha or not beta \) $
+  $ not \( alpha or beta \) equiv \( not alpha and not beta \) $
+
+==== Deduction Theorem
+<deduction-theorem>
+- #text(fill: red, weight: "bold")[Definition]: A #text(fill: black, weight: "bold")[valid
+  sentence] $alpha$ that is true for all the models
+  - E.g., $P or not P$
+  - Aka "tautology"
+  - Every tautology is equivalent to the sentence $T r u e$
+- #text(fill: green, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Contradiction]
+  is a sentence $alpha$ that is false for all the models
+  - E.g., $P and not P$
+  - Every contradiction is equivalent to the sentence $F a l s e$
+- #text(fill: blue, weight: "bold")[Theorem]: #text(fill: black, weight: "bold")[Deduction theorem]
+  - The sentence $alpha$ entails $beta$ (written
+    $alpha tack.r.double beta$) iff the sentence
+    $alpha arrow.r.double.long beta$ is a tautology
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Key insight]: The
+  deduction theorem is like a #emph[bridge] between two different but
+  closely related ideas:
+  - #emph[Entailment] $tack.r.double$ is a semantic notion
+    - It's about truth across all models
+    - $alpha$ entails $beta$ means in every possible world where $alpha$
+      is true, $beta$ is also true
+  - #emph[Implication] $arrow.r.double.long$ is a syntactic notion
+    - $alpha arrow.r.double.long beta$ is just another formula inside
+      the logic
+
+==== Satisfiability
+<satisfiability>
+- #text(fill: red, weight: "bold")[Definition]: A sentence $alpha$ is
+  #text(fill: black, weight: "bold")[satisfiable] iff $alpha$ is true for some model
+
+- #text(fill: green, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[SAT problem]
+  is about determining satisfiability of sentence in propositional logic
+
+  - One can enumerate all the possible models until one is found to
+    satisfy the sentence $alpha$
+  - It is NP-complete
+
+- #text(fill: blue, weight: "bold")[Corollary]: A sentence $alpha$ is
+  #text(fill: black, weight: "bold")[un-satisfiable] iff $alpha$ is never true (i.e., a
+  contradiction)
+
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Corollary]:
+  #text(fill: black, weight: "bold")[Validity and satisfiability]
+
+  - $alpha$ is valid (i.e., a tautology) iff $not alpha$ is
+    un-satisfiable
+  - By contrapositive, $alpha$ is satisfiable iff $not alpha$ is not
+    valid ($not alpha$ is not a tautology)
+
+==== Proof by Contraction
+<proof-by-contraction>
+- #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Proof method];:
+  The sentence $alpha tack.r.double beta$ is true iff the sentence
+  "$alpha or not beta \)$" is un-satisfiable (i.e., a contradiction)
+
+- #text(fill: blue, weight: "bold")[Algorithm]: In a proof by
+  contradiction:
+
+  - Assume $alpha$
+  - Assume that the sentence $beta$ is false
+  - Prove that this leads to a contradiction
+  - Thus $beta$ must be true
+
+==== Propositional Logic: Pros and Cons
+<propositional-logic-pros-and-cons>
+- #text(fill: red, weight: "bold")[Pros]
+  - Declarative
+    - Semantics is based on relation between sentences and possible
+      worlds
+  - Can deal with partial information
+    - E.g., "A white knight is in #text(fill: blue)[b1] or in
+      #text(fill: blue)[f6]" is represented with
+      $W K 1_(b 1) or W K 2_(f 6)$
+  - Compositional semantics
+    - The meaning of a sentence is a function of the meaning of its
+      parts
+  - Context independent
+  - Unambiguous
+- #text(fill: blue, weight: "bold")[Cons]
+  - Can't concisely describe environment with many objects, e.g.,
+    - E.g., #emph["The pawn is in a cell around #text(fill: blue)[b1]"]
+      requires all the possible states to be enumerated
+  - Can't represent uncertainty
+    - E.g., #emph["There is 50% of probability that the pawn is in
+      #text(fill: blue)[b1]"]
+
+==== Table of Content
+<table-of-content-3>
+- Propositional logic
+  - Syntax
+  - Semantics
+- #text(fill: red, weight: "bold")[#emph[First-order Logic]]
+  - Syntax
+  - Semantics
+
+==== Table of Content
+<table-of-content-4>
+- Propositional logic
+  - Syntax
+  - Semantics
+- First-order Logic
+  - #text(fill: red, weight: "bold")[#emph[Syntax]]
+  - Semantics
+
+==== First-Order Logic (FOL)
+<first-order-logic-fol>
+- #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[First-order
+  logic] (FOL) extends propositional logic by:
+  - Introducing #emph[quantifiers] (e.g., $forall$, $exists$)
+  - Using #emph[predicates] to represent properties and relations
+- #text(fill: blue, weight: "bold")[Pros]: Combines pros of
+  propositional logic with pros of natural language
+  - Built around objects and relations
+  - Allows to express facts about some or all objects, e.g.,
+    - #emph["Some humans have green eyes"]
+    - #emph["Chess pieces around the Queen are at risk"]
+  - FOL provides expressive power to represent structured, relational
+    knowledge
+
+==== First-Order Logic: Syntax
+<first-order-logic-syntax>
+#grid(
+  columns: (50%, 50%),
+  gutter: 0.5em,
+  [
+  - #text(fill: black, weight: "bold")[Constants];: represent specific objects
+    - E.g., $S o c r a t e s$
+  - #text(fill: black, weight: "bold")[Predicates];: describe properties or relations
+    - E.g., $H u m a n \( x \)$ = #emph["x is human"]
+  - #text(fill: black, weight: "bold")[Functions];: map tuples of objects to objects
+    - E.g., $M o t h e r \( x \)$ = #emph["the mother of x"]
+  - #text(fill: black, weight: "bold")[Variables];: act as placeholders
+    - E.g., $x \, y$
+  - #text(fill: black, weight: "bold")[Quantifiers]
+    - E.g., $forall x$ (for all $x$)
+    - E.g., $exists x$ (there exists an $x$)
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L03.FOL_Syntax.png"))
+  ]
+)
+==== Sentences
+<sentences-1>
+- #text(fill: black, weight: "bold")[Term] is a logical expression that refers to an object
+
+  - E.g., $R i c h a r d$
+
+- #text(fill: black, weight: "bold")[Atomic sentence] is a predicate symbol (i.e., corresponds to
+  relations) followed by a list of terms in parenthesis
+  $P r e d i c a t e \( T e r m 1 \, T e r m 2 \, . . . \)$
+
+  - E.g., $B r o t h e r \( R i c h a r d \, J o h n \)$ means
+    #emph["Richard is the brother of John"];, under a given grounding /
+    interpretation, \
+  - E.g.,
+    $M a r r i e d \( F a t h e r \( R i c h a r d \) \, M o t h e r \( J o h n \) \)$
+    means #emph["the father of Richard and the mother of John are
+    married"]
+
+- #text(fill: black, weight: "bold")[Complex sentence] is a sentence using logical connectives
+  complex, with the same syntax and semantics as in propositional logic
+
+- #text(fill: black, weight: "bold")[Variable] is a term that represents a possible object
+
+  - Typically represented as lowercase letter (e.g., $x$, $y$, $z$)
+  - Can be used as argument of a function, e.g., $L e f t L e g \( x \)$
+
+- #text(fill: black, weight: "bold")[Equality symbol] signifies that two terms refer to the same
+  object
+
+  - E.g., $F a t h e r \( J o h n \) = H e n r y$
+
+==== Quantifiers
+<quantifiers>
+- #text(fill: black, weight: "bold")[Quantifiers] express properties of entire collections of
+  objects, instead of enumerating objects by name (like done in
+  propositional logic)
+
+- #text(fill: black, weight: "bold")[Universal quantifier];: $forall x thin P \( x \)$
+
+  - Universal quantifier makes a statement about #emph[every] object
+  - Statement is true if $P \( x \)$ is true for all $x$
+
+- #text(fill: black, weight: "bold")[Existential quantifier];: $exists x thin P \( x \)$
+
+  - Existential quantifier makes a statement about #emph[some] object
+    (without naming it)
+  - Statement is true if $P \( x \)$ is true for at least one $x$
+
+- Variables are #text(fill: black, weight: "bold")[bound] by quantifiers or #text(fill: black, weight: "bold")[free] (unbound)
+
+  - E.g., $forall x \( C a t \( x \) arrow.r M a m m a l \( x \) \)$
+
+==== Nested Quantifiers
+<nested-quantifiers>
+- Complex sentences can be expressed using #text(fill: black, weight: "bold")[multiple quantifiers]
+  - The order of quantifiers is important
+  - Need to use parentheses to clarify
+- #text(fill: red, weight: "bold")[Example]:
+  - #emph["Brothers are siblings"]
+    - $forall x \, y #h(0em) B r o t h e r \( x \, y \) arrow.r.double.long S i b l i n g \( x \, y \)$
+  - Siblings is a symmetric relationship
+    - $forall x \, y #h(0em) S i b l i n g \( x \, y \) arrow.l.r.double S i b l i n g \( y \, x \)$
+  - #emph["Everybody loves somebody"]
+    - $forall x #h(0em) exists y #h(0em) L o v e s \( x \, y \)$
+  - #emph["There is someone loved by everyone"]
+    - $exists y #h(0em) forall x #h(0em) L o v e s \( x \, y \)$
+
+==== Connection between $forall$ and $exists$
+<connection-between-forall-and-exists>
+- #text(fill: red, weight: "bold")[Axiom]: the universal and existential
+  quantifiers are #text(fill: black, weight: "bold")[connected] through negation and De Morgan
+  rules
+  $ forall x #h(0em) not P \( x \) arrow.l.r.double not exists x : P \( x \) $
+  $ not \( forall x #h(0em) P \( x \) \) arrow.l.r.double exists x not P \( x \) $
+  $ forall x #h(0em) P \( x \) arrow.l.r.double not exists x not P \( x \) $
+  $ exists x #h(0em) P \( x \) arrow.l.r.double not \( forall x #h(0em) not P \( x \) \) $
+
+==== Table of Content
+<table-of-content-5>
+- Propositional logic
+  - Syntax
+  - Semantics
+- First-order Logic
+  - Syntax
+  - #text(fill: red, weight: "bold")[#emph[Semantics]]
+
+==== First-order Logic: Semantics
+<first-order-logic-semantics>
+- #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Semantics]
+  define how sentences are interpreted in a domain
+
+- Symbols represent entities, relationships, and functions in the domain
+
+  - #text(fill: black, weight: "bold")[Constant symbols] represent specific objects
+    - E.g., $A l i c e$, $G P$, $C S 101$
+  - #text(fill: black, weight: "bold")[Predicate symbols] represent relationships among objects,
+    e.g.,
+    - $E n r o l l e d I n \( S t u d e n t \, C l a s s \)$
+    - $T e a c h e s \( P r o f e s s o r \, C l a s s \)$
+    - $I s S t u d e n t \( x \)$, $I s P r o f e s s o r \( x \)$
+  - #text(fill: black, weight: "bold")[Function symbols] represent mappings between objects
+    - E.g., $A d v i s o r O f \( S t u d e n t \)$,
+      $D e p a r t m e n t O f \( P r o f e s s o r \)$
+
+- #text(fill: blue, weight: "bold")[Definition]: an
+  #text(fill: black, weight: "bold")[interpretation] (aka grounding) maps the world to its
+  mathematical description, and vice versa
+
+  - There are many possible interpretations
+  - The intended interpretation is often the one that is the most
+    natural
+    - E.g., map the symbol $G P$ $arrow.r$ me
+    - E.g.,
+      $forall x thin \( H u m a n \( x \) arrow.r M o r t a l \( x \) \)$
+      means that every human is mortal
+
+==== Representing Knowledge in FOL
+<representing-knowledge-in-fol>
+- #text(fill: red, weight: "bold")[Pros]: FOL enables representation of:
+
+  - General rules:
+    $forall x thin \( B i r d \( x \) arrow.r C a n F l y \( x \) \)$
+  - Specific facts: $B i r d \( T w e e t y \)$
+
+- #text(fill: black, weight: "bold")[Relations];: Complex relations are captured through
+  predicates:
+
+  - $L o v e s \( R o m e o \, J u l i e t \)$,
+    $G r e a t e r T h a n \( 3 \, 2 \)$
+
+- #text(fill: black, weight: "bold")[Functions];: Functions express object construction:
+
+  - $F a t h e r O f \( J o h n \)$
+
+- #text(fill: black, weight: "bold")[Knowledge base];: Built from axioms and facts
+
+- #text(fill: black, weight: "bold")[Reasoning];: Enables reasoning about objects, properties, and
+  their relationships
+
+==== First-Order Logic: Inference
+<first-order-logic-inference>
+- #text(fill: red, weight: "bold")[Goal]: derive new sentences from
+  existing ones using sound rules
+
+  - #text(fill: black, weight: "bold")[Universal Instantiation];:
+    - From $forall x thin P \( x \)$ infer $P \( c \)$ for any constant
+      $c$
+  - #text(fill: black, weight: "bold")[Existential Instantiation];:
+    - From $exists x thin P \( x \)$ infer $P \( c \)$ with a new
+      constant $c$
+  - #text(fill: black, weight: "bold")[Standard rules];: Propositional logic rules such as Modus
+    Ponens, Modus Tollens, Resolution, etc., also apply within FOL
+    - Modus ponens: from $P$ and $P arrow.r.double.long Q$, infer $Q$
+
+- #text(fill: blue, weight: "bold")[Complexity]: FOL inference is
+  semi-decidable:
+
+  - If a sentence is entailed, a proof can be found
+  - If not entailed, proof search may not terminate

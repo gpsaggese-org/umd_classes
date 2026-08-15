@@ -1,0 +1,1137 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+\usepackage{listings}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{1cm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+\newcommand{\black}[1]{\textcolor{black}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\brown}[1]{\textcolor{brown}{#1}}
+\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
+\newcommand{\gray}[1]{\textcolor{gray}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\olive}[1]{\textcolor{olive}{#1}}
+\newcommand{\orange}[1]{\textcolor{orange}{#1}}
+\newcommand{\purple}[1]{\textcolor{purple}{#1}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\teal}[1]{\textcolor{teal}{#1}}
+\newcommand{\violet}[1]{\textcolor{violet}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+% fallback for those not using the hyperref driver hyperxmp:
+\makeatletter
+\@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
+\makeatother
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+\begin{columns}[T]
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/UMD_Logo.png}}
+\end{column}
+
+\begin{column}{0.75\linewidth}
+\vspace{0.4cm}
+\begingroup \large
+
+UMD DATA605 - Big Data Systems \endgroup
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begingroup \Large
+
+\textbf{\[\text{\textcolor{blue}{\text{07.4: Big Data Architectures}}}\]}
+\endgroup
+
+\begin{columns}[T]
+\begin{column}{0.65\linewidth}
+\vspace{1cm}
+
+\textbf{Instructor}: Dr.~GP Saggese, \url{gsaggese@umd.edu}
+\end{column}
+
+\begin{column}{0.3\linewidth}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Software Testing}
+\protect\phantomsection\label{software-testing}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Goal}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Evaluate functionality, reliability, performance, and security of a
+    product to ensure it meets requirements
+  \item
+    Software testing is critical in development
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Adages}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``If it's not tested, it doesn't work''}
+  \item
+    \emph{``Debugging is 2x harder than writing code''}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Corollary: \emph{``If you do your best to write code, how can you
+      debug it?''}
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Many different types of testing}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    What do you test?
+  \item
+    From what point of view?
+  \item
+    \ldots{}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{What Are You Testing?}
+\protect\phantomsection\label{what-are-you-testing}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Unit testing}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Test individual components for correct functionality in isolation
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Integration testing}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Ensure components work together as expected
+  \item
+    Detect interface defects
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{System testing}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Evaluate a fully integrated system's compliance with requirements
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{How Are You Testing?}
+\protect\phantomsection\label{how-are-you-testing}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Smoke/sanity testing}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Quick check of functionalities to ensure main functions work
+  \item
+    E.g., decide if a new build is stable
+  \item
+    E.g., application doesn't crash on launch
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Regression testing}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Ensure new changes don't affect existing functionality
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Acceptance testing}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Final testing phase before release
+  \item
+    More common in waterfall than Agile
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Performance testing}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Load, stress, and spike testing
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Security testing}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Identify vulnerabilities, threats, and risks
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Usability testing}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Assess ease of use for end-users
+  \item
+    E.g., uI/UX
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Compatibility testing}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Check compatibility with browsers, database versions, OS, mobile
+    devices
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{CI / CD}
+\protect\phantomsection\label{ci-cd}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Continuous integration (CI)}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Merge code changes into a central repository multiple times a day
+  \item
+    Automate build and test after each change
+  \item
+    Add code with unit tests
+  \item
+    \emph{Goal}: Detect and fix integration errors quickly
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Continuous deployment (CD)}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Automatically deploy code changes to production
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Without human intervention
+    \item
+      After build and test phases pass
+    \end{itemize}
+  \item
+    \emph{Goal}: Deliver features, bug fixes, and updates continuously
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Examples}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    GitHub Actions, GitLab Workflows, AWS Code, Jenkins
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{RESTful API}
+\protect\phantomsection\label{restful-api}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{REST API}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    REST = REpresentational State Transfer
+  \item
+    Style of building API for web services / distributed systems
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Uniform interface}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Refer to resources
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., document, services, URI, persons
+    \end{itemize}
+  \item
+    Use HTTP methods
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., \textcolor{blue}{\texttt{GET}},
+      \textcolor{blue}{\texttt{POST}}, \textcolor{blue}{\texttt{PUT}},
+      \textcolor{blue}{\texttt{DELETE}}
+    \end{itemize}
+  \item
+    Naming convention, link format
+  \item
+    Response (XML or JSON)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Stateless}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Each request contains all necessary information
+  \item
+    No shared state
+  \item
+    Inspired by HTTP (modulo cookies)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{RESTful API}
+\protect\phantomsection\label{restful-api-1}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Cacheable}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    APIs label response data as cacheable or non-cacheable
+  \item
+    Client can reuse cacheable responses
+  \item
+    Increase scalability and performance
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Layered system}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Each layer interfaces only with the immediate layer
+  \item
+    E.g., in a tier application
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_7_1/lec_7_1_slide_46_image_1.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Stages of Deployment}
+\protect\phantomsection\label{stages-of-deployment}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Software is deployed through several environments}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Each environment tests, validates, and prepares software for release
+    to end user
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Development environment (Dev)}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Individual for each developer or feature team
+  \item
+    \emph{Goal}: Developers write and initially test code
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Testing}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Aka ``Quality Assurance (QA)''
+  \item
+    Mirrors production environment to perform under similar conditions
+  \item
+    \emph{Goal}: Systematic testing to uncover defects and ensure
+    quality
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Pre-prod}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Aka staging
+  \item
+    Final testing phase before deployment to production
+  \item
+    Replica of production environment for final checks and stakeholder
+    review
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Production (Prod)}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Live environment where software is available to end users
+  \item
+    Optimized for security, performance, and scalability
+  \item
+    Focus on uptime, user experience, and data integrity
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Semantic Versioning}
+\protect\phantomsection\label{semantic-versioning}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Semantic versioning}} conveys meaning about
+  changes to software
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Systematic approach
+  \item
+    Communicate to users potential impact of updating to a new version
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Increment version}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Major Version \textcolor{blue}{\texttt{X.y.z}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Incompatible API changes
+    \item
+      Significant updates that may break backward compatibility
+    \end{itemize}
+  \item
+    Minor Version \textcolor{blue}{\texttt{x.Y.z}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Backward-compatible enhancements
+    \item
+      Significant new features that don't break existing functionalities
+    \end{itemize}
+  \item
+    Patch Version \textcolor{blue}{\texttt{x.y.Z}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Backward-compatible bug fixes that address incorrect behavior
+    \end{itemize}
+  \item
+    Pre-release Version:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Denote a pre-release version that might not be stable
+    \item
+      E.g., \textcolor{blue}{\texttt{1.0.0-alpha}},
+      \textcolor{blue}{\texttt{1.0.0-beta}}
+    \item
+      Releases for testing and feedback, not for production use
+    \end{itemize}
+  \item
+    Build Metadata
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Optional metadata to denote build information or environment
+      specifics
+    \item
+      E.g., \textcolor{blue}{\texttt{1.0.0+20210313120000}} or
+      \textcolor{blue}{\texttt{1.0.0+f8a34b3228c}}
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Microservices vs Monolithic Architecture}
+\protect\phantomsection\label{microservices-vs-monolithic-architecture}
+\begin{columns}[T]
+\begin{column}{0.4\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Many styles of building complex systems}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Monolith}: all features in one deployable unit
+  \item
+    \emph{Microservices}: many small services collaborating over the
+    network
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.6\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_7_1/lec_7_1_slide_49_image_2.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Heuristics}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Start from business domains, not technology layers
+  \item
+    Align service boundaries with independent business capabilities
+  \item
+    E.g., online shop with separate services for catalog, cart, payment,
+    shipping
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Monolithic Architecture}
+\protect\phantomsection\label{monolithic-architecture}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Monolith}} = all features in one deployable
+  unit
+\item
+  \textbf{\textcolor{darkgreen}{Pros}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Simplicity}: Simpler to develop, test, deploy, and scale as a
+    single unit
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Cons}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Tightly coupled components}: Components run in the same
+    process, leading to scalability and resilience issues
+  \item
+    \emph{Technology stack uniformity}: Developed with a single
+    technology stack, limiting flexibility
+  \item
+    \emph{Deployment complexity}: Updates require redeploying the entire
+    application
+  \item
+    \emph{Single point of failure}: Issues in any module can affect the
+    entire application
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Microservice Architecture}
+\protect\phantomsection\label{microservice-architecture}
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Microservices}} = many small services
+  collaborating over the network
+\item
+  \textbf{\textcolor{darkgreen}{Cons}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Complex deployment
+  \item
+    Requires tooling
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_7_1/lec_7_1_slide_50_image_1.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Pros}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Modularity}: Small, independently deployable services with
+    specific business functionality
+  \item
+    \emph{Scalability}: Scale services independently for efficient
+    resource use based on demand
+  \item
+    \emph{Technology diversity}: Use the best technology stack for each
+    service's functionality
+  \item
+    \emph{Deployment flexibility}: Supports continuous delivery and
+    deployment for faster updates
+  \item
+    \emph{Resilience}: Isolate and address faults; one service failure
+    doesn't affect the entire system
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Microservices vs Monolith: Hype}
+\protect\phantomsection\label{microservices-vs-monolith-hype}
+\begin{columns}[T]
+\begin{column}{0.35\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  Neither approach is a slam dunk!
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You need to find the right granularity for your use case
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.6\linewidth}
+\centering \small
+
+\pandocbounded{\includegraphics[keepaspectratio]{data605/lectures_source/images/lecture_7_1/lec_7_1_slide_49_image_1.png}}
+\emph{``Microservice vs Monolithic'' search over time}
+\end{column}
+\end{columns}
+\end{frame}
+
+\end{document}

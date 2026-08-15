@@ -40,7 +40,7 @@ class Test_docker(hdoctest.DockerTestCase):
         # Prepare inputs.
         notebook_name = "langchain.example.ipynb"
         # Run test.
-        self._helper(notebook_name)
+        self.helper(notebook_name)
 
     @pytest.mark.slow
     @_REQUIRES_LLM_CREDENTIALS
@@ -51,7 +51,7 @@ class Test_docker(hdoctest.DockerTestCase):
         # Prepare inputs.
         notebook_name = "langchain.API.ipynb"
         # Run test.
-        self._helper(notebook_name)
+        self.helper(notebook_name)
 
     @pytest.mark.slow
     @_REQUIRES_LLM_CREDENTIALS
@@ -62,7 +62,7 @@ class Test_docker(hdoctest.DockerTestCase):
         # Prepare inputs.
         notebook_name = "langgraph.example.ipynb"
         # Run test.
-        self._helper(notebook_name)
+        self.helper(notebook_name)
 
     @pytest.mark.slow
     @_REQUIRES_LLM_CREDENTIALS
@@ -73,7 +73,7 @@ class Test_docker(hdoctest.DockerTestCase):
         # Prepare inputs.
         notebook_name = "deep_agents.example.ipynb"
         # Run test.
-        self._helper(notebook_name)
+        self.helper(notebook_name)
 
     @pytest.mark.slow
     @_REQUIRES_LLM_CREDENTIALS
@@ -84,4 +84,4 @@ class Test_docker(hdoctest.DockerTestCase):
         # Prepare inputs.
         notebook_name = "deep_agents.API.ipynb"
         # Run test.
-        self._helper(notebook_name)
+        self.helper(notebook_name)

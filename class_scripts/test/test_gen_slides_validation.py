@@ -82,7 +82,9 @@ class Test_gen_slides_batch_validation(hunitest.TestCase):
         Test that lesson numbers are well-formed across all courses.
         """
         # Prepare inputs.
-        valid_lesson_pattern = r"^\d+(\.\d+)?$"
+        # TODO(ai_gp): Add examples of what this expression matches, also this should
+        # become a standing function in csgsteut.
+        valid_lesson_pattern = r"^\d+(\.[0-9A-Za-z]+)?$"
         error_msg_template = "Invalid lesson format '{lesson}' in {course}"
         # Run test.
         all_lessons = csgsteut.collect_all_lessons()

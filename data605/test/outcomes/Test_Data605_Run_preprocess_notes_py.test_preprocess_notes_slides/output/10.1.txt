@@ -36,7 +36,7 @@ UMD DATA605 - Big Data Systems
 #### Client-Server Architecture
 :::columns
 ::::{.column width=60%}
-- **Client-server**: Model for distributed applications partitioning tasks
+- **\textcolor{red}{Client-server}**: Model for distributed applications partitioning tasks
   between:
   - _Clients_: Request services (e.g., dashboard, GUI, client applications)
   - _Servers_: Provide resources or services (e.g., database)
@@ -50,7 +50,7 @@ UMD DATA605 - Big Data Systems
 
 :::columns
 ::::{.column width=60%}
-- **Architecture of a database system**:
+- **\textcolor{blue}{Architecture of a database system}**:
   - _Back-end_ (Server): Manages access, query evaluation, optimization,
     concurrency control, and recovery
   - _Front-end_ (Clients): Tools like forms, report-writers, GUI
@@ -66,7 +66,7 @@ UMD DATA605 - Big Data Systems
 #### Parallel vs Distributed Computing
 :::columns
 ::::{.column width=60%}
-- **Parallel computing**
+- **\textcolor{red}{Parallel computing}**
   - One computer, multiple CPUs
   - Cluster: many computers, each with multiple CPUs
   - Homogeneous, geographically close nodes
@@ -82,7 +82,7 @@ UMD DATA605 - Big Data Systems
 
 :::columns
 ::::{.column width=60%}
-- **Distributed computing**
+- **\textcolor{blue}{Distributed computing}**
   - Autonomous, geographically separate systems
   - Heterogeneous and distant nodes
   - Perform separate tasks or parts of a larger task
@@ -95,17 +95,17 @@ UMD DATA605 - Big Data Systems
 #### Parallel Systems
 :::columns
 ::::{.column width=55%}
-- **Parallel systems** consist of:
+- **\textcolor{red}{Parallel systems}** consist of:
   - Multiple processors
   - Multiple memories
   - Multiple disks
   - Fast interconnection network
 
-- **Coarse-grain parallel machine**
+- **\textcolor{darkgreen}{Coarse-grain parallel machine}**
   - Small number of powerful processors
   - E.g., your laptop with multiple CPUs
 
-- **Fine-grain parallel machine**
+- **\textcolor{blue}{Fine-grain parallel machine}**
   - Aka massively parallel
   - Thousands of smaller processors
   - Larger degree of parallelism
@@ -124,18 +124,18 @@ _The Connection Machine, MIT, 1980s_
 :::
 
 #### Parallel Databases: Introduction
-- **Parallel DBs** were the standard approach before MapReduce
+- **\textcolor{red}{Parallel DBs}** were the standard approach before MapReduce
 
-- **Parallel machines have become common and affordable**
+- **\textcolor{darkgreen}{Parallel machines have become common and affordable}**
   - Prices of microprocessors, memory, and disks drop sharply
   - Desktop/laptop computers feature multiple processors
   - Trend will continue
 
-- **DBs are growing increasingly large**
+- **\textcolor{blue}{DBs are growing increasingly large}**
   - Large volumes of transaction data collected and stored for analysis
   - Multimedia objects increasingly stored in databases
 
-- **Large-scale parallel DBs increasingly used for:**
+- **\textcolor{violet}{Large-scale parallel DBs increasingly used for:}**
   - Storing large volumes of data
   - Processing time-consuming queries
   - Providing high throughput for transaction processing
@@ -145,17 +145,17 @@ _The Connection Machine, MIT, 1980s_
   - Store petabytes of data
   - Process thousands of transactions per second (e.g., commerce website)
 
-- **Databases can be parallelized**
+- **\textcolor{red}{Databases can be parallelized}**
   - Set-oriented nature of DB queries suits parallelization
   - Some operations are embarrassingly parallel
     - E.g., join between \textcolor{blue}{\texttt{R}} and \textcolor{blue}{\texttt{S on R.b = S.b}} as MapReduce task
 
-- **Parallel DBs**
+- **\textcolor{darkgreen}{Parallel DBs}**
   - More transactions per second or less time per query
   - Throughput vs response time
   - Speed-up vs scale-up
 
-- **Perfect speedup doesn't happen** due to:
+- **\textcolor{blue}{Perfect speedup doesn't happen}** due to:
   - Start-up costs
   - Task interference
   - Skew
@@ -163,15 +163,15 @@ _The Connection Machine, MIT, 1980s_
 #### How to Measure Parallel Performance
 :::columns
 ::::{.column width=55%}
-- **Throughput**
+- **\textcolor{red}{Throughput}**
   - Number of tasks completed in given time
   - Increase by processing tasks in parallel
 
-- **Latency**
+- **\textcolor{darkgreen}{Latency}**
   - Time to complete single task from submission
   - Decrease by performing subtasks in parallel
 
-- **Throughput and latency are related but not the same**
+- **\textcolor{blue}{Throughput and latency are related but not the same}**
   - Increase throughput by reducing latency
   - Increase throughput by pipelining (overlapping task execution)
     - E.g., building a car takes weeks, but one car is completed per hour
@@ -189,17 +189,17 @@ _Pipelining of instructions in microprocessor_
 :::
 
 #### Speed-Up and Scale-Up: Intuition
-- **You have a workload to execute**
+- **\textcolor{red}{You have a workload to execute}**
   - Change workload $M$
     - Number of DB transactions
     - Amount of DB data to query
 
-- **You need to execute the workload on a machine**
+- **\textcolor{darkgreen}{You need to execute the workload on a machine}**
   - Change computing power $N$
     - Better CPU (scale vertically, scale up)
     - More CPUs (scale horizontally, scale out)
 
-- Two **ways to measure efficiency** when increasing workload and computing
+- Two **\textcolor{blue}{ways to measure efficiency}** when increasing workload and computing
   power
   - _Speed-up_
     - Keep constant problem size $M$
@@ -214,7 +214,7 @@ _Pipelining of instructions in microprocessor_
 
 :::columns
 ::::{.column width=60%}
-- **Speed-up**: fixed-sized problem on a small system given to a system
+- **\textcolor{red}{Speed-up}**: fixed-sized problem on a small system given to a system
   $N$-times larger
     $$\text{speed-up} = \frac{\text{small system elapsed time}}
       {\text{large system elapsed time}}$$
@@ -229,7 +229,7 @@ _Pipelining of instructions in microprocessor_
 
 :::columns
 ::::{.column width=60%}
-- **Scale-up**: increase size of both problem $M$ and system $N$
+- **\textcolor{blue}{Scale-up}**: increase size of both problem $M$ and system $N$
   - $N$-times larger system to perform $M$-times larger job
     $$\text{scale-up} = \frac{\text{small system-problem time}}
       {\text{big system-problem time}}$$
@@ -241,12 +241,12 @@ _Pipelining of instructions in microprocessor_
 :::
 
 #### Factors Limiting Speed-up and Scale-up
-- **Speed-up and scale-up are typically sub-linear** due to several issues
+- **\textcolor{red}{Speed-up and scale-up are typically sub-linear}** due to several issues
   - E.g., not all computation is parallelizable
 
 :::columns
 ::::{.column width=60%}
-- **Amdahl's Law**
+- **\textcolor{blue}{Amdahl's Law}**
   - $p$ = fraction parallelizable
   - $s$ = number of nodes
   - $T$ = execution time serially
@@ -266,20 +266,20 @@ _Pipelining of instructions in microprocessor_
 :::
 
 #### Factors Limiting Speed-up and Scale-up
-- **Startup costs**
+- **\textcolor{red}{Startup costs}**
   - Starting processes may dominate computation time
   - E.g., dBs create thread pool at startup
 
-- **Interference**
+- **\textcolor{darkgreen}{Interference}**
   - Processes compete for shared resources (e.g., system bus, disks, locks)
   - Time spent waiting on other processes
   - E.g., devs touching same code create merge conflicts
 
-- **Cost of synchronization**
+- **\textcolor{blue}{Cost of synchronization}**
   - Smaller work pieces increase synchronization complexity
   - E.g., hiring many developers in a company
 
-- **Skew**
+- **\textcolor{violet}{Skew}**
   - Splitting work increases variance in task response time
   - Difficult to split tasks equally
   - Execution time determined by slowest task
@@ -292,13 +292,13 @@ _Pipelining of instructions in microprocessor_
   - $P$ = processors
   - $D$ = disks
 
-- **Topology**
+- **\textcolor{red}{Topology}**
   - Shared memory
   - Shared disk
   - Shared nothing
   - Hierarchical
 
-- **Problems**
+- **\textcolor{blue}{Problems}**
   - Cache coherency
   - Data communication
   - Fault tolerance
@@ -334,11 +334,11 @@ _Pipelining of instructions in microprocessor_
 #### Distributed Databases
 :::columns
 ::::{.column width=65%}
-- **Distributed DBs**
+- **\textcolor{red}{Distributed DBs}**
   - DB stored on nodes at geographically separated sites
   - Communicate through high-speed private networks or Internet
 
-- **Why needed?**
+- **\textcolor{darkgreen}{Why needed?}**
   - Large corporation with global offices
   - Redundancy and disaster recovery
   - Natural disasters, power outage, hacker attacks
@@ -351,7 +351,7 @@ _Pipelining of instructions in microprocessor_
 ::::
 :::
 
-- **Wide-area networks (WAN) vs Local-area networks (LAN)**
+- **\textcolor{blue}{Wide-area networks (WAN) vs Local-area networks (LAN)}**
   - Lower bandwidth
   - Higher latency
   - Greater probability of failures and network partition
@@ -363,11 +363,11 @@ _Pipelining of instructions in microprocessor_
 #### Consistency Issues in Distributed DB Systems
 :::columns
 ::::{.column width=70%}
-- **Parallel and distributed DBs**
+- **\textcolor{red}{Parallel and distributed DBs}**
   - Efficient for query processing (read-only)
   - Requires consistency enforcement
 
-- **Atomicity issues**
+- **\textcolor{blue}{Atomicity issues}**
   - _Problem_: Transaction is all-or-nothing across nodes
   - Two-phase commit (2PC) is centralized
     - Commit decision by a single coordinator node
@@ -387,10 +387,10 @@ _Pipelining of instructions in microprocessor_
 :::
 
 #### Consistency Issues in Distributed DB Systems
-- **Concurrency issues**
+- **\textcolor{red}{Concurrency issues}**
   - _Problem_: Multiple processes writing and reading simultaneously
   - Locks / deadlock management
 
-- **Autonomy issues**
+- **\textcolor{blue}{Autonomy issues}**
   - _Problem_: Units/departments protective of their systems
   - E.g., administering systems, patching, updating

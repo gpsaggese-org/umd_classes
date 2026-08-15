@@ -47,9 +47,9 @@ UMD DATA605 - Big Data Systems
 #### Workflow Managers
 ::: columns 
 :::: {.column width=50%}
-- **Data pipelines** move/transform data across stores
+- **\textcolor{red}{Data pipelines}** move/transform data across stores
 
-- **Orchestration problem** = coordinate jobs across systems
+- **\textcolor{blue}{Orchestration problem}** = coordinate jobs across systems
   - Run tasks on schedule
   - Run tasks in order (dependencies)
   - Monitor tasks
@@ -67,7 +67,7 @@ UMD DATA605 - Big Data Systems
 #### Workflow Managers
 ::: columns
 :::: {.column width=50%}
-- **E.g., live weather dashboard**
+- **\textcolor{red}{E.g., live weather dashboard}**
   - Fetch weather data from API
   - Clean/transform data
   - Push data to dashboard/website
@@ -89,27 +89,27 @@ UMD DATA605 - Big Data Systems
 #### Workflow Managers
 ::: columns
 :::: {.column width=50%}
-- **Workflow managers address orchestration problem**
+- **\textcolor{red}{Workflow managers address orchestration problem}**
   - E.g., airflow, Luigi, Metaflow, make, cron
 
-- **Represent data pipelines as DAGs**
+- **\textcolor{orange}{Represent data pipelines as DAGs}**
   - Nodes are tasks
   - Direct edges are dependencies
   - Execute task when all ancestors executed
   - Execute independent tasks in parallel
   - Re-run failed tasks incrementally
 
-- **Describe data pipelines**
+- **\textcolor{darkgreen}{Describe data pipelines}**
   - Static files (e.g., XML, YAML)
   - Workflows-as-code (e.g., Python in Airflow)
 
-- **Provide scheduling**
+- **\textcolor{teal}{Provide scheduling}**
   - Describe what and when to run
 
-- **Provide backfilling and catch-up**
+- **\textcolor{cyan}{Provide backfilling and catch-up}**
   - Horizontally scalable (e.g., multiple runners)
 
-- **Provide monitoring web interface**
+- **\textcolor{blue}{Provide monitoring web interface}**
 ::::
 :::: {.column width=45%}
 
@@ -125,16 +125,16 @@ UMD DATA605 - Big Data Systems
 :::: {.column width=50%}
 - Developed at AirBnB in 2015
   - Open-sourced as part of Apache project
-- **Batch oriented framework** for building data pipelines (not streaming)
-- **Data pipelines**
+- **\textcolor{red}{Batch oriented framework}** for building data pipelines (not streaming)
+- **\textcolor{darkgreen}{Data pipelines}**
   - Represented as DAGs
   - Described as Python code
-- **Scheduler with rich semantics**
+- **\textcolor{blue}{Scheduler with rich semantics}**
 - Web-interface for monitoring
 - Large ecosystem
   - Support many DBs
   - Many actions (e.g., emails, pager notifications)
-- **Hosted and managed solution**
+- **\textcolor{violet}{Hosted and managed solution}**
   - Run Airflow on your laptop (e.g., in tutorial)
   - Managed solution (e.g., AWS)
 ::::
@@ -146,29 +146,29 @@ UMD DATA605 - Big Data Systems
 
 #### Airflow: Execution Semantics
 
-- **Scheduling semantic**
+- **\textcolor{red}{Scheduling semantic}**
   - Define next scheduling interval
     - E.g., "every day at midnight", "every 5 minutes on the hour"
-  - Similar to **cron**
+  - Similar to **\textcolor{orange}{cron}**
 
-- **Retry**
+- **\textcolor{darkgreen}{Retry}**
   - Re-run task after failure to recover from intermittent issues
 
-- **Incremental processing**
+- **\textcolor{teal}{Incremental processing}**
   - Divide time into intervals per schedule
   - Execute DAG for data in that interval only
 
-- **Catch-up**
+- **\textcolor{cyan}{Catch-up}**
   - Run all missing intervals up to now (e.g., after downtime)
 
-- **Backfilling**
+- **\textcolor{blue}{Backfilling}**
   - Execute DAG for past schedule intervals
   - E.g., re-process data after pipeline changes
 
 #### Airflow: What Doesn't Do Well
 ::: columns
 :::: {.column width=55%}
-- **Not great for streaming pipelines**
+- **\textcolor{red}{Not great for streaming pipelines}**
   - Better for recurring batch tasks
   - Time is discrete, not continuous
     - E.g., schedule hourly, not process data continuously
@@ -180,31 +180,31 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Prefer static pipelines**
+- **\textcolor{darkgreen}{Prefer static pipelines}**
   - DAGs should remain consistent between runs
 
-- **No data lineage**
+- **\textcolor{blue}{No data lineage}**
   - No automatic tracking of data transformation
   - Implement manually
 
-- **No data versioning**
+- **\textcolor{violet}{No data versioning}**
   - No automatic tracking of data updates
   - Implement manually
 
 #### Airflow: Components
 ::: columns
 :::: {.column width=50%} 
-- **Users (DevOps)**
+- **\textcolor{red}{Users (DevOps)}**
 
-- **Web-server**
+- **\textcolor{orange}{Web-server}**
   - Visualize DAGs
   - Monitor DAG runs and results
 
-- **Metastore**
+- **\textcolor{darkgreen}{Metastore}**
   - Keep system state
   - Track executed DAG nodes
 
-- **Scheduler**
+- **\textcolor{teal}{Scheduler}**
   - Parse DAGs
   - Track completed dependencies
   - Add tasks to execution queue
@@ -215,11 +215,11 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Queue**
+- **\textcolor{cyan}{Queue}**
   - Tasks ready for execution
   - Tasks picked up by Workers
 
-- **Workers**
+- **\textcolor{blue}{Workers}**
   - Pick up tasks from Queue
   - Execute tasks
   - Register task outcome in Metastore
@@ -251,7 +251,7 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- **Scheduler** executes code to build DAG
+- **\textcolor{red}{Scheduler}** executes code to build DAG
 
 - \textcolor{blue}{\texttt{BashOperator}} creates task wrapping Bash command
 

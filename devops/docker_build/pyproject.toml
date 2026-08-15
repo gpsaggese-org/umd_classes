@@ -2,7 +2,7 @@
 name = "amp"
 version = "0.1.0"
 description = ""
-authors = ["GP Saggese <gp@kaizen-tech.io>"]
+authors = ["GP Saggese <saggese@gmail.com>"]
 
 [tool.poetry.dependencies]
 async_solipsism = ">= 0.3"
@@ -31,6 +31,7 @@ python = ">= 3.12"
 pytest = "*"
 pytest-cov = "*"
 pytest-instafail = "*"
+pytest-order = "*"
 pytest-rerunfailures = "*"
 pytest-timeout = "*"
 pytest-xdist = "*"

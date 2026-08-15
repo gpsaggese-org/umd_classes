@@ -1,0 +1,1034 @@
+// Pandoc Typst template producing Touying slides.
+//
+// Used by `notes_to_pdf.py --type slides --slides_engine typst`.
+//
+// - Pandoc maps markdown headings to Typst headings, e.g.,
+//   - `#` -> `=`
+//   - `####` -> `====`
+// - `config-common(slide-level: 4)` makes level-4 headings (`####`) start a
+//   new slide, mirroring the beamer `--slide-level 4` convention. Headings of
+//   level 1-3 become section/structure slides
+// - See https://github.com/touying-typ/touying
+#import "@preview/touying:0.6.1": *
+#import themes.simple: *
+
+//#include "/helpers_root/dev_scripts_helpers/documentation/typst_abbrevs.typ"
+#include "/helpers_root/dev_scripts_helpers/documentation/typst_abbrevs.typ"
+
+// Configure theme to match beamer's 4:3 aspect ratio.
+// Note: Touying's simple-theme controls page size internally;
+// exact beamer dimensions (362.835 x 272.126 pts) cannot be overridden.
+#show: simple-theme.with(
+  aspect-ratio: "4-3",
+  config-common(slide-level: 4),
+  subslide-preamble: block(below: 1em)[
+    #v(-0.6em)
+    #text(1.2em, weight: "bold", fill: rgb("#003366"),
+      utils.display-current-heading(level: 4))
+    #v(-0.5em)
+    #line(length: 100%, stroke: 2.0pt + rgb("#003366"))
+  ],
+  config-info(
+  ),
+)
+
+// Make the inline math font bigger.
+//#show math.equation.where(block: false): set text(size: 1.15em)
+
+// Scale display math to match slide text size (not oversized).
+#show math.equation.where(block: true): set text(size: 0.95em)
+
+// Make the inline verbatim font bigger.
+//#show raw.where(block: false): set text(size: 1.15em)
+#show raw.where(block: false): set text(size: 0.95em)
+
+// Styled table with zebra striping, lateral lines, and configurable width.
+#let styled-table(headers: (), rows: (), caption: none, col-widths: none, bold-first-col: true, size: 0.8em, width: 80%) = {
+  let n = headers.len()
+  let widths = if col-widths != none { col-widths } else { (1fr,) * n }
+
+  // Zebra striping: alternate white and darker gray backgrounds on full rows
+  let processed-rows = rows.enumerate().map(((idx, row)) => {
+    let bg-color = if calc.rem(idx, 2) == 0 { white } else { rgb("#e8e8e8") }
+    if bold-first-col {
+      (
+        table.cell(fill: bg-color, text(fill: black, weight: "bold", row.at(0))),
+        ..row.slice(1).map(cell => table.cell(fill: bg-color, text(fill: rgb("#555555"), cell)))
+      )
+    } else {
+      row.map(cell => table.cell(fill: bg-color, text(fill: rgb("#555555"), cell)))
+    }
+  })
+
+  text(size: size,
+    figure(
+      align(center,
+        block(width: width,
+          table(
+            columns: widths,
+            align: (left,) * n,
+            stroke: none,
+            table.vline(x: 0, stroke: 2pt),
+            table.hline(stroke: 2pt),
+            table.header(
+              ..headers.map(h => table.cell(fill: black, text(fill: white, weight: "bold", h)))
+            ),
+            table.hline(stroke: 1.5pt),
+            ..processed-rows.flatten(),
+            table.hline(stroke: 2pt),
+            table.vline(x: n, stroke: 2pt),
+          )
+        )
+      ),
+      kind: table,
+      caption: caption,
+    )
+  )
+}
+
+// Use Computer Modern Sans - standard TeX font (sans-serif variant).
+// Fails if Computer Modern not available in container (no fallback).
+#set text(font: "CMU Sans Serif", size: 22pt, fill: black)
+#show heading: set text(font: "CMU Sans Serif", size: 28pt)
+// Use DejaVu Sans (available in Alpine) with reduced size.
+// Applied AFTER theme to override theme defaults.
+//#set text(font: "DejaVu Sans", size: 20pt, fill: black)
+//#show heading: set text(font: "DejaVu Sans", size: 28pt)
+
+// Track list nesting depth with counter
+#let list-nesting = counter("list-nesting")
+
+// Use en-dashes for all bullet points (override default circle/triangle markers).
+#show list: set list(marker: "–")
+
+// Reduce font size for nested list levels.
+#show list: it => {
+  list-nesting.step()
+  let depth = list-nesting.get().first()
+  let size = if depth == 1 { 1em } else if depth == 2 { 0.95em } else { 0.90em }
+  set text(size: size)
+  [#it]
+  list-nesting.update(n => n - 1)
+}
+
+// Make footer text smaller.
+#let footer-text(body) = text(size: 0.8em, fill: black, body)
+
+
+====
+
+#slide[
+  #grid(
+    columns: (20%, 80%),
+    gutter: 0.5cm,
+    align(top + left)[#image("/msml610/lectures_source/figures/UMD_Logo.png", width: 3.5cm)],
+    align(top + left)[
+      #v(0.2cm)
+      #text(size: 28pt)[MSML610: Advanced Machine Learning]
+    ]
+  )
+
+  #v(1.5cm)
+  #align(center)[#text(size: 32pt, weight: "bold", fill: rgb("#0066CC"))[L03.1: Knowledge Representation]]
+
+  #v(2.5cm)
+  #text(size: 24pt)[Instructor: Dr. GP Saggese - #link("mailto:gsaggese@umd.edu")[_gsaggese\@umd.edu_]]
+]
+==== Table of Content
+<table-of-content>
+- #text(fill: red, weight: "bold")[#emph[Knowledge Representation]]
+  - Basics of Knowledge Representation
+  - Examples of Logic
+  - Logical Agents
+  - Ontologies
+  - Reasoning in Ontologies
+
+==== Table of Content
+<table-of-content-1>
+- Knowledge Representation
+  - #text(fill: red, weight: "bold")[#emph[Basics of Knowledge Representation]]
+  - Examples of Logic
+  - Logical Agents
+  - Ontologies
+  - Reasoning in Ontologies
+
+==== Why Knowledge Representation Matters
+<why-knowledge-representation-matters>
+- #text(fill: red, weight: "bold")[Motivation]: #text(fill: black, weight: "bold")[Why KR is
+  essential to AI]
+
+  + #text(fill: black, weight: "bold")[Learning alone is not enough];: machines need to
+    #emph[reason] about the world
+    - Example: a medical AI trained on patient data can predict diseases
+    - But to #emph[explain] a diagnosis to a doctor, it needs structured
+      knowledge
+  + #text(fill: black, weight: "bold")[Bridges perception and reasoning]
+    - Sensors provide raw data (perception)
+    - KR turns data into actionable knowledge (reasoning)
+  + #text(fill: black, weight: "bold")[Enables explainability]
+    - Users can understand #emph[why] a system made a decision
+    - Critical for high-stakes domains (healthcare, law, autonomous
+      systems)
+  + #text(fill: black, weight: "bold")[Enables white-box learning]
+    - Robots plan actions using abstract symbolic knowledge
+    - Conversational agents reason about intent and context
+
+==== What is Knowledge Representation?
+<what-is-knowledge-representation>
+- #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Knowledge
+  Representation (KR)] is the study of how to formally encode
+  information so that machines can reason with it
+  - E.g., rules, logic, ontologies, semantic networks
+  - KR defines:
+    - #emph[Structure];: how knowledge is organized
+    - #emph[Semantics];: what it means
+- #text(fill: green, weight: "bold")[Fact]: #text(fill: black, weight: "bold")[Knowledge
+  Representation]
+  - Is at the heart of AI and complements learning-based approaches
+  - Serves as a bridge between perception (data) and reasoning (logic)
+  - Is essential for explainability and transparency in intelligent
+    systems
+- #text(fill: blue, weight: "bold")[Example]: Machines can use knowledge
+  representation to:
+  - Draw conclusions
+  - Perform planning
+  - Answer queries
+  - …
+
+==== Expressiveness vs.~Tractability
+<expressiveness-vs.-tractability>
+#grid(
+  columns: (60%, 35%),
+  gutter: 0.5em,
+  [
+  - #text(fill: red, weight: "bold")[Definition]: Tradeoff in AI / ML
+    between:
+    - #emph[Expressiveness];: richness of concepts that can be captured
+    - #emph[Tractability];: whether reasoning can be performed efficiently
+  - #text(fill: green, weight: "bold")[Fact]: More expressive languages
+    lead to harder computation
+  ],
+  [
+  #box(image("/msml610/test/outcomes/Test_Msml610_Run_notes_to_pdf_py.test_typ_output/tmp.scratch/lesson_03.1/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.1.png"))
+  ]
+)
+- #text(fill: blue, weight: "bold")[Key insight]: choosing the right
+  knowledge representation depends on the application
+
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Example]
+
+  - #emph[Atomic];: treats each state as a single, indivisible entity:
+    simple but limited
+    - E.g., depth-first search algorithms (e.g., #text(fill: blue)[E3]
+      in chess)
+  - #emph[Factored];: captures relationships between variables but can't
+    express complex structures
+    - E.g., propositional logic: #emph["Minesweeper example: breeze at
+      1,2 iff pit at adjacent cells"]
+      $B_(1 \, 2) arrow.l.r.double \( P_(1 \, 1) or P_(2 \, 2) or P_(1 \, 3) \)$
+  - #emph[Structured];: more expressive but undecidable in general
+    - E.g., first-order logic:
+      $forall x thin forall y thin F a t h e r \( x \, y \) arrow.r.double P a r e n t \( x \, y \)$
+      \= #emph["A father of a person is their parent"]
+
+==== Symbolic vs.~Sub-symbolic Representation
+<symbolic-vs.-sub-symbolic-representation>
+#grid(
+  columns: (55%, 40%),
+  gutter: 0.5em,
+  [
+  - #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Symbolic KR]
+    uses discrete, human-readable symbols
+    - E.g., logic, knowledge graphs
+    - Interpretable and suitable for rule-based reasoning
+    - Struggle with ambiguity
+  - #text(fill: green, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Sub-symbolic
+    KR] uses learned, distributed representations
+    - E.g., vector embeddings
+    - Lack transparency
+  - #text(fill: blue, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Neuro-symbolic
+    KR] blend the two approaches
+    - Reason over learned concepts using structured logic
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L03.symbolic_vs_subsymbolic.png"))
+  ]
+)
+==== Neuro-symbolic Approach: Conceptual Spaces
+<neuro-symbolic-approach-conceptual-spaces>
+- #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Conceptual
+  spaces] are frameworks for representing knowledge using geometric
+  structures
+  - Each dimension represents an interpretable feature
+  - Similarity between objects is modeled by spatial distance
+  - A #text(fill: black, weight: "bold")[concepts] is a region in a multidimensional space
+- #text(fill: green, weight: "bold")[Pros]:
+  - Natural modeling of similarity and vagueness
+  - Symbolic systems use discrete symbols without structure (e.g.,
+    #text(fill: blue)[Car] vs #text(fill: blue)[Bicycle])
+
+#grid(
+  columns: (55%, 40%),
+  gutter: 0.5em,
+  [
+  - #text(fill: blue, weight: "bold")[Example]: Transportation methods
+    - Dimensions: #text(fill: blue)[Environmental Friendliness],
+      #text(fill: blue)[Technological Advancement]
+    - Wooden Transportation (red region)
+    - Vehicles (blue region)
+    - Advanced Vehicles (nested subset)
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L03.conceptual_spaces.png"))
+  ]
+)
+==== Natural languages
+<natural-languages>
+- #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Natural
+  languages] (e.g., English, Italian) are:
+  - #emph[Expressive]
+    - Medium for communication rather than representation
+  - #emph[Ambiguous]
+    - E.g., #emph["spring"] is both a "season" and "something that goes
+      boing"
+  - #emph[Context-dependent]
+    - Meaning depends on the sentence and context
+    - E.g., "Look!"
+- #text(fill: green, weight: "bold")[Concept]: #text(fill: black, weight: "bold")[Sapir-Whorf
+  hypothesis]
+  - #emph["The language you speak shapes how you perceive, think about,
+    and experience the world"]
+    - Even through arbitrary grammatical features (e.g., gender of
+      nouns)
+- #text(fill: blue, weight: "bold")[Example]
+  - Some languages lack words for certain concepts (e.g., direction)
+  - Some languages have many words for the same concepts
+    - E.g., Arctic languages have many words for snow (e.g., fresh,
+      hard)
+  - Newspeak from 1984 (Orwell)
+    - You can't think certain concepts since you don't have words for it
+
+==== Procedural vs Declarative Approaches
+<procedural-vs-declarative-approaches>
+- #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Procedural
+  approach] focuses on #emph[how] a task is done
+  - Encodes desired behavior directly into the program
+  - E.g., a robot programmed with specific steps to navigate a maze
+- #text(fill: green, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Declarative
+  approach] specifies #emph[what] the goal is, but #emph[not how] to
+  achieve it
+  - Describes relationships between actions and goals
+  - Leaves solution search to the system
+  - E.g., describing the goal "reach the exit of the maze" and letting
+    the robot find the path
+- #text(fill: blue, weight: "bold")[Comparison]:
+  - Procedural: more control, less flexibility
+  - Declarative: more abstraction, easier to modify or extend
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Approach]: Many successful
+  AI systems use a hybrid approach
+  - Declarative knowledge can be compiled into procedural code
+  - E.g., a planner generates procedures (plans) from declarative goals
+
+==== Programming Languages
+<programming-languages>
+- #text(fill: red, weight: "bold")[Concept]: A #text(fill: black, weight: "bold")[programming
+  language] (e.g., C++, Python) is a formal and procedural language
+  - #emph[Data structures] represent facts
+  - #emph[Code] updates data structures in a domain-specific way
+- #text(fill: green, weight: "bold")[Limitations]: Programming languages
+  lack:
+  + A general #emph[mechanism for deriving facts from other facts]
+    - Code updates data structures based on programmer's domain
+      knowledge
+  + Expressiveness to #emph[handle partial information]
+    - A variable represents a single value or unknown, can't handle
+      partial information or quantify uncertainty
+    - E.g., #emph["A white knight is in #text(fill: blue)[b1] or in
+      #text(fill: blue)[f6]"]
+- #text(fill: blue, weight: "bold")[Concept]: In #text(fill: black, weight: "bold")[declarative
+  language] knowledge and inference are separate:
+  + #emph[Knowledge] represents the domain-specific problem
+    - The meaning of a sentence is a function of the meaning of its
+      parts (compositional semantics)
+  + #emph[Inference] is domain independent
+
+  - E.g., propositional logic, first order logic
+
+==== Table of Content
+<table-of-content-2>
+- Knowledge Representation
+  - Basics of Knowledge Representation
+  - #text(fill: red, weight: "bold")[#emph[Examples of Logic]]
+  - Logical Agents
+  - Ontologies
+  - Reasoning in Ontologies
+
+==== Propositional Logic
+<propositional-logic>
+- #text(fill: red, weight: "bold")[Fact]: Propositional logic uses
+  atomic statements (propositions) and logical connectives to represent
+  knowledge
+  - #emph[Syntax]
+    - Atomic formulas: $P$, $Q$
+    - Connectives: NOT $not$, AND $and$, OR $or$, IMPLIES
+      $arrow.r.double.long$
+  - #emph[Semantics]
+    - Based on truth tables
+    - Each proposition has a binary truth value: true or false
+  - #emph[Inference mechanisms]
+    - Modus ponens: from statements "$P$" and
+      "$P arrow.r.double.long Q$", infer "$Q$"
+    - Resolution: derive contradictions to infer conclusions
+    - …
+- #text(fill: green, weight: "bold")[Applications]: best used in closed
+  and well-defined environments
+  - Digital circuit design
+  - Rule-based systems
+  - Simplified AI models
+- #text(fill: blue, weight: "bold")[Limitations]:
+  - Cannot represent objects, relations, or quantifiers
+  - Not suitable for open or dynamic domains
+
+==== First-Order Logic (FOL)
+<first-order-logic-fol>
+- #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[first-order
+  logic] is an extension of propositional logic
+  - #emph[Syntax]
+    - Atomic formulas and connectives from propositional logic
+    - #emph[Variables] $x$
+    - #emph[Predicate] $H u m a n \( x \)$
+    - #emph[Quantifiers] (e.g., universal "for all" $forall$,
+      existential "there exists" $exists$)
+  - #emph[Semantics]
+    - Represents more complex and structured knowledge than
+      propositional logic
+    - Can model properties, relationships, and quantification over
+      objects
+      - E.g.,
+        $forall x \( H u m a n \( x \) arrow.r.double.long M o r t a l \( x \) \)$
+        \= #emph["All humans are mortal"]
+  - #emph[Inference mechanisms]
+    - Unification: matches predicates with variables
+    - Resolution: deduces new facts from known statements
+    - Model checking: verifies truth of statements under specific
+      interpretations
+- #text(fill: blue, weight: "bold")[Applications]:
+  - Knowledge representation
+  - Automated theorem proving
+  - Semantic web and ontologies
+
+==== Reasoning and Inference in Logic
+<reasoning-and-inference-in-logic>
+- #text(fill: black, weight: "bold")[Knowledge base (KB)] is a structured set of facts and rules
+  used for logical reasoning
+
+- #text(fill: black, weight: "bold")[Logical inference] is the process of deriving new facts from
+  known ones using formal rules
+
+  - E.g., answer questions based on a Knowledge Base
+
+- #text(fill: black, weight: "bold")[Inference engine];: mechanism that applies logical rules to a
+  KB to derive conclusions or answer queries
+
+  - #emph[Forward chaining]
+    - Starts with known facts and applies inference rules to extract
+      more data
+    - E.g., given "$A arrow.r B$" and $A$, infer $B$
+  - #emph[Backward chaining]
+    - Begins with a goal and works backward to find supporting facts
+    - E.g., to prove $B$, check if $A arrow.r B$ and then prove $A$
+  - #emph[Resolution]
+    - A complete inference rule for propositional and first-order logic
+    - Useful in automated theorem proving
+  - #emph[Entailment] ($K B tack.r.double alpha$):
+    - Sentence $alpha$ is entailed by KB if it is true in all models
+      where KB is true
+
+==== Logic and Knowledge Base: Structure and Semantics
+<logic-and-knowledge-base-structure-and-semantics>
+- #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Knowledge base
+  (KB)] is a set of:
+
+  - #emph[Sentences] $alpha$ expressing assertions (observed, assumed or
+    derived) about the world
+    - E.g., #emph["it rains"];, #emph["the ground is dry"];, #emph["the
+      ground is wet"]
+  - #emph[Rules]
+    - E.g, #emph["If it rains, the ground gets wet"]
+
+- #text(fill: orange, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Knowledge
+  representation language] is a formal way of creating sentences about
+  the world
+
+  - #text(fill: black, weight: "bold")[Syntax];: specifies all well-formed sentences in the logic
+    - E.g., in arithmetic: "$x + y = 4$" is well-formed, "$x 4 y + =$"
+      is not
+  - #text(fill: black, weight: "bold")[Semantics];: meaning of sentences with respect to each
+    possible world
+    - E.g., $x + y = 4$ is true in world $\( x = 2 \, y = 2 \)$, false
+      in $\( x = 1 \, y = 1 \)$
+
+- #text(fill: green, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Axiom] is a
+  sentence taken as given (not derived from others)
+
+- #text(fill: teal, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Inference] is
+  the process of deriving new sentences from old ones
+
+  - Should follow logical reasoning rules
+
+- #text(fill: rgb("#00FFFF"), weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Truth
+  values] representations
+
+  - Classical logic: each sentence is true or false
+  - #text(fill: black, weight: "bold")[Fuzzy logic];: allows different degrees of truth
+    - E.g., $B e l i e f \( alpha \) = 0.5$
+  - #text(fill: black, weight: "bold")[Probabilistic logic];: sentences have probability of being
+    true
+    - E.g., $Pr \( alpha \) = 0.3$
+
+==== Rule-Based Systems (1/2)
+<rule-based-systems-12>
+- #text(fill: red, weight: "bold")[Definition]: A #text(fill: black, weight: "bold")[rule-based
+  system] uses "if-then" rules to derive conclusions or make decisions
+  - It mimics human decision-making by applying logical rules to a set
+    of facts
+- #text(fill: green, weight: "bold")[Key components]
+  - #emph[Knowledge base];: stores facts and rules
+  - #emph[Inference engine];: applies rules to known facts to infer new
+    facts or take actions
+  - #emph[Working memory];: holds current facts being considered
+- #text(fill: blue, weight: "bold")[Algorithm]
+  - #emph[Match];: find rules whose conditions match current facts
+  - #emph[Conflict resolution];: decide which rule to apply if multiple
+    rules match
+  - #emph[Act];: apply the chosen rule to modify facts or trigger
+    actions
+  - #emph[Repeat];: continue until no more rules can be applied
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Example]
+  - #emph[Rule];: If a patient has a fever and a rash, then suggest
+    measles
+  - #emph[Fact];: Patient has a fever and a rash
+  - #emph[Conclusion];: Suggest measles
+
+==== Rule-Based Systems (2/2)
+<rule-based-systems-22>
+- #text(fill: red, weight: "bold")[Pros]
+  - Easy to modify and update rules
+  - Transparent and explainable reasoning
+  - Good when expert knowledge can be clearly articulated
+- #text(fill: green, weight: "bold")[Cons]
+  - Hard to scale to very large or complex domains
+  - Cannot handle uncertainty without extensions (e.g., probabilistic
+    reasoning)
+  - Rule conflicts and maintenance can become challenging
+- #text(fill: blue, weight: "bold")[Applications]
+  - Expert systems
+    - E.g., medical diagnosis, technical troubleshooting
+  - Business rule engines
+  - Game AI
+  - Tools for legal reasoning
+
+==== Grounding: Definition and Framework
+<grounding-definition-and-framework>
+#grid(
+  columns: (50%, 50%),
+  gutter: 0.5em,
+  [
+  - #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Grounding]
+    connects abstract symbols to real-world entities or observations
+    - E.g., link the symbol in the KB #text(fill: blue)[Apple] to the
+      fruit "apple"
+    - It is the bridge between representation in a KB and the world
+  ],
+  [
+  #box(image("/msml610/test/outcomes/Test_Msml610_Run_notes_to_pdf_py.test_typ_output/tmp.scratch/lesson_03.1/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.2.png"))
+  ]
+)
+- #text(fill: green, weight: "bold")[Goals]: make representations
+  meaningful beyond syntax
+  - Enable agents to act meaningfully in the real world
+  - Avoid purely symbolic manipulation without real-world relevance
+- #text(fill: blue, weight: "bold")[Limitations]
+  - Noisy, incomplete sensory data
+  - Complex, context-dependent mapping from inputs to concepts
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Applications]
+  - Robotics: object recognition, manipulation
+  - Natural language understanding
+  - Autonomous agents, cognitive systems
+
+==== Grounding: Philosophical and Practical Considerations
+<grounding-philosophical-and-practical-considerations>
+- How #text(fill: black, weight: "bold")[can we know] that a KB accurately reflects the real world?
+  - We can't be sure!
+  - Do we live in a simulation? What is reality?
+- We #text(fill: black, weight: "bold")[assume] that is correct
+  - Agent's sensors create a sentence in the KB when something happens
+    in the real world
+
+    ```
+    IF smell = burning THEN food_is_burning
+    ```
+
+  - Agent learns rules and acts
+
+    ```
+    IF food_is_burning THEN turn_off_stove
+    ```
+- We assume that "learning" (going from particular cases to general
+  cases) is typically correct
+  - Learning is still fallible
+  - E.g., #text(fill: blue)[smell = burning] because maybe somebody is
+    cooking on a grill
+
+==== Model and Possible Worlds: Examples
+<model-and-possible-worlds-examples>
+#grid(
+  columns: (60%, 40%),
+  gutter: 0.5em,
+  [
+  - #text(fill: red, weight: "bold")[Example]: Consider a world where
+    there is #emph[rain] and #emph[wet ground]
+    - In each possible world/model, values are assigned to all relevant
+      variables
+      - World 1: $\( R a i n = T \, W e t G r o u n d = T \)$
+      - World 2: $\( R a i n = T \, W e t G r o u n d = F \)$
+      - World 3: $\( R a i n = F \, W e t G r o u n d = T \)$
+      - World 4: $\( R a i n = F \, W e t G r o u n d = F \)$
+    - Model $m$ is a mathematical abstraction of "possible world"
+      - E.g., $m$ is $\( R a i n = F \, W e t G r o u n d = T \)$
+  ],
+  [
+  #box(image("/msml610/test/outcomes/Test_Msml610_Run_notes_to_pdf_py.test_typ_output/tmp.scratch/lesson_03.1/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.3.png"))
+  ]
+)
+- #text(fill: blue, weight: "bold")[Example]: Consider worlds with
+  #emph["men and women sitting at a table"]
+  - Model represents all possible worlds as #emph["there are ($x$ men,
+    $y$ women)"]
+  - Sentence $x + y = 4$ is true in certain worlds and false in others
+  - E.g., in worlds with $x = 2$ men and $y = 2$ women, $x + y = 4$ is
+    true
+
+==== Satisfaction of a Sentence in a Model
+<satisfaction-of-a-sentence-in-a-model>
+- #text(fill: red, weight: "bold")[Recap]: A model $m$ fixes all the
+  variables $x_1 \, . . . \, x_n$ used in sentences
+  - E.g., $\( R a i n = T \, W e t G r o u n d = T \)$
+- #text(fill: green, weight: "bold")[Definition]: If a sentence $alpha$
+  is true in model $m$, we say #emph["the model $m$ #text(fill: black, weight: "bold")[satisfies]
+  the sentence $alpha$"]
+  - E.g., the model $\( R a i n = T \, W e t G r o u n d = F \)$
+    satisfies $alpha : R a i n = T$
+  - This seems backwards, since in our common way of reasoning, the
+    world is fixed and sentences are evaluated as true or false
+- #text(fill: blue, weight: "bold")[Definition]: $M \( alpha \)$ is the
+  set of all the models in which $alpha$ is true
+  - E.g.,
+    - $alpha : R a i n = T$
+    - $M \( R a i n = T \) = { \( R a i n \, W e t G r o u n d \) \, \( R a i n \, not W e t G r o u n d \) }$
+
+==== Logical Entailment
+<logical-entailment>
+- #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Logical
+  entailment] between sentences is the fact that a sentence follows
+  logically from another sentence in a KB
+  - "$alpha$ #text(fill: black, weight: "bold")[entails] $beta$" (written
+    $alpha tack.r.double beta$) iff (by def) in every model in which
+    $alpha$ is true, $beta$ is also true
+  - Equivalent to $M \( alpha \) subset.eq M \( beta \)$
+- #text(fill: green, weight: "bold")[Example]: in the "rain and wet
+  ground" world
+  - $alpha$: "(Rain = T, WetGround = T)" entails $beta$: "Rain
+    $arrow.r.double.long$ WetGround"
+  - If you know for a fact that it's raining and the ground is wet, then
+    you can confidently conclude that the rule "if it rains, then the
+    ground is wet" must be true (at least in this world)
+  - The specific concrete fact supports the general conditional rule
+- #text(fill: blue, weight: "bold")[Example]: in the "sitting table"
+  world
+  - $alpha$: "$x = 0$", $beta$: "$x dot.op y = 0$"
+  - $alpha$ entails $beta$ since in any model in which $x = 0$ is true,
+    also $x dot.op y = 0$ is true, regardless of the value of $y$
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Intuition]:
+  - Entailment is not related to a proof, it just "preserves truth"
+    across all models
+  - Entailment is a constraint on consistent belief
+  - #emph["If you believe your KB, you must believe the entailed
+    sentences"]
+
+==== Logical Entailment vs Implication
+<logical-entailment-vs-implication>
+- Entailment and implication are related but distinct
+  - #emph[Logical entailment] is about truth following from known facts
+  - #emph[Implication] is about a relationship between two statements
+- #text(fill: black, weight: "bold")[Logical entailment] ($K B tack.r.double alpha$):
+  - Means $alpha$ is always true in any world where KB is true
+  - E.g.,
+    - KB: #emph["It is raining"];, #emph["If it rains, the ground is
+      wet"]
+    - Entailed: #emph["The ground is wet"]
+- #text(fill: black, weight: "bold")[Implication] ($A arrow.r.double.long B$):
+  - A statement in logic that says: #emph["If A is true, then B is
+    true"]
+    - Doesn't guarantee A or B is true by itself
+    - Implication is true unless A is true and B is false
+  - E.g.,
+    - $A$: #emph["It is raining"];, $B$: #emph["The ground is wet"]
+    - $A arrow.r.double.long B$ is the statement #emph["If it is
+      raining, then the ground is wet"]
+    - This statement can be true even if it's not raining
+- #text(fill: red, weight: "bold")[Intuition]:
+  - Entailment is "meta-level truth-following"
+  - Implication is "within the logic"
+
+==== Model Checking Procedure
+<model-checking-procedure>
+- #text(fill: red, weight: "bold")[Recap]: $M \( K B \)$ represents all
+  the models / possible worlds that are true given our $K B$
+
+- #text(fill: green, weight: "bold")[Problem]:
+
+  - We want to verify whether "a sentence $alpha$ is entailed by $K B$",
+    i.e., $K B tack.r.double alpha$
+
+- #text(fill: blue, weight: "bold")[Solution]:
+
+  - According to the definition, we need to verify that $alpha$ is true
+    in all the models in which $K B$ is true
+    - I.e., $M \( K B \) subset.eq M \( alpha \)$
+
+- E.g., #text(fill: black, weight: "bold")[model checking procedure] (brute force)
+
+  + Enumerate all the models / possible worlds
+  + Find which models are possible given the $K B$, i.e., $M \( K B \)$
+  + Check whether the sentence $alpha$ is true in all the models that
+    are compatible with the $K B$
+
+==== Sound and Complete Inference Algorithm
+<sound-and-complete-inference-algorithm>
+- #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Inference] is a
+  syntactic process of deriving new sentences from others, using formal
+  rules of a proof system (e.g., modus ponens, resolution, etc.)
+  - You know: #emph["If it rains, the ground gets wet"]
+  - You see: #emph["It is raining"]
+  - You infer: #emph["The ground must be wet"]
+- #text(fill: green, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Sound]
+  inference algorithm
+  - Derives only sentences entailed from $K B$
+  - #emph["Whatever the inference algorithm finds, it's correct"];,
+    i.e., no false positives
+  - E.g., model checking is sound
+    - It works only when the space of models is finite
+    - When it works, it is truth preserving
+- #text(fill: blue, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Complete]
+  inference algorithm
+  - Can derive any sentence entailed from $K B$
+  - #emph["The inference algorithm doesn't miss anything"] i.e., no
+    false negatives
+- The ideal inference algorithm is both sound and complete
+
+==== Isomorphism between Model and Possible Worlds
+<isomorphism-between-model-and-possible-worlds>
+- A sound and complete inference algorithm yields conclusions guaranteed
+  to be true in any world where the premises are true
+
+#grid(
+  columns: (40%, 55%),
+  gutter: 0.5em,
+  [
+  - In other words, even if the inference operates on "syntax" (the
+    internal representation):
+    - #emph["Sentences in the representation"] correspond to
+      #emph["aspects of the real world"]
+    - #emph["Entailment between sentences in the representation"]
+      corresponds to #emph["implication between aspects of the real
+      world"]
+  ],
+  [
+  #box(image("/msml610/test/outcomes/Test_Msml610_Run_notes_to_pdf_py.test_typ_output/tmp.scratch/lesson_03.1/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.4.png"))
+  ]
+)
+==== Entailment vs Inference vs Implication
+<entailment-vs-inference-vs-implication>
+- #text(fill: black, weight: "bold")[Implication]
+  - #emph["If $A$, then $B$"]
+  - It doesn't say whether A is true; it just says, if it happens, then
+    B follows
+  - It's a "statement inside the logic system"
+- #text(fill: black, weight: "bold")[Inference]
+  - This is what you (a person or a computer) figure out based on what
+    you know
+  - You start with some truths, then reason your way to new truths
+  - It's "reasoning inside the logic system"
+- #text(fill: black, weight: "bold")[Logical entailment]
+  - $A$ entails $B$: if the fact $A$ is true and that automatically
+    guarantees that fact $B$ must also be true
+  - E.g., $R a i n$ entails $W e t G r o u n d$ iff in every possible
+    world where $R a i n$ is true, $W e t G r o u n d$ is also true
+    - $R a i n = T \, W e t G r o u n d = F arrow.r$ violation
+    - Since there is at least one counterexample, $R a i n$ does not
+      entail $W e t G r o u n d$
+
+==== Table of Content
+<table-of-content-3>
+- Knowledge Representation
+  - Basics of Knowledge Representation
+  - Examples of Logic
+  - #text(fill: red, weight: "bold")[#emph[Logical Agents]]
+  - Ontologies
+  - Reasoning in Ontologies
+
+==== Reflex Agents
+<reflex-agents>
+- #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Reflex agents]
+  act based on the current percept, ignoring percept history
+  - Operate using predefined condition-action rule: #emph["if condition,
+    then action"]
+    - E.g., a thermostat: #emph["if temperature \< threshold, turn on
+      the heater"]
+- #text(fill: green, weight: "bold")[Pros]
+  - Fast and efficient in well-defined environments
+- #text(fill: blue, weight: "bold")[Cons]
+  - Struggle with complex or partially observable environments
+  - Cannot plan ahead or learn from experience
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Applications]
+  - Simple or fully observable environments where quick reactions are
+    sufficient
+
+==== Knowledge-based Agents
+<knowledge-based-agents>
+- #text(fill: red, weight: "bold")[Fact]: Intelligence is achieved by
+  #emph[reasoning] on an internal representation of knowledge
+
+- #text(fill: blue, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Knowledge-based
+  agents]
+
+  - Form representations of a complex world using a knowledge base
+  - Use inference to derive new representations
+  - Deduce actions from representations
+  - Accept tasks as goal descriptions
+  - Update knowledge using information from sensors
+  - Explain actions based on knowledge
+    - E.g., medical diagnosis system infers diseases, suggests
+      treatments
+    - E.g., chess program uses move database to plan strategy
+  - Handle incomplete or uncertain information through probabilistic
+    reasoning
+
+==== Table of Content
+<table-of-content-4>
+- Knowledge Representation
+  - Basics of Knowledge Representation
+  - Examples of Logic
+  - Logical Agents
+  - #text(fill: red, weight: "bold")[#emph[Ontologies]]
+  - Reasoning in Ontologies
+
+==== Ontologies (in Computer Science)
+<ontologies-in-computer-science>
+- #text(fill: red, weight: "bold")[Definition]: #text(fill: black, weight: "bold")[Ontology:] is a
+  formal and explicit representation of a domain
+  - Describes the types of things that exist and how they relate to each
+    other
+    - #emph[Classes];: types of things
+    - #emph[Individuals];: specific objects
+    - #emph[Properties];: how things are related
+- #text(fill: green, weight: "bold")[Example]
+  - A medical ontology defines relationships between diseases, symptoms,
+    and treatments
+  - A geographical ontology describes cities, states, and countries
+- #text(fill: blue, weight: "bold")[Goal]
+  - Provide a vocabulary for a domain of knowledge
+  - Enable reasoning about entities and their relationships
+  - Enable machines and humans to understand and share information
+    consistently
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Related Concepts]
+  - #emph[Schema in a database];: columns with types (more rigid than
+    ontologies)
+  - #emph[Taxonomy];: simpler hierarchical tree-like classification
+  - #emph[Knowledge base];: a collection of facts and rules, sometimes
+    built from an ontology
+
+==== Ontologies: Components
+<ontologies-components>
+- #text(fill: black, weight: "bold")[Classes / Concepts];: Represent general concepts in a domain
+  - E.g., #text(fill: blue)[Person], #text(fill: blue)[City],
+    #text(fill: blue)[Car]
+- #text(fill: black, weight: "bold")[Individuals / Instances];: Specific, concrete examples of
+  classes
+  - E.g., #text(fill: blue)[GP] (an instance of
+    #text(fill: blue)[Person]), #text(fill: blue)[Rome],
+    #text(fill: blue)[Ferrari 458]
+- #text(fill: black, weight: "bold")[Properties / Relations];: Describe interactions or
+  associations between classes or instances
+  - E.g., #text(fill: blue)[isMortal], #text(fill: blue)[locatedIn],
+    #text(fill: blue)[hasAge]
+- #text(fill: black, weight: "bold")[Attributes / Data values];: Specify data associated with
+  instances
+  - E.g., (#text(fill: blue)[GP], #text(fill: blue)[hasAge],
+    #text(fill: blue)[<your_guess>])
+- #text(fill: black, weight: "bold")[Constraints];: Rules that restrict the kinds of values a
+  property can take
+  - E.g., (#text(fill: blue)[Ferrari 458], #text(fill: blue)[mustBe],
+    #text(fill: blue)[red])
+- #text(fill: black, weight: "bold")[Axioms];: Logical statements that define rules and constraints
+  - E.g., all humans are mortal:
+    $forall x \( P e r s o n \( x \) arrow.r.double.long M o r t a l \( x \) \)$
+- #text(fill: black, weight: "bold")[Hierarchies];: Organize classes and properties into
+  parent-child relationships
+  - E.g., #text(fill: blue)[Student] is a subclass of
+    #text(fill: blue)[Person]
+
+==== Ontology: Example University
+<ontology-example-university>
+#grid(
+  columns: (35%, 60%),
+  gutter: 0.5em,
+  [
+  - #text(fill: black, weight: "bold")[Classes]
+    - #text(fill: blue)[Student]
+    - #text(fill: blue)[Professor]
+    - #text(fill: blue)[Course]
+    - #text(fill: blue)[Department]
+  ],
+  [
+  #box(image("/msml610/test/outcomes/Test_Msml610_Run_notes_to_pdf_py.test_typ_output/tmp.scratch/lesson_03.1/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.5.png"))
+  ]
+)
+- #text(fill: black, weight: "bold")[Properties];: relationships between Classes
+  - #text(fill: blue)[takesCourse] (#text(fill: blue)[Student] $arrow.r$
+    #text(fill: blue)[Course])
+  - #text(fill: blue)[teachesCourse] (#text(fill: blue)[Professor]
+    $arrow.r$ #text(fill: blue)[Course])
+  - #text(fill: blue)[belongsToDepartment] (Student, Professor $arrow.r$
+    #text(fill: blue)[Department])
+- #text(fill: black, weight: "bold")[Individuals];: examples of Classes
+  - #text(fill: blue)[Student]: Alice, Bob
+  - #text(fill: blue)[Professor]: GP, DrNo
+  - #text(fill: blue)[Course]: DATA605, MSML610
+- #text(fill: black, weight: "bold")[Axioms];: logical rules that must be true
+  - Every #text(fill: blue)[Course] must be taught by exactly one
+    #text(fill: blue)[Professor]
+  - Every #text(fill: blue)[Student] must belong to exactly one
+    #text(fill: blue)[Department]
+
+==== Table of Content
+<table-of-content-5>
+- Knowledge Representation
+  - Basics of Knowledge Representation
+  - Examples of Logic
+  - Logical Agents
+  - Ontologies
+  - #text(fill: red, weight: "bold")[#emph[Reasoning in Ontologies]]
+
+==== Example of Reasoning Tasks (1/4)
+<example-of-reasoning-tasks-14>
+- #text(fill: black, weight: "bold")[Subsumption]
+  - #emph["Is class #text(fill: blue)[A] a subclass of
+    #text(fill: blue)[B]?"]
+  - Check whether one concept is more general than another
+  - E.g., if #text(fill: blue)[Person] subsumes
+    #text(fill: blue)[Student], every #text(fill: blue)[Student] is
+    necessarily a #text(fill: blue)[Person]
+  - Important for building taxonomies and ontologies
+- #text(fill: black, weight: "bold")[Satisfiability]
+  - #emph["Can an instance of a concept exist?"]
+  - Test if a concept is logically consistent (i.e., without
+    contradiction)
+  - E.g., if the concept #text(fill: blue)[FlyingPenguin] requires
+    flying but is also defined as a penguin (which cannot fly), it might
+    be not satisfiable
+- #text(fill: black, weight: "bold")[Classification]
+  - #emph[Organize concepts into a hierarchy]
+  - Automatically organize concepts into a hierarchy by checking
+    subsumption relationships
+  - E.g., given definitions of #text(fill: blue)[Animal],
+    #text(fill: blue)[Bird], and #text(fill: blue)[Penguin],
+    classification places #text(fill: blue)[Penguin] under
+    #text(fill: blue)[Bird], and #text(fill: blue)[Bird] under
+    #text(fill: blue)[Animal]
+
+==== Example of reasoning tasks in KR (2/4)
+<example-of-reasoning-tasks-in-kr-24>
+- #text(fill: black, weight: "bold")[Instance Checking]
+  - #emph["Is a specific individual an instance of a concept?"]
+  - E.g., is #text(fill: blue)[GP] an instance of
+    #text(fill: blue)[Student]?
+- #text(fill: black, weight: "bold")[Consistency Checking]
+  - #emph["Is the entire knowledge base free of contradictions?"]
+  - E.g., no #text(fill: blue)[Person] is both #text(fill: blue)[Alive]
+    and #text(fill: blue)[Dead] at the same time
+- #text(fill: black, weight: "bold")[Realization]
+  - #emph["What is the most specific class an instance belongs to?"]
+  - E.g., discovering that #text(fill: blue)[GP] is a
+    #text(fill: blue)[Professor] rather than just a
+    #text(fill: blue)[Human]
+- #text(fill: black, weight: "bold")[Retrieval]
+  - #emph[Find all individuals that satisfy a certain condition]
+  - E.g., retrieve all instances classified as
+    #text(fill: blue)[TeachingAssistant]
+
+==== Example of reasoning tasks in KR (3/4)
+<example-of-reasoning-tasks-in-kr-34>
+- #text(fill: black, weight: "bold")[Query Answering]
+  - #emph[Answer complex queries about the knowledge base]
+  - E.g., find all #text(fill: blue)[Person] that study at the
+    university and are not #text(fill: blue)[Student]
+- #text(fill: black, weight: "bold")[Abduction]
+  - #emph[Given an observation, infer the best explanation]
+  - E.g., seeing a #text(fill: blue)[Person] carrying a backpack and
+    wearing flip-flops in the snow and infer that is likely a
+    #text(fill: blue)[Student]
+- #text(fill: black, weight: "bold")[Deduction]
+  - #emph[Infer consequences that logically follow from facts and rules]
+  - E.g., if #text(fill: blue)[John] is a #text(fill: blue)[Student] in
+    #text(fill: blue)[ComputerScience] then he can attend
+    #text(fill: blue)[MSML610]
+
+==== Example of reasoning tasks in KR (4/4)
+<example-of-reasoning-tasks-in-kr-44>
+- #text(fill: black, weight: "bold")[Belief Revision]
+  - #emph[Update the knowledge base when new, possibly conflicting,
+    information arrives]
+  - E.g., learning that not every student in
+    #text(fill: blue)[ComputerScience] can take
+    #text(fill: blue)[MSML610] and revise a previous rule
+- #text(fill: black, weight: "bold")[Temporal Reasoning]
+  - #emph[Reason about events over time]
+  - E.g., if #text(fill: blue)[EventA] happens before
+    #text(fill: blue)[EventB], then #text(fill: blue)[EventB] cannot
+    #text(fill: blue)[Cause] #text(fill: blue)[EventA]
+- #text(fill: black, weight: "bold")[Causal Reasoning]
+  - #emph[Infer causes and effects among entities or events]
+  - E.g., inferring that (#text(fill: blue)[Storm],
+    #text(fill: blue)[Cause], #text(fill: blue)[Flooding]) based on
+    temporal and physical knowledge
+
+==== Ontologies tools: Protege Example
+<ontologies-tools-protege-example>
+#grid(
+  columns: (55%, 40%),
+  gutter: 0.5em,
+  [
+  - #text(fill: black, weight: "bold")[Protégé] is a free, open-source platform for building
+    ontologies
+    - Developed at Stanford
+  - #text(fill: black, weight: "bold")[Construct and visualize ontologies]
+    - Users can define classes, properties, individuals, and relationships
+  - #text(fill: black, weight: "bold")[Enable reasoning] over ontologies using plugins
+    - E.g., checking consistency, inferring new knowledge
+  ],
+  [
+  #box(image("/msml610/lectures_source/figures/L03.Protege_OWL.jpg"))
+  ]
+)
+- #text(fill: black, weight: "bold")[Supports]
+  - Major ontology languages
+    - OWL (Web Ontology Language)
+    - RDF (Resource Description Framework)
+  - Multiple serialization formats
+    - RDF/XML, Turtle, OWL Functional Syntax
+- #text(fill: black, weight: "bold")[Use cases]
+  - Domain-specific knowledge modeling (e.g., biomedicine, law)
+  - Semantic Web applications
+  - AI systems that require structured knowledge
