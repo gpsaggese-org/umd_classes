@@ -1,0 +1,5 @@
+# Build artifacts captured by `tee` during ./docker_build.sh.
+build.log
+*.log
+# yfinance parquet cache, generated when stumpy.example.ipynb runs.
+data/

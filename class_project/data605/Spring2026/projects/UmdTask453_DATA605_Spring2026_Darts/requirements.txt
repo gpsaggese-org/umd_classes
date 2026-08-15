@@ -1,0 +1,30 @@
+# Core data manipulation
+pandas==2.2.0
+numpy==1.26.4
+
+# Data download
+yfinance==0.2.37
+fredapi==0.5.1
+
+# Darts and forecasting
+darts==0.30.0
+prophet==1.1.5
+statsmodels==0.14.1
+
+# Machine learning
+lightgbm==4.3.0
+xgboost==2.0.3
+catboost==1.2.3
+scikit-learn==1.4.0
+
+# Model explainability
+shap==0.44.1
+
+# Visualization
+matplotlib==3.8.2
+seaborn==0.13.2
+plotly==5.18.0
+
+# Holidays
+holidays==0.46
+optuna==3.6.1

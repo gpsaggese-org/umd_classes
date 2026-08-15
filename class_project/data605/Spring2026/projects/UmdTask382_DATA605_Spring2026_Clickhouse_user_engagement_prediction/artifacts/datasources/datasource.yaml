@@ -1,0 +1,16 @@
+apiVersion: 1
+
+datasources:
+  - name: Ecommerce
+    type: grafana-clickhouse-datasource
+    access: proxy
+    isDefault: true
+    url: http://clickhouse:8123
+    jsonData:
+      defaultDatabase: ecomm
+      server: clickhouse
+      port: 8123
+      protocol: http
+    secureJsonData:
+      password: password
+    user: default

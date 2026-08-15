@@ -1,0 +1,1 @@
+# txtai Market Research Platform

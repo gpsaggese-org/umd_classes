@@ -1,0 +1,6 @@
+AutogluonModels/
+notebooks/AutogluonModels/
+*.parquet
+*.jsonl
+__pycache__/
+.DS_Store

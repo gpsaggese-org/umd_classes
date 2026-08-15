@@ -1,0 +1,148 @@
+# =============================================================================
+# Each agent wrapper in agents/{id}/run_task.py MUST match these IDs exactly.
+# =============================================================================
+
+agents:
+
+  # ---------------------------------------------------------------------------
+  # CATEGORY 1: AutoML (Local, no LLM, no tokens)
+  # ---------------------------------------------------------------------------
+  - id: autogluon
+    name: AutoGluon
+    category: automl
+    architecture: programmatic
+    local_or_cloud: local
+    version: "1.2"
+    model: null
+    pricing_input_per_M: 0
+    pricing_output_per_M: 0
+    install_cmd: "pip install autogluon"
+    supports: [tabular, image]
+    generates_code: false
+    notes: "Fully automated. No prompting. Strongest tabular AutoML baseline."
+
+  - id: pycaret
+    name: PyCaret
+    category: automl
+    architecture: programmatic
+    local_or_cloud: local
+    version: "3.4"
+    model: null
+    pricing_input_per_M: 0
+    pricing_output_per_M: 0
+    install_cmd: "pip install pycaret"
+    supports: [tabular]
+    generates_code: false
+    notes: "Low-code. Built-in compare_models(). Has SHAP support."
+
+  # ---------------------------------------------------------------------------
+  # CATEGORY 2: LLM-Based Agents (Cloud, API, token costs)
+  # ---------------------------------------------------------------------------
+  - id: chatgpt_ada
+    name: ChatGPT Advanced Data Analysis
+    category: llm_notebook
+    architecture: conversational
+    local_or_cloud: cloud
+    version: "gpt-4o"
+    model: "gpt-4o"
+    pricing_input_per_M: 2.50
+    pricing_output_per_M: 10.00
+    install_cmd: "pip install openai"
+    supports: [tabular, nlp, time_series, image, audio]
+    generates_code: true
+    notes: "Code Interpreter sandbox. Can upload files, run code, iterate."
+
+  - id: claude_code
+    name: Claude Code
+    category: agentic_coding
+    architecture: agentic_loop
+    local_or_cloud: both
+    version: "latest"
+    model: "claude-sonnet-4-6"
+    pricing_input_per_M: 3.00
+    pricing_output_per_M: 15.00
+    install_cmd: "npm install -g @anthropic-ai/claude-code"
+    supports: [tabular, nlp, time_series, image, audio]
+    generates_code: true
+    notes: >
+      AGENTIC: file system access, bash execution, self-correction loops, 
+      subagent orchestration. Compare directly vs claude_api_raw to isolate 
+      the value of agentic scaffolding.
+
+  - id: claude_api_raw
+    name: Claude API (raw)
+    category: direct_llm
+    architecture: single_turn
+    local_or_cloud: cloud
+    version: "claude-sonnet-4-6"
+    model: "claude-sonnet-4-6"
+    pricing_input_per_M: 3.00
+    pricing_output_per_M: 15.00
+    install_cmd: "pip install anthropic"
+    supports: [tabular, nlp, time_series, image, audio]
+    generates_code: true
+    notes: >
+      BASELINE for Claude Code comparison. Same model (Sonnet), 
+      no file access, no bash, no self-correction. Single prompt → response.
+
+  # ---------------------------------------------------------------------------
+  # CATEGORY 3: Multi-Agent Frameworks
+  # ---------------------------------------------------------------------------
+  - id: autogen
+    name: Microsoft AutoGen
+    category: multi_agent
+    architecture: collaborative_agents
+    local_or_cloud: both
+    version: "0.4"
+    model: "gpt-4o"
+    pricing_input_per_M: 2.50
+    pricing_output_per_M: 10.00
+    install_cmd: "pip install pyautogen"
+    supports: [tabular, nlp, time_series, image, audio]
+    generates_code: true
+    notes: "AssistantAgent + UserProxyAgent. Code execution in work_dir."
+
+  - id: smolagents
+    name: smolagents (HuggingFace)
+    category: code_agent
+    architecture: iterative_code
+    local_or_cloud: both
+    version: "1.x"
+    model: "gpt-4o"
+    pricing_input_per_M: 2.50
+    pricing_output_per_M: 10.00
+    install_cmd: "pip install smolagents"
+    supports: [tabular, nlp, time_series, image]
+    generates_code: true
+    notes: "Code-first agent. Iterative search-plan-repair loop."
+
+  - id: langgraph
+    name: LangGraph
+    category: stateful_agent
+    architecture: persistent_graph
+    local_or_cloud: both
+    version: "0.2"
+    model: "claude-sonnet-4-6"
+    pricing_input_per_M: 3.00
+    pricing_output_per_M: 15.00
+    install_cmd: "pip install langgraph langchain-anthropic"
+    supports: [tabular, nlp, time_series]
+    generates_code: true
+    notes: "Stateful agent graphs. Persistent reasoning loops. LOW PRIORITY."
+
+  # ---------------------------------------------------------------------------
+  # CATEGORY 4: Lightweight NL→Code
+  # ---------------------------------------------------------------------------
+  - id: pandasai
+    name: PandasAI
+    category: nl_to_code
+    architecture: lightweight
+    local_or_cloud: local
+    version: "2.4"
+    model: "local"
+    pricing_input_per_M: 0
+    pricing_output_per_M: 0
+    install_cmd: "pip install pandasai"
+    supports: [tabular]
+    generates_code: true
+    notes: "NL → pandas code. Fast, cheap. Breaks on complex multi-step tasks."
