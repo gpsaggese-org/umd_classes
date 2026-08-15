@@ -246,10 +246,10 @@
 | [AutoKeras](MSML610/AutoKeras_Project_Description.md) | Done | [Krishna Taduri](https://github.com/tkpratardan)<br>[Akhil Shekkari](https://github.com/shekkari1999) | [TutorTask_67](https://github.com/causify-ai/tutorials/issues/67)<br>[UmdTask123](https://github.com/gpsaggese/gpsaggese.github.io/issues/123) | [Result 1](../msml610/Fall2025/projects/TutorTask_67_Fall2025_AutoKeras_Electricity_Load_Forecasting)<br>[Result 2](../msml610/Fall2025/projects/UmdTask123_Fall2025_Fashion_Product_Image_Classification_AutoKeras) | Fall2025<br>Fall2025 |
 | [Autofeat](MSML610/Autofeat_Project_Description.md) |  | — | — | — | — |
 | [Ax](MSML610/Ax_Project_Description.md) | Done | [Aayush Verma](https://github.com/aver81) | [UmdTask78](https://github.com/gpsaggese/gpsaggese.github.io/issues/78) | [Result](../msml610/Fall2025/projects/UmdTask78_Fall2025_Ax_Multi_Objective_Optimization_for_Marketing_Campaigns) | Fall2025 |
-| [Azua](MSML610/Azua_Project_Description.md) |  | — | — | — | — |
+| [Azua](MSML610/Azua_Project_Description.md) | Done | — | [UmdTask87](https://github.com/gpsaggese/gpsaggese.github.io/issues/87) | [Result](../msml610/Fall2025/projects/UmdTask87_Fall2025_Predicting_House_Prices) | Fall2025 |
 | [BoTorch](MSML610/BoTorch_Project_Description.md) | Done | [@amysamy1611](https://github.com/amysamy1611)<br>[Aayush Verma](https://github.com/aver81) | [UmdTask147](https://github.com/gpsaggese/gpsaggese.github.io/issues/147)<br>[UmdTask24](https://github.com/gpsaggese/gpsaggese.github.io/issues/24) | [Result 1](../msml610/Fall2025/projects/UmdTask147_Fall2025_BoTorch_Optimizing_Compound_selection_from_CheMBL_Subset)<br>[Result 2](../msml610/Fall2025/projects/UmdTask24_Fall2025_BoTorch_Optimizing_Compound_selection_from_ChEMBL_Subset) | Fall2025<br>Fall2025 |
-| [CLIP-ViT-Large-Patch14](MSML610/CLIP-ViT-Large-Patch14_Project_Description.md) | Done | [Sonaal](https://github.com/sonaalKant) | [TutorTask37](https://github.com/causify-ai/tutorials/issues/37) | [Result](../msml610/Fall2025/projects/TutorTask37_Fall2025_CLIP_ViT_Large_Patch14_Generative_Art_from_Text_Prompts) | Fall2025 |
-| [Caffe](MSML610/Caffe_Project_Description.md) |  | — | — | — | — |
+| [CLIP-ViT-Large-Patch14](MSML610/CLIP-ViT-Large-Patch14_Project_Description.md) | Done | [Sonaal](https://github.com/sonaalKant)<br>[@priyagutti](https://github.com/priyagutti), [@Ay2012](https://github.com/Ay2012) | [TutorTask37](https://github.com/causify-ai/tutorials/issues/37)<br>[UmdTask22](https://github.com/gpsaggese/gpsaggese.github.io/issues/22) | [Result 1](../msml610/Fall2025/projects/TutorTask37_Fall2025_CLIP_ViT_Large_Patch14_Generative_Art_from_Text_Prompts)<br>[Result 2](../msml610/Fall2025/projects/CLIP_ViT_Large_Task22) | Fall2025<br>Fall2025 |
+| [Caffe](MSML610/Caffe_Project_Description.md) | Done | [Hairui Yin](https://github.com/henryparker) | [UmdTask47](https://github.com/gpsaggese/gpsaggese.github.io/issues/47) | [Result](../msml610/Fall2025/projects/UmdTask47_Object_Detection_with_Faster_R-CNN) | Fall2025 |
 | [CausalInference](MSML610/CausalInference_Project_Description.md) | Done | — | — | [Result](../msml610/Fall2025/projects/Fall2025_CausalInference_Evaluating_the_Effect_of_Public_Health_Interventions_on_Disease_Spread) | Fall2025 |
 | [CausalML](MSML610/CausalML_Project_Description.md) | Done | [Sonaal](https://github.com/sonaalKant) | [TutorTask35](https://github.com/causify-ai/tutorials/issues/35) | [Result](../msml610/Fall2025/projects/TutorTask35_Fall2025_CausalML_Measuring_the_Impact_of_Lifestyle_Programs_on_Diabetes_Outcomes) | Fall2025 |
 | [CausalNex](MSML610/CausalNex_Project_Description.md) |  | — | — | — | — |
@@ -262,10 +262,10 @@
 | [Dask](MSML610/Dask_Project_Description.md) |  | — | — | — | — |
 | [DeepSpeed](MSML610/DeepSpeed_Project_Description.md) | Done | [Siddharth Pathania](https://github.com/SiddharthPathania11) | [UmdTask110](https://github.com/gpsaggese/gpsaggese.github.io/issues/110) | [Result](../msml610/Fall2025/projects/UmdTask110_Fall2025_DeepSpeed_for_Vision_Transformer_Fine_Tuning) | Fall2025 |
 | [DoWhy](MSML610/DoWhy_Project_Description.md) |  | — | — | — | — |
-| [EconML](MSML610/EconML_Project_Description.md) | Done | —<br>[GP Saggese](https://github.com/gpsaggese)<br>[Geona Anna Jaimon](https://github.com/gannaj22) | —<br>[TutorTask82](https://github.com/causify-ai/tutorials/issues/82)<br>[UmdTask59](https://github.com/gpsaggese/gpsaggese.github.io/issues/59) | [Result 1](../msml610/Fall2025/projects/AkashKadali_EconML_NHANES)<br>[Result 2](../msml610/Fall2025/projects/TutorTask82_Fall2025_EconML_Evaluating_the_Impact_of_Health_Interventions_on_Patient_Outcomes)<br>[Result 3](../msml610/Fall2025/projects/UmdTask59_Fall2025_EconML_Analyzing_the_Effects_of_Education_Programs_on_Student_Performance) | Fall2025<br>Fall2025<br>Fall2025 |
+| [EconML](MSML610/EconML_Project_Description.md) | Done | —<br>[GP Saggese](https://github.com/gpsaggese)<br>[Geona Anna Jaimon](https://github.com/gannaj22)<br>[Krishna Kishore Buddi](https://github.com/bkk8403) | —<br>[TutorTask82](https://github.com/causify-ai/tutorials/issues/82)<br>[UmdTask59](https://github.com/gpsaggese/gpsaggese.github.io/issues/59)<br>[UmdTask200](https://github.com/gpsaggese/gpsaggese.github.io/issues/200) | [Result 1](../msml610/Fall2025/projects/AkashKadali_EconML_NHANES)<br>[Result 2](../msml610/Fall2025/projects/TutorTask82_Fall2025_EconML_Evaluating_the_Impact_of_Health_Interventions_on_Patient_Outcomes)<br>[Result 3](../msml610/Fall2025/projects/UmdTask59_Fall2025_EconML_Analyzing_the_Effects_of_Education_Programs_on_Student_Performance)<br>[Result 4](../msml610/Fall2025/projects/UmdTask200_Fall2025_A_Causal_Analysis_of_Success_in_Modern_Society) | Fall2025<br>Fall2025<br>Fall2025<br>Fall2025 |
 | [FLAML](MSML610/FLAML_Project_Description.md) | Done | [Anisha Katiyar](https://github.com/ani14kay) | [UmdTask131](https://github.com/gpsaggese/gpsaggese.github.io/issues/131) | [Result](../msml610/Fall2025/projects/UmdTask131_Fall2025_FLAML_Time_Series_Forecasting_of_Energy_Consumption) | Fall2025 |
 | [FairScale](MSML610/FairScale_Project_Description.md) |  | — | — | — | — |
-| [Fairlearn](MSML610/Fairlearn_Project_Description.md) |  | — | — | — | — |
+| [Fairlearn](MSML610/Fairlearn_Project_Description.md) | Done | [Pranav Srinivasan K N](https://github.com/knpranav) | [UmdTask187](https://github.com/gpsaggese/gpsaggese.github.io/issues/187) | [Result](../msml610/Fall2025/projects/UmdTask187_Fall2025_Fairness_in_Predictive_Policing) | Fall2025 |
 | [Flax](MSML610/Flax_Project_Description.md) |  | — | — | — | — |
 | [Gensim](MSML610/Gensim_Project_Description.md) |  | — | — | — | — |
 | [GluonTS](MSML610/GluonTS_Project_Description.md) | Done | [Adwait Gaur](https://github.com/Adwait197) | [TutorTask121](https://github.com/causify-ai/tutorials/issues/121) | [Result](../msml610/Fall2025/projects/TutorTask121_GluonTS_COVID_19_Case_Prediction) | Fall2025 |
@@ -282,8 +282,8 @@
 | [LIME](MSML610/LIME_Project_Description.md) | Done | [Dhanush Garikapati](https://github.com/Dhanush3620)<br>[damith](https://github.com/imbulana), [Kumar Vaibhav](https://github.com/KumarVaibhav27) | [UmdTask62](https://github.com/gpsaggese/gpsaggese.github.io/issues/62)<br>[UmdTask85](https://github.com/gpsaggese/gpsaggese.github.io/issues/85) | [Result 1](../msml610/Fall2025/projects/UmdTask62_Fall2025_LIME_Employee_Attrition_Prediction)<br>[Result 2](../msml610/Fall2025/projects/UmdTask85_Fall2025_LIME_Food_Image_Classification_with_LIME_Explanations) | Fall2025<br>Fall2025 |
 | [LakeFS](MSML610/LakeFS_Project_Description.md) | Done | [@Oja999](https://github.com/Oja999) | [UmdTask45](https://github.com/gpsaggese/gpsaggese.github.io/issues/45) | [Result](../msml610/Fall2025/projects/UmdTask45_Fall2025_LakeFS_Anomaly_Detection_in_Financial_Transactions) | Fall2025 |
 | [LiNGAM](MSML610/LiNGAM_Project_Description.md) |  | — | — | — | — |
-| [MCP (Model Context Protocol, Python SDK)](MSML610/MCP%20%28Model%20Context%20Protocol,%20Python%20SDK%29_Project_Description.md) |  | — | — | — | — |
-| [MLflow](MSML610/MLflow_Project_Description.md) |  | — | — | — | — |
+| [MCP (Model Context Protocol, Python SDK)](MSML610/MCP%20%28Model%20Context%20Protocol,%20Python%20SDK%29_Project_Description.md) | Done | [Sampreeth jangala](https://github.com/Sampreeth-08) | [UmdTask51](https://github.com/gpsaggese/gpsaggese.github.io/issues/51) | [Result](../msml610/Fall2025/projects/UmdTask51_Fall2025_MCP%20%28Model%20Context%20Protocol%2C%20Python%20SDK%29_Real_Estate_Price_Prediction) | Fall2025 |
+| [MLflow](MSML610/MLflow_Project_Description.md) | Done | [SHRUTHI RAJ GANGAPURI](https://github.com/shruthi0914) | [UmdTask15](https://github.com/gpsaggese/gpsaggese.github.io/issues/15) | [Result](../msml610/Fall2025/projects/UmdTask15_Fall2025_Renewable_Energy_Production) | Fall2025 |
 | [MLlib](MSML610/MLlib_Project_Description.md) |  | — | — | — | — |
 | [Megatron-LM](MSML610/Megatron-LM_Project_Description.md) |  | — | — | — | — |
 | [NLTK](MSML610/NLTK_Project_Description.md) | Done | [@HautschenYoung](https://github.com/HautschenYoung) | [UmdTask66](https://github.com/gpsaggese/gpsaggese.github.io/issues/66) | [Result](../msml610/Fall2025/projects/UmdTask66_Fall2025_NLTK_Named_Entity_Recognition_in_Scientific_Publications) | Fall2025 |
@@ -316,8 +316,8 @@
 | [TorchRL](MSML610/TorchRL_Project_Description.md) | Done | [Saransh Kumar](https://github.com/saranshkr), [Inesh Tandon](https://github.com/Ineshtandy) | [UmdTask21](https://github.com/gpsaggese/gpsaggese.github.io/issues/21) | [Result](../msml610/Fall2025/projects/UmdTask21_Fall2025_TorchRL_Multi-Agent_Cooperation) | Fall2025 |
 | [Vertex AI](MSML610/Vertex%20AI_Project_Description.md) | Done | [Abhinav Kumar](https://github.com/AbhinavKumar333), [@CoderAd1](https://github.com/CoderAd1), [@bala2306](https://github.com/bala2306) | [UmdTask79](https://github.com/gpsaggese/gpsaggese.github.io/issues/79) | [Result](../msml610/Fall2025/projects/UmdTask79_Fall2025_Vertex_AI_Sentiment_Analysis_on_Social_Media_Posts) | Fall2025 |
 | [W&B Weave](MSML610/W&B%20Weave_Project_Description.md) |  | — | — | — | — |
-| [Weights & Biases](MSML610/Weights%20&%20Biases_Project_Description.md) |  | — | — | — | — |
-| [What-If Tool (WIT)](MSML610/What-If%20Tool%20%28WIT%29_Project_Description.md) |  | — | — | — | — |
+| [Weights & Biases](MSML610/Weights%20&%20Biases_Project_Description.md) | Done | — | — | [Result](../msml610/Fall2025/projects/TutorTask_103_Weights_and_Biases_Hard) | Fall2025 |
+| [What-If Tool (WIT)](MSML610/What-If%20Tool%20%28WIT%29_Project_Description.md) | Done | [Tauksik Anil Kumar](https://github.com/Tauksik5) | [UmdTask211](https://github.com/gpsaggese/gpsaggese.github.io/issues/211) | [Result](../msml610/Fall2025/projects/UmdTask211_Fall2025_WIT_Credit_Card_Fraud_Detection) | Fall2025 |
 | [Whisper Large V3](MSML610/Whisper%20Large%20V3_Project_Description.md) | Done | [sriyank sagi](https://github.com/Sriyank-s) | [UmdTask40](https://github.com/gpsaggese/gpsaggese.github.io/issues/40) | [Result](../msml610/Fall2025/projects/UmdTask40_Fall2025_Whisper-Large-V3_Multilingual_Customer_Support_Chatbot) | Fall2025 |
 | [YData-profiling](MSML610/YData-profiling_Project_Description.md) | Done | [LakshmisaivenkatasivanagamaniCharan Kankanala](https://github.com/CharanKankanala) | [UmdTask38](https://github.com/gpsaggese/gpsaggese.github.io/issues/38) | [Result](../msml610/Fall2025/projects/UmdTask38_Fall2025_YData-profiling_Sentiment_Analysis_on_Social_Media_Posts) | Fall2025 |
 | [accelerate](MSML610/accelerate_Project_Description.md) |  | — | — | — | — |
@@ -333,7 +333,7 @@
 | [flwr](MSML610/flwr_Project_Description.md) |  | — | — | — | — |
 | [lightning-fabric](MSML610/lightning-fabric_Project_Description.md) |  | — | — | — | — |
 | [loralib](MSML610/loralib_Project_Description.md) |  | — | — | — | — |
-| [mlxtend](MSML610/mlxtend_Project_Description.md) |  | — | — | — | — |
+| [mlxtend](MSML610/mlxtend_Project_Description.md) | Done | — | [UmdTask19](https://github.com/gpsaggese/gpsaggese.github.io/issues/19) | [Result](../msml610/Fall2025/projects/UmdTask19_Fall2025_mlxtrend_Anomaly_Detection_in_Network_Traffic_Data) | Fall2025 |
 | [mpi4py](MSML610/mpi4py_Project_Description.md) |  | — | — | — | — |
 | [nevergrad](MSML610/nevergrad_Project_Description.md) |  | — | — | — | — |
 | [orbit](MSML610/orbit_Project_Description.md) |  | — | — | — | — |
@@ -370,17 +370,9 @@
 
 ### MSML610
 
-- `class_project/msml610/Fall2025/projects/CLIP_ViT_Large_Task22`
-- `class_project/msml610/Fall2025/projects/TutorTask_103_Weights_and_Biases_Hard`
-- `class_project/msml610/Fall2025/projects/UmdTask15_Fall2025_Renewable_Energy_Production`
-- `class_project/msml610/Fall2025/projects/UmdTask187_Fall2025_Fairness_in_Predictive_Policing`
-- `class_project/msml610/Fall2025/projects/UmdTask19_Fall2025_mlxtrend_Anomaly_Detection_in_Network_Traffic_Data`
-- `class_project/msml610/Fall2025/projects/UmdTask200_Fall2025_A_Causal_Analysis_of_Success_in_Modern_Society`
-- `class_project/msml610/Fall2025/projects/UmdTask211_Fall2025_WIT_Credit_Card_Fraud_Detection`
-- `class_project/msml610/Fall2025/projects/UmdTask47_Object_Detection_with_Faster_R-CNN`
-- `class_project/msml610/Fall2025/projects/UmdTask51_Fall2025_MCP (Model Context Protocol, Python SDK)_Real_Estate_Price_Prediction`
 - `class_project/msml610/Fall2025/projects/UmdTask77_Retail_Sales_Forecasting_with_LSTMs`
-- `class_project/msml610/Fall2025/projects/UmdTask87_Fall2025_Predicting_House_Prices`
+  (uses both `jax` and `flax` — unclear whether it maps to the `JAX` row (Done,
+  add as Result 2) or the `Flax` row (still blank); needs a call before moving)
 
 | Project name | Status | Authors | GitHub Issue | Result | Session |
 | :--- | :--- | :--- | :--- | :--- | :--- |
