@@ -53,49 +53,44 @@ Exploratory data analysis is typically the first step a data scientist takes
 when confronted with an unfamiliar dataset: forming hypotheses about which
 variables relate to which, testing those hypotheses with statistical tools,
 and revising them until a model of the data-generating process emerges. This
-process is difficult to automate for two related reasons.
+process is difficult to automate for two related reasons:
 
-// TODO(ai_gp): Use bullet lists
-First, it is
-open-ended: there is no fixed sequence of steps that is correct for every
-dataset, so an automated agent must decide adaptively, given what it has
-learned so far, which tool to try next. Second, on a real dataset the true
-data-generating process is unknown, so there is no ground truth against which
-an automated agent's output can be checked, either at deployment time or, more
-importantly for training, during learning.
+- **Open-ended.** There is no fixed sequence of steps that is correct for
+  every dataset, so an automated agent must decide adaptively, given what it
+  has learned so far, which tool to try next.
+- **No ground truth.** On a real dataset, the true data-generating process is
+  unknown, so there is no ground truth against which an automated agent's
+  output can be checked, either at deployment time or, more importantly for
+  training, during learning.
 
-Prior work on automating this process falls into three categories.
+Prior work on automating this process falls into three categories:
 
-// TODO(ai_gp): Use bullet lists
-
-The first category is AutoEDA and AutoML tooling, which applies fixed
-heuristics or search procedures, such as ranking candidate visualizations by
-an information-theoretic utility score or enumerating summary statistics and
-plots in a pre-defined order, to surface patterns a human analyst can then
-interpret
-[@vartak2015seedb; @wongsuphasawat2017voyager; @milo2020autoeda; @he2021automl].
-These systems do not learn an adaptive policy: their decision rule is
-engineered once and does not improve from experience across datasets.
-
-The second category is causal and probabilistic structure learning, which
-recovers a graph over variables from data using constraint-based tests
-[@spirtes2000causation], greedy score-based search [@chickering2002ges], or
-continuous optimization over a differentiable acyclicity constraint
-[@zheng2018notears]. These algorithms produce a structural output that can be
-compared against ground truth, but they are not formulated as sequential
-decision problems over an extensible toolbox and are not trained to improve at
-choosing among competing statistical tests.
-
-The third category is reinforcement learning with verifiable rewards (RLVR), a
-recent training paradigm in which a policy is optimized against an
-automatically checkable reward rather than a learned or human-provided one
-[@lambert2024tulu3]. RLVR has proven effective for training large language
-models to reason through multi-step math and code problems, where a proposed
-final answer or a generated program can be checked exactly against a known
-solution or test suite [@deepseekai2025r1]. This recipe presupposes a
-ground-truth checker, which is precisely what is missing for EDA on real
-data: a dataset collected in the wild carries no verified data-generating
-process to check a discovered graph against.
+- **AutoEDA and AutoML tooling** applies fixed heuristics or search
+  procedures, such as ranking candidate visualizations by an
+  information-theoretic utility score or enumerating summary statistics and
+  plots in a pre-defined order, to surface patterns a human analyst can then
+  interpret
+  [@vartak2015seedb; @wongsuphasawat2017voyager; @milo2020autoeda; @he2021automl].
+  These systems do not learn an adaptive policy: their decision rule is
+  engineered once and does not improve from experience across datasets.
+- **Causal and probabilistic structure learning** recovers a graph over
+  variables from data using constraint-based tests [@spirtes2000causation],
+  greedy score-based search [@chickering2002ges], or continuous optimization
+  over a differentiable acyclicity constraint [@zheng2018notears]. These
+  algorithms produce a structural output that can be compared against ground
+  truth, but they are not formulated as sequential decision problems over an
+  extensible toolbox and are not trained to improve at choosing among
+  competing statistical tests.
+- **Reinforcement learning with verifiable rewards (RLVR)** is a recent
+  training paradigm in which a policy is optimized against an automatically
+  checkable reward rather than a learned or human-provided one
+  [@lambert2024tulu3]. RLVR has proven effective for training large language
+  models to reason through multi-step math and code problems, where a
+  proposed final answer or a generated program can be checked exactly against
+  a known solution or test suite [@deepseekai2025r1]. This recipe
+  presupposes a ground-truth checker, which is precisely what is missing for
+  EDA on real data: a dataset collected in the wild carries no verified
+  data-generating process to check a discovered graph against.
 
 This paper proposes closing that gap between the second and third categories
 by supplying the missing ground truth synthetically. Rather than training on
@@ -145,9 +140,9 @@ concludes and outlines an implementation plan.
 
 # Related Work
 
-**AutoEDA and visualization recommendation.** SeeDB scores candidate
+**AutoEDA and visualization recommendation.** _SeeDB_ scores candidate
 visualizations by how much they deviate from a reference distribution, and
-Voyager 2 blends specification-driven and recommendation-driven visual
+_Voyager 2_ blends specification-driven and recommendation-driven visual
 analysis to surface relationships a human analyst reviews interactively
 [@vartak2015seedb; @wongsuphasawat2017voyager]. Milo and Somech survey a wider
 family of AutoEDA systems that apply machine learning to individual sub-tasks
