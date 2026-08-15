@@ -120,6 +120,10 @@ bibliography: references.bib
   | :--- | ---: | ---: |
   | <value> | <value> | <value> |
 
+// TODO(*): Add a real "Technical Evaluation" section (experimental setup,
+  metrics, baselines, and results) when the paper has an actual
+  implementation, instead of only an illustrative worked example.
+
 # Discussion and Limitations
 
 - One paragraph per limitation, bold lead-in per limitation, e.g.

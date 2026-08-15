@@ -10,10 +10,10 @@
 
 | Project | Paper | Code | Assignee |
 | :------ | :---- | :--- | :------- |
-| Noesis (core platform) | [`papers/Noesis/`](../../papers/Noesis/) | [`research/Noesis/`](../../research/Noesis/) | gpsaggese |
-| RL for Automated EDA | [`papers/RL_for_Automated_EDA/`](../../papers/RL_for_Automated_EDA/) | [`research/agentic_data_science/`](../agentic_data_science/) | Delvitron1019 + gpsaggese |
-| RL for Optimal Strategy in Racket Sports | [`papers/Optimal_strategy_for_racket_sports/`](../../papers/Optimal_strategy_for_racket_sports/) | - | PranavShashidhara + gpsaggese |
-| Monte Carlo Tree Search for Discrete NP Problems | [`papers/AlphaZero_MCTS_for_TSP/`](../../papers/AlphaZero_MCTS_for_TSP/) | [`research/Implement_MonteCarlo_Tree_Search_and_Alpha_Zero/`](../Implement_MonteCarlo_Tree_Search_and_Alpha_Zero/) | Eyepatch0 + gpsaggese |
+| Noesis (core platform) | [`link`](../../papers/Noesis/) | [`link`](../../research/Noesis/) | gpsaggese |
+| RL for Automated EDA | [`link`](../../papers/RL_for_Automated_EDA/) | [`link`](../agentic_data_science/) | Delvitron1019 + gpsaggese |
+| RL for Optimal Strategy in Racket Sports | [`link`](../../papers/Optimal_strategy_for_racket_sports/) | - | PranavShashidhara + gpsaggese |
+| Monte Carlo Tree Search for Discrete NP Problems | [`link`](../../papers/AlphaZero_MCTS_for_TSP/) | [`link`](../Implement_MonteCarlo_Tree_Search_and_Alpha_Zero/) | Eyepatch0 + gpsaggese |
 
 ## Description of Files
 

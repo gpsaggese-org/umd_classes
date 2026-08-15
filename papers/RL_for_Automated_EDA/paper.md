@@ -1,7 +1,7 @@
 ---
 title: "Reinforcement Learning with Verifiable Rewards for Automated Exploratory Data Analysis"
 author:
-  - name: Giacinto Paolo (GP) Saggese
+  - name: Dev Delvitron1019 + Giacinto Paolo (GP) Saggese
     department: "Department of Computer Science"
     organization: "University of Maryland, College Park"
     location: "College Park, MD, USA"
@@ -18,7 +18,7 @@ abstract: |
   domains where a proposed answer can be checked exactly, but EDA on real data
   has no such ground truth against which to check a proposed data-generating
   process.
-  <!-- -->
+
   This paper proposes closing that gap by training the EDA loop entirely on
   synthetic environments: a random graphical model $G^*$ is sampled from an
   existing generator, a dataset is drawn from it and split into training and
@@ -29,14 +29,14 @@ abstract: |
   $\hat{G}$ and $G^*$ with the discovered graph's out-of-sample predictive
   performance, yielding a verifiable reward suitable for policy-gradient
   training.
-  <!-- -->
+
   We formalize this training environment, specify a candidate reward and
   toolbox, and work through two illustrative examples, one in which the
   policy must recover a linear-Gaussian structure and one in which it must
-  avoid a spurious edge induced by an unmeasured confounder. No computational
-  implementation or empirical evaluation has been carried out; this paper is a
-  framework proposal, and we discuss the reward-design and sim-to-real
-  transfer questions that a working implementation would need to resolve.
+  avoid a spurious edge induced by an unmeasured confounder.
+
+  // TODO(*): Add info about the results
+
 keywords:
   - reinforcement learning
   - exploratory data analysis
@@ -53,7 +53,10 @@ Exploratory data analysis is typically the first step a data scientist takes
 when confronted with an unfamiliar dataset: forming hypotheses about which
 variables relate to which, testing those hypotheses with statistical tools,
 and revising them until a model of the data-generating process emerges. This
-process is difficult to automate for two related reasons. First, it is
+process is difficult to automate for two related reasons.
+
+// TODO(ai_gp): Use bullet lists
+First, it is
 open-ended: there is no fixed sequence of steps that is correct for every
 dataset, so an automated agent must decide adaptively, given what it has
 learned so far, which tool to try next. Second, on a real dataset the true
@@ -62,6 +65,8 @@ an automated agent's output can be checked, either at deployment time or, more
 importantly for training, during learning.
 
 Prior work on automating this process falls into three categories.
+
+// TODO(ai_gp): Use bullet lists
 
 The first category is AutoEDA and AutoML tooling, which applies fixed
 heuristics or search procedures, such as ranking candidate visualizations by
