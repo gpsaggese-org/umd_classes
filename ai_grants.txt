@@ -1,0 +1,189 @@
+https://aigrant.com/
+
+# AI & Crypto Grant Programs
+
+**Compiled:** August 15, 2026 **Applicant profile:** US-based academic /
+research institution **Note:** Difficulty ratings are estimates, not official
+Verify all deadlines at the source before investing time
+
+## Summary Table
+
+| Program                             | Website                                 | Who it's for                                                   | Amount                                         | Difficulty                        |
+| ----------------------------------- | --------------------------------------- | -------------------------------------------------------------- | ---------------------------------------------- | --------------------------------- |
+| NSF National AI Research Institutes | nsf.gov                                 | University-led consortia                                       | ~$20M each                                     | Very hard: between solicitations |
+| NSF ExpandAI (NSF 23-506)           | nsf.gov                                 | MSIs only (HBCU, HSI, ANSI, PBI)                               | Up to $400K / 2 yr (Track 1); $7.5M FY26 pool  | Moderate                          |
+| AI Forge (DARPA + NSF)              | sam.gov                                 | US universities & service academies only                       | $750K–$3M, one-year terms                      | Hard                              |
+| DOE Genesis Mission AI              | energy.gov / PAMS                       | Universities, nonprofits, national labs                        | Varies by FOA                                  | Hard                              |
+| NAIRR Pilot                         | nairrpilot.org                          | US academics, nonprofits, agencies, startups w/ federal grants | Compute + data, not cash                       | Easy                              |
+| Ethereum Foundation Academic Grants | esp.ethereum.foundation/academic-grants | Academic researchers globally                                  | $2M pool per round                             | Moderate                          |
+| EF PhD Fellowship                   | esp.ethereum.foundation/rounds/phdfp26  | Enrolled PhD students                                          | $24K/yr, 9–10 awarded                          | Hard                              |
+| EF Ecosystem Support (ESP)          | esp.ethereum.foundation                 | Anyone advancing Ethereum                                      | Varies                                         | Moderate                          |
+| Ripple UBRI                         | ripple.com/impact/ubri                  | Universities (partnership model)                               | $80M+ since 2018, 60+ universities             | Hard to enter                     |
+| NLnet / NGI Zero                    | nlnet.nl/funding.html                   | Individuals, researchers, nonprofits, small teams              | Typically up to €50,000                        | Moderate                          |
+| Filecoin Grants                     | filecoin.io                             | Any builder                                                    | $5K–$10K Builder Next Step; Open Grants + RFPs | Easy–moderate                     |
+| NSF SBIR/STTR                       | seedfund.nsf.gov                        | Startups only                                                  | $250K–$1M+ by phase                            | Hard                              |
+| NVIDIA Inception                    | nvidia.com                              | Startups only                                                  | GPU credits, technical access                  | Easy                              |
+
+## Detail
+
+### Federal / Government (AI)
+
+**NSF National AI Research Institutes**
+
+- Award size: ~$20M each
+- Eligibility: Multidisciplinary, multi-stakeholder university-led teams
+- Status: The program page shows no upcoming due dates: waiting on a new
+  solicitation. This is the window to watch
+- Difficulty: Very hard. Requires assembling a large consortium
+
+**NSF ExpandAI (NSF 23-506)**
+
+- Award size: Track 1 (Capacity Building Pilots) up to $400,000 over two years;
+  Track 2 (Partnerships) connects MSIs with existing AI Institutes. $7.5M
+  allocated for FY 2026
+- Eligibility: Minority-serving institutions only: HBCUs, HSIs, Alaska Native
+  Serving Institutions, Predominantly Black Institutions
+- Difficulty: Moderate. Restricted eligibility means a smaller applicant pool
+- Precedent: Clark Atlanta University used a Track 2 award to create the first
+  graduate AI degree programs at an HBCU
+
+**AI Forge (DARPA + NSF)**
+
+- Award size: $750,000–$3M per Project Venture, one-year terms
+- Focus areas: AI interpretability, AI control, adversarial robustness
+- Eligibility: US universities and military service academies only. One
+  authorized submission per institution
+- Status: Announced June 1, 2026. Administered by a nonprofit launching
+  summer 2026. The initial RFI has closed
+- Note: IP is expected to be shared across forum participants, preferably under
+  open-source licensing
+
+**DOE Genesis Mission AI**
+
+- Award size: Varies by funding opportunity announcement
+- Eligibility: Depends on the specific FOA: universities, nonprofits, and
+  national labs are typical; some announcements are lab-restricted
+- Process: Pre-applications or letters of intent, then full proposals via
+  Grants.gov or PAMS, then multi-stage review
+- Difficulty: Hard. Budget significant lead time for PAMS registration and
+  institutional sign-off if you have no prior DOE relationship
+
+**NAIRR Pilot**
+
+- What you get: Free computational, data, and training resources: GPUs,
+  pre-trained models, AI-ready datasets. Not cash
+- Eligibility: US-based researchers and educators at academic institutions
+  (including grad students with a faculty support letter), nonprofits, federal
+  agencies, FFRDCs, state/local/tribal agencies, and startups with federal
+  grants
+- Tracks: Start-Up Projects (3 months, one resource, decision in ~2 weeks), full
+  Resource Allocations (12 months), education calls, deep partnerships
+- Difficulty: Easiest entry point on this list. Rolling, open until resources
+  are exhausted
+- Requirement: Project results must be open and shared with the community. PI
+  name, affiliation, title, and abstract are posted publicly
+
+### Crypto / Web3
+
+**Ethereum Foundation: Academic Grants Round**
+
+- Award size: $2M total pool distributed across selected proposals
+- Eligibility: Academic researchers at universities and research institutions
+  globally
+- Disciplines: Economics & game theory, theoretical and applied cryptography,
+  consensus and protocol design, networking & P2P, client engineering, security,
+  formal verification, humanities
+- Project length: Typically 6–12 months, with some flexibility
+- Cadence: Annual, spring deadline
+- Difficulty: Moderate. Roughly 300 applications from 25 countries in the 2024
+  round
+
+**Ethereum Foundation: PhD Fellowship**
+
+- Award size: $24,000 over one year, as a supplement to an existing stipend
+  9–10 fellowships total
+- Eligibility: Actively enrolled PhD students
+- Requirements: Must produce formal academic research published in conferences
+  or journals. Output must be open-access under a free, permissive license
+  Written PDF proposal in English following their template
+- Timeline: Decisions emailed six weeks after the deadline. The 2026 deadline
+  was April 22
+- Difficulty: Hard, given fewer than a dozen slots
+
+**Ethereum Foundation: Ecosystem Support Program (ESP)**
+
+- The general, always-open channel. If you miss a dedicated round, book ESP
+  Office Hours
+- Recent Q1 2026 allocations went heavily to ZK research, cryptographic
+  primitives, formal verification of zkVMs, quantum-resistant schemes, and core
+  client work
+
+**Ripple UBRI (University Blockchain Research Initiative)**
+
+- Scale: Over $80 million committed since 2018 across 60+ university partners
+- Model: Institutional partnership, not an open application. Universities set
+  their own research priorities
+- Recent: $1.5M+ in renewed grants disbursed in RLUSD stablecoin. Advisory
+  Council of cryptographers from partner universities
+- Action: Check whether your institution is already a partner before building
+  plans around this
+
+**NLnet Foundation / NGI Zero**
+
+- Award size: Typically up to €50,000, paid in milestones as deliverables
+  complete
+- Eligibility: Individuals, researchers, nonprofits, small teams, companies,
+  institutions: worldwide. They fund people, not just organizations
+- Requirement: All funded work must be released under free/libre/open-source
+  licenses, with open standards where possible
+- Status: **Currently closed.** New calls open September 3, 2026, deadline
+  November 3, 2026 at 12:00 CEST. Historically ran back-to-back calls with
+  deadlines on the 1st of every even month
+- Process: Short initial application, with detail requested only for promising
+  proposals
+
+**Filecoin Grants**
+
+- Tiers: Open Grants, Builder Next Step Grants ($5K–$10K), and RFPs with defined
+  deliverables and milestones
+- Focus: Developer and data tooling, integrations, research and protocols,
+  storage and retrieval, Filecoin Virtual Machine
+
+### Startup-only (listed for Completeness: Not Applicable to University Applicants)
+
+**NSF SBIR/STTR**: $250,000 to $1M+ depending on phase, for early-stage small
+businesses
+
+**NVIDIA Inception**: GPU credits, technology access, and network support. No
+application deadlines
+
+## Common Rejection Reasons
+
+**Federal AI grants:** unclear research objectives, insufficient preliminary
+data, budgets misaligned with proposed activities, failure to address
+responsible AI considerations. NSF AI programs run roughly 15–25% success rates
+
+**Web3 grants:**
+
+- Generic project descriptions: be specific about what it does, who it serves,
+  what's novel
+- Closed-source code: most Web3 grants require open source
+- Mismatched ecosystem commitment: applying to one foundation while building on
+  another chain
+- No track record: zero GitHub activity or ecosystem presence gets
+  deprioritized
+- Asking too much: grants under $100K are meaningfully easier than those over
+  $250K
+- Vague milestones: "build the protocol" fails; "ship v0.1 with feature X by
+  date Y" works
+
+## Suggested Sequence
+
+1. **This month:** NAIRR Start-Up resource request: fastest turnaround, gets
+   compute in hand
+2. **Near term:** DOE Genesis Mission AI if the research fits; start PAMS
+   registration now regardless
+3. **September:** NLnet call reopens
+4. **Fall prep:** Draft the Ethereum Foundation Academic Grants proposal for the
+   spring round
+5. **Watch:** NSF AI Institutes solicitation, AI Forge nonprofit launch
