@@ -1,0 +1,7 @@
+.env
+!.env.example
+.gradio/
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+.venv

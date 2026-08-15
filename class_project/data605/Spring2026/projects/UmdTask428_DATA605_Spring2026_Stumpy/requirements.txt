@@ -1,0 +1,19 @@
+# Core scientific stack.
+numpy>=1.24,<2.0
+pandas>=2.0
+pyarrow>=14.0
+matplotlib>=3.7
+seaborn>=0.13
+
+# Financial data and time series modeling.
+yfinance>=0.2.40
+arch>=6.3
+
+# Matrix profile (the focus of the tutorial).
+stumpy>=1.13
+
+# Baseline anomaly detectors.
+scikit-learn>=1.3
+
+# Notebook tooling: keeps .ipynb and .py percent-format mirrors in sync.
+jupytext>=1.16

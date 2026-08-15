@@ -1,0 +1,8 @@
+pandas
+numpy
+scikit-learn
+joblib
+requests
+python-dotenv
+influxdb-client
+apache-flink==2.0.0

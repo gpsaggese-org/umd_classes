@@ -1,0 +1,26 @@
+# ~/.bashrc – container shell configuration.
+
+# Prompt.
+export PS1='\[\033[01;32m\]\u@container\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+
+# Convenience aliases.
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Set working directory to the project root on login.
+cd /project 2>/dev/null || true
+
+# Show available commands on startup.
+echo ""
+echo "  ┌─────────────────────────────────────────────────────┐"
+echo "  │  House Price Prediction – Docker Container          │"
+echo "  │                                                     │"
+echo "  │  Run notebooks:  jupyter lab --ip=0.0.0.0           │"
+echo "  │                  --no-browser --allow-root          │"
+echo "  │                                                     │"
+echo "  │  Run API:        python template.API.py             │"
+echo "  │  Run example:    python template.example.py         │"
+echo "  │  Run Ansible:    ansible-playbook playbook.yaml     │"
+echo "  └─────────────────────────────────────────────────────┘"
+echo ""

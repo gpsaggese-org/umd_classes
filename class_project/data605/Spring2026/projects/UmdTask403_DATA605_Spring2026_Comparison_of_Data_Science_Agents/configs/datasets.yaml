@@ -1,0 +1,98 @@
+
+datasets:
+
+  heart_disease:
+    name: "Heart Disease UCI"
+    source: "UCI ML Repository / Kaggle"
+    url: "https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data"
+    kaggle_id: "redwankarimsony/heart-disease-uci"
+    modality: tabular
+    approx_rows: 303
+    approx_cols: 14
+    target_col: "target"
+    file_format: csv
+    local_path: "data/raw/heart_disease.csv"
+    description: "14 clinical features, binary target (heart disease presence)"
+    tasks: [HD-DESC-01, HD-EDA-01, HD-PRED-01, HD-EXPL-01, HD-ROBU-01]
+    notes: "Small dataset. Good for quick iteration. All agents should handle this."
+
+  nyc_taxi:
+    name: "NYC Yellow Taxi Trip Records"
+    source: "NYC TLC"
+    url: "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-01.parquet"
+    modality: tabular
+    approx_rows: 50000   # we sample from millions
+    sample_size: 50000
+    approx_cols: 19
+    target_col: "fare_amount"
+    file_format: parquet
+    local_path: "data/raw/nyc_taxi_sample.parquet"
+    description: "Pickup/dropoff timestamps, GPS, fare, tip, distance. Sample 50K rows."
+    tasks: [TAXI-DESC-01, TAXI-EDA-01, TAXI-PRED-01, TAXI-PRESC-01]
+    notes: "Large original file (~100MB parquet). We sample 50K for laptop feasibility."
+
+  air_quality:
+    name: "Air Quality - OpenAQ"
+    source: "OpenAQ API v2"
+    url: "https://api.openaq.org/v2/measurements"
+    modality: time_series
+    approx_rows: 10000
+    approx_cols: 10
+    target_col: "value"
+    file_format: json_api
+    local_path: "data/raw/air_quality.csv"
+    description: "PM2.5, PM10, NO2, O3 readings from global monitoring stations with timestamps."
+    api_params:
+      city: "Los Angeles"
+      parameter: "pm25"
+      limit: 10000
+      order_by: "datetime"
+    tasks: [AQ-EDA-01, AQ-PRED-01, AQ-ROBU-01]
+    notes: "Free API, no auth required for basic access. Rate limited."
+
+  amazon_reviews:
+    name: "Amazon Product Reviews"
+    source: "HuggingFace Hub"
+    hf_dataset: "McAuley-Lab/Amazon-Reviews-2023"
+    hf_subset: "raw_review_All_Beauty"
+    modality: nlp
+    approx_rows: 10000   # sample from larger set
+    sample_size: 10000
+    target_col: "rating"
+    file_format: huggingface
+    local_path: "data/raw/amazon_reviews.csv"
+    description: "Product ratings (1-5), review text, verified purchase flag."
+    tasks: [AR-DESC-01, AR-EDA-01, AR-PRED-01, AR-ROBU-01]
+    notes: "Use streaming=True to avoid downloading full dataset. Sample 10K."
+
+  # ---------------------------------------------------------------------------
+  # EXTENSION (modality coverage)
+  # ---------------------------------------------------------------------------
+  cifar10:
+    name: "CIFAR-10"
+    source: "HuggingFace / torchvision"
+    hf_dataset: "cifar10"
+    modality: image
+    approx_rows: 5000     # test set subset
+    sample_size: 5000
+    num_classes: 10
+    target_col: "label"
+    file_format: huggingface
+    local_path: "data/raw/cifar10/"
+    description: "32x32 color images in 10 classes. 50K train, 10K test."
+    tasks: [CF-PRED-01, CF-ROBU-01]
+    notes: "Tests if LLM agents can handle non-tabular data. Most AutoML tools struggle."
+
+  urbansound8k:
+    name: "UrbanSound8K"
+    source: "Zenodo / Manual Download"
+    url: "https://zenodo.org/record/1203745"
+    modality: audio
+    approx_rows: 8732
+    num_classes: 10
+    target_col: "classID"
+    file_format: wav
+    local_path: "data/raw/urbansound8k/"
+    description: "8732 labeled audio clips of urban sounds (10 classes: siren, dog bark, etc.)"
+    tasks: [US-PRED-01]
+    notes: "Requires manual download (~6GB). Lowest priority extension dataset."

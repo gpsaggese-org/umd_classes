@@ -1,0 +1,22 @@
+matplotlib
+numpy
+pandas
+seaborn
+
+# ── Machine learning ─────────────────────────────────────────
+pycaret
+scikit-learn>=1.5
+# pandas>=2.2
+# numpy>=1.26
+ 
+# ── REST API ─────────────────────────────────────────────────
+flask>=3.0
+gunicorn>=22.0
+ 
+# ── Ansible (deploy automation) ──────────────────────────────
+ansible>=9.0
+ 
+# ── Utilities ────────────────────────────────────────────────
+requests>=2.31
+python-dotenv>=1.0
+# matplotlib>=3.8

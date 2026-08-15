@@ -1,0 +1,11 @@
+ipywidgets
+jupyterlab
+jupyterlab-vim
+matplotlib
+numpy
+pandas
+seaborn
+ydata-profiling
+scikit-learn
+setuptools<82
+jupytext
