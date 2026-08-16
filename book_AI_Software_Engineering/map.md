@@ -54,6 +54,15 @@
   Topics, TODO, Slides, Lesson Materials, Notes) and Roadmap section
   conventions used throughout this file
 
+## Gneral Resources
+- `/Users/saggese/src/umd_classes1/helpers_root/papers/AIgentic_Development_System/*.tex`
+  - Code Quality & Standards
+  - Unit Testing
+  - Coding Architecture
+  - Automation & Workflows
+  - Dockerized Executables
+  - AI-Optimized Development Infrastructure
+
 # Roadmap
 
 | Chap                                          | Slides                                                | Slides % | Criticize | Tutorial | Book |
@@ -78,19 +87,6 @@
 | 13. Trust, Verification, and Hallucination Risks | N/A                                                  |          |           |          |      |
 | 14. Human-AI Collaboration Patterns           | Lesson14.01_Human_AI_Collaboration_Patterns.txt        | 100%     |           |          |      |
 | 15. Ethics, IP, and Security of AI-Generated Software | N/A                                             |          |           |          |      |
-
-## TODOs
-- [ ] Write `book_AI_Software_Engineering/generate_all_tocs.sh` to regenerate
-  `## All Lesson Materials`
-- [ ] Author dedicated slide decks for chapters 01, 03-11, 13-15 (currently no
-  source material)
-- [ ] Expand `lectures_notes/Lesson01-AI_workflows_for_coding.txt` from a
-  4-bullet stub into a full chapter 02 deck, or retire it in favor of a new
-  deck
-- [ ] Search other course dirs (`msml610`, `data605`, `book.Agentic_AI`,
-  `helpers_root`) for reusable material once each chapter's Topics are final
-- [ ] Add a `tutorials/` directory once chapters have runnable notebook
-  examples
 
 # Detailed TOC
 
@@ -503,17 +499,54 @@
 ### Slides
 - `book_AI_Software_Engineering/lectures_source/Lesson14.01_Human_AI_Collaboration_Patterns.txt`
 
-### Lesson Materials
-- `book.Agentic_AI/lectures_source/Lesson01.01-What_Is_An_Agentic_AI.txt`
-  - Autonomy Levels: Worked Examples; Human-in-the-Loop vs. Full Autonomy —
-    background reused for Task-Risk Matching and Designing Handoffs
-- `helpers_root/papers/AIgentic_Development_System`
-  - Agent Instruction Manifests, Machine-Readable Repository Contracts,
-    Guardrails and Provenance, Layered Quality Gates, Emergent
-    AI-Optimization — used for Task-Risk Matching and Team Workflows
-- Papers and books listed under Chapter 14 in `resources.md` — used
-  throughout for Collaboration Modes, Designing Handoffs, Task-Risk
-  Matching, and Team Workflows
+### Books
+- 2022, National Academies of Sciences, Engineering, and Medicine,
+  "Human-AI Teaming: State-of-the-Art and Research Needs"
+  (https://www.nap.edu/catalog/26355/human-ai-teaming-state-of-the-art-and-research-needs)
+  — free full text; task allocation, trust, and team design across
+  human-AI teams
+- 2018, Daugherty et al., "Human + Machine: Reimagining Work in the Age
+  of AI" (https://books.google.com/books?id=wpY4DwAAQBAJ) — hybrid
+  human+AI roles and handoff design in organizational workflows
+
+### Papers
+- 2026, Kang, "Governed AI-Assisted Engineering: Graduated Human Oversight for
+  Agentic Code Generation in Regulated Domains"
+  (https://arxiv.org/abs/2606.22484) — three-tier oversight model
+  (human-in-the-loop / human-over-the-loop / automated-with-monitoring) keyed to
+  regulatory impact and reversibility
+- 2026, Shukla et al., "Hedwig: Dynamic Autonomy for Coding Agents Under Local
+  Oversight" (https://arxiv.org/abs/2605.11495) — adaptive autonomy level per
+  task for coding agents
+- 2026, Heilman et al., "GitHub Copilot and Developer Productivity: An
+  Observational Dose-Response Analysis" (https://arxiv.org/abs/2606.00438) —
+  large-scale observational evidence on AI-assisted team workflows
+- 2026, Raees et al., "From Trust to Appropriate Reliance: Measurement Constructs
+  in Human-AI Decision-Making" (https://arxiv.org/abs/2604.23896) — distinguishes
+  trust, reliance, and appropriate reliance for calibrating escalation decisions
+- 2025, Li et al., "The Rise of AI Teammates in Software Engineering (SE 3.0):
+  How Autonomous Coding Agents Are Reshaping Software Engineering"
+  (https://arxiv.org/abs/2507.15003) — pair vs. autonomous collaboration modes
+  for coding agents
+- 2025, Mayer et al., "Human-AI Collaboration: Trade-offs Between Performance and
+  Preferences" (https://arxiv.org/abs/2503.00248) — agent consideration of human
+  actions vs. team performance
+- 2025, He et al., "Fine-Grained Appropriate Reliance: Human-AI Collaboration
+  with a Multi-Step Transparent Decision Workflow for Complex Task Decomposition"
+  (https://arxiv.org/abs/2501.10909) — review-loop-style decomposition of
+  multi-step tasks for reliance
+- 2024, Vats et al., "A Survey on Human-AI Collaboration with Large Foundation
+  Models" (https://arxiv.org/abs/2403.04931) — collaborative design principles
+  and governance frameworks
+- 2023, Mehrotra et al., "A Systematic Review on Fostering Appropriate Trust in
+  Human-AI Interaction" (https://arxiv.org/abs/2311.06305) — practices and
+  measures for calibrating trust, tied to task type
+- 2023, Peng et al., "The Impact of AI on Developer Productivity: Evidence from
+  GitHub Copilot" (https://arxiv.org/abs/2302.06590) — controlled experiment
+  quantifying pair-programming speedup
+- 1999, Horvitz, "Principles of Mixed-Initiative User Interfaces"
+  (https://doi.org/10.1145/302979.303030) — foundational principles for when to
+  hand off initiative between human and system
 
 ## 15: Ethics, IP, and Security of AI-Generated Software
 
