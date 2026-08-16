@@ -288,9 +288,9 @@ digraph ReviewLoop {
 * Mixed-Initiative Interfaces
 
 // From paper Horvitz, "Principles of Mixed-Initiative User Interfaces" (1999)
-- @Definition@: a **mixed-initiative system** is one where either the human
-  or the agent can take the initiative to act, and the system must decide
-  when handing off initiative helps versus interrupts
+- @Definition@: a **mixed-initiative system** is one where
+  - Either the human or the agent can take the initiative to act; and 
+  - The system must decide when handing off initiative helps versus interrupts
 
 - @Principles@ (adapted for coding agents):
   - Weigh the cost of asking against the cost of a wrong autonomous action
