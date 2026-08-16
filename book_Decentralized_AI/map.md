@@ -87,7 +87,7 @@
 | ------------------------------------------------------| -----------| ---------| ----------| ---------| -----|
 |                                                        |            |          |           |          |      |
 | **Foundations and Infrastructure**                    |            |          |           |          |      |
-| 01. Blockchain Consensus Foundations                  |            |          |           |          |      |
+| 01. Blockchain Consensus Foundations                  | Lesson01.01_Blockchain_Consensus_Foundations.txt | 100% |           |          |      |
 | 02. Distributed Ledger Fundamentals                   |            |          |           |          |      |
 | 03. Smart Contract Platforms and Security              |            |          |           |          |      |
 | 04. Layer 2 and Scaling Architectures                  |            |          |           |          |      |
@@ -129,7 +129,7 @@
 
 ## TODOs
 - Build `book_Decentralized_AI/lectures_source/` slide decks per chapter
-  (none exist yet, so every `### Slides` section below is `N/A`)
+  (Chapter 01 done, every other `### Slides` section below is still `N/A`)
 - Create `book_Decentralized_AI/tutorials/` notebooks once slide decks exist
 - Incorporate the high-priority reading list from `resources.md` (Harvey's
   DeFi course and book, Voshmgir's Token Economy) into the relevant chapters
@@ -157,7 +157,7 @@
   - Liveness vs safety tradeoffs
 
 ### Slides
-- N/A
+- `book_Decentralized_AI/lectures_source/Lesson01.01_Blockchain_Consensus_Foundations.txt`
 
 ### Lesson Materials
 - `data605/lectures_source/Lesson_93_Sorrentum_Project.txt`
