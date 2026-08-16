@@ -55,3 +55,17 @@ compute/inference markets, differential privacy, SMC/HE,
 provenance/watermarking, data marketplaces, multi-agent mechanism
 design, open vs closed ecosystems) are AI-specific — no counterpart in
 defi or web3.
+
+## Union count of chapters
+
+- Total entries: 45 (15 per file: deai, defi, web3).
+- Merged (same topic, different names, count once):
+  - Governance/DAOs: deai + defi + web3
+  - Tokenomics/incentive design: deai + defi + web3
+  - Regulation: deai + defi + web3
+  - Layer 2/scaling: defi + web3
+  - Cross-chain interoperability/bridges: defi + web3
+  - Consensus/blockchain foundations: defi + web3
+  - Smart contracts: defi + web3
+- 7 merges remove 10 duplicate entries.
+- **Union = 45 − 10 = 35 unique chapters.**
