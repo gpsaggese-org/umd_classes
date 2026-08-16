@@ -1,4 +1,4 @@
-// > open_md.py -i research/Noesis/architecture.md --mode pandoc --github_style
+// > open_md.py -i research/Noesis/architecture.md
 
 # Rules
 - This document describe the code as it is, without making reference to intermediate
