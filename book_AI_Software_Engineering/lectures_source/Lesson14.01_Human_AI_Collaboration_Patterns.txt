@@ -363,10 +363,10 @@ digraph HandoffGate {
   - **Impact**: how much damage a mistake would cause if it reached users
     or production systems
 
-- @Key idea@: low reversibility and high impact are what should raise the
-  level of human oversight, not the size of the diff or the difficulty of
-  the code
-  - A one-line change to a security check can be higher risk than a
+- @Key idea@: _low reversibility_ and _high impact_ are what should raise the
+  level of human oversight, not the size of the diff or the difficulty of the
+  code
+  - E.g., a one-line change to a security check can be higher risk than a
     thousand-line refactor of internal-only code
 
 * Low-Risk Tasks
@@ -384,7 +384,7 @@ digraph HandoffGate {
   - A CI test suite is the checkpoint for behavioral correctness
 
 - @Key idea@: for low-risk tasks, the guardrail _is_ the handoff, so the
-  autonomous mode is appropriate by default
+  **autonomous mode** is appropriate by default
 
 * High-Risk Tasks
 
@@ -396,11 +396,13 @@ digraph HandoffGate {
   - Impact reaches beyond the repository: users, data, or other teams
   - Correctness cannot be fully captured by an automated test
 
-- @Solution@: route these tasks through pair collaboration or a
-  review-loop with an explicit confirmation point, never fully autonomous
+- @Solution@: route these tasks through **pair collaboration** or a
+  **review-loop** with an explicit confirmation point, never fully autonomous
 
-- @Example@: an agent may draft a database migration script, but a human
-  should review the migration plan and trigger it manually in production
+- @Example@:
+  - An agent may draft a database migration script
+  - A human should review the migration plan
+  - A human triggers it manually in production
 
 * A Risk Matrix for Delegation
 
@@ -427,10 +429,10 @@ digraph HandoffGate {
 - @Definition@: a **three-tier oversight model** keys the level of
   supervision to a task's regulatory impact and reversibility, rather than
   offering only "supervised" or "unsupervised"
-  1. **Human-in-the-loop**: a human approves before the action executes
-  2. **Human-over-the-loop**: the action executes, a human can pause or
+  1. _Human-in-the-loop_: a human approves before the action executes
+  2. _Human-over-the-loop_: the action executes, a human can pause or
      roll it back within a window
-  3. **Automated-with-monitoring**: the action executes and is only
+  3. _Automated-with-monitoring_: the action executes and is only
      inspected by dashboards or alerts after the fact
 
 - @Intuition@: this is a finer-grained version of the risk matrix above,
@@ -444,14 +446,17 @@ digraph HandoffGate {
   agent change per task, or even per step within a task, instead of being
   fixed for an entire session
 
-- @Key idea@: an agent can start a session with tight oversight, then be
-  granted more autonomy for a specific class of low-risk actions once it
-  has demonstrated reliability on that class, and be pulled back to tighter
-  oversight when it enters unfamiliar or high-risk territory
+- @Key idea@: an agent can:
+  - Start a session with tight oversight
+  - Be granted more autonomy for a specific class of low-risk actions once it has
+    demonstrated reliability on that class
+  - Be pulled back to tighter oversight when it enters unfamiliar or high-risk
+    territory
 
-- @Example@: an agent gains standing approval to run tests and fix lint
-  issues after several correct iterations, but every schema-touching action
-  still requires a fresh confirmation
+- @Example@: an agent
+  - Gains standing approval to run tests and fix lint issues after several
+    correct iterations
+  - But every schema-touching action still requires a fresh confirmation
 
 * Escalation Paths When AI Is Uncertain
 
@@ -497,9 +502,11 @@ digraph HandoffGate {
 
 * Multiple Engineers, One or More Agents
 
-- @Motivation@: task-risk matching and handoff design so far describe one
-  human working with one agent; a team adds a second problem: several
-  engineers and several agents must converge on the _same_ conventions
+- @Motivation@:
+  - Task-risk matching and handoff design so far describe **one human** working
+    **with one agent**
+  - In a team **several engineers** and **several agents** must converge on the
+    _same_ conventions
 
 - @Problem@: without a shared reference, each engineer configures their
   agent differently
@@ -509,8 +516,7 @@ digraph HandoffGate {
   - Review comments repeat the same conventions on every pull request
 
 - @Key idea@: a team needs to encode collaboration policy once, in a place
-  every agent and every engineer can read, instead of repeating it in every
-  prompt
+  every agent and every engineer can read
 
 * Shared Conventions: Instruction Manifests
 
