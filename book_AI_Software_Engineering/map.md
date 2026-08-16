@@ -76,7 +76,7 @@
 | 12. AI in CI/CD                               | claude_code.md (partial)                               | 5%       |           |          |      |
 | **Trust, Collaboration, and Governance**      |                                                        |          |           |          |      |
 | 13. Trust, Verification, and Hallucination Risks | N/A                                                  |          |           |          |      |
-| 14. Human-AI Collaboration Patterns           | N/A                                                    |          |           |          |      |
+| 14. Human-AI Collaboration Patterns           | Lesson14.01_Human_AI_Collaboration_Patterns.txt        | 100%     |           |          |      |
 | 15. Ethics, IP, and Security of AI-Generated Software | N/A                                             |          |           |          |      |
 
 ## TODOs
@@ -501,11 +501,19 @@
   - Shared conventions and context (CLAUDE.md-style instructions)
 
 ### Slides
-- N/A — no dedicated deck yet
+- `book_AI_Software_Engineering/lectures_source/Lesson14.01_Human_AI_Collaboration_Patterns.txt`
 
 ### Lesson Materials
-- Not covered
-  - [100%]: No existing lecture material found in this repo for this topic
+- `book.Agentic_AI/lectures_source/Lesson01.01-What_Is_An_Agentic_AI.txt`
+  - Autonomy Levels: Worked Examples; Human-in-the-Loop vs. Full Autonomy —
+    background reused for Task-Risk Matching and Designing Handoffs
+- `helpers_root/papers/AIgentic_Development_System`
+  - Agent Instruction Manifests, Machine-Readable Repository Contracts,
+    Guardrails and Provenance, Layered Quality Gates, Emergent
+    AI-Optimization — used for Task-Risk Matching and Team Workflows
+- Papers and books listed under Chapter 14 in `resources.md` — used
+  throughout for Collaboration Modes, Designing Handoffs, Task-Risk
+  Matching, and Team Workflows
 
 ## 15: Ethics, IP, and Security of AI-Generated Software
 

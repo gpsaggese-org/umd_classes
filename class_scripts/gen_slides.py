@@ -172,16 +172,20 @@ def _main(parser: argparse.ArgumentParser) -> None:
     # Add extra options if provided.
     if args.extra_opts:
         cmd_parts.extend(args.extra_opts)
+    if not args.daemon:
+        # `notes_to_pdf.py`'s default actions don't include "open_pdf", so
+        # add it explicitly to open the PDF after a one-shot generation.
+        cmd_parts.append("--action=open_pdf")
     # Prepare command by quoting all arguments to preserve special characters.
     quoted_parts = [shlex.quote(part) for part in cmd_parts]
     cmd = " ".join(quoted_parts)
     if args.daemon:
-        # `notes_to_pdf.py`'s default actions don't include "open", so build
-        # once upfront and open the PDF; then hand off to its own `--daemon`
-        # watch loop, which regenerates on change without reopening the viewer
-        # (it skips "open" on watch runs since the viewer auto-reloads).
-        # TODO(ai_gp): Rename the action open -> open_pdf
-        initial_cmd = cmd + " --action=open"
+        # `notes_to_pdf.py`'s default actions don't include "open_pdf", so
+        # build once upfront and open the PDF; then hand off to its own
+        # `--daemon` watch loop, which regenerates on change without
+        # reopening the viewer (it skips "open_pdf" on watch runs since the
+        # viewer auto-reloads).
+        initial_cmd = cmd + " --action=open_pdf"
         _LOG.info("%s", hprint.color_highlight(f"> {initial_cmd}", "green"))
         hsystem.system(initial_cmd, suppress_output=False)
         cmd += " --daemon"
