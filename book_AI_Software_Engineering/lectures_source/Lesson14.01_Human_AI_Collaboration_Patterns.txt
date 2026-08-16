@@ -222,20 +222,22 @@ digraph ReviewLoop {
 - @Definition@: a **handoff** is a point in a workflow where responsibility
   for the next decision moves from the agent to the human, or back
 
-- @Problem@: too many handoffs recreate pair collaboration's throughput
-  problem; too few recreate autonomous collaboration's blind-spot problem
+- @Problem@:
+  - Too many handoffs recreate pair collaboration's throughput problem
+  - Too few recreate autonomous collaboration's blind-spot problem
   - Neither extreme is a good default for every step of every task
 
 - @Key idea@: design handoffs around _what_ is being decided, not around a
   fixed schedule of check-ins
 
-* What to Delegate Fully
+* What to Delegate Fully to Agent
 
-- @Characteristics@ of steps safe to delegate fully:
-  - The action is easily reversible (revert a commit, rerun a test)
-  - The action's correctness can be checked mechanically (lint passes,
+- @Characteristics@ of **steps safe to delegate fully**:
+  - The action is _easily reversible_ (e.g., revert a commit, rerun a test)
+  - The action's _correctness can be checked_ mechanically (e.g., lint passes,
     tests pass, types check)
-  - The action stays inside the repository: no external system is touched
+  - The action stays _inside the repository_ (e.g., no external system is
+    touched)
 
 // From paper AIgentic_Development_System, "Layered Quality Gates for
 // Incremental Validation"
@@ -249,17 +251,17 @@ digraph ReviewLoop {
 * What Requires a Human Decision
 
 - @Characteristics@ of steps that need a human:
-  - The action is hard to reverse (schema change, deleted data, a merged
+  - The action is _hard to reverse_ (e.g., schema change, deleted data, a merged
     release)
-  - The action is outward-facing (a message sent, a deploy, a public API)
-  - Correctness depends on judgment a test cannot express (is this the
-    right trade-off, not just does it compile)
+  - The action is _outward-facing_ (e.g., a message sent, a deploy, a public API)
+  - Correctness depends on _judgment_ a test cannot express (e.g., is this the
+    right trade-off?, not just does it compile?)
 
 - @Example@: an agent asked to "clean up the database" should draft a
   migration plan and stop, because dropping a column cannot be undone by
   rerunning a test suite
 
-- @Comparison@: beyond code, the same pattern holds
+- @Comparison@: The same pattern holds beyond code, e.g.,
   - A trading system may auto-size a small order but route a large one to a
     trader for sign-off
   - A clinical decision-support tool may surface a drug-interaction warning
@@ -270,12 +272,13 @@ digraph ReviewLoop {
 - @Definition@: a **confirmation point** is a handoff inserted specifically
   because an action is hard to reverse or outward-facing, independent of
   how well-tested the change appears to be
+  - Once a class of action is explicitly authorized, the same confirmation is not
+    repeated for every instance of it
 
-- @Example@: a coding assistant may run edits and local tests without
-  asking, but pause to confirm before a force-push, a branch deletion, or
-  sending a message to an external channel
-  - Once a class of action is explicitly authorized, the same confirmation
-    is not repeated for every instance of it
+- @Example@: A coding assistant:
+  - Runs edits and local tests without asking
+  - Pauses to confirm before a force-push, a branch deletion, or sending a
+    message to an external channel
 
 - @Key idea@: confirmation points are cheap when they gate rare,
   high-stakes actions, and expensive when they gate common, low-stakes ones
@@ -285,7 +288,7 @@ digraph ReviewLoop {
 * Mixed-Initiative Interfaces
 
 // From paper Horvitz, "Principles of Mixed-Initiative User Interfaces" (1999)
-- @Definition@: a **mixed-initiative** system is one where either the human
+- @Definition@: a **mixed-initiative system** is one where either the human
   or the agent can take the initiative to act, and the system must decide
   when handing off initiative helps versus interrupts
 
