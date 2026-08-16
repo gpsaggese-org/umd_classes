@@ -54,7 +54,7 @@
   Topics, TODO, Slides, Lesson Materials, Notes) and Roadmap section
   conventions used throughout this file
 
-## Gneral Resources
+# General Resources
 - `/Users/saggese/src/umd_classes1/helpers_root/papers/AIgentic_Development_System/*.tex`
   - Code Quality & Standards
   - Unit Testing
@@ -69,8 +69,8 @@
 | ---------------------------------------------- | ------------------------------------------------------ | -------- | --------- | -------- | ---- |
 |                                                |                                                        |          |           |          |      |
 | **Foundations of AI-Assisted Coding**         |                                                        |          |           |          |      |
-| 01. LLM-Assisted Code Generation              | N/A                                                    |          |           |          |      |
-| 02. AI Pair Programming Workflows             | Lesson01-AI_workflows_for_coding.txt, claude_code.md   | 15%      |           |          |      |
+| 01. LLM-Assisted Code Generation              | Lesson01.01_LLM_Assisted_Code_Generation.txt           | 100%     |           |          |      |
+| 02. AI Pair Programming Workflows             | Lesson02.01_AI_Pair_Programming_Workflows.txt          | 100%     |           |          |      |
 | 03. Prompt Engineering for Code               | N/A                                                    |          |           |          |      |
 | 04. Retrieval-Augmented Generation for Codebases | N/A                                                 |          |           |          |      |
 | **AI Across the Development Lifecycle**       |                                                        |          |           |          |      |
@@ -82,7 +82,7 @@
 | **Building, Evaluating, and Deploying AI Coding Systems** |                                            |          |           |          |      |
 | 10. Fine-Tuning and Adapting Models for Codebases | N/A                                                |          |           |          |      |
 | 11. Evaluation of AI Coding Tools             | N/A                                                    |          |           |          |      |
-| 12. AI in CI/CD                               | claude_code.md (partial)                               | 5%       |           |          |      |
+| 12. AI in CI/CD                               | N/A                               | 5%       |           |          |      |
 | **Trust, Collaboration, and Governance**      |                                                        |          |           |          |      |
 | 13. Trust, Verification, and Hallucination Risks | N/A                                                  |          |           |          |      |
 | 14. Human-AI Collaboration Patterns           | Lesson14.01_Human_AI_Collaboration_Patterns.txt        | 100%     |           |          |      |
@@ -112,11 +112,74 @@
   - When generation degrades: long files, ambiguous specs
 
 ### Slides
-- N/A — no dedicated deck yet
+- `book_AI_Software_Engineering/lectures_source/Lesson01.01_LLM_Assisted_Code_Generation.txt`
 
 ### Lesson Materials
 - Not covered
   - [100%]: No existing lecture material found in this repo for this topic
+
+### Books
+- 2024, Alammar et al., "Hands-On Large Language Models: Language
+  Understanding and Generation"
+  (https://www.oreilly.com/library/view/hands-on-large-language/9781098150952/)
+  — transformer architecture, autoregressive token prediction, and prompting
+  mechanics underlying code generation
+- 2024, Taulli, "AI-Assisted Programming: Better Planning, Coding, Testing,
+  and Deployment"
+  (https://www.oreilly.com/library/view/ai-assisted-programming/9781098164553/)
+  — planning-to-deployment workflows across ChatGPT, Claude, Copilot, and
+  Cursor; modular prompting methodology for AI-generated code
+
+### Papers
+- 2026, Ashik et al., "When LLMs Lag Behind: Knowledge Conflicts from
+  Evolving APIs in Code Generation" (https://arxiv.org/abs/2604.09515) —
+  models default to memorized, pre-cutoff API patterns even when the prompt
+  supplies current API info
+- 2025, Huynh et al., "Large Language Models for Code Generation: A
+  Comprehensive Survey of Challenges, Techniques, Evaluation, and
+  Applications" (https://arxiv.org/abs/2503.01245) — survey of
+  architectures, training data, and evaluation for code-generating LLMs
+- 2025, Lee et al., "Hallucination by Code Generation LLMs: Taxonomy,
+  Benchmarks, Mitigation, and Challenges"
+  (https://arxiv.org/abs/2504.20799) — taxonomy of hallucinated APIs, logic
+  errors, and outdated library usage in generated code
+- 2024, Liu et al., "Exploring and Evaluating Hallucinations in
+  LLM-Powered Code Generation" (https://arxiv.org/abs/2404.00971) —
+  empirical categorization of hallucination types across mainstream code
+  LLMs
+- 2024, Tian et al., "CodeHalu: Investigating Code Hallucinations in LLMs
+  via Execution-based Verification" (https://arxiv.org/abs/2405.00253) —
+  execution-based benchmark for detecting hallucinated code
+- 2024, Lozhkov et al., "StarCoder 2 and The Stack v2: The Next Generation"
+  (https://arxiv.org/abs/2402.19173) — training data and architecture
+  behind an open code-generation model family
+- 2023, Rozière et al., "Code Llama: Open Foundation Models for Code"
+  (https://arxiv.org/abs/2308.12950) — training data (85% code) and
+  fine-tuning behind a widely used open code model
+- 2023, Liu et al., "Lost in the Middle: How Language Models Use Long
+  Contexts" (https://arxiv.org/abs/2307.03172) — context window position
+  effects on retrieval accuracy, directly relevant to multi-file generation
+- 2022, Wei et al., "Chain-of-Thought Prompting Elicits Reasoning in Large
+  Language Models" (https://arxiv.org/abs/2201.11903) — foundational
+  prompting pattern for step-by-step code generation
+- 2021, Chen et al., "Evaluating Large Language Models Trained on Code"
+  (https://arxiv.org/abs/2107.03374) — the Codex paper; introduces
+  HumanEval and underlies GitHub Copilot
+- 2021, Austin et al., "Program Synthesis with Large Language Models"
+  (https://arxiv.org/abs/2108.07732) — early large-scale study of LLM code
+  synthesis from natural-language specs
+
+### Internet resources
+- Anthropic, "Prompt engineering overview"
+  (https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview)
+  — official guidance on system prompts, few-shot examples, and context
+  structuring
+- GitHub Blog, "Inside GitHub: Working with the LLMs behind GitHub Copilot"
+  (https://github.blog/ai-and-ml/github-copilot/inside-github-working-with-the-llms-behind-github-copilot/)
+  — practitioner account of prompt construction and context selection in a
+  production code assistant
+- OpenAI, "OpenAI Codex" (https://openai.com/index/openai-codex/) —
+  background on the model that powered early Copilot-style code generation
 
 ## 02: AI Pair Programming Workflows
 
@@ -139,7 +202,7 @@
   - Dispatch, remote control, scheduled tasks, background sessions
 
 ### Slides
-- `book_AI_Software_Engineering/lectures_notes/Lesson01-AI_workflows_for_coding.txt`
+- `book_AI_Software_Engineering/lectures_source/Lesson02.01_AI_Pair_Programming_Workflows.txt`
 
 ### Lesson Materials
 - `book_AI_Software_Engineering/lectures_notes/claude_code.md`
@@ -154,6 +217,70 @@
   - [55%]: Head-to-head comparison of Claude Code vs. Copilot vs. Cursor;
     autocomplete-vs-agentic distinction; no material at all on Copilot or
     Cursor specifically
+
+### Books
+- 2025, Laster, "Learning GitHub Copilot: Multiplying Your Coding
+  Productivity Using AI"
+  (https://www.oreilly.com/library/view/learning-github-copilot/9781098164645/)
+  — autocomplete vs. chat vs. agent modes, IDE/CLI setup, and workflow
+  integration for a mainstream pair-programming tool
+- 2002, Williams et al., "Pair Programming Illuminated"
+  (https://dl.acm.org/doi/10.5555/548833) — foundational practices of human
+  pair programming that AI pair-programming tools now mirror and extend
+
+### Papers
+- 2026, Peralta et al., "Why Are Agentic Pull Requests Merged or Rejected?
+  An Empirical Study" (https://arxiv.org/abs/2605.22534) — outcomes of
+  agent-authored PRs across Copilot, Devin, Codex, and Cursor in CI/review
+  workflows
+- 2026, Murphy-Hill et al., "Adoption and Impact of Command-Line AI Coding
+  Agents: A Study of Microsoft's Early 2026 Rollout of Claude Code and
+  GitHub Copilot CLI" (https://arxiv.org/abs/2607.01418) — large-scale
+  rollout data on adoption drivers and PR-throughput impact of CLI agents
+- 2026, Chen et al., "Understanding How Enterprises Adopt the Model Context
+  Protocol for LLM-Driven Software Engineering"
+  (https://arxiv.org/abs/2606.09182) — practitioner interviews on barriers
+  to extending assistants with MCP-connected tools
+- 2026, Geng et al., "Effective Strategies for Asynchronous Software
+  Engineering Agents" (https://arxiv.org/abs/2603.21489) — centralized
+  delegation and isolated workspaces for background/asynchronous agent work
+- 2026, Agarwal et al., "AI IDEs or Autonomous Agents? Measuring the Impact
+  of Coding Agents on Software Development"
+  (https://arxiv.org/abs/2601.13597) — empirical comparison of IDE-embedded
+  assistants vs. autonomous coding agents on code quality and productivity
+- 2025, Hou et al., "Model Context Protocol (MCP): Landscape, Security
+  Threats, and Future Research Directions"
+  (https://arxiv.org/abs/2503.23278) — protocol lifecycle and architecture
+  behind MCP-based tool integrations
+- 2025, Sapkota et al., "Vibe Coding vs. Agentic Coding: Fundamentals and
+  Practical Implications of Agentic AI" (https://arxiv.org/abs/2505.19443)
+  — contrasts conversational/autocomplete-style use with autonomous
+  agentic workflows
+- 2025, Wang et al., "AI Agentic Programming: A Survey of Techniques,
+  Challenges, and Opportunities" (https://arxiv.org/abs/2508.11126) —
+  taxonomy of agent architectures, planning, and tool integration
+- 2022, Nguyen et al., "An Empirical Evaluation of GitHub Copilot's Code
+  Suggestions" (https://sarahnadi.org/assets/pdf/pubs/NguyenMSR22.pdf) —
+  correctness/understandability baseline for autocomplete-style suggestions
+- 2000, Williams et al., "Strengthening the Case for Pair Programming"
+  (http://sunnyday.mit.edu/16.355/williams.pdf) — foundational empirical
+  case for pair programming that AI pair-programming tools now extend
+
+### Internet resources
+- Cursor, "Cursor Docs" (https://cursor.com/docs) — official docs for
+  Agent mode, Rules, MCP, Skills, and CLI
+- GitHub, "GitHub Copilot Documentation" (https://docs.github.com/copilot)
+  — official docs for autocomplete, chat, and agent modes across IDEs
+- Model Context Protocol, "Specification"
+  (https://modelcontextprotocol.io/specification/2025-11-25) — official
+  protocol spec for connecting assistants to external tools and data
+- Anthropic, "Introducing the Model Context Protocol"
+  (https://www.anthropic.com/news/model-context-protocol) — announcement
+  and rationale for the MCP standard
+- Anthropic, "Where to run Claude Code"
+  (https://code.claude.com/docs/en/platforms) — official platform guide
+  (CLI, Desktop, VS Code, JetBrains, Web, Mobile) underlying this chapter's
+  local material
 
 ### Notes
 - The two source files are stubs (56 lines total), not a full deck — treat
