@@ -1,34 +1,84 @@
-# Blockchain & Web3 Course Topics
+# Blockchain and Web3 Course Topics
 
-15 topics for advanced college course on blockchain and Web3.
+- **Distributed ledger fundamentals**
+  - Merkle trees
+  - Hash chains
+  - State machines
+  - Byzantine fault tolerance
 
-1. **Distributed ledger fundamentals** — Merkle trees, hash chains, state
-   machines, Byzantine fault tolerance.
-2. **Consensus protocols** — proof-of-work, proof-of-stake, BFT-style
-   (Tendermint/HotStuff), liveness vs safety tradeoffs.
-3. **Smart contract platforms** — EVM, WASM-based chains, gas models,
-   account abstraction.
-4. **Cryptographic primitives for Web3** — digital signatures, hash
-   functions, zero-knowledge proofs, threshold signatures.
-5. **Layer 2 & scaling architectures** — rollups (optimistic/zk), sidechains,
-   state channels, sharding.
-6. **Interoperability & cross-chain messaging** — bridges, light clients,
-   IBC-style protocols, atomic swaps.
-7. **Decentralized identity & credentials** — DIDs, verifiable credentials,
-   soulbound tokens, self-sovereign identity.
-8. **NFTs & digital ownership** — token standards (ERC-721/1155),
-   provenance, royalties, on-chain vs off-chain metadata.
-9. **Decentralized storage & data availability** — IPFS, Arweave, Filecoin,
-   data availability sampling.
-10. **DAOs & on-chain governance** — voting mechanisms, delegation,
-    treasury management, legal wrapper models.
-11. **Web3 infrastructure & node economics** — RPC providers, indexers
-    (The Graph), validator/staking economics.
-12. **Tokenomics & mechanism design** — token issuance, incentive
-    alignment, game-theoretic attack analysis.
-13. **Security & auditing** — vulnerability classes, formal verification,
-    bug bounties, post-mortem case studies.
-14. **Privacy-preserving Web3** — zk-rollups for privacy, mixers,
-    confidential transactions, regulatory tension.
-15. **Regulation & institutional adoption** — securities law, custody,
-    CBDCs vs permissionless chains, enterprise blockchain use cases.
+- **Consensus protocols**
+  - Proof-of-work
+  - Proof-of-stake
+  - BFT-style (Tendermint/HotStuff)
+  - Liveness vs safety tradeoffs
+
+- **Smart contract platforms**
+  - EVM, WASM-based chains
+  - Gas models
+  - Account abstraction
+
+- **Cryptographic primitives for Web3**
+  - Digital signatures
+  - Hash functions
+  - Zero-knowledge proofs
+  - Threshold signatures
+
+- **Layer 2 and scaling architectures**
+  - Rollups (optimistic/zk)
+  - Sidechains
+  - State channels
+  - Sharding
+
+- **Interoperability and cross-chain messaging**
+  - Bridges
+  - Light clients
+  - IBC-style protocols
+  - Atomic swaps
+
+- **Decentralized identity and credentials**
+  - DIDs, verifiable credentials
+  - Soulbound tokens
+  - Self-sovereign identity
+
+- **NFTs and digital ownership**
+  - Token standards (ERC-721/1155)
+  - Provenance, royalties
+  - On-chain vs off-chain metadata
+
+- **Decentralized storage and data availability**
+  - IPFS, Arweave, Filecoin
+  - Data availability sampling
+
+- **DAOs and on-chain governance**
+  - Voting mechanisms
+  - Delegation
+  - Treasury management
+  - Legal wrapper models
+
+- **Web3 infrastructure and node economics**
+  - RPC providers
+  - Indexers (The Graph)
+  - Validator/staking economics
+
+- **Tokenomics and mechanism design**
+  - Token issuance
+  - Incentive alignment
+  - Game-theoretic attack analysis
+
+- **Security and auditing**
+  - Vulnerability classes
+  - Formal verification
+  - Bug bounties
+  - Post-mortem case studies
+
+- **Privacy-preserving Web3**
+  - zk-rollups for privacy
+  - Mixers
+  - Confidential transactions
+  - Regulatory tension
+
+- **Regulation and institutional adoption**
+  - Securities law
+  - Custody
+  - CBDCs vs permissionless chains
+  - Enterprise blockchain use cases
