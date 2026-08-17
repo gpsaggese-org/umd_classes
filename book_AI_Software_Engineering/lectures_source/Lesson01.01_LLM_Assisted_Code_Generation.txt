@@ -466,19 +466,16 @@ digraph PromptAnatomy {
 
 * When Generation Degrades: Ambiguous Specs
 
-- @Problem@: an ambiguous natural-language spec has multiple plausible
-  continuations, and the model picks one without asking for clarification
-  unless explicitly prompted to, e.g.,
+- @Problem@: an **ambiguous natural-language spec** has multiple plausible
+  continuations, and the model picks one without asking for clarification unless
+  explicitly prompted to, e.g.,
   - _"add caching to this function"_ is ambiguous over cache key, eviction
-    policy, and thread-safety
-  - The model picks _a_ reasonable default, not necessarily _the_ one the
+    policy, thread-safety, ...
+  - The model picks _a reasonable default_, not necessarily _the_ one the
     codebase needs
 
-- @Key idea@: the model's guess under an ambiguous spec is itself a form of
-  hallucination, just at the level of requirements instead of API facts
-
-- @Remark@: writing specs that eliminate this ambiguity turns the model's freedom
-  to guess into a deliberate, reviewable design choice instead
+- @Remark@: writing specs that eliminate this ambiguity replaces the model's
+  freedom to guess with a deliberate, reviewable design choice instead
 
 * Survey View: Where the Field Stands
 
@@ -502,22 +499,19 @@ digraph PromptAnatomy {
     ("Context budget limits", "Finite context vs. large codebases"),
     ("Ambiguous specs", "Multiple plausible continuations"),
   ),
-  caption: "Structural limits of LLM code generation",
   col-widths: (1.3fr, 2fr),
 )
 ```
-- @Key idea@: every limit in this lesson traces back to the same root - an
-  autoregressive model continues plausible patterns, it does not verify
-  facts or execute code on its own
 
-* Summary of LLM-Assisted Code Generation
+::: columns
+:::: {.column width=60%}
+- @Key idea@: every limit in this lesson traces back to the same root
+  - _"An autoregressive model continues plausible patterns, it does not verify
+    facts or execute code on its own"_
+  - LLM needs grounding in codebase, updated documentation, or execution
 
-- **Generation** is repeated next-token prediction over code and
-  natural-language text, trained on repositories, docs, and synthetic code
-- **Prompting** supplies what training data cannot: task-specific
-  instructions, examples, and reasoning steps, bounded by the context window
-- **Limits** - hallucinated or stale APIs, finite context, ambiguous specs -
-  all stem from generation without grounding in a live codebase or executor
+::::
+:::: {.column width=40%}
 
 ```mermaid
 mindmap
@@ -535,12 +529,14 @@ mindmap
       Context budget
       Ambiguous specs
 ```
+::::
+:::
 
 * Open Questions
 
 - How much of a codebase should a prompt include before more context starts
   hurting, rather than helping, generation quality?
-- Can a model be made to signal its own uncertainty about an API call,
-  instead of generating a confident but wrong one?
-- Where is the boundary between an ambiguous spec the model should ask about
-  and one it is reasonable to resolve with a default?
+- Can a model be made to signal its own uncertainty about an API call, instead of
+  generating a confident but wrong one?
+- Where is the boundary between an ambiguous spec the model should ask about and
+  one it is reasonable to resolve with a default?
