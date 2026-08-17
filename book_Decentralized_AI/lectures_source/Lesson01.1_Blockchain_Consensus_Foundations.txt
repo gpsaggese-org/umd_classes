@@ -38,18 +38,22 @@
 
 * Why Distributed Systems Need Consensus
 
-- @Motivation@: many independent parties want to share one evolving record
-  (who owns what, what happened, in what order) with no central party
-  controlling it
-- @Problem@: without a trusted intermediary, how do mutually distrusting
-  nodes agree on a single, consistent history?
+- @Motivation@: many independent parties want to share one evolving record (e.g.,
+  who owns what, what happened, in what order) with no central party controlling
+  it
+
+- @Problem@: _without a trusted intermediary_, how do _mutually distrusting nodes
+  agree_ on a single, consistent history?
   - Nodes can be slow, offline, or actively malicious
   - Network messages can be delayed, dropped, or reordered
-- @Key idea@: **consensus** is the mechanism that lets independent nodes
-  converge on the same ledger despite these failures
-- @Example@: a bank's database is the single source of truth for account
-  balances, a blockchain replaces that single database with thousands of
-  independently operated copies that must all agree
+
+- @Key idea@: **consensus** is the mechanism that lets independent nodes converge
+  on the same ledger despite these failures
+
+- @Example@:
+  - A bank's database is the single source of truth for account balances
+  - A blockchain replaces the single database with thousands of independently
+    operated copies that must all agree
 
 * What a Blockchain Guarantees
 
