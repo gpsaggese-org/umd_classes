@@ -61,51 +61,60 @@
 - @Definition@: a **blockchain** is _replicated, shared, synchronized data
   based on consensus_, letting multiple parties operate on data without
   trusting each other or a central authority
-  - Intuition: a distributed, append-only, immutable ledger
+  - I.e., a distributed, append-only, immutable ledger
+
 - @Characteristics@:
-  - No single point of failure, no central authority to compromise or shut
-    down
+  - No single point of failure
+  - No central authority to compromise or shut down
   - Designed to resist malicious tampering, up to a certain bound (e.g., a
     51% attack)
+
 - @Variants@:
-  - **Permissionless**: anyone can join as a node, e.g., Bitcoin, Ethereum,
-    Solana, Cardano
-  - **Permissioned**: only vetted parties may participate
-- @Remark@: permissionless networks must reach consensus among anonymous,
-  ever-changing participants, this constraint drives most of the algorithm
-  design in this lesson
+  - _Permissionless_: anyone can join as a node
+    - E.g., Bitcoin, Ethereum, Solana, Cardano
+    - Need to reach consensus among anonymous, ever-changing participants
+  - _Permissioned_: only vetted parties may participate
+    - E.g., a proprietary chain
 
 * The Double-Spending Problem
 
-- @Problem@: a digital token is just data, and data can be copied, nothing
-  stops the same coin from being sent to two different people at once
-- @(Naive) Solution@: a trusted central ledger keeper checks each payment
-  against the account balance before approving it
+- @Problem@:
+  - A digital token is just data
+  - Data can be copied
+  - Nothing stops the same coin from being sent to two different people at once
+
+- @(Naive) Solution@: a trusted central ledger checks each payment against the
+  account balance before approving it
   - Cons: reintroduces the single point of trust and failure a distributed
     ledger is trying to remove
+
 // From notes/IN_PROGRESS.course.cs.Decentralized_finance.Harvey.Coursera.txt
 - @Solution@: Bitcoin solved double-spending by making the entire
   transaction history public and ordering it through **consensus** rather
   than through a trusted party
   - Every node can independently verify who currently owns what
+
 - @Key idea@: double-spending is fundamentally an ordering problem, whichever
   transaction is agreed to have happened first is the valid one
 
 * Consensus Protocol: The Rules for Extending the Chain
 
 ::: columns
-:::: {.column width=55%}
+:::: {.column width=60%}
 - @Definition@: a **consensus protocol** is the set of rules that determines
-  which blocks become part of the blockchain, and in what order
-- @Goal@: all honest nodes converge on the same chain, even though some
-  nodes may be faulty or malicious, and messages are delayed or partial
+  _which blocks_ become part of the blockchain and _in what order_
+
+- @Goal@: all honest nodes converge on the same chain, even though
+  - Some nodes may be faulty or malicious
+  - Messages are delayed or partial
+
 - @Overview@: the rest of this lesson compares three families of consensus
   protocols
   1. **Proof-of-work**: propose via a computational lottery
   2. **Proof-of-stake**: propose via a stake-weighted lottery
   3. **BFT-style**: propose via leader rotation and explicit voting
 ::::
-:::: {.column width=42%}
+:::: {.column width=40%}
 ```graphviz
 digraph ConsensusLoop {
     rankdir=TB;
@@ -134,14 +143,17 @@ digraph ConsensusLoop {
 
 - @Motivation@: before nodes can agree on new blocks, they need a shared
   model of what "the current state" even means
+
 - @Question@: does the ledger track discrete _units of money_ or a single
   _running balance_ per account?
+
 - @Overview@: two dominant models emerged
   - **UTXO model** (Bitcoin-style): the ledger tracks unspent coin fragments
   - **Account model** (Ethereum-style): the ledger tracks one balance per
     address
-- @Key idea@: this choice affects privacy, parallelism, and what a smart
-  contract platform can express, not just bookkeeping style
+
+- This choice affects privacy, parallelism, and what a smart contract platform
+  can express, not just bookkeeping style
 
 * UTXO Model: Definition
 
@@ -150,26 +162,31 @@ digraph ConsensusLoop {
   unspent chunk of currency created by a prior transaction and owned by
   whoever can sign for it
   - Aka "coin fragment"
+
 - @Characteristics@:
   - A wallet's balance is the sum of all UTXOs it can spend, not a single
     stored number
   - A transaction consumes one or more UTXOs as _inputs_ and creates new
     UTXOs as _outputs_
   - Once spent, a UTXO is destroyed, it can never be reused
+
 - @Example@: Bitcoin represents every balance as a collection of UTXOs
+
+// TODO(ai_gp): Add picture
 
 * UTXO Model: Worked Example
 
 // From notes/IN_PROGRESS.course.cs.Decentralized_finance.Harvey.Coursera.txt
 - @Example@: a wallet holds 3.21 BTC as three UTXOs: 3, 0.2, and 0.01 BTC
   - Goal: send 0.15 BTC to Bob
-  - The wallet picks the 0.2 BTC UTXO as input, the 0.01 BTC UTXO alone is
-    not enough
+  - The wallet picks the 0.2 BTC UTXO as input (since the 0.01 BTC UTXO alone is
+    not enough)
   - The transaction creates two new UTXOs: 0.15 BTC to Bob, 0.05 BTC in
     change back to the sender
-- @Remark@: change is not automatic, unlike a bank account, a UTXO
-  transaction must explicitly send any leftover value back to the sender as
-  a new output
+
+- @Remark@: change is not automatic, unlike a bank account, a UTXO transaction
+  must explicitly send any leftover value back to the sender as a new output
+
 - @Intuition@: paying with UTXOs is like paying cash with bills, you cannot
   split a $20 bill in the register, you hand it over and get change back
 
