@@ -126,7 +126,7 @@ def _find_lesson_names(dir_: str) -> List[str]:
     """
     lectures_source_dir = os.path.join(dir_, _LECTURES_SOURCE_SUBDIR)
     hdbg.dassert_dir_exists(lectures_source_dir)
-    pattern = os.path.join(lectures_source_dir, "Lesson*.txt")
+    pattern = os.path.join(lectures_source_dir, "Lesson*.smd")
     source_files = sorted(glob.glob(pattern))
     hdbg.dassert_lt(
         0,

@@ -33,7 +33,7 @@ def _create_lesson_source_files(class_dir: str, lesson_names: List[str]) -> None
     """
     for lesson_name in lesson_names:
         file_path = os.path.join(
-            class_dir, "lectures_source", f"{lesson_name}.txt"
+            class_dir, "lectures_source", f"{lesson_name}.smd"
         )
         hio.to_file(file_path, f"Content of {lesson_name}")
 
@@ -450,11 +450,11 @@ class Test_generate_html_page(hunitest.TestCase):
         pdf_url = _mock_github_url(file_path=pdf_path, use_master=use_master)
         html_url = _mock_github_url(file_path=html_path, use_master=use_master)
         expected_pdf_href = (
-            f'<a href="{pdf_url}">{cspucli._get_short_label(pdf_label)}</a>'
+            f'<a href="{pdf_url}">{cspuclli._get_short_label(pdf_label)}</a>'
         )
         expected_html_href = (
             f'<a href="https://htmlpreview.github.io/?{html_url}">'
-            f"{cspucli._get_short_label(html_label)}</a>"
+            f"{cspuclli._get_short_label(html_label)}</a>"
         )
         # Run test.
         with mock.patch(

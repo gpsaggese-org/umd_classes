@@ -49,13 +49,13 @@ def _get_lesson_numbers(course_dir: str) -> List[str]:
     hdbg.dassert_dir_exists(lectures_source_dir)
     lessons = []
     for file in os.listdir(lectures_source_dir):
-        # Match lesson numbers from filenames like "Lesson01.1-BigData.txt"
+        # Match lesson numbers from filenames like "Lesson01.1-BigData.smd"
         # -> "01.1".
         match = re.match(r"Lesson(\d+(?:\.[0-9A-Za-z]+)?)", file)
         if match:
             lesson_num = match.group(1)
             lessons.append(lesson_num)
-    # De-dup since e.g. both "Lesson01.1-*.txt" and "Lesson01.1-*.pdf" match.
+    # De-dup since e.g. both "Lesson01.1-*.smd" and "Lesson01.1-*.pdf" match.
     lessons = sorted(set(lessons))
     _LOG.debug("return=%s", lessons)
     return lessons
@@ -68,8 +68,8 @@ def get_lesson_files(course_dir: str) -> List[str]:
     :param course_dir: Course directory (data605 or msml610)
     :return: Sorted list of lesson file paths, e.g.,
         ```
-        ["data605/lectures_source/Lesson01.1-BigData.txt",
-        "data605/lectures_source/Lesson01.2-History.txt"]
+        ["data605/lectures_source/Lesson01.1-BigData.smd",
+        "data605/lectures_source/Lesson01.2-History.smd"]
         ```
     """
     _LOG.debug(hprint.to_str("course_dir"))
@@ -77,8 +77,8 @@ def get_lesson_files(course_dir: str) -> List[str]:
     hdbg.dassert_dir_exists(lectures_source_dir)
     lesson_files = []
     for file in os.listdir(lectures_source_dir):
-        # Match files like "Lesson01.1-BigData.txt" or
-        # "Lesson02-Introduction.txt".
+        # Match files like "Lesson01.1-BigData.smd" or
+        # "Lesson02-Introduction.smd".
         if re.match(r"^Lesson\d+", file):
             file_path = os.path.join(lectures_source_dir, file)
             lesson_files.append(file_path)
@@ -479,7 +479,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
             output_type_arg = "slides"
             toc_type_arg = "navigation"
             cleanup_action = "cleanup_after"
-            open_action = "open"
+            open_action = "open_pdf"
             # Build skip_action arguments.
             all_skip_actions = [cleanup_action, open_action]
             skip_action_args = " ".join(
@@ -518,7 +518,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
         Test converting and saving notes to TeX.
 
         > notes_to_pdf.py \
-            --input=msml610/lectures_source/Lesson00-Class.txt
+            --input=msml610/lectures_source/Lesson00-Class.smd
             --output=.../tmp.scratch/lesson_00/output.tex \
             --type=slides \
             --toc_type=navigation \
@@ -550,7 +550,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
         check that the PDF is generated.
 
         > notes_to_pdf.py \
-            --input=msml610/lectures_source/Lesson00-Class.txt
+            --input=msml610/lectures_source/Lesson00-Class.smd
             --output=...tmp.scratch/lesson_00/output.pdf
             --type=slides \
             --toc_type=navigation \
@@ -574,7 +574,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
         check that the PDF is generated.
 
         > notes_to_pdf.py \
-            --input=msml610/lectures_source/Lesson00-Class.txt
+            --input=msml610/lectures_source/Lesson00-Class.smd
             --output=...tmp.scratch/lesson_00/output.pdf
             --type=slides \
             --toc_type=navigation \
@@ -617,7 +617,7 @@ class Run_gen_slides_py_TestCase(hunitest.TestCase):
         Run gen_slides for a lesson, generating only TeX output.
         """
         _LOG.debug(hprint.to_str("course_dir lesson"))
-        cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open --no_pdf"
+        cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open_pdf --no_pdf"
         hsystem.system(cmd)
 
     @pytest.mark.slow

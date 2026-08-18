@@ -19,7 +19,7 @@ This script generates a PDF from lecture source files using notes_to_pdf.py.
 
 - Generate the slides PDF by specifying the lecture source file path
   directly:
-> gen_slides.py msml610/lectures_source/Lesson10.2-Causal_Discovery.txt
+> gen_slides.py msml610/lectures_source/Lesson10.2-Causal_Discovery.smd
 """
 
 import argparse
@@ -44,10 +44,10 @@ def _extract_lesson_from_file(file_path_str: str) -> Tuple[str, str]:
     """
     Extract lesson number and directory from a file path.
 
-    Parses filenames like "Lesson10.2-Causal_Discovery.txt" to extract "10.2".
+    Parses filenames like "Lesson10.2-Causal_Discovery.smd" to extract "10.2".
     Also extracts the course directory (data605 or msml610) from the path.
 
-    :param file_path_str: File path like "msml610/lectures_source/Lesson10.2-Name.txt"
+    :param file_path_str: File path like "msml610/lectures_source/Lesson10.2-Name.smd"
     :return: Tuple of (dir, lesson) e.g., ("msml610", "10.2")
     """
     filename = os.path.basename(file_path_str)
@@ -78,17 +78,17 @@ def _parse_first_arg(arg: str) -> Tuple[str, str]:
 
     Handles:
     - "data605/08.1" or "msml610/08.1" -> ("data605", "08.1")
-    - "data605/lectures_source/Lesson10.2-Name.txt" -> extracted via file parsing
+    - "data605/lectures_source/Lesson10.2-Name.smd" -> extracted via file parsing
 
     :param arg: first argument from command line
     :return: tuple of (directory, lesson)
     """
-    if "lectures_source" in arg or arg.endswith(".txt"):
+    if "lectures_source" in arg or arg.endswith(".smd"):
         return _extract_lesson_from_file(arg)
     hdbg.dassert(
         "/" in arg,
         f"Invalid input '{arg}'. Use 'data605/08.1' or "
-        "'data605/lectures_source/Lesson08.1-Name.txt'",
+        "'data605/lectures_source/Lesson08.1-Name.smd'",
     )
     parts = arg.split("/")
     hdbg.dassert_eq(
@@ -110,7 +110,7 @@ def _parse() -> argparse.ArgumentParser:
         "input",
         type=str,
         help="Lecture specification: 'data605/08.1', 'msml610/08.1', "
-        "or file path 'msml610/lectures_source/Lesson10.2-Name.txt'",
+        "or file path 'msml610/lectures_source/Lesson10.2-Name.smd'",
     )
     parser.add_argument(
         "--daemon",

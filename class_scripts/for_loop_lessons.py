@@ -105,14 +105,14 @@ def _expand_lecture_range(
     lectures_source_dir = os.path.join(class_dir, "lectures_source")
     hdbg.dassert_dir_exists(lectures_source_dir)
     # Find all lecture files in the directory.
-    all_files_pattern = os.path.join(lectures_source_dir, "Lesson*.txt")
+    all_files_pattern = os.path.join(lectures_source_dir, "Lesson*.smd")
     all_files = sorted(glob.glob(all_files_pattern))
     _LOG.debug("Found %d total lecture files", len(all_files))
     # Extract lesson numbers from filenames and filter to range.
     result = []
     for file_path in all_files:
         basename = os.path.basename(file_path)
-        # Extract lesson number from filename (e.g., 'Lesson01.1-Intro.txt' -> '01.1').
+        # Extract lesson number from filename (e.g., 'Lesson01.1-Intro.smd' -> '01.1').
         match = re.match(r"Lesson([\d.]+)", basename)
         if not match:
             continue
@@ -174,7 +174,7 @@ def _find_lecture_files(
     )
     all_files = []
     for pattern in patterns_or_range:
-        pattern_path = os.path.join(lectures_source_dir, f"Lesson{pattern}*.txt")
+        pattern_path = os.path.join(lectures_source_dir, f"Lesson{pattern}*.smd")
         matched_files = sorted(glob.glob(pattern_path))
         _LOG.debug("Pattern '%s' matched %d files", pattern, len(matched_files))
         all_files.extend(matched_files)
@@ -193,7 +193,7 @@ def _generate_pdf(
     source_name: str,
     *,
     limit: Optional[str] = None,
-    skip_action: str = "open",
+    skip_action: str = "open_pdf",
     cmd_opts: Optional[str] = None,
 ) -> None:
     """
@@ -203,15 +203,15 @@ def _generate_pdf(
     file into PDF slides.
 
     :param class_dir: class directory (data605 or msml610)
-    :param source_path: path to source .txt file
+    :param source_path: path to source .smd file
     :param source_name: name of source file
     :param limit: optional slide range to process (e.g., '1:3')
-    :param skip_action: action to skip (default: 'open')
+    :param skip_action: action to skip (default: 'open_pdf')
     :param cmd_opts: extra options string appended verbatim to the invoked
         command
     """
     # Compute output path.
-    dst_name = source_name.replace(".txt", ".pdf")
+    dst_name = source_name.replace(".smd", ".pdf")
     lectures_dir = os.path.join(class_dir, "lectures")
     hio.create_dir(lectures_dir, incremental=True)
     output_path = os.path.join(lectures_dir, dst_name)
@@ -247,18 +247,18 @@ def _generate_tex(
     """
     Generate TeX files from a lecture source file.
 
-    Calls notes_to_pdf.py with `--no_pdf` and `--skip_action=open` to generate
-    TeX files without opening them.
+    Calls notes_to_pdf.py with `--no_pdf` and `--skip_action=open_pdf` to
+    generate TeX files without opening them.
 
     :param class_dir: class directory (data605 or msml610)
-    :param source_path: path to source .txt file
+    :param source_path: path to source .smd file
     :param source_name: name of source file
     :param limit: optional slide range to process (e.g., '1:3')
     :param cmd_opts: extra options string appended verbatim to the invoked
         command
     """
     # Compute output path.
-    dst_name = source_name.replace(".txt", ".tex")
+    dst_name = source_name.replace(".smd", ".tex")
     lectures_tex_dir = os.path.join(class_dir, "lectures_tex")
     hio.create_dir(lectures_tex_dir, incremental=True)
     output_path = os.path.join(lectures_tex_dir, dst_name)
@@ -271,7 +271,7 @@ def _generate_tex(
         "--type slides",
         "--toc_type navigation",
         "--no_pdf",
-        "--skip_action open",
+        "--skip_action open_pdf",
         "--debug_on_error",
     ]
     if limit:
@@ -301,13 +301,13 @@ def _generate_script(
     3. Lints the output using lint_text.py
 
     :param class_dir: class directory (data605 or msml610)
-    :param source_path: path to source .txt file
+    :param source_path: path to source .smd file
     :param source_name: name of source file
     :param cmd_opts: extra options string appended verbatim to the invoked
         command
     """
     # Compute output path.
-    dst_name = source_name.replace(".txt", ".script.txt")
+    dst_name = source_name.replace(".smd", ".script.txt")
     lectures_script_dir = os.path.join(class_dir, "lectures_video_script")
     hio.create_dir(lectures_script_dir, incremental=True)
     output_path = os.path.join(lectures_script_dir, dst_name)
@@ -346,7 +346,7 @@ def _slide_reduce(
 
     This transforms the data in place using process_slides.py.
 
-    :param source_path: path to source .txt file
+    :param source_path: path to source .smd file
     :param source_name: name of source file
     :param cmd_opts: extra options string appended verbatim to the invoked
         command
@@ -379,7 +379,7 @@ def _slide_check(
 
     Creates a check report in a separate output file.
 
-    :param source_path: path to source .txt file
+    :param source_path: path to source .smd file
     :param source_name: name of source file
     :param cmd_opts: extra options string appended verbatim to the invoked
         command
@@ -420,12 +420,12 @@ def _generate_lecture_commentary(
     4. Opens the resulting PDF
 
     :param class_dir: class directory (data605 or msml610)
-    :param source_path: path to source .txt file
+    :param source_path: path to source .smd file
     :param source_name: name of source file
     :param cmd_opts: extra options string appended verbatim to the invoked
         command (e.g., '--no_incremental --open_pdf')
     """
-    # Extract lesson number from source name (e.g., Lesson01.1-Intro.txt -> 01.1)
+    # Extract lesson number from source name (e.g., Lesson01.1-Intro.smd -> 01.1)
     match = re.match(r"Lesson([\d.]+)", source_name)
     hdbg.dassert_is_not(
         match, None, "Could not extract lesson number from %s", source_name
@@ -458,12 +458,12 @@ def _generate_class_quizzes(
     directory.
 
     :param class_dir: class directory (data605 or msml610)
-    :param source_path: path to source .txt file
+    :param source_path: path to source .smd file
     :param source_name: name of source file
     :param cmd_opts: extra options string appended verbatim to the invoked
         command
     """
-    # Extract lesson number from source name (e.g., Lesson01.1-Intro.txt -> 01.1)
+    # Extract lesson number from source name (e.g., Lesson01.1-Intro.smd -> 01.1)
     match = re.match(r"Lesson([\d.]+)", source_name)
     hdbg.dassert_is_not(
         match, None, "Could not extract lesson number from %s", source_name
@@ -495,12 +495,12 @@ def _generate_class_recap(
     content. The script outputs the questions to the lectures_recap directory.
 
     :param class_dir: class directory (data605 or msml610)
-    :param source_path: path to source .txt file
+    :param source_path: path to source .smd file
     :param source_name: name of source file
     :param cmd_opts: extra options string appended verbatim to the invoked
         command
     """
-    # Extract lesson number from source name (e.g., Lesson01.1-Intro.txt -> 01.1)
+    # Extract lesson number from source name (e.g., Lesson01.1-Intro.smd -> 01.1)
     match = re.match(r"Lesson([\d.]+)", source_name)
     hdbg.dassert_is_not(
         match,
@@ -530,7 +530,7 @@ def _generate_toc(
     Calls extract_toc_from_txt.py to extract the table of contents
     from the lecture source file.
 
-    :param source_path: path to source .txt file
+    :param source_path: path to source .smd file
     :param source_name: name of source file
     :return: extracted TOC content with lesson header
     """
@@ -562,7 +562,7 @@ def _process_lecture_file(
     Process a single lecture file for specified actions.
 
     :param class_dir: class directory (data605 or msml610)
-    :param source_path: path to source .txt file
+    :param source_path: path to source .smd file
     :param source_name: name of source file
     :param actions: list of actions to execute ('generate_pdf', 'generate_script',
         'reduce_slide', 'check_slide', 'improve_slide', 'generate_lecture_commentary',

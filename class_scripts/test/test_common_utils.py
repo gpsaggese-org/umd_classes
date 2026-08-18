@@ -101,11 +101,11 @@ class Test_find_lecture_file(hunitest.TestCase):
         Test happy path: exactly one matching file is found.
         """
         # Prepare inputs.
-        filenames = ["Lesson01-Introduction.txt"]
+        filenames = ["Lesson01-Introduction.smd"]
         dir_path = self._create_lecture_source_dir(filenames)
         # Prepare outputs.
         expected = os.path.join(
-            dir_path, "lectures_source", "Lesson01-Introduction.txt"
+            dir_path, "lectures_source", "Lesson01-Introduction.smd"
         )
         # Run test.
         actual = csccouti.find_lecture_file(dir_path, "01")
@@ -117,7 +117,7 @@ class Test_find_lecture_file(hunitest.TestCase):
         Test edge case: no matching file raises AssertionError.
         """
         # Prepare inputs.
-        filenames = ["Lesson02-Other.txt"]
+        filenames = ["Lesson02-Other.smd"]
         dir_path = self._create_lecture_source_dir(filenames)
         # Prepare outputs.
         expected = "Expected exactly one file"
@@ -132,7 +132,7 @@ class Test_find_lecture_file(hunitest.TestCase):
         Test edge case: two matching files raises AssertionError.
         """
         # Prepare inputs.
-        filenames = ["Lesson01-First.txt", "Lesson01-Second.txt"]
+        filenames = ["Lesson01-First.smd", "Lesson01-Second.smd"]
         dir_path = self._create_lecture_source_dir(filenames)
         # Prepare outputs.
         expected = "Expected exactly one file"
@@ -162,10 +162,10 @@ class Test_get_source_name(hunitest.TestCase):
         source_dir = os.path.join(scratch_dir, "lectures_source")
         os.makedirs(source_dir, exist_ok=True)
         hio.to_file(
-            os.path.join(source_dir, "Lesson01-Introduction.txt"), "content"
+            os.path.join(source_dir, "Lesson01-Introduction.smd"), "content"
         )
         # Prepare outputs.
-        expected = "Lesson01-Introduction.txt"
+        expected = "Lesson01-Introduction.smd"
         # Run test.
         actual = csccouti.get_source_name(scratch_dir, "01")
         # Check outputs.

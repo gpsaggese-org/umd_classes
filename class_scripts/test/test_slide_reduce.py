@@ -21,14 +21,14 @@ import class_scripts.slide_reduce as cscslred
 
 def _create_lecture_source(self) -> str:
     """
-    Create a scratch `lectures_source/LessonXX-Foo.txt` fixture.
+    Create a scratch `lectures_source/LessonXX-Foo.smd` fixture.
 
     :return: path to the scratch (course) directory
     """
     scratch_dir = self.get_scratch_space()
     source_dir = os.path.join(scratch_dir, "lectures_source")
     os.makedirs(source_dir, exist_ok=True)
-    hio.to_file(os.path.join(source_dir, "Lesson01.1-Intro.txt"), "content")
+    hio.to_file(os.path.join(source_dir, "Lesson01.1-Intro.smd"), "content")
     return scratch_dir
 
 
@@ -94,7 +94,7 @@ class Test_main(hunitest.TestCase):
         # Prepare inputs.
         scratch_dir = _create_lecture_source(self)
         lecture_file = os.path.join(
-            scratch_dir, "lectures_source", "Lesson01.1-Intro.txt"
+            scratch_dir, "lectures_source", "Lesson01.1-Intro.smd"
         )
         arg_list = [scratch_dir, "01.1"]
         # Prepare outputs.
@@ -127,7 +127,7 @@ class Test_main(hunitest.TestCase):
         # Prepare inputs.
         scratch_dir = _create_lecture_source(self)
         lecture_file = os.path.join(
-            scratch_dir, "lectures_source", "Lesson01.1-Intro.txt"
+            scratch_dir, "lectures_source", "Lesson01.1-Intro.smd"
         )
         arg_list = [scratch_dir, "01.1", "extra_arg1", "extra_arg2"]
         # Prepare outputs.

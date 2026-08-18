@@ -372,7 +372,7 @@ def _generate_lecture_commentary(
     hio.create_dir(output_dir, incremental=True)
     # Extract base name from input file.
     input_basename = os.path.basename(input_file)
-    if input_basename.endswith(".txt"):
+    if input_basename.endswith(".smd"):
         base_name = input_basename[:-4]
     elif input_basename.endswith(".md"):
         base_name = input_basename[:-3]

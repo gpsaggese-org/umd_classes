@@ -64,11 +64,11 @@ class Test_main(hunitest.TestCase):
         source_dir = os.path.join(scratch_dir, "lectures_source")
         os.makedirs(source_dir, exist_ok=True)
         hio.to_file(
-            os.path.join(source_dir, "Lesson01-Introduction.txt"), "content"
+            os.path.join(source_dir, "Lesson01-Introduction.smd"), "content"
         )
         arg_list = [scratch_dir, "01"]
         # Prepare outputs.
-        lecture_file = os.path.join(source_dir, "Lesson01-Introduction.txt")
+        lecture_file = os.path.join(source_dir, "Lesson01-Introduction.smd")
         expected_log = f"Lecture file: {lecture_file}"
         # Run test.
         with self.assertLogs(
