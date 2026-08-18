@@ -38,19 +38,19 @@
 
 * Why Distributed Systems Need Consensus
 
-- @Motivation@: many independent parties want to share one evolving record (e.g.,
-  who owns what, what happened, in what order) with no central party controlling
-  it
+- @Motivation@: Many independent parties want to share one evolving record
+  (e.g., who owns what, what happened, in what order) with no central party
+  controlling it
 
-- @Problem@: _without a trusted intermediary_, how do _mutually distrusting nodes
-  agree_ on a single, consistent history?
+- @Problem@: _Without a trusted intermediary_, how do _mutually distrusting
+  nodes agree_ on a single, consistent history?
   - Nodes can be slow, offline, or actively malicious
   - Network messages can be delayed, dropped, or reordered
 
-- @Key idea@: **consensus** is the mechanism that lets independent nodes converge
-  on the same ledger despite these failures
+- @Key idea@: **Consensus** is the mechanism that lets independent nodes
+  converge on the same ledger despite these failures
 
-- @Example@:
+- @Example@
   - A bank's database is the single source of truth for account balances
   - A blockchain replaces the single database with thousands of independently
     operated copies that must all agree
@@ -58,63 +58,67 @@
 * What a Blockchain Guarantees
 
 // From data605/93/Blockchain
-- @Definition@: a **blockchain** is _replicated, shared, synchronized data
-  based on consensus_, letting multiple parties operate on data without
-  trusting each other or a central authority
+
+- @Definition@: A **blockchain** is _replicated, shared, synchronized data based
+  on consensus_, letting multiple parties operate on data without trusting each
+  other or a central authority
   - I.e., a distributed, append-only, immutable ledger
 
-- @Characteristics@:
+- @Characteristics@
   - No single point of failure
   - No central authority to compromise or shut down
-  - Designed to resist malicious tampering, up to a certain bound (e.g., a
-    51% attack)
+  - Designed to resist malicious tampering, up to a certain bound (e.g., a 51%
+    attack)
 
-- @Variants@:
-  - _Permissionless_: anyone can join as a node
+- @Variants@
+  - _Permissionless_: Anyone can join as a node
     - E.g., Bitcoin, Ethereum, Solana, Cardano
     - Need to reach consensus among anonymous, ever-changing participants
-  - _Permissioned_: only vetted parties may participate
+  - _Permissioned_: Only vetted parties may participate
     - E.g., a proprietary chain
 
 * The Double-Spending Problem
 
-- @Problem@:
+- @Problem@
   - A digital token is just data
   - Data can be copied
   - Nothing stops the same coin from being sent to two different people at once
 
-- @(Naive) Solution@: a trusted central ledger checks each payment against the
+- @(Naive) Solution@: A trusted central ledger checks each payment against the
   account balance before approving it
-  - Cons: reintroduces the single point of trust and failure a distributed
+  - Cons: Reintroduces the single point of trust and failure a distributed
     ledger is trying to remove
-
 // From notes/IN_PROGRESS.course.cs.Decentralized_finance.Harvey.Coursera.txt
-- @Solution@: Bitcoin solved double-spending by making the entire
-  transaction history public and ordering it through **consensus** rather
-  than through a trusted party
+
+- @Solution@: Bitcoin solved double-spending by making the entire transaction
+  history public and ordering it through **consensus** rather than through a
+  trusted party
   - Every node can independently verify who currently owns what
 
-- @Key idea@: double-spending is fundamentally an ordering problem, whichever
+- @Key idea@: Double-spending is fundamentally an ordering problem, whichever
   transaction is agreed to have happened first is the valid one
 
-* Consensus Protocol: The Rules for Extending the Chain
+* Consensus Protocol: the Rules for Extending the Chain
 
 ::: columns
 :::: {.column width=60%}
-- @Definition@: a **consensus protocol** is the set of rules that determines
+
+- @Definition@: A **consensus protocol** is the set of rules that determines
   _which blocks_ become part of the blockchain and _in what order_
 
-- @Goal@: all honest nodes converge on the same chain, even though
+- @Goal@: All honest nodes converge on the same chain, even though
   - Some nodes may be faulty or malicious
   - Messages are delayed or partial
 
-- @Overview@: the rest of this lesson compares three families of consensus
+- @Overview@: The rest of this lesson compares three families of consensus
   protocols
-  1. **Proof-of-work**: propose via a computational lottery
-  2. **Proof-of-stake**: propose via a stake-weighted lottery
-  3. **BFT-style**: propose via leader rotation and explicit voting
+  1. **Proof-of-work**: Propose via a computational lottery
+  2. **Proof-of-stake**: Propose via a stake-weighted lottery
+  3. **BFT-style**: Propose via leader rotation and explicit voting
+
 ::::
 :::: {.column width=40%}
+
 ```graphviz
 digraph ConsensusLoop {
     rankdir=TB;
@@ -134,6 +138,7 @@ digraph ConsensusLoop {
     Propose -> Validate -> Agree -> Propose [label="  next\l  block\l"];
 }
 ```
+
 ::::
 :::
 
@@ -141,15 +146,15 @@ digraph ConsensusLoop {
 
 * Two Ways to Represent Ledger State
 
-- @Motivation@: before nodes can agree on new blocks, they need a shared
-  model of what "the current state" even means
+- @Motivation@: Before nodes can agree on new blocks, they need a shared model
+  of what "the current state" even means
 
-- @Question@: does the ledger track discrete _units of money_ or a single
+- @Question@: Does the ledger track discrete _units of money_ or a single
   _running balance_ per account?
 
-- @Overview@: two dominant models emerged
-  - **UTXO model** (Bitcoin-style): the ledger tracks unspent coin fragments
-  - **Account model** (Ethereum-style): the ledger tracks one balance per
+- @Overview@: Two dominant models emerged
+  - **UTXO model** (Bitcoin-style): The ledger tracks unspent coin fragments
+  - **Account model** (Ethereum-style): The ledger tracks one balance per
     address
 
 - This choice affects privacy, parallelism, and what a smart contract platform
@@ -158,54 +163,55 @@ digraph ConsensusLoop {
 * UTXO Model: Definition
 
 // From notes/IN_PROGRESS.course.cs.Decentralized_finance.Harvey.Coursera.txt
-- @Definition@: an **Unspent Transaction Output (UTXO)** is a discrete,
-  unspent chunk of currency created by a prior transaction and owned by
-  whoever can sign for it
+
+- @Definition@: An **Unspent Transaction Output (UTXO)** is a discrete, unspent
+  chunk of currency created by a prior transaction and owned by whoever can sign
+  for it
   - Aka "coin fragment"
 
-- @Characteristics@:
-  - A wallet's balance is the sum of all UTXOs it can spend, not a single
-    stored number
-  - A transaction consumes one or more UTXOs as _inputs_ and creates new
-    UTXOs as _outputs_
+- @Characteristics@
+  - A wallet's balance is the sum of all UTXOs it can spend, not a single stored
+    number
+  - A transaction consumes one or more UTXOs as _inputs_ and creates new UTXOs
+    as _outputs_
   - Once spent, a UTXO is destroyed, it can never be reused
 
 - @Example@: Bitcoin represents every balance as a collection of UTXOs
-
 // TODO(ai_gp): Add picture
 
 * UTXO Model: Worked Example
 
 // From notes/IN_PROGRESS.course.cs.Decentralized_finance.Harvey.Coursera.txt
-- @Example@: a wallet holds 3.21 BTC as three UTXOs: `(3, 0.2, 0.01)` BTC
-  - Goal: send 0.15 BTC to Bob
+
+- @Example@: A wallet holds 3.21 BTC as three UTXOs: `(3, 0.2, 0.01)` BTC
+  - Goal: Send 0.15 BTC to Bob
   - The wallet picks the 0.2 BTC UTXO as input (since the 0.01 BTC UTXO alone is
     not enough)
-  - The transaction creates two new UTXOs: 0.15 BTC to Bob, 0.05 BTC in
-    change back to the sender
+  - The transaction creates two new UTXOs: 0.15 BTC to Bob, 0.05 BTC in change
+    back to the sender
 
-- @Remark@:
+- @Remark@
   - Change is not automatic, like a bank account
-  - A UTXO transaction must explicitly send any leftover value back to the sender
-    as a new output
+  - A UTXO transaction must explicitly send any leftover value back to the
+    sender as a new output
 
-- @Intuition@:
+- @Intuition@
   - Paying with UTXOs is like paying cash with bills
   - You cannot split a $20 bill in the register, you hand it over and get change
     back
 
 * Account-Based Model: Definition
 
-- @Definition@: in the **account model** (aka "balance model")
+- @Definition@: In the **account model** (aka "balance model")
   - The ledger stores one running balance per address
   - A transaction directly debits the sender's balance and credits the
     recipient's
 
-- @Characteristics@:
-  - State is a simple key-value map: address $\to$ balance (and, for smart
+- @Characteristics@
+  - State is a simple key-value map: Address $\to$ balance (and, for smart
     contracts, address $\to$ contract storage)
-  - A **nonce** per account (a sequential counter) prevents replaying the
-    same transaction twice
+  - A **nonce** per account (a sequential counter) prevents replaying the same
+    transaction twice
 
 - @Example@: Ethereum represents every balance as a single number per address,
   updated in place
@@ -214,10 +220,9 @@ digraph ConsensusLoop {
 
 // TODO(gp): Explain better, examples?
 
-- @Key idea@:
+- @Key idea@
   - Bitcoin's UTXO model optimizes for simple, parallel, auditable payments
   - Ethereum's account model optimizes for expressive, stateful smart contracts
-
 ```{=typst}
 #styled-table(
   headers: ("Property", "UTXO model", "Account model"),
@@ -236,14 +241,16 @@ digraph ConsensusLoop {
 
 ::: columns
 :::: {.column width=55%}
-- @Definition@: **finality** is the point at which a block is considered
+
+- @Definition@: **Finality** is the point at which a block is considered
   permanent and can no longer be removed from the canonical chain
 
-- @Problem@: two miners (or validators) can produce competing blocks at
-  nearly the same height, temporarily forking the chain
+- @Problem@: Two miners (or validators) can produce competing blocks at nearly
+  the same height, temporarily forking the chain
 
 ::::
 :::: {.column width=42%}
+
 ```graphviz
 digraph ChainReorg {
     rankdir=LR;
@@ -264,80 +271,79 @@ digraph ChainReorg {
     B2b -> B3;
 }
 ```
+
 ::::
 :::
 
-- @Definition@: a **chain reorganization** ("reorg") happens when nodes
-  switch to a different, now-heavier fork, discarding the blocks that lose
+- @Definition@: A **chain reorganization** ("reorg") happens when nodes switch
+  to a different, now-heavier fork, discarding the blocks that lose
   - Transactions in the discarded blocks become unconfirmed again
 
-- @Comparison@:
-  - _Probabilistic finality_ (e.g., Bitcoin): confidence in a block grows
-    with each block built on top of it, but is never exactly 100%
-  - _Absolute finality_ (e.g., BFT-style protocols): once a supermajority
-    votes for a block, it is finalized and provably cannot be reverted
-
+- @Comparison@
+  - _Probabilistic finality_ (e.g., Bitcoin): Confidence in a block grows with
+    each block built on top of it, but is never exactly 100%
+  - _Absolute finality_ (e.g., BFT-style protocols): Once a supermajority votes
+    for a block, it is finalized and provably cannot be reverted
 // From paper Neu et al., "Ebb-and-Flow Protocols: A Resolution of the
 // Availability-Finality Dilemma" (2021)
-- @Remark@: modern protocols increasingly combine both, a fast, available
+
+- @Remark@: Modern protocols increasingly combine both, a fast, available
   probabilistic layer plus a slower, finalizing layer
 
 ## Proof-of-Work Consensus
 
-* Proof-of-Work: The Mining Process
+* Proof-of-Work: the Mining Process
 
 // TODO(ai_gp): Add picture + example
-
 // From notes/IN_PROGRESS.course.cs.Decentralized_finance.Harvey.Coursera.txt
-- @Algorithm@: to propose the next block, a _miner_:
+
+- @Algorithm@: To propose the next block, a _miner_:
   1. Collects unconfirmed transactions from the _mempool_
-  2. Verifies each transaction is valid (correct signatures, no
-     double-spend)
-  3. Assembles the valid transactions into a block, hashed together in a
-     _Merkle tree_
-  4. Searches for a _nonce_ such that the block's hash has enough leading
-     zeros
+  2. Verifies each transaction is valid (correct signatures, no double-spend)
+  3. Assembles the valid transactions into a block, hashed together in a _Merkle
+     tree_
+  4. Searches for a _nonce_ such that the block's hash has enough leading zeros
 
-- @Intuition@: finding the nonce is a brute-force lottery, there is no
-  shortcut, only trying billions of guesses per second
+- @Intuition@: Finding the nonce is a brute-force lottery, there is no shortcut,
+  only trying billions of guesses per second
 
-- @Remark@:
+- @Remark@
   - Any other node can verify a found nonce instantly
   - Checking a hash is _cheap_ even though finding it is _expensive_
 
 * Why Proof-of-Work Resists Tampering
 
-- @Key idea@: **proof-of-work (PoW)**
+- @Key idea@: **Proof-of-work (PoW)**
   - Makes proposing a block expensive to do, but cheap to verify
   - Ties "the right to propose" to real-world computational cost
 
-- @Definition@: under PoW, honest nodes always extend the **longest valid
+- @Definition@: Under PoW, honest nodes always extend the **longest valid
   chain**, this is the tie-breaking rule that resolves competing forks
-
 // From notes/IN_PROGRESS.crypto.DeFi_and_the_future_of_finance.Harvey.2021.txt
-- @Remark@:
+
+- @Remark@
   - Proof-of-work is a computationally intensive lottery to decide which block
     gets added
   - Participants agree the longest chain is the truth
 
-- @Intuition@: rewriting history requires
+- @Intuition@: Rewriting history requires
   - Redoing the computational work for every block after the point you want to
     change, and
   - Outrunning everyone else's honest work at the same time
 
 * The 51% Attack
 
-- @Definition@: a **51% attack** occurs when a single actor (or coalition)
-  controls a majority of a network's mining power, letting it outrace the
-  honest chain and rewrite recent history
-
+- @Definition@: A **51% attack** occurs when a single actor (or coalition)
+  controls a majority of a network's mining power, letting it outrace the honest
+  chain and rewrite recent history
 // From notes/IN_PROGRESS.course.cs.Decentralized_finance.Harvey.Coursera.txt
-- @Characteristics@:
+
+- @Characteristics@
   - The attacker can double-spend and censor transactions
   - The attacker cannot forge signatures, create coins from nothing, or steal
     funds from addresses it does not control
 
-- @Remark@:
+- @Remark@
   - Acquiring 51% of a large network's hash power costs billions of dollars, and
     using it would collapse trust (and price) in the asset being attacked
   - The only economically rational actor for such an attack is to destroy the
@@ -347,18 +353,18 @@ digraph ChainReorg {
 
 - @Pros@
   - Proven reliability, over a decade of continuous operation on Bitcoin
-  - Predictable block times, difficulty self-adjusts if blocks come too
-    fast or too slow
+  - Predictable block times, difficulty self-adjusts if blocks come too fast or
+    too slow
   - Fully permissionless, anyone with hardware can participate
-
 // From notes/IN_PROGRESS.course.cs.Decentralized_finance.Harvey.Coursera.txt
+
 - @Cons@
   - Enormous electricity consumption
-  - Specialized hardware (ASICs) gives an advantage that centralizes mining
-    into a few large pools
+  - Specialized hardware (ASICs) gives an advantage that centralizes mining into
+    a few large pools
   - Low transaction throughput and high latency
 
-* Proof-of-Work at Scale: The Throughput Ceiling
+* Proof-of-Work at Scale: the Throughput Ceiling
 
 // From notes/IN_PROGRESS.course.cs.Decentralized_finance.Harvey.Coursera.txt
 ```{=typst}
@@ -375,12 +381,12 @@ digraph ChainReorg {
 )
 ```
 
-- @Key idea@:
-  - Full redundancy (every node re-verifies everything) buys trustlessness at the
-    cost of throughput
+- @Key idea@
+  - Full redundancy (every node re-verifies everything) buys trustlessness at
+    the cost of throughput
   - This ceiling is what motivates proof-of-stake and layer-2 scaling
 
-- @Remark@: layer-2 scaling and sharding (which relax this bottleneck directly)
+- @Remark@: Layer-2 scaling and sharding (which relax this bottleneck directly)
   will be discussed later
 
 ## Proof-of-Stake Consensus
@@ -388,14 +394,15 @@ digraph ChainReorg {
 * Proof-of-Stake: Definition
 
 // From notes/IN_PROGRESS.crypto.DeFi_and_the_future_of_finance.Harvey.2021.txt
-- @Definition@: in **proof-of-stake (PoS)**, validators
-  - Lock up (_stake_) capital as collateral, and
-  - Are chosen, roughly in proportion to their stake, to propose and validate the
-    next block
 
-- @Comparison@:
-  - PoS replaces PoW's _"who computes the most"_ with _"who has staked the most"_
-    as the basis for the block-proposal lottery
+- @Definition@: In **proof-of-stake (PoS)**, validators
+  - Lock up (_stake_) capital as collateral, and
+  - Are chosen, roughly in proportion to their stake, to propose and validate
+    the next block
+
+- @Comparison@
+  - PoS replaces PoW's _"who computes the most"_ with _"who has staked the
+    most"_ as the basis for the block-proposal lottery
   - No specialized hardware is needed, the "work" is capital at risk, not
     electricity spent
 
@@ -404,15 +411,16 @@ digraph ChainReorg {
 * Proof-of-Stake: Aligning Incentives
 
 // From notes/IN_PROGRESS.course.cs.Decentralized_finance.Harvey.Coursera.txt
-- @Positive incentive@: a validator that proposes and attests to valid
-  blocks earns rewards from transaction fees and issuance
 
-- @Negative incentive@: a validator caught approving an invalid or conflicting
+- @Positive incentive@: A validator that proposes and attests to valid blocks
+  earns rewards from transaction fees and issuance
+
+- @Negative incentive@: A validator caught approving an invalid or conflicting
   block has its stake destroyed (aka "slashing")
 
-- @Key idea@: the validators with the most value at risk are also the ones
-  with the strongest incentive to keep the chain honest $\to$ incentives and
-  security are aligned by design
+- @Key idea@: The validators with the most value at risk are also the ones with
+  the strongest incentive to keep the chain honest $\to$ incentives and security
+  are aligned by design
 
 * Proof-of-Stake vs Proof-of-Work
 
@@ -430,82 +438,82 @@ digraph ChainReorg {
 )
 ```
 
-- @Remark@:
+- @Remark@
   - The "rich get richer" critique (Matthew effect) is a genuine centralization
     pressure in PoS
-  - The claim that PoS is inherently less secure than PoW is generally considered
-    debunked
+  - The claim that PoS is inherently less secure than PoW is generally
+    considered debunked
 
 * Other Consensus Mechanisms
 
-- @Variants@: beyond plain PoW and PoS, several intermediate designs trade off
+- @Variants@: Beyond plain PoW and PoS, several intermediate designs trade off
   different properties
-  - _Delegated PoS_: token holders vote for a small set of delegates who do the
+  - _Delegated PoS_: Token holders vote for a small set of delegates who do the
     validating
-  - _Proof of authority_: a fixed set of pre-approved, identified validators
-  - _Proof of capacity_: the lottery is weighted by disk space committed, not
+  - _Proof of authority_: A fixed set of pre-approved, identified validators
+  - _Proof of capacity_: The lottery is weighted by disk space committed, not
     computation
-  - _Proof of activity_: hybrid of PoW block proposal with PoS-style validator
+  - _Proof of activity_: Hybrid of PoW block proposal with PoS-style validator
     signing
-
 // From notes/IN_PROGRESS.course.cs.Decentralized_finance.Harvey.Coursera.txt
-- @Remark@: the broad industry direction over the past decade has moved from PoW
+
+- @Remark@: The broad industry direction over the past decade has moved from PoW
   toward PoS and its variants, primarily for energy and scalability reasons
 
 ## BFT-Style Consensus
 
 * The Byzantine Generals Problem
 
-- @Motivation@: PoW and PoS both use a computational or economic lottery to
-  pick a proposer, a different family of protocols instead has known
-  validators vote explicitly
+- @Motivation@: PoW and PoS both use a computational or economic lottery to pick
+  a proposer, a different family of protocols instead has known validators vote
+  explicitly
 
-- @Definition@: the **Byzantine Generals Problem** asks how a group of
-  generals, some of whom may be traitors, can agree on a single battle plan
-  by exchanging messages alone
-  - A traitor can send different, contradictory messages to different
-    generals
+- @Definition@: The **Byzantine Generals Problem** asks how a group of generals,
+  some of whom may be traitors, can agree on a single battle plan by exchanging
+  messages alone
+  - A traitor can send different, contradictory messages to different generals
 
-- @Key idea@: this is a stand-in for any distributed system where some nodes may
+- @Key idea@: This is a stand-in for any distributed system where some nodes may
   fail arbitrarily (e.g., lying and colluding) rather than just crashing
 
 * Byzantine Fault Tolerance: Definition
 
-- @Definition@: a protocol is **Byzantine fault tolerant (BFT)** if honest
-  nodes still reach agreement despite up to $f$ nodes behaving arbitrarily
-  (crashing, lying, colluding)
-
+- @Definition@: A protocol is **Byzantine fault tolerant (BFT)** if honest nodes
+  still reach agreement despite up to $f$ nodes behaving arbitrarily (crashing,
+  lying, colluding)
 // From paper Castro et al., "Practical Byzantine Fault Tolerance" (1999)
 
-- @Fact@: classical BFT protocols guarantee safety and liveness only if the
+- @Fact@: Classical BFT protocols guarantee safety and liveness only if the
   total number of nodes $n$ satisfies $n \geq 3f + 1$
   - E.g., tolerating 1 faulty node out of 4 requires all 4 to participate in
     every decision
 
-- @Remark@: this bound is tight, no protocol can tolerate $f$ Byzantine
-  nodes among $n \leq 3f$ participants
+- @Remark@: This bound is tight, no protocol can tolerate $f$ Byzantine nodes
+  among $n \leq 3f$ participants
 
 * Practical BFT: Voting to Agreement
 
 ::: columns
 :::: {.column width=70%}
+
 // From paper Castro et al., "Practical Byzantine Fault Tolerance" (1999)
 
 - @Algorithm@: **Practical BFT (PBFT)** reaches agreement in three message
   rounds per block
-  1. _Pre-prepare_: the leader proposes a block to all validators
-  2. _Prepare_: validators broadcast that they saw the same proposal
-  3. _Commit_: once a validator sees $2f+1$ matching prepares, it commits
-     and broadcasts that too
+  1. _Pre-prepare_: The leader proposes a block to all validators
+  2. _Prepare_: Validators broadcast that they saw the same proposal
+  3. _Commit_: Once a validator sees $2f+1$ matching prepares, it commits and
+     broadcasts that too
 
-- @Cons@: communication cost grows quadratically with the number of validators
+- @Cons@: Communication cost grows quadratically with the number of validators
   ($O(n^2)$ messages), limiting PBFT to a few hundred validators
 
-- @Key idea@: a block is final the moment $2f+1$ commit messages are
-  collected, no waiting for probabilistic confidence to build over many
-  later blocks
+- @Key idea@: A block is final the moment $2f+1$ commit messages are collected,
+  no waiting for probabilistic confidence to build over many later blocks
+
 ::::
 :::: {.column width=30%}
+
 ```graphviz
 digraph PBFT {
     rankdir=TB;
@@ -523,6 +531,7 @@ digraph PBFT {
     Leader -> Prep -> Commit -> Final;
 }
 ```
+
 ::::
 :::
 
@@ -530,15 +539,18 @@ digraph PBFT {
 
 // From paper Buchman, "Tendermint: Byzantine Fault Tolerance in the Age
 // of Blockchains" (2016)
+
 - @Definition@: **Tendermint** adapts PBFT-style voting into a
   blockchain-native, round-based protocol with a rotating leader
-- @Characteristics@:
+
+- @Characteristics@
   - Each round has a designated proposer, chosen by a deterministic,
     stake-weighted schedule
-  - Validators vote in two phases (_prevote_, _precommit_), a block commits
-    once it receives precommits from more than two-thirds of voting power
+  - Validators vote in two phases (_prevote_, _precommit_), a block commits once
+    it receives precommits from more than two-thirds of voting power
   - Finality is immediate and absolute, once committed, a block cannot be
     reverted without violating the $n \geq 3f+1$ assumption
+
 - @Example@: Tendermint underlies Cosmos and its application-specific
   blockchains
 
@@ -546,20 +558,27 @@ digraph PBFT {
 
 ::: columns
 :::: {.column width=55%}
+
 // From paper Yin et al., "HotStuff: BFT Consensus with Linearity and
 // Responsiveness" (2019)
-- @Problem@: PBFT-style all-to-all voting does not scale past a small
-  validator set
-- @Solution@: **HotStuff** pipelines the voting phases through the leader,
-  using threshold signatures so each phase needs only $O(n)$ messages
-  instead of $O(n^2)$
+
+- @Problem@: PBFT-style all-to-all voting does not scale past a small validator
+  set
+
+- @Solution@: **HotStuff** pipelines the voting phases through the leader, using
+  threshold signatures so each phase needs only $O(n)$ messages instead of
+  $O(n^2)$
   - Aka "linear BFT"
-- @Key idea@: HotStuff also achieves _responsiveness_, it commits as fast
-  as the network actually allows, rather than waiting out a fixed timeout
+
+- @Key idea@: HotStuff also achieves _responsiveness_, it commits as fast as the
+  network actually allows, rather than waiting out a fixed timeout
+
 - @Example@: HotStuff-style protocols underlie several modern chains, e.g.,
   Aptos and Diem's original design
+
 ::::
 :::: {.column width=42%}
+
 ```graphviz
 digraph HotStuff {
     rankdir=TB;
@@ -577,6 +596,7 @@ digraph HotStuff {
     P -> PC -> C -> D [label="  O(n) votes\l  per phase\l"];
 }
 ```
+
 ::::
 :::
 
@@ -596,7 +616,7 @@ digraph HotStuff {
 )
 ```
 
-- @Remark@: many production networks now blend the two, e.g.,
+- @Remark@: Many production networks now blend the two, e.g.,
   - Using a PoS lottery to pick a small validator committee
   - The committee then runs a BFT-style voting round for fast, absolute finality
 
@@ -604,67 +624,69 @@ digraph HotStuff {
 
 * Two Guarantees Every Consensus Protocol Must Balance
 
-- @Definition@:
-  - **Safety**: _nothing bad happens_
+- @Definition@
+  - **Safety**: _Nothing bad happens_
     - E.g., honest nodes never finalize two conflicting blocks
-  - **Liveness**: _something good eventually happens_
+  - **Liveness**: _Something good eventually happens_
     - E.g., the chain keeps making progress, new valid transactions eventually
       get included
 
-- @Motivation@:
+- @Motivation@
   - PoW, PoS, and BFT are different mechanisms for the same underlying job
     (reaching consensus)
   - Each makes a different tradeoff between two formal guarantees
 
-- @Key idea@: a protocol can fail by violating either guarantee, and the two
+- @Key idea@: A protocol can fail by violating either guarantee, and the two
   failures look very different
 
 * Safety Failure: A Fork That Should Not Exist
 
-- @Definition@: a **safety violation** happens when honest nodes finalize
-  two different, conflicting blocks at the same height
-- @Example@: if a BFT-style protocol committed a block with fewer than
-  $2f+1$ genuine votes (e.g., because Byzantine nodes forged votes), two
-  incompatible histories could both appear final
-- @Remark@: safety violations are catastrophic, once something is "final",
+- @Definition@: A **safety violation** happens when honest nodes finalize two
+  different, conflicting blocks at the same height
+
+- @Example@: If a BFT-style protocol committed a block with fewer than $2f+1$
+  genuine votes (e.g., because Byzantine nodes forged votes), two incompatible
+  histories could both appear final
+
+- @Remark@: Safety violations are catastrophic, once something is "final",
   downstream systems (exchanges, contracts) act on it as permanent
-- @Key idea@: correctly designed protocols prefer to halt rather than risk a
+
+- @Key idea@: Correctly designed protocols prefer to halt rather than risk a
   safety violation, this is exactly what a liveness failure is
 
-* Liveness Failure: The Chain Stalls
+* Liveness Failure: the Chain Stalls
 
-- @Definition@: a **liveness violation** happens when the network stops
-  making progress, no new block gets finalized even though no safety rule
-  was broken
-- @Example@: in a BFT-style protocol, if network delays or a bad leader
-  prevent $2f+1$ matching votes from ever assembling, the round times out
-  and simply retries
-- @Comparison@:
-  - PoW/PoS (Nakamoto-style) protocols favor **liveness**, they always
-    produce a next block, even under network partitions, at the cost of
-    only probabilistic safety
-  - Classical BFT protocols favor **safety**, they refuse to finalize a
-    block until a genuine supermajority agrees, at the cost of stalling if
-    that supermajority cannot be reached
+- @Definition@: A **liveness violation** happens when the network stops making
+  progress, no new block gets finalized even though no safety rule was broken
+
+- @Example@: In a BFT-style protocol, if network delays or a bad leader prevent
+  $2f+1$ matching votes from ever assembling, the round times out and simply
+  retries
+
+- @Comparison@
+  - PoW/PoS (Nakamoto-style) protocols favor **liveness**, they always produce a
+    next block, even under network partitions, at the cost of only probabilistic
+    safety
+  - Classical BFT protocols favor **safety**, they refuse to finalize a block
+    until a genuine supermajority agrees, at the cost of stalling if that
+    supermajority cannot be reached
 
 * The Safety-Liveness Tradeoff
 
 // From paper Garay et al., "The Bitcoin Backbone Protocol: Analysis and
 // Applications" (2015)
-- @Fact@: no consensus protocol can guarantee both perfect safety and
-  perfect liveness under fully asynchronous network conditions with even
-  one faulty node
-  - This is a foundational distributed-systems result (the FLP
-    impossibility result), blockchains work around it with timing or
-    probabilistic assumptions
 
+- @Fact@: No consensus protocol can guarantee both perfect safety and perfect
+  liveness under fully asynchronous network conditions with even one faulty node
+  - This is a foundational distributed-systems result (the FLP impossibility
+    result), blockchains work around it with timing or probabilistic assumptions
 // What does FLP stand for?
 
-- @Key idea@: every consensus design in this lesson is really a choice of
-  _which assumption to relax_
-  - PoW/PoS relax: accept only probabilistic, not absolute, safety
-  - BFT relaxes: accept a synchrony assumption (messages arrive within a
-    known bound) and a bounded, known validator set
+- @Key idea@: Every consensus design in this lesson is really a choice of _which
+  assumption to relax_
+  - PoW/PoS relax: Accept only probabilistic, not absolute, safety
+  - BFT relaxes: Accept a synchrony assumption (messages arrive within a known
+    bound) and a bounded, known validator set
 
 * Choosing a Consensus Mechanism
 
@@ -681,29 +703,30 @@ digraph HotStuff {
 )
 ```
 
-- @Key idea@:
+- @Key idea@
   - There is no universally best consensus mechanism
   - Only a best mechanism for a given tradeoff between openness, finality speed,
     and trust assumptions
-
 // TODO(ai_gp): This is good move it at the beginning
 
 * Dimensions of Blockchain Consensus
 
 - A **blockchain** is a replicated ledger that reaches agreement through
   **consensus**, not through a trusted intermediary
-- The **UTXO** and **account** models represent state differently,
-  trading off privacy and parallelism against smart-contract
-  expressiveness
-- **Proof-of-work** and **proof-of-stake** use a lottery (computational
-  or stake-weighted) to pick a proposer, favoring liveness with
-  probabilistic safety
-- **BFT-style** protocols (PBFT, Tendermint, HotStuff) use explicit
-  voting among known validators to get absolute finality, at the cost of
-  needing a bounded validator set
-- Every design answers the same underlying **safety vs liveness**
-  tradeoff differently
 
+- The **UTXO** and **account** models represent state differently, trading off
+  privacy and parallelism against smart-contract expressiveness
+
+- **Proof-of-work** and **proof-of-stake** use a lottery (computational or
+  stake-weighted) to pick a proposer, favoring liveness with probabilistic
+  safety
+
+- **BFT-style** protocols (PBFT, Tendermint, HotStuff) use explicit voting among
+  known validators to get absolute finality, at the cost of needing a bounded
+  validator set
+
+- Every design answers the same underlying **safety vs liveness** tradeoff
+  differently
 ```mermaid
 mindmap
   root((**Blockchain Consensus**))
@@ -727,7 +750,9 @@ mindmap
 
 - How should a network reconfigure its validator set over time without
   reintroducing a trusted party?
-- Can a protocol get BFT-style fast finality at Nakamoto-style
-  permissionless scale?
-- How much of this consensus machinery still matters once AI agents, not
-  only humans, are the ones proposing and validating transactions?
+
+- Can a protocol get BFT-style fast finality at Nakamoto-style permissionless
+  scale?
+
+- How much of this consensus machinery still matters once AI agents, not only
+  humans, are the ones proposing and validating transactions?
