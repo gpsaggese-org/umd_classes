@@ -46,10 +46,11 @@ if [[ "$DOCKER_ENGINE_CURRENT" == "apple" ]]; then
     # and print instructions for a manual port forward script.
     echo "Apple container engine detected."
     echo "NOTE: Apple's container tool has a bug where -p port forwarding does"
-    echo "not work. To access Jupyter from your browser, run this in another"
-    echo "terminal after the container starts:"
+    echo "not work. Connect directly to the container's bridge IP printed below"
+    echo "instead (no forwarding needed). Only if that address is not reachable"
+    echo "(e.g. different subnet/VPN), run this in another terminal:"
     echo ""
-    echo "  docker_jupyter_port_forward.sh $CONTAINER_NAME $JUPYTER_HOST_PORT"
+    echo "> docker_jupyter_port_forward.sh $CONTAINER_NAME $JUPYTER_HOST_PORT"
     echo ""
     DOCKER_CMD_OPTS=$(get_docker_jupyter_options $CONTAINER_NAME $JUPYTER_HOST_PORT $JUPYTER_USE_VIM)
     # Run container in detached mode (we follow logs instead of -ti).
@@ -57,8 +58,9 @@ if [[ "$DOCKER_ENGINE_CURRENT" == "apple" ]]; then
     sleep 3
     CONTAINER_IP=$(get_container_ip $CONTAINER_NAME)
     if [[ -n "$CONTAINER_IP" ]]; then
-        echo "Container IP: $CONTAINER_IP"
-        echo "Direct URL: http://$CONTAINER_IP:$JUPYTER_HOST_PORT"
+        echo "Container: $CONTAINER_NAME"
+        echo "Bridge IP: $CONTAINER_IP"
+        echo "Direct URL: http://$CONTAINER_IP:$JUPYTER_HOST_PORT (works without port forwarding)"
         echo ""
     fi
     # Follow logs so the user sees Jupyter output.
