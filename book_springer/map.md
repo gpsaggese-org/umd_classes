@@ -65,72 +65,9 @@
 
 ## Chapter Templates and Invariants
 
-### Goals
-- 3 short bullet points of less of 100 characters each explaining what are the
-  goals of the chapter
-
-### Topics
-- The `### Topics` section for each chapter should be in nested bullet points
-  - Level 1 bullets: the title of the subchapter
-  - Level 2 bullets: a short list of topics
-- It should follow the template
-  ```
-  ### Topics
-  - Topic 1
-    - Subtopic 1.1
-    - Subtopic 1.2
-  - Topic 2
-    ...
-  ```
-- The `### Topics` should be less than 20-25 lines and 175-200 words
-
-### Slides
-- This points to the slides in `book_springer/lectures_source` containing the
-  book chapter
-- Each slide deck should be about 30-35 slides
-
-### Lesson Materials
-- For each chapter:
-  - Read the table of content for the slides in `### Topics` and the content in
-    `### Lesson Materials`
-  - Update the `### Lesson Materials` to cover the `### Topics` using the
-    materials listed above in `## All Lesson Materials`
-  - Reference the actual lecture files to verify coverage percentages
-
-- The output must follow the template below
-  ```
-  ### Lesson Materials
-  - `pointer to a lecture`
-    - [<Amount used>]: topics
-  - ...
-  - _Not covered_
-    - [<Amount of topics not covered by any lesson>]: <topics>
-  ```
-- E.g.,
-  ```
-  ### Lesson Materials
-  - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
-    - [95%]: Causal effects to expected value, EVPI/EVSI, Bayesian optimization,
-      causal multi-armed bandits, exploration vs. exploitation
-  - `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt`
-    - [90%]: Thompson sampling, UCB, epsilon-greedy, contextual bandits, regret
-      bounds
-  - `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
-    - [80%]: MDPs, value/policy iteration, off-line vs. on-line MDP solving
-  - `msml610/lectures_source/Lesson08.5-Experimentation.txt`
-    - [75%]: A/B testing design, decision framework for experiment vs. observe,
-      hybrid experimental-causal approaches
-  - `msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt`
-    - [65%]: Posterior-based decision rules via loss functions and ROPE: using
-      full posterior distribution, not point estimates
-  - `msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt`
-    - [45%]: Bayesian updating fundamentals, priors: foundational only
-  - _Not covered_
-    - [50%]: Minimax/distributional robustness against model misspecification,
-      formal sensitivity analysis, advanced acquisition-function design
-  ```
-
-### Notes
+- Follow `.claude/skills/book.rules.md` for the Chapter Template (Goals, Topics,
+  TODO, Slides, Lesson Materials, Notes) and Roadmap section conventions used
+  throughout this file
 
 # Roadmap
 

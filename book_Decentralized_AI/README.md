@@ -1,18 +1,3 @@
-book.Decentralized_AI/decentralization_ai_summit_2023.md
-book.Decentralized_AI/responsible_genai_f23.md
-
-From /Users/saggese/src/notes1/notes
-- crypto.How_to_Defi_Beginner.Coingecko.2021.txt
-- crypto.Mastering_Bitcoin.Antonopoulos.2017.txt
-- crypto.Mastering_Ethereum.Antonopoulos.2018.txt
-- IN_PROGRESS.book.crypto.Hands_on_smart_contract_development_with_Solidity_and_Ethereum.2019.Solorio.txt
-- IN_PROGRESS.course.cs.Decentralized_finance.Harvey.Coursera.txt
-- IN_PROGRESS.course.cs.entrepreneurship_in_web3.Berkeley.txt
-- IN_PROGRESS.crypto.DeFi_and_the_future_of_finance.Harvey.2021.txt
-- IN_PROGRESS.crypto.How_to_Defi_Advanced.Coingecko.2021.txt
-- IN_PROGRESS.finance.Token_economy_and_Web3.Voshmgir.2020.txt
-- IN_PROGRESS.book.crypto.Solidity_programming_essentials.Modi.2022.txt
-
 ## Overlap between deai.map.md, defi.map.md, web3.map.md
 
 Compared headers and subpoints across all 3 files (deai=15 sections,
@@ -55,3 +40,17 @@ compute/inference markets, differential privacy, SMC/HE,
 provenance/watermarking, data marketplaces, multi-agent mechanism
 design, open vs closed ecosystems) are AI-specific — no counterpart in
 defi or web3.
+
+## Union count of chapters
+
+- Total entries: 45 (15 per file: deai, defi, web3).
+- Merged (same topic, different names, count once):
+  - Governance/DAOs: deai + defi + web3
+  - Tokenomics/incentive design: deai + defi + web3
+  - Regulation: deai + defi + web3
+  - Layer 2/scaling: defi + web3
+  - Cross-chain interoperability/bridges: defi + web3
+  - Consensus/blockchain foundations: defi + web3
+  - Smart contracts: defi + web3
+- 7 merges remove 10 duplicate entries.
+- **Union = 45 − 10 = 35 unique chapters.**
