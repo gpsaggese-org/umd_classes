@@ -523,7 +523,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
             --type=slides \
             --toc_type=navigation \
             --skip_action=cleanup_after \
-            --skip_action=open \
+            --skip_action=open_pdf \
             --no_pdf
         """
         _LOG.debug(hprint.to_str("self.COURSE_DIR"))
@@ -555,7 +555,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
             --type=slides \
             --toc_type=navigation \
             --skip_action=cleanup_after \
-            --skip_action=open
+            --skip_action=open_pdf
         """
         _LOG.debug(hprint.to_str("self.COURSE_DIR"))
         hdbg.dassert_ne(self.COURSE_DIR, "")
@@ -579,7 +579,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
             --type=slides \
             --toc_type=navigation \
             --skip_action=cleanup_after \
-            --skip_action=open
+            --skip_action=open_pdf
         """
         _LOG.debug(hprint.to_str("self.COURSE_DIR"))
         hdbg.dassert_ne(self.COURSE_DIR, "")

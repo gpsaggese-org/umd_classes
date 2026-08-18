@@ -45,12 +45,12 @@
 
 * From Code Generation to a Coding Partner
 
-- @Motivation@: A model that generates good code is only half of a workflow
+- @Motivation@: A _strong coding model_ is only half of the problem
   - The other half is _where_ the assistant runs, _what_ it can read, and _what_
     it is allowed to do
 
 - @Question@: Two engineers use the same underlying model and get very different
-  results - what differs?
+  results: what differs?
 
 - @Overview@: This lesson covers
   1. The tool landscape and the interaction models behind it
@@ -67,15 +67,20 @@
   - _Driver_: Writes the code
   - _Navigator_: Reviews each line, watches for defects, thinks one step ahead
   - Roles rotate during the session
+
 // From paper Williams et al., "Strengthening the Case for Pair Programming"
 // (2000)
 
-- @Fact@: A controlled study found pairs spent roughly 15% more total programmer
-  time, delivered in less elapsed time, and produced code that passed more of
-  the test cases than solo programmers
+// TODO(ai_gp): Clarify how it compares to two coders working independently
+- @Fact@: A controlled study found pairs
+  - Spent roughly 15% more total programmer time
+  - Delivered in less elapsed time
+  - Produced code that passed more of the test cases than solo programmers
 
-- @Key idea@: The benefit comes from **continuous review** and from having to
-  say out loud what the code is supposed to do, not from typing twice
+- @Key idea@: The benefit comes:
+  - From _continuous review_
+  - From having to say out loud what the code is supposed to do
+  - Not from typing twice
 
 * What Changes with an AI Partner
 
@@ -87,11 +92,11 @@
     written into a file in the repository
   - _Accountability_: Cannot own a decision or be responsible for a defect
 
-- @Key idea@: AI pair programming keeps the continuous-review property and
-  **inverts the roles** - the model drives, the human navigates
+- @Key idea@: AI pair programming **inverts the roles**: the model drives, the
+  human navigates
 
-- @Remark@: How much control to hand over, and when, is covered in detail in
-  Lesson 14: Human-AI Collaboration Patterns
+- @Remark@: Human-AI Collaboration Patterns cover how much control to hand over
+  and when (later lesson)
 
 * Three Interaction Models
 
@@ -109,6 +114,7 @@
 ::::
 :::: {.column width=50%}
 
+// TODO(ai_gp): Make it a bidimensional graph and place the boxes there
 ```graphviz
 digraph InteractionModels {
   rankdir=LR;
@@ -125,19 +131,20 @@ digraph InteractionModels {
 ::::
 :::
 
-- @Key idea@: The three models differ in the _unit of work_ they accept, from
-  one line to one task
+- @Key idea@: The three models differ in the _unit of work_ they accept (e.g.,
+  from one line to one task)
 
 * Autocomplete Assistance
 
 - @Definition@: **Autocomplete assistance** completes code inline at the cursor,
-  using the surrounding file as context, and is accepted or rejected with a
-  single keystroke
+  using the surrounding file as context
+  - Human accepts or rejects changes with a single keystroke
 
 - @Characteristics@
   - Sub-second latency, since the suggestion appears while typing
   - Unit of work is a line or a small block
   - The assistant never executes anything it wrote
+
 // From paper Nguyen et al., "An Empirical Evaluation of GitHub Copilot's
 // Code Suggestions" (2022)
 
@@ -154,8 +161,8 @@ digraph InteractionModels {
   panel, scoped to a selection, a file, or a pasted snippet
 
 - @Characteristics@
-  - Handles requests autocomplete cannot express, e.g., _"explain this
-    function"_, _"rewrite this loop without recursion"_
+  - Handles requests autocomplete cannot express
+    - E.g., _"explain this function"_, _"rewrite this loop without recursion"_
   - The output is text: The human decides what to apply, and applies it
   - Context is whatever the human selected or pasted
 
@@ -167,20 +174,25 @@ digraph InteractionModels {
 * Agentic Assistance
 
 ::: columns
-:::: {.column width=52%}
+:::: {.column width=60%}
 
 - @Definition@: An **agentic assistant** pursues a stated goal by calling
-  _tools_ - read a file, search the repository, edit a file, run a command -
-  observing the result, and deciding the next step
+  _tools_, observing the result, and deciding the next step
+  - Tool examples are "read a file", 'search the repository", "edit a file", "run
+    a command"
 
 - @Characteristics@
   - Unit of work is a task, not a line
   - The assistant gathers its own context instead of receiving it
   - Test output, compiler errors, and grep results re-enter the loop
 
-::::
-:::: {.column width=43%}
+- @Key idea@: What makes an assistant "agentic" is **feedback from the environment
+  inside the loop**, not a larger model
 
+::::
+:::: {.column width=35%}
+
+// TODO(ai_gp): Maybe horizontal
 ```graphviz
 digraph AgentLoop {
   rankdir=TB;
@@ -188,20 +200,17 @@ digraph AgentLoop {
         fontsize=10, penwidth=1.5];
   Goal [label="Goal", fillcolor="#FFD1A6"];
   Plan [label="Plan next step", fillcolor="#A0D6D1"];
-  Act  [label="Call a tool\n(read, edit, run)", fillcolor="#F4A6A6"];
+  Act  [label="Call a tool\n(read, edit, run, ...)", fillcolor="#F4A6A6"];
   Obs  [label="Observe result", fillcolor="#A6E7F4"];
   Done [label="Result", fillcolor="#A6C8F4"];
   Goal -> Plan -> Act -> Obs;
-  Obs -> Plan [label="  iterate", style=dashed, constraint=false];
-  Obs -> Done [label="  goal met"];
+  Obs -> Plan [label="  Iterate", style=dashed, constraint=false];
+  Obs -> Done [label="  Goal met"];
 }
 ```
 
 ::::
 :::
-
-- @Key idea@: What makes an assistant agentic is **feedback from the environment
-  inside the loop**, not a larger model
 
 * Autocomplete Vs. Agentic
 
