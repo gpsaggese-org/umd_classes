@@ -14,10 +14,9 @@
 
 - Rules and AI skills
 
-# Refs
-/Users/saggese/src/umd_classes1/helpers_root/papers/AIgentic_Development_System
+# /Users/saggese/src/umd_classes1/helpers_root/papers/AIgentic_Development_System
 
-# Code Quality & Standards
+## Code Quality & Standards
 
 - Linter Framework
   - Architecture & modifying vs non-modifying actions
@@ -45,7 +44,7 @@
   - Enforced thresholds & quality gates
   - Visibility & developer experience
 
-# Unit Testing
+## Unit Testing
 
 - Testing Philosophy & Motivation
   - Tests as executable specifications
@@ -92,7 +91,7 @@
   - Test organization
   - Debugging failing notebook tests
 
-# Coding Architecture
+## Coding Architecture
 
 - Runnable Directories Architecture
   - Problem: monorepo vs multi-repo tradeoffs
@@ -124,7 +123,7 @@
   - Git hooks management
   - Test infrastructure
 
-# Automation & Workflows
+## Automation & Workflows
 
 - Invoke Workflows
   - Centralized task registry
@@ -154,7 +153,7 @@
   - Quality gates & automated testing
   - Rollback capabilities
 
-# Dockerized Executables
+## Dockerized Executables
 
 - Architecture & Design
   - Container image structure
@@ -197,7 +196,7 @@
   - CI/CD pipeline usage
   - Automated task orchestration
 
-# AI-Optimized Development Infrastructure
+## AI-Optimized Development Infrastructure
 
 - Self-Documenting Executable Workflows
   - Invoke task discoverability

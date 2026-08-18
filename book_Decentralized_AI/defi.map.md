@@ -31,7 +31,6 @@
   - Fiat-collateralized, crypto-backed, algorithmic pegs
   - Depeg risk (Terra/UST case study)
 
-q
 - **Derivatives and synthetic assets**
   - Perpetual futures
   - Options protocols

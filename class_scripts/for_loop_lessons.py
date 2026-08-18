@@ -193,7 +193,7 @@ def _generate_pdf(
     source_name: str,
     *,
     limit: Optional[str] = None,
-    skip_action: str = "open",
+    skip_action: str = "open_pdf",
     cmd_opts: Optional[str] = None,
 ) -> None:
     """
@@ -206,7 +206,7 @@ def _generate_pdf(
     :param source_path: path to source .txt file
     :param source_name: name of source file
     :param limit: optional slide range to process (e.g., '1:3')
-    :param skip_action: action to skip (default: 'open')
+    :param skip_action: action to skip (default: 'open_pdf')
     :param cmd_opts: extra options string appended verbatim to the invoked
         command
     """
@@ -247,8 +247,8 @@ def _generate_tex(
     """
     Generate TeX files from a lecture source file.
 
-    Calls notes_to_pdf.py with `--no_pdf` and `--skip_action=open` to generate
-    TeX files without opening them.
+    Calls notes_to_pdf.py with `--no_pdf` and `--skip_action=open_pdf` to
+    generate TeX files without opening them.
 
     :param class_dir: class directory (data605 or msml610)
     :param source_path: path to source .txt file
@@ -271,7 +271,7 @@ def _generate_tex(
         "--type slides",
         "--toc_type navigation",
         "--no_pdf",
-        "--skip_action open",
+        "--skip_action open_pdf",
         "--debug_on_error",
     ]
     if limit:

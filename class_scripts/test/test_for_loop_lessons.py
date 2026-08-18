@@ -444,7 +444,7 @@ class Test_generate_pdf(hunitest.TestCase):
         # Run test.
         with hunteuti.capture_sys_calls() as sys_calls:
             csfolole._generate_pdf(
-                class_dir, source_path, source_name, skip_action="open"
+                class_dir, source_path, source_name, skip_action="open_pdf"
             )
         # Check outputs.
         actual_str = pprint.pformat(sys_calls)
@@ -453,7 +453,7 @@ class Test_generate_pdf(hunitest.TestCase):
                        '$GIT_ROOT/class_scripts/test/outcomes/Test_generate_pdf.test1/tmp.scratch/Lesson01.1-Intro.txt '
                        '--output '
                        '$GIT_ROOT/class_scripts/test/outcomes/Test_generate_pdf.test1/tmp.scratch/msml610/lectures/Lesson01.1-Intro.pdf '
-                       '--type slides --toc_type navigation --skip_action open '
+                       '--type slides --toc_type navigation --skip_action open_pdf '
                        '--debug_on_error',),
               'function': 'hsystem.system',
               'kwargs': {'suppress_output': False}}]
@@ -484,7 +484,7 @@ class Test_generate_pdf(hunitest.TestCase):
                        '$GIT_ROOT/class_scripts/test/outcomes/Test_generate_pdf.test2/tmp.scratch/Lesson01.1-Intro.txt '
                        '--output '
                        '$GIT_ROOT/class_scripts/test/outcomes/Test_generate_pdf.test2/tmp.scratch/msml610/lectures/Lesson01.1-Intro.pdf '
-                       '--type slides --toc_type navigation --skip_action open '
+                       '--type slides --toc_type navigation --skip_action open_pdf '
                        '--debug_on_error --filter_by_slides 1:5',),
               'function': 'hsystem.system',
               'kwargs': {'suppress_output': False}}]
@@ -918,7 +918,7 @@ class Test_process_lecture_file_with_generate_toc(hunitest.TestCase):
                        '$GIT_ROOT/class_scripts/test/outcomes/Test_process_lecture_file_with_generate_toc.test2/tmp.scratch/Lesson01.1-Intro.txt '
                        '--output '
                        '$GIT_ROOT/class_scripts/test/outcomes/Test_process_lecture_file_with_generate_toc.test2/tmp.scratch/msml610/lectures/Lesson01.1-Intro.pdf '
-                       '--type slides --toc_type navigation --skip_action open '
+                       '--type slides --toc_type navigation --skip_action open_pdf '
                        '--debug_on_error',),
               'function': 'hsystem.system',
               'kwargs': {'suppress_output': False}}]
