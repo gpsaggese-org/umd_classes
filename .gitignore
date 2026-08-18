@@ -16,6 +16,7 @@ build/
 dist/
 *.egg-info/
 .eggs/
+tmp.build/
 
 # C extensions / binaries
 *.so

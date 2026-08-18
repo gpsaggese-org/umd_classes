@@ -109,7 +109,7 @@ class Test__generate_tex(hunitest.TestCase):
         self.assertIn("notes_to_pdf.py", cmd_str)
         self.assertIn("--no_pdf", cmd_str)
         self.assertIn(source_path, cmd_str)
-        self.assertIn("--skip_action open", cmd_str)
+        self.assertIn("--skip_action open_pdf", cmd_str)
 
     def test2(self) -> None:
         """
@@ -157,7 +157,10 @@ class Test__generate_pdf(hunitest.TestCase):
         with mock.patch("helpers.hsystem.system") as mock_system:
             if limit is None:
                 csfolole._generate_pdf(
-                    msml610_dir, source_path, source_name, skip_action="open"
+                    msml610_dir,
+                    source_path,
+                    source_name,
+                    skip_action="open_pdf",
                 )
             else:
                 csfolole._generate_pdf(
@@ -165,7 +168,7 @@ class Test__generate_pdf(hunitest.TestCase):
                     source_path,
                     source_name,
                     limit=limit,
-                    skip_action="open",
+                    skip_action="open_pdf",
                 )
             mock_system.assert_called_once()
             cmd_str = mock_system.call_args[0][0]
@@ -184,7 +187,7 @@ class Test__generate_pdf(hunitest.TestCase):
         self.assertIn("notes_to_pdf.py", cmd_str)
         self.assertIn("--type slides", cmd_str)
         self.assertIn(source_path, cmd_str)
-        self.assertIn("--skip_action open", cmd_str)
+        self.assertIn("--skip_action open_pdf", cmd_str)
 
     def test2(self) -> None:
         """
