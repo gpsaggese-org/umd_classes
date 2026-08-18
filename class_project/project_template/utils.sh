@@ -86,7 +86,7 @@ _print_docker_jupyter_help() {
     echo "Launch Jupyter Lab inside a Docker container."
     echo ""
     echo "Options:"
-    echo "  -f          Force kill existing container with same name before starting"
+    echo "  -f, --force Force kill existing container with same name before starting"
     echo "  -h          Print this help message and exit"
     echo "  -p PORT     Host port to forward to Jupyter Lab (default: 8888)"
     echo "  -u          Enable vim keybindings in Jupyter Lab"
@@ -111,6 +111,18 @@ parse_docker_jupyter_args() {
     FORCE=0
     # Save original args to pass through to run_jupyter.sh.
     OLD_CMD_OPTS="$*"
+    # Translate long options to their short form since getopts doesn't
+    # support long options natively.
+    local args=()
+    for arg in "$@"; do
+        case "$arg" in
+            --force) args+=("-f");;
+            --help) args+=("-h");;
+            --verbose) args+=("-v");;
+            *) args+=("$arg");;
+        esac
+    done
+    set -- "${args[@]}"
     # Parse options.
     while getopts "fhp:uv" flag; do
         case "${flag}" in
@@ -684,7 +696,11 @@ list_and_inspect_docker_image() {
     local DOCKER_CMD
     DOCKER_CMD=$(get_docker_cmd)
     run "$DOCKER_CMD image ls | grep '$FULL_IMAGE_NAME' || true"
-    ($DOCKER_CMD manifest inspect $FULL_IMAGE_NAME | grep arch) || true
+    # Apple's container CLI has no "manifest" plugin, so only try
+    # "manifest inspect" (used to report the image architecture) on Docker.
+    if [[ "$(get_docker_engine)" != "apple" ]]; then
+        ($DOCKER_CMD manifest inspect $FULL_IMAGE_NAME | grep arch) || true
+    fi
 }
 
 
