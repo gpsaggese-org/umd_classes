@@ -1,4 +1,4 @@
-name: Class content tests
+name: fast_tests.no_docker
 
 on:
   # Run on every PR to master that is ready to review (i.e., not draft).
