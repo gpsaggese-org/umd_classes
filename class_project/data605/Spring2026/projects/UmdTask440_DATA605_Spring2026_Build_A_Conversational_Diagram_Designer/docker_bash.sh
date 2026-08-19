@@ -1,34 +1,10 @@
 #!/bin/bash
-# """
-# This script launches a Docker container with an interactive bash shell for
-# development.
-# """
-
-# Exit immediately if any command exits with a non-zero status.
+# Open a bash shell inside the Docker container.
 set -e
-
-# Import the utility functions from the project template.
-GIT_ROOT=$(git rev-parse --show-toplevel)
-source $GIT_ROOT/class_project/project_template/utils.sh
-
-# Parse default args (-h, -v) and enable set -x if -v is passed.
-parse_default_args "$@"
-
-# Load Docker configuration variables for this script.
-get_docker_vars_script ${BASH_SOURCE[0]}
-source $DOCKER_NAME
-print_docker_vars
-
-# List the available Docker images matching the expected image name.
-run "docker image ls $FULL_IMAGE_NAME"
-
-# Configure and run the Docker container with interactive bash shell.
-# - Container is removed automatically on exit (--rm)
-# - Interactive mode with TTY allocation (-ti)
-# - Port forwarding for Jupyter or other services
-# - Git root mounted to /git_root inside container
-CONTAINER_NAME=${IMAGE_NAME}_bash
-PORT=
-DOCKER_CMD=$(get_docker_bash_command)
-DOCKER_CMD_OPTS=$(get_docker_bash_options $CONTAINER_NAME $PORT)
-run "$DOCKER_CMD $DOCKER_CMD_OPTS $FULL_IMAGE_NAME"
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+IMAGE_NAME="cdd_project"
+docker run --rm -it \
+    -p 8888:8888 -p 8000:8000 \
+    -v "$SCRIPT_DIR":/app \
+    --env-file "$SCRIPT_DIR/.env" \
+    $IMAGE_NAME /bin/bash

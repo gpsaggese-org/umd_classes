@@ -14,6 +14,8 @@
 # ---
 
 # %% [markdown]
+# # TODO(ai_gp): This section is pure exposition describing when to use what. Convert into a discovery-based demo that shows *examples* of using each function together, letting students explore and see results interactively rather than being told what to use. (.claude/skills/notebook.rules.md:## Key Principles)
+#
 # ## When to Use What
 #
 # - Use the **simulation functions** (`create_population`, `run_simulation`,
@@ -31,19 +33,18 @@
 # Together, these APIs give you a complete pipeline from **simulation** →
 # **descriptive analysis** → **causal and Bayesian inference**.
 
-# %%
-
 # %% [markdown]
+# # TODO(ai_gp): Reorganize notebook headers per the markdown structure rule. Replace this level-1 header with a `# Part 1: API Demonstration` header, then use `## Cell 1.1:`, `## Cell 1.2:`, etc., for individual cells. Also add a `## Library Overview` section right after setup (before first code) that includes: What problem it solves, Key abstraction, Mental model table, and Key classes. (.claude/skills/notebook.rules.md:## Markdown Header Structure and Naming)
+#
 # # Causal Success Analysis: API Demonstration
 #
 # **Purpose:** Introduce and explore each core function in isolation before moving on to the full analysis.
 #
 # This notebook is meant to be a hands-on walkthrough of the building blocks behind the project. We import the simulation code and experiment with each component one at a time to understand what it does and why it matters.
 #
-# If you’re interested in seeing how all of these pieces come together in a complete analysis—simulation, causal inference, and policy comparison—take a look at `causal_success_example.ipynb`.
+# If you're interested in seeing how all of these pieces come together in a complete analysis—simulation, causal inference, and policy comparison—take a look at `causal_success_example.ipynb`.
 #
 # You can think of this notebook as getting familiar with the individual tools before using them together in a full wrkflow.
-#
 
 # %% [markdown]
 # ## Setup: Import Everything
@@ -98,8 +99,9 @@ _LOG.info("Pandas version: %s", pd.__version__)
 # %% [markdown]
 # ## Demo 1: Creating a Single Agent
 #
-# Let’s create one simulated person and take a quick look at their starting traits and stat.
+# # TODO(ai_gp): Add a dedicated contextual background explanation before this demo code that explains: (1) what an Agent is and why agents are the core abstraction, (2) what talent attributes represent and how they affect outcomes, (3) how these parameters are used throughout the model, and (4) practical guidance on setting parameter values. This should appear as a separate markdown cell before Demo 1 code, not after. (.claude/skills/notebook.rules.md:## Contextual Background Explanations)
 #
+# Let's create one simulated person and take a quick look at their starting traits and stat.
 
 # %%
 # Create a single agent with chosen talent levels
@@ -124,12 +126,13 @@ print(f"Talent norm (combined ability): {person.talent_norm:.3f}")
 print(f"Event exposure probability: {person.get_event_probability():.3f}")
 
 # %% [markdown]
+# # TODO(ai_gp): Change the heading from "**What to notice:**" to "**Key observations**:" and format as bullet points per the visualization cell triplet format. Key observations should be concise, standalone statements about patterns observed in the visualization, not general explanations. Apply this format to all markdown cells that follow visualization code cells (Cells 7, 10, 13, 16, 19, 22, 25, 30, etc.). (.claude/skills/notebook.rules.md:## Visualization Cell Triplet Details)
+#
 # **What to notice:**
 #
-# The event exposure probability is computed using a sigmoid function of the agent’s intensity. With an intensity of 0.7, this agent has **above-average exposure** to events, resulting in an exposure probability of about **0.60**. An agent with lower intensity (for example, 0.3) would have noticeably less exposure, while higher intensity values push the probability closer to 1.
+# The event exposure probability is computed using a sigmoid function of the agent's intensity. With an intensity of 0.7, this agent has **above-average exposure** to events, resulting in an exposure probability of about **0.60**. An agent with lower intensity (for example, 0.3) would have noticeably less exposure, while higher intensity values push the probability closer to 1.
 #
-# The talent norm is simply the Euclidean norm of the talent vector (intensity, IQ, networking, and initial capital). It provides a single summary measure of overall capability. This value is useful for analysis and comparison, but it does not directly determine success on its own—outcomes still depend heavily on the sequence of events the agent experienes.
-#
+# The talent norm is simply the Euclidean norm of the talent vector (intensity, IQ, networking, and initial capital). It provides a single summary measure of overall capability. This value is useful for analysis and comparison, but it does not directly determine success on its own: outcomes still depend heavily on the sequence of events the agent experienes.
 
 # %% [markdown]
 # ## Demo 2: Applying Events to an Agent
@@ -183,6 +186,8 @@ agents = create_population(n_agents=20, seed=42)
 
 print(f"Created {len(agents)} agents\n")
 
+# TODO(ai_gp): Replace this formatted print table with a pandas DataFrame. Extract agent data into a DataFrame and use `display()` instead of the for-loop print statements. This follows the rule to use pandas DataFrames for tables, not print formatting. (.claude/skills/notebook.rules.md:## Use Pandas Dataframes and not Print for Tables)
+
 # Look at the first 5
 print("First 5 agents:")
 print(
@@ -232,6 +237,8 @@ agents = run_simulation(
 
 print("Simulation complete!\n")
 
+# TODO(ai_gp): Replace this formatted print table with a pandas DataFrame. Create a DataFrame from the agents' results and use `display()` instead of the for-loop print statements. This follows the rule to use pandas DataFrames for tables, not print formatting. (.claude/skills/notebook.rules.md:## Use Pandas Dataframes and not Print for Tables)
+
 # Show what changed
 print("After 10 periods:")
 print(f"{'ID':>3} {'Capital':>10} {'Lucky':>6} {'Unlucky':>8} {'Net':>5}")
@@ -250,12 +257,13 @@ print(f"Spread: {max(capitals) / min(capitals):.1f}x")
 # %% [markdown]
 # **What to notice:**
 #
-# Even over just 10 periods, noticeable differences in outcomes have already emerged. Capital now ranges from about \$0.46 to \$1.63, a spread of roughly **3.5×**, despite all agents starting with exactly \$1.00.
+# Even over just 10 periods, noticeable differences in outcomes have already emerged. Capital now ranges from about \$0.46 to \$1.63, a spread of roughly **3.5x**, despite all agents starting with exactly \$1.00.
+#
+# # TODO(ai_gp): Replace the non-ASCII × character with ASCII x (3.5x instead of 3.5×) per the rule on non-ASCII characters. (.claude/skills/notebook.rules.md:## Non-ASCII Characters)
 #
 # These differences are driven primarily by **event histories**. For example, Agent 2 experienced several more lucky than unlucky events and ended up well ahead of the population mean, while Agents 3 and 4 encountered multiple unlucky events and fell behind. The mean capital remains close to \$1.00, indicating that gains by some agents are largely offset by losses elsewhere.
 #
 # This short run illustrates the core mechanism of the model: random events, combined with multiplicative updates, quickly generate dispersion in outcomes. While inequality is still limited at this horizon, extending the simulation in time or increasing event frequency amplifies these differences substantially, which motivates the longer simulations examined later in the anaysis.
-#
 
 # %% [markdown]
 # ## Demo 5: Calculating the Gini Coefficient
@@ -328,11 +336,14 @@ print(
 #
 # From the summary statistics, we can already observe several important facts. Average capital remains close to \$1 00, which is consistent with gains and losses roughly balancing out over this short run. At the same time, there is meaningful dispersion: some agents accumulated over \$1.60 after experiencing multiple lucky events, while others suffered repeated unlucky events and fell below \$0.50.
 #
-# Using a DataFrame allows us to compute correlations, rank agents by outcomes,
-# and prepare the data for causal analysis methods in later sections. These
-# operations would be cumbersome and error-prone if we worked directly with
-# lists of agent objects.
+# Using a DataFrame allows us to:
+# - Compute correlations
+# - Rank agents by outcomes
+# - Prepare the data for causal analysis methods in later sections
 #
+# # TODO(ai_gp): Convert the inline comma-separated list above to nested bullet points instead of "correlations, rank agents by outcomes, and prepare the data". This follows the rule to convert inline comma lists to bullets. (.claude/skills/notebook.rules.md:## Convert Inline Comma Lists to Bullets)
+#
+# These operations would be cumbersome and error-prone if we worked directly with lists of agent objects.
 
 # %% [markdown]
 # ## Demo 7: Summary Statistics Function
@@ -345,6 +356,8 @@ print(
 # %%
 # Generate comprehensive statistics
 stats = generate_summary_statistics(agents)
+
+# TODO(ai_gp): Replace this formatted print output with a pandas DataFrame. Convert the stats dictionary into a DataFrame with columns like "Metric" and "Value", then use `display()` instead of the for-loop print statements. This follows the rule to use pandas DataFrames for tables, not print formatting. (.claude/skills/notebook.rules.md:## Use Pandas Dataframes and not Print for Tables)
 
 print("Complete Summary Statistics:\n")
 print("=" * 50)
@@ -360,12 +373,13 @@ print("=" * 50)
 # %% [markdown]
 # **Interpreting the summary metrics:**
 #
-# Even after a relatively short simulation with only 20 agents and 10 periods, meaningful dispersion begins to emerge. While average capital remains close to the initial value of $1.00, outcomes already span a range of more than 3× between the poorest and richest agents.
+# Even after a relatively short simulation with only 20 agents and 10 periods, meaningful dispersion begins to emerge. While average capital remains close to the initial value of $1.00, outcomes already span a range of more than 3x between the poorest and richest agents.
+#
+# # TODO(ai_gp): Replace the non-ASCII × character with ASCII x (3x instead of 3×) per the rule on non-ASCII characters. (.claude/skills/notebook.rules.md:## Non-ASCII Characters)
 #
 # The Gini coefficient of approximately 0.12 indicates low overall inequality at this stage, which is expected given the short time horizon. However, wealth concentration is already visible: the top 10% of agents hold about 15% of total capital, while the bottom half collectively holds just over 40%.
 #
 # These statistics illustrate an important feature of the model: inequality does not appear all at once. Instead, it accumulates gradually as random events compound over time. In longer simulations, the same dynamics lead to substantially higher inequality, even though the underlying talent distribution remains unchnged.
-#
 
 # %% [markdown]
 # ## Demo 8: Validation Function
@@ -430,6 +444,8 @@ def run_policy(policy_name: str, cate_values=None):
     return df, calculate_gini(df["capital"].values)
 
 
+# TODO(ai_gp): Split this cell into two separate cells—one for egalitarian policy outcome and one for meritocratic policy outcome. Each cell should demonstrate a single API call with its distinct result, per the "Split API Example Cells by Outcome" principle. This keeps each cell focused on one outcome and makes the comparison clearer. (.claude/skills/notebook.rules.md:## Split API Example Cells by Outcome)
+
 print("Testing egalitarian allocation...\n")
 df_equal, gini_equal = run_policy("egalitarian")
 print("Egalitarian policy:")
@@ -485,6 +501,8 @@ agents_vis = create_population(n_agents=100, seed=999)
 agents_vis = run_simulation(agents_vis, n_periods=30, seed=999, verbose=False)
 df_vis = get_results_dataframe(agents_vis)
 
+# TODO(ai_gp): Refactor this visualization to use seaborn instead of matplotlib for histograms and scatter plots (e.g., sns.histplot, sns.scatterplot). Embed key results and observations directly on the plots using ax.text() or enhanced titles instead of printing them below. Also add a configurable figsize parameter instead of hard-coding (15, 4). (.claude/skills/notebook.rules.md:## Prefer Pandas and Seaborn and ## Add Information to Plots, Not Output)
+
 # Create plots
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))
 
@@ -531,6 +549,8 @@ print(
 print(f"Correlation between luck and success is {corr:.3f} (strong!)")
 
 # %% [markdown]
+# # TODO(ai_gp): Rename this section to `## Summary: The Mental Model` and reformatted it to recap 2-4 essential takeaways about the causal success model that readers should remember. Each bullet should be a complete, standalone statement rather than a numbered list of steps. This reinforces the key concepts after closing the notebook. (.claude/skills/notebook.rules.md:## API Notebook Overview and Summary Sections)
+#
 # ## Summary: What We Covered
 #
 # This notebook walked through the core building blocks of the causal success model, step by step. Along the way, we demonstrated how each component works in isolation before combining them into larger analyses.
@@ -562,9 +582,10 @@ print(f"Correlation between luck and success is {corr:.3f} (strong!)")
 #
 # You now have a clear understanding of the individual pieces. The next notebook
 # shows how they fit together.
-#
 
 # %% [markdown]
+# # TODO(ai_gp): This section is API documentation with formulas and function signatures presented as exposition. Follow the discovery pattern of Demos 1–10 by creating executable code cells that demonstrate each Bayesian function interactively, show results first, then briefly explain what happened. This builds intuition instead of relying on readers to learn from formal documentation. (.claude/skills/notebook.rules.md:## Key Principles)
+#
 # ## Bayesian Inference API
 #
 # In addition to the simulation and descriptive statistics, the project includes a
