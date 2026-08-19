@@ -12,6 +12,10 @@
 //   documentation": https://diataxis.fr/
 // - Google, "Engineering Practices: Code Review":
 //   https://google.github.io/eng-practices/review/
+// - Potvin and Levenberg, "Why Google Stores Billions of Lines of Code in a
+//   Single Repository" (CACM, 2016): https://research.google/pubs/pub45424/
+// - Meta, Microsoft, and Uber engineering blogs on monorepo vs. multi-repo
+//   practice at scale
 // - Anthropic, "Claude Code: Remote Control":
 //   https://code.claude.com/docs/en/remote-control
 // - Anthropic, "Claude Code: Security Guidance":
@@ -406,6 +410,13 @@
 - @Fact@: imports still start at the parent repository root, so a runnable
   directory stays usable both alone and as part of the whole
 
+- @Goals@: design targets the architecture is aimed at
+  - Dependencies pinned by a Python package manager (`poetry` or Conda),
+    not by hand
+  - Local development in an IDE (PyCharm, VS Code), not only a terminal
+  - Devops builds and releases the container; developers only use it
+  - One image builds for both Intel and Arm, on Linux, macOS, and WSL
+
 ::::
 :::: {.column width=46%}
 
@@ -618,6 +629,11 @@ digraph RunnableRepo {
   > convert_docx_to_markdown.py -i docs/update.docx -o docs/update.md
   ```
 
+- @Remark@: the pattern is not tied to one tool
+  - Prettier formatting, Mermaid/Graphviz/TikZ diagram rendering, full
+    LaTeX PDF compilation, and LLM-powered content transforms are all the
+    same wrapper around a different image
+
 - @Cons@: Docker becomes a hard dependency, images consume disk, and the first
   run pays a pull or build
 
@@ -765,6 +781,24 @@ digraph Containers {
 // TODO(gp): Look into `gh` CLI scripting, GitHub Actions bots, and agent PR
 //   platforms (OpenAI Codex Cloud, Devin, Cursor background agents) that
 //   automate this same path
+
+* Repo Governance as Versioned Config, Not Clicks
+
+// From paper "The Causify AIgentic Development System", Part 1
+
+- @Problem@: the `PR_for_authors` / `PR_for_reviewers` / `PR_for_integrators`
+  labels only work as a review-state machine if every repo has exactly
+  those labels, and a label created by hand in the GitHub UI leaves no diff
+
+- @Solution@: the label set, the project-board fields, and branch
+  protection are each declared in a file and synced, not clicked
+  - A label manifest is synced, backed up, and can run in dry-run mode
+  - GitHub Projects fields and views sync from a template
+  - Branch protection rules sync from a YAML manifest the same way
+
+- @Key idea@: a setting that lives only in the GitHub UI cannot be
+  reviewed, diffed, or restored, so repo configuration follows the same
+  rule as code: it is a file first, and a click second
 
 * Splitting Work: Child PRs and Branch Splitting
 
@@ -1173,6 +1207,24 @@ digraph QualityGates {
 //   JS/multi-language repos, and Talisman for a hook dedicated to
 //   secret-scanning
 
+* The Linter Framework: One Interface Over Many Tools
+
+// From paper "The Causify AIgentic Development System", Part 1
+
+- @Problem@: a repo runs a dozen formatters and checkers, and each has its
+  own CLI, config format, and notion of "fix it for me"
+
+- @Definition@: every linter is wrapped in an `Action` subclass exposing the
+  same `check_if_possible()` / `_execute()` interface, so the runner treats
+  Black and mypy identically
+
+- @Components@: the tool roster behind the common interface
+  - _Modifying_: Black, Prettier, isort, autoflake rewrite the file in place
+  - _Non-modifying_: flake8, pylint, mypy, ty only report
+
+- @Key idea@: one interface over many tools means adding a linter is a new
+  `Action`, not a new special case in the runner
+
 * Type Checking as a Quality Gate
 
 // From helpers_root/.claude/skills/coding.fix_pyright
@@ -1225,25 +1277,31 @@ digraph QualityGates {
 
 * Dependency Vulnerability Scanning, SBOMs, and Automated Upgrades
 
+// From paper "The Causify AIgentic Development System", Part 3
+
 - @Problem@: `docker.shrink_requirements` removes packages nobody imports,
   but says nothing about a package everybody imports that carries a known
   CVE, or one whose license conflicts with the project's
 
-- @Gap@: nothing in this stack scans dependencies for known
-  vulnerabilities, produces a software bill of materials (SBOM), or opens
-  an upgrade pull request on its own
+- @Fact@: the production image build already scans for known
+  vulnerabilities, blocking release on a high-severity match, so the CVE
+  question is not fully open
+
+- @Gap@: what the scan does not cover
+  - No software bill of materials (SBOM), so "are we exposed to CVE-X" is
+    still an audit, not a lookup
+  - No license-compliance check
+  - No bot that opens an upgrade pull request on its own; a known CVE
+    blocks release but does not fix itself
 
 - @What it would take@
-  - A scanner run against a CVE database on the same schedule as
-    `gitleaks` and `semgrep`, failing the build on a high-severity match
-  - A generated SBOM per release, so "are we exposed to CVE-X" is a
-    lookup, not an audit
-  - A bot that opens a pull request bumping one dependency at a time, with
-    the changelog attached, for a human to merge
+  - A generated SBOM per release, kept alongside the scan report
+  - A bot that bumps one dependency at a time, changelog attached, for a
+    human to merge
 
 - @Key idea@: `docker.shrink_requirements` answers "do we need this
-  package"; a vulnerability scanner answers the equally necessary "is this
-  package safe", and today only the first question is automated
+  package", the release scan answers "is this package safe today", and
+  neither one answers "how do we get to safe automatically"
 
 // TODO(gp): Look into Dependabot and Renovate for automated upgrade PRs,
 //   Snyk/Trivy/Grype for CVE scanning, and Syft or OSV-Scanner for SBOM
@@ -1404,6 +1462,28 @@ digraph QualityGates {
 //   the approval-testing style, and ReportPortal/TestRail as Allure
 //   alternatives
 
+* Testing Notebooks the Same Way as Code
+
+// From paper "The Causify AIgentic Development System", Part 1
+
+- @Problem@: a notebook is code, but "run all cells and eyeball the
+  output" is the usual test, which an agent cannot check unattended
+
+- @Solution@: a wrapper executes the notebook headlessly and applies the
+  same golden-file comparison used for regular tests
+  - `run_notebook.py` drives execution through papermill
+  - The test file follows the same naming convention, e.g.
+    `test_analysis_notebook.py`
+  - Expected output is a golden file, not a human glance
+
+- @Example@: debugging a failure keeps the interactive workflow
+  - `-s --dbg` reruns with output visible instead of captured
+  - `--no_suppress_output` keeps cell output when the intent is to inspect
+    it, not just to compare it
+
+- @Key idea@: a notebook only stays trustworthy if it is tested the same
+  way the rest of the codebase is, not exempted because it renders nicely
+
 * Detecting and Quarantining Flaky Tests
 
 // From helpers_root/.claude/skills/pytest.triage_local_unit_tests
@@ -1425,6 +1505,11 @@ digraph QualityGates {
   3. Classify: genuine regression, environment flake, or known-flaky
   4. Genuine regressions file a build-fail issue; known flakes are
      quarantined with a tracking issue, not silently skipped
+
+- @Fact@: two pytest plugins absorb the cheapest flakes automatically
+  - `pytest-timeout` kills a hung test instead of stalling the suite
+  - `pytest-rerunfailures` retries a failure before it is even triaged:
+    twice for fast tests, once for slow and superslow
 
 - @Key idea@: a flaky test left in the suite trains the team to ignore red,
   which is a worse outcome than a quarantined test with an open issue
@@ -1486,6 +1571,14 @@ digraph QualityGates {
 - @Fact@: the policy is _"fix it or revert"_
   - The build returns to green within one hour
   - Disabling a test is the last resort and never a unilateral decision
+
+- @Mechanics@: what makes the rotation itself accountable
+  - A daily status email, so build health has a paper trail, not just a
+    dashboard state
+  - Handover requires the incoming buildmeister to reply and confirm, so
+    the role is never silently unattended
+  - A post-mortem log records repo, test type, run link, root cause,
+    owner, and fix timeline for every break
 
 - @Example@: the linter gate encodes the same idea in code
   ```bash
@@ -1642,27 +1735,33 @@ digraph ReleaseFlow {
 
 * Canary Analysis and Automated Rollback
 
-- @Problem@: `docker_rollback_dev_image` exists, but rollback is a command
-  a human decides to run after noticing something is wrong; nothing
-  decides automatically that something is wrong
+// From paper "The Causify AIgentic Development System", Part 3
+
+- @Problem@: `docker_rollback_dev_image` covers the dev image, and a human
+  decides to run it after noticing something is wrong
 
 - @Definition@: a **canary release** ships a change to a small slice of
   traffic first and compares its error rate and latency against the
   unchanged majority before widening the rollout
 
-- @Gap@: nothing in this stack automates that comparison or the rollback it
-  should trigger; the release flow (local $\to$ dev $\to$ prod) is staged
-  by environment, not by traffic percentage
+- @Fact@: the production service already runs blue-green and canary
+  deploys, with an automatic rollback when a health check fails; the gap is
+  narrower than "nothing exists"
+
+- @Gap@: a health check only sees "is the process up", not "did the error
+  rate or latency get worse"
+  - No metric-threshold rollback, only liveness-threshold rollback
+  - The dev-image path (`docker_rollback_dev_image`) stays a manual command,
+    with no equivalent automatic trigger
 
 - @What it would take@
-  - A metric comparison job that runs after each deploy and pages before a
-    human would have noticed manually
-  - A rollback triggered by a metric threshold, with the same
-    `docker_rollback_dev_image` path a human uses today, so the automated
-    and manual paths stay identical
+  - A metric comparison job that runs after each deploy and triggers
+    rollback on a threshold, not just on a failed health check
+  - The same trigger wired to the dev-image rollback path, so a metric
+    regression there recovers as fast as a metric regression in prod
 
-- @Key idea@: the tooling already made rollback fast for a human to
-  execute; it is not yet fast enough to execute itself
+- @Key idea@: automatic rollback already exists for "is it alive"; the open
+  problem is automatic rollback for "is it correct"
 
 // TODO(gp): Look into Flagger and Argo Rollouts for canary automation on
 //   Kubernetes, Istio traffic splitting, and Prometheus + Alertmanager for
