@@ -27,6 +27,12 @@
 // - Petazzoni, "Do not use Docker-in-Docker for CI":
 //   https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/
 
+// TODO(gp): At the end of each part add part of the table from
+// book_AI_Software_Engineering/lectures_source/Lesson05.1_Tools.tools_reference.md
+
+// TODO(gp): List of skills and rules organized and standardized
+// Examples of a implementation
+
 # Rules, Skills, and Agent Instruction Manifests
 
 * From Model Capability to Repo Infrastructure
@@ -211,6 +217,7 @@
 
 - @Key idea@: A manifest is a whiteboard, not a library; past a certain repo size, an
   agent needs an index, not a longer document
+
 // TODO(gp): Look into embedding-based code/doc search that would close this
 //   gap: Sourcegraph Cody context, a Context7-style MCP server, LlamaIndex
 //   or txtai for retrieval-augmented rule lookup
@@ -234,6 +241,7 @@
   - _Workflow_: Numbered, imperative steps
   - _Conventions_: Pointers to relevant `<TOPIC>.rules.md` (never a restatement)
   - _Verification_: How to check the work was done
+
 ```{=typst}
 #styled-table(
   headers: ("Artifact", "Answers", "Example"),
@@ -301,51 +309,47 @@
 - @Solution@: The `specs.write` skill drafts a specification from a request, covering
   scope, interface, edge cases, and out-of-scope items explicitly
 
-- @Constraints@: What keeps the spec from becoming its own source of drift
-  - Stop for human approval before implementation starts
-  - Reference the spec file from the pull request, so reviewers check code against a
-    written contract, not against the issue title
+- @Constraints@: Keep the spec from drift by:
+  - Stopping for human approval before implementation starts
+  - Referencing the spec file from the pull request, so reviewers check code
+    against a written contract, not against the issue title
 
 - @Key idea@: The earliest and cheapest place to catch a misunderstanding is before
   the first line of code, not in review
-// TODO(gp): Look into spec-writing conventions this borrows from: RFC
-//   templates (Google/AWS), Shape Up pitch docs, Amazon's PR/FAQ, Jira/Linear
-//   spec templates
 
-* Architecture Decision Records: Capturing Why, Not Just What
+* Architecture Decision Records
 
-- @Problem@: A repository's rules and manifests capture the current convention, but
-  not why an earlier alternative was rejected, so an agent re-litigates a settled
-  tradeoff (e.g., sibling vs. child containers) every time it is asked to reconsider
-  one
+- @Problem@: A repository's rules and manifests capture the current convention,
+  but not why an earlier alternative was rejected
+  - An agent explores a settled tradeoff every time it is asked to reconsider one
 
 - @Definition@: An **architecture decision record (ADR)** is a short, dated,
-  versioned file recording one decision: The context, the options considered, the
-  choice, and the consequences
+  versioned file recording one decision:
+  - The context
+  - The options considered
+  - The choice and its consequences
 
-- @Gap@: Nothing in this stack stores decisions as structured, queryable artifacts;
-  the reasoning lives in pull request discussions and chat threads an agent cannot
-  cheaply retrieve
-
-- @What it would take@
+- @Solution@: Decisions need to be stored as structured, queryable artifacts
+  - The reasoning should not live in pull request discussions and chat threads an
+    agent cannot cheaply retrieve
   - A `docs/adr/NNNN-<slug>.md` convention with a fixed template
-  - A skill that drafts an ADR from a pull request discussion and links it from the
+  - A skill that drafts / updates an ADR from a discussion and links it from the
     affected rule file
 
-- @Key idea@: A rule file says what to do today, an ADR says why today's answer beat
-  yesterday's, and an agent needs both to avoid reopening closed questions
-// TODO(gp): Look into ADR tooling that could fill this gap: adr-tools CLI,
-//   Log4brains, the MADR template, and linking ADRs from Backstage TechDocs
+- @Key idea@:
+  - A rule file says what to do today
+  - An ADR says why today's rule beat other rules
 
 # Code Modularization and Repo Structure
 
-* Single vs Multiple Repo: the Monorepo Tradeoff
+* Single vs Multiple Repo
 
 // From helpers_root/docs/tools/all.integrate_repos.how_to_guide.md
 // From paper "The Causify AIgentic Development System", Part 2
 
 - @Problem@: Teams want the _modularity_ of many repositories and the _environment
   consistency_ of one, and the classic answer sacrifices one
+
 ```{=typst}
 #styled-table(
   headers: ("Approach", "Pros", "Cons"),
@@ -361,14 +365,11 @@
 )
 ```
 
-- @Remark@: When two forks of a repository must be reconciled, the work is scripted
-  rather than manual
-  - `i integrate_create_branch --dir-basename cmamp1` starts the integration branch
-    on each side
-  - Integrate by directory when a directory was touched on one side only
+- @Key idea@: The real question:
+  - Is not _"one repo or many"_
+  - Is _"what is the smallest unit that can be built, tested, and released on its
+    own"_
 
-- @Key idea@: The real question is not "one repo or many", it is "what is the
-  smallest unit that can be built, tested, and released on its own"
 // TODO(gp): Look into monorepo tooling (Bazel, Nx, Turborepo, Lerna) and
 //   multi-repo tooling (git submodules/subtrees, Meta's Sapling) for how
 //   other stacks solve the same tradeoff
@@ -381,23 +382,14 @@
 ::: columns
 :::: {.column width=50%}
 
-- @Definition@: A directory is **runnable** when it carries its own `devops`
-  directory, and therefore its own container and dependencies
+- @Definition@: A directory is **runnable** when it carries its container and
+  dependencies, so that it can be deployed as a unit
 
 - @Components@: What a runnable directory contains
   - `devops`: Build, run, and release the container
   - `dev_scripts_<name>`: Thin environment and `setenv`
   - `repo_config.yaml`: The machine-readable contract
   - Common files symlinked back to `//helpers`
-
-- @Fact@: Imports still start at the parent repository root, so a runnable directory
-  stays usable both alone and as part of the whole
-
-- @Goals@: Design targets the architecture is aimed at
-  - Dependencies pinned by a Python package manager (`poetry` or Conda), not by hand
-  - Local development in an IDE (PyCharm, VS Code), not only a terminal
-  - Devops builds and releases the container; developers only use it
-  - One image builds for both Intel and Arm, on Linux, macOS, and WSL
 
 ::::
 :::: {.column width=46%}
@@ -452,9 +444,16 @@ digraph RunnableRepo {
 ::::
 :::
 
-- @Key idea@: A runnable directory is a **context boundary**, so the agent's prompt,
-  container, and test scope coincide, which cuts cross-cutting edits and context
-  hallucinations
+- @Goals@: Design targets the architecture is aimed at:
+  - Dependencies pinned by a Python package manager (`poetry`, `uv`, Conda), not
+    by hand
+  - Devops builds and releases the container; developers only use it
+  - One image builds for both Intel and Arm, on Linux, macOS, and WSL
+
+- @Key idea@: A runnable directory is a **context boundary**, so the agent's
+  prompt, container, and test scope coincide, which cuts cross-cutting edits and
+  context hallucinations
+
 // TODO(gp): Look into similar boundary mechanisms: Bazel `BUILD` target
 //   sandboxing, Nx module-boundary lint rules, the Pants build system,
 //   per-package Dev Containers
@@ -464,34 +463,21 @@ digraph RunnableRepo {
 // From helpers_root/docs/tools/all.imports_and_packages.how_to_guide.md
 // From helpers_root/docs/tools/all.import_check.reference.md
 
-- @Goal@: Packages simplify client imports, hide which file holds the code, group
-  related units, and make loops preventable
+- @Goal@: Python packages simplify client imports, hide which file holds the
+  code, group related units, and make import loops preventable
 
-- @Techniques@: The import rules
+- @Algorithm@: The import rules
   - Inside a package, import sibling _files_ directly
-  - From outside, import the _package_, so internals can be reorganized freely
-  - Module-level imports only, since a local import hides a dependency from static
-    analysis
-  - A short alias under 8 characters is declared in `__init__.py`, e.g.,
-    `import datapull.talos.data.client as itdcl`
-
-- @Fact@: `helpers` enforces a layered hierarchy, and a library imports only its own
-  level or below
-  1. `hwarnings`, `hserver`, `hlogging`
-  2. `hdbg`
-  3. `hintrospection`, `hprint`
-  4. `henv`, `hsystem`, `hio`, `hversio`
-  5. `hgit`
+  - From outside, import the _package_ (so internals can be reorganized freely)
 
 - @Example@: The rule is machine-checkable
-  - `show_imports.py` renders the dependency graph, including a cycles-only view
-  - `i lint_detect_cycles` fails the build and lists every file in each cycle
+  - Detect import cycles
+  - Render the dependency graph, including a cycles-only view
+  - Automate abbreviations of the package for visibility and consistency
+    - E.g., `import datapull.XYZ.data.client as itdcl`
 
 - @Key idea@: An explicit dependency order is a boundary an agent respects and
   continuous integration verifies
-// TODO(gp): Look into import-linter and pydeps for Python, dependency-cruiser
-//   and madge for JS/TS, and ArchUnit for enforcing layered architecture as a
-//   test
 
 * Automating Code Modularization with AI
 
@@ -503,17 +489,17 @@ digraph RunnableRepo {
 - @Solution@: The `coding.factor_common_code` skill
   - Detects exact and structurally similar blocks across the given files
   - Proposes a function interface: Name, parameters, return value
-  - Reports duplicate locations and emits a `cfile` to navigate them
-  - Applies the refactoring only after the proposal is accepted
+  - Reports duplicate locations
+  - Applies the refactoring after the proposal is accepted
 
 - @Constraints@: What keeps the refactoring honest
   - Behavior must not change
   - Skip trivial extractions of fewer than two or three meaningful lines
   - Prefer logic with one clear responsibility that will change in one place
-  - `--dry_run` reports instead of editing
 
 - @Key idea@: Deduplication is easy to detect and easy to overdo, so the tool
   proposes and a human decides
+
 // TODO(gp): Look into jscpd, PMD CPD, and SonarQube's duplication detector as
 //   language-agnostic alternatives, and Sourcegraph batch changes for
 //   applying the refactor at scale
@@ -524,26 +510,24 @@ digraph RunnableRepo {
 // From helpers_root/.claude/skills/git.update_references
 // From helpers_root/.claude/skills/coding.rename
 
-- @Problem@: The Monorepo Tradeoff slide names "costly change propagation" as
-  multi-repo's core cost; renaming a function or moving a file means finding every
-  reference across repositories a human would search by hand
+- @Problem@: 
+  - Renaming a function or moving a file means finding every reference across
+    repositories a human would search by hand
+  - Change propagation is costly in multi-repo approach
 
-- @Solution@: Three skills chain to cover one move end to end
+- @Solution@: Skills to cover one move end to end
   - `git.move` relocates a file or directory and rewrites references inside its own
     repository
   - `git.update_references` finds and updates references to that path in _other_ Git
     repositories that depend on it
   - `coding.rename` performs the same propagation for a function or variable name,
     not just a path
-
-- @Constraints@: What keeps a repo-wide rename safe
-  - Every reference is a match found by static analysis, not a blind find-and-replace
-    across text
-  - The change lands as a reviewable diff per repository, not one opaque cross-repo
-    commit
+  - After find-and-replace across text, every reference is a match found by
+    static analysis
 
 - @Key idea@: The propagation cost that makes multi-repo expensive for a human is
   exactly the mechanical, rule-following work an agent automates cheaply
+
 // TODO(gp): Look into codemod frameworks that do the same job outside this
 //   stack: jscodeshift, Comby, OpenRewrite, and LSP-based rename (rope,
 //   ts-morph)
@@ -554,9 +538,10 @@ digraph RunnableRepo {
 
 // From helpers_root/docs/tools/thin_environment/all.thin_environment.reference.md
 
-- @Definition@: The **thin environment** is a Python virtual environment holding the
-  minimum packages needed to start the development system in Docker
+- @Definition@: The **thin environment** approach is a Python virtual environment
+  holding the minimum packages needed to start the development system in Docker
 
+// TODO(gp): too much detail, point to the documentation
 - @Components@: The files under `dev_scripts_<repo>/thin_client/`
   - `build.py` and `requirements.txt`: Create the environment
   - `setenv.sh`: Configure a shell, inside or outside the container
@@ -573,15 +558,17 @@ digraph RunnableRepo {
 
 - @Pros@: The host keeps only Docker and a handful of packages
   - The laptop, the server, and the CI runner behave identically
-  - Installing the hooks is a side effect of activating the environment
+  - Installing the Git hooks and configuring the environment are a side effect of
+    activating the environment
 
-- @Key idea@: An agent can be dropped into any machine and reach the same environment
-  through the same two commands
+- @Key idea@: An agent can be dropped into any machine and reach the same
+  environment through the same two commands
+
 // TODO(gp): Look into the VS Code Dev Containers spec, Nix flakes + direnv,
 //   and Gitpod/GitHub Codespaces as alternative reproducible-dev-env
 //   approaches
 
-* Dockerized Executables: Architecture and Design
+* Dockerized Executables
 
 // From helpers_root/docs/tools/docker/all.docker.tutorial.md
 // From paper "The Causify AIgentic Development System", Part 3
@@ -590,11 +577,12 @@ digraph RunnableRepo {
   into one development image produces a bloated, fragile container
 
 - @Definition@: A **dockerized executable** is a slim purpose-built image plus a thin
-  wrapper script, so calling it looks like calling a local program
+  wrapper script, so that calling it looks like calling a local program
 
 - @Components@: What the wrapper is responsible for
   - _Repository discovery_: Find the repo root and mount it at `/src`
-  - _Path translation_: Rewrite `docs/file.md` to `/src/docs/file.md`
+  - _Path translation_: Rewrite the paths from host to docker space (e.g.,
+    `docs/file.md` to `/src/docs/file.md`)
   - _Image lifecycle_: Pull or build when needed, then remove the container
   - _Permissions_: Run as the caller's `UID:GID` so outputs are owned correctly
   - _Isolation_: Forward only whitelisted environment variables
@@ -606,15 +594,15 @@ digraph RunnableRepo {
   ```
 
 - @Remark@: The pattern is not tied to one tool
-  - Prettier formatting, Mermaid/Graphviz/TikZ diagram rendering, full LaTeX PDF
-    compilation, and LLM-powered content transforms are all the same wrapper around a
-    different image
+  - E.g., running non-python packages (e.g., `prettier` for formatting,
+    Mermaid/Graphviz/TikZ diagram rendering, LaTeX)
+  - They are an alternative to `uvx`
 
-- @Cons@: Docker becomes a hard dependency, images consume disk, and the first run
-  pays a pull or build
+- @Cons@:
+  - Docker becomes a hard dependency
+  - Images consume disk
+  - The first run pays the price of a Docker pull or build
 
-- @Key idea@: A faithful exit code and clean stdout are what make a container a tool
-  an agent can call
 // TODO(gp): Look into Homebrew formulae that wrap a container, `act` for
 //   running GitHub Actions locally, and `just`/`entr` as other thin-wrapper
 //   patterns
@@ -627,11 +615,13 @@ digraph RunnableRepo {
 ::: columns
 :::: {.column width=50%}
 
+// TODO(ai_gp): Too much details, point to blog and documentation
+
 - @Comparison@: Two ways to launch a container from inside one
-  - _Children_ (Docker-in-Docker): The outer container runs its own daemon
+  - _Children containers_ (aka Docker-in-Docker): The outer container runs its own daemon
     - Cons: Needs `--privileged`, which is often refused
     - Cons: The build cache is not shared, so images are rebuilt after every restart
-  - _Siblings_ (preferred): Mount `/var/run/docker.sock` and talk to the host daemon
+  - _Sibling containers_ : Mount `/var/run/docker.sock` and talk to the host daemon
     - Pros: No privilege escalation, and the build cache is shared
     - Cons: Less isolation, and spawned containers can be left hanging
     - Cons: Mounts must name host-visible paths, so the wrapper translates them
@@ -694,30 +684,6 @@ digraph Containers {
 //   sysbox for safer Docker-in-Docker, and Kaniko/Buildah for daemonless
 //   image builds in CI
 
-* Optimizing and Shrinking Containers with AI
-
-// From helpers_root/.claude/skills/docker.shrink_requirements
-// From helpers_root/.claude/skills/docker.shrink_container
-
-- @Problem@: Images accumulate packages nobody removes, and every CI run pays for the
-  extra build and pull time
-
-- @Algorithm@: How `docker.shrink_requirements` proceeds
-  1. Extract the real imports from every `.py` file by grep or AST analysis
-  2. Map the distribution name to the import name, e.g., `Pillow` $\to$ `PIL`,
-     `scikit-learn` $\to$ `sklearn`, `PyYAML` $\to$ `yaml`
-  3. Also inspect `setup.py`, `pyproject.toml`, `tasks.py`, and `Makefile` for
-     tool-level use
-  4. Emit a table of (`package`, `import_name`, `used_in_code`, `verdict`)
-  5. Write the trimmed `requirements.txt`
-
-- @Constraints@: What must be flagged and not removed
-  - Plugins loaded dynamically through `importlib`
-  - Transitive dependencies pulled in by another listed package
-  - Packages used only by tests, marked `test-only`
-
-- @Key idea@: The `verdict` column is the design choice, since it turns a destructive
-  edit into a reviewable proposal
 // TODO(gp): Look into dive and docker-slim for image-layer inspection, and
 //   Trivy/Snyk Container for size and vulnerability scanning together
 
@@ -727,9 +693,10 @@ digraph Containers {
 
 // From helpers_root/docs/work_organization/all.use_github.how_to_guide.md
 
-- @Definition@: The unit of work is a **GitHub issue**, implemented in a branch, and
-  delivered as a pull request whose title matches the branch name
+- @Definition@: The unit of work is a **GitHub issue**, implemented in a branch,
+  and delivered as a pull request whose title matches the branch name
 
+// TODO(ai_gp): Description of how to automate the dev
 - @Components@: The labels that encode review state
   - `PR_for_authors`: Changes are owed by the author
   - `PR_for_reviewers`: Ready for team-leader review

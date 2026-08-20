@@ -15,167 +15,167 @@
 
 # Summary
 
-| Tool | Cluster | Languages Supported | Pricing | GitHub Stars |
-|:-----|:--------|:---------------------|:--------|:--------------|
-| [SWE-bench](https://www.swebench.com) | Agent evaluation benchmark | Python, +9 more (multilingual) | free / open source | 5,700 |
-| [METR time-horizon evals](https://metr.org) | Agent evaluation benchmark | n/a | free | 300 |
-| [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) | Static dependency analysis (JS/TS) | JavaScript, TypeScript | free / open source | 7,100 |
-| [madge](https://github.com/pahen/madge) | Static dependency analysis (JS/TS) | JavaScript, TypeScript | free / open source | 10,000 |
-| [radon](https://radon.readthedocs.io) | Complexity metrics (Python) | Python | free / open source | 2,000 |
-| [CodeScene](https://codescene.com) | Code-health analytics | 25+ languages | paid (free OSS tier) | n/a |
-| [Team Topologies](https://teamtopologies.com) | Org-design framework | n/a | free framework | n/a |
-| [OpenTelemetry](https://opentelemetry.io) | Observability | 12+ languages | free / open source | 7,400 |
-| [LaunchDarkly](https://launchdarkly.com) | Feature flags | 25+ languages | freemium / paid | n/a |
-| [ArchUnit](https://www.archunit.org) | Architecture fitness functions (Java) | Java, C# (port) | free / open source | 3,800 |
-| [Nix](https://nixos.org) | Reproducible package/environment manager | language-agnostic | free / open source | 18,000 |
-| [Docker](https://www.docker.com) | Containerization | language-agnostic | freemium | 72,000 |
-| [DVC](https://dvc.org) | Data/pipeline versioning | Python | free / open source | 16,000 |
-| [Backstage](https://backstage.io) | Developer portal / service catalog | TypeScript, JavaScript | free / open source | 34,000 |
-| [Rundeck](https://www.rundeck.com) | Runbook automation | Java, Groovy | freemium | 6,300 |
-| [PagerDuty](https://www.pagerduty.com) | Incident response / runbook automation | language-agnostic | freemium / paid | n/a |
-| [AGENTS.md](https://agents.md) | Agent instruction manifest | language-agnostic | free / open spec | 23,000 |
-| [Cursor `.cursorrules`](https://cursor.com) | IDE agent-rules convention | language-agnostic | free convention | n/a |
-| [GitHub Copilot custom instructions](https://docs.github.com/copilot) | IDE agent-rules convention | language-agnostic | paid | n/a |
-| [ruff](https://docs.astral.sh/ruff) | Linter (Python) | Python | free / open source | 49,000 |
-| [mypy](https://mypy-lang.org) | Type checker (Python) | Python | free / open source | 21,000 |
-| [Sourcegraph Cody](https://sourcegraph.com/cody) | AI coding assistant with codebase context | language-agnostic | freemium / paid | n/a |
-| [Context7](https://context7.com) | MCP server for documentation retrieval | language-agnostic | free | 61,000 |
-| [LlamaIndex](https://www.llamaindex.ai) | RAG framework | Python, TypeScript | free / open source | 52,000 |
-| [txtai](https://neuml.github.io/txtai) | Embeddings / vector search library | Python, JavaScript | free / open source | 13,000 |
-| [LangChain](https://www.langchain.com) | Agent framework | Python, JavaScript/TS | free / open source | 145,000 |
-| [MCP](https://modelcontextprotocol.io) | Agent-tooling protocol | language-agnostic | free / open spec | 9,000 |
-| [LangGraph](https://www.langchain.com/langgraph) | Agent orchestration | Python, JavaScript/TS | free / open source | 40,000 |
-| [Semantic Kernel](https://github.com/microsoft/semantic-kernel) | Agent framework | Python, C#, Java | free / open source | 29,000 |
-| [Nx](https://nx.dev) | Monorepo build system | TS, JS, Java, .NET, Go, Rust, Python | freemium | 29,200 |
-| [Bazel](https://bazel.build) | Build system | Java, C/C++, Python, Go, and more | free / open source | 25,700 |
-| [cookiecutter](https://cookiecutter.readthedocs.io) | Project templating | language-agnostic | free / open source | 25,100 |
-| [RFC templates](https://en.wikipedia.org/wiki/Request_for_Comments) | Spec-writing practice | n/a | free (practice) | n/a |
-| [Shape Up](https://basecamp.com/shapeup) | Product-planning methodology | n/a | free (book) | n/a |
-| [Amazon PR/FAQ](https://en.wikipedia.org/wiki/Working_backwards) | Spec-writing practice | n/a | free (practice) | n/a |
-| [Jira](https://www.atlassian.com/software/jira) | Issue tracker | language-agnostic | freemium / paid | n/a |
-| [Linear](https://linear.app) | Issue tracker | language-agnostic | freemium / paid | n/a |
-| [adr-tools](https://github.com/npryce/adr-tools) | ADR management CLI | language-agnostic | free / open source | 5,600 |
-| [Log4brains](https://github.com/thomvaill/log4brains) | ADR management | language-agnostic | free / open source | 1,600 |
-| [MADR](https://adr.github.io/madr) | ADR template standard | language-agnostic | free / open spec | 2,400 |
-| [Turborepo](https://turbo.build/repo) | Monorepo build system (JS/TS) | JavaScript, TypeScript | free / open source | 31,000 |
-| [Lerna](https://lerna.js.org) | Monorepo tool (JS) | JavaScript, TypeScript | free / open source | 36,000 |
-| [Sapling](https://sapling-scm.com) | Source control (large monorepos) | language-agnostic | free / open source | 7,000 |
-| [git submodules / subtrees](https://git-scm.com) | Multi-repo composition | language-agnostic | free / open source | n/a |
-| [Pants](https://www.pantsbuild.org) | Build system | Python, Java, Scala, Kotlin, Go | free / open source | 3,800 |
-| [import-linter](https://import-linter.readthedocs.io) | Import-rule enforcement (Python) | Python | free / open source | 1,100 |
-| [pydeps](https://github.com/thebjorn/pydeps) | Dependency graph (Python) | Python | free / open source | 2,100 |
-| [jscpd](https://github.com/kucherenko/jscpd) | Duplicate-code detection | 200+ languages | free / open source | 6,000 |
-| [PMD CPD](https://pmd.github.io) | Duplicate-code detection | Java, JS/TS, and 15+ more | free / open source | 5,500 |
-| [SonarQube](https://www.sonarsource.com/products/sonarqube) | Code-quality platform | 30+ languages | freemium | 11,000 |
-| [Sourcegraph batch changes](https://sourcegraph.com/batch-changes) | Large-scale automated refactor | language-agnostic | paid | n/a |
-| [jscodeshift](https://github.com/facebook/jscodeshift) | Codemod toolkit (JS/TS) | JavaScript, TypeScript | free / open source | 10,000 |
-| [Comby](https://comby.dev) | Structural search and replace | language-agnostic | free / open source | 2,600 |
-| [OpenRewrite](https://docs.openrewrite.org) | Automated mass refactoring | Java, Kotlin, Groovy, +more | free / open source | 3,600 |
-| [rope](https://github.com/python-rope/rope) | Refactoring library (Python) | Python | free / open source | 2,200 |
-| [ts-morph](https://ts-morph.com) | AST manipulation (TypeScript) | TypeScript, JavaScript | free / open source | 6,100 |
-| [VS Code Dev Containers](https://containers.dev) | Containerized dev environment spec | language-agnostic | free / open source | 5,700 |
-| [direnv](https://direnv.net) | Environment loader | language-agnostic | free / open source | 15,000 |
-| [Gitpod](https://www.gitpod.io) | Cloud dev environment | language-agnostic | freemium / paid | 14,000 |
-| [GitHub Codespaces](https://github.com/features/codespaces) | Cloud dev environment | language-agnostic | freemium | n/a |
-| [Homebrew](https://brew.sh) | Package manager | language-agnostic | free / open source | 49,000 |
-| [act](https://github.com/nektos/act) | Local CI runner | language-agnostic | free / open source | 72,000 |
-| [just](https://github.com/casey/just) | Command runner | language-agnostic | free / open source | 35,000 |
-| [entr](https://eradman.com/entrproject) | File watcher | language-agnostic | free / open source | 5,700 |
-| [Podman](https://podman.io) | Container engine | language-agnostic | free / open source | 30,000 |
-| [sysbox](https://github.com/nestybox/sysbox) | Container runtime for safer Docker-in-Docker | language-agnostic | free / open source | 3,800 |
-| [Kaniko](https://github.com/GoogleContainerTools/kaniko) | Daemonless image builder | language-agnostic | free / open source | 16,000 |
-| [Buildah](https://buildah.io) | Daemonless image builder | language-agnostic | free / open source | 9,000 |
-| [dive](https://github.com/wagoodman/dive) | Image-layer inspection | language-agnostic | free / open source | 55,000 |
-| [docker-slim](https://github.com/slimtoolkit/slim) | Image shrinking | language-agnostic | free / open source | 23,000 |
-| [Trivy](https://trivy.dev) | Vulnerability scanner | language-agnostic | free / open source | 38,000 |
-| [Snyk](https://snyk.io) | Security scanning platform | JS, Python, Java, Go, +more | freemium / paid | 5,600 |
-| [gh CLI](https://cli.github.com) | GitHub command-line tool | language-agnostic | free / open source | 46,000 |
-| [GitHub Actions](https://github.com/features/actions) | CI/CD | language-agnostic | freemium | n/a |
-| [OpenAI Codex Cloud](https://openai.com/codex) | Autonomous cloud coding agent | most major languages | paid | n/a |
-| [Devin](https://devin.ai) | Autonomous coding agent | most major languages | paid | n/a |
-| [Cursor background agents](https://cursor.com) | Autonomous coding agent | most major languages | paid | n/a |
-| [Graphite](https://graphite.dev) | Stacked-PR workflow and review | language-agnostic | freemium / paid | n/a |
-| [git-branchless](https://github.com/arxanas/git-branchless) | Git workflow tooling | language-agnostic | free / open source | 4,100 |
-| [ghstack](https://github.com/ezyang/ghstack) | Stacked-PR tooling | language-agnostic | free / open source | 1,000 |
-| [Claude Code (GitHub Action / remote control)](https://code.claude.com) | Async coding agent | language-agnostic | paid | 142,000 |
-| [Sweep.dev](https://sweep.dev) | Autonomous coding agent | language-agnostic | freemium / paid | 7,700 |
-| [OPA / Rego](https://www.openpolicyagent.org) | Policy engine | Rego, language-agnostic | free / open source | 12,000 |
-| [Firecracker](https://firecracker-microvm.github.io) | MicroVM sandbox | language-agnostic | free / open source | 36,000 |
-| [gVisor](https://gvisor.dev) | Container sandbox | language-agnostic | free / open source | 19,000 |
-| [reviewdog](https://github.com/reviewdog/reviewdog) | Lint-to-PR-comment bridge | language-agnostic | free / open source | 9,500 |
-| [Danger / danger.js](https://danger.systems) | Policy-as-code PR review | language-agnostic | free / open source | 5,500 |
-| [Codacy](https://www.codacy.com) | Hosted automated code review | 40+ languages | freemium / paid | n/a |
-| [DeepSource](https://deepsource.com) | Hosted automated code review | 10+ languages | freemium / paid | n/a |
-| [Qodo](https://www.qodo.ai) | AI code review and test generation | language-agnostic | freemium / paid | n/a |
-| [Greptile](https://www.greptile.com) | AI code review | language-agnostic | paid | n/a |
-| [PR-Agent](https://github.com/qodo-ai/pr-agent) | Open-source AI PR review | language-agnostic | free / open source | 13,000 |
-| [SWE-agent](https://github.com/SWE-agent/SWE-agent) | Research coding agent | Python, language-agnostic targets | free / open source | 20,000 |
-| [Aider](https://aider.chat) | AI pair-programming CLI | language-agnostic | free / open source | 48,000 |
-| [Sentry](https://sentry.io) | Error tracking | language-agnostic | freemium / paid | 45,000 |
-| [Datadog](https://www.datadoghq.com) | Observability platform | language-agnostic | paid | n/a |
-| [BuildPulse](https://buildpulse.io) | Flaky-test detection | language-agnostic | paid | n/a |
-| [Docusaurus](https://docusaurus.io) | Documentation site generator | JS, TS, Markdown, MDX | free / open source | 66,000 |
-| [MkDocs](https://www.mkdocs.org) | Documentation site generator | Python, Markdown | free / open source | 22,400 |
-| [Vale](https://vale.sh) | Prose linter | language-agnostic | free / open source | 6,000 |
-| [alex](https://alexjs.com) | Prose linter | JavaScript | free / open source | 5,100 |
-| [readme-ai](https://github.com/eli64s/readme-ai) | AI README generator | Python, language-agnostic | free / open source | 2,800 |
-| [Mintlify](https://mintlify.com) | Documentation platform | n/a | freemium / paid | n/a |
-| [markdown-link-check](https://github.com/tcort/markdown-link-check) | Link checker | JavaScript | free / open source | 700 |
-| [lychee](https://lychee.cli.rs) | Link checker | Rust, language-agnostic | free / open source | 3,800 |
-| [pre-commit](https://pre-commit.com) | Git hook manager | Python, language-agnostic | free / open source | 15,000 |
-| [husky](https://typicode.github.io/husky) | Git hook manager (JS/Node) | JavaScript, TypeScript | free / open source | 35,000 |
-| [lefthook](https://github.com/evilmartians/lefthook) | Git hook manager | Go, language-agnostic | free / open source | 8,600 |
-| [Talisman](https://github.com/thoughtworks/talisman) | Secret-scanning Git hook | Go, language-agnostic | free / open source | 2,100 |
-| [dmypy](https://mypy.readthedocs.io) | Type-checker daemon (Python) | Python | free / open source | 21,000 |
-| [pyright](https://microsoft.github.io/pyright) | Type checker (Python) | Python | free / open source | 16,000 |
-| [TruffleHog](https://trufflesecurity.com) | Secret scanner | language-agnostic | freemium / paid | 28,000 |
-| [detect-secrets](https://github.com/Yelp/detect-secrets) | Secret scanner | language-agnostic | free / open source | 4,600 |
-| [GitHub secret scanning](https://docs.github.com/code-security/secret-scanning) | Secret scanner (platform-native) | language-agnostic | free / paid | n/a |
-| [CodeQL](https://codeql.github.com) | SAST | C, C++, C#, Go, Java, JS/TS, Python, +more | free / paid | 10,000 |
-| [Bandit](https://bandit.readthedocs.io) | SAST (Python) | Python | free / open source | 8,200 |
-| [Dependabot](https://github.com/dependabot) | Automated dependency updates | 14+ ecosystems | free | 5,700 |
-| [Renovate](https://docs.renovatebot.com) | Automated dependency updates | 90+ ecosystems | free / open source | 22,000 |
-| [Grype](https://github.com/anchore/grype) | Vulnerability scanner | language-agnostic | free / open source | 13,000 |
-| [Syft](https://github.com/anchore/syft) | SBOM generator | language-agnostic | free / open source | 9,400 |
-| [OSV-Scanner](https://google.github.io/osv-scanner) | Vulnerability scanner | 12+ languages | free / open source | 11,000 |
-| [Coveralls](https://coveralls.io) | Coverage reporting | language-agnostic | freemium | n/a |
-| [mutmut](https://mutmut.readthedocs.io) | Mutation testing (Python) | Python | free / open source | 1,400 |
-| [cosmic-ray](https://cosmic-ray.readthedocs.io) | Mutation testing (Python) | Python | free / open source | 700 |
-| [Stryker Mutator](https://stryker-mutator.io) | Mutation testing (JS/TS/.NET) | JS, TS, C#, .NET | free / open source | 3,000 |
-| [Pitest](https://pitest.org) | Mutation testing (Java/JVM) | Java, Kotlin, Scala, Groovy | free / open source | 1,800 |
-| [Hypothesis](https://hypothesis.readthedocs.io) | Property-based testing (Python) | Python | free / open source | 8,900 |
-| [Pact](https://pact.io) | Contract testing | 9+ languages | free / open source | 1,800 |
-| [Diffblue Cover](https://www.diffblue.com) | AI unit-test generation (Java) | Java | paid | n/a |
-| [EvoSuite](https://www.evosuite.org) | Automated test generation (Java) | Java | free / open source | 900 |
-| [GitHub Copilot test generation](https://docs.github.com/copilot) | AI test generation | Python, JS/TS, Java, C#, +more | paid | n/a |
-| [syrupy](https://github.com/tophat/syrupy) | Snapshot testing (pytest) | Python | free / open source | 900 |
-| [ApprovalTests](https://approvaltests.com) | Approval/golden-master testing | Java, C#, C++, Python, +more | free / open source | 600 |
-| [ReportPortal](https://reportportal.io) | Test reporting | Java, Python, JS/TS, C#, Ruby | free / open source | 2,000 |
-| [TestRail](https://www.testrail.com) | Test-case management | language-agnostic | paid | n/a |
-| [Datadog Test Optimization](https://www.datadoghq.com/product/test-optimization) | Flaky-test detection | JS, Java, Python, .NET, Go, Ruby, Swift | paid | n/a |
-| [pytest-rerunfailures](https://github.com/pytest-dev/pytest-rerunfailures) | Flaky-test triage (retry plugin) | Python | free / open source | 500 |
-| [Make](https://www.gnu.org/software/make) | Task/build runner | language-agnostic | free / open source | n/a |
-| [Taskfile.dev](https://taskfile.dev) | Task runner | language-agnostic | free / open source | 16,000 |
-| [Datadog CI Visibility](https://www.datadoghq.com/product/ci-cd-monitoring) | CI/CD observability | language-agnostic | paid | n/a |
-| [GitHub required status checks](https://docs.github.com) | Branch protection | n/a | free / paid | n/a |
-| [semantic-release](https://semantic-release.gitbook.io) | Release automation | JS/Node, plugin-extensible | free / open source | 24,000 |
-| [Release Please](https://github.com/googleapis/release-please) | Release automation | 11+ ecosystems | free / open source | 7,400 |
-| [changesets](https://github.com/changesets/changesets) | Release automation (JS/TS monorepos) | JavaScript, TypeScript | free / open source | 12,000 |
-| [Skopeo](https://github.com/containers/skopeo) | Image copy/inspection | language-agnostic | free / open source | 11,000 |
-| [cosign](https://docs.sigstore.dev/cosign) | Image signing | language-agnostic | free / open source | 6,200 |
-| [Rollbar](https://rollbar.com) | Error tracking | JS, Python, Ruby, Go, Java, +more | freemium / paid | n/a |
-| [PagerDuty-to-GitHub bridges](https://www.pagerduty.com/integrations) | Incident-to-issue integration | language-agnostic | depends on plan | n/a |
-| [Flagger](https://flagger.app) | Canary deployment (Kubernetes) | language-agnostic | free / open source | 5,400 |
-| [Argo Rollouts](https://argoproj.github.io/rollouts) | Progressive delivery (Kubernetes) | language-agnostic | free / open source | 3,600 |
-| [Istio](https://istio.io) | Service mesh | language-agnostic | free / open source | 38,000 |
-| [Prometheus](https://prometheus.io) | Metrics and monitoring | language-agnostic | free / open source | 66,000 |
-| [Alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager) | Alerting | language-agnostic | free / open source | 8,600 |
-| [SLSA](https://slsa.dev) | Supply-chain security framework | n/a | free / open spec | n/a |
+| Tool | Topic | Languages Supported | Pricing | GitHub Stars | Ref |
+|:-----|:--------|:---------------------|:--------|:--------------|:----|
+| [SWE-bench](https://www.swebench.com) | Agent-Readiness Benchmarks | Python, +9 more (multilingual) | free / open source | 5,700 | [→](#swe-bench) |
+| [METR time-horizon evals](https://metr.org) | Agent-Readiness Benchmarks | n/a | free | 300 | [→](#metr-time-horizon-evals) |
+| [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) | Architecture & Complexity Management | JavaScript, TypeScript | free / open source | 7,100 | [→](#dependency-cruiser) |
+| [madge](https://github.com/pahen/madge) | Architecture & Complexity Management | JavaScript, TypeScript | free / open source | 10,000 | [→](#madge) |
+| [radon](https://radon.readthedocs.io) | Architecture & Complexity Management | Python | free / open source | 2,000 | [→](#radon) |
+| [CodeScene](https://codescene.com) | Architecture & Complexity Management | 25+ languages | paid (free OSS tier) | n/a | [→](#codescene) |
+| [Team Topologies](https://teamtopologies.com) | Architecture & Complexity Management | n/a | free framework | n/a | [→](#team-topologies) |
+| [OpenTelemetry](https://opentelemetry.io) | Observability & Reliability | 12+ languages | free / open source | 7,400 | [→](#opentelemetry) |
+| [LaunchDarkly](https://launchdarkly.com) | Observability & Reliability | 25+ languages | freemium / paid | n/a | [→](#launchdarkly) |
+| [ArchUnit](https://www.archunit.org) | Observability & Reliability | Java, C# (port) | free / open source | 3,800 | [→](#archunit) |
+| [Nix](https://nixos.org) | Reproducible Environments & Data | language-agnostic | free / open source | 18,000 | [→](#nix) |
+| [Docker](https://www.docker.com) | Reproducible Environments & Data | language-agnostic | freemium | 72,000 | [→](#docker) |
+| [DVC](https://dvc.org) | Reproducible Environments & Data | Python | free / open source | 16,000 | [→](#dvc-data-version-control) |
+| [Backstage](https://backstage.io) | Reproducible Environments & Data | TypeScript, JavaScript | free / open source | 34,000 | [→](#backstage) |
+| [Rundeck](https://www.rundeck.com) | Reproducible Environments & Data | Java, Groovy | freemium | 6,300 | [→](#rundeck) |
+| [PagerDuty](https://www.pagerduty.com) | Reproducible Environments & Data | language-agnostic | freemium / paid | n/a | [→](#pagerduty) |
+| [AGENTS.md](https://agents.md) | Agent Instruction Manifests & Rules | language-agnostic | free / open spec | 23,000 | [→](#agentsmd) |
+| [Cursor `.cursorrules`](https://cursor.com) | Agent Instruction Manifests & Rules | language-agnostic | free convention | n/a | [→](#cursor-cursorrules) |
+| [GitHub Copilot custom instructions](https://docs.github.com/copilot) | Agent Instruction Manifests & Rules | language-agnostic | paid | n/a | [→](#github-copilot-custom-instructions) |
+| [ruff](https://docs.astral.sh/ruff) | Agent Instruction Manifests & Rules | Python | free / open source | 49,000 | [→](#ruff) |
+| [mypy](https://mypy-lang.org) | Agent Instruction Manifests & Rules | Python | free / open source | 21,000 | [→](#mypy) |
+| [Sourcegraph Cody](https://sourcegraph.com/cody) | Retrieval-Augmented Context for Code | language-agnostic | freemium / paid | n/a | [→](#sourcegraph-cody) |
+| [Context7](https://context7.com) | Retrieval-Augmented Context for Code | language-agnostic | free | 61,000 | [→](#context7) |
+| [LlamaIndex](https://www.llamaindex.ai) | Retrieval-Augmented Context for Code | Python, TypeScript | free / open source | 52,000 | [→](#llamaindex) |
+| [txtai](https://neuml.github.io/txtai) | Retrieval-Augmented Context for Code | Python, JavaScript | free / open source | 13,000 | [→](#txtai) |
+| [LangChain](https://www.langchain.com) | Agent Frameworks & Protocols | Python, JavaScript/TS | free / open source | 145,000 | [→](#langchain) |
+| [MCP](https://modelcontextprotocol.io) | Agent Frameworks & Protocols | language-agnostic | free / open spec | 9,000 | [→](#mcp-model-context-protocol) |
+| [LangGraph](https://www.langchain.com/langgraph) | Agent Frameworks & Protocols | Python, JavaScript/TS | free / open source | 40,000 | [→](#langgraph) |
+| [Semantic Kernel](https://github.com/microsoft/semantic-kernel) | Agent Frameworks & Protocols | Python, C#, Java | free / open source | 29,000 | [→](#semantic-kernel) |
+| [Nx](https://nx.dev) | Repository Contracts & Templating | TS, JS, Java, .NET, Go, Rust, Python | freemium | 29,200 | [→](#nx) |
+| [Bazel](https://bazel.build) | Repository Contracts & Templating | Java, C/C++, Python, Go, and more | free / open source | 25,700 | [→](#bazel) |
+| [cookiecutter](https://cookiecutter.readthedocs.io) | Repository Contracts & Templating | language-agnostic | free / open source | 25,100 | [→](#cookiecutter) |
+| [RFC templates](https://en.wikipedia.org/wiki/Request_for_Comments) | Requirements & Planning Practices | n/a | free (practice) | n/a | [→](#rfc-templates-googleaws-style) |
+| [Shape Up](https://basecamp.com/shapeup) | Requirements & Planning Practices | n/a | free (book) | n/a | [→](#shape-up) |
+| [Amazon PR/FAQ](https://en.wikipedia.org/wiki/Working_backwards) | Requirements & Planning Practices | n/a | free (practice) | n/a | [→](#amazon-prfaq) |
+| [Jira](https://www.atlassian.com/software/jira) | Requirements & Planning Practices | language-agnostic | freemium / paid | n/a | [→](#jira) |
+| [Linear](https://linear.app) | Requirements & Planning Practices | language-agnostic | freemium / paid | n/a | [→](#linear) |
+| [adr-tools](https://github.com/npryce/adr-tools) | Architecture Decision Record (ADR) Tooling | language-agnostic | free / open source | 5,600 | [→](#adr-tools) |
+| [Log4brains](https://github.com/thomvaill/log4brains) | Architecture Decision Record (ADR) Tooling | language-agnostic | free / open source | 1,600 | [→](#log4brains) |
+| [MADR](https://adr.github.io/madr) | Architecture Decision Record (ADR) Tooling | language-agnostic | free / open spec | 2,400 | [→](#madr) |
+| [Turborepo](https://turbo.build/repo) | Monorepo & Multi-repo Tooling | JavaScript, TypeScript | free / open source | 31,000 | [→](#turborepo) |
+| [Lerna](https://lerna.js.org) | Monorepo & Multi-repo Tooling | JavaScript, TypeScript | free / open source | 36,000 | [→](#lerna) |
+| [Sapling](https://sapling-scm.com) | Monorepo & Multi-repo Tooling | language-agnostic | free / open source | 7,000 | [→](#sapling) |
+| [git submodules / subtrees](https://git-scm.com) | Monorepo & Multi-repo Tooling | language-agnostic | free / open source | n/a | [→](#git-submodules-subtrees) |
+| [Pants](https://www.pantsbuild.org) | Build Systems & Project Boundaries | Python, Java, Scala, Kotlin, Go | free / open source | 3,800 | [→](#pants) |
+| [import-linter](https://import-linter.readthedocs.io) | Import & Dependency Analysis | Python | free / open source | 1,100 | [→](#import-linter) |
+| [pydeps](https://github.com/thebjorn/pydeps) | Import & Dependency Analysis | Python | free / open source | 2,100 | [→](#pydeps) |
+| [jscpd](https://github.com/kucherenko/jscpd) | Code Duplication Detection | 200+ languages | free / open source | 6,000 | [→](#jscpd) |
+| [PMD CPD](https://pmd.github.io) | Code Duplication Detection | Java, JS/TS, and 15+ more | free / open source | 5,500 | [→](#pmd-cpd) |
+| [SonarQube](https://www.sonarsource.com/products/sonarqube) | Code Duplication Detection | 30+ languages | freemium | 11,000 | [→](#sonarqube) |
+| [Sourcegraph batch changes](https://sourcegraph.com/batch-changes) | Code Duplication Detection | language-agnostic | paid | n/a | [→](#sourcegraph-batch-changes) |
+| [jscodeshift](https://github.com/facebook/jscodeshift) | Codemods & Automated Refactoring | JavaScript, TypeScript | free / open source | 10,000 | [→](#jscodeshift) |
+| [Comby](https://comby.dev) | Codemods & Automated Refactoring | language-agnostic | free / open source | 2,600 | [→](#comby) |
+| [OpenRewrite](https://docs.openrewrite.org) | Codemods & Automated Refactoring | Java, Kotlin, Groovy, +more | free / open source | 3,600 | [→](#openrewrite) |
+| [rope](https://github.com/python-rope/rope) | Codemods & Automated Refactoring | Python | free / open source | 2,200 | [→](#rope) |
+| [ts-morph](https://ts-morph.com) | Codemods & Automated Refactoring | TypeScript, JavaScript | free / open source | 6,100 | [→](#ts-morph) |
+| [VS Code Dev Containers](https://containers.dev) | Dev Environments | language-agnostic | free / open source | 5,700 | [→](#vs-code-dev-containers) |
+| [direnv](https://direnv.net) | Dev Environments | language-agnostic | free / open source | 15,000 | [→](#direnv) |
+| [Gitpod](https://www.gitpod.io) | Dev Environments | language-agnostic | freemium / paid | 14,000 | [→](#gitpod) |
+| [GitHub Codespaces](https://github.com/features/codespaces) | Dev Environments | language-agnostic | freemium | n/a | [→](#github-codespaces) |
+| [Homebrew](https://brew.sh) | Container Wrapper Patterns | language-agnostic | free / open source | 49,000 | [→](#homebrew) |
+| [act](https://github.com/nektos/act) | Container Wrapper Patterns | language-agnostic | free / open source | 72,000 | [→](#act) |
+| [just](https://github.com/casey/just) | Container Wrapper Patterns | language-agnostic | free / open source | 35,000 | [→](#just) |
+| [entr](https://eradman.com/entrproject) | Container Wrapper Patterns | language-agnostic | free / open source | 5,700 | [→](#entr) |
+| [Podman](https://podman.io) | Container Runtimes & Isolation | language-agnostic | free / open source | 30,000 | [→](#podman) |
+| [sysbox](https://github.com/nestybox/sysbox) | Container Runtimes & Isolation | language-agnostic | free / open source | 3,800 | [→](#sysbox) |
+| [Kaniko](https://github.com/GoogleContainerTools/kaniko) | Container Runtimes & Isolation | language-agnostic | free / open source | 16,000 | [→](#kaniko) |
+| [Buildah](https://buildah.io) | Container Runtimes & Isolation | language-agnostic | free / open source | 9,000 | [→](#buildah) |
+| [dive](https://github.com/wagoodman/dive) | Container Image Optimization & Scanning | language-agnostic | free / open source | 55,000 | [→](#dive) |
+| [docker-slim](https://github.com/slimtoolkit/slim) | Container Image Optimization & Scanning | language-agnostic | free / open source | 23,000 | [→](#docker-slim) |
+| [Trivy](https://trivy.dev) | Container Image Optimization & Scanning | language-agnostic | free / open source | 38,000 | [→](#trivy) |
+| [Snyk](https://snyk.io) | Container Image Optimization & Scanning | JS, Python, Java, Go, +more | freemium / paid | 5,600 | [→](#snyk) |
+| [gh CLI](https://cli.github.com) | GitHub / PR Automation | language-agnostic | free / open source | 46,000 | [→](#gh-cli) |
+| [GitHub Actions](https://github.com/features/actions) | GitHub / PR Automation | language-agnostic | freemium | n/a | [→](#github-actions) |
+| [OpenAI Codex Cloud](https://openai.com/codex) | GitHub / PR Automation | most major languages | paid | n/a | [→](#openai-codex-cloud) |
+| [Devin](https://devin.ai) | GitHub / PR Automation | most major languages | paid | n/a | [→](#devin) |
+| [Cursor background agents](https://cursor.com) | GitHub / PR Automation | most major languages | paid | n/a | [→](#cursor-background-agents) |
+| [Graphite](https://graphite.dev) | Stacked PRs / Branch Splitting | language-agnostic | freemium / paid | n/a | [→](#graphite) |
+| [git-branchless](https://github.com/arxanas/git-branchless) | Stacked PRs / Branch Splitting | language-agnostic | free / open source | 4,100 | [→](#git-branchless) |
+| [ghstack](https://github.com/ezyang/ghstack) | Stacked PRs / Branch Splitting | language-agnostic | free / open source | 1,000 | [→](#ghstack) |
+| [Claude Code (GitHub Action / remote control)](https://code.claude.com) | Async / Autonomous Agent Platforms | language-agnostic | paid | 142,000 | [→](#claude-code-github-action-remote-control) |
+| [Sweep.dev](https://sweep.dev) | Async / Autonomous Agent Platforms | language-agnostic | freemium / paid | 7,700 | [→](#sweepdev) |
+| [OPA / Rego](https://www.openpolicyagent.org) | Agent Permissions & Sandboxing | Rego, language-agnostic | free / open source | 12,000 | [→](#opa-rego-open-policy-agent) |
+| [Firecracker](https://firecracker-microvm.github.io) | Agent Permissions & Sandboxing | language-agnostic | free / open source | 36,000 | [→](#firecracker) |
+| [gVisor](https://gvisor.dev) | Agent Permissions & Sandboxing | language-agnostic | free / open source | 19,000 | [→](#gvisor) |
+| [reviewdog](https://github.com/reviewdog/reviewdog) | AI / Automated PR Review | language-agnostic | free / open source | 9,500 | [→](#reviewdog) |
+| [Danger / danger.js](https://danger.systems) | AI / Automated PR Review | language-agnostic | free / open source | 5,500 | [→](#danger-dangerjs) |
+| [Codacy](https://www.codacy.com) | AI / Automated PR Review | 40+ languages | freemium / paid | n/a | [→](#codacy) |
+| [DeepSource](https://deepsource.com) | AI / Automated PR Review | 10+ languages | freemium / paid | n/a | [→](#deepsource) |
+| [Qodo](https://www.qodo.ai) | AI / Automated PR Review | language-agnostic | freemium / paid | n/a | [→](#qodo-formerly-codiumai) |
+| [Greptile](https://www.greptile.com) | AI / Automated PR Review | language-agnostic | paid | n/a | [→](#greptile) |
+| [PR-Agent](https://github.com/qodo-ai/pr-agent) | AI / Automated PR Review | language-agnostic | free / open source | 13,000 | [→](#pr-agent) |
+| [SWE-agent](https://github.com/SWE-agent/SWE-agent) | Autonomous Coding Loops | Python, language-agnostic targets | free / open source | 20,000 | [→](#swe-agent) |
+| [Aider](https://aider.chat) | Autonomous Coding Loops | language-agnostic | free / open source | 48,000 | [→](#aider) |
+| [Sentry](https://sentry.io) | Root-Cause Analysis & Incident Clustering | language-agnostic | freemium / paid | 45,000 | [→](#sentry) |
+| [Datadog](https://www.datadoghq.com) | Root-Cause Analysis & Incident Clustering | language-agnostic | paid | n/a | [→](#datadog) |
+| [BuildPulse](https://buildpulse.io) | Root-Cause Analysis & Incident Clustering | language-agnostic | paid | n/a | [→](#buildpulse) |
+| [Docusaurus](https://docusaurus.io) | Documentation Tooling | JS, TS, Markdown, MDX | free / open source | 66,000 | [→](#docusaurus) |
+| [MkDocs](https://www.mkdocs.org) | Documentation Tooling | Python, Markdown | free / open source | 22,400 | [→](#mkdocs) |
+| [Vale](https://vale.sh) | Documentation Tooling | language-agnostic | free / open source | 6,000 | [→](#vale) |
+| [alex](https://alexjs.com) | Documentation Tooling | JavaScript | free / open source | 5,100 | [→](#alex) |
+| [readme-ai](https://github.com/eli64s/readme-ai) | README Generation & Link Checking | Python, language-agnostic | free / open source | 2,800 | [→](#readme-ai) |
+| [Mintlify](https://mintlify.com) | README Generation & Link Checking | n/a | freemium / paid | n/a | [→](#mintlify) |
+| [markdown-link-check](https://github.com/tcort/markdown-link-check) | README Generation & Link Checking | JavaScript | free / open source | 700 | [→](#markdown-link-check) |
+| [lychee](https://lychee.cli.rs) | README Generation & Link Checking | Rust, language-agnostic | free / open source | 3,800 | [→](#lychee) |
+| [pre-commit](https://pre-commit.com) | Git Hooks | Python, language-agnostic | free / open source | 15,000 | [→](#pre-commit-framework) |
+| [husky](https://typicode.github.io/husky) | Git Hooks | JavaScript, TypeScript | free / open source | 35,000 | [→](#husky) |
+| [lefthook](https://github.com/evilmartians/lefthook) | Git Hooks | Go, language-agnostic | free / open source | 8,600 | [→](#lefthook) |
+| [Talisman](https://github.com/thoughtworks/talisman) | Git Hooks | Go, language-agnostic | free / open source | 2,100 | [→](#talisman) |
+| [dmypy](https://mypy.readthedocs.io) | Type Checking | Python | free / open source | 21,000 | [→](#dmypy-mypy-daemon) |
+| [pyright](https://microsoft.github.io/pyright) | Type Checking | Python | free / open source | 16,000 | [→](#pyright) |
+| [TruffleHog](https://trufflesecurity.com) | Secret Scanning & SAST | language-agnostic | freemium / paid | 28,000 | [→](#trufflehog) |
+| [detect-secrets](https://github.com/Yelp/detect-secrets) | Secret Scanning & SAST | language-agnostic | free / open source | 4,600 | [→](#detect-secrets) |
+| [GitHub secret scanning](https://docs.github.com/code-security/secret-scanning) | Secret Scanning & SAST | language-agnostic | free / paid | n/a | [→](#github-secret-scanning) |
+| [CodeQL](https://codeql.github.com) | Secret Scanning & SAST | C, C++, C#, Go, Java, JS/TS, Python, +more | free / paid | 10,000 | [→](#codeql) |
+| [Bandit](https://bandit.readthedocs.io) | Secret Scanning & SAST | Python | free / open source | 8,200 | [→](#bandit) |
+| [Dependabot](https://github.com/dependabot) | Dependency Vulnerability & SBOM | 14+ ecosystems | free | 5,700 | [→](#dependabot) |
+| [Renovate](https://docs.renovatebot.com) | Dependency Vulnerability & SBOM | 90+ ecosystems | free / open source | 22,000 | [→](#renovate) |
+| [Grype](https://github.com/anchore/grype) | Dependency Vulnerability & SBOM | language-agnostic | free / open source | 13,000 | [→](#grype) |
+| [Syft](https://github.com/anchore/syft) | Dependency Vulnerability & SBOM | language-agnostic | free / open source | 9,400 | [→](#syft) |
+| [OSV-Scanner](https://google.github.io/osv-scanner) | Dependency Vulnerability & SBOM | 12+ languages | free / open source | 11,000 | [→](#osv-scanner) |
+| [Coveralls](https://coveralls.io) | Coverage Reporting | language-agnostic | freemium | n/a | [→](#coveralls) |
+| [mutmut](https://mutmut.readthedocs.io) | Mutation Testing | Python | free / open source | 1,400 | [→](#mutmut) |
+| [cosmic-ray](https://cosmic-ray.readthedocs.io) | Mutation Testing | Python | free / open source | 700 | [→](#cosmic-ray) |
+| [Stryker Mutator](https://stryker-mutator.io) | Mutation Testing | JS, TS, C#, .NET | free / open source | 3,000 | [→](#stryker-mutator) |
+| [Pitest](https://pitest.org) | Mutation Testing | Java, Kotlin, Scala, Groovy | free / open source | 1,800 | [→](#pitest) |
+| [Hypothesis](https://hypothesis.readthedocs.io) | Property-Based & Contract Testing | Python | free / open source | 8,900 | [→](#hypothesis) |
+| [Pact](https://pact.io) | Property-Based & Contract Testing | 9+ languages | free / open source | 1,800 | [→](#pact) |
+| [Diffblue Cover](https://www.diffblue.com) | AI Test Generation | Java | paid | n/a | [→](#diffblue-cover) |
+| [EvoSuite](https://www.evosuite.org) | AI Test Generation | Java | free / open source | 900 | [→](#evosuite) |
+| [GitHub Copilot test generation](https://docs.github.com/copilot) | AI Test Generation | Python, JS/TS, Java, C#, +more | paid | n/a | [→](#github-copilot-test-generation) |
+| [syrupy](https://github.com/tophat/syrupy) | Snapshot / Approval Testing & Reporting | Python | free / open source | 900 | [→](#syrupy) |
+| [ApprovalTests](https://approvaltests.com) | Snapshot / Approval Testing & Reporting | Java, C#, C++, Python, +more | free / open source | 600 | [→](#approvaltests) |
+| [ReportPortal](https://reportportal.io) | Snapshot / Approval Testing & Reporting | Java, Python, JS/TS, C#, Ruby | free / open source | 2,000 | [→](#reportportal) |
+| [TestRail](https://www.testrail.com) | Snapshot / Approval Testing & Reporting | language-agnostic | paid | n/a | [→](#testrail) |
+| [Datadog Test Optimization](https://www.datadoghq.com/product/test-optimization) | Flaky Test Detection | JS, Java, Python, .NET, Go, Ruby, Swift | paid | n/a | [→](#datadog-test-optimization) |
+| [pytest-rerunfailures](https://github.com/pytest-dev/pytest-rerunfailures) | Flaky Test Detection | Python | free / open source | 500 | [→](#pytest-rerunfailures) |
+| [Make](https://www.gnu.org/software/make) | Task Runners | language-agnostic | free / open source | n/a | [→](#make) |
+| [Taskfile.dev](https://taskfile.dev) | Task Runners | language-agnostic | free / open source | 16,000 | [→](#taskfiledev-task) |
+| [Datadog CI Visibility](https://www.datadoghq.com/product/ci-cd-monitoring) | CI/CD Dashboards | language-agnostic | paid | n/a | [→](#datadog-ci-visibility) |
+| [GitHub required status checks](https://docs.github.com) | CI/CD Dashboards | n/a | free / paid | n/a | [→](#github-required-status-checks) |
+| [semantic-release](https://semantic-release.gitbook.io) | Release Automation | JS/Node, plugin-extensible | free / open source | 24,000 | [→](#semantic-release) |
+| [Release Please](https://github.com/googleapis/release-please) | Release Automation | 11+ ecosystems | free / open source | 7,400 | [→](#release-please) |
+| [changesets](https://github.com/changesets/changesets) | Release Automation | JavaScript, TypeScript | free / open source | 12,000 | [→](#changesets) |
+| [Skopeo](https://github.com/containers/skopeo) | Container Release, Signing & SBOM | language-agnostic | free / open source | 11,000 | [→](#skopeo) |
+| [cosign](https://docs.sigstore.dev/cosign) | Container Release, Signing & SBOM | language-agnostic | free / open source | 6,200 | [→](#cosign) |
+| [Rollbar](https://rollbar.com) | Error Tracking & Incident Routing | JS, Python, Ruby, Go, Java, +more | freemium / paid | n/a | [→](#rollbar) |
+| [PagerDuty-to-GitHub bridges](https://www.pagerduty.com/integrations) | Error Tracking & Incident Routing | language-agnostic | depends on plan | n/a | [→](#pagerduty-to-github-bridges) |
+| [Flagger](https://flagger.app) | Canary Deployment & Progressive Delivery | language-agnostic | free / open source | 5,400 | [→](#flagger) |
+| [Argo Rollouts](https://argoproj.github.io/rollouts) | Canary Deployment & Progressive Delivery | language-agnostic | free / open source | 3,600 | [→](#argo-rollouts) |
+| [Istio](https://istio.io) | Canary Deployment & Progressive Delivery | language-agnostic | free / open source | 38,000 | [→](#istio) |
+| [Prometheus](https://prometheus.io) | Canary Deployment & Progressive Delivery | language-agnostic | free / open source | 66,000 | [→](#prometheus) |
+| [Alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager) | Canary Deployment & Progressive Delivery | language-agnostic | free / open source | 8,600 | [→](#alertmanager) |
+| [SLSA](https://slsa.dev) | Supply Chain Security & Governance | n/a | free / open spec | n/a | [→](#slsa-supply-chain-levels-for-software-artifacts) |
 
 ## Agent-Readiness Benchmarks
 
-- **SWE-bench**
-  - _Website_: https://www.swebench.com
+### SWE-bench
+  - _Website_: [https://www.swebench.com](https://www.swebench.com)
   - _Cluster_: Agent evaluation benchmark
   - _Problem it solves_:
     - LLM coding benchmarks relied on short, synthetic problems, leaving no
@@ -190,11 +190,11 @@
     plus C, C++, Go, Java, JavaScript, TypeScript, PHP, Ruby, Rust
     (SWE-bench Multilingual variant)
   - _Pricing_: free / open source (research benchmark)
-  - _GitHub link_: https://github.com/SWE-bench/SWE-bench
+  - _GitHub link_: [https://github.com/SWE-bench/SWE-bench](https://github.com/SWE-bench/SWE-bench)
   - _GitHub stars_: 5,700
 
-- **METR time-horizon evals**
-  - _Website_: https://metr.org
+### METR time-horizon evals
+  - _Website_: [https://metr.org](https://metr.org)
   - _Cluster_: Agent evaluation benchmark
   - _Problem it solves_:
     - Standard accuracy benchmarks don't capture how long a task an AI agent
@@ -209,13 +209,13 @@
     tied to one programming language; underlying tasks span software
     engineering, ML, and cybersecurity)
   - _Pricing_: free (published research, not a licensed product)
-  - _GitHub link_: https://github.com/METR/eval-analysis-public
+  - _GitHub link_: [https://github.com/METR/eval-analysis-public](https://github.com/METR/eval-analysis-public)
   - _GitHub stars_: 300
 
 ## Architecture & Complexity Management
 
-- **dependency-cruiser**
-  - _Website_: https://github.com/sverweij/dependency-cruiser
+### dependency-cruiser
+  - _Website_: [https://github.com/sverweij/dependency-cruiser](https://github.com/sverweij/dependency-cruiser)
   - _Cluster_: Static dependency analysis (JS/TS)
   - _Problem it solves_:
     - Codebases grow tangled dependency graphs (circular deps, forbidden
@@ -226,11 +226,11 @@
     forbidden imports and cycles
   - _Languages supported_: JavaScript, TypeScript, CoffeeScript, LiveScript
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/sverweij/dependency-cruiser
+  - _GitHub link_: [https://github.com/sverweij/dependency-cruiser](https://github.com/sverweij/dependency-cruiser)
   - _GitHub stars_: 7,100
 
-- **madge**
-  - _Website_: https://github.com/pahen/madge
+### madge
+  - _Website_: [https://github.com/pahen/madge](https://github.com/pahen/madge)
   - _Cluster_: Static dependency analysis (JS/TS)
   - _Problem it solves_:
     - Module dependency graphs become opaque as a project grows, making
@@ -241,11 +241,11 @@
     circular dependencies
   - _Languages supported_: JavaScript, TypeScript, Sass, Stylus, Less
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/pahen/madge
+  - _GitHub link_: [https://github.com/pahen/madge](https://github.com/pahen/madge)
   - _GitHub stars_: 10,000
 
-- **radon**
-  - _Website_: https://radon.readthedocs.io
+### radon
+  - _Website_: [https://radon.readthedocs.io](https://radon.readthedocs.io)
   - _Cluster_: Complexity metrics (Python)
   - _Problem it solves_:
     - Code complexity and maintainability are hard to gauge by eye, so risky
@@ -256,11 +256,11 @@
     raw code metrics
   - _Languages supported_: Python
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/rubik/radon
+  - _GitHub link_: [https://github.com/rubik/radon](https://github.com/rubik/radon)
   - _GitHub stars_: 2,000
 
-- **CodeScene**
-  - _Website_: https://codescene.com
+### CodeScene
+  - _Website_: [https://codescene.com](https://codescene.com)
   - _Cluster_: Code-health analytics
   - _Problem it solves_:
     - Traditional static analysis floods teams with unprioritized warnings,
@@ -276,8 +276,8 @@
   - _GitHub link_: n/a
   - _GitHub stars_: n/a
 
-- **Team Topologies**
-  - _Website_: https://teamtopologies.com
+### Team Topologies
+  - _Website_: [https://teamtopologies.com](https://teamtopologies.com)
   - _Cluster_: Org-design framework
   - _Problem it solves_:
     - Conventional org charts and team structures create hand-offs and
@@ -294,8 +294,8 @@
 
 ## Observability & Reliability
 
-- **OpenTelemetry**
-  - _Website_: https://opentelemetry.io
+### OpenTelemetry
+  - _Website_: [https://opentelemetry.io](https://opentelemetry.io)
   - _Cluster_: Observability
   - _Problem it solves_:
     - Observability tooling is fragmented across vendors, forcing teams to
@@ -307,11 +307,11 @@
   - _Languages supported_: Java, Kotlin, Python, Go, JavaScript, .NET (C#),
     Ruby, PHP, Rust, C++, Swift, Erlang
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/open-telemetry/opentelemetry-collector
+  - _GitHub link_: [https://github.com/open-telemetry/opentelemetry-collector](https://github.com/open-telemetry/opentelemetry-collector)
   - _GitHub stars_: 7,400
 
-- **LaunchDarkly**
-  - _Website_: https://launchdarkly.com
+### LaunchDarkly
+  - _Website_: [https://launchdarkly.com](https://launchdarkly.com)
   - _Cluster_: Feature flags
   - _Problem it solves_:
     - Shipping features tied to full code deploys is risky and slow, making
@@ -327,8 +327,8 @@
   - _GitHub link_: n/a
   - _GitHub stars_: n/a
 
-- **ArchUnit**
-  - _Website_: https://www.archunit.org
+### ArchUnit
+  - _Website_: [https://www.archunit.org](https://www.archunit.org)
   - _Cluster_: Architecture fitness functions (Java)
   - _Problem it solves_:
     - Architectural rules (layering, dependency direction, package
@@ -340,13 +340,13 @@
     executable unit tests
   - _Languages supported_: Java (with a community .NET/C# port, ArchUnitNET)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/TNG/ArchUnit
+  - _GitHub link_: [https://github.com/TNG/ArchUnit](https://github.com/TNG/ArchUnit)
   - _GitHub stars_: 3,800
 
 ## Reproducible Environments & Data
 
-- **Nix**
-  - _Website_: https://nixos.org
+### Nix
+  - _Website_: [https://nixos.org](https://nixos.org)
   - _Cluster_: Reproducible package/environment manager
   - _Problem it solves_:
     - Software builds and dev environments are not reproducible, causing
@@ -359,11 +359,11 @@
     for any language); package/build recipes are written in the Nix
     expression language
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/NixOS/nix
+  - _GitHub link_: [https://github.com/NixOS/nix](https://github.com/NixOS/nix)
   - _GitHub stars_: 18,000
 
-- **Docker**
-  - _Website_: https://www.docker.com
+### Docker
+  - _Website_: [https://www.docker.com](https://www.docker.com)
   - _Cluster_: Containerization
   - _Problem it solves_:
     - Applications behave differently across dev, test, and production
@@ -375,11 +375,11 @@
   - _Languages supported_: language-agnostic (packages any application/
     runtime into OCI-compliant containers)
   - _Pricing_: freemium (Docker Desktop paid for larger companies)
-  - _GitHub link_: https://github.com/moby/moby
+  - _GitHub link_: [https://github.com/moby/moby](https://github.com/moby/moby)
   - _GitHub stars_: 72,000
 
-- **DVC (Data Version Control)**
-  - _Website_: https://dvc.org
+### DVC (Data Version Control)
+  - _Website_: [https://dvc.org](https://dvc.org)
   - _Cluster_: Data/pipeline versioning
   - _Problem it solves_:
     - Large datasets and ML models cannot be efficiently versioned or diffed
@@ -390,11 +390,11 @@
   - _Languages supported_: Python (core CLI/library); language-agnostic for
     the code and data projects it versions
   - _Pricing_: free / open source (Iterative Studio SaaS is paid)
-  - _GitHub link_: https://github.com/iterative/dvc
+  - _GitHub link_: [https://github.com/iterative/dvc](https://github.com/iterative/dvc)
   - _GitHub stars_: 16,000
 
-- **Backstage**
-  - _Website_: https://backstage.io
+### Backstage
+  - _Website_: [https://backstage.io](https://backstage.io)
   - _Cluster_: Developer portal / service catalog
   - _Problem it solves_:
     - Microservices and infrastructure sprawl create chaos: scattered
@@ -406,11 +406,11 @@
   - _Languages supported_: TypeScript, JavaScript (Node.js backend, React
     frontend; plugins written in TypeScript/JavaScript)
   - _Pricing_: free / open source (self-hosted)
-  - _GitHub link_: https://github.com/backstage/backstage
+  - _GitHub link_: [https://github.com/backstage/backstage](https://github.com/backstage/backstage)
   - _GitHub stars_: 34,000
 
-- **Rundeck**
-  - _Website_: https://www.rundeck.com
+### Rundeck
+  - _Website_: [https://www.rundeck.com](https://www.rundeck.com)
   - _Cluster_: Runbook automation
   - _Problem it solves_:
     - Operational tasks and existing automation/scripts are scattered and
@@ -422,11 +422,11 @@
   - _Languages supported_: Java, Groovy (core platform); language-agnostic
     for job scripts it orchestrates (Bash, Python, PowerShell, Ansible, etc.)
   - _Pricing_: freemium (OSS core + paid Enterprise)
-  - _GitHub link_: https://github.com/rundeck/rundeck
+  - _GitHub link_: [https://github.com/rundeck/rundeck](https://github.com/rundeck/rundeck)
   - _GitHub stars_: 6,300
 
-- **PagerDuty**
-  - _Website_: https://www.pagerduty.com
+### PagerDuty
+  - _Website_: [https://www.pagerduty.com](https://www.pagerduty.com)
   - _Cluster_: Incident response / runbook automation
   - _Problem it solves_:
     - Incidents and operational issues are detected and resolved too
@@ -443,8 +443,8 @@
 
 ## Agent Instruction Manifests & Rules
 
-- **AGENTS.md**
-  - _Website_: https://agents.md
+### AGENTS.md
+  - _Website_: [https://agents.md](https://agents.md)
   - _Cluster_: Agent instruction manifest (open standard)
   - _Problem it solves_:
     - Coding agents lack a consistent, discoverable place for repo context
@@ -457,11 +457,11 @@
     "how to work in this repo" file for coding agents
   - _Languages supported_: language-agnostic
   - _Pricing_: free / open specification
-  - _GitHub link_: https://github.com/agentsmd/agents.md
+  - _GitHub link_: [https://github.com/agentsmd/agents.md](https://github.com/agentsmd/agents.md)
   - _GitHub stars_: 23,000
 
-- **Cursor `.cursorrules`**
-  - _Website_: https://cursor.com
+### Cursor `.cursorrules`
+  - _Website_: [https://cursor.com](https://cursor.com)
   - _Cluster_: IDE agent-rules convention
   - _Problem it solves_:
     - Generic LLM code suggestions ignore a repo's specific conventions,
@@ -475,8 +475,8 @@
   - _GitHub link_: n/a
   - _GitHub stars_: n/a
 
-- **GitHub Copilot custom instructions**
-  - _Website_: https://docs.github.com/copilot
+### GitHub Copilot custom instructions
+  - _Website_: [https://docs.github.com/copilot](https://docs.github.com/copilot)
   - _Cluster_: IDE agent-rules convention
   - _Problem it solves_:
     - Copilot suggestions and PRs miss repo-specific build steps, test
@@ -490,8 +490,8 @@
   - _GitHub link_: n/a
   - _GitHub stars_: n/a
 
-- **ruff**
-  - _Website_: https://docs.astral.sh/ruff
+### ruff
+  - _Website_: [https://docs.astral.sh/ruff](https://docs.astral.sh/ruff)
   - _Cluster_: Linter (Python)
   - _Problem it solves_:
     - Python projects needed multiple slow, separately-configured tools
@@ -503,11 +503,11 @@
     Rust
   - _Languages supported_: Python
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/astral-sh/ruff
+  - _GitHub link_: [https://github.com/astral-sh/ruff](https://github.com/astral-sh/ruff)
   - _GitHub stars_: 49,000
 
-- **mypy**
-  - _Website_: https://mypy-lang.org
+### mypy
+  - _Website_: [https://mypy-lang.org](https://mypy-lang.org)
   - _Cluster_: Type checker (Python)
   - _Problem it solves_:
     - Python's dynamic typing lets type errors surface only at runtime
@@ -518,13 +518,13 @@
     annotations
   - _Languages supported_: Python
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/python/mypy
+  - _GitHub link_: [https://github.com/python/mypy](https://github.com/python/mypy)
   - _GitHub stars_: 21,000
 
 ## Retrieval-Augmented Context for Code
 
-- **Sourcegraph Cody**
-  - _Website_: https://sourcegraph.com/cody
+### Sourcegraph Cody
+  - _Website_: [https://sourcegraph.com/cody](https://sourcegraph.com/cody)
   - _Cluster_: AI coding assistant with codebase context
   - _Problem it solves_:
     - Generic LLM chat has no awareness of a specific codebase's structure,
@@ -538,12 +538,12 @@
     programming languages via code search/indexing)
   - _Pricing_: freemium / paid tiers
   - _GitHub link_: n/a (main repo went private Aug 2025; last public
-    snapshot archived at https://github.com/sourcegraph/cody-public-snapshot)
+    snapshot archived at [https://github.com/sourcegraph/cody-public-snapshot](https://github.com/sourcegraph/cody-public-snapshot))
   - _GitHub stars_: n/a (archived snapshot had ~3,800 stars, no longer
     updated)
 
-- **Context7**
-  - _Website_: https://context7.com
+### Context7
+  - _Website_: [https://context7.com](https://context7.com)
   - _Cluster_: MCP server for documentation retrieval
   - _Problem it solves_:
     - LLMs are trained on stale snapshots of library/API docs and
@@ -555,11 +555,11 @@
   - _Languages supported_: language-agnostic (serves docs for libraries
     across any programming language; server itself is TypeScript)
   - _Pricing_: free (open source; hosted service has usage limits)
-  - _GitHub link_: https://github.com/upstash/context7
+  - _GitHub link_: [https://github.com/upstash/context7](https://github.com/upstash/context7)
   - _GitHub stars_: 61,000
 
-- **LlamaIndex**
-  - _Website_: https://www.llamaindex.ai
+### LlamaIndex
+  - _Website_: [https://www.llamaindex.ai](https://www.llamaindex.ai)
   - _Cluster_: RAG framework
   - _Problem it solves_:
     - Raw LLMs have no access to private/proprietary data and a fixed
@@ -570,11 +570,11 @@
     applications
   - _Languages supported_: Python, TypeScript/JavaScript
   - _Pricing_: free / open source (LlamaCloud SaaS is paid)
-  - _GitHub link_: https://github.com/run-llama/llama_index
+  - _GitHub link_: [https://github.com/run-llama/llama_index](https://github.com/run-llama/llama_index)
   - _GitHub stars_: 52,000
 
-- **txtai**
-  - _Website_: https://neuml.github.io/txtai
+### txtai
+  - _Website_: [https://neuml.github.io/txtai](https://neuml.github.io/txtai)
   - _Cluster_: Embeddings / vector search library
   - _Problem it solves_:
     - Assembling a semantic search / RAG stack normally requires separately
@@ -587,13 +587,13 @@
   - _Languages supported_: Python (core); JavaScript client available
     (txtai.js)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/neuml/txtai
+  - _GitHub link_: [https://github.com/neuml/txtai](https://github.com/neuml/txtai)
   - _GitHub stars_: 13,000
 
 ## Agent Frameworks & Protocols
 
-- **LangChain**
-  - _Website_: https://www.langchain.com
+### LangChain
+  - _Website_: [https://www.langchain.com](https://www.langchain.com)
   - _Cluster_: Agent framework
   - _Problem it solves_:
     - Building LLM apps means juggling many model providers, prompt
@@ -605,11 +605,11 @@
   - _What it does_: framework for composing LLM chains, tools, and agents
   - _Languages supported_: Python, JavaScript/TypeScript
   - _Pricing_: free / open source (LangSmith observability is paid)
-  - _GitHub link_: https://github.com/langchain-ai/langchain
+  - _GitHub link_: [https://github.com/langchain-ai/langchain](https://github.com/langchain-ai/langchain)
   - _GitHub stars_: 145,000
 
-- **MCP (Model Context Protocol)**
-  - _Website_: https://modelcontextprotocol.io
+### MCP (Model Context Protocol)
+  - _Website_: [https://modelcontextprotocol.io](https://modelcontextprotocol.io)
   - _Cluster_: Agent-tooling protocol
   - _Problem it solves_:
     - Each AI app needed custom, one-off connectors for every external tool
@@ -621,11 +621,11 @@
   - _Languages supported_: language-agnostic (protocol; official SDKs in
     Python, TypeScript, Java, C#, Kotlin, Swift, Rust, Go, Ruby, PHP)
   - _Pricing_: free / open specification
-  - _GitHub link_: https://github.com/modelcontextprotocol/modelcontextprotocol
+  - _GitHub link_: [https://github.com/modelcontextprotocol/modelcontextprotocol](https://github.com/modelcontextprotocol/modelcontextprotocol)
   - _GitHub stars_: 9,000
 
-- **LangGraph**
-  - _Website_: https://www.langchain.com/langgraph
+### LangGraph
+  - _Website_: [https://www.langchain.com/langgraph](https://www.langchain.com/langgraph)
   - _Cluster_: Agent orchestration
   - _Problem it solves_:
     - Simple linear chains cannot express agent workflows needing
@@ -637,11 +637,11 @@
     workflows
   - _Languages supported_: Python, JavaScript/TypeScript
   - _Pricing_: free / open source (LangGraph Platform is paid)
-  - _GitHub link_: https://github.com/langchain-ai/langgraph
+  - _GitHub link_: [https://github.com/langchain-ai/langgraph](https://github.com/langchain-ai/langgraph)
   - _GitHub stars_: 40,000
 
-- **Semantic Kernel**
-  - _Website_: https://github.com/microsoft/semantic-kernel
+### Semantic Kernel
+  - _Website_: [https://github.com/microsoft/semantic-kernel](https://github.com/microsoft/semantic-kernel)
   - _Cluster_: Agent framework
   - _Problem it solves_:
     - Enterprise apps need a stable, production-grade way to plug LLM
@@ -653,13 +653,13 @@
   - _What it does_: Microsoft's SDK for orchestrating LLM plugins and agents
   - _Languages supported_: Python, C# (.NET), Java
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/microsoft/semantic-kernel
+  - _GitHub link_: [https://github.com/microsoft/semantic-kernel](https://github.com/microsoft/semantic-kernel)
   - _GitHub stars_: 29,000
 
 ## Repository Contracts & Templating
 
-- **Nx**
-  - _Website_: https://nx.dev
+### Nx
+  - _Website_: [https://nx.dev](https://nx.dev)
   - _Cluster_: Monorepo build system
   - _Problem it solves_:
     - Monorepos grow slow: CI reruns unchanged builds/tests, wasting time
@@ -671,11 +671,11 @@
   - _Languages supported_: TypeScript, JavaScript (native), Java (Gradle/
     Maven plugins), C#/.NET (plugin), Go, Rust, Python (community plugins)
   - _Pricing_: freemium (Nx Cloud caching/CI is paid)
-  - _GitHub link_: https://github.com/nrwl/nx
+  - _GitHub link_: [https://github.com/nrwl/nx](https://github.com/nrwl/nx)
   - _GitHub stars_: 29,200
 
-- **Bazel**
-  - _Website_: https://bazel.build
+### Bazel
+  - _Website_: [https://bazel.build](https://bazel.build)
   - _Cluster_: Build system
   - _Problem it solves_:
     - Large multi-language codebases suffer slow, non-reproducible builds
@@ -688,11 +688,11 @@
     Android (Java/Kotlin), iOS/Objective-C, Rust, Scala, Haskell, Shell,
     Protocol Buffers
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/bazelbuild/bazel
+  - _GitHub link_: [https://github.com/bazelbuild/bazel](https://github.com/bazelbuild/bazel)
   - _GitHub stars_: 25,700
 
-- **cookiecutter**
-  - _Website_: https://cookiecutter.readthedocs.io
+### cookiecutter
+  - _Website_: [https://cookiecutter.readthedocs.io](https://cookiecutter.readthedocs.io)
   - _Cluster_: Project templating
   - _Problem it solves_:
     - Starting a new project means manually recreating boilerplate
@@ -704,12 +704,12 @@
   - _Languages supported_: language-agnostic (templates can target Python,
     JavaScript, Ruby, C++, or any text-based project)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/cookiecutter/cookiecutter
+  - _GitHub link_: [https://github.com/cookiecutter/cookiecutter](https://github.com/cookiecutter/cookiecutter)
   - _GitHub stars_: 25,100
 
 ## Requirements & Planning Practices
 
-- **RFC templates (Google/AWS style)**
+### RFC templates (Google/AWS style)
   - _Website_: n/a (internal practice, many public examples online)
   - _Cluster_: Spec-writing practice
   - _Problem it solves_:
@@ -724,8 +724,8 @@
   - _GitHub link_: n/a
   - _GitHub stars_: n/a
 
-- **Shape Up**
-  - _Website_: https://basecamp.com/shapeup
+### Shape Up
+  - _Website_: [https://basecamp.com/shapeup](https://basecamp.com/shapeup)
   - _Cluster_: Product-planning methodology
   - _Problem it solves_:
     - Open-ended project scope drags on indefinitely because teams never
@@ -740,7 +740,7 @@
   - _GitHub link_: n/a
   - _GitHub stars_: n/a
 
-- **Amazon PR/FAQ**
+### Amazon PR/FAQ
   - _Website_: n/a (internal Amazon practice, widely documented)
   - _Cluster_: Spec-writing practice
   - _Problem it solves_:
@@ -755,8 +755,8 @@
   - _GitHub link_: n/a
   - _GitHub stars_: n/a
 
-- **Jira**
-  - _Website_: https://www.atlassian.com/software/jira
+### Jira
+  - _Website_: [https://www.atlassian.com/software/jira](https://www.atlassian.com/software/jira)
   - _Cluster_: Issue tracker
   - _Problem it solves_:
     - Distributed teams lack a shared, auditable system of record for what
@@ -769,8 +769,8 @@
   - _GitHub link_: n/a
   - _GitHub stars_: n/a
 
-- **Linear**
-  - _Website_: https://linear.app
+### Linear
+  - _Website_: [https://linear.app](https://linear.app)
   - _Cluster_: Issue tracker
   - _Problem it solves_:
     - Legacy issue trackers are slow and cluttered, adding friction that
@@ -785,8 +785,8 @@
 
 ## Architecture Decision Record (ADR) Tooling
 
-- **adr-tools**
-  - _Website_: https://github.com/npryce/adr-tools
+### adr-tools
+  - _Website_: [https://github.com/npryce/adr-tools](https://github.com/npryce/adr-tools)
   - _Cluster_: ADR management CLI
   - _Problem it solves_:
     - Architectural rationale lives in people's heads or scattered chat/
@@ -798,11 +798,11 @@
   - _Languages supported_: language-agnostic (Bash/POSIX shell CLI; ADRs
     stored as Markdown, usable with any codebase)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/npryce/adr-tools
+  - _GitHub link_: [https://github.com/npryce/adr-tools](https://github.com/npryce/adr-tools)
   - _GitHub stars_: 5,600
 
-- **Log4brains**
-  - _Website_: https://github.com/thomvaill/log4brains
+### Log4brains
+  - _Website_: [https://github.com/thomvaill/log4brains](https://github.com/thomvaill/log4brains)
   - _Cluster_: ADR management
   - _Problem it solves_:
     - ADRs stored as scattered Markdown files are hard to browse, search,
@@ -814,11 +814,11 @@
   - _Languages supported_: language-agnostic (works with any project's
     ADRs; tool itself built with TypeScript/Node.js)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/thomvaill/log4brains
+  - _GitHub link_: [https://github.com/thomvaill/log4brains](https://github.com/thomvaill/log4brains)
   - _GitHub stars_: 1,600
 
-- **MADR**
-  - _Website_: https://adr.github.io/madr
+### MADR
+  - _Website_: [https://adr.github.io/madr](https://adr.github.io/madr)
   - _Cluster_: ADR template standard
   - _Problem it solves_:
     - Every team invents its own ad hoc ADR format, making decisions
@@ -829,13 +829,13 @@
   - _Languages supported_: language-agnostic (Markdown template convention,
     not tied to any programming language)
   - _Pricing_: free / open specification
-  - _GitHub link_: https://github.com/adr/madr
+  - _GitHub link_: [https://github.com/adr/madr](https://github.com/adr/madr)
   - _GitHub stars_: 2,400
 
 ## Monorepo & Multi-repo Tooling
 
-- **Turborepo**
-  - _Website_: https://turbo.build/repo
+### Turborepo
+  - _Website_: [https://turbo.build/repo](https://turbo.build/repo)
   - _Cluster_: Monorepo build system (JS/TS)
   - _Problem it solves_:
     - Full rebuilds/retests of a growing JS/TS monorepo get slower over
@@ -846,11 +846,11 @@
     JS/TS monorepos
   - _Languages supported_: JavaScript, TypeScript
   - _Pricing_: free / open source (Vercel remote cache is paid)
-  - _GitHub link_: https://github.com/vercel/turborepo
+  - _GitHub link_: [https://github.com/vercel/turborepo](https://github.com/vercel/turborepo)
   - _GitHub stars_: 31,000
 
-- **Lerna**
-  - _Website_: https://lerna.js.org
+### Lerna
+  - _Website_: [https://lerna.js.org](https://lerna.js.org)
   - _Cluster_: Monorepo tool (JS)
   - _Problem it solves_:
     - Coordinating version bumps, changelogs, and publish steps across many
@@ -861,11 +861,11 @@
     repositories
   - _Languages supported_: JavaScript, TypeScript
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/lerna/lerna
+  - _GitHub link_: [https://github.com/lerna/lerna](https://github.com/lerna/lerna)
   - _GitHub stars_: 36,000
 
-- **Sapling**
-  - _Website_: https://sapling-scm.com
+### Sapling
+  - _Website_: [https://sapling-scm.com](https://sapling-scm.com)
   - _Cluster_: Source control (large monorepos)
   - _Problem it solves_:
     - Git's performance degrades on massive, high-churn monorepos, making
@@ -877,11 +877,11 @@
   - _Languages supported_: language-agnostic (source-control system works
     with any codebase; CLI built in Rust/Python)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/facebook/sapling
+  - _GitHub link_: [https://github.com/facebook/sapling](https://github.com/facebook/sapling)
   - _GitHub stars_: 7,000
 
-- **git submodules / subtrees**
-  - _Website_: https://git-scm.com
+### git submodules / subtrees
+  - _Website_: [https://git-scm.com](https://git-scm.com)
   - _Cluster_: Multi-repo composition (built into Git)
   - _Problem it solves_:
     - Projects need to depend on or embed another repository's code while
@@ -898,8 +898,8 @@
 
 ## Build Systems & Project Boundaries
 
-- **Pants**
-  - _Website_: https://www.pantsbuild.org
+### Pants
+  - _Website_: [https://www.pantsbuild.org](https://www.pantsbuild.org)
   - _Cluster_: Build system
   - _Problem it solves_:
     - Slow, unscalable builds in large multi-language monorepos make CI and
@@ -911,13 +911,13 @@
   - _Languages supported_: Python, Java, Scala, Kotlin, Go, Shell (also
     builds Docker images and supports JVM ecosystems)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/pantsbuild/pants
+  - _GitHub link_: [https://github.com/pantsbuild/pants](https://github.com/pantsbuild/pants)
   - _GitHub stars_: 3,800
 
 ## Import & Dependency Analysis
 
-- **import-linter**
-  - _Website_: https://import-linter.readthedocs.io
+### import-linter
+  - _Website_: [https://import-linter.readthedocs.io](https://import-linter.readthedocs.io)
   - _Cluster_: Import-rule enforcement (Python)
   - _Problem it solves_:
     - Codebases silently accumulate spaghetti dependencies as modules
@@ -928,11 +928,11 @@
     projects, fails CI on violation
   - _Languages supported_: Python
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/seddonym/import-linter
+  - _GitHub link_: [https://github.com/seddonym/import-linter](https://github.com/seddonym/import-linter)
   - _GitHub stars_: 1,100
 
-- **pydeps**
-  - _Website_: https://github.com/thebjorn/pydeps
+### pydeps
+  - _Website_: [https://github.com/thebjorn/pydeps](https://github.com/thebjorn/pydeps)
   - _Cluster_: Dependency graph (Python)
   - _Problem it solves_:
     - Large Python codebases build up hidden coupling and circular imports
@@ -943,13 +943,13 @@
     cycle detection
   - _Languages supported_: Python
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/thebjorn/pydeps
+  - _GitHub link_: [https://github.com/thebjorn/pydeps](https://github.com/thebjorn/pydeps)
   - _GitHub stars_: 2,100
 
 ## Code Duplication Detection
 
-- **jscpd**
-  - _Website_: https://github.com/kucherenko/jscpd
+### jscpd
+  - _Website_: [https://github.com/kucherenko/jscpd](https://github.com/kucherenko/jscpd)
   - _Cluster_: Duplicate-code detection
   - _Problem it solves_:
     - Copy-pasted code drifts out of sync as one copy gets bug-fixed and
@@ -961,11 +961,11 @@
     including JavaScript, TypeScript, Python, Java, Go, C/C++, Ruby, PHP,
     Vue, Markdown)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/kucherenko/jscpd
+  - _GitHub link_: [https://github.com/kucherenko/jscpd](https://github.com/kucherenko/jscpd)
   - _GitHub stars_: 6,000
 
-- **PMD CPD**
-  - _Website_: https://pmd.github.io
+### PMD CPD
+  - _Website_: [https://pmd.github.io](https://pmd.github.io)
   - _Cluster_: Duplicate-code detection
   - _Problem it solves_:
     - Duplicate logic scattered across a codebase multiplies maintenance
@@ -978,11 +978,11 @@
     Swift, C/C++, C#, Go, PHP, Python, Ruby, Groovy, Dart, Perl, Matlab,
     Lua, Fortran, Objective-C, T-SQL, CSS, and more
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/pmd/pmd
+  - _GitHub link_: [https://github.com/pmd/pmd](https://github.com/pmd/pmd)
   - _GitHub stars_: 5,500
 
-- **SonarQube**
-  - _Website_: https://www.sonarsource.com/products/sonarqube
+### SonarQube
+  - _Website_: [https://www.sonarsource.com/products/sonarqube](https://www.sonarsource.com/products/sonarqube)
   - _Cluster_: Code-quality platform
   - _Problem it solves_:
     - Code-quality and security issues (bugs, vulnerabilities, smells,
@@ -995,11 +995,11 @@
     C#, JavaScript, TypeScript, Python, C/C++, Go, Kotlin, PHP, Ruby,
     Swift, Scala)
   - _Pricing_: freemium (Community free, Developer/Enterprise paid)
-  - _GitHub link_: https://github.com/SonarSource/sonarqube
+  - _GitHub link_: [https://github.com/SonarSource/sonarqube](https://github.com/SonarSource/sonarqube)
   - _GitHub stars_: 11,000
 
-- **Sourcegraph batch changes**
-  - _Website_: https://sourcegraph.com/batch-changes
+### Sourcegraph batch changes
+  - _Website_: [https://sourcegraph.com/batch-changes](https://sourcegraph.com/batch-changes)
   - _Cluster_: Large-scale automated refactor
   - _Problem it solves_:
     - Applying the same fix (dependency bump, API migration) by hand
@@ -1015,8 +1015,8 @@
 
 ## Codemods & Automated Refactoring
 
-- **jscodeshift**
-  - _Website_: https://github.com/facebook/jscodeshift
+### jscodeshift
+  - _Website_: [https://github.com/facebook/jscodeshift](https://github.com/facebook/jscodeshift)
   - _Cluster_: Codemod toolkit (JS/TS)
   - _Problem it solves_:
     - Manually rewriting an API-usage pattern across thousands of call
@@ -1027,11 +1027,11 @@
     ASTs at scale
   - _Languages supported_: JavaScript, TypeScript, JSX, Flow
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/facebook/jscodeshift
+  - _GitHub link_: [https://github.com/facebook/jscodeshift](https://github.com/facebook/jscodeshift)
   - _GitHub stars_: 10,000
 
-- **Comby**
-  - _Website_: https://comby.dev
+### Comby
+  - _Website_: [https://comby.dev](https://comby.dev)
   - _Cluster_: Structural search and replace
   - _Problem it solves_:
     - Teams need structural code rewrites in languages with no dedicated
@@ -1042,11 +1042,11 @@
   - _Languages supported_: language-agnostic (lightweight, syntax-aware
     matching across most languages, no full AST required)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/comby-tools/comby
+  - _GitHub link_: [https://github.com/comby-tools/comby](https://github.com/comby-tools/comby)
   - _GitHub stars_: 2,600
 
-- **OpenRewrite**
-  - _Website_: https://docs.openrewrite.org
+### OpenRewrite
+  - _Website_: [https://docs.openrewrite.org](https://docs.openrewrite.org)
   - _Cluster_: Automated mass refactoring (Java + others)
   - _Problem it solves_:
     - Large-scale framework/API version migrations (Java bumps, Spring
@@ -1059,11 +1059,11 @@
     Properties, Protobuf, HCL, TOML for config; extended coverage (via
     Moderne) for JavaScript, TypeScript, Python, C#, Go, Ruby, COBOL
   - _Pricing_: free / open source (Moderne SaaS is paid)
-  - _GitHub link_: https://github.com/openrewrite/rewrite
+  - _GitHub link_: [https://github.com/openrewrite/rewrite](https://github.com/openrewrite/rewrite)
   - _GitHub stars_: 3,600
 
-- **rope**
-  - _Website_: https://github.com/python-rope/rope
+### rope
+  - _Website_: [https://github.com/python-rope/rope](https://github.com/python-rope/rope)
   - _Cluster_: Refactoring library (Python)
   - _Problem it solves_:
     - Python lacked a native, editor-independent refactoring engine,
@@ -1074,11 +1074,11 @@
     extract method/variable)
   - _Languages supported_: Python
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/python-rope/rope
+  - _GitHub link_: [https://github.com/python-rope/rope](https://github.com/python-rope/rope)
   - _GitHub stars_: 2,200
 
-- **ts-morph**
-  - _Website_: https://ts-morph.com
+### ts-morph
+  - _Website_: [https://ts-morph.com](https://ts-morph.com)
   - _Cluster_: AST manipulation (TypeScript)
   - _Problem it solves_:
     - Direct use of the raw TypeScript Compiler API is verbose and
@@ -1089,13 +1089,13 @@
     transforms
   - _Languages supported_: TypeScript, JavaScript
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/dsherret/ts-morph
+  - _GitHub link_: [https://github.com/dsherret/ts-morph](https://github.com/dsherret/ts-morph)
   - _GitHub stars_: 6,100
 
 ## Dev Environments
 
-- **VS Code Dev Containers**
-  - _Website_: https://containers.dev
+### VS Code Dev Containers
+  - _Website_: [https://containers.dev](https://containers.dev)
   - _Cluster_: Containerized dev environment spec
   - _Problem it solves_:
     - "Works on my machine" drift happens when each developer configures
@@ -1106,11 +1106,11 @@
     reproducible, containerized dev environment
   - _Languages supported_: language-agnostic
   - _Pricing_: free / open source (VS Code itself is free)
-  - _GitHub link_: https://github.com/devcontainers/spec
+  - _GitHub link_: [https://github.com/devcontainers/spec](https://github.com/devcontainers/spec)
   - _GitHub stars_: 5,700
 
-- **direnv**
-  - _Website_: https://direnv.net
+### direnv
+  - _Website_: [https://direnv.net](https://direnv.net)
   - _Cluster_: Environment loader
   - _Problem it solves_:
     - Manually exporting/unsetting environment variables when switching
@@ -1121,11 +1121,11 @@
     per directory on `cd`
   - _Languages supported_: language-agnostic
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/direnv/direnv
+  - _GitHub link_: [https://github.com/direnv/direnv](https://github.com/direnv/direnv)
   - _GitHub stars_: 15,000
 
-- **Gitpod**
-  - _Website_: https://www.gitpod.io
+### Gitpod
+  - _Website_: [https://www.gitpod.io](https://www.gitpod.io)
   - _Cluster_: Cloud dev environment
   - _Problem it solves_:
     - Local machine setup for a new project can take hours and diverges
@@ -1136,11 +1136,11 @@
     from a repo config
   - _Languages supported_: language-agnostic
   - _Pricing_: freemium / paid tiers
-  - _GitHub link_: https://github.com/gitpod-io/gitpod
+  - _GitHub link_: [https://github.com/gitpod-io/gitpod](https://github.com/gitpod-io/gitpod)
   - _GitHub stars_: 14,000
 
-- **GitHub Codespaces**
-  - _Website_: https://github.com/features/codespaces
+### GitHub Codespaces
+  - _Website_: [https://github.com/features/codespaces](https://github.com/features/codespaces)
   - _Cluster_: Cloud dev environment
   - _Problem it solves_:
     - Setting up a full dev environment on a low-powered or locked-down
@@ -1155,8 +1155,8 @@
 
 ## Container Wrapper Patterns
 
-- **Homebrew**
-  - _Website_: https://brew.sh
+### Homebrew
+  - _Website_: [https://brew.sh](https://brew.sh)
   - _Cluster_: Package manager
   - _Problem it solves_:
     - Manual, ad-hoc installation and version tracking of CLI tools/
@@ -1169,11 +1169,11 @@
   - _Languages supported_: language-agnostic (package manager; implemented
     in Ruby)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/Homebrew/brew
+  - _GitHub link_: [https://github.com/Homebrew/brew](https://github.com/Homebrew/brew)
   - _GitHub stars_: 49,000
 
-- **act**
-  - _Website_: https://github.com/nektos/act
+### act
+  - _Website_: [https://github.com/nektos/act](https://github.com/nektos/act)
   - _Cluster_: Local CI runner
   - _Problem it solves_:
     - Testing GitHub Actions workflows normally requires pushing commits
@@ -1184,11 +1184,11 @@
   - _Languages supported_: language-agnostic (runs GitHub Actions workflows
     for any project language); written in Go
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/nektos/act
+  - _GitHub link_: [https://github.com/nektos/act](https://github.com/nektos/act)
   - _GitHub stars_: 72,000
 
-- **just**
-  - _Website_: https://github.com/casey/just
+### just
+  - _Website_: [https://github.com/casey/just](https://github.com/casey/just)
   - _Cluster_: Command runner
   - _Problem it solves_:
     - Makefiles use quirky, error-prone syntax (tabs, phony targets) not
@@ -1200,11 +1200,11 @@
   - _Languages supported_: language-agnostic (command runner for any
     project); written in Rust
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/casey/just
+  - _GitHub link_: [https://github.com/casey/just](https://github.com/casey/just)
   - _GitHub stars_: 35,000
 
-- **entr**
-  - _Website_: https://eradman.com/entrproject
+### entr
+  - _Website_: [https://eradman.com/entrproject](https://eradman.com/entrproject)
   - _Cluster_: File watcher
   - _Problem it solves_:
     - Manually re-running build/test/lint commands after every file edit
@@ -1215,13 +1215,13 @@
   - _Languages supported_: language-agnostic (reruns any command on file
     change); written in C
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/eradman/entr
+  - _GitHub link_: [https://github.com/eradman/entr](https://github.com/eradman/entr)
   - _GitHub stars_: 5,700
 
 ## Container Runtimes & Isolation
 
-- **Podman**
-  - _Website_: https://podman.io
+### Podman
+  - _Website_: [https://podman.io](https://podman.io)
   - _Cluster_: Container engine
   - _Problem it solves_:
     - Docker's daemon traditionally runs as root, creating a large attack
@@ -1232,11 +1232,11 @@
   - _Languages supported_: language-agnostic (container engine); written in
     Go
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/containers/podman
+  - _GitHub link_: [https://github.com/containers/podman](https://github.com/containers/podman)
   - _GitHub stars_: 30,000
 
-- **sysbox**
-  - _Website_: https://github.com/nestybox/sysbox
+### sysbox
+  - _Website_: [https://github.com/nestybox/sysbox](https://github.com/nestybox/sysbox)
   - _Cluster_: Container runtime for safer Docker-in-Docker
   - _Problem it solves_:
     - Running Docker-in-Docker or systemd inside a container normally
@@ -1248,11 +1248,11 @@
   - _Languages supported_: language-agnostic (container runtime); core
     components written in Go
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/nestybox/sysbox
+  - _GitHub link_: [https://github.com/nestybox/sysbox](https://github.com/nestybox/sysbox)
   - _GitHub stars_: 3,800
 
-- **Kaniko**
-  - _Website_: https://github.com/GoogleContainerTools/kaniko
+### Kaniko
+  - _Website_: [https://github.com/GoogleContainerTools/kaniko](https://github.com/GoogleContainerTools/kaniko)
   - _Cluster_: Daemonless image builder
   - _Problem it solves_:
     - Building images inside a CI container normally needs Docker-in-Docker
@@ -1264,11 +1264,11 @@
   - _Languages supported_: language-agnostic (builds images from any
     Dockerfile); written in Go
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/GoogleContainerTools/kaniko
+  - _GitHub link_: [https://github.com/GoogleContainerTools/kaniko](https://github.com/GoogleContainerTools/kaniko)
   - _GitHub stars_: 16,000
 
-- **Buildah**
-  - _Website_: https://buildah.io
+### Buildah
+  - _Website_: [https://buildah.io](https://buildah.io)
   - _Cluster_: Daemonless image builder
   - _Problem it solves_:
     - Building OCI-compliant images without running a full container
@@ -1280,13 +1280,13 @@
   - _Languages supported_: language-agnostic (builds OCI images); written
     in Go
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/containers/buildah
+  - _GitHub link_: [https://github.com/containers/buildah](https://github.com/containers/buildah)
   - _GitHub stars_: 9,000
 
 ## Container Image Optimization & Scanning
 
-- **dive**
-  - _Website_: https://github.com/wagoodman/dive
+### dive
+  - _Website_: [https://github.com/wagoodman/dive](https://github.com/wagoodman/dive)
   - _Cluster_: Image-layer inspection
   - _Problem it solves_:
     - Docker images accumulate wasted space across layers (cache, temp
@@ -1298,11 +1298,11 @@
   - _Languages supported_: language-agnostic (inspects Docker image layers
     for any application); written in Go
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/wagoodman/dive
+  - _GitHub link_: [https://github.com/wagoodman/dive](https://github.com/wagoodman/dive)
   - _GitHub stars_: 55,000
 
-- **docker-slim**
-  - _Website_: https://github.com/slimtoolkit/slim
+### docker-slim
+  - _Website_: [https://github.com/slimtoolkit/slim](https://github.com/slimtoolkit/slim)
   - _Cluster_: Image shrinking
   - _Problem it solves_:
     - Manually minimizing a container image by hand (stripping unused
@@ -1313,11 +1313,11 @@
   - _Languages supported_: language-agnostic (slims images for any
     application); written in Go
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/slimtoolkit/slim
+  - _GitHub link_: [https://github.com/slimtoolkit/slim](https://github.com/slimtoolkit/slim)
   - _GitHub stars_: 23,000
 
-- **Trivy**
-  - _Website_: https://trivy.dev
+### Trivy
+  - _Website_: [https://trivy.dev](https://trivy.dev)
   - _Cluster_: Vulnerability scanner
   - _Problem it solves_:
     - Vulnerabilities, secrets, and misconfigurations in images, IaC, and
@@ -1331,11 +1331,11 @@
     Java, JavaScript/Node, Ruby, PHP, Rust, .NET/C#, and more); written in
     Go
   - _Pricing_: free / open source (Aqua commercial platform is paid)
-  - _GitHub link_: https://github.com/aquasecurity/trivy
+  - _GitHub link_: [https://github.com/aquasecurity/trivy](https://github.com/aquasecurity/trivy)
   - _GitHub stars_: 38,000
 
-- **Snyk**
-  - _Website_: https://snyk.io
+### Snyk
+  - _Website_: [https://snyk.io](https://snyk.io)
   - _Cluster_: Security scanning platform
   - _Problem it solves_:
     - Developers lack real-time, in-workflow visibility into vulnerable
@@ -1350,14 +1350,14 @@
     .NET/C#, and more (dependency/container/IaC scanning); CLI written in
     TypeScript
   - _Pricing_: freemium / paid tiers
-  - _GitHub link_: https://github.com/snyk/cli (CLI only; core platform is
+  - _GitHub link_: [https://github.com/snyk/cli](https://github.com/snyk/cli) (CLI only; core platform is
     closed-source SaaS)
   - _GitHub stars_: 5,600
 
 ## GitHub / PR Automation
 
-- **gh CLI**
-  - _Website_: https://cli.github.com
+### gh CLI
+  - _Website_: [https://cli.github.com](https://cli.github.com)
   - _Cluster_: GitHub command-line tool
   - _Problem it solves_:
     - Switching to a browser to manage PRs/issues/workflows breaks a
@@ -1368,11 +1368,11 @@
   - _Languages supported_: language-agnostic (works with repositories in
     any language); written in Go
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/cli/cli
+  - _GitHub link_: [https://github.com/cli/cli](https://github.com/cli/cli)
   - _GitHub stars_: 46,000
 
-- **GitHub Actions**
-  - _Website_: https://github.com/features/actions
+### GitHub Actions
+  - _Website_: [https://github.com/features/actions](https://github.com/features/actions)
   - _Cluster_: CI/CD
   - _Problem it solves_:
     - Teams need CI/CD tightly integrated with their repository without
@@ -1387,8 +1387,8 @@
     separate runner agent is open source)
   - _GitHub stars_: n/a
 
-- **OpenAI Codex Cloud**
-  - _Website_: https://openai.com/codex
+### OpenAI Codex Cloud
+  - _Website_: [https://openai.com/codex](https://openai.com/codex)
   - _Cluster_: Autonomous cloud coding agent
   - _Problem it solves_:
     - Developers want coding tasks (bug fixes, features) executed
@@ -1403,8 +1403,8 @@
   - _GitHub link_: n/a
   - _GitHub stars_: n/a
 
-- **Devin**
-  - _Website_: https://devin.ai
+### Devin
+  - _Website_: [https://devin.ai](https://devin.ai)
   - _Cluster_: Autonomous coding agent
   - _Problem it solves_:
     - Engineering teams have more queued work than engineer bandwidth and
@@ -1418,8 +1418,8 @@
   - _GitHub link_: n/a
   - _GitHub stars_: n/a
 
-- **Cursor background agents**
-  - _Website_: https://cursor.com
+### Cursor background agents
+  - _Website_: [https://cursor.com](https://cursor.com)
   - _Cluster_: Autonomous coding agent
   - _Problem it solves_:
     - Waiting synchronously on an in-editor AI coding assistant blocks the
@@ -1436,8 +1436,8 @@
 
 ## Stacked PRs / Branch Splitting
 
-- **Graphite**
-  - _Website_: https://graphite.dev
+### Graphite
+  - _Website_: [https://graphite.dev](https://graphite.dev)
   - _Cluster_: Stacked-PR workflow and review
   - _Problem it solves_:
     - Large feature branches produce giant, slow-to-review PRs that block
@@ -1452,8 +1452,8 @@
     developed in a private monorepo)
   - _GitHub stars_: n/a
 
-- **git-branchless**
-  - _Website_: https://github.com/arxanas/git-branchless
+### git-branchless
+  - _Website_: [https://github.com/arxanas/git-branchless](https://github.com/arxanas/git-branchless)
   - _Cluster_: Git workflow tooling
   - _Problem it solves_:
     - Git's branch-per-change model is slow and error-prone at monorepo
@@ -1465,11 +1465,11 @@
   - _Languages supported_: language-agnostic (operates on Git repositories;
     implemented in Rust)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/arxanas/git-branchless
+  - _GitHub link_: [https://github.com/arxanas/git-branchless](https://github.com/arxanas/git-branchless)
   - _GitHub stars_: 4,100
 
-- **ghstack**
-  - _Website_: https://github.com/ezyang/ghstack
+### ghstack
+  - _Website_: [https://github.com/ezyang/ghstack](https://github.com/ezyang/ghstack)
   - _Cluster_: Stacked-PR tooling
   - _Problem it solves_:
     - Large contributions need to land as many small, independently
@@ -1481,13 +1481,13 @@
   - _Languages supported_: language-agnostic (Git/GitHub tool; implemented
     in Python)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/ezyang/ghstack
+  - _GitHub link_: [https://github.com/ezyang/ghstack](https://github.com/ezyang/ghstack)
   - _GitHub stars_: 1,000
 
 ## Async / Autonomous Agent Platforms
 
-- **Claude Code (GitHub Action / remote control)**
-  - _Website_: https://code.claude.com
+### Claude Code (GitHub Action / remote control)
+  - _Website_: [https://code.claude.com](https://code.claude.com)
   - _Cluster_: Async coding agent
   - _Problem it solves_:
     - Developers need coding help outside an interactive terminal session,
@@ -1498,12 +1498,12 @@
     remotely from a phone/desktop session
   - _Languages supported_: language-agnostic
   - _Pricing_: paid (Claude subscription/API usage)
-  - _GitHub link_: https://github.com/anthropics/claude-code (core CLI);
-    https://github.com/anthropics/claude-code-action (GitHub Action)
+  - _GitHub link_: [https://github.com/anthropics/claude-code](https://github.com/anthropics/claude-code) (core CLI);
+    [https://github.com/anthropics/claude-code-action](https://github.com/anthropics/claude-code-action) (GitHub Action)
   - _GitHub stars_: 142,000 (claude-code); 8,700 (claude-code-action)
 
-- **Sweep.dev**
-  - _Website_: https://sweep.dev
+### Sweep.dev
+  - _Website_: [https://sweep.dev](https://sweep.dev)
   - _Cluster_: Autonomous coding agent
   - _Problem it solves_:
     - Small, well-scoped GitHub issues (bug fixes, minor features) pile up
@@ -1514,13 +1514,13 @@
   - _Languages supported_: language-agnostic (LLM-based; project has since
     pivoted toward a JetBrains IDE plugin)
   - _Pricing_: freemium / paid tiers
-  - _GitHub link_: https://github.com/sweepai/sweep
+  - _GitHub link_: [https://github.com/sweepai/sweep](https://github.com/sweepai/sweep)
   - _GitHub stars_: 7,700
 
 ## Agent Permissions & Sandboxing
 
-- **OPA / Rego (Open Policy Agent)**
-  - _Website_: https://www.openpolicyagent.org
+### OPA / Rego (Open Policy Agent)
+  - _Website_: [https://www.openpolicyagent.org](https://www.openpolicyagent.org)
   - _Cluster_: Policy engine
   - _Problem it solves_:
     - Authorization logic hardcoded into application code is duplicated
@@ -1532,11 +1532,11 @@
   - _Languages supported_: Rego (its own policy language); language-agnostic
     for the services it guards
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/open-policy-agent/opa
+  - _GitHub link_: [https://github.com/open-policy-agent/opa](https://github.com/open-policy-agent/opa)
   - _GitHub stars_: 12,000
 
-- **Firecracker**
-  - _Website_: https://firecracker-microvm.github.io
+### Firecracker
+  - _Website_: [https://firecracker-microvm.github.io](https://firecracker-microvm.github.io)
   - _Cluster_: MicroVM sandbox
   - _Problem it solves_:
     - Running untrusted or multi-tenant workloads (e.g. AI agent code
@@ -1549,11 +1549,11 @@
   - _Languages supported_: language-agnostic (runs any Linux workload;
     implemented in Rust)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/firecracker-microvm/firecracker
+  - _GitHub link_: [https://github.com/firecracker-microvm/firecracker](https://github.com/firecracker-microvm/firecracker)
   - _GitHub stars_: 36,000
 
-- **gVisor**
-  - _Website_: https://gvisor.dev
+### gVisor
+  - _Website_: [https://gvisor.dev](https://gvisor.dev)
   - _Cluster_: Container sandbox
   - _Problem it solves_:
     - Standard containers share the host kernel, so a container escape or
@@ -1565,13 +1565,13 @@
   - _Languages supported_: language-agnostic (sandboxes any containerized
     process; implemented in Go)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/google/gvisor
+  - _GitHub link_: [https://github.com/google/gvisor](https://github.com/google/gvisor)
   - _GitHub stars_: 19,000
 
 ## AI / Automated PR Review
 
-- **reviewdog**
-  - _Website_: https://github.com/reviewdog/reviewdog
+### reviewdog
+  - _Website_: [https://github.com/reviewdog/reviewdog](https://github.com/reviewdog/reviewdog)
   - _Cluster_: Lint-to-PR-comment bridge
   - _Problem it solves_:
     - Linter/static-analyzer output printed to a console log is easy to
@@ -1584,11 +1584,11 @@
     integrates with tools for Go, JS/TS, Python, Ruby, Shell, Terraform,
     and more)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/reviewdog/reviewdog
+  - _GitHub link_: [https://github.com/reviewdog/reviewdog](https://github.com/reviewdog/reviewdog)
   - _GitHub stars_: 9,500
 
-- **Danger / danger.js**
-  - _Website_: https://danger.systems
+### Danger / danger.js
+  - _Website_: [https://danger.systems](https://danger.systems)
   - _Cluster_: Policy-as-code PR review
   - _Problem it solves_:
     - Manual PR review conventions (changelog updates, test coverage, diff
@@ -1601,11 +1601,11 @@
     codebase; danger.js runtime is JavaScript/TypeScript; Ruby, Swift,
     Kotlin flavors also exist)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/danger/danger-js
+  - _GitHub link_: [https://github.com/danger/danger-js](https://github.com/danger/danger-js)
   - _GitHub stars_: 5,500
 
-- **Codacy**
-  - _Website_: https://www.codacy.com
+### Codacy
+  - _Website_: [https://www.codacy.com](https://www.codacy.com)
   - _Cluster_: Hosted automated code review
   - _Problem it solves_:
     - Enforcing consistent code-quality standards across many repos/teams
@@ -1621,8 +1621,8 @@
   - _GitHub link_: n/a (closed-source SaaS)
   - _GitHub stars_: n/a
 
-- **DeepSource**
-  - _Website_: https://deepsource.com
+### DeepSource
+  - _Website_: [https://deepsource.com](https://deepsource.com)
   - _Cluster_: Hosted automated code review
   - _Problem it solves_:
     - Static-analysis findings often require manual triage; teams want
@@ -1636,8 +1636,8 @@
   - _GitHub link_: n/a (closed-source SaaS)
   - _GitHub stars_: n/a
 
-- **Qodo (formerly CodiumAI)**
-  - _Website_: https://www.qodo.ai
+### Qodo (formerly CodiumAI)
+  - _Website_: [https://www.qodo.ai](https://www.qodo.ai)
   - _Cluster_: AI code review and test generation
   - _Problem it solves_:
     - Writing thorough test coverage and catching subtle bugs during
@@ -1653,8 +1653,8 @@
     project is PR-Agent, listed separately)
   - _GitHub stars_: n/a
 
-- **Greptile**
-  - _Website_: https://www.greptile.com
+### Greptile
+  - _Website_: [https://www.greptile.com](https://www.greptile.com)
   - _Cluster_: AI code review
   - _Problem it solves_:
     - Diff-only review tools miss bugs that only become apparent with
@@ -1670,8 +1670,8 @@
   - _GitHub link_: n/a (closed-source SaaS)
   - _GitHub stars_: n/a
 
-- **PR-Agent**
-  - _Website_: https://github.com/qodo-ai/pr-agent
+### PR-Agent
+  - _Website_: [https://github.com/qodo-ai/pr-agent](https://github.com/qodo-ai/pr-agent)
   - _Cluster_: Open-source AI PR review
   - _Problem it solves_:
     - Teams without budget for a paid AI-review SaaS still want automated
@@ -1683,13 +1683,13 @@
   - _Languages supported_: language-agnostic (LLM-based; implemented in
     Python)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/qodo-ai/pr-agent
+  - _GitHub link_: [https://github.com/qodo-ai/pr-agent](https://github.com/qodo-ai/pr-agent)
   - _GitHub stars_: 13,000
 
 ## Autonomous Coding Loops
 
-- **SWE-agent**
-  - _Website_: https://github.com/SWE-agent/SWE-agent
+### SWE-agent
+  - _Website_: [https://github.com/SWE-agent/SWE-agent](https://github.com/SWE-agent/SWE-agent)
   - _Cluster_: Research coding agent
   - _Problem it solves_:
     - LLMs need a safe, structured interface to browse, edit, and test real
@@ -1702,11 +1702,11 @@
   - _Languages supported_: Python (agent implementation); language-agnostic
     for target codebases (works on repos in any language)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/SWE-agent/SWE-agent
+  - _GitHub link_: [https://github.com/SWE-agent/SWE-agent](https://github.com/SWE-agent/SWE-agent)
   - _GitHub stars_: 20,000
 
-- **Aider**
-  - _Website_: https://aider.chat
+### Aider
+  - _Website_: [https://aider.chat](https://aider.chat)
   - _Cluster_: AI pair-programming CLI
   - _Problem it solves_:
     - Switching between a chat window and an editor breaks flow;
@@ -1720,13 +1720,13 @@
     support most major programming languages: Python, JavaScript,
     TypeScript, Go, Rust, Java, C/C++, Ruby, PHP, and more)
   - _Pricing_: free / open source (LLM API usage cost is separate)
-  - _GitHub link_: https://github.com/Aider-AI/aider
+  - _GitHub link_: [https://github.com/Aider-AI/aider](https://github.com/Aider-AI/aider)
   - _GitHub stars_: 48,000
 
 ## Root-Cause Analysis & Incident Clustering
 
-- **Sentry**
-  - _Website_: https://sentry.io
+### Sentry
+  - _Website_: [https://sentry.io](https://sentry.io)
   - _Cluster_: Error tracking
   - _Problem it solves_:
     - Production errors are scattered across logs and hard to reproduce,
@@ -1738,11 +1738,11 @@
   - _Languages supported_: language-agnostic (SDKs for Python, JavaScript/
     Node, Java, Go, Ruby, PHP, C#, Rust, and more)
   - _Pricing_: freemium / paid tiers
-  - _GitHub link_: https://github.com/getsentry/sentry
+  - _GitHub link_: [https://github.com/getsentry/sentry](https://github.com/getsentry/sentry)
   - _GitHub stars_: 45,000
 
-- **Datadog**
-  - _Website_: https://www.datadoghq.com
+### Datadog
+  - _Website_: [https://www.datadoghq.com](https://www.datadoghq.com)
   - _Cluster_: Observability platform
   - _Problem it solves_:
     - Diagnosing incidents requires correlating metrics, traces, logs, and
@@ -1757,8 +1757,8 @@
   - _GitHub link_: n/a
   - _GitHub stars_: n/a
 
-- **BuildPulse**
-  - _Website_: https://buildpulse.io
+### BuildPulse
+  - _Website_: [https://buildpulse.io](https://buildpulse.io)
   - _Cluster_: Flaky-test detection
   - _Problem it solves_:
     - Flaky tests erode trust in CI, causing teams to ignore failures or
@@ -1776,8 +1776,8 @@
 
 ## Documentation Tooling
 
-- **Docusaurus**
-  - _Website_: https://docusaurus.io
+### Docusaurus
+  - _Website_: [https://docusaurus.io](https://docusaurus.io)
   - _Cluster_: Documentation site generator
   - _Problem it solves_:
     - Teams need an easy way to build, deploy, and maintain a versioned
@@ -1788,11 +1788,11 @@
     documentation
   - _Languages supported_: JavaScript, TypeScript, Markdown, MDX
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/facebook/docusaurus
+  - _GitHub link_: [https://github.com/facebook/docusaurus](https://github.com/facebook/docusaurus)
   - _GitHub stars_: 66,000
 
-- **MkDocs**
-  - _Website_: https://www.mkdocs.org
+### MkDocs
+  - _Website_: [https://www.mkdocs.org](https://www.mkdocs.org)
   - _Cluster_: Documentation site generator
   - _Problem it solves_:
     - Projects need a fast, simple way to turn a folder of Markdown files
@@ -1805,11 +1805,11 @@
   - _Languages supported_: Python (tool itself), Markdown (content
     authoring), language-agnostic for the docs it generates
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/mkdocs/mkdocs
+  - _GitHub link_: [https://github.com/mkdocs/mkdocs](https://github.com/mkdocs/mkdocs)
   - _GitHub stars_: 22,400
 
-- **Vale**
-  - _Website_: https://vale.sh
+### Vale
+  - _Website_: [https://vale.sh](https://vale.sh)
   - _Cluster_: Prose linter
   - _Problem it solves_:
     - Teams lack a way to enforce consistent prose style, terminology, and
@@ -1823,11 +1823,11 @@
     reStructuredText, HTML, XML, Org, and plain prose; core tool written in
     Go)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/vale-cli/vale
+  - _GitHub link_: [https://github.com/vale-cli/vale](https://github.com/vale-cli/vale)
   - _GitHub stars_: 6,000
 
-- **alex**
-  - _Website_: https://alexjs.com
+### alex
+  - _Website_: [https://alexjs.com](https://alexjs.com)
   - _Cluster_: Prose linter
   - _Problem it solves_:
     - Writers may unintentionally use insensitive, biased, or inconsiderate
@@ -1839,13 +1839,13 @@
   - _Languages supported_: JavaScript (tool itself); checks plain text,
     Markdown, HTML, MDX prose (language-agnostic for content)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/get-alex/alex
+  - _GitHub link_: [https://github.com/get-alex/alex](https://github.com/get-alex/alex)
   - _GitHub stars_: 5,100
 
 ## README Generation & Link Checking
 
-- **readme-ai**
-  - _Website_: https://github.com/eli64s/readme-ai
+### readme-ai
+  - _Website_: [https://github.com/eli64s/readme-ai](https://github.com/eli64s/readme-ai)
   - _Cluster_: AI README generator
   - _Problem it solves_:
     - Writing a thorough, well-structured README from scratch is
@@ -1856,11 +1856,11 @@
   - _Languages supported_: Python (tool); language-agnostic (analyzes and
     documents repos in any language)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/eli64s/readme-ai
+  - _GitHub link_: [https://github.com/eli64s/readme-ai](https://github.com/eli64s/readme-ai)
   - _GitHub stars_: 2,800
 
-- **Mintlify**
-  - _Website_: https://mintlify.com
+### Mintlify
+  - _Website_: [https://mintlify.com](https://mintlify.com)
   - _Cluster_: Documentation platform
   - _Problem it solves_:
     - Building and maintaining a polished, searchable docs site normally
@@ -1874,8 +1874,8 @@
   - _GitHub link_: n/a
   - _GitHub stars_: n/a
 
-- **markdown-link-check**
-  - _Website_: https://github.com/tcort/markdown-link-check
+### markdown-link-check
+  - _Website_: [https://github.com/tcort/markdown-link-check](https://github.com/tcort/markdown-link-check)
   - _Cluster_: Link checker
   - _Problem it solves_:
     - Markdown docs accumulate dead/broken links over time as pages move or
@@ -1886,11 +1886,11 @@
   - _Languages supported_: JavaScript/Node.js (tool); language-agnostic
     (checks links in Markdown files regardless of source language)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/tcort/markdown-link-check
+  - _GitHub link_: [https://github.com/tcort/markdown-link-check](https://github.com/tcort/markdown-link-check)
   - _GitHub stars_: 700
 
-- **lychee**
-  - _Website_: https://lychee.cli.rs
+### lychee
+  - _Website_: [https://lychee.cli.rs](https://lychee.cli.rs)
   - _Cluster_: Link checker
   - _Problem it solves_:
     - Checking thousands of links across many file formats manually or
@@ -1901,13 +1901,13 @@
   - _Languages supported_: Rust (tool); language-agnostic (checks links in
     Markdown, HTML, reStructuredText, and plain text)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/lycheeverse/lychee
+  - _GitHub link_: [https://github.com/lycheeverse/lychee](https://github.com/lycheeverse/lychee)
   - _GitHub stars_: 3,800
 
 ## Git Hooks
 
-- **pre-commit (framework)**
-  - _Website_: https://pre-commit.com
+### pre-commit (framework)
+  - _Website_: [https://pre-commit.com](https://pre-commit.com)
   - _Cluster_: Git hook manager
   - _Problem it solves_:
     - Enforcing code-quality checks before commit requires wiring up
@@ -1920,11 +1920,11 @@
   - _Languages supported_: Python (framework); language-agnostic (hooks can
     be written in/for any language)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/pre-commit/pre-commit
+  - _GitHub link_: [https://github.com/pre-commit/pre-commit](https://github.com/pre-commit/pre-commit)
   - _GitHub stars_: 15,000
 
-- **husky**
-  - _Website_: https://typicode.github.io/husky
+### husky
+  - _Website_: [https://typicode.github.io/husky](https://typicode.github.io/husky)
   - _Cluster_: Git hook manager (JS/Node)
   - _Problem it solves_:
     - Node/JS projects need an easy, version-controlled way to run scripts
@@ -1936,11 +1936,11 @@
   - _What it does_: manages Git hooks for JS/Node projects via `package.json`
   - _Languages supported_: JavaScript, TypeScript (Node.js projects)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/typicode/husky
+  - _GitHub link_: [https://github.com/typicode/husky](https://github.com/typicode/husky)
   - _GitHub stars_: 35,000
 
-- **lefthook**
-  - _Website_: https://github.com/evilmartians/lefthook
+### lefthook
+  - _Website_: [https://github.com/evilmartians/lefthook](https://github.com/evilmartians/lefthook)
   - _Cluster_: Git hook manager
   - _Problem it solves_:
     - Multi-language monorepos need a single fast hook manager instead of
@@ -1952,11 +1952,11 @@
   - _Languages supported_: Go (tool); language-agnostic (polyglot hooks
     manager for any language)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/evilmartians/lefthook
+  - _GitHub link_: [https://github.com/evilmartians/lefthook](https://github.com/evilmartians/lefthook)
   - _GitHub stars_: 8,600
 
-- **Talisman**
-  - _Website_: https://github.com/thoughtworks/talisman
+### Talisman
+  - _Website_: [https://github.com/thoughtworks/talisman](https://github.com/thoughtworks/talisman)
   - _Cluster_: Secret-scanning Git hook
   - _Problem it solves_:
     - Secrets (API keys, passwords, private keys) accidentally committed to
@@ -1968,13 +1968,13 @@
   - _Languages supported_: Go (tool); language-agnostic (scans any codebase
     for secrets)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/thoughtworks/talisman
+  - _GitHub link_: [https://github.com/thoughtworks/talisman](https://github.com/thoughtworks/talisman)
   - _GitHub stars_: 2,100
 
 ## Type Checking
 
-- **dmypy (mypy daemon)**
-  - _Website_: https://mypy.readthedocs.io
+### dmypy (mypy daemon)
+  - _Website_: [https://mypy.readthedocs.io](https://mypy.readthedocs.io)
   - _Cluster_: Type-checker daemon (Python)
   - _Problem it solves_:
     - Full-project mypy runs are too slow to fit inside a save-and-check
@@ -1985,11 +1985,11 @@
     incremental type checks
   - _Languages supported_: Python
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/python/mypy
+  - _GitHub link_: [https://github.com/python/mypy](https://github.com/python/mypy)
   - _GitHub stars_: 21,000
 
-- **pyright**
-  - _Website_: https://microsoft.github.io/pyright
+### pyright
+  - _Website_: [https://microsoft.github.io/pyright](https://microsoft.github.io/pyright)
   - _Cluster_: Type checker (Python)
   - _Problem it solves_:
     - Python's dynamic typing lets type errors slip through to runtime
@@ -2000,13 +2000,13 @@
     watch mode
   - _Languages supported_: Python
   - _Pricing_: free / open source (Pylance in VS Code)
-  - _GitHub link_: https://github.com/microsoft/pyright
+  - _GitHub link_: [https://github.com/microsoft/pyright](https://github.com/microsoft/pyright)
   - _GitHub stars_: 16,000
 
 ## Secret Scanning & SAST
 
-- **TruffleHog**
-  - _Website_: https://trufflesecurity.com
+### TruffleHog
+  - _Website_: [https://trufflesecurity.com](https://trufflesecurity.com)
   - _Cluster_: Secret scanner
   - _Problem it solves_:
     - Secrets committed then later deleted remain permanently retrievable
@@ -2016,11 +2016,11 @@
   - _What it does_: scans Git history and live sources for verified secrets
   - _Languages supported_: language-agnostic
   - _Pricing_: freemium / paid tiers
-  - _GitHub link_: https://github.com/trufflesecurity/trufflehog
+  - _GitHub link_: [https://github.com/trufflesecurity/trufflehog](https://github.com/trufflesecurity/trufflehog)
   - _GitHub stars_: 28,000
 
-- **detect-secrets**
-  - _Website_: https://github.com/Yelp/detect-secrets
+### detect-secrets
+  - _Website_: [https://github.com/Yelp/detect-secrets](https://github.com/Yelp/detect-secrets)
   - _Cluster_: Secret scanner
   - _Problem it solves_:
     - Without a stored baseline of accepted findings, every new commit
@@ -2031,11 +2031,11 @@
     entering a codebase
   - _Languages supported_: language-agnostic
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/Yelp/detect-secrets
+  - _GitHub link_: [https://github.com/Yelp/detect-secrets](https://github.com/Yelp/detect-secrets)
   - _GitHub stars_: 4,600
 
-- **GitHub secret scanning**
-  - _Website_: https://docs.github.com/code-security/secret-scanning
+### GitHub secret scanning
+  - _Website_: [https://docs.github.com/code-security/secret-scanning](https://docs.github.com/code-security/secret-scanning)
   - _Cluster_: Secret scanner (platform-native)
   - _Problem it solves_:
     - Developers accidentally leak provider API keys/tokens in commits or
@@ -2050,8 +2050,8 @@
   - _GitHub link_: n/a
   - _GitHub stars_: n/a
 
-- **CodeQL**
-  - _Website_: https://codeql.github.com
+### CodeQL
+  - _Website_: [https://codeql.github.com](https://codeql.github.com)
   - _Cluster_: SAST
   - _Problem it solves_:
     - Pattern/regex-based scanners miss vulnerabilities that only appear as
@@ -2063,11 +2063,11 @@
   - _Languages supported_: C, C++, C#, Go, Java, Kotlin, JavaScript,
     TypeScript, Python, Ruby, Swift, Rust
   - _Pricing_: free (public repos/OSS) / paid (GitHub Advanced Security)
-  - _GitHub link_: https://github.com/github/codeql
+  - _GitHub link_: [https://github.com/github/codeql](https://github.com/github/codeql)
   - _GitHub stars_: 10,000
 
-- **Bandit**
-  - _Website_: https://bandit.readthedocs.io
+### Bandit
+  - _Website_: [https://bandit.readthedocs.io](https://bandit.readthedocs.io)
   - _Cluster_: SAST (Python)
   - _Problem it solves_:
     - Python's flexibility (eval, pickle, subprocess, weak crypto) makes
@@ -2078,13 +2078,13 @@
     Python code
   - _Languages supported_: Python
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/PyCQA/bandit
+  - _GitHub link_: [https://github.com/PyCQA/bandit](https://github.com/PyCQA/bandit)
   - _GitHub stars_: 8,200
 
 ## Dependency Vulnerability & SBOM
 
-- **Dependabot**
-  - _Website_: https://github.com/dependabot
+### Dependabot
+  - _Website_: [https://github.com/dependabot](https://github.com/dependabot)
   - _Cluster_: Automated dependency updates
   - _Problem it solves_:
     - Manually tracking upstream releases and CVEs across many packages
@@ -2096,11 +2096,11 @@
   - _Languages supported_: Ruby, JavaScript, Python, PHP, Dart, Elixir,
     Elm, Go, Rust, Java, Julia, .NET, Docker, Terraform
   - _Pricing_: free (GitHub-native feature)
-  - _GitHub link_: https://github.com/dependabot/dependabot-core
+  - _GitHub link_: [https://github.com/dependabot/dependabot-core](https://github.com/dependabot/dependabot-core)
   - _GitHub stars_: 5,700
 
-- **Renovate**
-  - _Website_: https://docs.renovatebot.com
+### Renovate
+  - _Website_: [https://docs.renovatebot.com](https://docs.renovatebot.com)
   - _Cluster_: Automated dependency updates
   - _Problem it solves_:
     - Teams outside GitHub-native tooling, or on GitLab/Bitbucket/Azure
@@ -2112,11 +2112,11 @@
   - _Languages supported_: language-agnostic (90+ package managers, incl.
     npm, Python, Java, .NET, Go, Ruby, Docker)
   - _Pricing_: free / open source (Mend-hosted version is paid)
-  - _GitHub link_: https://github.com/renovatebot/renovate
+  - _GitHub link_: [https://github.com/renovatebot/renovate](https://github.com/renovatebot/renovate)
   - _GitHub stars_: 22,000
 
-- **Grype**
-  - _Website_: https://github.com/anchore/grype
+### Grype
+  - _Website_: [https://github.com/anchore/grype](https://github.com/anchore/grype)
   - _Cluster_: Vulnerability scanner
   - _Problem it solves_:
     - Container images bundle OS and language packages whose vulnerability
@@ -2128,11 +2128,11 @@
   - _Languages supported_: language-agnostic (OS packages plus Ruby, Java,
     JavaScript, Python, .NET, Go, PHP, Rust)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/anchore/grype
+  - _GitHub link_: [https://github.com/anchore/grype](https://github.com/anchore/grype)
   - _GitHub stars_: 13,000
 
-- **Syft**
-  - _Website_: https://github.com/anchore/syft
+### Syft
+  - _Website_: [https://github.com/anchore/syft](https://github.com/anchore/syft)
   - _Cluster_: SBOM generator
   - _Problem it solves_:
     - Teams lack an accurate, standardized inventory of what components
@@ -2144,11 +2144,11 @@
   - _Languages supported_: language-agnostic (Alpine, Debian, RPM, Go,
     Python, Java, JavaScript, Ruby, Rust, PHP, .NET)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/anchore/syft
+  - _GitHub link_: [https://github.com/anchore/syft](https://github.com/anchore/syft)
   - _GitHub stars_: 9,400
 
-- **OSV-Scanner**
-  - _Website_: https://google.github.io/osv-scanner
+### OSV-Scanner
+  - _Website_: [https://google.github.io/osv-scanner](https://google.github.io/osv-scanner)
   - _Cluster_: Vulnerability scanner
   - _Problem it solves_:
     - Vulnerability data is fragmented across many language-specific
@@ -2160,13 +2160,13 @@
   - _Languages supported_: C, C++, Dart, Elixir, Go, Java, JavaScript, PHP,
     Python, R, Ruby, Rust
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/google/osv-scanner
+  - _GitHub link_: [https://github.com/google/osv-scanner](https://github.com/google/osv-scanner)
   - _GitHub stars_: 11,000
 
 ## Coverage Reporting
 
-- **Coveralls**
-  - _Website_: https://coveralls.io
+### Coveralls
+  - _Website_: [https://coveralls.io](https://coveralls.io)
   - _Cluster_: Coverage reporting
   - _Problem it solves_:
     - A single coverage percentage snapshot hides whether coverage is
@@ -2183,8 +2183,8 @@
 
 ## Mutation Testing
 
-- **mutmut**
-  - _Website_: https://mutmut.readthedocs.io
+### mutmut
+  - _Website_: [https://mutmut.readthedocs.io](https://mutmut.readthedocs.io)
   - _Cluster_: Mutation testing (Python)
   - _Problem it solves_:
     - High line/branch coverage percentages can hide weak or missing
@@ -2195,11 +2195,11 @@
     to check they would catch the change
   - _Languages supported_: Python
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/boxed/mutmut
+  - _GitHub link_: [https://github.com/boxed/mutmut](https://github.com/boxed/mutmut)
   - _GitHub stars_: 1,400
 
-- **cosmic-ray**
-  - _Website_: https://cosmic-ray.readthedocs.io
+### cosmic-ray
+  - _Website_: [https://cosmic-ray.readthedocs.io](https://cosmic-ray.readthedocs.io)
   - _Cluster_: Mutation testing (Python)
   - _Problem it solves_:
     - Coverage metrics alone don't prove a test suite catches real
@@ -2209,11 +2209,11 @@
   - _What it does_: another mutation-testing tool for Python codebases
   - _Languages supported_: Python
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/sixty-north/cosmic-ray
+  - _GitHub link_: [https://github.com/sixty-north/cosmic-ray](https://github.com/sixty-north/cosmic-ray)
   - _GitHub stars_: 700
 
-- **Stryker Mutator**
-  - _Website_: https://stryker-mutator.io
+### Stryker Mutator
+  - _Website_: [https://stryker-mutator.io](https://stryker-mutator.io)
   - _Cluster_: Mutation testing (JS/TS/.NET)
   - _Problem it solves_:
     - JS/TS and .NET teams have no built-in way to verify tests fail when
@@ -2224,11 +2224,11 @@
     ecosystems
   - _Languages supported_: JavaScript, TypeScript, C#, .NET
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/stryker-mutator/stryker-js
+  - _GitHub link_: [https://github.com/stryker-mutator/stryker-js](https://github.com/stryker-mutator/stryker-js)
   - _GitHub stars_: 3,000
 
-- **Pitest**
-  - _Website_: https://pitest.org
+### Pitest
+  - _Website_: [https://pitest.org](https://pitest.org)
   - _Cluster_: Mutation testing (Java/JVM)
   - _Problem it solves_:
     - JVM teams need mutation testing fast enough for CI, since naive
@@ -2239,13 +2239,13 @@
   - _Languages supported_: Java, Kotlin, Scala, Groovy (any JVM bytecode
     language)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/hcoles/pitest
+  - _GitHub link_: [https://github.com/hcoles/pitest](https://github.com/hcoles/pitest)
   - _GitHub stars_: 1,800
 
 ## Property-Based & Contract Testing
 
-- **Hypothesis**
-  - _Website_: https://hypothesis.readthedocs.io
+### Hypothesis
+  - _Website_: [https://hypothesis.readthedocs.io](https://hypothesis.readthedocs.io)
   - _Cluster_: Property-based testing (Python)
   - _Problem it solves_:
     - Example-based tests suffer selection bias — developers pick inputs
@@ -2258,11 +2258,11 @@
     declared properties
   - _Languages supported_: Python
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/HypothesisWorks/hypothesis
+  - _GitHub link_: [https://github.com/HypothesisWorks/hypothesis](https://github.com/HypothesisWorks/hypothesis)
   - _GitHub stars_: 8,900
 
-- **Pact**
-  - _Website_: https://pact.io
+### Pact
+  - _Website_: [https://pact.io](https://pact.io)
   - _Cluster_: Contract testing
   - _Problem it solves_:
     - In microservices, a breaking API change can pass CI and deploy
@@ -2275,13 +2275,13 @@
   - _Languages supported_: JavaScript/TypeScript, Java/JVM (Kotlin,
     Scala), Ruby, .NET/C#, Go, Python, PHP, Swift/Objective-C, C/C++
   - _Pricing_: free / open source (PactFlow SaaS is paid)
-  - _GitHub link_: https://github.com/pact-foundation/pact-js
+  - _GitHub link_: [https://github.com/pact-foundation/pact-js](https://github.com/pact-foundation/pact-js)
   - _GitHub stars_: 1,800
 
 ## AI Test Generation
 
-- **Diffblue Cover**
-  - _Website_: https://www.diffblue.com
+### Diffblue Cover
+  - _Website_: [https://www.diffblue.com](https://www.diffblue.com)
   - _Cluster_: AI unit-test generation (Java)
   - _Problem it solves_:
     - Writing and maintaining unit tests is tedious and time-consuming, so
@@ -2296,8 +2296,8 @@
   - _GitHub link_: n/a
   - _GitHub stars_: n/a
 
-- **EvoSuite**
-  - _Website_: https://www.evosuite.org
+### EvoSuite
+  - _Website_: [https://www.evosuite.org](https://www.evosuite.org)
   - _Cluster_: Automated test generation (Java)
   - _Problem it solves_:
     - Manually creating unit test suites that reach high code coverage
@@ -2309,11 +2309,11 @@
   - _What it does_: search-based automatic unit-test generation for Java
   - _Languages supported_: Java
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/EvoSuite/evosuite
+  - _GitHub link_: [https://github.com/EvoSuite/evosuite](https://github.com/EvoSuite/evosuite)
   - _GitHub stars_: 900
 
-- **GitHub Copilot test generation**
-  - _Website_: https://docs.github.com/copilot
+### GitHub Copilot test generation
+  - _Website_: [https://docs.github.com/copilot](https://docs.github.com/copilot)
   - _Cluster_: AI test generation
   - _Problem it solves_:
     - Writing and maintaining tests is crucial but time-consuming, and
@@ -2331,8 +2331,8 @@
 
 ## Snapshot / Approval Testing & Reporting
 
-- **syrupy**
-  - _Website_: https://github.com/tophat/syrupy
+### syrupy
+  - _Website_: [https://github.com/tophat/syrupy](https://github.com/tophat/syrupy)
   - _Cluster_: Snapshot testing (pytest)
   - _Problem it solves_:
     - Hand-written assertions on large/nested computed outputs (API
@@ -2344,11 +2344,11 @@
   - _What it does_: pytest plugin for snapshot-based testing
   - _Languages supported_: Python
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/syrupy-project/syrupy
+  - _GitHub link_: [https://github.com/syrupy-project/syrupy](https://github.com/syrupy-project/syrupy)
   - _GitHub stars_: 900
 
-- **ApprovalTests**
-  - _Website_: https://approvaltests.com
+### ApprovalTests
+  - _Website_: [https://approvaltests.com](https://approvaltests.com)
   - _Cluster_: Approval/golden-master testing
   - _Problem it solves_:
     - Traditional assert-based unit tests struggle to verify complex
@@ -2361,11 +2361,11 @@
   - _Languages supported_: Java, C#, C++, Python, JavaScript (Node.js),
     PHP, Swift, Perl, Go, Lua, Objective-C, Ruby, LabVIEW, Dart, Elixir
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/approvals/ApprovalTests.Net
+  - _GitHub link_: [https://github.com/approvals/ApprovalTests.Net](https://github.com/approvals/ApprovalTests.Net)
   - _GitHub stars_: 600
 
-- **ReportPortal**
-  - _Website_: https://reportportal.io
+### ReportPortal
+  - _Website_: [https://reportportal.io](https://reportportal.io)
   - _Cluster_: Test reporting
   - _Problem it solves_:
     - Large test suites across many CI runs and frameworks produce huge
@@ -2379,11 +2379,11 @@
   - _Languages supported_: Java, Python, JavaScript/TypeScript, C#/.NET,
     Ruby (via language/framework-specific agent integrations)
   - _Pricing_: free / open source (hosted/enterprise is paid)
-  - _GitHub link_: https://github.com/reportportal/reportportal
+  - _GitHub link_: [https://github.com/reportportal/reportportal](https://github.com/reportportal/reportportal)
   - _GitHub stars_: 2,000
 
-- **TestRail**
-  - _Website_: https://www.testrail.com
+### TestRail
+  - _Website_: [https://www.testrail.com](https://www.testrail.com)
   - _Cluster_: Test-case management
   - _Problem it solves_:
     - Tracking manual and automated test cases, runs, and coverage in
@@ -2401,8 +2401,8 @@
 
 ## Flaky Test Detection
 
-- **Datadog Test Optimization**
-  - _Website_: https://www.datadoghq.com/product/test-optimization
+### Datadog Test Optimization
+  - _Website_: [https://www.datadoghq.com/product/test-optimization](https://www.datadoghq.com/product/test-optimization)
   - _Cluster_: Flaky-test detection
   - _Problem it solves_:
     - Flaky tests erode trust in CI signal, causing teams to ignore
@@ -2418,8 +2418,8 @@
   - _GitHub link_: n/a
   - _GitHub stars_: n/a
 
-- **pytest-rerunfailures**
-  - _Website_: https://github.com/pytest-dev/pytest-rerunfailures
+### pytest-rerunfailures
+  - _Website_: [https://github.com/pytest-dev/pytest-rerunfailures](https://github.com/pytest-dev/pytest-rerunfailures)
   - _Cluster_: Flaky-test triage (retry plugin)
   - _Problem it solves_:
     - Flaky tests (intermittent failures from timing, network, or external
@@ -2430,13 +2430,13 @@
     separate flakes from real regressions
   - _Languages supported_: Python
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/pytest-dev/pytest-rerunfailures
+  - _GitHub link_: [https://github.com/pytest-dev/pytest-rerunfailures](https://github.com/pytest-dev/pytest-rerunfailures)
   - _GitHub stars_: 500
 
 ## Task Runners
 
-- **Make**
-  - _Website_: https://www.gnu.org/software/make
+### Make
+  - _Website_: [https://www.gnu.org/software/make](https://www.gnu.org/software/make)
   - _Cluster_: Task/build runner
   - _Problem it solves_:
     - Multi-step compile/build processes need automation and dependency
@@ -2449,8 +2449,8 @@
   - _GitHub link_: n/a
   - _GitHub stars_: n/a
 
-- **Taskfile.dev (Task)**
-  - _Website_: https://taskfile.dev
+### Taskfile.dev (Task)
+  - _Website_: [https://taskfile.dev](https://taskfile.dev)
   - _Cluster_: Task runner
   - _Problem it solves_:
     - Make's syntax (tabs, whitespace sensitivity, arcane rules) is
@@ -2460,13 +2460,13 @@
   - _What it does_: YAML-based modern task runner, a `make` alternative
   - _Languages supported_: language-agnostic
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/go-task/task
+  - _GitHub link_: [https://github.com/go-task/task](https://github.com/go-task/task)
   - _GitHub stars_: 16,000
 
 ## CI/CD Dashboards
 
-- **Datadog CI Visibility**
-  - _Website_: https://www.datadoghq.com/product/ci-cd-monitoring
+### Datadog CI Visibility
+  - _Website_: [https://www.datadoghq.com/product/ci-cd-monitoring](https://www.datadoghq.com/product/ci-cd-monitoring)
   - _Cluster_: CI/CD observability
   - _Problem it solves_:
     - Lack of granular visibility into CI/CD pipelines makes it hard to
@@ -2482,8 +2482,8 @@
   - _GitHub link_: n/a
   - _GitHub stars_: n/a
 
-- **GitHub required status checks**
-  - _Website_: https://docs.github.com
+### GitHub required status checks
+  - _Website_: [https://docs.github.com](https://docs.github.com)
   - _Cluster_: Branch protection
   - _Problem it solves_:
     - Need to prevent merging broken or failing code into protected
@@ -2500,8 +2500,8 @@
 
 ## Release Automation
 
-- **semantic-release**
-  - _Website_: https://semantic-release.gitbook.io
+### semantic-release
+  - _Website_: [https://semantic-release.gitbook.io](https://semantic-release.gitbook.io)
   - _Cluster_: Release automation
   - _Problem it solves_:
     - Manual version bumping and changelog writing is error-prone and
@@ -2513,11 +2513,11 @@
   - _Languages supported_: JavaScript/Node.js (core tool); language/
     package-manager-agnostic via plugins for the actual publish step
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/semantic-release/semantic-release
+  - _GitHub link_: [https://github.com/semantic-release/semantic-release](https://github.com/semantic-release/semantic-release)
   - _GitHub stars_: 24,000
 
-- **Release Please**
-  - _Website_: https://github.com/googleapis/release-please
+### Release Please
+  - _Website_: [https://github.com/googleapis/release-please](https://github.com/googleapis/release-please)
   - _Cluster_: Release automation
   - _Problem it solves_:
     - Maintaining accurate changelogs and version numbers by hand across
@@ -2532,11 +2532,11 @@
     Dart, Elixir, R, OCaml (plus non-code ecosystems like Terraform, Helm,
     Bazel)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/googleapis/release-please
+  - _GitHub link_: [https://github.com/googleapis/release-please](https://github.com/googleapis/release-please)
   - _GitHub stars_: 7,400
 
-- **changesets**
-  - _Website_: https://github.com/changesets/changesets
+### changesets
+  - _Website_: [https://github.com/changesets/changesets](https://github.com/changesets/changesets)
   - _Cluster_: Release automation (JS/TS monorepos)
   - _Problem it solves_:
     - In a JS/TS monorepo, changes to one package can leave dependent
@@ -2546,13 +2546,13 @@
   - _What it does_: versioning and changelog workflow for JS/TS monorepos
   - _Languages supported_: JavaScript, TypeScript
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/changesets/changesets
+  - _GitHub link_: [https://github.com/changesets/changesets](https://github.com/changesets/changesets)
   - _GitHub stars_: 12,000
 
 ## Container Release, Signing & SBOM
 
-- **Skopeo**
-  - _Website_: https://github.com/containers/skopeo
+### Skopeo
+  - _Website_: [https://github.com/containers/skopeo](https://github.com/containers/skopeo)
   - _Cluster_: Image copy/inspection
   - _Problem it solves_:
     - Copying, inspecting, or signing container images across registries
@@ -2565,11 +2565,11 @@
     without a daemon
   - _Languages supported_: language-agnostic
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/containers/skopeo
+  - _GitHub link_: [https://github.com/containers/skopeo](https://github.com/containers/skopeo)
   - _GitHub stars_: 11,000
 
-- **cosign**
-  - _Website_: https://docs.sigstore.dev/cosign
+### cosign
+  - _Website_: [https://docs.sigstore.dev/cosign](https://docs.sigstore.dev/cosign)
   - _Cluster_: Image signing
   - _Problem it solves_:
     - Container images and artifacts are normally distributed with no
@@ -2582,13 +2582,13 @@
     images and artifacts
   - _Languages supported_: language-agnostic
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/sigstore/cosign
+  - _GitHub link_: [https://github.com/sigstore/cosign](https://github.com/sigstore/cosign)
   - _GitHub stars_: 6,200
 
 ## Error Tracking & Incident Routing
 
-- **Rollbar**
-  - _Website_: https://rollbar.com
+### Rollbar
+  - _Website_: [https://rollbar.com](https://rollbar.com)
   - _Cluster_: Error tracking
   - _Problem it solves_:
     - Production errors often go unnoticed until users complain, with no
@@ -2602,8 +2602,8 @@
   - _GitHub link_: n/a
   - _GitHub stars_: n/a
 
-- **PagerDuty-to-GitHub bridges**
-  - _Website_: https://www.pagerduty.com/integrations
+### PagerDuty-to-GitHub bridges
+  - _Website_: [https://www.pagerduty.com/integrations](https://www.pagerduty.com/integrations)
   - _Cluster_: Incident-to-issue integration
   - _Problem it solves_:
     - Incident findings and follow-up action items often stay stuck in
@@ -2620,8 +2620,8 @@
 
 ## Canary Deployment & Progressive Delivery
 
-- **Flagger**
-  - _Website_: https://flagger.app
+### Flagger
+  - _Website_: [https://flagger.app](https://flagger.app)
   - _Cluster_: Canary deployment (Kubernetes)
   - _Problem it solves_:
     - Manually shifting traffic and watching metrics during a canary
@@ -2634,11 +2634,11 @@
   - _Languages supported_: language-agnostic (Kubernetes operator; core
     written in Go)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/fluxcd/flagger
+  - _GitHub link_: [https://github.com/fluxcd/flagger](https://github.com/fluxcd/flagger)
   - _GitHub stars_: 5,400
 
-- **Argo Rollouts**
-  - _Website_: https://argoproj.github.io/rollouts
+### Argo Rollouts
+  - _Website_: [https://argoproj.github.io/rollouts](https://argoproj.github.io/rollouts)
   - _Cluster_: Progressive delivery (Kubernetes)
   - _Problem it solves_:
     - Kubernetes' native Deployment resource only supports basic rolling
@@ -2651,11 +2651,11 @@
   - _Languages supported_: language-agnostic (Kubernetes controller; core
     written in Go)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/argoproj/argo-rollouts
+  - _GitHub link_: [https://github.com/argoproj/argo-rollouts](https://github.com/argoproj/argo-rollouts)
   - _GitHub stars_: 3,600
 
-- **Istio**
-  - _Website_: https://istio.io
+### Istio
+  - _Website_: [https://istio.io](https://istio.io)
   - _Cluster_: Service mesh
   - _Problem it solves_:
     - Implementing consistent traffic splitting, retries, and mTLS
@@ -2668,11 +2668,11 @@
   - _Languages supported_: language-agnostic (control plane written in
     Go, data plane Envoy in C++)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/istio/istio
+  - _GitHub link_: [https://github.com/istio/istio](https://github.com/istio/istio)
   - _GitHub stars_: 38,000
 
-- **Prometheus**
-  - _Website_: https://prometheus.io
+### Prometheus
+  - _Website_: [https://prometheus.io](https://prometheus.io)
   - _Cluster_: Metrics & monitoring
   - _Problem it solves_:
     - Teams need a reliable way to collect and query time-series metrics
@@ -2685,11 +2685,11 @@
   - _Languages supported_: language-agnostic (any service exposing metrics
     via client libraries; core written in Go)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/prometheus/prometheus
+  - _GitHub link_: [https://github.com/prometheus/prometheus](https://github.com/prometheus/prometheus)
   - _GitHub stars_: 66,000
 
-- **Alertmanager**
-  - _Website_: https://prometheus.io/docs/alerting/latest/alertmanager
+### Alertmanager
+  - _Website_: [https://prometheus.io/docs/alerting/latest/alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager)
   - _Cluster_: Alerting
   - _Problem it solves_:
     - Raw firing alerts from monitoring systems can flood on-call
@@ -2701,13 +2701,13 @@
   - _Languages supported_: language-agnostic (works with Prometheus and
     any Alertmanager-compatible source; core written in Go)
   - _Pricing_: free / open source
-  - _GitHub link_: https://github.com/prometheus/alertmanager
+  - _GitHub link_: [https://github.com/prometheus/alertmanager](https://github.com/prometheus/alertmanager)
   - _GitHub stars_: 8,600
 
 ## Supply Chain Security & Governance
 
-- **SLSA (Supply-chain Levels for Software Artifacts)**
-  - _Website_: https://slsa.dev
+### SLSA (Supply-chain Levels for Software Artifacts)
+  - _Website_: [https://slsa.dev](https://slsa.dev)
   - _Cluster_: Supply-chain security framework
   - _Problem it solves_:
     - Organizations lack a common vocabulary or graduated standard to
