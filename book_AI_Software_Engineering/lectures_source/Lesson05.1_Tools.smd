@@ -33,9 +33,9 @@
 * From Model Capability to Repo Infrastructure
 
 - @Key idea@: an **AI-optimized codebase** is an emergent property of designing
-  for human and agent discoverability, automation, and fast feedback
-  - The same properties that shorten human onboarding often shorten agent
-    onboarding
+  a codebase for human and agent discoverability, automation, and fast feedback
+  - Most of the same properties that shorten human onboarding and make them
+    effective, often apply to AI agents
 
 - @Overview@: this lesson walks the development lifecycle
   1. Rules, skills, and instruction manifests
@@ -55,72 +55,73 @@
 
 * Why Software Engineering Is Difficult
 
-- **No silver bullet**: complexity is both essential (the problem itself) vs.
+- @No silver bullet@: complexity is both essential (the problem itself) vs.
   accidental (tools/workarounds)
   - Even if accidental complexity can shrink, essential can't *(Brooks, 1986)*
 
-- **Invisibility**: unlike physical engineering, software has no natural
+- @Invisibility@: unlike physical engineering, software has no natural
   constraints that visibly signal when a design is overbuilt or fragile
 
-- **Combinatorial state explosion**: every added flag/variable multiplies
-  possible system states beyond what humans can reason about
+- @Combinatorial state explosion@: every added flag/variable multiplies possible
+  system states beyond what humans can reason about
 
-- **Requirements are moving targets**: building the system changes what people
+- @Requirements are moving targets@: building the system changes what people
   realize they actually need
 
-- **Conway's Law**: system structure mirrors the organization's communication
+- @Conway's Law@: system structure mirrors the organization's communication
   structure: human complexity leaks into technical complexity *(Conway, 1968)*
 
-- **Software entropy**: every patch and extension nudges a system further from
+- @Software entropy@: every patch and extension nudges a system further from
   anyone's full understanding *(code rot)*
 
-- **Brooks's Law**: adding people to a late project makes it later, due to rising
+- @Brooks's Law@: adding people to a late project makes it later, due to rising
   coordination overhead *(Brooks, 1975)*
 
 // TODO(gp): Look into tools that manage this complexity: architecture
 //   decision records (ADRs), dependency-cruiser/madge for coupling, radon/
 //   CodeScene for complexity metrics, Team Topologies for org design
 
-* What Has Been Learned in 50 years of Software Engineering
+* Lessons Learned in 50 years of Software Engineering
 
-- **Abstraction & information hiding**: encapsulate detail behind clean
+- @Abstraction & information hiding@: encapsulate detail behind clean
   interfaces so no one has to hold the whole system in their head *(Parnas,
   1972)*
 
-- **Feedback loops beat upfront planning**: short iterative cycles surface
+- @Feedback loops beat upfront planning@: short iterative cycles surface
   mistakes early, cheaper than planning them away *(Agile Manifesto, 2001)*
 
-- **Simplicity is a discipline**: systems drift toward complexity unless actively
+- @Simplicity is a discipline@: systems drift toward complexity unless actively
   resisted (e.g., YAGNI, refactoring, deliberate debt paydown)
 
-- **Technical debt is a real tradeoff**: shortcuts accrue "interest", so teams
+- @Technical debt is a real tradeoff@: shortcuts accrue "interest", so teams
   must consciously choose when to pay it down *(Cunningham, 1992)*
 
-- **Design for partial failure**: distributed systems taught the field to expect
+- @Design for partial failure@: distributed systems taught the field to expect
   failure, not avoid it
   - Need retries, circuit breakers, graceful degradation
 
-- **Observability is not optional**: you can't manage complexity you can't see
+- @Observability is not optional@: you can't manage complexity you can't see
   - Logging, metrics, and tracing as first-class concerns
 
-- **Shared mental models matter as much as code**: most fatal complexity comes
+- @Shared mental models matter as much as code@: most fatal complexity comes
   from mismatched understanding between people, not algorithms
 
 // TODO(gp): Look into OpenTelemetry for observability, feature flags
 //   (LaunchDarkly) for partial rollout, architecture fitness functions
 //   (ArchUnit) to enforce these lessons automatically
 
-* Why Consistency and Reproducibility is Important for Sw Engineering
+* Consistency and Reproducibility is Key
 
 - @Fact@: one of the few universally agreed rules of software engineering is
   that consistency and conventions speed up development
   - A reader who knows the convention can guess the answer instead of
     searching for it
 
-- @Definition@: **reproducibility** means the same code, config, and data
-  produce the same result on any machine, at any time
-  - The complement, **consistency**, means the same kind of problem is
-    solved the same way everywhere in the codebase
+- @Definition@:
+  - **Reproducibility** means the same code, config, and data produce the same
+    result on any machine, at any time
+  - The complement, **consistency**, means the same kind of problem is solved the
+    same way everywhere in the codebase
 
 - @Problem@: without either property, a bug that appears on one machine and
   not another burns hours before the difference is even located
@@ -133,9 +134,9 @@
   - A **checklist** for a deploy or a failover catches the step a tired
     engineer would otherwise skip
 
-- @Key idea@: rules, skills, and manifests, the subject of this section, are
-  how a repository encodes consistency and reproducibility for a coding
-  agent, the same way a runbook encodes them for an on-call engineer
+- @Key idea@: rules, skills, and manifests are how a repository encodes
+  consistency and reproducibility for a coding agent, the same way a runbook
+  encodes them for an on-call engineer
 
 // TODO(gp): Look into reproducibility tools: Nix/Docker for pinned envs, DVC
 //   for data, Backstage golden paths, Rundeck/PagerDuty for runbook
@@ -147,30 +148,28 @@
 // From helpers_root/.claude/skills/coding.rules.md
 
 - @Problem@: a model completes patterns, so with no stated convention it invents
-  a plausible one
-  - Writes `dict` where the repo requires `Dict[str, str]`
-  - Reaches for `pathlib.Path` where the repo standardizes on `os.path`
+  plausible, but inconsistent, code
+  - Writes `dict` where the repo uses `Dict[str, str]` everywhere
+  - Reaches for `os.path` where the repo standardizes on `pathlib.Path`
   - ...
 
 - @Naive Solution@: restate the conventions in the prompt of every session
-  - Cons: burns context on every run
-  - Cons: drifts out of sync with the code, since nothing ties prompt to repo
-  - Cons: cannot be reviewed, because it lives in a chat log
+  - Cons:
+    - Burns context on every run
+    - Drifts out of sync with the code, since nothing ties prompt to repo
+    - Cannot be reviewed, because it lives in a chat log
 
 - @Solution@: check the conventions into the repository as versioned files
-  - `.claude/rules.md` maps _file type_ $\to$ _rule file_
+  - `.ai/rules.md` maps _file type_ $\to$ _rule file_
   - `<TOPIC>.rules.md` holds why and when for principles and decision criteria
-  - `.claude/templates/<TOPIC>.template.<EXT>` holds what to copy: a skeleton
-    with `<VAR>` placeholders
 
 - @Key idea@: rules stored in the repo are reviewed, diffed, and versioned like
   code, so agent behavior changes through a pull request
 
-// TODO(gp): Look into the emerging AGENTS.md open standard, Cursor's
-//   `.cursorrules`, GitHub Copilot custom instructions, and how ruff/mypy
-//   already enforce some conventions mechanically instead of by prose
+// TODO(gp): Look into how ruff/mypy already enforce some conventions
+//   mechanically instead of by prose
 
-* CLAUDE.md as a Machine-Readable Instruction Manifest
+* AGENTS.md as a Machine-Readable Instruction Manifest
 
 // From helpers_root/CLAUDE.md
 // From paper "The Causify AIgentic Development System", Part 4
@@ -178,6 +177,11 @@
 - @Definition@: an **agent instruction manifest** is a structured description of
   architecture, module boundaries, and canonical commands, written for a program
   rather than for a newcomer
+
+- @Examples@: the same pattern, different names per tool
+  - `AGENTS.md`: an open, tool-agnostic standard adopted across coding agents
+  - `CLAUDE.md` (Claude Code), `.cursorrules` (Cursor), and GitHub Copilot
+    custom instructions are vendor-specific variants of the same idea
 
 - @Components@: what a manifest declares
   - _Architecture_: components and ownership boundaries
@@ -193,29 +197,26 @@
 - @Remark@: this is not documentation in the traditional sense
   - It is an operating manual whose primary reader is a machine
 
-// TODO(gp): Look into the emerging AGENTS.md open standard, Cursor's
-//   `.cursorrules`, GitHub Copilot custom instructions, and how ruff/mypy
-//   already enforce some conventions mechanically instead of by prose
+// TODO(gp): Look into how ruff/mypy already enforce some conventions
+//   mechanically instead of by prose
+
+// TODO(ai_gp): Add description of agents.md conventions (there are files)
 
 * Scaling Context Retrieval Beyond a Static Manifest
 
-- @Problem@: `CLAUDE.md` and `<TOPIC>.rules.md` work while the manifest fits
-  in context; a codebase with hundreds of rule files and thousands of source
-  files stops fitting no matter how well it is organized
+- @Problem@:
+  - `AGENTS.md` and `<TOPIC>.rules.md` work while the manifest fits in context
+  - a codebase with hundreds of rule files and thousands of source files stops
+    fitting in context, no matter how well it is organized
 
+// TODO(ai_gp): Unclear
 - @Gap@: nothing in this stack retrieves the _right_ rule file or the
   _right_ prior implementation on demand, so the agent either loads
   everything or relies on the file paths it happens to already know
 
 - @What it would take@
-  - Semantic or embedding-based search over rules, skills, and code, so a
-    query like "how do we name test classes" resolves to
-    `testing.rules.md` without enumerating `.claude/skills/`
-  - Retrieval that respects the same layering `helpers` already enforces
-    for imports, so a low-level rule is not buried under high-level noise
-
-- @Remark@: the repository's own backlog names this gap directly (`ctx7?`
-  in `resources.md`), unresolved as of this lesson
+  - Semantic or embedding-based search over rules, skills, and code
+  - E.g., _"how do we name test classes"_
 
 - @Key idea@: a manifest is a whiteboard, not a library; past a certain repo
   size, an agent needs an index, not a longer document
@@ -228,18 +229,20 @@
 
 // From helpers_root/.claude/skills/skill.rules.md
 
-- @Problem@: a rule file says what "good" looks like, but not how to carry out a
-  recurring task
+- @Problem@:
+  - A rule file describes in natural language what "good" looks like
+  - A template is an example of how "good" looks like
+  - A skill says how to carry out a recurring task
 
 - @Definition@: a **skill** is a named, versioned procedure stored at
-  `.claude/skills/<TOPIC>.<ACTION>/SKILL.md`
+  `skills/<TOPIC>.<ACTION>/SKILL.md`
   - E.g., `testing.write_unit_tests`, `docker.shrink_container`
 
 - @Components@: the sections of a `SKILL.md`
   - _Frontmatter_: `description` and `model`
   - _Goal_: one or two sentences
   - _Workflow_: numbered, imperative steps
-  - _Conventions_: a pointer to `<TOPIC>.rules.md`, never a restatement
+  - _Conventions_: pointers to relevant `<TOPIC>.rules.md` (never a restatement)
   - _Verification_: how to check the work was done
 
 ```{=typst}
@@ -254,14 +257,17 @@
 )
 ```
 
-- @Key idea@: naming a workflow turns tacit practice into an asset the team can
-  review, test, and improve
-
 // TODO(gp): Look into LangChain tools/agents, MCP servers, and prompt/skill
 //   registries (LangGraph, Semantic Kernel plugins) as comparable ways to
 //   package a repeatable workflow for an agent
 
 * repo_config.yaml: Machine-Readable Repository Contracts
+
+// TODO(gp): Generalize by looking into other machine-readable repo contracts:
+// - Backstage `catalog-info.yaml`
+// - Nx `project.json`
+// - Bazel `BUILD` files
+// - cookiecutter config
 
 // From helpers_root/docs/tools/dev_system/all.runnable_repo.reference.md
 // From
@@ -292,19 +298,15 @@
 - @Key idea@: a release task derives the registry and the naming convention from
   the contract, instead of relying on environment-specific assumptions
 
-// TODO(gp): Look into other machine-readable repo contracts: Backstage
-//   `catalog-info.yaml`, Nx `project.json`, Bazel `BUILD` files, cookiecutter
-//   config
-
 # Requirements and Planning
 
-* From Issue to Specification: Automating Requirements Capture
+* Automating Requirements Capture
 
 // From helpers_root/.claude/skills/specs.write
 
 - @Problem@: an agent handed a one-line issue title fills the gap between
-  "what was asked" and "what to build" with assumptions, and a wrong
-  assumption compounds every commit downstream
+  _"what was asked"_ and _"what to build"_ with assumptions
+  - A wrong assumption compounds every commit downstream
 
 - @Definition@: a **specification** is the artifact that separates "what
   does the user want" from "how is it implemented", written before a branch
@@ -1779,7 +1781,7 @@ digraph ReleaseFlow {
 
 - @Characteristics@: the properties that make a codebase agent-ready
   - _Self-documenting workflows_: `invoke --list` replaces tribal knowledge
-  - _Manifests and contracts_: `CLAUDE.md` and `repo_config.yaml` answer
+  - _Manifests and contracts_: `AGENTS.md` and `repo_config.yaml` answer
     questions instead of hiding answers in prose
   - _Context-bounded editing_: the runnable directory limits what must be read
   - _Guardrails and provenance_: hooks, linters, and scanners make failures
@@ -1806,7 +1808,7 @@ digraph ReleaseFlow {
   headers: ("Lifecycle stage", "Artifact the agent uses"),
   rows: (
     ("Plan the work", "specs.write, ADRs (gap)"),
-    ("Understand the repo", "CLAUDE.md, rules files, repo_config.yaml"),
+    ("Understand the repo", "AGENTS.md, rules files, repo_config.yaml"),
     ("Do a task", "Skill files, invoke tasks"),
     ("Change code", "Runnable directory boundary, linter"),
     ("Prove the change", "Fast/slow tests, golden files, coverage, mutation (gap)"),
