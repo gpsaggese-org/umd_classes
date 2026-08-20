@@ -1,3 +1,8 @@
+// type=UMD_slides
+// course_title=From Data to Decisions: Building Decision Systems with Probabilistic Causal Reasoning
+// lesson_title=Lesson 08.1: Causal Data Pipelines
+// slides_engine=typst
+
 # Data Collection and Its Biases
 
 ## Collection Design and Measurement Choices

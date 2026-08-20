@@ -1,3 +1,8 @@
+// type=UMD_slides
+// course_title=From Data to Decisions: Building Decision Systems with Probabilistic Causal Reasoning
+// lesson_title=Lesson 06.1: Causal ML
+// slides_engine=typst
+
 # Causal Graphical Models
 
 ## Structural Causal Models and DAGs
