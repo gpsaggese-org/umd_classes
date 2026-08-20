@@ -26,10 +26,8 @@
 // - Codecov, "Codecov Documentation": https://docs.codecov.com/
 // - Petazzoni, "Do not use Docker-in-Docker for CI":
 //   https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/
-
 // TODO(gp): At the end of each part add part of the table from
 // book_AI_Software_Engineering/lectures_source/Lesson05.1_Tools.tools_reference.md
-
 // TODO(gp): List of skills and rules organized and standardized
 // Examples of a implementation
 
@@ -59,8 +57,8 @@
 
 * Why Software Engineering Is Difficult
 
-- @No silver bullet@: Complexity is both essential (the problem itself) vs
-  accidental (tools/workarounds)
+- @No silver bullet@: Complexity is both essential (the problem itself) vs accidental
+  (tools/workarounds)
   - Even if accidental complexity can shrink, essential can't _(Brooks, 1986)_
 
 - @Invisibility@: Unlike physical engineering, software has no natural constraints
@@ -217,7 +215,6 @@
 
 - @Key idea@: A manifest is a whiteboard, not a library; past a certain repo size, an
   agent needs an index, not a longer document
-
 // TODO(gp): Look into embedding-based code/doc search that would close this
 //   gap: Sourcegraph Cody context, a Context7-style MCP server, LlamaIndex
 //   or txtai for retrieval-augmented rule lookup
@@ -241,7 +238,6 @@
   - _Workflow_: Numbered, imperative steps
   - _Conventions_: Pointers to relevant `<TOPIC>.rules.md` (never a restatement)
   - _Verification_: How to check the work was done
-
 ```{=typst}
 #styled-table(
   headers: ("Artifact", "Answers", "Example"),
@@ -311,16 +307,16 @@
 
 - @Constraints@: Keep the spec from drift by:
   - Stopping for human approval before implementation starts
-  - Referencing the spec file from the pull request, so reviewers check code
-    against a written contract, not against the issue title
+  - Referencing the spec file from the pull request, so reviewers check code against
+    a written contract, not against the issue title
 
 - @Key idea@: The earliest and cheapest place to catch a misunderstanding is before
   the first line of code, not in review
 
 * Architecture Decision Records
 
-- @Problem@: A repository's rules and manifests capture the current convention,
-  but not why an earlier alternative was rejected
+- @Problem@: A repository's rules and manifests capture the current convention, but
+  not why an earlier alternative was rejected
   - An agent explores a settled tradeoff every time it is asked to reconsider one
 
 - @Definition@: An **architecture decision record (ADR)** is a short, dated,
@@ -336,7 +332,7 @@
   - A skill that drafts / updates an ADR from a discussion and links it from the
     affected rule file
 
-- @Key idea@:
+- @Key idea@
   - A rule file says what to do today
   - An ADR says why today's rule beat other rules
 
@@ -349,7 +345,6 @@
 
 - @Problem@: Teams want the _modularity_ of many repositories and the _environment
   consistency_ of one, and the classic answer sacrifices one
-
 ```{=typst}
 #styled-table(
   headers: ("Approach", "Pros", "Cons"),
@@ -369,7 +364,6 @@
   - Is not _"one repo or many"_
   - Is _"what is the smallest unit that can be built, tested, and released on its
     own"_
-
 // TODO(gp): Look into monorepo tooling (Bazel, Nx, Turborepo, Lerna) and
 //   multi-repo tooling (git submodules/subtrees, Meta's Sapling) for how
 //   other stacks solve the same tradeoff
@@ -445,15 +439,14 @@ digraph RunnableRepo {
 :::
 
 - @Goals@: Design targets the architecture is aimed at:
-  - Dependencies pinned by a Python package manager (`poetry`, `uv`, Conda), not
-    by hand
+  - Dependencies pinned by a Python package manager (`poetry`, `uv`, Conda), not by
+    hand
   - Devops builds and releases the container; developers only use it
   - One image builds for both Intel and Arm, on Linux, macOS, and WSL
 
-- @Key idea@: A runnable directory is a **context boundary**, so the agent's
-  prompt, container, and test scope coincide, which cuts cross-cutting edits and
-  context hallucinations
-
+- @Key idea@: A runnable directory is a **context boundary**, so the agent's prompt,
+  container, and test scope coincide, which cuts cross-cutting edits and context
+  hallucinations
 // TODO(gp): Look into similar boundary mechanisms: Bazel `BUILD` target
 //   sandboxing, Nx module-boundary lint rules, the Pants build system,
 //   per-package Dev Containers
@@ -463,8 +456,8 @@ digraph RunnableRepo {
 // From helpers_root/docs/tools/all.imports_and_packages.how_to_guide.md
 // From helpers_root/docs/tools/all.import_check.reference.md
 
-- @Goal@: Python packages simplify client imports, hide which file holds the
-  code, group related units, and make import loops preventable
+- @Goal@: Python packages simplify client imports, hide which file holds the code,
+  group related units, and make import loops preventable
 
 - @Algorithm@: The import rules
   - Inside a package, import sibling _files_ directly
@@ -499,7 +492,6 @@ digraph RunnableRepo {
 
 - @Key idea@: Deduplication is easy to detect and easy to overdo, so the tool
   proposes and a human decides
-
 // TODO(gp): Look into jscpd, PMD CPD, and SonarQube's duplication detector as
 //   language-agnostic alternatives, and Sourcegraph batch changes for
 //   applying the refactor at scale
@@ -510,7 +502,7 @@ digraph RunnableRepo {
 // From helpers_root/.claude/skills/git.update_references
 // From helpers_root/.claude/skills/coding.rename
 
-- @Problem@: 
+- @Problem@
   - Renaming a function or moving a file means finding every reference across
     repositories a human would search by hand
   - Change propagation is costly in multi-repo approach
@@ -522,12 +514,11 @@ digraph RunnableRepo {
     repositories that depend on it
   - `coding.rename` performs the same propagation for a function or variable name,
     not just a path
-  - After find-and-replace across text, every reference is a match found by
-    static analysis
+  - After find-and-replace across text, every reference is a match found by static
+    analysis
 
 - @Key idea@: The propagation cost that makes multi-repo expensive for a human is
   exactly the mechanical, rule-following work an agent automates cheaply
-
 // TODO(gp): Look into codemod frameworks that do the same job outside this
 //   stack: jscodeshift, Comby, OpenRewrite, and LSP-based rename (rope,
 //   ts-morph)
@@ -540,8 +531,8 @@ digraph RunnableRepo {
 
 - @Definition@: The **thin environment** approach is a Python virtual environment
   holding the minimum packages needed to start the development system in Docker
-
 // TODO(gp): too much detail, point to the documentation
+
 - @Components@: The files under `dev_scripts_<repo>/thin_client/`
   - `build.py` and `requirements.txt`: Create the environment
   - `setenv.sh`: Configure a shell, inside or outside the container
@@ -561,9 +552,8 @@ digraph RunnableRepo {
   - Installing the Git hooks and configuring the environment are a side effect of
     activating the environment
 
-- @Key idea@: An agent can be dropped into any machine and reach the same
-  environment through the same two commands
-
+- @Key idea@: An agent can be dropped into any machine and reach the same environment
+  through the same two commands
 // TODO(gp): Look into the VS Code Dev Containers spec, Nix flakes + direnv,
 //   and Gitpod/GitHub Codespaces as alternative reproducible-dev-env
 //   approaches
@@ -598,11 +588,10 @@ digraph RunnableRepo {
     Mermaid/Graphviz/TikZ diagram rendering, LaTeX)
   - They are an alternative to `uvx`
 
-- @Cons@:
+- @Cons@
   - Docker becomes a hard dependency
   - Images consume disk
   - The first run pays the price of a Docker pull or build
-
 // TODO(gp): Look into Homebrew formulae that wrap a container, `act` for
 //   running GitHub Actions locally, and `just`/`entr` as other thin-wrapper
 //   patterns
@@ -618,7 +607,8 @@ digraph RunnableRepo {
 // TODO(ai_gp): Too much details, point to blog and documentation
 
 - @Comparison@: Two ways to launch a container from inside one
-  - _Children containers_ (aka Docker-in-Docker): The outer container runs its own daemon
+  - _Children containers_ (aka Docker-in-Docker): The outer container runs its own
+    daemon
     - Cons: Needs `--privileged`, which is often refused
     - Cons: The build cache is not shared, so images are rebuilt after every restart
   - _Sibling containers_ : Mount `/var/run/docker.sock` and talk to the host daemon
@@ -683,7 +673,6 @@ digraph Containers {
 // TODO(gp): Look into Podman (daemonless/rootless) as a sibling alternative,
 //   sysbox for safer Docker-in-Docker, and Kaniko/Buildah for daemonless
 //   image builds in CI
-
 // TODO(gp): Look into dive and docker-slim for image-layer inspection, and
 //   Trivy/Snyk Container for size and vulnerability scanning together
 
@@ -693,11 +682,9 @@ digraph Containers {
 
 // From helpers_root/docs/work_organization/all.use_github.how_to_guide.md
 
-- @Definition@: The unit of work is a **GitHub issue**, implemented in a branch,
-  and delivered as a pull request whose title matches the branch name
-
+- @Definition@: The unit of work is a **GitHub issue**, implemented in a branch, and
+  delivered as a pull request whose title matches the branch name
 // TODO(ai_gp): Point to blog / documentation
-
 //// TODO(ai_gp): Description of how to automate the dev
 //- @Components@: The labels that encode review state
 //  - `PR_for_authors`: Changes are owed by the author
@@ -727,7 +714,6 @@ digraph Containers {
 
 - @Goal@: Decompose a PR into small, cohesive pull requests that minimize review
   complexity and the risk of breaking tests
-
 // TODO(ai_gp): Point to doc and blog
 // - @Algorithm@
 //   1. List the touched files with `git diff --name-status origin/master HEAD`
@@ -737,14 +723,12 @@ digraph Containers {
 //   5. Order the pull requests so low-risk, wide-touch changes merge first
 //   6. Emit `pr<NUM>.files.txt` and an executable `pr<NUM>.pytest.sh` per unit
 //   7. Record the plan in `github_PR_plan.md` and re-lint it
-
 // - @Example@: Carrying a subset of files into a fresh child branch
 //   ```bash
 //   > i git_branch_next_name
 //   > git_sync_between_branches.sh --src_branch $SRC --dst_branch $DST \
 //       --files "$FILES"
 //   ```
-
 // TODO(gp): Look into stacked-diff tools that automate this split: Graphite,
 //   git-branchless, Sapling, ghstack
 
@@ -752,8 +736,8 @@ digraph Containers {
 
 // From book_AI_Software_Engineering/resources.md: Managing Code
 
-- @Definition@: In **asynchronous agent work** no human is attached to the
-  session while the agent runs
+- @Definition@: In **asynchronous agent work** no human is attached to the session
+  while the agent runs
 
 - @Techniques@
   - Web and desktop sessions that outlive the terminal
@@ -761,28 +745,26 @@ digraph Containers {
   - Scheduled tasks that fire on a cron expression
   - A GitHub app that dispatches an agent from an issue or a comment
 
-- @Assumptions@:
+- @Assumptions@
   - The permission surface is bounded, so destructive actions need approval
   - Every gate that CI runs can also be run by the agent before it reports
-  - A human should still review and  merge the changes
+  - A human should still review and merge the changes
 
 - @Challenges@
-  - The agent cannot ask a clarifying question, so ambiguity is resolved by
-    guessing
+  - The agent cannot ask a clarifying question, so ambiguity is resolved by guessing
   - The affected code grows with session length
   - Review load moves in time, not away: The work still arrives on a human desk
 
-- @Key idea@: Asynchronous work changes the human role from _author_ to
-  _reviewer_ / _supervisor_ running a team of AI collaborators
-
+- @Key idea@: Asynchronous work changes the human role from _author_ to _reviewer_ /
+  _supervisor_ running a team of AI collaborators
 // TODO(gp): Look into Devin, OpenAI Codex Cloud, Claude Code's GitHub Action
 //   and remote control, Cursor background agents, and Sweep.dev as examples
 //   of this mode
 
 * Governing Agent Permissions and Auditing Actions
 
-- @Problem@: A change from a long-running asynchronous agent can affect a large
-  part of the codebase, so one needs mechanisms to bound the scope
+- @Problem@: A change from a long-running asynchronous agent can affect a large part
+  of the codebase, so one needs mechanisms to bound the scope
 
 - @What it would take@
   - A permission manifest per agent run: Which directories, which commands, which
@@ -794,7 +776,6 @@ digraph Containers {
 
 - @Key idea@: A human reviews the diff an agent produces; nothing today lets a human
   review the _actions_ an agent took to get there
-
 // TODO(gp): Look into OPA/Rego for a permission manifest, sandboxes
 //   (Firecracker, gVisor) to bound blast radius, and OpenTelemetry traces of
 //   tool calls as the audit log
@@ -808,9 +789,7 @@ digraph Containers {
 
 - @Definition@: A **cfile** is a vim quickfix list of `file:line:message` entries,
   generated by a tool and navigated by a human
-
 // TODO(ai_gp): Point to blog / documentation
-
 //- @Algorithm@
 //  1. Commit first, so the transform lands in its own reviewable commit
 //  2. `invoke git_branch_diff -t base --only-print-files`
@@ -866,7 +845,6 @@ digraph Containers {
   - _Patch_: Implement a minimal diff that respects directory boundaries
   - _Prove_: Run the cheapest gate first, then widen
   - _Summarize_: Produce a pull-request-ready explanation with evidence
-
 // - @Example@: The escalation order inside _Prove_
 //   ```bash
 //   > invoke lint --modified
@@ -951,7 +929,6 @@ digraph AgenticLoop {
   - `git bisect` driven by the agent, running the failing test at each step
   - A skill that groups CI failures by stack-trace similarity, so a recurring flake
     is recognized instead of re-diagnosed from zero
-
 // TODO(gp): Look into automated `git bisect` runners, Sentry/Datadog error
 //   clustering by stack-trace fingerprint, and BuildPulse for grouping
 //   recurring CI failures
@@ -968,7 +945,6 @@ digraph AgenticLoop {
 
 - @Definition@: **Diataxis** splits documentation into four modes, each with one
   clear job
-
 ```{=typst}
 #styled-table(
   headers: ("Mode", "Orientation", "Reader question", "Suffix"),
@@ -980,8 +956,8 @@ digraph AgenticLoop {
   ),
 )
 ```
-  - File name encodes the mode:
-    `docs/{component}/{audience}.{topic}.{diataxis_tag}.md`
+
+- File name encodes the mode: `docs/{component}/{audience}.{topic}.{diataxis_tag}.md`
 
 - @Techniques@: Conventions that make a document machine-consumable
   - A summary in bullets for incremental disclosure
@@ -993,7 +969,6 @@ digraph AgenticLoop {
 
 - @Key idea@: The structure that makes a document skimmable for a human is the same
   structure that makes it easily searchable and consumable for an AI assistant
-
 // TODO(ai_gp): Prefer markdown
 // TODO(gp): Look into doc tooling: Docusaurus/MkDocs renderers, Vale/alex for
 //   prose linting, and RAG doc-indexing tools (LlamaIndex, Context7) for
@@ -1016,7 +991,6 @@ digraph AgenticLoop {
   - Check relationships with other markdown links
   - Keep it updated (incrementally when something change + a top to bottom run once
     in a while)
-
 // TODO(ai_gp): Systems to keep documentation updated
 // ctx7?
 // TODO(gp): Look into readme-ai, Mintlify writer, and link checkers
@@ -1049,7 +1023,6 @@ digraph AgenticLoop {
   - Check leftover merge-conflict markers
   - Lint was run and passed
   - Unit tests are present and have coverage of the new code
-  - ...
 
 - @Key idea@: Gates are ordered by cost, so the cheapest check runs first
 
@@ -1160,7 +1133,7 @@ digraph QualityGates {
 
 // From paper "The Causify AIgentic Development System", Part 3
 
-- @Problem@:
+- @Problem@
   - Remove packages nobody imports
   - Check package everybody imports that carries a known CVE
   - Check package whose license conflicts with the project's
@@ -1179,7 +1152,6 @@ digraph QualityGates {
   - A generated SBOM per release, kept alongside the scan report
   - A bot that bumps one dependency at a time, changelog attached, for a human to
     merge
-
 // TODO(gp): Look into Dependabot and Renovate for automated upgrade PRs,
 //   Snyk/Trivy/Grype for CVE scanning, and Syft or OSV-Scanner for SBOM
 //   generation
@@ -1192,13 +1164,11 @@ digraph QualityGates {
 - @Definition@: Coverage is collected per **test suite**, and each suite uploads
   under its own flag
   - `fast` and `slow` run daily, `superslow` runs weekly
-
 // - @Example@: Measuring locally before pushing
 //   ```bash
 //   > invoke run_coverage --suite fast --generate-html-report
 //   > invoke run_coverage_subprocess --target-dir=dev_scripts_helpers/llms
 //   ```
-
 // - @Techniques@: Covering subprocesses and containers
 //   - `.coveragerc` sets `parallel = True` and `concurrency = multiprocessing`
 //   - `hcoverage.inject()` installs the startup hook, `COVERAGE_PROCESS_START` points
@@ -1227,10 +1197,9 @@ digraph QualityGates {
   - A `mutation_score` reported alongside coverage, so "100% covered, 40%
     mutation-killed" is visible instead of hidden behind one green number
 
-- @Key idea@:
+- @Key idea@
   - Coverage proves a line executed
   - Mutation testing proves a test would have noticed if that line were wrong
-
 // TODO(gp): Look into mutmut and cosmic-ray for Python, Stryker Mutator for
 //   JS, and Pitest for Java as the mutation runners that would fill this gap
 
@@ -1240,34 +1209,37 @@ digraph QualityGates {
 
 // From helpers_root/.claude/skills/testing.rules.md
 
-- @Key idea@: A test is a specification a machine can check, which makes it the only
-  feedback channel an agent can act on without a human
+- @Key idea@: A test is a specification a machine can check, which makes it the most
+  important feedback channel an agent can act on without a human
 
-- @Characteristics@: The four invariants
-  - _Test one thing_: One class per function or class, one case per method
-  - _Self-contained_: Never assume execution order, state inputs explicitly
-  - _Outside-in_: Interface tests survive refactors, implementation tests do not
-  - _In sync_: Renaming the tested class renames the test class and the file
+// TODO(ai_gp): Point to the blog
 
-- @Example@: Every method uses the same four sections
-  ```python
-  def test1(self) -> None:
-      """
-      Test extraction from a valid file path.
-      """
-      # Prepare inputs.
-      file_path = "msml610/lectures_source/Lesson10-Name.md"
-      # Prepare outputs.
-      expected_dir = "msml610"
-      # Run test.
-      actual_dir, _ = _extract_lesson_from_file(file_path)
-      # Check outputs.
-      self.assertEqual(actual_dir, expected_dir)
-  ```
+// - @Characteristics@: The four invariants
+//   - _Test one thing_: One class per function or class, one case per method
+//   - _Self-contained_: Never assume execution order, state inputs explicitly
+//   - _Outside-in_: Interface tests survive refactors, implementation tests do not
+//   - _In sync_: Renaming the tested class renames the test class and the file
 
-- @Remark@: Naming is fully determined, so there is nothing to decide
-  - `parse_limit_range()` $\to$ `Test_parse_limit_range`, `Config` $\to$
-    `TestConfig`, methods numbered `test1`, `test2` with the intent in the docstring
+// - @Example@: Every method uses the same four sections
+//   ```python
+//   def test1(self) -> None:
+//       """
+//       Test extraction from a valid file path.
+//       """
+//       # Prepare inputs.
+//       file_path = "msml610/lectures_source/Lesson10-Name.md"
+//       # Prepare outputs.
+//       expected_dir = "msml610"
+//       # Run test.
+//       actual_dir, _ = _extract_lesson_from_file(file_path)
+//       # Check outputs.
+//       self.assertEqual(actual_dir, expected_dir)
+//   ```
+
+// - @Remark@: Naming is fully determined, so there is nothing to decide
+//   - `parse_limit_range()` $\to$ `Test_parse_limit_range`, `Config` $\to$
+//     `TestConfig`, methods numbered `test1`, `test2` with the intent in the docstring
+
 // TODO(gp): Look into Hypothesis for property-based testing and Pact for
 //   contract testing as complements to these example-based specs
 
@@ -1276,8 +1248,9 @@ digraph QualityGates {
 // From helpers_root/.claude/skills/testing.write_unit_tests
 // From helpers_root/.claude/skills/testing.reach_coverage
 
-- @Problem@: Asked for tests with no constraint, a model produces many shallow tests
-  that execute code without asserting behavior
+- @Problem@: Asked for tests with no constraint, a model produces often procudes
+  low quality tests (e.g., too brittle, without asserting behavior, difficult to
+  maintain, lots of repeated code)
 
 - @Algorithm@: Both skills are plan-then-implement, with a human gate in between
   1. Establish the baseline, e.g., run coverage and list uncovered lines
@@ -1334,8 +1307,7 @@ digraph QualityGates {
 - @Solution@: A wrapper executes the notebook headlessly and applies the same
   golden-file comparison used for regular tests
   - `run_notebook.py` drives execution through papermill
-  - The test file follows the same naming convention, e.g
-    `test_analysis_notebook.py`
+  - The test file follows the same naming convention, e.g `test_analysis_notebook.py`
   - Expected output is a golden file, not a human glance
 
 - @Example@: Debugging a failure keeps the interactive workflow
