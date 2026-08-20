@@ -637,6 +637,17 @@
 - Uncomment: `:UC`
 - To prepend a XXXX in front of each line of a block: `:'<,'>s/^/XXXX/`
 
+# #############################################################################
+# vim-commentary
+# #############################################################################
+
+- Plugin: `tpope/vim-commentary` (https://github.com/tpope/vim-commentary)
+- Install via vim-plug: add `Plug 'tpope/vim-commentary'` to `.vimrc`, then run
+  `:PlugInstall`
+- Comment/uncomment current line: `gcc`
+- Comment/uncomment a motion or visual selection: `gc{motion}`, e.g. `gcap`,
+  or `gc` in visual mode
+
 <!--
 # #############################################################################
 # CTRLP

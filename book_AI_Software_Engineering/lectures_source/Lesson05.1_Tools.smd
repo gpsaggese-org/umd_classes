@@ -696,45 +696,26 @@ digraph Containers {
 - @Definition@: The unit of work is a **GitHub issue**, implemented in a branch,
   and delivered as a pull request whose title matches the branch name
 
-// TODO(ai_gp): Description of how to automate the dev
-- @Components@: The labels that encode review state
-  - `PR_for_authors`: Changes are owed by the author
-  - `PR_for_reviewers`: Ready for team-leader review
-  - `PR_for_integrators`: Final round, close to merge
+// TODO(ai_gp): Point to blog / documentation
 
-- @Example@: The same three commands a human runs
-  ```bash
-  > i git_branch_create -i 828
-  > i gh_create_pr
-  > i gh_watch
-  ```
-
-- @Remark@: Reference the issue as _"Related to #NNN"_, never _"Fixes #NNN"_
-  - GitHub auto-closes a linked issue on merge, and closing is a human decision
+//// TODO(ai_gp): Description of how to automate the dev
+//- @Components@: The labels that encode review state
+//  - `PR_for_authors`: Changes are owed by the author
+//  - `PR_for_reviewers`: Ready for team-leader review
+//  - `PR_for_integrators`: Final round, close to merge
+//
+//- @Example@: The same three commands a human runs
+//  ```bash
+//  > i git_branch_create -i 828
+//  > i gh_create_pr
+//  > i gh_watch
+//  ```
 
 - @Key idea@: The workflow was already scripted for humans, so an agent executes the
   identical path with no special-case automation
 // TODO(gp): Look into `gh` CLI scripting, GitHub Actions bots, and agent PR
 //   platforms (OpenAI Codex Cloud, Devin, Cursor background agents) that
 //   automate this same path
-
-* Repo Governance as Versioned Config, Not Clicks
-
-// From paper "The Causify AIgentic Development System", Part 1
-
-- @Problem@: The `PR_for_authors` / `PR_for_reviewers` / `PR_for_integrators` labels
-  only work as a review-state machine if every repo has exactly those labels, and a
-  label created by hand in the GitHub UI leaves no diff
-
-- @Solution@: The label set, the project-board fields, and branch protection are each
-  declared in a file and synced, not clicked
-  - A label manifest is synced, backed up, and can run in dry-run mode
-  - GitHub Projects fields and views sync from a template
-  - Branch protection rules sync from a YAML manifest the same way
-
-- @Key idea@: A setting that lives only in the GitHub UI cannot be reviewed, diffed,
-  or restored, so repo configuration follows the same rule as code: It is a file
-  first, and a click second
 
 * Splitting Work: Child PRs and Branch Splitting
 
@@ -744,36 +725,35 @@ digraph Containers {
 - @Problem@: A long-lived branch mixes refactoring with behavior change, and the
   reviewer cannot separate _what moved_ from _what changed_
 
-- @Goal@: Decompose `origin/master...HEAD` into small, cohesive pull requests that
-  minimize review complexity and the risk of breaking tests
+- @Goal@: Decompose a PR into small, cohesive pull requests that minimize review
+  complexity and the risk of breaking tests
 
-- @Algorithm@
-  1. List the touched files with `git diff --name-status origin/master HEAD`
-  2. Group them so each pull request is internally coupled
-  3. Prefer whole files per pull request over splitting one file across several
-  4. Keep a source file and its test file in the same pull request
-  5. Order the pull requests so low-risk, wide-touch changes merge first
-  6. Emit `pr<NUM>.files.txt` and an executable `pr<NUM>.pytest.sh` per unit
-  7. Record the plan in `github_PR_plan.md` and re-lint it
+// TODO(ai_gp): Point to doc and blog
+// - @Algorithm@
+//   1. List the touched files with `git diff --name-status origin/master HEAD`
+//   2. Group them so each pull request is internally coupled
+//   3. Prefer whole files per pull request over splitting one file across several
+//   4. Keep a source file and its test file in the same pull request
+//   5. Order the pull requests so low-risk, wide-touch changes merge first
+//   6. Emit `pr<NUM>.files.txt` and an executable `pr<NUM>.pytest.sh` per unit
+//   7. Record the plan in `github_PR_plan.md` and re-lint it
 
-- @Example@: Carrying a subset of files into a fresh child branch
-  ```bash
-  > i git_branch_next_name
-  > git_sync_between_branches.sh --src_branch $SRC --dst_branch $DST \
-      --files "$FILES"
-  ```
+// - @Example@: Carrying a subset of files into a fresh child branch
+//   ```bash
+//   > i git_branch_next_name
+//   > git_sync_between_branches.sh --src_branch $SRC --dst_branch $DST \
+//       --files "$FILES"
+//   ```
 
-- @Key idea@: The mechanics are automatable, but the judgment of what belongs
-  together stays under review
 // TODO(gp): Look into stacked-diff tools that automate this split: Graphite,
 //   git-branchless, Sapling, ghstack
 
-* Coding While You Sleep: Remote and Autonomous Agents
+* Remote and Autonomous Agents
 
 // From book_AI_Software_Engineering/resources.md: Managing Code
 
-- @Definition@: In **asynchronous agent work** no human is attached to the session
-  while the agent runs
+- @Definition@: In **asynchronous agent work** no human is attached to the
+  session while the agent runs
 
 - @Techniques@
   - Web and desktop sessions that outlive the terminal
@@ -781,30 +761,28 @@ digraph Containers {
   - Scheduled tasks that fire on a cron expression
   - A GitHub app that dispatches an agent from an issue or a comment
 
-- @Assumptions@: Conditions that make the mode acceptable
+- @Assumptions@:
   - The permission surface is bounded, so destructive actions need approval
   - Every gate that CI runs can also be run by the agent before it reports
-  - A human still merges
+  - A human should still review and  merge the changes
 
 - @Challenges@
-  - The agent cannot ask a clarifying question, so ambiguity is resolved by guessing
-  - The blast radius grows with session length
+  - The agent cannot ask a clarifying question, so ambiguity is resolved by
+    guessing
+  - The affected code grows with session length
   - Review load moves in time, not away: The work still arrives on a human desk
 
-- @Key idea@: Asynchronous work changes the human role from _author_ to _reviewer of
-  evidence_
+- @Key idea@: Asynchronous work changes the human role from _author_ to
+  _reviewer_ / _supervisor_ running a team of AI collaborators
+
 // TODO(gp): Look into Devin, OpenAI Codex Cloud, Claude Code's GitHub Action
 //   and remote control, Cursor background agents, and Sweep.dev as examples
 //   of this mode
 
 * Governing Agent Permissions and Auditing Actions
 
-- @Problem@: The asynchronous-agent slide already names the risk, "the blast radius
-  grows with session length", but names no mechanism that bounds or records it
-
-- @Gap@: Nothing in this stack scopes what a long-running or scheduled agent is
-  allowed to touch, or logs what it actually did, independent of the pull request it
-  eventually opens
+- @Problem@: A change from a long-running asynchronous agent can affect a large
+  part of the codebase, so one needs mechanisms to bound the scope
 
 - @What it would take@
   - A permission manifest per agent run: Which directories, which commands, which
@@ -816,6 +794,7 @@ digraph Containers {
 
 - @Key idea@: A human reviews the diff an agent produces; nothing today lets a human
   review the _actions_ an agent took to get there
+
 // TODO(gp): Look into OPA/Rego for a permission manifest, sandboxes
 //   (Firecracker, gVisor) to bound blast radius, and OpenTelemetry traces of
 //   tool calls as the audit log
@@ -830,16 +809,18 @@ digraph Containers {
 - @Definition@: A **cfile** is a vim quickfix list of `file:line:message` entries,
   generated by a tool and navigated by a human
 
-- @Algorithm@
-  1. Commit first, so the transform lands in its own reviewable commit
-  2. `invoke git_branch_diff -t base --only-print-files`
-  3. `ai_review.py -i $FILE -p $PROMPT` to emit the `cfile`
-  4. `vim -c "cfile cfile"` to walk the comments and discard false positives
-  5. `inject_todos.py --cfile cfile` to leave `TODO`s for whoever fixes them
-  6. `apply_todos.py` to let a model apply them, which is the risky step
+// TODO(ai_gp): Point to blog / documentation
 
-- @Variants@: The prompt selects the lens
-  - `review_correctness`, `review_architecture`, `review_linter`, `review_llm`
+//- @Algorithm@
+//  1. Commit first, so the transform lands in its own reviewable commit
+//  2. `invoke git_branch_diff -t base --only-print-files`
+//  3. `ai_review.py -i $FILE -p $PROMPT` to emit the `cfile`
+//  4. `vim -c "cfile cfile"` to walk the comments and discard false positives
+//  5. `inject_todos.py --cfile cfile` to leave `TODO`s for whoever fixes them
+//  6. `apply_todos.py` to let a model apply them, which is the risky step
+//
+//- @Variants@: The prompt selects the lens
+//  - `review_correctness`, `review_architecture`, `review_linter`, `review_llm`
 
 - @Key idea@: The review criteria live in the same style-guide file the linter reads,
   so tool and reviewer share one source of truth
@@ -852,10 +833,10 @@ digraph Containers {
 // From helpers_root/docs/code_guidelines/all.code_review.how_to_guide.md
 
 - @Examples@: Hosted review systems
-  - **GitHub Copilot Code Review**: In-platform, minimal setup, shallow analysis
-  - **Graphite**: Pull request workflow and stacked diffs, light on semantics
-  - **CodeRabbit**: Deeper logic and bug analysis, younger integrations
-  - **Snyk Code**: Static analysis aimed at security and anti-patterns
+  - _GitHub Copilot Code Review_: In-platform, minimal setup, shallow analysis
+  - _Graphite_: Pull request workflow and stacked diffs, light on semantics
+  - _CodeRabbit_: Deeper logic and bug analysis, younger integrations
+  - _Snyk Code_: Static analysis aimed at security and anti-patterns
 
 - @Limitations@
   - Suggestions are best guesses and need human oversight
@@ -877,7 +858,7 @@ digraph Containers {
 // From paper "The Causify AIgentic Development System", Part 4
 
 ::: columns
-:::: {.column width=52%}
+:::: {.column width=60%}
 
 - @Definition@: The **agentic loop** is the disciplined workflow the infrastructure
   makes possible
@@ -886,15 +867,18 @@ digraph Containers {
   - _Prove_: Run the cheapest gate first, then widen
   - _Summarize_: Produce a pull-request-ready explanation with evidence
 
-- @Example@: The escalation order inside _Prove_
-  ```bash
-  > invoke lint --modified
-  > invoke run_fast_tests
-  > invoke run_slow_tests
-  ```
+// - @Example@: The escalation order inside _Prove_
+//   ```bash
+//   > invoke lint --modified
+//   > invoke run_fast_tests
+//   > invoke run_slow_tests
+//   ```
+
+- @Key idea@: The novelty is not that an agent writes code, it is that the change
+  arrives carrying its own evidence
 
 ::::
-:::: {.column width=44%}
+:::: {.column width=40%}
 
 ```graphviz
 digraph AgenticLoop {
@@ -937,8 +921,8 @@ digraph AgenticLoop {
 
   Plan -> Patch;
   Patch -> Prove;
-  Prove -> Sum [label="  gates green"];
-  Prove -> Patch [label="  gate fails",
+  Prove -> Sum [label="  Gates green"];
+  Prove -> Patch [label="  Gate fails",
                   style=dashed, penwidth=1.6,
                   color="#C0455B", fontcolor="#C0455B",
                   constraint=false];
@@ -948,19 +932,18 @@ digraph AgenticLoop {
 ::::
 :::
 
-- @Key idea@: The novelty is not that an agent writes code, it is that the change
-  arrives carrying its own evidence
 // TODO(gp): Look into SWE-agent, Aider's edit-test loop, and ReAct-style
 //   plan/act/observe agents as other implementations of this loop
 
 * Automating Root-Cause Analysis When a Gate Fails
 
-- @Problem@: The agentic loop's dashed edge, "gate fails $\to$ back to Patch", hides
-  the hardest step; knowing a test failed is not the same as knowing why, and an
-  agent that patches without a cause thrashes
+- @Problem@: The agentic loop's dashed edge _"Gate fails $\to$ back to Patch"_ hides
+  the hardest step
+  - Knowing a test failed is not the same as knowing why, and an agent that patches
+    without a cause thrashes
 
 - @Gap@: Nothing in this stack automates the diagnosis itself
-  - No bisection: Which commit in the branch introduced the failure
+  - No bisection: Which commit in the branch introduced the failure?
   - No log or stack-trace clustering: Is this failure the same one from three pull
     requests ago, or new
 
@@ -969,23 +952,23 @@ digraph AgenticLoop {
   - A skill that groups CI failures by stack-trace similarity, so a recurring flake
     is recognized instead of re-diagnosed from zero
 
-- @Key idea@: "Prove" tells the agent a gate is red; closing the loop needs a step
-  that tells it _why_, or Patch is just another guess
 // TODO(gp): Look into automated `git bisect` runners, Sentry/Datadog error
 //   clustering by stack-trace fingerprint, and BuildPulse for grouping
 //   recurring CI failures
 
 # Automating Documentation
 
-* Documentation as a First-Class, Machine-Consumable Artifact
+* Documentation as a Machine-Consumable Artifact
 
 // From helpers_root/docs/documentation_meta/all.diataxis.explanation.md
 // From helpers_root/docs/documentation_meta/all.writing_docs.how_to_guide.md
 
 - @Problem@: An essay-shaped document is expensive for a human to skim and expensive
-  for a retriever to chunk
+  for an AI agent to search
 
-- @Definition@: **Diataxis** splits documentation into four modes, each with one job
+- @Definition@: **Diataxis** splits documentation into four modes, each with one
+  clear job
+
 ```{=typst}
 #styled-table(
   headers: ("Mode", "Orientation", "Reader question", "Suffix"),
@@ -997,15 +980,20 @@ digraph AgenticLoop {
   ),
 )
 ```
-
-- @Techniques@: Conventions that make a document machine-consumable
-  - One level-1 header, a summary in bullets, a linter-generated table of contents
   - File name encodes the mode:
     `docs/{component}/{audience}.{topic}.{diataxis_tag}.md`
-  - One idea per bullet, diagrams instead of wordy explanations
+
+- @Techniques@: Conventions that make a document machine-consumable
+  - A summary in bullets for incremental disclosure
+  - Meaningful headers and clear conventions (e.g., one idea per bullet, DRY applied
+    to documentation)
+  - A loop that keeps the content up to date (e.g., ensure the content is in sync
+    with the code, check referred URLs, check markdown links...)
+  - Machine readable and generated diagrams
 
 - @Key idea@: The structure that makes a document skimmable for a human is the same
   structure that makes it easily searchable and consumable for an AI assistant
+
 // TODO(ai_gp): Prefer markdown
 // TODO(gp): Look into doc tooling: Docusaurus/MkDocs renderers, Vale/alex for
 //   prose linting, and RAG doc-indexing tools (LlamaIndex, Context7) for
@@ -1018,21 +1006,17 @@ digraph AgenticLoop {
 
 - @Problem@: A `README` is written once and rots, because nothing fails when it goes
   stale
-
-- Conventions for README (dir vs file)
+  - Different types of README (e.g., for a dir, an executable, a Python library)
   - Summary, structure of the directory, description of files
   - Description of executables, workflows, and architecture when they apply
 
-- Checks links
+- @Key idea@: Generation is cheap
+  - Check that the document still matches the code
+  - Check referred URLs
+  - Check relationships with other markdown links
+  - Keep it updated (incrementally when something change + a top to bottom run once
+    in a while)
 
-- Checks other markdown links
-
-- Check that it's referred by other files
-
-- Keep it updated (incrementally when something change + a top to bottom run)
-
-- @Key idea@: Generation is cheap, so the scarce resource is a check that the
-  document still matches the code
 // TODO(ai_gp): Systems to keep documentation updated
 // ctx7?
 // TODO(gp): Look into readme-ai, Mintlify writer, and link checkers
@@ -1054,20 +1038,20 @@ digraph AgenticLoop {
 :::: {.column width=54%}
 
 - @Definition@: A **git hook** is a script Git runs around an event such as a commit
-  - `pre-commit.py` runs before the commit is created
-  - `commit-msg.py` checks and edits the commit message
 
-- @Components@: What the pre-commit hook enforces
-  - `check_master`: Never commit on the default branch
-  - `check_author`: Name and email are configured
-  - `check_file_size`: Refuse oversized blobs
-  - `check_python_compile`: The file at least parses
-  - `check_gitleaks`: No secret in the staged diff
-  - Leftover merge-conflict markers, for any Git operation that can create them
+- @Examples@ of checks
+  - Check commit message conventions
+  - Never commit on the default branch (e.g., `master`) but always use a PR
+  - Name and email for the author are configured
+  - Refuse oversized blobs
+  - Make sure all the source code (e.g., Python) at least parses
+  - No secret in the staged diff
+  - Check leftover merge-conflict markers
+  - Lint was run and passed
+  - Unit tests are present and have coverage of the new code
+  - ...
 
-- @Remark@: The escape hatch is explicit
-  - `git commit --no-verify` skips the checks for one commit
-  - `enable_git_commit_hook: False` in `repo_config.yaml` disables them per repo
+- @Key idea@: Gates are ordered by cost, so the cheapest check runs first
 
 ::::
 :::: {.column width=42%}
@@ -1122,37 +1106,16 @@ digraph QualityGates {
 ::::
 :::
 
-- @Key idea@: Gates are ordered by cost, so the cheapest check rejects the most
-  common mistake first
 // TODO(gp): Look into husky and lefthook as alternative hook managers for
 //   JS/multi-language repos, and Talisman for a hook dedicated to
 //   secret-scanning
-
-* The Linter Framework: One Interface Over Many Tools
-
-// From paper "The Causify AIgentic Development System", Part 1
-
-- @Problem@: A repo runs a dozen formatters and checkers, and each has its own CLI,
-  config format, and notion of "fix it for me"
-
-- @Definition@: Every linter is wrapped in an `Action` subclass exposing the same
-  `check_if_possible()` / `_execute()` interface, so the runner treats Black and mypy
-  identically
-
-- @Components@: The tool roster behind the common interface
-  - _Modifying_: Black, Prettier, isort, autoflake rewrite the file in place
-  - _Non-modifying_: Flake8, pylint, mypy, ty only report
-
-- @Key idea@: One interface over many tools means adding a linter is a new `Action`,
-  not a new special case in the runner
 
 * Type Checking as a Quality Gate
 
 // From helpers_root/.claude/skills/coding.fix_pyright
 
 - @Problem@: A linter checks style and a test checks behavior for the paths it
-  exercises; neither one catches a value of the wrong type flowing through a path no
-  test happens to cover
+  exercises
 
 - @Solution@: `coding.fix_pyright` runs static type checking and fixes the reported
   lints, closing the gap between "style is correct" and "types are correct"
@@ -1177,13 +1140,13 @@ digraph QualityGates {
 - @Problem@: An autonomous agent that edits configuration files can commit a
   credential, and deleting the line later does not remove it from history
 
-- @Solution 1: Gitleaks@: Secret scanning at two points
+- @Gitleaks@: Secret scanning at two points
   - Locally as the `check_gitleaks` pre-commit check
   - In continuous integration on every pull request, every push to `master`, on a
     daily schedule, and on manual dispatch
   - Rules in `.github/gitleaks-rules.toml`, failures posted to a Slack channel
 
-- @Solution 2: Semgrep@: Pattern-based static analysis
+- @Semgrep@: Pattern-based static analysis
   - Uses the `p/secrets` rule pack, with the same trigger schedule
   - `.semgrepignore` excludes vendored code, `# nosemgrep` suppresses one line
   - Reproduce a failure locally with `semgrep --config=p/secrets`
@@ -1193,13 +1156,14 @@ digraph QualityGates {
 // TODO(gp): Look into TruffleHog and detect-secrets as gitleaks alternatives,
 //   and GitHub secret scanning plus CodeQL/Bandit for broader SAST coverage
 
-* Dependency Vulnerability Scanning, SBOMs, and Automated Upgrades
+* Dependency Vulnerability Scanning
 
 // From paper "The Causify AIgentic Development System", Part 3
 
-- @Problem@: `docker.shrink_requirements` removes packages nobody imports, but says
-  nothing about a package everybody imports that carries a known CVE, or one whose
-  license conflicts with the project's
+- @Problem@:
+  - Remove packages nobody imports
+  - Check package everybody imports that carries a known CVE
+  - Check package whose license conflicts with the project's
 
 - @Fact@: The production image build already scans for known vulnerabilities,
   blocking release on a high-severity match, so the CVE question is not fully open
@@ -1216,9 +1180,6 @@ digraph QualityGates {
   - A bot that bumps one dependency at a time, changelog attached, for a human to
     merge
 
-- @Key idea@: `docker.shrink_requirements` answers "do we need this package", the
-  release scan answers "is this package safe today", and neither one answers "how do
-  we get to safe automatically"
 // TODO(gp): Look into Dependabot and Renovate for automated upgrade PRs,
 //   Snyk/Trivy/Grype for CVE scanning, and Syft or OSV-Scanner for SBOM
 //   generation
@@ -1232,17 +1193,17 @@ digraph QualityGates {
   under its own flag
   - `fast` and `slow` run daily, `superslow` runs weekly
 
-- @Example@: Measuring locally before pushing
-  ```bash
-  > invoke run_coverage --suite fast --generate-html-report
-  > invoke run_coverage_subprocess --target-dir=dev_scripts_helpers/llms
-  ```
+// - @Example@: Measuring locally before pushing
+//   ```bash
+//   > invoke run_coverage --suite fast --generate-html-report
+//   > invoke run_coverage_subprocess --target-dir=dev_scripts_helpers/llms
+//   ```
 
-- @Techniques@: Covering subprocesses and containers
-  - `.coveragerc` sets `parallel = True` and `concurrency = multiprocessing`
-  - `hcoverage.inject()` installs the startup hook, `COVERAGE_PROCESS_START` points
-    at the config
-  - `hcoverage.coverage_combine()` merges the per-process data files
+// - @Techniques@: Covering subprocesses and containers
+//   - `.coveragerc` sets `parallel = True` and `concurrency = multiprocessing`
+//   - `hcoverage.inject()` installs the startup hook, `COVERAGE_PROCESS_START` points
+//     at the config
+//   - `hcoverage.coverage_combine()` merges the per-process data files
 
 - @Fact@: The gate is a delta, not an absolute
   - The project check fails when coverage drops by 1% or more against the base
@@ -1256,16 +1217,9 @@ digraph QualityGates {
 
 * Mutation Testing: Verifying That Tests Actually Assert
 
-- @Problem@: The coverage slide's own limitation stands unanswered: Coverage measures
-  which lines ran, not whether anything was asserted about them, and a test that
-  calls a function and checks nothing scores full coverage
-
 - @Definition@: **Mutation testing** injects a small fault into the source (flip a
-  comparison, drop a line) and reruns the suite; a test suite that still passes did
-  not actually exercise that logic
-
-- @Gap@: Nothing in this stack runs a mutation pass; coverage is the only signal a
-  test's thoroughness produces today
+  comparison, drop a line) and reruns the suite
+  - A test suite that still passes did not actually exercise that logic
 
 - @What it would take@
   - A mutation runner scoped to the lines a pull request changed, since a
@@ -1273,8 +1227,10 @@ digraph QualityGates {
   - A `mutation_score` reported alongside coverage, so "100% covered, 40%
     mutation-killed" is visible instead of hidden behind one green number
 
-- @Key idea@: Coverage proves a line executed, mutation testing proves a test would
-  have noticed if that line were wrong
+- @Key idea@:
+  - Coverage proves a line executed
+  - Mutation testing proves a test would have noticed if that line were wrong
+
 // TODO(gp): Look into mutmut and cosmic-ray for Python, Stryker Mutator for
 //   JS, and Pitest for Java as the mutation runners that would fill this gap
 
