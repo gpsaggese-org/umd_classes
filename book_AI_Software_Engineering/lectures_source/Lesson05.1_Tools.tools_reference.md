@@ -1,8 +1,22 @@
 # AI-Assisted Software Engineering: Tools Reference
 
-- Each tool lists: cluster, what it does, website, and whether it is
-  free/open-source or paid
-- Pricing/availability is as of this writing and may change
+- Each tool lists:
+  - _Website_
+  - _Cluster_
+  - _Problem it solves_: nested bullets explaining what are the issues
+    that this tool addresses
+  - _What it does_: nested bullets explaining the functionalities it does to
+    solve the problems above
+  - _Languages supported_
+  - _Pricing_: whether it is free, freemium, open-source, paid
+    - Pricing/availability is as of this writing and may change
+  - _GitHub link_: link for the project, if available
+  - _GitHub stars_: approximate, as of today
+
+# Summary
+
+// TODO(ai_gp): Add a table with
+// name, website, cluster, language, free/fremium/
 
 ## Agent-Readiness Benchmarks
 
