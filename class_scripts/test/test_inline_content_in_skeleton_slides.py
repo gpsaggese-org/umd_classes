@@ -21,6 +21,7 @@ _LOG = logging.getLogger(__name__)
 
 
 # TODO(ai_gp): Reorder test classes to test public APIs before internal helpers (testing.rules.md:## Test From the Outside-In)
+# TODO(ai_gp): Change "# Run test." to "# Run test and check outputs." in test methods that call helper functions which do the checking (testing.rules.md:## Use Three Sections in Testing Methods)
 
 # #############################################################################
 # Test__get_title_level
@@ -375,6 +376,7 @@ class Test__parse_from_tag(hunitest.TestCase):
 # #############################################################################
 
 
+# TODO(ai_gp): Create helper method to reduce repeated test logic across test1 and test2 (testing.rules.md:## Verification - No repeated code, use at least one `def helper()` per class)
 class Test__find_next_title_line(hunitest.TestCase):
     """
     Test `_find_next_title_line()` function.
@@ -712,6 +714,7 @@ class Test_inline_content_in_skeleton_slides(hunitest.TestCase):
 # #############################################################################
 
 
+# TODO(ai_gp): Create helper method to reduce repeated test logic across test1 and test2 (testing.rules.md:## Verification - No repeated code, use at least one `def helper()` per class)
 class Test__parse(hunitest.TestCase):
     """
     Test `_parse()` function.
@@ -754,6 +757,7 @@ class Test__parse(hunitest.TestCase):
 # #############################################################################
 
 
+# TODO(ai_gp): Rename class from Test__main to Test_inline_content_in_skeleton_slides_py to follow executable test naming convention (testing.rules.md:## Test Name)
 class Test__main(hunitest.TestCase):
     """
     End-to-end tests for `_main()`.
@@ -770,6 +774,8 @@ class Test__main(hunitest.TestCase):
         with mock.patch("sys.argv", argv):
             clincoss._main(parser)
 
+    # TODO(ai_gp): Factor out more common code into a helper and inline
+    # _run_main in the helper.
     def test1(self) -> None:
         """
         Test happy path: a slide with no `// From` tag round-trips

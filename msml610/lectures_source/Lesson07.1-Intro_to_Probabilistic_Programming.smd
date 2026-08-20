@@ -91,10 +91,10 @@
   - Capture the most relevant aspects of the system (abstraction)
   - Ignore minor details
 
-/*
 * Bayes' Theorem: Recap
 - @Definition@: **Bayes' theorem** posits that for model parameters $\theta$ and
   data $X$
+/*
   $$
   \red{\Pr(\theta | X)}
   = \frac{\teal{\Pr(X | \theta)} \cdot \blue{\Pr(\theta)}}{\violet{\Pr(X)}}
