@@ -46,8 +46,9 @@
 
 ## Opening files under the cursor
 - Open file under the cursor: `gf`
-- To jump to a file and line: `gF`
+- Jump to a file and line: `gF`
 - Open file under the cursor in a split window: `CTRL-W, CTRL-F`
+- Open an URL under the cursor with the default browse: `gx`
 
 ## Inserting non-printable chars
 - To insert a tab, i.e., `^I`: `CTRL-v + TAB`
@@ -488,18 +489,14 @@
   or `gc` in visual mode
 
 <!--
-# #############################################################################
 # CTRLP
-# #############################################################################
 
 // https://vimawesome.com/plugin/ctrlp-vim-everything-has-changed
 
 - Fuzzy, buffer, mru, tag finder
 - To find a font
 
-# #############################################################################
 # VimTaglist
-# #############################################################################
 
 // http://vim-taglist.sourceforge.net/manual.html
 :TlistToggle
