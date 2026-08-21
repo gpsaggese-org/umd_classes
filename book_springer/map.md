@@ -141,7 +141,7 @@
 - [ ] Apply `msml610/lectures_source/prompt.convert_to_typst.md` to all the files
   in `msml610/lectures_source/Lesson*`
 - [ ] `/slides.lint_incrementally`
-- [ ] `/slides.add_bold_and_italic`
+- [ ] `/slides.fix_formatting`
 
 ## `book_springer` Tutorials
 

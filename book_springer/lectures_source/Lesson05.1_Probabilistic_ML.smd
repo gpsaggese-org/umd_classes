@@ -8,7 +8,7 @@
 ## Reasoning Under Uncertainty
 
 * Why Logic Fails Under Uncertainty
-// From: msml610/lectures_source/Lesson06.1-Bayesian_Networks.smd:69 Why Logic Fails Under Uncertainty
+// From: msml610/lectures_source/Lesson06.1-Bayesian_Networks.smd:69 '## Why Logic Fails Under Uncertainty'
 
 ### The Qualification Problem
 
@@ -121,13 +121,13 @@ digraph BayesianFlow {
 ```
 
 * Bayes' Theorem: From Data to Posterior
-// From: msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.smd:93 Bayes' Theorem: Recap
+// From: msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.smd:93 '* Bayes' Theorem: Recap'
 
 - @Definition@: **Bayes' theorem** posits that for model parameters $\theta$ and data
   $X$
 
 * Frequentist Approach vs Priors
-// From: msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.smd:369 Frequentist Approach vs Bayesian Priors
+// From: msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.smd:369 '* Frequentist Approach vs Bayesian Priors'
 
 - @Problem@: Detractors of the Bayesian approach complain that:
   - _"One should let the data speak!"_
@@ -148,7 +148,7 @@ digraph BayesianFlow {
 ## Representing and Updating Belief
 
 * Full Joint Distributions and Conditional Independence
-// From: msml610/lectures_source/Lesson06.1-Bayesian_Networks.smd:290 Conditional Independence: Definition
+// From: msml610/lectures_source/Lesson06.1-Bayesian_Networks.smd:290 '* Conditional Independence: Definition'
 
 - @Definition@: Two random variables $X$ and $Y$ are **conditionally independent**
   given a random variable $Z$ iff knowing $Z$ makes $X$ and $Y$ independent:
@@ -171,7 +171,7 @@ digraph BayesianFlow {
     product of individual conditional distributions
 
 * Bayesian Framework: Updating Beliefs From Priors
-// From: msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.smd:121 Bayesian Models
+// From: msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.smd:121 '* Bayesian Models'
 
 - @Recap@
   - **Probability** measures uncertainty about parameters
@@ -192,7 +192,7 @@ digraph BayesianFlow {
   - Gather more or different data
 
 * Choosing Priors: Advantages and Practical Guidance
-// From: msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.smd:400 How to Choose Priors
+// From: msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.smd:400 '* How to Choose Priors'
 
 - @Variants@
   - _Weakly-informative priors_ (aka "flat", "vague", "diffuse priors")
@@ -217,7 +217,7 @@ digraph BayesianFlow {
 ## Approximate Inference
 
 * Approximate Inference: Sampling, Variational Inference, and MCMC
-// From: msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.smd:950 Monte Carlo Algorithms
+// From: msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.smd:950 '* Monte Carlo Algorithms'
 
 - @Definition@: **Monte Carlo algorithms** are _randomized sampling algorithms_ used
   to estimate quantities that are difficult to calculate exactly
@@ -234,7 +234,7 @@ digraph BayesianFlow {
   - _Computationally intensive_
 
 * Probabilistic Programming Languages
-// From: msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.smd:552 Probabilistic Programming Languages
+// From: msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.smd:552 '* Probabilistic Programming Languages'
 
 - @Procedure@
   1. Specify models using code
@@ -258,7 +258,7 @@ digraph BayesianFlow {
 ## Bayesian Networks
 
 * Bayesian Networks: Structure and Semantics
-// From: msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.smd:15 Bayesian Networks: Semantics
+// From: msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.smd:15 '* Bayesian Networks: Semantics'
 
 - @Definition@: Two equivalent semantic interpretations of a Bayesian Network:
   1. **Joint Distribution View**
@@ -277,7 +277,7 @@ digraph BayesianFlow {
 // ### Representing the full joint distribution (p. 533)
 
 * Constructing a Bayesian Network: Ordering and Markov Blankets
-// From: msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.smd:314 Markov Blanket of a Node
+// From: msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.smd:314 '* Markov Blanket of a Node'
 
 ::: columns
 :::: {.column width=50%}
@@ -358,7 +358,7 @@ digraph CausalModel {
 :::
 
 * Exact and Approximate Inference in Bayesian Networks
-// From: msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.smd:900 Exact Inference in Bayesian Networks
+// From: msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.smd:900 '* Exact Inference in Bayesian Networks'
 
 // ## 13.3 Exact inference in Bayesian networks (p. 440)
 
@@ -419,7 +419,7 @@ digraph CausalModel {
 ## Regression Models
 
 * Linear and Logistic Regression: Posterior-Based Uncertainty
-// From: msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.smd:61 Linear Model: Bayesian Approach
+// From: msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.smd:61 '* Linear Model: Bayesian Approach'
 
 - **Bayesian assumptions**:
   - Data $y$ is Gaussian with mean $\alpha + \beta x$ and standard deviation
@@ -447,7 +447,7 @@ digraph CausalModel {
 // ## Linear model: synthetic example
 
 * Generalized Linear Models: Poisson and Negative Binomial
-// From: msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.smd:241 Negative Binomial Distribution
+// From: msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.smd:241 '* Negative Binomial Distribution'
 
 ::: columns
 :::: {.column width=45%}
@@ -475,7 +475,7 @@ digraph CausalModel {
 ## Hierarchical and Regularized Models
 
 * Hierarchical Models: Pooling Information Across Groups
-// From: msml610/lectures_source/Lesson07.3-Hierarchical_Models.smd:41 Unpooled, Pooled, Hierarchical Models
+// From: msml610/lectures_source/Lesson07.3-Hierarchical_Models.smd:41 '* Unpooled, Pooled, Hierarchical Models'
 
 - **Pooled**
   - Groups have the same priors
@@ -493,7 +493,7 @@ digraph CausalModel {
 // ## 3.2, Hierarchical shifts
 
 * Regularization Via Priors: Shrinkage
-// From: msml610/lectures_source/Lesson07.3-Hierarchical_Models.smd:138 Shrinkage
+// From: msml610/lectures_source/Lesson07.3-Hierarchical_Models.smd:138 '* Shrinkage'
 
 ::: columns
 :::: {.column width=55%}
@@ -524,7 +524,7 @@ digraph CausalModel {
 ## Predictive Distributions and Checks
 
 * Posterior Predictive Distributions
-// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:243 Samples from Posterior Distribution
+// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:243 '* Samples from Posterior Distribution'
 
 - Given **\blue{posterior distribution $\Pr(\theta | y)$}**, generate predictions
   **\red{$\tilde{y}$}** based on data **\green{$y$}** and estimated parameters
@@ -550,7 +550,7 @@ digraph CausalModel {
     - Captured by the likelihood $\Pr(\tilde{y} | \theta)$
 
 * Posterior Predictive Checks: Validating Model Fit
-// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:267 Posterior Predictive Check (PPC)
+// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:267 '* Posterior Predictive Check (PPC)'
 
 - **PPC approach**:
   - Generate predictions $\tilde{y}$ with observed data $y$ from posterior
@@ -567,7 +567,7 @@ digraph CausalModel {
   - Data limitations
 
 * Robust Inference with Student's t-Distribution
-// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:365 Chemical Shift: Use Student's t-dist (1/3)
+// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:365 '* Chemical Shift: Use Student's t-dist (1/3)'
 
 ::: columns
 :::: {.column width=45%}
@@ -594,7 +594,7 @@ $$
 ## Comparing Groups
 
 * Group Comparison and Effect Size
-// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:481 Cohen's d
+// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:481 '* Cohen's d'
 
 - **Cohen's d** is the difference of means relative to pooled standard deviation
   $$
@@ -616,7 +616,7 @@ $$
 // TODO: Finish
 
 * Sample Size Effects on Posterior Uncertainty
-// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:452 Sample Size Effect
+// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:452 '* Sample Size Effect'
 
 ::: columns
 :::: {.column width=60%}
@@ -650,7 +650,7 @@ $$
 ## From Posteriors to Decisions
 
 * Expected Utility Under Posterior Uncertainty
-// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:96 Loss Function: Motivation
+// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:96 '* Loss Function: Motivation'
 
 - For many problems:
   - **Make decisions based on inference**
@@ -665,7 +665,7 @@ $$
   - Use loss function for decisions
 
 * Loss Functions: From Stakeholder Preferences to Parameters
-// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:110 Loss Function
+// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:110 '* Loss Function'
 
 - Aka "cost function"
   - The inverse is known as "objective", "fitness", "utility function"
@@ -689,7 +689,7 @@ $$
   - Find $\hat{\theta}$ minimizing expected loss function
 
 * Savage-Dickey Density Ratio and the Region of Practical Equivalence
-// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:78 Region of Practical Equivalence
+// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:78 '* Region of Practical Equivalence'
 
 - **Region of Practical Equivalence** (ROPE) = interval where values are "equivalent"
 
@@ -709,7 +709,7 @@ $$
 ## Communicating and Updating Beliefs
 
 * Sequential Updating: Priors Becoming Posteriors as Evidence Arrives
-// From: msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.smd:345 Coin Example: Effect of Priors (2/2)
+// From: msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.smd:345 '* Coin Example: Effect of Priors (2/2)'
 
 ::: columns
 :::: {.column width=40%}
@@ -732,7 +732,7 @@ $$
 - _Order invariance_: Applying posterior sequentially or at once yields same result
 
 * Communicating Results: Credible Vs. Confidence Intervals
-// From: msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.smd:458 Confidence Intervals vs Credible Intervals
+// From: msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.smd:458 '* Confidence Intervals vs Credible Intervals'
 
 - @Remark@: People confuse _frequentist confidence intervals_ with _Bayesian credible
   intervals_
@@ -756,7 +756,7 @@ $$
 ## Fit Vs. Complexity
 
 * Occam's Razor: Balancing Fit and Complexity
-// From: msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.smd:148 Occam's Razor
+// From: msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.smd:148 '* Occam's Razor'
 
 - _"If you have **equivalent** explanations for the same phenomenon, you should
   choose the **simpler** one"_
@@ -774,7 +774,7 @@ $$
 - Ideally balance complexity and accuracy in a quantitative way
 
 * Overfitting, Underfitting, and the Bias-Variance Trade-off
-// From: msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.smd:179 Bias-Variance Trade-Off
+// From: msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.smd:179 '* Bias-Variance Trade-Off'
 
 - A model has **high bias** when:
   - It has low ability to accommodate the data
@@ -793,7 +793,7 @@ $$
 ## Comparing Models
 
 * Information Criteria: AIC, BIC, and WAIC
-// From: msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.smd:267 Akaike Information Criterion (AIC)
+// From: msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.smd:267 '* Akaike Information Criterion (AIC)'
 
 - AIC is defined as
   $$
@@ -814,7 +814,7 @@ $$
     - E.g., in hierarchical models the effective number of params is smaller
 
 * Cross-Validation: LOO-CV and PSIS-LOO
-// From: msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.smd:413 PSIS-LOO-CV
+// From: msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.smd:413 '* PSIS-LOO-CV'
 
 - Compute the Expected Log Pointwise Predictive Density (ELPD) using Leave-One-Out
   Cross-Validation (LOO-CV):
@@ -863,7 +863,7 @@ $$
 // TODO(gp): Use 
 
 * Model Ensembles and Averaging
-// From: msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.smd:496 Model Averaging
+// From: msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.smd:496 '* Model Averaging'
 
 - What do you do when you have multiple models explaining the data?
   1. **Model selection**
@@ -879,7 +879,7 @@ $$
      - A hierarchical model is a continuous versions of multiple discrete models
 
 * Bayes Factors and Hypothesis Testing
-// From: msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.smd:513 Bayes Factors
+// From: msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.smd:513 '* Bayes Factors'
 
 - **Bayes factors** are ratio of two marginal likelihoods of the data under competing
   model hypotheses $M_0$ and $M_1$

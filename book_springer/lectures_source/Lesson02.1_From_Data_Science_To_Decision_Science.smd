@@ -8,7 +8,7 @@
 # Why Decisions, Not Predictions
 
 * Why Traditional ML Falls Short
-// From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:318 Where ML Falls Short
+// From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:318 '* Where ML Falls Short'
 
 - Traditional machine learning optimizes prediction accuracy on a fixed
   distribution, which ignores four things a decision requires:
@@ -20,7 +20,7 @@
 - Each gap turns a technically accurate model into a poor decision-maker
 
 * From Data Science to Decision Science
-// From: msml610/lectures_source/Lesson08.2-Causal_AI_concepts.smd:129 From Data Science to Decision Science
+// From: msml610/lectures_source/Lesson08.2-Causal_AI_concepts.smd:129 '* From Data Science to Decision Science'
 
 - Data science and decision science optimize for different things
 ```{=typst}
@@ -42,7 +42,7 @@
   little or no business value, however accurate the prediction is
 
 * Causal vs Predictive Questions
-// From: msml610/lectures_source/Lesson08.2-Causal_AI_concepts.smd:161 Causal Questions vs. Predictive Questions
+// From: msml610/lectures_source/Lesson08.2-Causal_AI_concepts.smd:161 '* Causal Questions vs. Predictive Questions'
 
 - Every business question has a predictive form and a causal form, and only
   one of them says what to do
@@ -66,7 +66,7 @@
     that support decisions and policy design
 
 * The Analytics Maturity Ladder
-// From: msml610/lectures_source/Lesson08.2-Causal_AI_concepts.smd:189 A Roadmap From Prediction to Decision Intelligence
+// From: msml610/lectures_source/Lesson08.2-Causal_AI_concepts.smd:189 '* A Roadmap From Prediction to Decision Intelligence'
 
 - Organizations climb four levels of analytical sophistication
 
@@ -92,9 +92,9 @@
 ## When Correlation Misleads
 
 * Correlation Encodes Confounding as Causation
-// From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:345 The Cost of Ignoring Causality (1/2)
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:161 Confounding: The Root Cause
-// From: book_springer/related_papers.md:12 A Survey on Causal Inference
+// From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:345 '* The Cost of Ignoring Causality (1/2)'
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:161 '* Confounding: The Root Cause'
+// From: book_springer/related_papers.md:12 '- [P007] Zhang et al., "A Survey on Causal Inference", 2020'
 
 - @Problem@: a purely predictive model learns $\Pr(Y | X)$ from historical
   data and absorbs any association in the data, spurious or not
@@ -134,7 +134,7 @@ digraph IceCreamDrowning {
   - Acting on $\Pr(Y | X)$ is what makes correlation-based decisions backfire
 
 * Missing Interventions and Counterfactuals
-// From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:113 What ML Systems Cannot Tell You
+// From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:113 '* What ML Systems Cannot Tell You'
 
 - @Problem@: a correlation model answers _"what is?"_, never _"what if?"_ or
   _"why?"_
@@ -173,7 +173,7 @@ digraph IceCreamDrowning {
 ## Structural Failure Modes
 
 * Interference and Spillovers Across Units
-// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:315 Cannibalization and Interference
+// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:315 '* Cannibalization and Interference'
 
 - @Problem@: standard ML assumes each unit's outcome depends only on its own
   treatment
@@ -190,9 +190,9 @@ digraph IceCreamDrowning {
   underlying predictor is
 
 * Simpson's Paradox
-// From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:345 The Cost of Ignoring Causality (1/2)
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:86 Simpson's Paradox
-// From: book_springer/related_papers.md:3 Simpson's Paradox, Confounding, and Collapsibility
+// From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:345 '* The Cost of Ignoring Causality (1/2)'
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:86 '* Simpson's Paradox'
+// From: book_springer/related_papers.md:3 '- [P005] Pearl, "Simpson's Paradox, Confounding, and Collapsibility", 1999'
 
 - @Definition@: the _Simpson's paradox_ is a trend within every subgroup
   reverses once the subgroups are pooled
@@ -240,7 +240,7 @@ digraph SimpsonsParadox {
   harmful, for every segment it is applied to
 
 * Berkson's Paradox
-// From: msml610/lectures_source/Lesson08.4-Causal_networks.smd:1147 Collider Bias
+// From: msml610/lectures_source/Lesson08.4-Causal_networks.smd:1147 '* Collider Bias'
 
 - @Definition@: a _collider_ is a variable influenced by two or more
   independent causes
@@ -261,7 +261,7 @@ digraph SimpsonsParadox {
 
 * Discarding Domain Knowledge and Mechanisms
 // From:
-// From: book_springer/related_papers.md:71 Why Should I Trust You? Explaining the Predictions of Any Classifier
+// From: book_springer/related_papers.md:71 '- [P001] Ribeiro et al., "Why Should I Trust You? Explaining the Predictions of Any Classifier", 2016'
 
 - @Problem@: a purely correlation-based pipeline discards known structure,
   physics, economics, or the causal graph, in favor of whatever pattern the
@@ -299,7 +299,7 @@ digraph WolfHusky {
 # The Cost of Ignoring Uncertainty
 
 * Point Estimates Without Error Bars
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:1217 Communicating Uncertainty to Stakeholders
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:1217 '* Communicating Uncertainty to Stakeholders'
 
 - @Problem@: most business problems are "small data" problems with large
   uncertainty, yet standard ML pipelines emit a single number as if it were
@@ -319,7 +319,7 @@ digraph WolfHusky {
   much as its center
 
 * Epistemic vs Aleatoric Uncertainty Conflated
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:1076 Aleatoric vs Epistemic Uncertainty
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:1076 '* Aleatoric vs Epistemic Uncertainty'
 
 - @Problem@: standard models collapse two different kinds of uncertainty
   into one number
@@ -341,7 +341,7 @@ digraph WolfHusky {
   both as the same number misleads the decision of when to collect more
 
 * No Abstention: Systems That Never Say "I Don't Know"
-// From: msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.smd:1879 Predictive Uncertainty in Classification and Regression
+// From: msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.smd:1879 '* Predictive Uncertainty in Classification and Regression'
 
 - @Problem@: a standard classifier or regressor always returns an answer,
   even when the input falls far outside its training distribution
@@ -355,7 +355,7 @@ digraph WolfHusky {
   trusted with high-stakes decisions
 
 * Overfitting and the Statistical Significance Traps
-// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:270 Peeking and the Multiple Comparisons Trap
+// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:270 '* Peeking and the Multiple Comparisons Trap'
 
 - @Problem@: without a prior or assumptions to constrain the fit, nothing
   bounds overfitting
@@ -377,7 +377,7 @@ digraph WolfHusky {
 
 * Optimizing the Wrong Objective
 // From:
-// From: book_springer/related_papers.md:131 Problems of Monetary Management: The U.K. Experience
+// From: book_springer/related_papers.md:131 '- [P096] Goodhart, "Problems of Monetary Management: The U.K. Experience", 1984'
 
 - @Problem@: models chase a proxy metric (e.g., clicks or accuracy) instead of
   the business goal it stands in for (e.g., revenue, retention, or wellbeing)
@@ -393,7 +393,7 @@ digraph WolfHusky {
   business actually gets, whether or not that was the intent
 
 * Symmetric Losses for Asymmetric Errors
-// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:96 Loss Function: Motivation
+// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:96 '* Loss Function: Motivation'
 
 - @Problem@: standard losses such as log-loss and mean squared error treat
   every error the same size
@@ -414,7 +414,7 @@ digraph WolfHusky {
   an afterthought
 
 * Multi-Objective Decisions Under Constraints
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:475 Multi-Criteria Trade-offs
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:475 '* Multi-Criteria Trade-offs'
 
 - @Problem@: real decisions trade off competing goals under budget,
   capacity, and legal limits
@@ -432,9 +432,9 @@ digraph WolfHusky {
 ## From Scores to Actionable Decisions
 
 * Black-Box Scores Are Not Recommendations
-// From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:202 Problem 3: ML Explainability
-// From: msml610/lectures_source/Lesson13.1-Explainability.smd:532 Counterfactual Explanations
-// From: book_springer/related_papers.md:71 Why Should I Trust You? Explaining the Predictions of Any Classifier
+// From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:202 '* Problem 3: ML Explainability'
+// From: msml610/lectures_source/Lesson13.1-Explainability.smd:532 '* Counterfactual Explanations'
+// From: book_springer/related_papers.md:71 '- [P001] Ribeiro et al., "Why Should I Trust You? Explaining the Predictions of Any Classifier", 2016'
 
 - @Problem@: a black-box score ranks units but names no lever and gives no
   _why_
@@ -453,7 +453,7 @@ digraph WolfHusky {
   neither of which a bare prediction provides
 
 * The Cost of Solving Sub-Problems Separately
-// From: msml610/lectures_source/Lesson02.2-ML_Paradigms.smd:326 How Are Machine Learning Systems Organized?
+// From: msml610/lectures_source/Lesson02.2-ML_Paradigms.smd:326 '* How Are Machine Learning Systems Organized?'
 
 - @Problem@: a decision pipeline is often split into smaller, individually
   optimized pieces, e.g., a prediction model followed by a separate rule that
@@ -475,7 +475,7 @@ digraph WolfHusky {
 ## A World That Reacts
 
 * The Static-World Assumption Breaks
-// From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:274 Problem 6: Distribution Shift
+// From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:274 '* Problem 6: Distribution Shift'
 
 - @Problem@: any decision changes the world, breaking the distribution the
   model was trained on
@@ -504,8 +504,8 @@ digraph WolfHusky {
   shift than surface correlations
 
 * Feedback Loops and Bias Amplification
-// From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:252 Problem 5: Feedback Loops
-// From: book_springer/related_papers.md:73 Data Feedback Loops: Model-driven Amplification of Dataset Biases
+// From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:252 '* Problem 5: Feedback Loops'
+// From: book_springer/related_papers.md:73 '- [P003] Taori et al., "Data Feedback Loops: Model-driven Amplification of Dataset Biases", 2020'
 
 - @Problem@: predictions act on the world and reshape the future data the
   model will be retrained on
@@ -526,7 +526,7 @@ digraph WolfHusky {
 
 * Performativity: When the Prediction Changes the Outcome
 // From:
-// From: book_springer/related_papers.md:75 Performative Prediction
+// From: book_springer/related_papers.md:75 '- [P099] Liu et al., "Performative Prediction", 2021'
 
 - @Definition@: _performativity_ is a prediction that changes the very
   quantity it predicts
@@ -544,7 +544,7 @@ digraph WolfHusky {
 ## Missing Exploration and Long Horizons
 
 * No Exploration: Trapped in the Logged Policy
-// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:572 Policy Evaluation and Off-Policy Learning
+// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:572 '* Policy Evaluation and Off-Policy Learning'
 
 - @Problem@: an observational-only model never experiments, so it stays
   trapped inside the support of whatever policy logged the training data
@@ -559,7 +559,7 @@ digraph WolfHusky {
   data, only by a deliberate intervention
 
 * Delayed and Long-Horizon Effects
-// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:492 When A/B Testing Is Not Enough
+// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:492 '* When A/B Testing Is Not Enough'
 
 - @Problem@: a model optimized for an immediate proxy ignores downstream
   outcomes and has no way to assign credit to actions over time
@@ -602,7 +602,7 @@ digraph WolfHusky {
 ## Roadmap
 
 * Why AI Projects Fail
-// From: msml610/lectures_source/Lesson08.3-Causal_AI_in_business.smd:24 Why AI Projects Fail?
+// From: msml610/lectures_source/Lesson08.3-Causal_AI_in_business.smd:24 '* Why AI Projects Fail?'
 
 - Most AI projects fail not because of failures at the modeling phase, but
   because they frame the problems incorrectly 

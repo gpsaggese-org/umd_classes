@@ -33,7 +33,7 @@
   fully instantiated, one arrow at a time
 
 * From KPIs to Causal Objectives
-// From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:220 Problem 4: How ML Systems Make Decisions Today
+// From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:220 '* Problem 4: How ML Systems Make Decisions Today'
 
 - @Problem@: a KPI like click-through rate or accuracy is a proxy, not the
   goal itself, and a decision system needs a target it can actually optimize
@@ -49,7 +49,7 @@
 ## Utility Functions and Expected Utility
 
 * Utility Functions: Encoding What Matters
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:252 Utility Functions
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:252 '* Utility Functions'
 
 - @Definition@: a utility function $U: \mathcal{Y} \to \bbR$ maps each
   outcome $y$ to a real-valued preference score, higher is better
@@ -64,8 +64,8 @@
   into a number a decision rule can maximize
 
 * The Expected Utility Principle
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:271 Expected Utility Principle
-// From: book_springer/related_books.md:26 Decision Making Under Uncertainty
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:271 '* Expected Utility Principle'
+// From: book_springer/related_books.md:26 '- [B028] Kochenderfer, "Decision Making Under Uncertainty", 2015'
 
 - @Fact@: a rational agent chooses the action maximizing expected utility
   under uncertainty
@@ -79,7 +79,7 @@
   to
 
 * Two Treatments: A Worked Utility Computation
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:319 Expected Utility: Two Treatment Example
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:319 '* Expected Utility: Two Treatment Example'
 
 - @Problem@: a doctor chooses between two treatments
   - Treatment 1: cures with probability 0.9, no side effect
@@ -93,8 +93,8 @@
   effects are priced in
 
 * Risk Preferences and the Shape of Utility
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:442 Risk Preferences
-// From: book_springer/related_papers.md:133 Prospect Theory: An Analysis of Decision under Risk
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:442 '* Risk Preferences'
+// From: book_springer/related_papers.md:133 '- [P100] Kahneman & Tversky, "Prospect Theory: An Analysis of Decision under Risk", 1979'
 
 - @Intuition@: the curvature of $U$ encodes attitude toward risk
 ```{=typst}
@@ -118,7 +118,7 @@
   choose different actions if their utility curvature differs
 
 * Cost Matrices and Asymmetric Loss, Formally
-// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:96 Loss Function: Motivation
+// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:96 '* Loss Function: Motivation'
 
 - @Recall@: symmetric losses like log-loss or mean squared error misprice
   asymmetric business errors
@@ -132,7 +132,7 @@
   cost-asymmetric decision-making as a special case
 
 * Multi-Objective Trade-offs and the Pareto Frontier
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:475 Multi-Criteria Trade-offs
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:475 '* Multi-Criteria Trade-offs'
 
 - @Problem@: real decisions weigh multiple objectives that pull in
   different directions: efficacy, cost, patient burden
@@ -151,7 +151,7 @@
 ## From Graphs to Optimal Policies
 
 * Decision Networks: Chance, Decision, and Utility Nodes
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:526 Decision Networks: Motivation
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:526 '* Decision Networks: Motivation'
 
 ::: columns
 :::: {.column width=55%}
@@ -185,7 +185,7 @@ digraph DecisionNet {
 :::
 
 * Solving a Decision Network
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:611 Solving an Decision Network
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:611 '* Solving an Decision Network'
 
 - @Input@: a decision network with conditional probability tables for
   chance nodes and a utility table
@@ -201,7 +201,7 @@ digraph DecisionNet {
   decision nodes are added
 
 * Bayesian Decision Rules and Admissibility
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:703 Why Bayes Rules Are Admissible
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:703 '* Why Bayes Rules Are Admissible'
 
 - @Definition@: the _risk_ of a decision rule $\delta$ at parameter
   $\theta$ is its expected loss
@@ -217,7 +217,7 @@ digraph DecisionNet {
   subjective add-on
 
 * Prior Elicitation: Where Priors Come From
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:797 Prior Elicitation: What and Why
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:797 '* Prior Elicitation: What and Why'
 
 - @Problem@: a causal decision needs a prior over the effect size before
   data arrives, especially when data is scarce, experiments are unethical,
@@ -234,7 +234,7 @@ digraph DecisionNet {
   what makes a prior defensible rather than arbitrary
 
 * The Value of Information
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:876 Expected Value of Perfect Information
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:876 '* Expected Value of Perfect Information'
 
 - @Problem@: before committing to a costly action, is it worth gathering
   more data first?
@@ -250,7 +250,7 @@ digraph DecisionNet {
 # Decision-Focused Learning
 
 * Interventions Inside the Decision
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:343 From Observational to Interventional Expectation
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:343 '* From Observational to Interventional Expectation'
 
 - @Problem@: plugging the observational $\Pr(Y|a)$ into expected utility
   yields a biased action ranking whenever confounders are present
@@ -264,7 +264,7 @@ digraph DecisionNet {
   topics; expected utility is only valid once its inputs are interventional
 
 * End-to-End, Decision-Focused Learning
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:48 Decision Pipeline: What Changes
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:48 '* Decision Pipeline: What Changes'
 
 - @Problem@: a pipeline that first fits a causal model for accuracy, then
   bolts on a decision rule, optimizes the wrong thing at the first stage
@@ -283,7 +283,7 @@ digraph DecisionNet {
 ## Feedback in Time
 
 * The Static-World Assumption, Formally
-// From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:274 Problem 6: Distribution Shift
+// From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:274 '* Problem 6: Distribution Shift'
 
 - @Recall@: Lesson 1.1 named the static-world assumption as a cost; the
   tools built so far still assume the structural equations $f_i$, and the
@@ -296,7 +296,7 @@ digraph DecisionNet {
   interventions unfold
 
 * Feedback Loops and Simultaneity in Time Series
-// From: msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.smd:137 Feedback Loops and Simultaneity
+// From: msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.smd:137 '* Feedback Loops and Simultaneity'
 
 ::: columns
 :::: {.column width=55%}
@@ -329,7 +329,7 @@ digraph Feedback {
 :::
 
 * Granger Causality: Prediction Is Not Causation
-// From: msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.smd:308 Granger Causality: Intuition
+// From: msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.smd:308 '* Granger Causality: Intuition'
 
 - @Definition@: $X$ _Granger-causes_ $Y$ if past values of $X$ improve the
   forecast of $Y$ beyond what $Y$'s own past already provides
@@ -346,7 +346,7 @@ digraph Feedback {
   correlation-vs-causation gap from Lesson 1.1, now in a time-indexed form
 
 * When Temporal Structure Misleads
-// From: msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.smd:286 When Temporal Structure Misleads
+// From: msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.smd:286 '* When Temporal Structure Misleads'
 
 - Time ordering rules out some causal directions, but introduces its own
   failure modes:
@@ -363,7 +363,7 @@ digraph Feedback {
   ones
 
 * Measuring Effects Under Non-Stationarity: Interrupted Time Series
-// From: msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.smd:405 Interrupted Time Series: Motivation
+// From: msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.smd:405 '* Interrupted Time Series: Motivation'
 
 - @Problem@: a policy is implemented at one known date for an entire
   population, so no control group exists
@@ -383,7 +383,7 @@ digraph Feedback {
   trusting an extrapolation
 
 * Synthetic Control: A Counterfactual Without a Control Group
-// From: msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.smd:665 Synthetic Control: Motivation
+// From: msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.smd:665 '* Synthetic Control: Motivation'
 
 - @Problem@: even a single-unit comparison needs a counterfactual, and no
   single other unit may resemble the treated one closely enough
@@ -402,8 +402,8 @@ digraph Feedback {
 ## Exploring Under Uncertainty
 
 * The Exploration-Exploitation Trade-off
-// From: msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.smd:93 The Exploration-Exploitation Tradeoff
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:919 Exploration vs Exploitation
+// From: msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.smd:93 '* The Exploration-Exploitation Tradeoff'
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:919 '* Exploration vs Exploitation'
 
 ::: columns
 :::: {.column width=55%}
@@ -433,7 +433,7 @@ digraph ExploreExploit {
 :::
 
 * Upper Confidence Bound: Optimism Under Uncertainty
-// From: msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.smd:528 Optimism in the Face of Uncertainty
+// From: msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.smd:528 '* Optimism in the Face of Uncertainty'
 
 - @Idea@: be optimistic about arms you are uncertain of, and let that
   optimism drive exploration automatically
@@ -446,7 +446,7 @@ digraph ExploreExploit {
   achieves regret that grows logarithmically rather than linearly in time
 
 * Contextual and Non-Stationary Bandits
-// From: msml610/lectures_source/Lesson09.7-Advanced_Bandits.smd:108 Contextual Bandits: Formal Definition
+// From: msml610/lectures_source/Lesson09.7-Advanced_Bandits.smd:108 '* Contextual Bandits: Formal Definition'
 
 - @Definition@: a _contextual bandit_ chooses an action conditioned on
   side information $x$, learning a policy $\pi(x) \to a$ rather than one
@@ -463,8 +463,8 @@ digraph ExploreExploit {
   reward does not change over time
 
 * Causal Bandits: Sharing Information Across Interventions
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:936 Causal Multi-Armed Bandits
-// From: msml610/lectures_source/Lesson08.5-Do_calculus.smd:769 Do-Calculus: Formal Framework
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:936 '* Causal Multi-Armed Bandits'
+// From: msml610/lectures_source/Lesson08.5-Do_calculus.smd:769 '* Do-Calculus: Formal Framework'
 
 - @Definition@: in a _causal bandit_, each arm is an intervention
   $do(a)$ on a partly known causal graph, rather than an unstructured
@@ -484,8 +484,8 @@ digraph ExploreExploit {
 ## Long-Horizon Decisions
 
 * Utilities Over Time and the Bellman Equation
-// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:460 Bellman Equation
-// From: book_springer/related_books.md:42 Reinforcement Learning: An Introduction
+// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:460 '* Bellman Equation'
+// From: book_springer/related_books.md:42 '- [B030/B062] Sutton et al., "Reinforcement Learning: An Introduction", 2018'
 
 - @Definition@: with a discount factor $\gamma \in [0,1)$, the utility of
   a policy $\pi$ from state $s$ sums discounted future reward
@@ -502,8 +502,8 @@ digraph ExploreExploit {
   maximization applied recursively over time
 
 * Structural Causal Models for Sequential Decisions
-// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:1875 Structural Causal Models for MDPs
-// From: book_springer/related_papers.md:92 Mastering Atari, Go, Chess and Shogi by Planning with a Learned World Model
+// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:1875 '* Structural Causal Models for MDPs'
+// From: book_springer/related_papers.md:92 '- [P042] Hafner et al., "Mastering Atari, Go, Chess and Shogi by Planning with a Learned World Model", 2023'
 
 ::: columns
 :::: {.column width=55%}
@@ -536,7 +536,7 @@ digraph SCM_MDP {
 :::
 
 * Counterfactual Credit Assignment
-// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:1956 Counterfactual Reasoning and Credit Assignment
+// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:1956 '* Counterfactual Reasoning and Credit Assignment'
 
 - @Problem@: standard credit assignment asks whether an action _preceded_
   a later reward, not whether it _caused_ that reward
@@ -552,9 +552,9 @@ digraph SCM_MDP {
   before crediting the left turn
 
 * Deconfounding Off-Policy Evaluation
-// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:1978 Deconfounding Offline / Off-Policy Data
-// From: msml610/lectures_source/Lesson08.5-Do_calculus.smd:280 The Back-Door Adjustment
-// From: book_springer/related_papers.md:89 Counterfactual reasoning and learning systems: The example of computational advertising
+// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:1978 '* Deconfounding Offline / Off-Policy Data'
+// From: msml610/lectures_source/Lesson08.5-Do_calculus.smd:280 '* The Back-Door Adjustment'
+// From: book_springer/related_papers.md:89 '- [P036] Bottou et al., "Counterfactual reasoning and learning systems: The example of computational advertising", 2013'
 
 - @Problem@: offline reinforcement learning trains on logged data from a
   policy that likely depended on unobserved factors, exactly the setting

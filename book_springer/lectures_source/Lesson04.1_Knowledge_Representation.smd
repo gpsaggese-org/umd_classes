@@ -6,7 +6,7 @@
 # Representation as a Foundation for Decisions
 
 * Why Knowledge Representation Matters
-// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:22 Why Knowledge Representation Matters
+// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:22 '* Why Knowledge Representation Matters'
 
 - @Motivation@: **Why KR is essential to AI**
 
@@ -27,7 +27,7 @@
      - Conversational agents reason about intent and context
 
 * What Is Knowledge Representation?
-// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:42 What is Knowledge Representation?
+// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:42 '* What is Knowledge Representation?'
 
 - @Definition@: **Knowledge Representation (KR)** is the study of how to formally
   encode information so that machines can reason with it
@@ -48,7 +48,7 @@
   - ...
 
 * Expressiveness vs. Tractability
-// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:62 Expressiveness vs. Tractability
+// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:62 '* Expressiveness vs. Tractability'
 
 ::: columns
 :::: {.column width=60%}
@@ -124,7 +124,7 @@
       _"A father of a person is their parent"_
 
 * Symbolic vs. Sub-symbolic Representation
-// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:137 Symbolic vs. Sub-symbolic Representation
+// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:137 '* Symbolic vs. Sub-symbolic Representation'
 
 ::: columns
 :::: {.column width=55%}
@@ -151,7 +151,7 @@
 :::
 
 * Neuro-symbolic Approach: Conceptual Spaces
-// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:163 Neuro-symbolic Approach: Conceptual Spaces
+// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:163 '* Neuro-symbolic Approach: Conceptual Spaces'
 
 - @Definition@: **Conceptual spaces** are frameworks for representing knowledge
   using geometric structures
@@ -182,7 +182,7 @@
 :::
 
 * Procedural vs. Declarative Representation
-// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:216 Procedural vs Declarative Approaches
+// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:216 '* Procedural vs Declarative Approaches'
 
 - @Definition@: **Procedural approach** focuses on _how_ a task is done
   - Encodes desired behavior directly into the program
@@ -205,7 +205,7 @@
   - E.g., a planner generates procedures (plans) from declarative goals
 
 * Natural Language as a Representation
-// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:193 Natural languages
+// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:193 '* Natural languages'
 
 - @Definition@: **Natural languages** (e.g., English, Italian) are:
   - _Expressive_
@@ -229,7 +229,7 @@
     - You can't think certain concepts since you don't have words for it
 
 * Programming Languages as a Representation
-// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:238 Programming Languages
+// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:238 '* Programming Languages'
 
 - @Concept@: A **programming language** (e.g., C++, Python) is a formal and
   procedural language
@@ -256,7 +256,7 @@
 # Formal Knowledge Representation
 
 * Propositional Logic: Syntax and Semantics
-// From: msml610/lectures_source/Lesson03.2-Propositional_and_first_order_logic.smd:24 Propositional Logic
+// From: msml610/lectures_source/Lesson03.2-Propositional_and_first_order_logic.smd:24 '* Propositional Logic'
 
 - @Definition@: **Propositional logic** is a formal system for reasoning about
   statements that can be true or false
@@ -282,7 +282,7 @@
 // ## Syntax of propositional logic
 
 * First-Order Logic: Quantifiers and Inference
-// From: msml610/lectures_source/Lesson03.2-Propositional_and_first_order_logic.smd:442 Quantifiers
+// From: msml610/lectures_source/Lesson03.2-Propositional_and_first_order_logic.smd:442 '* Quantifiers'
 
 - **Quantifiers** express properties of entire collections of objects, instead of
   enumerating objects by name (like done in propositional logic)
@@ -300,7 +300,7 @@
   - E.g., $\forall x (Cat(x) \rightarrow Mammal(x))$
 
 * Logical Entailment and Inference
-// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:517 Logical Entailment
+// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:517 '* Logical Entailment'
 
 - @Definition@: **Logical entailment** between sentences is the fact that a
   sentence follows logically from another sentence in a KB
@@ -328,7 +328,7 @@
   - _"If you believe your KB, you must believe the entailed sentences"_
 
 * Non-Monotonic Logic and Default Reasoning
-// From: msml610/lectures_source/Lesson03.3-Non_classical_logics.smd:54 Non-monotonic Logic
+// From: msml610/lectures_source/Lesson03.3-Non_classical_logics.smd:54 '* Non-monotonic Logic'
 
 - @Definition@: **Non-monotonic logic** is a logic where adding new information
   can invalidate previous conclusions
@@ -350,7 +350,7 @@
     circumstances
 
 * Open World vs. Closed World Assumptions
-// From: msml610/lectures_source/Lesson03.3-Non_classical_logics.smd:161 Open World vs Closed World Assumptions
+// From: msml610/lectures_source/Lesson03.3-Non_classical_logics.smd:161 '* Open World vs Closed World Assumptions'
 
 - @Definition@: the **Closed World Assumption (CWA)** implies that any missing
   information is false by default
@@ -371,7 +371,7 @@
   - OWA conclusion: _"Bob's enrollment is unknown"_
 
 * Inductive Logic Programming: Learning Rules from Examples
-// From: msml610/lectures_source/Lesson03.3-Non_classical_logics.smd:181 Inductive Logic Programming
+// From: msml610/lectures_source/Lesson03.3-Non_classical_logics.smd:181 '* Inductive Logic Programming'
 
 - @Definition@: **Inductive logic programming** learns logical rules from
   examples and background knowledge
@@ -400,7 +400,7 @@
 // https://en.wikipedia.org/wiki/Description_logic
 
 * Rule-Based Systems and Knowledge-Based Agents
-// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:362 Rule-Based Systems (1/2)
+// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:362 '* Rule-Based Systems (1/2)'
 
 - @Definition@: A **rule-based system** uses "if-then" rules to derive
   conclusions or make decisions
@@ -424,7 +424,7 @@
   - _Conclusion_: Suggest measles
 
 * Grounding: Connecting Symbols to the World
-// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:403 Grounding: Definition and Framework
+// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:403 '* Grounding: Definition and Framework'
 
 ::: columns
 :::: {.column width=50%}
@@ -456,7 +456,7 @@
   - Autonomous agents, cognitive systems
 
 * Ontologies: Components and Structure
-// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:747 Ontologies: Components
+// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:747 '* Ontologies: Components'
 
 - **Classes / Concepts**: Represent general concepts in a domain
   - E.g., `Person`, `City`, `Car`
@@ -482,7 +482,7 @@
   - E.g., `Student` is a subclass of `Person`
 
 * Ontologies: A Worked Example (University Domain)
-// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:772 Ontology: Example University
+// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:772 '* Ontology: Example University'
 
 ::: columns
 :::: {.column width=35%}
@@ -556,7 +556,7 @@ digraph UniversityOntology {
 ## Reasoning in Ontologies
 
 * Reasoning in Ontologies: Inference Tasks
-// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:845 Example of Reasoning Tasks (1/4)
+// From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:845 '* Example of Reasoning Tasks (1/4)'
 
 - **Subsumption**
   - _"Is class `A` a subclass of `B`?"_
@@ -579,7 +579,7 @@ digraph UniversityOntology {
     places `Penguin` under `Bird`, and `Bird` under `Animal`
 
 * Description Logics and OWL
-// From: msml610/lectures_source/Lesson03.3-Non_classical_logics.smd:209 Description Logic
+// From: msml610/lectures_source/Lesson03.3-Non_classical_logics.smd:209 '* Description Logic'
 
 - @Definition@: **Description logic** represents structured knowledge about a
   domain
@@ -603,7 +603,7 @@ digraph UniversityOntology {
   - Used widely in ontologies (e.g., OWL)
 
 * RDF and SPARQL: Representation Standards
-// From: msml610/lectures_source/Lesson03.3-Non_classical_logics.smd:370 RDF (Resource Description Framework)
+// From: msml610/lectures_source/Lesson03.3-Non_classical_logics.smd:370 '* RDF (Resource Description Framework)'
 
 - @Pros@
   - Statements form directed graphs of nodes and edges
@@ -616,7 +616,7 @@ digraph UniversityOntology {
   - Supporting ontologies
 
 * Semantic Networks and Knowledge Graphs
-// From: msml610/lectures_source/Lesson03.3-Non_classical_logics.smd:480 Semantic Networks
+// From: msml610/lectures_source/Lesson03.3-Non_classical_logics.smd:480 '* Semantic Networks'
 
 - @Definition@: **Semantic Networks** represent knowledge as graphs of concepts
   and relations
@@ -637,7 +637,7 @@ digraph UniversityOntology {
 # Graphical Models for Uncertainty
 
 * Why Logic Fails Under Uncertainty
-// From: msml610/lectures_source/Lesson06.1-Bayesian_Networks.smd:17 Logic-Based AI Under Uncertainty: Problem
+// From: msml610/lectures_source/Lesson06.1-Bayesian_Networks.smd:17 '* Logic-Based AI Under Uncertainty: Problem'
 
 - @Definition@: **Logic-based AI systems**:
   - Are based on propositional logic
@@ -657,7 +657,7 @@ digraph UniversityOntology {
      - Other agents may interfere
 
 * Bayesian Networks: Definition and Structure
-// From: msml610/lectures_source/Lesson06.1-Bayesian_Networks.smd:422 Bayesian Networks: Definition
+// From: msml610/lectures_source/Lesson06.1-Bayesian_Networks.smd:422 '* Bayesian Networks: Definition'
 
 - Aka: "Bayes nets", "Belief networks", "Probabilistic networks", "Graphical
   models" (broader class), "Causal networks" (arrows have special meaning)
@@ -674,7 +674,7 @@ digraph UniversityOntology {
 # Causal Graphical Models
 
 * Causal Networks (Causal DAGs): Definition and Structure
-// From: msml610/lectures_source/Lesson08.4-Causal_networks.smd:91 Causal DAG
+// From: msml610/lectures_source/Lesson08.4-Causal_networks.smd:91 '* Causal DAG'
 
 - **Causal DAG**
   - _Directed_: Arrows show cause $\rightarrow$ effect
@@ -693,7 +693,7 @@ digraph UniversityOntology {
   - Assumes all relevant variables included (no hidden confounders)
 
 * The Ladder of Causation: Association, Intervention, Counterfactual
-// From: msml610/lectures_source/Lesson08.4-Causal_networks.smd:159 Example: Tornado Warning
+// From: msml610/lectures_source/Lesson08.4-Causal_networks.smd:159 '* Example: Tornado Warning'
 
 ::: columns
 :::: {.column width=50%}
@@ -744,7 +744,7 @@ digraph Tornado_Warning {
 :::
 
 * Structural Causal Models (SCM): Definition
-// From: msml610/lectures_source/Lesson08.4-Causal_networks.smd:366 Structural Causal Model
+// From: msml610/lectures_source/Lesson08.4-Causal_networks.smd:366 '* Structural Causal Model'
 
 - A **Structural Causal Model** (SCM) translates a causal DAG into mathematical
   equations to define how variables interact
@@ -771,7 +771,7 @@ digraph Tornado_Warning {
 # Integrating Logic and Causality
 
 * Markov Logic Networks: Combining Logic and Probability
-// From: msml610/lectures_source/Lesson09.2-Hidden_Markov_Models.smd:286 Markov Logic Networks: Basics
+// From: msml610/lectures_source/Lesson09.2-Hidden_Markov_Models.smd:286 '* Markov Logic Networks: Basics'
 
 - A **Markov Logic Network** (MLN) combines:
   - First-order logic (expressing knowledge with rules and quantifiers)
@@ -814,7 +814,7 @@ digraph Tornado_Warning {
 ## #############################################################################
 
 * From Correlation to Causal Reasoning: What Graphs Add
-// From: msml610/lectures_source/Lesson08.4-Causal_networks.smd:15 (Non-Causal) Bayesian Networks
+// From: msml610/lectures_source/Lesson08.4-Causal_networks.smd:15 '* (Non-Causal) Bayesian Networks'
 
 - **Bayesian networks** represent a joint distribution function
   - The direction of the arrow represent _conditional dependence_ (not
@@ -880,7 +880,7 @@ digraph BayesianNetwork1 {
   - Clearing smoke doesn't affect fire
 
 * Choosing a Representation: Logic, Probability, or Causal Graphs
-// From: msml610/lectures_source/Lesson08.4-Causal_networks.smd:76 Causal (Bayesian) Networks
+// From: msml610/lectures_source/Lesson08.4-Causal_networks.smd:76 '* Causal (Bayesian) Networks'
 
 - **Causal networks are Bayesian networks with only causal edges**
   - Use judgment based on nature instead of just statistics

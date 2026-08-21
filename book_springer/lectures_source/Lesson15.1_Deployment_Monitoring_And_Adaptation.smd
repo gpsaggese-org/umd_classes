@@ -86,7 +86,7 @@ digraph Lifecycle {
   distribution_, not under the distribution the policy itself will create
 
 * What Changes When a Decision Ships
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:68 Prediction vs. Decision: Side-by-Side
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:68 '* Prediction vs. Decision: Side-by-Side'
 
 - **The output is an action, not a score**: the system executes $do(a)$, so
   errors become _policy harm_, not just miscalibration
@@ -147,8 +147,8 @@ digraph Serve {
 # Cost-Aware Deployment Strategies
 
 * Decision Cost Asymmetry Drives Rollout
-// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:201 Hypothesis Testing Refresher
-// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:96 Loss Function: Motivation
+// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:201 '* Hypothesis Testing Refresher'
+// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:96 '* Loss Function: Motivation'
 
 - **Intuition**: how cautiously you roll out should scale with the _cost of a
   wrong decision_, not with model novelty
@@ -212,7 +212,7 @@ digraph Serve {
   - Flagged _before_ any revenue was put at risk
 
 * Canary Analysis and Guardrail Metrics
-// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:284 Sample Ratio Mismatch (SRM)
+// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:284 '* Sample Ratio Mismatch (SRM)'
 
 - **Definition**: a _canary_ routes a small traffic slice to the new policy and
   _auto-halts_ if a guardrail metric degrades
@@ -274,8 +274,8 @@ digraph Serve {
   assumptions need _bounds_ and _human review_, not thresholds
 
 * Directly Testable Assumptions
-// From: msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.smd:120 Non-Stationarity and Trends
-// From: msml610/lectures_source/Lesson08.9-Effect_heterogeneity_and_Metalearners.smd:28 Conditional Average Treatment Effect
+// From: msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.smd:120 '* Non-Stationarity and Trends'
+// From: msml610/lectures_source/Lesson08.9-Effect_heterogeneity_and_Metalearners.smd:28 '* Conditional Average Treatment Effect'
 
 - **Definition**: assumptions whose violation shows up in observable data
   streams while the system runs
@@ -314,7 +314,7 @@ digraph Serve {
     before it drags the whole policy
 
 * Indirectly Testable Assumptions
-// From: msml610/lectures_source/Lesson12.2-Causal_Discovery.smd:580 Validating a Discovered DAG
+// From: msml610/lectures_source/Lesson12.2-Causal_Discovery.smd:580 '* Validating a Discovered DAG'
 
 - **Problem**: _no unmeasured confounding_ cannot be verified from data — but
   its plausibility can be _bounded_
@@ -384,7 +384,7 @@ digraph Serve {
 # Experimentation in Production
 
 * A/B Testing vs. Observational Causal Inference
-// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:528 Decision Framework: Experiment or Observe?
+// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:528 '* Decision Framework: Experiment or Observe?'
 
 - **Question**: in production, when should we _run an experiment_ versus _rely
   on an observational causal model_?
@@ -428,8 +428,8 @@ digraph Serve {
   policy that looks fine on aggregate metrics but has stopped adding value
 
 * From Experiment to Policy: Incremental Updates
-// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:392 From A/B to Multi-Armed Bandits
-// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:919 Exploration vs Exploitation
+// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:392 '* From A/B to Multi-Armed Bandits'
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:919 '* Exploration vs Exploitation'
 
 - **Problem**: a fixed 50/50 test wastes traffic on a known-worse arm; a greedy
   switch locks in early noise
@@ -451,7 +451,7 @@ digraph Serve {
   is a policy that trades regret against safety
 
 * Heterogeneous Deployment
-// From: msml610/lectures_source/Lesson08.9-Effect_heterogeneity_and_Metalearners.smd:184 Cumulative Gain
+// From: msml610/lectures_source/Lesson08.9-Effect_heterogeneity_and_Metalearners.smd:184 '* Cumulative Gain'
 
 ::: columns
 :::: {.column width=54%}
@@ -555,8 +555,8 @@ digraph Gain {
 # Feedback Loops and Adaptation
 
 * Feedback Loops in Production
-// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:572 Policy Evaluation and Off-Policy Learning
-// From: msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.smd:137 Feedback Loops and Simultaneity
+// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:572 '* Policy Evaluation and Off-Policy Learning'
+// From: msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.smd:137 '* Feedback Loops and Simultaneity'
 
 - **Definition**: a _production feedback loop_ arises because the policy's
   actions become the data used to retrain the next policy
@@ -593,7 +593,7 @@ digraph Gain {
 
 * Performativity and Self-Fulfilling Policies
 // From:
-// From: book_springer/related_papers.md:75 Performative Prediction
+// From: book_springer/related_papers.md:75 '- [P099] Liu et al., "Performative Prediction", 2021'
 
 - **Definition**: a policy is _performative_ when deploying it _changes_ the
   distribution it was trained to model
@@ -619,7 +619,7 @@ digraph Gain {
 # Technical Debt and Maintenance
 
 * Technical Debt in Decision Systems
-// From: book_springer/related_papers.md:141 Technical Debt in Machine Learning Systems
+// From: book_springer/related_papers.md:141 '- [P105] Sculley et al., "Technical Debt in Machine Learning Systems", 2015'
 
 - **Definition**: _technical debt_ is the long-term maintenance cost incurred by
   expedient short-term choices — amplified in decision systems
