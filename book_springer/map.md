@@ -131,7 +131,7 @@
 | `msml610/lectures_source/Lesson08.3-Causal_AI_in_business.smd`               | yes   | 80%    |           |          |
 | `msml610/lectures_source/Lesson08.4-Causal_networks.smd`                     | yes   | 80%    |           | 60%      |
 | `msml610/lectures_source/Lesson08.5-Do_calculus.smd`                         | yes   | 70%    |           | 60%      |
-| `msml610/lectures_source/Lesson08.6-Causal_inference.smd`                    | yes   | 70%    |           | 60%      |
+| `msml610/lectures_source/Lesson08.6-Causal_inference_intro.smd`              | yes   | 70%    |           | 60%      |
 | `msml610/lectures_source/Lesson08.7-Causal_experiments.smd`                  | yes   | 70%    |           | 60%      |
 | `msml610/lectures_source/Lesson08.8.Causal_Linear_Regression.smd`            | yes   | 70%    |           | 60%      |
 | `msml610/lectures_source/Lesson08.9-Effect_heterogeneity_and_Metalearners.smd` | yes   | 70%  |           | 60%      |
@@ -849,7 +849,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
     bounds
 - `msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd`
   - [80%]: MDPs, value/policy iteration, off-line vs. on-line MDP solving
-- `msml610/lectures_source/Lesson08.5-Experimentation.smd`
+- `msml610/lectures_source/Lesson08.7-Causal_experiments.smd`
   - [75%]: A/B testing design, decision framework for experiment vs. observe,
     hybrid experimental-causal approaches
 - `msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd`
@@ -947,14 +947,14 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
   - [95%]: Model-based vs. model-free RL, policy search, causal RL, structural
     causal models for MDPs, counterfactual credit assignment, deconfounding
     offline/off-policy data
-- `class_cs_refreshers/lectures_source/Lesson95.Refresher_game_theory.smd`
+- `book_cs_refreshers/lectures_source/Lesson95.Refresher_game_theory.smd`
   - [50%]: Nash equilibrium, zero-sum games and the minimax theorem, cooperative
     game theory, mechanism design, multi-agent RL (conceptual foundations, not
     QMIX/MAPPO/CFR specifics)
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd`
   - [55%]: Robustness under misspecification (aleatoric/epistemic uncertainty),
     exploration vs. exploitation in a causal-decision frame
-- `msml610/lectures_source/Lesson08.5-Experimentation.smd`
+- `msml610/lectures_source/Lesson08.7-Causal_experiments.smd`
   - [55%]: Policy evaluation and off-policy learning: logged-data learning
     without live interaction
 - `msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.smd`
@@ -1067,13 +1067,13 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd`
   - [88%]: Communicating uncertainty to stakeholders; prior elicitation methods
     and pitfalls (structured elicitation of causal/prior knowledge)
-- `msml610/lectures_source/Lesson08.2-Causal_Networks.smd`
+- `msml610/lectures_source/Lesson08.4-Causal_networks.smd`
   - [75%]: Building a causal DAG, mediator/moderator/confounder types,
     documenting causal assumptions for review
 - `msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd`
   - [60%]: Loss-function elicitation, Region of Practical Equivalence: framing
     acceptable error/cost trade-offs for stakeholder sign-off
-- `msml610/lectures_source/Lesson08.4.smd`
+- `msml610/lectures_source/Lesson08.4-Causal_networks.smd`
   - [45%]: Causal DAG structures (chains, forks, colliders, d-separation),
     confounding bias, backdoor adjustment: supports DAG
     visualization/communication only
@@ -1117,7 +1117,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
     (directly/indirectly testable/domain-assessed), sensitivity analysis and
     E-values, negative controls, versioning, error budgets, rollback, feedback
     loops, performativity, technical debt
-- `msml610/lectures_source/Lesson08.5-Experimentation.smd`
+- `msml610/lectures_source/Lesson08.7-Causal_experiments.smd`
   - [85%]: A/B test design, power analysis, SRM, novelty/primacy effects,
     multi-armed bandits, experiment-vs-observe decision framework, off-policy
     evaluation
@@ -1127,7 +1127,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
 - `msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.smd`
   - [65%]: Non-stationarity/trend detection, feedback loops and simultaneity,
     time-varying unobserved confounders
-- `msml610/lectures_source/Lesson08.4.smd`
+- `msml610/lectures_source/Lesson08.9-Effect_heterogeneity_and_Metalearners.smd`
   - [65%]: CATE, effect heterogeneity, cumulative-gain curves: basis for
     heterogeneous deployment and stratified rollout targeting
 - `data605/lectures_source/Lesson02.3-Data_Pipelines.smd`
@@ -1174,7 +1174,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
     safety-through-causal-constraints (guardrails, harmful-outcome prevention),
     transparency for trustworthy autonomy, human-in-the-loop override, causal
     monitoring/adaptation
-- `msml610/lectures_source/Lesson08.2-Causal_Networks.smd`
+- `msml610/lectures_source/Lesson08.4-Causal_networks.smd`
   - [85%]: Causal mechanisms, mediation analysis, direct vs indirect effects —
     foundation for path-specific fairness reasoning
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd`
@@ -1183,7 +1183,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
 - `book.Agentic_AI/lectures_source/Lesson01.01-What_Is_An_Agentic_AI.smd`
   - [55%]: Human-in-the-loop vs full autonomy trade-offs, audit and
     accountability, error-catching before real-world consequences
-- `msml610/lectures_source/Lesson08.4.smd`
+- `msml610/lectures_source/Lesson08.9-Effect_heterogeneity_and_Metalearners.smd`
   - [35%]: Effect heterogeneity (CATE) across subgroups: relevant to detecting
     disparate treatment effects, though it defines no fairness metrics
 - Not covered
