@@ -965,22 +965,22 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
     causal agent architectures, causal MDPs and planning under causal
     uncertainty, transparency/fairness/robustness/safety through causal
     constraints
-- `book.Agentic_AI/lectures_source/Lesson01.05-Reasoning_Memory_and_Planning.smd`
+- `book.Agentic_AI/lectures_source/Lesson05.1-Reasoning_Memory_and_Planning.smd`
   - [60%]: World models for planning: LLM-as-world-model, WebDreamer "simulate
     before you act" (forward-model causal simulation)
-- `book.Agentic_AI/lectures_source/Lesson01.04-LLM_Reasoning.smd`
+- `book.Agentic_AI/lectures_source/Lesson04.1-LLM_Reasoning.smd`
   - [55%]: Chain-of-thought/tree-of-thought variants, self-consistency: general
     reasoning scaffolding, not causal-specific decomposition
-- `book.Agentic_AI/lectures_source/Lesson01.07-Tool_use_and_retrieval.smd`
+- `book.Agentic_AI/lectures_source/Lesson07.1-Tool_use_and_retrieval.smd`
   - [45%]: Tool-use/retrieval architecture, grounding on enterprise knowledge —
     the tool-use half of the topic, no causal-simulation content
-- `book.Agentic_AI/lectures_source/Lesson01.01-What_Is_An_Agentic_AI.smd`
+- `book.Agentic_AI/lectures_source/Lesson01.1-What_Is_An_Agentic_AI.smd`
   - [30%]: Generic perceive-plan-act agent architecture and tool/environment
     taxonomy: background context only
-- `book.Agentic_AI/lectures_source/Lesson01.09_Post_training_and_verifiable_agents.smd`
+- `book.Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.smd`
   - [25%]: Verification, reward hacking: tangential to trustworthy-agent topic,
     not causal/fairness/performativity specific
-- `book.Agentic_AI/lectures_source/Lesson01.03-History_of_LLM_Agents.smd`
+- `book.Agentic_AI/lectures_source/Lesson03.1-History_of_LLM_Agents.smd`
   - [20%]: ReAct and agent history: background context
 - Not covered
   - [30%]: Online causal-discovery algorithms learning DAGs from live deployment
@@ -1141,7 +1141,7 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd`
   - [70%]: Interpretability/explainability techniques, causal AI for trustworthy
     and transparent systems
-- `book.Agentic_AI/lectures_source/Lesson01.01-What_Is_An_Agentic_AI.smd`
+- `book.Agentic_AI/lectures_source/Lesson01.1-What_Is_An_Agentic_AI.smd`
   - [55%]: Human-in-the-loop vs full autonomy trade-offs, audit and
     accountability, error-catching before real-world consequences
 - `msml610/lectures_source/Lesson08.9-Effect_heterogeneity_and_Metalearners.smd`

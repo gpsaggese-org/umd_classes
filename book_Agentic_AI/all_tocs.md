@@ -1,4 +1,4 @@
-# Lesson01.01-What_Is_An_Agentic_AI.txt
+# Lesson01.1-What_Is_An_Agentic_AI.txt
 
 - What Is an Agentic AI?
   - Motivation: From Generation to Action
@@ -39,7 +39,7 @@
   - Summary
         - What Is an Agentic AI? Summary and Open Questions
 
-# Lesson01.02-LLM_Building_Blocks.txt
+# Lesson02.1-LLM_Building_Blocks.txt
 
 - LLM Building Blocks
   - Motivation: The Engine Inside the Agent
@@ -80,7 +80,7 @@
         - What Transformers Cannot (Easily) Compute
         - Summary and Open Questions
 
-# Lesson01.03-History_of_LLM_Agents.txt
+# Lesson03.1-History_of_LLM_Agents.txt
 
 - A Brief History of LLM Agents
   - Motivation: Why the History Matters
@@ -118,7 +118,7 @@
   - Summary
         - A Brief History of LLM Agents: Summary
 
-# Lesson01.04-LLM_Reasoning.txt
+# Lesson04.1-LLM_Reasoning.txt
 
 - LLM Reasoning
   - Motivation: Why Reasoning Deserves Its Own Lesson
@@ -155,7 +155,7 @@
   - Summary
         - LLM Reasoning: Summary and Open Questions
 
-# Lesson01.05-Reasoning_Memory_and_Planning.txt
+# Lesson05.1-Reasoning_Memory_and_Planning.txt
 
 - Reasoning, Memory, and Planning
   - Motivation: From Single-Shot Reasoning to a Persistent Loop
@@ -194,7 +194,7 @@
   - Summary
         - Summary and Open Questions
 
-# Lesson01.06-Inference_time_techniques.txt
+# Lesson06.1-Inference_time_techniques.txt
 
 - Inference-Time Techniques
   - Motivation: Beyond a Single Reasoning Chain
@@ -232,7 +232,7 @@
         - Inference-Time Techniques: The Full Picture
         - Summary and Open Questions
 
-# Lesson01.07-Tool_use_and_retrieval.txt
+# Lesson07.1-Tool_use_and_retrieval.txt
 
 - Tool Use and Retrieval
   - Motivation: Two Failure Modes and a Roadmap
@@ -271,7 +271,7 @@
   - Summary
         - Summary and Open Questions
 
-# Lesson01.08-Learning_to_reason.txt
+# Lesson08.1-Learning_to_reason.txt
 
 - Learning to Reason
   - Motivation: From Inference-Time Fixes to Learned Reasoning
@@ -312,7 +312,7 @@
   - Summary
         - Summary and Open Questions
 
-# Lesson01.09_Post_training_and_verifiable_agents.txt
+# Lesson09.1_Post_training_and_verifiable_agents.txt
 
 - Post-Training and Verifiable Agents
   - Motivation: The Verification Problem
@@ -350,7 +350,7 @@
         - Open Questions
         - Conclusion: Why Verification Matters for Post-Training
 
-# Lesson01.10_Open_training_recipes_for_reasoning.txt
+# Lesson10.1_Open_training_recipes_for_reasoning.txt
 
 - Open Training Recipes for Reasoning
   - Motivation: From Proprietary to Open Post-Training
@@ -390,7 +390,7 @@
         - Integration with Lesson 16.9: Verification and Preferences
         - Recap: From Closed to Open Reasoning
 
-# Lesson01.11_Lessons_from_training_agentic_models.txt
+# Lesson11.1_Lessons_from_training_agentic_models.txt
 
 - Lessons from Training Agentic Models
   - Motivation: From Theory to Practice
