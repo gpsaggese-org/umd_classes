@@ -83,6 +83,12 @@
 - Open an URL under the cursor with the default browse: `gx`
 - Open file under the cursor in a split window: `CTRL-W, CTRL-F`
 
+## Custom clipboard shortcuts (from `.vimrc`)
+
+- Copy current line to system clipboard (normal or visual mode): `cyy`, `ycc`
+- Copy `file:line 'content'` reference of line under cursor to system
+  clipboard, and echo it: `ycl`
+
 ## Edit command and search history
 
 - Edit search history In command mode: `q:`

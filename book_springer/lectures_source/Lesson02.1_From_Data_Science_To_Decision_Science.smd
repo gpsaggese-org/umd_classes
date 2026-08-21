@@ -10,21 +10,23 @@
 * Why Traditional ML Falls Short
 // From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:318 '* Where ML Falls Short'
 
-- @Problem@: traditional machine learning optimizes prediction accuracy on a
+- @Problem@: **traditional machine learning** optimizes _prediction accuracy_ on a
   fixed distribution, which ignores four things a decision requires:
-  1. _Causality_: modeling correlation, not mechanisms
+  1. _Causality_: causal mechanisms governing the predicted system, focusing only on
+     correlation
   2. _Uncertainty_: no quantification of what the model does not know
   3. _Business objective_: a prediction is not a decision
   4. _Dynamics_: the world reacts to the actions informed by the prediction
 
-- @Key idea@: each gap turns a technically accurate model into a poor
-  decision-maker
+- @Key idea@: each gap turns an _accurate prediction model_ into a _poor model for
+  decision-making_
 
 * From Data Science to Decision Science
 // From: msml610/lectures_source/Lesson08.2-Causal_AI_concepts.smd:129 '* From Data Science to Decision Science'
 
-- @Comparison@: data science and decision science optimize for different
-  things
+- @Comparison@: **data science** and **decision science** optimize for different
+  goals
+
 ```{=typst}
 #styled-table(
   headers: ("Dimension", "Data Science", "Decision Science"),
@@ -40,14 +42,14 @@
 )
 ```
 
-- @Key idea@: shipping a prediction when the business needs a decision delivers
-  little or no business value, however accurate the prediction is
+- @Key idea@: shipping a _prediction_ when the business instead needs a _decision_
+  delivers little or no business value, however accurate the prediction is
 
 * Causal vs Predictive Questions
 // From: msml610/lectures_source/Lesson08.2-Causal_AI_concepts.smd:161 '* Causal Questions vs. Predictive Questions'
 
-- @Comparison@: every business question has a predictive form and a causal
-  form, and only the latter one says what to do
+- @Comparison@: every business question has a **predictive form** and a **causal
+  form**, and only the latter one says what to do
 ```{=typst}
 #styled-table(
   headers: ("Predictive Question", "Causal Question"),
@@ -62,19 +64,19 @@
 ```
 
 - @Key idea@
-  - Predictive questions can be answered from observational data alone, which is
+  - _Predictive questions_ can be answered from observational data alone, which is
     enough for monitoring and alerting, but not for choosing an action
-  - Causal questions require causal models or experiments, and are the only ones
+  - _Causal questions_ require causal models or experiments, and are the only ones
     that support decisions and policy design
 
 * The Analytics Maturity Ladder
 // From: msml610/lectures_source/Lesson08.2-Causal_AI_concepts.smd:189 '* A Roadmap From Prediction to Decision Intelligence'
 
-- @Comparison@: organizations climb four levels of analytical sophistication
+- @Comparison@: organizations climb four levels of **analytical sophistication**
 
 ```{=typst}
 #styled-table(
-  headers: ("Level", "Question", "Tools"),
+  headers: ("Level", "Question asked", "Tools"),
   rows: (
     ("1. Descriptive", "What happened?", "Dashboards, reports"),
     ("2. Predictive", "What will happen?", "ML, forecasting"),
@@ -85,10 +87,10 @@
 )
 ```
 
-- @Problem@: most organizations are stuck at Level 2, predicting well but
-  unable to say what to do
+- @Problem@: most organizations are stuck at _Level 2_, predicting well but unable to
+  say what to do
 
-- @Key idea@: climbing to Levels 3 and 4 is the jump this book makes, from
+- @Key idea@: climbing to _Levels 3_ and _4_ is the jump this book makes, from
   prediction pipelines to decision pipelines
 
 # The Cost of Ignoring Causality
@@ -100,17 +102,17 @@
 // From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:161 '* Confounding: The Root Cause'
 // From: book_springer/related_papers.md:12 '- [P007] Zhang et al., "A Survey on Causal Inference", 2020'
 
-- @Problem@: a purely predictive model learns $\Pr(Y | X)$ from historical
-  data and absorbs any association in the data, spurious or not
-  - It answers _"what will happen?"_, not _"what should we do?"_
+- @Problem@: a purely **predictive model** learns $\Pr(Y | X)$ from historical data
+  and absorbs any _association_ in the data, _spurious or not_
+  - It answers _"what will happen?"_ (not _"what should we do?"_)
   - It assumes the world stays fixed, even though the actions informed by the
-    prediction change it
+    prediction themselves will change the world
 
 ::: columns
 :::: {.column width=55%}
 - @Example@: ice cream sales and drowning deaths are highly correlated
-  - Predictor: _"more ice cream $\to$ predict more drownings"_ (accurate)
-  - Decision built on it: _"ban ice cream to cut drownings"_ (disastrous)
+  - Prediction: _"more ice cream $\to$ more drownings"_ (which is accurate)
+  - Decision built on it: _"ban ice cream to cut drownings"_ (which is disastrous)
   - Confounder: hot weather drives both
 ::::
 :::: {.column width=40%}
