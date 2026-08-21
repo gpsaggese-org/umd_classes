@@ -7,7 +7,7 @@
 
 \motto{A machine can only reason about what its representation lets it say.}
 
-% From: '# Representation as a Foundation for Decisions'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:6 '# Representation as a Foundation for Decisions'
 \section{Representation as a Foundation for Decisions}
 \label{sec:representation-foundation-decisions}
 
@@ -24,7 +24,7 @@ and how efficiently it can be reasoned over, the split between symbolic and
 learned representations, and finally how natural language and programming
 languages fit, or fail to fit, the same mold
 
-% From: '* Why Knowledge Representation Matters'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:8 '* Why Knowledge Representation Matters'
 \textbf{Why Knowledge Representation Matters} --- Learning alone is not
 enough. A model trained on patient records can predict which disease a
 patient likely has, but predicting is not the same as \emph{reasoning}: to
@@ -63,7 +63,7 @@ supporting explainability, and enabling symbolic planning and dialogue,
 points at the same underlying fact: the representation is not incidental to
 what an AI system can do, it is a precondition for it
 
-% From: '* What Is Knowledge Representation?'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:29 '* What Is Knowledge Representation?'
 \textbf{What Is Knowledge Representation?} --- \begin{definition}
   \emph{Knowledge Representation} (KR) is the study of how to formally encode
   information so that machines can reason with it, spanning schemes such as
@@ -98,7 +98,7 @@ drawing conclusions, planning, and answering queries, is available to a
 system that only stores raw data without a representation scheme that
 defines what that data means and how it combines
 
-% From: '* Expressiveness vs. Tractability'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:50 '* Expressiveness vs. Tractability'
 \textbf{Expressiveness vs. Tractability} --- \begin{definition}
   The central tradeoff in choosing a knowledge representation pits
   \emph{expressiveness}, the richness of concepts a scheme can capture,
@@ -146,7 +146,7 @@ answer; it depends on the application, on how much of the tradeoff's
 expressiveness a task genuinely needs against how much tractability it can
 afford to give up
 
-% From: '* Symbolic vs. Sub-symbolic Representation'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:126 '* Symbolic vs. Sub-symbolic Representation'
 \textbf{Symbolic vs. Sub-symbolic Representation} --- \emph{Symbolic KR} uses
 discrete, human-readable symbols, the kind found in logic and knowledge
 graphs. Its chief virtue is interpretability: a symbolic fact like
@@ -193,7 +193,7 @@ generalize from data
   \label{fig:symbolic-vs-subsymbolic}
 \end{figure}
 
-% From: '* Neuro-symbolic Approach: Conceptual Spaces'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:153 '* Neuro-symbolic Approach: Conceptual Spaces'
 \textbf{Neuro-symbolic Approach: Conceptual Spaces} --- \emph{Conceptual
 spaces} are a neuro-symbolic framework for representing knowledge using
 geometric structure rather than discrete symbols alone. Each dimension of
@@ -241,7 +241,7 @@ scheme has no native mechanism for expressing
   \label{fig:conceptual-spaces}
 \end{figure}
 
-% From: '* Procedural vs. Declarative Representation'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:184 '* Procedural vs. Declarative Representation'
 \textbf{Procedural vs. Declarative Representation} --- The \emph{procedural
 approach} to representing knowledge focuses on \emph{how} a task is done: it
 encodes the desired behavior directly into a program, step by step. A robot
@@ -274,7 +274,7 @@ action: the goal is declared, the mechanism for reaching it is generated
 procedurally, and the two representational styles end up working together
 rather than in competition
 
-% From: '* Natural Language as a Representation'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:207 '* Natural Language as a Representation'
 \textbf{Natural Language as a Representation} --- Natural languages such as
 English or Italian are a representation scheme humans use constantly, and
 they have three properties that make them a poor fit for the kind of formal
@@ -308,7 +308,7 @@ extreme as a work of fiction: a language engineered so that certain
 concepts, and the thoughts built from them, become literally
 unrepresentable to anyone who only has Newspeak's vocabulary to think in
 
-% From: '* Programming Languages as a Representation'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:231 '* Programming Languages as a Representation'
 \textbf{Programming Languages as a Representation} --- A \emph{programming
 language} such as \texttt{C++} or \texttt{Python} is itself a formal,
 procedural representation scheme: \emph{data structures} represent facts
@@ -342,7 +342,7 @@ domain expressed in the language, which is precisely the general mechanism
 for deriving facts from facts that a conventional programming language
 lacks
 
-% From: '# Formal Knowledge Representation'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:256 '# Formal Knowledge Representation'
 \section{Formal Knowledge Representation}
 \label{sec:formal-knowledge-representation}
 
@@ -358,7 +358,7 @@ classical logic's assumptions break down in practice, non-monotonic
 reasoning and the closed- versus open-world distinction, before closing
 with a framework for learning logical rules directly from examples
 
-% From: '* Propositional Logic: Syntax and Semantics'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:258 '* Propositional Logic: Syntax and Semantics'
 \textbf{Propositional Logic: Syntax and Semantics} --- \begin{definition}
   \emph{Propositional logic} is a formal system for reasoning about
   statements that can be true or false, defined by a \emph{syntax}, which
@@ -387,7 +387,7 @@ operate on a set of predefined rules built from this same logical
 substrate, as in automated customer service chatbots that route a query
 based on which rule's conditions the query satisfies
 
-% From: '* First-Order Logic: Quantifiers and Inference'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:284 '* First-Order Logic: Quantifiers and Inference'
 \textbf{First-Order Logic: Quantifiers and Inference} --- Propositional
 logic can only talk about named statements one at a time; \emph{quantifiers}
 are what let first-order logic express properties of entire collections of
@@ -414,7 +414,7 @@ conjunction of statements about individual cats, which is exactly the
 expressive power that atomic and factored representations, discussed
 earlier in this chapter, are structurally unable to provide
 
-% From: '* Logical Entailment and Inference'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:302 '* Logical Entailment and Inference'
 \textbf{Logical Entailment and Inference} --- \begin{definition}
   \emph{Logical entailment} between sentences is the fact that a sentence
   follows logically from another sentence in a knowledge base. ``$\alpha$
@@ -448,7 +448,7 @@ because a specific derivation was carried out, but because disbelieving an
 entailed sentence while believing the premises that entail it is, by the
 definition above, an inconsistent position to hold
 
-% From: '* Non-Monotonic Logic and Default Reasoning'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:330 '* Non-Monotonic Logic and Default Reasoning'
 \textbf{Non-Monotonic Logic and Default Reasoning} --- \emph{Non-monotonic
 logic} is a logic in which adding new information can invalidate
 conclusions that were previously derived, a property that separates it
@@ -475,7 +475,7 @@ this condition, drawing a reasonable conclusion from typical-case defaults
 while remaining able to revise that conclusion cleanly the moment an
 exception, like Tweety turning out to be a penguin, is learned
 
-% From: '* Open World vs. Closed World Assumptions'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:352 '* Open World vs. Closed World Assumptions'
 \textbf{Open World vs. Closed World Assumptions} --- \begin{definition}
   The \emph{Closed World Assumption} (CWA) treats any information missing
   from a knowledge base as false by default, an assumption standard in
@@ -503,7 +503,7 @@ yet having an opinion on it, which is exactly the kind of decision that has
 to be made deliberately when a knowledge base is still growing, as in the
 open, decentralized data sources the Semantic Web is built to integrate
 
-% From: '* Inductive Logic Programming: Learning Rules from Examples'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:373 '* Inductive Logic Programming: Learning Rules from Examples'
 \textbf{Inductive Logic Programming: Learning Rules from Examples} ---
 \begin{definition}
   \emph{Inductive logic programming} (ILP) learns logical rules from
@@ -527,11 +527,11 @@ set of examples is itself an expensive symbolic search; the framework can
 still work with noisy, incomplete data to a meaningful degree, but the cost
 of the rule search remains the binding constraint on how far ILP scales
 
-% From: '# Knowledge Representation Frameworks'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:396 '# Knowledge Representation Frameworks'
 \section{Knowledge Representation Frameworks}
 \label{sec:knowledge-representation-frameworks}
 
-% From: '## Description Logics'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:398 '## Description Logics'
 \subsection{Description Logics}
 \label{subsec:description-logics}
 
@@ -544,7 +544,7 @@ resulting knowledge a shared vocabulary of classes, individuals, and
 relationships that description-logic-style reasoners can check for
 consistency and organize into hierarchies
 
-% From: '* Rule-Based Systems and Knowledge-Based Agents'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:402 '* Rule-Based Systems and Knowledge-Based Agents'
 \textbf{Rule-Based Systems and Knowledge-Based Agents} --- \begin{definition}
   A \emph{rule-based system} uses ``if-then'' rules to derive conclusions or
   make decisions, mimicking human decision-making by applying logical rules
@@ -578,7 +578,7 @@ produces the conclusion ``suggest measles.'' Larger rule-based systems
 chain many such cycles together, with the output of one rule feeding the
 facts that trigger the next
 
-% From: '* Grounding: Connecting Symbols to the World'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:426 '* Grounding: Connecting Symbols to the World'
 \textbf{Grounding: Connecting Symbols to the World} --- \begin{definition}
   \emph{Grounding} connects abstract symbols to real-world entities or
   observations, serving as the bridge between a representation stored in a
@@ -605,7 +605,7 @@ autonomous agents and cognitive systems more broadly, wherever a symbol
 manipulated internally needs to correspond to something the agent can
 sense or affect
 
-% From: '* Ontologies: Components and Structure'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:458 '* Ontologies: Components and Structure'
 \textbf{Ontologies: Components and Structure} --- An ontology organizes
 domain knowledge through seven kinds of building block, each playing a
 distinct structural role
@@ -645,7 +645,7 @@ exactly the compositional structure that lets an ontology be checked for
 consistency and reasoned over automatically, the subject of the next
 subsection
 
-% From: '* Ontologies: A Worked Example (University Domain)'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:484 '* Ontologies: A Worked Example (University Domain)'
 \textbf{Ontologies: A Worked Example (University Domain)} --- A university
 ontology grounds the abstract components from the previous slide in a
 single concrete domain. Four classes anchor the ontology: \texttt{Student},
@@ -680,7 +680,7 @@ could never support on its own
 \subsection{Reasoning in Ontologies}
 \label{subsec:reasoning-in-ontologies}
 
-% From: '## Reasoning in Ontologies'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:556 '## Reasoning in Ontologies'
 Declaring classes, individuals, and axioms is only half of what an ontology
 is for; the other half is the set of automated inference tasks that operate
 on that structure. This subsection works through the three core reasoning
@@ -689,7 +689,7 @@ itself as the family of languages these tasks are defined over, and closes
 with the standards, RDF, SPARQL, and semantic networks, that let this
 machinery scale to knowledge graphs built from many independent sources
 
-% From: '* Reasoning in Ontologies: Inference Tasks'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:558 '* Reasoning in Ontologies: Inference Tasks'
 \textbf{Reasoning in Ontologies: Inference Tasks} --- Ontology reasoning
 rests on three core tasks. \emph{Subsumption} asks ``is class $A$ a
 subclass of $B$?'', checking whether one concept is strictly more general
@@ -713,7 +713,7 @@ it derives the hierarchy, placing \texttt{Penguin} under \texttt{Bird} and
 subsumes which, turning subsumption from a pairwise test into a mechanism
 for building entire taxonomies automatically
 
-% From: '* Description Logics and OWL'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:581 '* Description Logics and OWL'
 \textbf{Description Logics and OWL} --- \begin{definition}
   \emph{Description logic} is a family of languages for representing
   structured knowledge about a domain, positioned deliberately between
@@ -740,7 +740,7 @@ logic of this kind is the formal foundation underlying the Web Ontology
 Language (OWL), which is used widely to specify ontologies that other
 systems can reason over automatically
 
-% From: '* RDF and SPARQL: Representation Standards'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:605 '* RDF and SPARQL: Representation Standards'
 \textbf{RDF and SPARQL: Representation Standards} --- The Resource
 Description Framework (RDF) represents knowledge as statements that form
 directed graphs of nodes and edges, where each node or edge is identified
@@ -762,7 +762,7 @@ ontology-based reasoning described earlier in this subsection, since an
 ontology's classes and axioms can themselves be stored and queried as RDF
 statements
 
-% From: '* Semantic Networks and Knowledge Graphs'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:618 '* Semantic Networks and Knowledge Graphs'
 \textbf{Semantic Networks and Knowledge Graphs} --- \begin{definition}
   \emph{Semantic networks} represent knowledge as graphs of concepts and
   the relations between them
@@ -785,7 +785,7 @@ visual clarity and reasoning support is why semantic networks appear both
 in early AI systems and in today's large-scale knowledge graph
 applications
 
-% From: '# Graphical Models for Uncertainty'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:637 '# Graphical Models for Uncertainty'
 \section{Graphical Models for Uncertainty}
 \label{sec:graphical-models-uncertainty}
 
@@ -800,7 +800,7 @@ semantic networks already established but replace hard logical rules with
 probability distributions that can represent degrees of belief rather than
 only certainties
 
-% From: '* Why Logic Fails Under Uncertainty'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:639 '* Why Logic Fails Under Uncertainty'
 \textbf{Why Logic Fails Under Uncertainty} --- Logic-based AI systems, built
 on propositional logic, typically represent actions using rules of the
 form ``if preconditions $P$ hold, then action $A$ causes effect $E$.'' The
@@ -823,7 +823,7 @@ that a precondition guarantees an effect, has no native way to represent
 any of these three sources of uncertainty, which is exactly the gap
 graphical models are built to close
 
-% From: '* Bayesian Networks: Definition and Structure'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:659 '* Bayesian Networks: Definition and Structure'
 \textbf{Bayesian Networks: Definition and Structure} --- Bayesian networks
 appear in the literature under several names, Bayes nets, belief networks,
 probabilistic networks, and, as the broader class that networks with only
@@ -853,7 +853,7 @@ variables each node's probability depends on, so the full joint
 distribution can be reconstructed by multiplying together these local,
 manageable pieces rather than having to be specified directly
 
-% From: '# Causal Graphical Models'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:674 '# Causal Graphical Models'
 \section{Causal Graphical Models}
 \label{sec:causal-graphical-models-kr}
 
@@ -865,7 +865,7 @@ before working through what that added causal commitment buys, in terms of
 reasoning about interventions, and how it can be made fully quantitative
 through structural causal models
 
-% From: '* Causal Networks (Causal DAGs): Definition and Structure'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:676 '* Causal Networks (Causal DAGs): Definition and Structure'
 \textbf{Causal Networks (Causal DAGs): Definition and Structure} --- A
 causal DAG carries two structural properties in its name. It is
 \emph{directed}: arrows point from cause to effect, not merely between
@@ -889,7 +889,7 @@ the resulting graph is only as good as its assumption that all relevant
 variables are included, with no hidden confounders lurking outside the
 graph and distorting the causal picture it presents
 
-% From: '* The Ladder of Causation: Association, Intervention, Counterfactual'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:695 '* The Ladder of Causation: Association, Intervention, Counterfactual'
 \textbf{The Ladder of Causation: Association, Intervention, Counterfactual}
 --- A causal DAG is easiest to read through a concrete example: a severe
 weather alert reaching the public. The causal chain runs through five
@@ -914,7 +914,7 @@ whether a specific set of residents would have been warned had the warning
 never been issued, a question about a specific case that did not occur,
 not about the graph's typical behavior in general
 
-% From: '* Structural Causal Models (SCM): Definition'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:746 '* Structural Causal Models (SCM): Definition'
 \textbf{Structural Causal Models (SCM): Definition} --- \begin{definition}
   A \emph{Structural Causal Model} (SCM) translates a causal DAG into
   mathematical equations that define how the variables in the graph
@@ -945,7 +945,7 @@ before causality was formalized as a distinct branch of statistics and
 computer science, which is worth remembering when SCMs are introduced as
 though they were a purely computational innovation
 
-% From: '# Integrating Logic and Causality'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:771 '# Integrating Logic and Causality'
 \section{Integrating Logic and Causality}
 \label{sec:integrating-logic-causality}
 
@@ -958,7 +958,7 @@ time, now explicitly against causal networks, shows precisely what a
 causal reading of a graph's edges adds on top of the purely statistical
 one
 
-% From: '* Markov Logic Networks: Combining Logic and Probability'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:773 '* Markov Logic Networks: Combining Logic and Probability'
 \textbf{Markov Logic Networks: Combining Logic and Probability} --- A
 \emph{Markov Logic Network} (MLN) combines first-order logic, which
 expresses knowledge through rules and quantifiers, with Markov Random
@@ -997,7 +997,7 @@ higher-weight, formulas a correspondingly lower probability, which is the
 soft, graded behavior that distinguishes an MLN from the hard constraints
 of classical first-order logic it is built from
 
-% From: '* From Correlation to Causal Reasoning: What Graphs Add'
+% From: book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd:816 '* From Correlation to Causal Reasoning: What Graphs Add'
 \textbf{From Correlation to Causal Reasoning: What Graphs Add} --- A
 Bayesian network represents a joint distribution function, and the
 direction its arrows point represents conditional dependence, not

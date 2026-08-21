@@ -10,19 +10,21 @@
 * Why Traditional ML Falls Short
 // From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:318 '* Where ML Falls Short'
 
-- Traditional machine learning optimizes prediction accuracy on a fixed
-  distribution, which ignores four things a decision requires:
+- @Problem@: traditional machine learning optimizes prediction accuracy on a
+  fixed distribution, which ignores four things a decision requires:
   1. _Causality_: modeling correlation, not mechanisms
   2. _Uncertainty_: no quantification of what the model does not know
   3. _Business objective_: a prediction is not a decision
   4. _Dynamics_: the world reacts to the actions informed by the prediction
 
-- Each gap turns a technically accurate model into a poor decision-maker
+- @Key idea@: each gap turns a technically accurate model into a poor
+  decision-maker
 
 * From Data Science to Decision Science
 // From: msml610/lectures_source/Lesson08.2-Causal_AI_concepts.smd:129 '* From Data Science to Decision Science'
 
-- Data science and decision science optimize for different things
+- @Comparison@: data science and decision science optimize for different
+  things
 ```{=typst}
 #styled-table(
   headers: ("Dimension", "Data Science", "Decision Science"),
@@ -44,8 +46,8 @@
 * Causal vs Predictive Questions
 // From: msml610/lectures_source/Lesson08.2-Causal_AI_concepts.smd:161 '* Causal Questions vs. Predictive Questions'
 
-- Every business question has a predictive form and a causal form, and only
-  one of them says what to do
+- @Comparison@: every business question has a predictive form and a causal
+  form, and only the latter one says what to do
 ```{=typst}
 #styled-table(
   headers: ("Predictive Question", "Causal Question"),
@@ -68,7 +70,7 @@
 * The Analytics Maturity Ladder
 // From: msml610/lectures_source/Lesson08.2-Causal_AI_concepts.smd:189 '* A Roadmap From Prediction to Decision Intelligence'
 
-- Organizations climb four levels of analytical sophistication
+- @Comparison@: organizations climb four levels of analytical sophistication
 
 ```{=typst}
 #styled-table(
@@ -82,8 +84,10 @@
   bold-first-col: true,
 )
 ```
+
 - @Problem@: most organizations are stuck at Level 2, predicting well but
   unable to say what to do
+
 - @Key idea@: climbing to Levels 3 and 4 is the jump this book makes, from
   prediction pipelines to decision pipelines
 
@@ -138,6 +142,7 @@ digraph IceCreamDrowning {
 
 - @Problem@: a correlation model answers _"what is?"_, never _"what if?"_ or
   _"why?"_
+
 - Two classes of business question stay permanently out of reach:
   - Intervention: _"If we cut price 10%, how do units sold and revenue
     change?"_
@@ -194,7 +199,7 @@ digraph IceCreamDrowning {
 // From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:86 '* Simpson's Paradox'
 // From: book_springer/related_papers.md:3 '- [P005] Pearl, "Simpson's Paradox, Confounding, and Collapsibility", 1999'
 
-- @Definition@: the _Simpson's paradox_ is a trend within every subgroup
+- @Definition@: the **Simpson's paradox** is a trend within every subgroup
   reverses once the subgroups are pooled
 
 // TODO(gp): Add a better picture of a Simpson's paradox
@@ -242,7 +247,7 @@ digraph SimpsonsParadox {
 * Berkson's Paradox
 // From: msml610/lectures_source/Lesson08.4-Causal_networks.smd:1147 '* Collider Bias'
 
-- @Definition@: a _collider_ is a variable influenced by two or more
+- @Definition@: a **collider** is a variable influenced by two or more
   independent causes
 
 - @Fact@: Conditioning on a collider opens a spurious association between its
@@ -328,9 +333,10 @@ digraph WolfHusky {
   - _Epistemic_ uncertainty comes from not having seen enough data, or from
     the wrong model
     - E.g., a rare disease with only 10 recorded cases
+
 - Without separating them, a model cannot flag what it has never seen: it can
-  exhibit maximal confidence off-distribution, precisely where it should exhibit
-  maximal uncertainty
+  exhibit maximal confidence off-distribution, precisely where it should
+  exhibit maximal uncertainty
 
 - @Example@: a fraud model's low predicted risk for a novel transaction
   pattern may reflect
@@ -382,7 +388,7 @@ digraph WolfHusky {
 - @Problem@: models chase a proxy metric (e.g., clicks or accuracy) instead of
   the business goal it stands in for (e.g., revenue, retention, or wellbeing)
 
-- @Definition@: _Goodhart's law_ states that once a proxy becomes a target,
+- @Definition@: **Goodhart's law** states that once a proxy becomes a target,
   it stops measuring what you care about
 
 - @Example@: a recommender optimized purely for click-through rate learns to
@@ -404,10 +410,11 @@ digraph WolfHusky {
     symmetric since there is a limit to how many consecutive losses, but not a
     limit to consecutive wins
 
-- @Example@: 
+- @Example@:
     - A fraud false negative and a fraud false positive cost differently
-    - A fraud model with 95% accuracy that blocks half of legitimate transactions
-      is a costly decision system, however accurate it is by the standard metric
+    - A fraud model with 95% accuracy that blocks half of legitimate
+      transactions is a costly decision system, however accurate it is by the
+      standard metric
 
 - @Key idea@: cost asymmetry has to be built into the objective, not bolted
   in subsequent stages of a decision pipeline, or bolted on after deployment as
@@ -439,7 +446,7 @@ digraph WolfHusky {
 - @Problem@: a black-box score ranks units but names no lever and gives no
   _why_
 
-- @Example@: 
+- @Example@:
   - A churn score does not say which action prevents churn
   - Instead of _"this customer has churn score 0.8"_, a useful recommendation
     says _"offering a discount lowers this customer's churn probability by 12
@@ -479,6 +486,7 @@ digraph WolfHusky {
 
 - @Problem@: any decision changes the world, breaking the distribution the
   model was trained on
+
 - Three ways the world moves out from under a static model:
   - _Concept shift_: the link $\Pr(Y | X)$ between inputs and outcomes changes
   - _Covariate shift_: the input distribution $\Pr(X)$ changes while the
@@ -500,8 +508,8 @@ digraph WolfHusky {
     across the board (label shift)
 
 - @Key idea@: a model that encodes (causal) mechanisms, not just patterns,
-  degrades more gracefully because mechanisms are more stable across distribution
-  shift than surface correlations
+  degrades more gracefully because mechanisms are more stable across
+  distribution shift than surface correlations
 
 * Feedback Loops and Bias Amplification
 // From: msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd:252 '* Problem 5: Feedback Loops'
@@ -528,7 +536,7 @@ digraph WolfHusky {
 // From:
 // From: book_springer/related_papers.md:75 '- [P099] Liu et al., "Performative Prediction", 2021'
 
-- @Definition@: _performativity_ is a prediction that changes the very
+- @Definition@: **performativity** is a prediction that changes the very
   quantity it predicts
 
 - @Example@: a published credit-risk score moves borrower behavior, which
@@ -604,27 +612,29 @@ digraph WolfHusky {
 * Why AI Projects Fail
 // From: msml610/lectures_source/Lesson08.3-Causal_AI_in_business.smd:24 '* Why AI Projects Fail?'
 
-- Most AI projects fail not because of failures at the modeling phase, but
-  because they frame the problems incorrectly 
-  - @Misalignment@: the model optimizes a proxy, not the business goal
-  - @Black boxes@: outputs cannot be explained, so they are not trusted or
+- @Components@: most AI projects fail not because of failures at the
+  modeling phase, but because they frame the problems incorrectly
+  - _Misalignment_: the model optimizes a proxy, not the business goal
+  - _Black boxes_: outputs cannot be explained, so they are not trusted or
     adopted
-  - @No lever@: a score is delivered where an action was needed
-  - @No feedback@: performance is never monitored after deployment
+  - _No lever_: a score is delivered where an action was needed
+  - _No feedback_: performance is never monitored after deployment
 
-- Any accurate model that answers the wrong question is a failed project, however
-  good its metrics look on a dashboard
+- @Key idea@: any accurate model that answers the wrong question is a failed
+  project, however good its metrics look on a dashboard
 
 * The Root Cause of the Four Costs
 
-- The four costs surveyed in this chapter (i.e., ignoring causality, uncertainty,
-  the business objective, and dynamics) share a single root cause
+- The four costs surveyed in this chapter (i.e., ignoring causality,
+  uncertainty, the business objective, and dynamics) share a single root
+  cause
 
 - Each one comes from optimizing prediction accuracy on a fixed distribution
   instead of decision quality on a distribution the decision itself changes
 
-- This book shows how to solve all the 4 problems using causal and probabilistic
-  approaches to build
+- This book shows how to solve all the 4 problems using causal and
+  probabilistic approaches to build
+
 - Every technique plugs into one loop
 
 ```graphviz
@@ -646,17 +656,17 @@ digraph DecisionLoop {
 
 * Book Roadmap
 
-- The rest of the book builds the pipeline that proposes solutions for
-  the problem highlighted in this chapter
-  - @Part II: Advanced Modeling Theory & Tools@ supplies the machinery:
+- @Components@: the rest of the book builds the pipeline that proposes
+  solutions for the problem highlighted in this chapter
+  - _Part II: Advanced Modeling Theory & Tools_ supplies the machinery:
     knowledge representation, probabilistic ML (Bayesian inference,
     uncertainty), and causal ML (SCMs, do-calculus, causal discovery)
-  - @Part III: Data@ turns domain knowledge into causal DAGs and causal
+  - _Part III: Data_ turns domain knowledge into causal DAGs and causal
     data pipelines, and confronts selection bias and distribution shift
-  - @Part IV: Decision-Making Theory & Tools@ turns causal models into
+  - _Part IV: Decision-Making Theory & Tools_ turns causal models into
     actions: decision theory, the taxonomy of decision problems, simple
-    decisions (bandits, RL), complex decisions (policy gradients, multi-agent),
-    and agentic causal reasoning
-  - @Part V: Implementation, Deployment & Governance@ covers stakeholder
+    decisions (bandits, RL), complex decisions (policy gradients,
+    multi-agent), and agentic causal reasoning
+  - _Part V: Implementation, Deployment & Governance_ covers stakeholder
     alignment, deployment/monitoring/adaptation, and trust, explainability,
     fairness, and governance
