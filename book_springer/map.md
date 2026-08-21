@@ -404,12 +404,6 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
 - `book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd`
 
 ### Lesson Materials
-- `book_springer/lectures_source/Lesson04.1_Knowledge_Representation.smd`
-  - [95%]: Chapter's own compiled deck — section headers map almost 1:1 to
-    the topic list (representation foundations, formal KR,
-    propositional/FOL, non-monotonic logic, ontologies/RDF/SPARQL/knowledge
-    graphs, Bayesian networks, causal DAGs/SCMs, Markov logic networks,
-    choosing a representation)
 - `msml610/lectures_source/Lesson03.1-Knowledge_representation.smd`
   - [45%]: Representation foundations, expressiveness/tractability
     trade-offs, propositional/FOL basics, entailment/inference, rule-based
@@ -621,11 +615,6 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
 - `book_springer/lectures_source/Lesson07.1_Building_Probabilistic_And_Causal_Knowledge.smd`
 
 ### Lesson Materials
-- `book_springer/lectures_source/Lesson07.1_Building_Probabilistic_And_Causal_Knowledge.smd`
-  - [90%]: Chapter's own outline — section headers match all five topics
-    verbatim (elicitation steps, hybrid-team roles, prior elicitation, DAG
-    building, variable types, discovery, temporal structure), but is a thin
-    bullet-point skeleton with source pointers rather than full prose
 - `msml610/lectures_source/Lesson08.4-Causal_networks.smd`
   - [55%]: Building causal DAGs (definition, directed/acyclic properties,
     worked examples) and full coverage of variable types (observed/
@@ -686,10 +675,6 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
 - `book_springer/lectures_source/Lesson08.1_Causal_Data_Pipelines.smd`
 
 ### Lesson Materials
-- `book_springer/lectures_source/Lesson08.1_Causal_Data_Pipelines.smd`
-  - [90%]: Chapter's own outline — headers map 1:1 onto all five topic
-    groups, but content is stub bullet titles pulled from other lectures,
-    not fully elaborated prose
 - `msml610/lectures_source/Lesson08.6-Causal_inference_intro.smd`
   - [35%]: Confounder introduction (confounding-bias equation), surrogate
     confounding/proxy issues, selection-bias mechanisms (collider,
