@@ -1,4 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env -S uv run
+
+# /// script
+# dependencies = ["tabulate"]
+# ///
 
 """
 Count slides and text statistics in lecture source files.
