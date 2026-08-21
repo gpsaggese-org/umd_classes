@@ -50,7 +50,7 @@
 # Bayesian Inference for Decisions
 
 * Bayesian Updating: Definition
-// From Lesson07.1 (Bayesian updating, prior/likelihood/posterior)
+// From: msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.smd:93 Bayes' Theorem: Recap
 
 - **Definition**: Bayesian updating revises a belief over an unknown $\theta$
   by combining a _prior_ with the _likelihood_ of observed data $X$
@@ -81,7 +81,7 @@
   everywhere a decision must be made under parameter and outcome uncertainty
 
 * Conjugate Priors: Beta-Binomial Example
-// From Lesson07.1 (conjugate priors, coin-bias example)
+// From: msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.smd:284 Coin Example: Analytical Solution
 
 - **Definition**: a prior is _conjugate_ to a likelihood if the posterior
   has the same distributional family as the prior
@@ -159,7 +159,7 @@
   choice
 
 * From Posterior to Decision: Loss Functions
-// From Lesson07.2 (posterior-based decision rules, loss functions)
+// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:110 Loss Function
 
 - **Problem**: a posterior is a distribution over $\theta$, but a decision
   requires a single action or point estimate $\hat\theta$
@@ -193,8 +193,7 @@
   it is a modeling choice tied to the decision's cost structure
 
 * Decisions via Bayes Factors and ROPE
-// From Lesson07.2 (Savage-Dickey Bayes factor, region of practical
-// equivalence)
+// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:25 Savage-Dickey Density Ratio
 
 - **Question**: does the data provide evidence for or against a specific
   hypothesis, such as "this coin is fair" or "this treatment has no effect"?
@@ -233,7 +232,7 @@
 # Sequential Inference with Hidden State
 
 * Hidden Markov Models: Definition
-// From Lesson09.1 (HMM formalism, rain/umbrella example)
+// From: msml610/lectures_source/Lesson09.1-Reasoning_over_time.smd:276 Sensor Model: Rain Example
 
 ::: columns
 :::: {.column width=55%}
@@ -296,7 +295,7 @@ digraph HMM {
   reading, while inference runs the other way
 
 * Filtering: Estimating the Current State
-// From Lesson09.1 (recursive filtering, forward algorithm)
+// From: msml610/lectures_source/Lesson09.1-Reasoning_over_time.smd:610 Recursive Filtering: Intuition
 
 - **Goal**: compute $\Pr(\vX_t | \ve_{1:t})$, the belief about the
   _current_ hidden state given all evidence so far
@@ -324,7 +323,7 @@ digraph HMM {
   days of sensor-model math each time
 
 * Prediction and Smoothing
-// From Lesson09.1 (prediction, forward-backward smoothing)
+// From: msml610/lectures_source/Lesson09.1-Reasoning_over_time.smd:697 Task 3: Smoothing: Update Formula
 
 - **Prediction**: extend filtering $k$ steps into the future using only the
   transition model, without new evidence
@@ -350,7 +349,7 @@ digraph HMM {
   ways, and both reuse the same transition and sensor models
 
 * Most Likely Explanation: The Viterbi Algorithm
-// From Lesson09.1 (Viterbi algorithm, worked example)
+// From: msml610/lectures_source/Lesson09.1-Reasoning_over_time.smd:764 Viterbi Algorithm: Intuition
 
 - **Problem**: filtering and smoothing give the best guess _per time step_,
   but the resulting sequence may not be jointly plausible
@@ -443,7 +442,7 @@ digraph HMM {
   particle filters trade the Kalman filter's exactness for generality
 
 * Belief States: A Sufficient Statistic
-// From Lesson12.1 (POMDP belief-state formalism, belief update)
+// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:1128 Belief State Transitions
 
 - **Definition**: a _belief state_ $b(\vX_t) = \Pr(\vX_t | \ve_{1:t})$ is
   the full posterior over the hidden state given everything observed so far
@@ -471,7 +470,7 @@ digraph HMM {
 # Bandit Algorithms
 
 * The Multi-Armed Bandit Problem
-// From Lesson09.3 (bandit formalism, exploration-exploitation tradeoff)
+// From: msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.smd:147 The K-Armed Bandit Problem: Formal Definition
 
 ::: columns
 :::: {.column width=60%}
@@ -512,7 +511,7 @@ digraph ExploitExplore {
   state transitions at all
 
 * Regret: Measuring the Cost of Learning
-// From Lesson09.3 (regret definition, Lai-Robbins lower bound)
+// From: msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.smd:447 Regret Lower Bounds: Lai-Robbins Bound
 
 - **Definition**: _regret_ is the reward lost by not always pulling the
   best arm $a^*$
@@ -538,7 +537,7 @@ digraph ExploitExplore {
   $L_T = \Omega(T)$, since it can get stuck on a suboptimal arm forever
 
 * Epsilon-Greedy
-// From Lesson09.3 (epsilon-greedy algorithm, regret behavior)
+// From: msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.smd:336 $\epsilon$-Greedy Algorithm
 
 - **Algorithm**: with probability $\epsilon$ pick a uniformly random arm,
   otherwise pick the current best estimate
@@ -566,7 +565,7 @@ digraph ExploitExplore {
     $L_T = O(T^{2/3})$, short of the logarithmic bound
 
 * Upper Confidence Bound
-// From Lesson09.3 (UCB1, optimism principle, regret bound)
+// From: msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.smd:599 Upper Confidence Bound (UCB1)
 
 ::: columns
 :::: {.column width=58%}
@@ -610,7 +609,7 @@ digraph Optimism {
   inequality
 
 * Thompson Sampling
-// From Lesson09.3 (Bayesian bandits, Thompson sampling algorithm)
+// From: msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.smd:818 Thompson Sampling
 
 - **Definition**: maintain a posterior $\Pr(\mu_i | \text{data})$ over each
   arm's mean, sample one value per arm, and pull the arm with the highest
@@ -671,7 +670,7 @@ digraph Optimism {
   consequence of past actions)
 
 * Bandit Algorithms: When to Use Which
-// From Lesson09.3 (comparison of bandit algorithms)
+// From: msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.smd:945 Which Algorithm Should I Use?
 
 ```{=typst}
 #styled-table(
@@ -844,7 +843,7 @@ digraph Optimism {
 # Value-Based Reinforcement Learning
 
 * From Bellman Equations to Learned Values
-// From Lesson12.1 (Bellman equation, Q-function)
+// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:460 Bellman Equation
 
 - **Recall**: the optimal value of a state satisfies the Bellman equation
   $$
@@ -867,7 +866,7 @@ digraph Optimism {
   instead of a known model
 
 * Q-Learning: Off-Policy Temporal-Difference Control
-// From Lesson12.1 (Q-learning update rule, temporal-difference learning)
+// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:1577 Temporal-Difference Q-Learning
 
 - **Definition**: $Q(s,a)$ is the expected return of taking action $a$ in
   state $s$ and acting optimally afterward, so $U^*(s) = \max_a Q(s,a)$
@@ -918,7 +917,7 @@ digraph Optimism {
   learned policy stays safer while training is still happening
 
 * Function Approximation: Scaling Beyond Tables
-// From Lesson12.1 (generalization, linear function approximation)
+// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:1612 Generalization in Reinforcement Learning
 
 - **Problem**: a lookup table $Q(s,a)$ needs one entry per state-action
   pair, infeasible once $|\mathcal{S}|$ is large or continuous (an image,
@@ -949,7 +948,7 @@ digraph Optimism {
   deep value-based methods are built to close
 
 * Deep Q-Networks
-// From Lesson12.1 (deep reinforcement learning, experience replay)
+// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:1612 Generalization in Reinforcement Learning
 
 - **Definition**: a _Deep Q-Network_ (DQN) uses a deep neural network as
   the function approximator $\hat{Q}_\vtheta(s,a)$, learning features
@@ -976,7 +975,7 @@ digraph Optimism {
   continuous action spaces come next
 
 * Delayed and Sparse Rewards
-// From Lesson12.1 (sparse vs. immediate rewards, reward shaping)
+// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:545 Shaping Theorem
 
 - **Definition**: a reward is _sparse_ when most states carry no
   informative signal, and the agent only learns something at rare,

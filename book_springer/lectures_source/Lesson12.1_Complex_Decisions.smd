@@ -52,7 +52,7 @@
   high-dimensional action spaces
 
 * The Policy Gradient Theorem
-// From Lesson12.1 (policy search, parameterized policy)
+// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:1674 Policy Search in Reinforcement Learning
 
 - **Definition**: a stochastic policy $\pi_\vtheta(a|s)$ assigns a
   probability to each action given the state, parameterized by $\vtheta$
@@ -82,7 +82,7 @@
   samples of trajectories and their returns
 
 * REINFORCE: Monte Carlo Policy Gradient
-// From Lesson12.1 (policy search, gradient-based optimization)
+// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:1674 Policy Search in Reinforcement Learning
 
 - **Algorithm (REINFORCE)**
   1. Roll out a full episode under $\pi_\vtheta$
@@ -177,7 +177,7 @@ digraph ActorCritic {
   trade-off TD learning made against Monte Carlo returns
 
 * Trust Region Policy Optimization
-// From Lesson12.1 (policy search, gradient-based optimization)
+// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:1674 Policy Search in Reinforcement Learning
 
 - **Problem**: an unconstrained policy-gradient step can move $\vtheta$
   far enough that the new policy visits a different part of state space,
@@ -291,7 +291,7 @@ digraph ActorCritic {
 # Planning with Learned Models and Deep Search
 
 * Dyna-Q: Interleaving Learning and Planning
-// From Lesson12.1 (model-based RL, Dyna-Q)
+// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:1293 Model-Based Reinforcement Learning
 
 - **Recall**: model-based RL fits a transition model $\hat{\Pr}(s'|s,a)$
   and reward model $\hat{R}(s,a)$ from experience, then plans against it
@@ -453,7 +453,7 @@ digraph AlphaGo {
   decisions over reusable sub-behaviors
 
 * Options: Definition
-// From Lesson09.1 (Markov property as the foundation being extended)
+// From: msml610/lectures_source/Lesson09.1-Reasoning_over_time.smd:165 Markov Property
 
 - **Definition**: an _option_ $o = (\mathcal{I}, \pi_o, \beta_o)$ bundles a
   temporally extended sub-behavior
@@ -519,7 +519,7 @@ digraph AlphaGo {
 # Offline and Batch Learning
 
 * When Interaction Is Not an Option
-// From Lesson12.1 (offline RL motivation, confounding in logged data)
+// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:1978 Deconfounding Offline / Off-Policy Data
 
 - **Problem**: every algorithm so far assumes the agent can act in the
   environment and observe the consequence, unavailable when acting is
@@ -536,7 +536,7 @@ digraph AlphaGo {
   belief, so any error the logged data does not cover is permanent
 
 * Off-Policy Evaluation via Inverse Propensity Weighting
-// From Lesson08.5 (off-policy evaluation, IPS weighting)
+// From: msml610/lectures_source/Lesson08.7-Causal_experiments.smd:572 Policy Evaluation and Off-Policy Learning
 
 - **Goal**: estimate how a new policy $\pi_{\text{new}}$ would perform,
   using only data logged under $\pi_{\text{old}}$, before ever deploying it
@@ -613,7 +613,7 @@ digraph AlphaGo {
   verify an optimistic guess against the real environment
 
 * Deconfounding Offline Data: A Causal View
-// From Lesson12.1 (confounding in sequential decision making, deconfounding offline data)
+// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:1805 Confounding in Sequential Decision Making
 
 ::: columns
 :::: {.column width=55%}
@@ -664,7 +664,7 @@ digraph OfflineConfound {
 # Multi-Agent and Game-Theoretic Algorithms
 
 * Why Single-Agent Assumptions Break
-// From Lesson10.2 (feedback loops and simultaneity)
+// From: msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.smd:137 Feedback Loops and Simultaneity
 
 - **Problem**: every algorithm so far treats the environment as a fixed,
   possibly stochastic, mechanism reacting only to the agent's own actions
@@ -686,7 +686,7 @@ digraph OfflineConfound {
   agents' behavior is specified
 
 * Normal-Form Games and Nash Equilibrium
-// From Lesson95 (games, payoffs, Nash equilibrium)
+// From: book_cs_refreshers/lectures_source/Lesson95.Refresher_game_theory.smd:365 Chapter 3: Nash Equilibrium
 
 - **Definition**: a _normal-form game_ specifies a set of players, each
   with a strategy set and a payoff function over the joint strategy
@@ -706,7 +706,7 @@ digraph OfflineConfound {
   agent's policy is simultaneously a best response to the rest
 
 * Computing Equilibria Is Hard
-// From Lesson95 (computational complexity, approximation algorithms)
+// From: book_cs_refreshers/lectures_source/Lesson95.Refresher_game_theory.smd:1393 Chapter 15: Algorithmic Game Theory
 
 - **Question**: Nash's theorem guarantees an equilibrium exists, but can
   an algorithm find one efficiently?
@@ -726,7 +726,7 @@ digraph OfflineConfound {
   self-play, rather than solving for it directly
 
 * Self-Play and Regret Minimization
-// From Lesson95 (self-play, counterfactual regret minimization)
+// From: book_cs_refreshers/lectures_source/Lesson95.Refresher_game_theory.smd:1393 Chapter 15: Algorithmic Game Theory
 
 - **Solution 1 (self-play)**: an agent improves by repeatedly playing
   against copies of itself, each generation training against a slightly
@@ -826,7 +826,7 @@ digraph OfflineConfound {
   to continuous, policy-gradient methods instead of discrete $Q$-values
 
 * Causal Transportability Across Environments
-// From Lesson12.1 (causal generalization across environments)
+// From: msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd:2055 Causal Generalization Across Environments
 
 - **Question**: does a policy trained in one environment (or against one
   set of opponents) hold when the environment or the opponents change?

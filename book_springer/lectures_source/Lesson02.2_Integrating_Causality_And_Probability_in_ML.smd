@@ -34,7 +34,7 @@
     decision-maker can trust
 
 * Prediction vs Decision, Formally
-// From Lesson 11.1
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:68 Prediction vs. Decision: Side-by-Side
 
 - Prediction and decision live in different mathematical settings; collapsing
   them is a common source of costly errors
@@ -60,8 +60,8 @@
 ## Three Rungs of Causal Reasoning
 
 * The Ladder of Causation
-// From Lesson 08.1
-// From paper [P009] Seven Pillars of Causal Reasoning
+// From: msml610/lectures_source/Lesson08.2-Causal_AI_concepts.smd:12 The Ladder of Causation
+// From: book_springer/related_papers.md:105 The Seven Pillars of Causal Reasoning with Reflections on Machine Learning
 
 - Pearl organizes causal reasoning into three rungs of increasing power
 ```{=typst}
@@ -79,7 +79,7 @@
   amount of rung-1 data answers a rung-2 or rung-3 question
 
 * Rung 1: Association
-// From Lesson 08.1
+// From: msml610/lectures_source/Lesson08.2-Causal_AI_concepts.smd:33 Rung 1: Association
 
 - @Question@: how would seeing $X$ change your belief in $Y$?
 - @Math@: $\Pr(Y | X)$
@@ -91,7 +91,7 @@
   reverse causation
 
 * Rung 2: Intervention
-// From Lesson 08.1
+// From: msml610/lectures_source/Lesson08.2-Causal_AI_concepts.smd:48 Rung 2: Intervention
 
 - @Question@: what happens to $Y$ if I do $X$?
 - @Math@: $\Pr(Y | do(X), Z)$
@@ -103,7 +103,7 @@
   differ sharply from what observation suggests
 
 * Rung 3: Counterfactuals
-// From Lesson 08.1
+// From: msml610/lectures_source/Lesson08.2-Causal_AI_concepts.smd:64 Rung 3: Counterfactuals
 
 - @Question@: was it $X$ that caused $Y$, for this specific unit?
 - @Math@: $\Pr(Y_x | x', y')$, the outcome had $X$ been $x$, given we
@@ -115,7 +115,7 @@
 - @Interpretation@: attribution, blame, and credit all live on rung 3
 
 * Seeing vs Doing: A Worked Example
-// From Lesson 08.2
+// From: msml610/lectures_source/Lesson08.4-Causal_networks.smd:256 Tornado Warning: Level 2 (Intervention)
 
 ::: columns
 :::: {.column width=52%}
@@ -164,7 +164,7 @@ digraph Tornado_Warning {
 ## Structure and Variable Types
 
 * Structural Causal Models
-// From Lesson 08.2
+// From: msml610/lectures_source/Lesson08.4-Causal_networks.smd:366 Structural Causal Model
 
 ::: columns
 :::: {.column width=55%}
@@ -200,7 +200,7 @@ digraph Sprinkler {
 :::
 
 * Confounders: The Fork Structure
-// From Lesson 08.4
+// From: msml610/lectures_source/Lesson08.6-Causal_inference_intro.smd:831 Example: Are Consultants Worth It?
 
 ::: columns
 :::: {.column width=55%}
@@ -234,7 +234,7 @@ digraph Consultancy {
 :::
 
 * Mediators: The Chain Structure
-// From Lesson 08.2
+// From: msml610/lectures_source/Lesson08.4-Causal_networks.smd:741 Mediator Variable
 
 ::: columns
 :::: {.column width=55%}
@@ -269,7 +269,8 @@ digraph Mediator {
 :::
 
 * Colliders Revisited: A Formal Treatment
-// From Lesson 08.2, 08.4
+// From: msml610/lectures_source/Lesson08.4-Causal_networks.smd:1089 Collider
+// From: msml610/lectures_source/Lesson08.6-Causal_inference_intro.smd:973 D-separation
 
 ::: columns
 :::: {.column width=55%}
@@ -307,7 +308,7 @@ digraph Collider {
 :::
 
 * Building a Causal DAG from Domain Knowledge
-// From Lesson 08.2
+// From: msml610/lectures_source/Lesson08.4-Causal_networks.smd:660 Building a Causal DAG
 
 - Nodes are like nouns (price, sales, revenue); edges are like verbs
   (causes, mediates)
@@ -330,7 +331,7 @@ digraph Collider {
 ## From Association to Intervention
 
 * The Do-Operator: Simulating Intervention
-// From Lesson 08.3
+// From: msml610/lectures_source/Lesson08.5-Do_calculus.smd:79 The Do-Operator
 
 ::: columns
 :::: {.column width=55%}
@@ -366,7 +367,7 @@ digraph DoOperator {
 :::
 
 * Randomized Controlled Trials: The Gold Standard
-// From Lesson 08.3
+// From: msml610/lectures_source/Lesson08.5-Do_calculus.smd:167 Randomized Controlled Trials
 
 - @Key idea@: randomizing $X$ is the physical way to perform $do(X)$
   - Random assignment severs every incoming edge into $X$, known and
@@ -383,8 +384,8 @@ digraph DoOperator {
   trial would have given for free
 
 * The Back-Door Criterion
-// From Lesson 08.3
-// From paper [B002] The Book of Why
+// From: msml610/lectures_source/Lesson08.5-Do_calculus.smd:368 Backdoor Criteria
+// From: book_springer/related_books.md:4 The Book of Why
 
 - @Problem@: can $\Pr(Y | do(X))$ be computed from purely observational
   data, without ever randomizing $X$?
@@ -401,7 +402,7 @@ digraph DoOperator {
   computation over purely observational data, rung 1
 
 * Back-Door Adjustment: A Worked Example
-// From Lesson 08.3
+// From: msml610/lectures_source/Lesson08.5-Do_calculus.smd:227 Backdoor Paths: Example
 
 ::: columns
 :::: {.column width=55%}
@@ -434,7 +435,7 @@ digraph BackDoor {
 :::
 
 * When Back-Door Fails: The Front-Door Criterion
-// From Lesson 08.3
+// From: msml610/lectures_source/Lesson08.5-Do_calculus.smd:563 Front-Door Adjustment: Definition
 
 ::: columns
 :::: {.column width=55%}
@@ -472,7 +473,7 @@ digraph FrontDoor {
 :::
 
 * Instrumental Variables: A Third Path
-// From Lesson 08.3
+// From: msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.smd:198 Instrumental Variables (IV)
 
 - @Definition@: an _instrumental variable_ $Z$ affects the treatment $X$
   but has no path to the outcome $Y$ except through $X$
@@ -494,8 +495,8 @@ digraph FrontDoor {
 ## Measuring What Cannot Be Observed
 
 * Potential Outcomes: Rubin's Framework
-// From Lesson 08.4
-// From paper [P063] Estimating Causal Effects of Treatments
+// From: msml610/lectures_source/Lesson08.6-Causal_inference_intro.smd:283 Potential Outcomes
+// From: book_springer/related_papers.md:4 Estimating causal effects of treatments in randomized and nonrandomized studies
 
 - @Definition@: unit $i$ has two _potential outcomes_ under a binary
   treatment: $Y_{1i}$ if treated, $Y_{0i}$ if not
@@ -510,7 +511,7 @@ digraph FrontDoor {
   $\EE[Y_1 - Y_0]$ without ever observing an individual $Y_1 - Y_0$
 
 * The Bias Equation
-// From Lesson 08.4
+// From: msml610/lectures_source/Lesson08.6-Causal_inference_intro.smd:391 The Confounding Bias Equation
 
 - @Problem@: the quantity we can measure, $\EE[Y|T=1] - \EE[Y|T=0]$, is
   not automatically the causal effect $\EE[Y_1 - Y_0]$
@@ -530,7 +531,7 @@ digraph FrontDoor {
   the bias term, by construction
 
 * Average and Conditional Treatment Effects
-// From Lesson 08.4
+// From: msml610/lectures_source/Lesson08.6-Causal_inference_intro.smd:326 Average Treatment Effect
 
 - @Definition@: the _average treatment effect_ is the population-level
   impact of treatment
@@ -548,8 +549,8 @@ digraph FrontDoor {
   personalized policy
 
 * Assumptions Are Not Free
-// From Lesson 08.4
-// From paper [B050] Causal Inference: What If
+// From: msml610/lectures_source/Lesson08.6-Causal_inference_intro.smd:581 Independence Property (Aka Unconfoundedness)
+// From: book_springer/related_books.md:15 Causal Inference: What If
 
 - Every identification result in this lesson, backdoor, frontdoor, or
   randomization, rests on assumptions that do not verify themselves from
@@ -570,7 +571,7 @@ digraph FrontDoor {
 ## Why Point Estimates Are Not Enough
 
 * Posteriors, Not Point Estimates
-// From Lesson 08.5
+// From: msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.smd:12 Posterior-Based Decisions
 
 - Point estimates hide how much a business could be wrong, and conflate
   irreducible randomness with what more data could fix
@@ -584,7 +585,7 @@ digraph FrontDoor {
   width of that posterior is itself decision-relevant
 
 * Variational Inference: Scaling Bayesian Updating
-// From Lesson 11.2
+// From: msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.smd:1899 Variational Inference (VI)
 
 - @Problem@: an exact posterior $\Pr(\theta | \mathcal{D})$ is rarely
   available in closed form once the model has any real complexity
@@ -600,7 +601,7 @@ digraph FrontDoor {
   inference are developed in full in Part II
 
 * Normalizing Flows: Flexible Posteriors
-// From Lesson 11.2
+// From: msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.smd:1754 Flow-Based Generative Models (Normalizing Flows)
 
 - @Problem@: a variational family that is too simple, e.g., a single
   Gaussian, can badly underfit a posterior with skew or multiple modes
@@ -615,8 +616,8 @@ digraph FrontDoor {
   variational inference
 
 * Calibration and Conformal Prediction
-// From Lesson 11.2
-// From paper [P069] Deep Ensembles
+// From: msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.smd:1862 Calibration of Neural Networks
+// From: book_springer/related_papers.md:49 Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles
 
 - @Definition@: a model is _calibrated_ if its stated confidence matches
   its actual accuracy
@@ -631,7 +632,8 @@ digraph FrontDoor {
   trust the width of an interval, not just its center
 
 * Decision Readiness Under Uncertainty
-// From Lesson 08.5, 11.1
+// From: msml610/lectures_source/Lesson08.6-Causal_inference_intro.smd:581 Independence Property (Aka Unconfoundedness)
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:1076 Aleatoric vs Epistemic Uncertainty
 
 - @Problem@: not every causal claim is safe to act on, even with a
   posterior attached
@@ -648,7 +650,7 @@ digraph FrontDoor {
 # Roadmap
 
 * Causal Models as the Foundation for Decisions
-// From Lesson 11.1
+// From: msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd:199 Causal Models for Decisions
 
 - A causal model built with the tools in this lesson supplies exactly what a
   decision needs and a predictive model cannot:
