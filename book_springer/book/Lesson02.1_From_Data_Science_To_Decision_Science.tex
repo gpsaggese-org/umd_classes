@@ -1,5 +1,5 @@
-% git_hash=f15bc6b9, timestamp=2026-07-15 14:41:12 EDT
-% book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.txt
+% git_hash=d53d1b9f, timestamp=2026-08-21 15:27:59 EDT
+% book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd
 
 \chapter{Introduction}
 
@@ -7,7 +7,7 @@
 \section{Why Decisions, Not Predictions}
 \label{chap:why-decisions-not-predictions}
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:23 '* From Data Science to Decision Science'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:24 '* From Data Science to Decision Science'
 \subsection{From Data Science to Decision Science}
 \label{sec:data-science-to-decision-science}
 
@@ -118,7 +118,7 @@ old predictive metrics while adopting the new vocabulary. The gap between data s
 and decision science is fundamentally a gap in what gets optimized and what gets
 output, and closing it is the organizing theme of this book
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:46 '* Causal vs Predictive Questions'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:48 '* Causal vs Predictive Questions'
 \textbf{Causal vs Predictive Questions} --- The distinction between data science
 and decision science becomes concrete once it is applied to a specific business
 question, because almost every business question has two forms: a predictive
@@ -171,7 +171,7 @@ questions need only observational data and support monitoring, while causal ques
 need causal models or experiments and support the decisions and policy design that
 monitoring alone cannot provide
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:70 '* The Analytics Maturity Ladder'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:72 '* The Analytics Maturity Ladder'
 \textbf{The Analytics Maturity Ladder} --- Organizations do not arrive at decision
 science all at once; they climb toward it through four levels of increasing
 analytical sophistication, summarized in Table~\ref{tab:analytics-maturity-ladder}
@@ -183,51 +183,51 @@ analytical sophistication, summarized in Table~\ref{tab:analytics-maturity-ladde
   \begin{tabular}{p{2.3cm}p{4.1cm}p{4.9cm}}
     \hline
     \noalign{\smallskip} Level                                      & Question             & Tools                   \\
-    \noalign{\smallskip}\svhline\noalign{\smallskip} 0. Descriptive & What happened?       & Dashboards, reports     \\
-    1. Predictive                                                   & What will happen?    & ML, forecasting         \\
-    2. Causal                                                       & Why? What if we act? & DAGs, do-calculus       \\
-    3. Decision                                                     & What should we do?   & Causal models + utility \\
+    \noalign{\smallskip}\svhline\noalign{\smallskip} 1. Descriptive & What happened?       & Dashboards, reports     \\
+    2. Predictive                                                   & What will happen?    & ML, forecasting         \\
+    3. Causal                                                       & Why? What if we act? & DAGs, do-calculus       \\
+    4. Decision                                                     & What should we do?   & Causal models + utility \\
     \noalign{\smallskip}                                             \hline
     \noalign{\smallskip}
   \end{tabular}
 \end{table}
 
-Level~0 is the dashboard: it summarizes what already happened, with no attempt to
-anticipate the future. Level~1 is where most of the modern machine learning
-industry lives, forecasting what will happen next from historical patterns Level~2
+Level~1 is the dashboard: it summarizes what already happened, with no attempt to
+anticipate the future. Level~2 is where most of the modern machine learning
+industry lives, forecasting what will happen next from historical patterns Level~3
 asks why something happened and what would happen under an intervention,
 requiring the causal machinery, directed acyclic graphs and do-calculus, that a
-purely predictive pipeline never needed. Level~3 closes the loop by combining a causal
+purely predictive pipeline never needed. Level~4 closes the loop by combining a causal
 model with an explicit utility function to recommend what to do, not just what
 to expect
 
-The problem this ladder exposes is that most organizations are stuck at Level~1:
+The problem this ladder exposes is that most organizations are stuck at Level~2:
 they have invested heavily in forecasting and prediction infrastructure, and their
 models predict well, yet nobody in the pipeline can answer what the organization
 should actually do differently as a result. Part of why organizations plateau there
 is momentum: the tooling, the hiring pipeline, and the internal expertise built
-up around Level~1 all reinforce building yet another predictive model, since predictive
-modeling is the skill the team already has, while Level~2 and Level~3 work calls
+up around Level~2 all reinforce building yet another predictive model, since predictive
+modeling is the skill the team already has, while Level~3 and Level~4 work calls
 for a different set of tools, causal graphs, do-calculus, and utility functions,
 that a typical machine learning curriculum does not emphasize
 
-The jump from Level~1 to Levels~2 and~3 is not an incremental improvement in model
+The jump from Level~2 to Levels~3 and~4 is not an incremental improvement in model
 accuracy; it is a change in what kind of question the pipeline is built to
-answer at all. Level~2 requires being explicit about the causal structure connecting
+answer at all. Level~3 requires being explicit about the causal structure connecting
 actions to outcomes, structure a purely predictive model never needs to
-represent, let alone get right. Level~3 requires, in addition, an explicit
+represent, let alone get right. Level~4 requires, in addition, an explicit
 utility function that says how to weigh one outcome against another, which forces
 a business to make its trade-offs precise rather than leaving them implicit in whichever
-proxy metric happened to be easiest to log. Climbing to Levels~2 and~3 is the
+proxy metric happened to be easiest to log. Climbing to Levels~3 and~4 is the
 jump this book makes, moving the reader from building prediction pipelines to building
 decision pipelines, and every subsequent chapter contributes a piece of that
 climb
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:94 '# The Cost of Ignoring Causality'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:96 '# The Cost of Ignoring Causality'
 \section{The Cost of Ignoring Causality}
 \label{chap:cost-ignoring-causality}
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:96 '## When Correlation Misleads'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:98 '## When Correlation Misleads'
 \subsection{When Correlation Misleads}
 \label{sec:when-correlation-misleads}
 
@@ -238,7 +238,7 @@ tends to co-occur with what; it does not tell you what happens if you reach in a
 change $X$ yourself, and it says nothing at all about the cases history never
 let you observe
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:98 '* Correlation Encodes Confounding as Causation'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:100 '* Correlation Encodes Confounding as Causation'
 \textbf{Correlation Encodes Confounding as Causation} --- A purely predictive
 model learns $\Pr(Y \mid X)$ from historical data, and in doing so it absorbs every
 association present in that data, whether or not the association reflects a
@@ -273,7 +273,7 @@ responsible for $X$ taking that value. Acting on $\Pr(Y \mid X)$ as if it were $
 the gap between the two is not a modeling error to be fixed with more data, but a
 structural feature of observational data that only a causal model can address
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:140 '* Missing Interventions and Counterfactuals'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:167 '* Missing Interventions and Counterfactuals'
 \textbf{Missing Interventions and Counterfactuals} --- A correlation model answers
 \emph{``what is?''}, and it can be pushed, with enough data, to answer \emph{``what
 is likely to be?''}. It cannot answer \emph{``what if?''} or \emph{``why?''}, no
@@ -307,12 +307,13 @@ counterfactual questions require a causal model, not a more accurate predictor, 
 accuracy on observed data says nothing about behavior under an action the data never
 contained
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:160 '* Selection Bias and the Missing Counterfactual'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:187 '* Selection Bias and the Missing Counterfactual'
 \textbf{Selection Bias and the Missing Counterfactual} --- A separate and more basic
 problem sits upstream of confounding: historical data records only the decision
-that was actually made, never the alternative that was not. This is a missing-counterfactual
-problem that exists before any modeling begins, built into the data-collection process
-itself rather than introduced by a poor choice of model
+that was actually made, never the alternative that was not. Confounding biases
+the \emph{relationship} between variables that were recorded; selection bias comes
+from which units got recorded at all, a problem baked into the data before any model
+is fit, rather than introduced by a poor choice of model
 
 Loan approval data is the clearest case. A bank's historical records show repayment
 outcomes only for applicants who were approved; applicants who were rejected
@@ -342,7 +343,7 @@ model can be accurate on the population it happened to observe and still be
 blind to the population the business actually needed to reason about, and no amount
 of tuning on the observed population fixes a gap in what was observed to begin with
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:178 '## Structural Failure Modes'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:205 '## Structural Failure Modes'
 \subsection{Structural Failure Modes}
 \label{sec:structural-failure-modes}
 
@@ -354,7 +355,7 @@ aggregation, illusions created by conditioning on the wrong variable, and the
 discarding of mechanism in favor of whatever the training data happens to
 contain
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:180 '* Interference and Spillovers Across Units'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:207 '* Interference and Spillovers Across Units'
 \textbf{Interference and Spillovers Across Units} --- Standard machine learning
 and standard causal inference both typically assume that each unit's outcome
 depends only on that unit's own treatment, an assumption sometimes called the stable
@@ -391,8 +392,8 @@ matter how accurate the underlying predictive model of each individual outcome
 is. Interference has to be modeled explicitly, through network structure or
 market-clearing constraints, rather than assumed away
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:197 '* Simpson's Paradox: When Aggregates Lie'
-\textbf{Simpson's Paradox: When Aggregates Lie}
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:224 '* Simpson's Paradox'
+\textbf{Simpson's Paradox}
 
 \begin{definition}
   \emph{Simpson's paradox} occurs when a trend present within every subgroup of
@@ -422,13 +423,16 @@ combined
 Reading Table~\ref{tab:simpsons-paradox} row by row, the drug helps male
 patients, 93\% versus 87\%, and it helps female patients, 73\% versus 69\%. Yet
 the combined row shows the drug apparently hurting, 78\% versus 83\%. The
-reversal happens because gender correlates with both treatment choice and
-baseline recovery rate: in this data, male patients, who recover at a higher baseline
-rate regardless of the drug, are also more likely to have received the drug, so pooling
-the groups lets gender's effect on the outcome masquerade as the drug's effect
+reversal happens because gender confounds both treatment assignment and the
+outcome: female patients, who recover less easily than male patients regardless
+of the drug, receive the drug far more often, 263 of the 350 treated patients,
+versus only 87 of 350 for male patients, so pooling stacks a mostly-female
+drug group against a mostly-male no-drug group, and the harder-to-treat gender
+dominates the ``drug'' column and reverses the sign of an effect that helps
+everyone
 
 The paradox is easy to dismiss as a curiosity, yet the pooled row in Table~\ref{tab:simpsons-paradox}
-is exactly the number a Level~0 dashboard would surface: an overall recovery
+is exactly the number a Level~1 dashboard would surface: an overall recovery
 rate, computed without regard to any subgroup structure, because that is the
 number that is cheapest to compute and easiest to put in a single-line summary. Nothing
 about the computation is wrong; the aggregate recovery rate really is what it
@@ -443,8 +447,8 @@ segment it is actually applied to. This is why a causal analysis needs to
 identify the right level of stratification, guided by the causal structure connecting
 treatment, subgroup, and outcome, before trusting an aggregate number
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:247 '* Collider Bias: Conditioning Creates Illusions'
-\textbf{Collider Bias: Conditioning Creates Illusions}
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:296 '* Berkson's Paradox'
+\textbf{Berkson's Paradox}
 
 \begin{definition}
   A \emph{collider} is a variable that is influenced by two or more independent
@@ -484,8 +488,8 @@ the right one, is by itself enough to manufacture a correlation with no causal m
 at all. This is why deciding what to control for in an analysis requires knowing
 the causal structure, not just adding available covariates to a regression
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:267 '* Discarding Domain Knowledge and Mechanism'
-\textbf{Discarding Domain Knowledge and Mechanism} --- A purely correlation-based
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:316 '* Discarding Domain Knowledge and Mechanisms'
+\textbf{Discarding Domain Knowledge and Mechanisms} --- A purely correlation-based
 pipeline discards known structure, whether physics, economics, or an explicit
 causal graph, in favor of whatever pattern happens to be present in the training
 data. Standard supervised learning offers no principled way to inject such
@@ -516,7 +520,7 @@ amount of additional training data of the same kind fixes the problem, since
 more data of the same kind only reinforces the spurious pattern rather than
 correcting it
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:304 '# The Cost of Ignoring Uncertainty'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:376 '# The Cost of Ignoring Uncertainty'
 \section{The Cost of Ignoring Uncertainty}
 \label{chap:cost-ignoring-uncertainty}
 
@@ -530,7 +534,7 @@ two different sources of uncertainty that get flattened into one, the absence of
 any mechanism for a model to admit it does not know, and the statistical traps that
 let unwarranted confidence accumulate silently over a project
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:306 '* Point Estimates Without Error Bars'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:378 '* Point Estimates Without Error Bars'
 \textbf{Point Estimates Without Error Bars} --- Most business problems are, in
 the relevant sense, small-data problems: the number of comparable historical
 episodes, a product launch, a pricing change, a new market, is small relative to
@@ -555,6 +559,15 @@ because the spread is not implied by the point estimate; it has to be estimated 
 reported alongside it, using tools, confidence intervals, Bayesian posteriors, ensembles,
 that a purely point-estimate pipeline was never asked to produce
 
+The same point number can imply opposite actions once its uncertainty is made
+explicit. Take a prediction that a stock's price will rise 1\% If that estimate
+carries a 95\% confidence interval of $1\% \pm 2\%$, the true return could easily be
+negative, and the sensible response is to ignore the prediction. If the same point
+estimate instead carries an interval of $1\% \pm 0.01\%$, the outcome is all but
+certain, and the sensible response is to buy. The point forecast is identical,
+1\%, in both cases; only the width of the interval around it tells the
+decision-maker which of the two opposite actions is the right one
+
 The small-data character of most business problems makes this worse, not better,
 because the usual intuition that more data shrinks uncertainty automatically applies
 most cleanly in the large-sample regime, and a great many consequential business
@@ -566,15 +579,16 @@ look identical whether it rests on a thousand comparable historical episodes or 
 three. A decision-maker needs the spread of an estimate at least as much as its
 center, since the center alone cannot distinguish a safe bet from a gamble
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:326 '* Epistemic vs Aleatoric Uncertainty Conflated'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:398 '* Epistemic vs Aleatoric Uncertainty Conflated'
 \textbf{Epistemic vs Aleatoric Uncertainty Conflated} --- Even when a model does
 report some notion of uncertainty, standard pipelines typically collapse two
 genuinely different kinds of uncertainty into a single number \emph{Aleatoric} uncertainty
 is irreducible randomness in the outcome itself: even with a perfect model and
 infinite data, the outcome would still vary, because the underlying process is
-stochastic \emph{Epistemic} uncertainty, by contrast, comes from not having seen
-enough data, or from using the wrong model; it reflects what the model does not yet
-know, rather than randomness inherent to the world
+stochastic, as with the outcome of a fair coin flip. \emph{Epistemic} uncertainty,
+by contrast, comes from not having seen enough data, or from using the wrong model;
+it reflects what the model does not yet know, rather than randomness inherent to the
+world, as with a rare disease for which only ten cases have ever been recorded
 
 The distinction matters because the two kinds of uncertainty call for different responses,
 and without separating them a model cannot flag the situation where it is most
@@ -602,7 +616,7 @@ is a property of the outcome, not of the model's knowledge; treating both kinds 
 uncertainty as a single number misleads not just the current decision but also the
 decision of when it is worth collecting more data at all
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:349 '* No Abstention: Systems That Never Say "I Don't Know"'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:421 '* No Abstention: Systems That Never Say "I Don't Know"'
 \textbf{No Abstention: Systems That Never Say ``I Don't Know''} --- A standard classifier
 or regressor is built to always return an answer. Given any input, including an input
 that falls far outside the range of anything the model was trained on, the model
@@ -639,7 +653,7 @@ don't know''} cannot be trusted with precisely the cases that matter most, since
 those are disproportionately the cases where the training data gave it the least
 evidence to go on
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:363 '* Overfitting and the Statistical Significance Traps'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:435 '* Overfitting and the Statistical Significance Traps'
 \textbf{Overfitting and the Statistical Significance Traps} --- Without a prior
 or some other constraint on how closely a model is allowed to fit its training
 data, nothing bounds how much a model can overfit, memorizing noise in the
@@ -685,11 +699,11 @@ not one mistake made in one run; it accumulates from every repeated look taken
 at the same data, which is why disciplined experimental protocol, not just a
 better model, is what keeps it in check
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:380 '# The Cost of Ignoring the Business Objective'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:452 '# The Cost of Ignoring the Business Objective'
 \section{The Cost of Ignoring the Business Objective}
 \label{chap:cost-ignoring-business-objective}
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:382 '## Proxies, Costs, and Trade-offs'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:454 '## Proxies, Costs, and Trade-offs'
 \subsection{Proxies, Costs, and Trade-offs}
 \label{sec:proxies-costs-tradeoffs}
 
@@ -698,7 +712,7 @@ it is a proxy rather than the true business goal, what happens when it treats
 every error as equally costly, and what happens when a real decision has to trade
 off several goals at once rather than optimize a single scalar
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:384 '* Optimizing the Wrong Objective'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:456 '* Optimizing the Wrong Objective'
 \textbf{Optimizing the Wrong Objective} --- Machine learning models chase whatever
 objective they are given, and that objective is frequently a proxy metric, clicks,
 engagement time, predictive accuracy, rather than the underlying business goal
@@ -736,7 +750,7 @@ the intent behind choosing the proxy in the first place, which makes the choice
 of training objective one of the highest-leverage decisions in building a model,
 not a minor implementation detail to settle after the modeling is done
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:401 '* Symmetric Losses for Asymmetric Errors'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:473 '* Symmetric Losses for Asymmetric Errors'
 \textbf{Symmetric Losses for Asymmetric Errors} --- Standard loss functions, log-loss,
 mean squared error, treat every unit of error identically: a false positive costs
 the same as a false negative of the same magnitude, and an overestimate costs
@@ -744,7 +758,12 @@ the same as an equally sized underestimate Real business errors are almost never
 symmetric in this way. A fraud false negative, letting a fraudulent transaction
 through, and a fraud false positive, blocking a legitimate customer's purchase, impose
 very different costs on the business, and treating them as interchangeable in
-the loss function bakes a mismatch into the model from the start
+the loss function bakes a mismatch into the model from the start. Stock return
+prediction shows the same asymmetry from a different angle: a loss on a position
+is bounded, since it cannot fall below losing the entire investment, but a run of
+gains is not bounded in the same way, so a loss function that scores an
+overestimate and an underestimate of the same size identically misrepresents a
+risk-reward profile that is asymmetric from the start
 
 A fraud model that reaches 95\% accuracy sounds like a success by the standard
 metric, but if that accuracy comes from a model that blocks half of all legitimate
@@ -768,7 +787,7 @@ an explicit decision threshold chosen to reflect the relative costs, rather than
 bolted on after deployment as a post-hoc adjustment to a model that was never
 asked to care about the difference in the first place
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:423 '* Multi-Objective Decisions Under Constraints'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:495 '* Multi-Objective Decisions Under Constraints'
 \textbf{Multi-Objective Decisions Under Constraints} --- Real decisions rarely
 optimize one thing at a time; they trade off several competing goals simultaneously,
 and they do so under hard constraints of budget, capacity, or legal requirement
@@ -802,7 +821,7 @@ baking in someone's judgment about the relative weights instead of surfacing
 that judgment where it can be examined, debated, and adjusted by the people
 accountable for the decision
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:439 '## From Scores to Actionable Decisions'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:511 '## From Scores to Actionable Decisions'
 \subsection{From Scores to Actionable Decisions}
 \label{sec:scores-to-actionable-decisions}
 
@@ -812,7 +831,7 @@ not enough if it sits inside a pipeline optimized piece by piece rather than as 
 whole. The next two sections take up these two remaining gaps between a
 technically sound model and a usable decision
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:441 '* Black-Box Scores Are Not Recommendations'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:513 '* Black-Box Scores Are Not Recommendations'
 \textbf{Black-Box Scores Are Not Recommendations} --- A black-box score ranks
 units against one another but names no lever and gives no reason \emph{why} a given
 unit received the score it did. A churn score of 0.8 tells a business that a
@@ -844,7 +863,7 @@ predictive score provides on its own. Moving from scoring to recommending
 requires causal reasoning about the effect of specific interventions, not just a
 ranking of who is most at risk
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:462 '* The Cost of Solving Sub-Problems Separately'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:534 '* The Cost of Solving Sub-Problems Separately'
 \textbf{The Cost of Solving Sub-Problems Separately} --- A decision pipeline is frequently
 built as a chain of smaller pieces, each optimized on its own: a prediction model
 trained to minimize forecast error, followed by a separate, often hand-written rule
@@ -875,11 +894,11 @@ the decision the pipeline as a whole is meant to produce, since the seam between
 the pieces, here the fixed reorder rule, is exactly where the objective the
 business cares about can leak out of the optimization entirely
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:480 '# The Cost of Ignoring Dynamics and Feedback'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:552 '# The Cost of Ignoring Dynamics and Feedback'
 \section{The Cost of Ignoring Dynamics and Feedback}
 \label{chap:cost-ignoring-dynamics-feedback}
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:482 '## A World That Reacts'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:554 '## A World That Reacts'
 \subsection{A World That Reacts}
 \label{sec:world-that-reacts}
 
@@ -889,7 +908,7 @@ fit to can shift, the shift can compound into a feedback loop, and in the
 sharpest case the prediction itself becomes the cause of the outcome it was
 meant to forecast
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:484 '* The Static-World Assumption Breaks'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:556 '* The Static-World Assumption Breaks'
 \textbf{The Static-World Assumption Breaks} --- Every decision changes the world
 in some way, and that change breaks the assumption, implicit in almost all
 standard machine learning, that the distribution a model was trained on will still
@@ -906,11 +925,24 @@ different mix of cases than it was trained on. \emph{Label shift} occurs when
 the outcome distribution $\Pr(Y)$ itself changes, independent of any change in how
 inputs map to outcomes
 
-A fraud model trained on last year's fraud rate illustrates the danger of the
-third kind. As attackers adopt new tactics, the base rate and pattern of fraud
-shifts, a label shift the model has no built-in way to detect on its own, since
-the model only knows the fraud patterns it was shown during training and has no
+A card-fraud model trained on last year's transactions can suffer all three kinds
+of shift at once, each traceable to a different cause. Attackers adopting new
+tactics is a concept shift: a transaction pattern that used to be safe now
+signals fraud, changing $\Pr(Y \mid X)$ itself. Contactless payments becoming far
+more common is a covariate shift: the input distribution $\Pr(X)$ moves even
+though fraud tactics on that channel are unchanged. A data breach that leaks
+card numbers and pushes up the overall fraud rate is a label shift: the outcome
+distribution $\Pr(Y)$ rises on its own, independent of any change in how inputs
+map to outcomes. The model has no built-in way to detect any of the three on its
+own, since it only knows the patterns it was shown during training and has no
 signal that the world it is now scoring has moved on from that training period
+
+A house-price model trained on pre-pandemic listings shows the same three shifts
+playing out in a completely different market. Remote work permanently changes
+what commute distance is worth to a buyer, a concept shift in how a feature maps
+to price, while a move to lower interest rates raises average sale prices across
+the board, a label shift in the outcome itself, with neither shift announcing
+itself as an error in the model that was fit before either change occurred
 
 The three kinds of shift are worth keeping separate because they call for different
 monitoring signals: concept shift shows up as a change in the relationship
@@ -926,7 +958,7 @@ gracefully under all three kinds of shift, because mechanisms tend to be far mor
 stable across a distribution shift than the correlational patterns a purely predictive
 model relies on
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:514 '* Feedback Loops and Bias Amplification'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:586 '* Feedback Loops and Bias Amplification'
 \textbf{Feedback Loops and Bias Amplification} --- Predictions do not just describe
 the world; once deployed, they act on it, and the world they act on then
 reshapes the very data the model is later retrained on This creates a feedback
@@ -960,7 +992,7 @@ purely as a consequence of the model being retrained on the outcomes of its own
 past decisions, which means the bias compounds even if every individual retraining
 step is executed correctly by the standards of ordinary supervised learning
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:535 '* Performativity: When the Prediction Changes the Outcome'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:607 '* Performativity: When the Prediction Changes the Outcome'
 \textbf{Performativity: When the Prediction Changes the Outcome}
 
 \begin{definition}
@@ -980,6 +1012,12 @@ predict, so the score's target is not a fixed quantity waiting to be estimated m
 accurately; it is a quantity that shifts in response to the act of estimating
 and publishing it
 
+A navigation app makes the same effect visible in real time. Predicting a
+particular route as fastest routes many drivers onto it at once, and that surge
+of traffic congests the route until it is no longer the fastest option,
+invalidating the very prediction that attracted the drivers to it in the first
+place
+
 Performativity sharpens the feedback-loop idea from the previous section in one important
 way: a feedback loop can, in principle, be broken by changing what data gets
 logged or by holding the model fixed for a while, since the loop runs through retraining
@@ -994,7 +1032,7 @@ changes the behavior that generates $Y$ in the first place, a possibility that
 standard supervised learning, built around the assumption of a fixed target distribution,
 has no native way to represent
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:552 '## Missing Exploration and Long Horizons'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:624 '## Missing Exploration and Long Horizons'
 \subsection{Missing Exploration and Long Horizons}
 \label{sec:missing-exploration-long-horizons}
 
@@ -1003,7 +1041,7 @@ because it was never allowed to find out: the effect of actions nobody has tried
 the consequences that only appear long after the decision was made, and the responses
 of people who learn how the model scores them and adjust their behavior accordingly
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:554 '* No Exploration: Trapped in the Logged Policy'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:626 '* No Exploration: Trapped in the Logged Policy'
 \textbf{No Exploration: Trapped in the Logged Policy} --- A model trained purely
 on observational data never experiments; it only ever sees the outcomes of
 whatever policy was actually in force when the training data was logged, and it stays
@@ -1035,7 +1073,7 @@ actually trying the untried price, action, or policy, on at least a controlled s
 of cases, which is exactly the kind of exploration a purely observational
 pipeline never performs
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:569 '* Delayed and Long-Horizon Effects'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:641 '* Delayed and Long-Horizon Effects'
 \textbf{Delayed and Long-Horizon Effects} --- A model optimized for an immediate
 proxy metric has no visibility into downstream outcomes that only materialize
 later, and consequently no way to assign credit or blame across time for the outcomes
@@ -1050,6 +1088,13 @@ tickets without resolving the issue, repeat complaints from the same customers a
 a gradual erosion of trust in the support function, shows up only months later, and
 it shows up in a completely different metric, such as churn or renewal rate, than
 the one the team was originally optimized against
+
+A collections agency optimized to maximize dollars recovered this quarter shows the
+same pattern with the sign reversed: it pushes borrowers into aggressive repayment
+plans that look like a win the moment they are signed. Months later, a share of
+those borrowers default on the plan they were pushed into, so this quarter's extra
+recovery is repaid, later, with a lower lifetime repayment rate and reputational
+damage that never shows up in the metric the agency was optimized against
 
 The underlying difficulty is a credit-assignment problem: even once the long-horizon
 outcome is finally observed, it is no longer obvious which of the many earlier
@@ -1067,7 +1112,7 @@ about in the end. This means a decision system needs some mechanism for creditin
 today's action with tomorrow's consequence, not just today's easily observed
 result
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:590 '* Strategic and Adversarial Response'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:662 '* Strategic and Adversarial Response'
 \textbf{Strategic and Adversarial Response} --- Once a model is deployed and its
 scores start to matter, the people being scored have an incentive to learn how the
 model works and to adjust their behavior to score better under it, whether or
@@ -1081,7 +1126,11 @@ game the specific features the model relies on rather than to improve the
 underlying creditworthiness the model is meant to assess. Publishing details of a
 search-ranking algorithm invites keyword-stuffing and other manipulations aimed at
 the ranking signal itself, rather than at improving the underlying content
-quality the ranking was designed to surface
+quality the ranking was designed to surface. A tax-audit model that flags returns
+reporting income above a threshold produces the same response once the threshold
+becomes known: self-employed filers bunch their reported income just below it,
+adjusting the number they report rather than the underlying income the rule was
+meant to verify
 
 This is a close relative of Goodhart's law introduced earlier in this lesson,
 but it is worth separating as its own failure mode because the mechanism is
@@ -1103,11 +1152,11 @@ because the training data reflects a world in which the agents had not yet
 adapted, and adaptation is precisely what a deployed, consequential model
 invites
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:608 '# Why This Matters'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:680 '# Why This Matters'
 \section{Why This Matters}
 \label{chap:why-this-matters}
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:610 '## Roadmap'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:682 '## Roadmap'
 \subsection{Roadmap}
 \label{sec:why-this-matters-roadmap}
 
@@ -1115,7 +1164,7 @@ The lesson closes by pulling back from the four individual costs to ask why they
 matter together, what they share as a root cause, and where the rest of the book
 goes to address them
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:612 '* Why AI Projects Fail'
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:684 '* Why AI Projects Fail'
 \textbf{Why AI Projects Fail} --- Most AI project failures are not, on close
 inspection, modeling failures; they are framing failures, cases where the model itself
 works as intended but was pointed at the wrong problem from the start. Four
@@ -1159,14 +1208,21 @@ from the start. An accurate model that answers the wrong question is a failed pr
 however good its metrics look on a dashboard, because the dashboard is measuring
 fit to a proxy, not success at the decision the business actually needed made
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:626 '* Four Costs, One Root Cause'
-\textbf{Four Costs, One Root Cause} --- The four costs surveyed across this
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:698 '* The Root Cause of the Four Costs'
+\textbf{The Root Cause of the Four Costs} --- The four costs surveyed across this
 lesson, ignoring causality, ignoring uncertainty, ignoring the business objective,
 and ignoring dynamics, can look like four unrelated engineering gaps, each
 requiring its own separate fix. They share a single root cause. Each one arises
 from optimizing prediction accuracy on a fixed distribution, instead of optimizing
 decision quality on a distribution that the decision itself changes once it is acted
-upon
+upon. This book addresses all four costs together with the same causal and
+probabilistic reasoning: every technique introduced in a later chapter plugs into
+one recurring loop,
+\begin{equation}
+  \label{eq:decision-loop}\text{data}\to \text{model}\to \text{policy}\to \text{action}
+  \to \text{feedback}\;,
+\end{equation}
+with the feedback arrow closing back on the data that trains the next model
 
 Causality is ignored because a fixed-distribution predictor never needs to
 distinguish correlation from mechanism to fit its training data well, as Chapter~\ref{chap:cost-ignoring-causality}
@@ -1192,47 +1248,50 @@ bolted onto an existing pipeline; it is a single shift in what the pipeline is b
 to optimize, from prediction accuracy on data already collected to decision
 quality on the consequences the decision itself sets in motion
 
-% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:657 '* Roadmap: Where the Book Goes From Here'
-\textbf{Roadmap: Where the Book Goes From Here} --- This lesson has catalogued
-what a purely predictive pipeline misses: causal mechanism, calibrated
-uncertainty, an explicit business objective, and an accounting for the dynamics
-a decision sets off. The rest of the book builds the pipeline that does not miss
-these things, organized into four parts that build on one another
+% From: book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd:754 '* Book Roadmap'
+\textbf{Book Roadmap} --- This lesson has catalogued what a purely predictive
+pipeline misses: causal mechanism, calibrated uncertainty, an explicit business
+objective, and an accounting for the dynamics a decision sets off. The rest of
+the book builds the pipeline that does not miss these things, organized into
+four parts that build on one another
 
 \begin{itemize}
-  \item \textbf{Part~II} supplies the probabilistic and causal tools the later
-    parts depend on: Gaussian processes, variational inference, normalizing flows,
-    and causal discovery
+  \item \textbf{Part~II: Advanced Modeling Theory \& Tools} supplies the
+    machinery the later parts depend on: knowledge representation, probabilistic
+    machine learning (Bayesian inference, uncertainty), and causal machine
+    learning (structural causal models, do-calculus, causal discovery)
 
-  \item \textbf{Part~III} turns those tools into single-step decisions, covering
-    decision theory, policy learning, and partial identification
+  \item \textbf{Part~III: Data} turns domain knowledge into causal DAGs and
+    causal data pipelines, and confronts the selection bias and distribution
+    shift surveyed in this chapter
 
-  \item \textbf{Part~IV} extends the framework to multi-step and dynamic
-    decisions, introducing causal world models, causal reinforcement learning, and
-    the feedback loops surveyed in this chapter
+  \item \textbf{Part~IV: Decision-Making Theory \& Tools} turns causal models
+    into actions: decision theory, the taxonomy of decision problems, simple
+    decisions such as bandits and reinforcement learning, complex decisions such
+    as policy gradients and multi-agent settings, and agentic causal reasoning
 
-  \item \textbf{Part~V} covers deploying, monitoring, and governing the
-    resulting decision systems once they are running in production
+  \item \textbf{Part~V: Implementation, Deployment \& Governance} covers
+    stakeholder alignment, deployment, monitoring, and adaptation, and trust,
+    explainability, fairness, and governance
 \end{itemize}
 
 Each part picks up where the previous one leaves off. Part~II's probabilistic and
 causal tools supply the representational machinery, a way to express uncertainty
 and a way to express causal structure, that the earlier chapters showed a standard
-predictive pipeline lacks. Part~III then shows how to use that machinery to make
-a single decision well, choosing one action under known uncertainty and a stated
-objective. Part~IV relaxes the single-step assumption, since most real decisions
-are not made once and forgotten but repeated over time in a world that reacts,
-exactly the dynamics surveyed in Chapter~\ref{chap:cost-ignoring-dynamics-feedback}
-Part~V closes the loop back to practice, since a decision system that is well designed
-on paper still has to be deployed, watched, and adjusted once it is running against
-real data it can no longer fully control
+predictive pipeline lacks. Part~III then turns that machinery on the data itself,
+building the causal DAGs and data pipelines a decision needs while confronting
+head-on the selection bias and distribution shift that Chapter~\ref{chap:cost-ignoring-causality}
+and Chapter~\ref{chap:cost-ignoring-dynamics-feedback} showed a purely observational
+pipeline cannot see past on its own. Part~IV then puts the machinery and the data
+to work choosing actions, from a single simple decision to the multi-step, multi-agent,
+and agentic settings that the feedback loops and strategic responses of
+Chapter~\ref{chap:cost-ignoring-dynamics-feedback} demand. Part~V closes the loop
+back to practice, since a decision system that is well designed on paper still has
+to be deployed, watched, adjusted, and governed once it is running against real
+data it can no longer fully control, and once it is answering to the stakeholders
+Chapter~\ref{chap:cost-ignoring-business-objective} showed a bare score cannot
+satisfy on its own
 
-Every technique introduced in a later chapter plugs into a single recurring loop
-that this lesson has, in effect, been arguing for from its opening section:
-\begin{equation}
-  \label{eq:decision-loop}\text{data}\to \text{model}\to \text{policy}\to \text{action}
-  \to \text{feedback}\;
-\end{equation}
 Every later technique in this book is best understood as strengthening one arrow
 in the loop of Eq.~\eqref{eq:decision-loop}, and the loop closing back on itself,
 through the feedback arrow, is exactly the dynamic that Sect.~\ref{sec:world-that-reacts}

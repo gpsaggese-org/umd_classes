@@ -15,3 +15,13 @@
   ```
 
   > class_scripts/create_book_toc_from_slides.py --max_level 2
+
+- 
+
+```
+claude> /slides.add_references XYZ.smd
+
+slides.criticize
+slides.add_visuals
+slides.review
+```

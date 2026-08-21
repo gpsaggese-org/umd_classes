@@ -104,7 +104,8 @@
 
 - @Problem@: a purely **predictive model** learns $\Pr(Y | X)$ from historical data
   and absorbs any _association_ in the data, _spurious or not_
-  - It answers _"what will happen?"_ (not _"what should we do?"_)
+  [@yao2020survey]
+  - It answers _"what will happen?"_, but not _"what should we do?"_
   - It assumes the world stays fixed, even though the actions informed by the
     prediction themselves will change the world
 
@@ -116,19 +117,43 @@
   - Confounder: hot weather drives both
 ::::
 :::: {.column width=40%}
-// TODO(ai_gp): Make the hot water up and the other 2 down and aligned
 ```graphviz
 digraph IceCreamDrowning {
-    rankdir=LR; nodesep=0.6; ranksep=0.6;
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-    edge [penwidth=1.2, color="#555555", arrowsize=0.9];
+  bgcolor="transparent";
+  pad="0.15";
+  splines=spline;
+  nodesep=0.30;
+  ranksep=0.50;
+  rankdir=TB;
 
-    H [label="Hot Weather", fillcolor="#A6E7F4"];
-    I [label="Ice Cream Sales", fillcolor="#FFD1A6"];
-    D [label="Drownings", fillcolor="#F4A6A6"];
+  node [shape=box,
+        style="rounded,filled",
+        penwidth=1.8,
+        fontname="Helvetica",
+        fontsize=12,
+        margin="0.22,0.14",
+        height=0.50];
 
-    H -> I; H -> D;
-    I -> D [label="  spurious", style=dashed, color="#8C8C8C"];
+  edge [color="#A3B1C0",
+        penwidth=1.3,
+        arrowhead=vee,
+        arrowsize=0.75,
+        fontname="Helvetica",
+        fontsize=10,
+        fontcolor="#7B8794"];
+
+  H [label=<<b>Hot Weather</b><br/><font point-size="10" color="#6B4517">Confounder</font>>,
+     fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+  I [label=<<b>Ice Cream Sales</b><br/><font point-size="10" color="#1F4E79">Observed</font>>,
+     fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+  D [label=<<b>Drownings</b><br/><font point-size="10" color="#6B2A44">Outcome</font>>,
+     fillcolor="#F6E1E8", color="#D98CA8", fontcolor="#6B2A44"];
+
+  { rank=same; I; D; }
+
+  H -> I [label="  drives"];
+  H -> D [label="  drives"];
+  I -> D [style=dashed, penwidth=1.6, color="#C0455B", fontcolor="#C0455B", label="  spurious", constraint=false];
 }
 ```
 ::::
@@ -137,6 +162,7 @@ digraph IceCreamDrowning {
 - @Key idea@:
   - The observational and interventional quantities disagree
     $$\Pr(Y | X) \neq \Pr(Y | do(X))$$
+    [@pearl2009causality]
   - Acting on $\Pr(Y | X)$ is what makes correlation-based decisions backfire
 
 * Missing Interventions and Counterfactuals
@@ -144,14 +170,14 @@ digraph IceCreamDrowning {
 
 - @Problem@: a correlation model answers _"what is?"_, never _"what if?"_ or
   _"why?"_
+  - Two classes of business question stay permanently out of reach
+    [@rubin1974estimating]:
+    - Intervention questions: _"If we cut price 10%, how do units sold and revenue
+      change?"_
+    - Counterfactual questions: _"Would this customer have churned had we offered a
+      discount?"_
 
-- Two classes of business question stay permanently out of reach:
-  - Intervention: _"If we cut price 10%, how do units sold and revenue
-    change?"_
-  - Counterfactual: _"Would this customer have churned had we offered a
-    discount?"_
-
-- @Example@: a tutoring program correlates with higher exam scores
+- @Example@: a tutoring program correlates with higher exam scores, but:
   - _"Does tutoring cause the improvement?"_, or
   - _"Do strong students self-select into it?"_
   - No amount of additional observational data resolves the question
@@ -166,9 +192,10 @@ digraph IceCreamDrowning {
   the alternative
   - E.g., loan data shows outcomes for approved applicants, but not always data
     for rejected ones
-  - Unlike confounding, which biases the _relationship_ between variables
-    that were recorded, this bias comes from which units got recorded at
-    all, a problem baked into the data before any model is fit
+  - **Confounding biases** the _relationship_ between variables
+    that were recorded
+  - **Selection bias** comes from which units got recorded at all, a problem baked
+    into the data before any model is fit
 
 - @Example@: a credit model trained only on approved loans learns what
   predicts repayment among people the bank already trusted
@@ -202,9 +229,7 @@ digraph IceCreamDrowning {
 // From: book_springer/related_papers.md:3 '- [P005] Pearl, "Simpson's Paradox, Confounding, and Collapsibility", 1999'
 
 - @Definition@: the **Simpson's paradox** is a trend within every subgroup
-  reverses once the subgroups are pooled
-
-// TODO(gp): Add a better picture of a Simpson's paradox
+  reverses once the subgroups are pooled [@pearl2009causality]
 
 - @Example@: a drug's recovery rate
 ```{=typst}
@@ -219,18 +244,41 @@ digraph IceCreamDrowning {
 )
 ```
 
-// TODO(gp): Improve
 ```graphviz
 digraph SimpsonsParadox {
-    rankdir=LR; nodesep=0.6; ranksep=0.6;
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-    edge [penwidth=1.2, color="#555555", arrowsize=0.9];
+  bgcolor="transparent";
+  pad="0.15";
+  splines=spline;
+  nodesep=0.30;
+  ranksep=0.50;
+  rankdir=LR;
 
-    G [label="Gender", fillcolor="#A6E7F4"];
-    T [label="Drug Choice", fillcolor="#FFD1A6"];
-    R [label="Recovery", fillcolor="#A6C8F4"];
+  node [shape=box,
+        style="rounded,filled",
+        penwidth=1.8,
+        fontname="Helvetica",
+        fontsize=12,
+        margin="0.22,0.14",
+        height=0.50];
 
-    G -> T; G -> R; T -> R;
+  edge [color="#A3B1C0",
+        penwidth=1.3,
+        arrowhead=vee,
+        arrowsize=0.75,
+        fontname="Helvetica",
+        fontsize=10,
+        fontcolor="#7B8794"];
+
+  G [label=<<b>Gender</b><br/><font point-size="10" color="#6B4517">Confounder</font>>,
+     fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+  T [label=<<b>Drug Choice</b><br/><font point-size="10" color="#1F4E79">Treatment</font>>,
+     fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+  R [label=<<b>Recovery</b><br/><font point-size="10" color="#6B2A44">Outcome</font>>,
+     fillcolor="#F6E1E8", color="#D98CA8", fontcolor="#6B2A44"];
+
+  G -> T [label="  assigns"];
+  G -> R [label="  drives"];
+  T -> R [label="  true effect", penwidth=1.6, color="#1F4E79", fontcolor="#1F4E79"];
 }
 ```
 
@@ -278,23 +326,44 @@ digraph SimpsonsParadox {
 ::: columns
 :::: {.column width=55%}
 - @Example@: a wolf-vs-husky classifier with high test accuracy keys on
-  _snow_ in the background, not on the animal
+  _snow_ in the background, not on the animal [@ribeiro2016why]
   - Accurate for the wrong reason, and worthless once conditions change
 ::::
 :::: {.column width=40%}
-// TODO(gp): Add reference and maybe picture
 ```graphviz
 digraph WolfHusky {
-    rankdir=LR; nodesep=0.6; ranksep=0.6;
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-    edge [penwidth=1.2, color="#555555", arrowsize=0.9];
+  bgcolor="transparent";
+  pad="0.15";
+  splines=spline;
+  nodesep=0.30;
+  ranksep=0.50;
+  rankdir=LR;
 
-    Species [label="True Species\n(Wolf vs Husky)", fillcolor="#A6C8F4"];
-    Snow    [label="Snow in Background", fillcolor="#FFD1A6"];
-    Pred    [label="Classifier Prediction", fillcolor="#F4A6A6"];
+  node [shape=box,
+        style="rounded,filled",
+        penwidth=1.8,
+        fontname="Helvetica",
+        fontsize=12,
+        margin="0.22,0.14",
+        height=0.50];
 
-    Species -> Pred [style=dashed, color="#8C8C8C", label="  ignored"];
-    Snow -> Pred [label="  used instead", penwidth=2.0, color="#B23A48", fontcolor="#B23A48"];
+  edge [color="#A3B1C0",
+        penwidth=1.3,
+        arrowhead=vee,
+        arrowsize=0.75,
+        fontname="Helvetica",
+        fontsize=10,
+        fontcolor="#7B8794"];
+
+  Species [label=<<b>True Species</b><br/><font point-size="10" color="#2E5A3D">Wolf vs Husky</font>>,
+           fillcolor="#DFEDE0", color="#8FB79A", fontcolor="#2E5A3D"];
+  Snow    [label=<<b>Snow in Background</b><br/><font point-size="10" color="#6B2A44">Spurious feature</font>>,
+           fillcolor="#F6E1E8", color="#D98CA8", fontcolor="#6B2A44"];
+  Pred    [label=<<b>Classifier Prediction</b><br/><font point-size="10" color="#1F4E79">Model output</font>>,
+           fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+
+  Species -> Pred [style=dashed, label="  ignored"];
+  Snow -> Pred [label="  used instead", penwidth=1.6, color="#C0455B", fontcolor="#C0455B"];
 }
 ```
 ::::
@@ -391,7 +460,7 @@ digraph WolfHusky {
   the business goal it stands in for (e.g., revenue, retention, or wellbeing)
 
 - @Definition@: **Goodhart's law** states that once a proxy becomes a target,
-  it stops measuring what you care about
+  it stops measuring what you care about [@goodhart1984problems]
 
 - @Example@: a recommender optimized purely for click-through rate learns to
   surface sensational content, growing clicks while eroding long-term
@@ -446,7 +515,7 @@ digraph WolfHusky {
 // From: book_springer/related_papers.md:71 '- [P001] Ribeiro et al., "Why Should I Trust You? Explaining the Predictions of Any Classifier", 2016'
 
 - @Problem@: a black-box score ranks units but names no lever and gives no
-  _why_
+  _why_ [@ribeiro2016why]
 
 - @Example@:
   - A churn score does not say which action prevents churn
@@ -518,7 +587,7 @@ digraph WolfHusky {
 // From: book_springer/related_papers.md:73 '- [P003] Taori et al., "Data Feedback Loops: Model-driven Amplification of Dataset Biases", 2020'
 
 - @Problem@: predictions act on the world and reshape the future data the
-  model will be retrained on
+  model will be retrained on [@taori2023data]
 
 - @Example@:
   - A recommender that surfaces sensational content earns more clicks on that
@@ -539,7 +608,7 @@ digraph WolfHusky {
 // From: book_springer/related_papers.md:75 '- [P099] Liu et al., "Performative Prediction", 2021'
 
 - @Definition@: **performativity** is a prediction that changes the very
-  quantity it predicts
+  quantity it predicts [@perdomo2020performative]
 
 - @Example@: a published credit-risk score moves borrower behavior, which
   moves the true default rate the score was trying to predict
@@ -558,6 +627,7 @@ digraph WolfHusky {
 
 - @Problem@: an observational-only model never experiments, so it stays
   trapped inside the support of whatever policy logged the training data
+  [@bottou2013counterfactual]
   - It cannot learn the effect of an action nobody has ever taken, an
     overlap, or positivity, violation
 
@@ -641,18 +711,42 @@ digraph WolfHusky {
 
 ```graphviz
 digraph DecisionLoop {
-    rankdir=LR; nodesep=0.6; ranksep=0.6;
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-    edge [penwidth=1.2, color="#555555", arrowsize=0.9];
+  bgcolor="transparent";
+  pad="0.15";
+  splines=spline;
+  nodesep=0.30;
+  ranksep=0.50;
+  rankdir=TB;
 
-    Data     [label="Data", fillcolor="#FFD1A6"];
-    Model    [label="Model", fillcolor="#A0D6D1"];
-    Policy   [label="Policy", fillcolor="#A6E7F4"];
-    Action   [label="Action", fillcolor="#A6C8F4"];
-    Feedback [label="Feedback", fillcolor="#B2E2B2"];
+  node [shape=box,
+        style="rounded,filled",
+        penwidth=1.8,
+        fontname="Helvetica",
+        fontsize=12,
+        margin="0.22,0.14",
+        height=0.50];
 
-    Data -> Model -> Policy -> Action -> Feedback;
-    Feedback -> Data [label="  retrain / adapt", style=dashed, color="#8C8C8C"];
+  edge [color="#3A4A5C",
+        penwidth=1.6,
+        arrowhead=vee,
+        arrowsize=0.85,
+        fontname="Helvetica",
+        fontsize=11,
+        fontcolor="#3A4A5C"];
+
+  Data     [label=<<b>Data</b><br/><font point-size="10" color="#6B4517">Observations</font>>,
+            fillcolor="#FBEBD4", color="#D9A85F", fontcolor="#6B4517"];
+  Model    [label=<<b>Model</b><br/><font point-size="10" color="#1F4E39">Learned mechanism</font>>,
+            fillcolor="#B7DDD0", color="#6FA890", fontcolor="#1F4E39"];
+  Policy   [label=<<b>Policy</b><br/><font point-size="10" color="#1F4E79">Decision rule</font>>,
+            fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
+  Action   [label=<<b>Action</b><br/><font point-size="10" color="#6B2A44">Enacted choice</font>>,
+            fillcolor="#F6E1E8", color="#D98CA8", fontcolor="#6B2A44"];
+  Feedback [label=<<b>Feedback</b><br/><font point-size="10" color="#1F4E56">Observed outcome</font>>,
+            fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+
+  Data -> Model -> Policy -> Action -> Feedback;
+  Feedback -> Data [label="  retrain / adapt", style=dashed, constraint=false];
 }
 ```
 
@@ -672,3 +766,10 @@ digraph DecisionLoop {
   - _Part V: Implementation, Deployment & Governance_ covers stakeholder
     alignment, deployment/monitoring/adaptation, and trust, explainability,
     fairness, and governance
+
+* References
+
+```{=typst}
+#set text(size: 0.75em)
+#bibliography("/book_springer/lectures_source/refs.bib", title: none)
+```
