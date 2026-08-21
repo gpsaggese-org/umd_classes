@@ -11,8 +11,26 @@ categories:
 
 # GitHub CLI Shortcuts
 
-A guide to the most useful GitHub CLI commands for managing repositories, issues,
-pull requests, and workflows.
+A short guide to the most useful GitHub CLI commands for managing repositories,
+issues, pull requests, and workflows.
+
+// TODO(ai_gp): Convert into a table
+```
+  auth:          Authenticate gh and git with GitHub
+  browse:        Open repositories, issues, pull requests, and more in the browser
+  issue:         Manage issues
+  pr:            Manage pull requests
+  project:       Work with GitHub Projects.
+  repo:          Manage repositories
+
+  run:           View details about workflow runs
+  workflow:      View details about GitHub Actions workflows
+```
+
+- `gh reference` to show a full reference of all the commands
+  - E.g., `gh reference | vim -`
+
+# Subcommands
 
 ## Authentication & Setup
 
@@ -177,7 +195,25 @@ pull requests, and workflows.
 | `--head <branch>` | Filter by head branch |
 | `--base <branch>` | Filter by base branch |
 
-### Useful One-Liners
+## Working with Multiple Repositories
+
+- List issues from a different repo
+  ```
+  > gh issue list -R owner/another-repo
+  #5     Fix typo in README          open      about 2 hours ago
+  #4     Update API docs             closed    about 1 week ago
+  ```
+
+- Check PRs across repos
+  ```
+  > gh pr list -R owner/repo1 && gh pr list -R owner/repo2
+  repo1:
+  #12    Feature X                   open
+  repo2:
+  #8     Bugfix Y                    open
+  ```
+
+# Useful One-Liners
 
 - List all open PRs with JSON output
   ```
@@ -202,25 +238,7 @@ pull requests, and workflows.
   #37    Refactor data pipeline          open      about 3 days ago
   ```
 
-### Working with Multiple Repositories
-
-- List issues from a different repo
-  ```
-  > gh issue list -R owner/another-repo
-  #5     Fix typo in README          open      about 2 hours ago
-  #4     Update API docs             closed    about 1 week ago
-  ```
-
-- Check PRs across repos
-  ```
-  > gh pr list -R owner/repo1 && gh pr list -R owner/repo2
-  repo1:
-  #12    Feature X                   open
-  repo2:
-  #8     Bugfix Y                    open
-  ```
-
-## Common Workflows
+# Common Workflows
 
 - Finding current GitHub issue from the branch
   ```
@@ -261,7 +279,7 @@ pull requests, and workflows.
   Closed issue #45 in gpsaggese/umd_classes2
   ```
 
-## Additional Resources
+# Additional Resources
 
 - [Official GitHub CLI Documentation](https://cli.github.com/)
 - [GitHub CLI Manual](https://cli.github.com/manual/)
