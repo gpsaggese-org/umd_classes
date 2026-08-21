@@ -11,25 +11,12 @@
   background who build production decision systems
 - Working knowledge of causal basics (DAGs, SCMs, do-calculus) assumed
 
-## Approach of the book
-- Focus on:
-  - The minimal mathematics to understand the problem and the solutions
-  - Intuition
-  - Toy examples
-  - How to make the theory operational
-    - Referring to packages in the Python ecosystem
-  - Jupyter notebooks to back up the intuition with toy and more complex examples
-
-- Provide resources to go one level deep
-  - My classes
-  - References to books and papers
-
 ## Short TOC
 - The sequence of the parts in the books are:
   - Motivation
     - 01, Introduction
     - 02, Why Decisions, Not Predictions
-    - 03, the Cost of Ignoring Causality, Uncertainty and Dynamics
+    - 03, The Cost of Ignoring Causality, Uncertainty and Dynamics
   - Advanced Modeling Theory & Tools
     - 04, Knowledge Representation
     - 05, Probabilistic ML
@@ -77,8 +64,8 @@
 | --------------------------------------------| -------------------------------------------------------------| ------------ | --------- | ---------| -----|
 |                                             |                                                              |              |           |          |      |
 | **Motivation**                              |                                                              |              |           |          |      |
-| 01. Why Decisions, Not Predictions          | Lesson01.01_From_Data_Science_To_Decision_Science.smd        | 50%          |           |          |      |
-| 02. The Cost of Ignoring Causality          | Lesson01.02_Integrating_Causality_And_Probability_in_ML.smd  |              |           |          |      |
+| 01. Why Decisions, Not Predictions          | Lesson01.1_From_Data_Science_To_Decision_Science.smd        | 50%          |           |          |      |
+| 02. The Cost of Ignoring Causality          | Lesson02.1_Integrating_Causality_And_Probability_in_ML.smd  |              |           |          |      |
 | **Advanced Modeling Theory & Tools**        |                                                              |              |           |          |      |
 | 04. Knowledge Representation                | MSML610 Slides                                               |              |           |          |      |
 | 05. Probalistic ML                          | MSML610 Slides                                               |              |           |          |      |
@@ -243,17 +230,6 @@ msml610/tutorials/L12_reinforcement_learning/L12_02_gridworld_4x3_gymnasium.ipyn
     feedback loops, why stages matter), book organization (five-part
     structure, audience/prerequisites, chapter progression), intuition-first
     focus, Jupyter tutorials
-- `book_springer/lectures_source/Lesson02.1_From_Data_Science_To_Decision_Science.smd`
-  - [60%]: Why prediction accuracy alone fails business value, data-science-
-    to-decision-science framing, causal vs. predictive questions, decision
-    pipeline diagram, feedback/bias amplification, partial book roadmap
-- `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.smd`
-  - [45%]: "Why Prediction Is Not Enough," decision-loop-with-causal-models
-    diagram matching the Decision Pipeline Framework and feedback loops
-- `msml610/lectures_source/Lesson08.1-Causal_AI_intro.smd`
-  - [30%]: Why prediction accuracy fails business value, causal reasoning's
-    role in decisions (optimization vs. inference vs. decision theory),
-    feedback loops
 - `msml610/lectures_source/Lesson00-Class.smd`
   - [25%]: "Invariants of a Class Lecture" matches intuition-over-math focus,
     realistic-assumptions/numerical-methods emphasis, Jupyter tutorials

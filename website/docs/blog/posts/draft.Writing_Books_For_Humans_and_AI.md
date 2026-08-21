@@ -10,13 +10,39 @@ categories:
   - Developer Tools
 ---
 
-# How to write books for humans and AI
+# How to Write Book and Technical Content for Humans (and AI)
 
-- Writing a textbook optimized for learning using notes means prioritizing
-  clarity, brevity
+- AI can answer any question with depth and proficiency
+- AI can write a book on any topic you are interested in tailored to the level you
+  are at (from ELI5 to PhD), with a tutor that can patiently answer questions,
+  all of this instantaneously and (almost for free
+
+- Why writing any technical content? What happens to the old concept of a "book"?
+
+- Also how should a book be written for the era of limited attention and shortcuts
+  (a "little known secret", "the 1 hr weird trick billionaires use")?
+
+- Knowing "syntax" is useless, what matters is teaching judgement: when to apply
+  a technique, what to do if the results are not what was expected, being able
+  to critique, having a mental model of different approaches
+
+- Add hard-won lessons learned on the field, AI optimizes for "consensus" and
+average, while what's often interesting are edge cases and non-linear path to
+  success
+
+- Lots of content that were fundamental until few years ago (e.g., linear algebra,
+  deriving backprop from scratch) are now useless or detrimental, since this
+  is the kind of standard content that one can get from AI
+
+- Embrace AI by sharing prompts and automation that can make the work easier
+
+- Optimize for human learning
   - For humans visual structure and active recall
-- Organize information in a hierarchical, bullet-point format
-  - Starting with the main topic, then indenting subtopics and details underneath
+  - Organize information in a hierarchical, bullet-point format
+
+- Avoid (actually abhorr) anything that is or resembles AI slop
+
+- Starting with the main topic, then indenting subtopics and details underneath
 
 ## Pedagogical Progression
 - **Start with motivation**: Explain why the topic matters before diving into

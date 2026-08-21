@@ -1,20 +1,49 @@
 # Command line
 
 - Open and run a command in vim: `> vim -c '...'`
-
 - Print the path of VIMRUNTIME: `> vim --cmd 'echo $VIMRUNTIME' --cmd 'quit'`
 - Regenerate the tags (?): `> vim -c "helptags ~/.vim/doc"`
+- Skip reading the config `.vimrc`: `> vim -u 'NONE'`
 
-- Skip reading `.vimrc`: `> vim -u 'NONE'`
+# Brief concepts
+
+**Buffer**
+- An in-memory representation of a file's content, once it's loaded into Vim
+- Multiple buffers can be open at once (one per file you've edited/loaded)
+  - Lists open buffers: `:buffers` 
+  - Switches to one buffer: `:b <name/number>` 
+
+**Window (aka viewport)**
+- A viewport into a buffer: the visible frame showing (part of) a buffer's content
+- Multiple windows can display the same buffer simultaneously
+  - E.g., two views scrolled to different lines
+- Created by splitting the screen
+  - Navigate with `Ctrl-w` + direction (`h/j/k/l`)
+  - Closed with `:q` (doesn't close the buffer, just the view)
+
+**Split**
+- The act of dividing the screen into multiple windows
+- Horizontal split: `:split` or `:sp` (stacks windows top/bottom)
+- Vertical split: `:vsplit` or `:vsp` (side by side)
+  - Each split is a window
+  - Each window shows a buffer
+
+**How they relate**
+- Tabs (`:tabnew`) contain layouts of windows
+- Windows contain/display buffers
+- Buffers hold the actual file content
+- In brief: one buffer -> can be shown in many windows -> windows are arranged via
+  splits -> splits live inside tabs
 
 # Help
 
 - Get help: `:help TOPIC`
   - `CTRL-d` or `tab` to auto-complete
 - Get help on a shortcut: `:help CTRL-W_CTRL-W`
-
 - Open help about TOPIC in a vertical split: `:vert help TOPIC`
   - E.g., `:vert help marks`
+- Get help about registers: `:help registers`
+- Get help about copying and moving: `:help copy-move`
 
 # Settings
 
@@ -25,7 +54,8 @@
 
 - Set only for the current buffer: `:setlocal XXXX`
 
-## Some useful settings
+## Useful settings
+
 - Disable flashing on error: `:set visualbells`
 - Disable beeping on error: `:set noerrorbells`
 - Set case sensitive/insensitive: `:set ic, set noic`
@@ -34,68 +64,61 @@
 - To avoid automatic indentation: `:set paste`
 
 ## Misc settings
+
 - Show cursor line (using underline): `:set cursorline`
 - To highlight the position of the cursor.: `:highlight CursorLine guibg=lightblue ctermbg=lightgray`
 - Show all the color scheme: `:highlight`
 - Show the palette: `:runtime syntax/colortest.vim`
 
 ## Setting path
+
 - Print path: `:set path`
 - Look for certain file in path: `:find file_name`
 - Update path: `:set path+=/path/`
 
 ## Opening files under the cursor
+
 - Open file under the cursor: `gf`
-- Jump to a file and line: `gF`
-- Open file under the cursor in a split window: `CTRL-W, CTRL-F`
+- Jump to a file and line (like in a cfile): `gF`
 - Open an URL under the cursor with the default browse: `gx`
-
-## Inserting non-printable chars
-- To insert a tab, i.e., `^I`: `CTRL-v + TAB`
-- To insert a return, i.e., `^M`: `CTRL-v + ENTER`
-
-- To match non-ascii chars: `/[^\x00-\x7F]`
+- Open file under the cursor in a split window: `CTRL-W, CTRL-F`
 
 ## Edit command and search history
+
 - Edit search history In command mode: `q:`
 - Search in search history: `q/`, `q?`
 
 # Moving
 
-- Move around: `ijkl`
+- Move one character at the time: `ijkl`
+
+- Move forward to the start/end of a word: `w, e`
+- Move backward to the start/end of a word: `b, ge`
 
 - Go to the start of the file: `gg`
 - Go to the end of the file: `G`
+
 - Move to the Home, Middle, or Last of the current screen: `H, M, L`
 - Move to the next/previous paragraph: `), (`
 - Move to the beginning/end of a line: `0, $`
 - Move to the first character of a line: `^`
 
-- Move forward to the start/end of a word: `w, e`
-
-- Move backward to the start/end of a word: `b, ge`
-
-- Move forward/backward camelCaseWise: `CTRL-h, CTRL-l`
-
 ## Move to char
-- Move to the next, previous occurrence of x: `fx, Fx`
-- Repeat the last fx command: `;`
-- Like fx, but moves to the character immediately before: `tx`
-
-- Repeat the last column command, e.g. `:cn`: `@:` and then `@@`
+- Move to the next, previous occurrence of character `x`: `fx, Fx`
+- Repeat the last `fx` command: `;`
+- Like `fx`, but moves to the character immediately before: `tx`
 
 ## Moving on wrapped-around lines
-- To move up and down: `gj,gk`
-- To move at the beginning/end of a line: `g$,g0`
-- To move to the center: `gm`
+- Move up and down: `gj,gk`
+- Move at the beginning/end of a line: `g$,g0`
+- Move to the center: `gm`
 
+## Highlighting stuff
 - Reselect a visual area: `gv`
-
 - Highlight a word without moving: `*#`
 
 - Block highlight: `CTRL-v`
 
-## Highlighting stuff
 - Move to the next matching word under the cursor: `*`
 - Move to the previous matching word under the cursor: `#`
 
@@ -108,51 +131,45 @@
 
 - Go to insertion mode: `i`
 - Insert at the beginning of the line: `I`
-- Insert at the end of the line: `A`
+- Insert at the end of the line: `A` (append)
 - Replace one char: `r`
 - Replace more than one chars: `R`
 
 - Change case of a char: `~`
+- Switch case of {motion} text: `g~{motion}`
 
 ## Go to normal mode for one command
-- In insert mode go to normal mode for just one command: `CTRL-O + ...`
-- Delete the rest of the line in command mode: - `CTRL-O d$`
+- Execute one command while in insert mode: `CTRL-O` + command
+- Delete the rest of the line while in command mode: `CTRL-O d$`
 - Find the next `k` while in command mode: `CTRL-O fk`
-
-- Show the contents of registers: `:reg`
 
 - Yank and insert: `c{motion}` yank the text and then insert
 
-- Switch case of {motion} text: `g~{motion}`
-
-- Format comments and text: `gq{motion}`
-
-## Join
+## Joining
 - Join selected lines (with spaces): `J`
 - Join selected lines without spaces: `gJ`
 
 - Delete line without saving in the buffer (black hole): `"_dd`
 
 ## Use registers
+- Show the contents of registers: `:reg`
 - Delete and save in 0 registers (from 0 to 9): `0_d`
 - Copy and save in 0 registers: `0_y`
 - Paste content of register 0: `0_p`
 
+## Files
 - Write the range to a file: `:[range]w FILE`
-
 - Read file and paste it in the current spot: `:r FILE`
 
-## Indent
+## Format / Indent
 - Indent a range of lines: `:[range]!indent (or =)`
 - Indent entire file: `gg=G`
 
 - Visual select entire file: `ggVG`
+- Format comments and text: `gq{motion}`
+  - E.g., `gq)`
 
 - Sort entire file: `%! sort | uniq`
-
-## Help
-- Help about registers: `:help registers`
-- Help about copying and moving: `:help copy-move`
 
 # Buffers
 
@@ -249,11 +266,25 @@
 
 - Preview all the occurrence of the word under cursor in a separate window: `[I`
 
+# Navigating Filesystem
+
+- `netrw` ships with Vim and allows to navigate the file system
+
+- Open netrw in the directory of the current file: `:Ex`
+- Open current path: `:Ex <path>`
+- Open horizontal split: `:Sex`
+- Open vertical split: `:Vex`
+
+- Open file or descent into dir: `<Enter>`
+- Go up one dir: `-`
+- Go back to previous dir (history): `u`
+- Preview file in a split: `p`
+
 # Vim regex
 
 - Help for regex: `:help regex`
 
-## Use perl
+## Using perl
 - Execute perl CMD on all the lines selected: `:perldo CMD`
 
 - Print matching lines: `:%!perl -ne 'print if ///'`
@@ -282,14 +313,9 @@
 
 # Tags
 
-// http://www.vim.org/tips/tip.php?tip_id=94
-
 - Show tag stack: `:tags`
-
 - Jump to tag: `:tag TAG`
-
 - List matching tags: `:ts[elect] TAG`
-
 - Split window `:tag`: `:stag TAG`
 
 ## Jump to the tag under the cursor
@@ -423,13 +449,21 @@
 - http://vim.sourceforge.net/scripts/script.php?script_id=72
 - http://vim.sourceforge.net/scripts/script.php?script_id=197
 
-# Hex editing
+# Non-Ascii Editing
+
+## Inserting non-printable chars
+
+- To insert a tab, i.e., `^I`: `CTRL-v + TAB`
+- To insert a return, i.e., `^M`: `CTRL-v + ENTER`
+- To match non-ascii chars: `/[^\x00-\x7F]`
+
+## Hex editing
 
 - To see character under the cursor: `ga`
 - To show non-printable characters: `:set display=uhex`
 - To open a file in hex form: vim -b datafile, :%!xxd
 
-# Digraphs
+## Digraphs
 
 //Greek/math symbols in gvim with
 //  http://www.alecjacobson.com/weblog/?p=443
@@ -442,9 +476,7 @@
 - there exists: `CTRL-k TE`
 - for all: `CTRL-k FA`
 
-// Packages
-
-# Packages to get working
+# Useful Packages
 
 <!--
 - Minibufexplorer
@@ -470,7 +502,7 @@
     - `http://www.vim.org/scripts/script.php?script_id=987`
 -->
 
-# Commentify
+## Commentify
 
 - Comment the selected block out with: `:norm i# (lower case i)`
 - To uncomment, highlight your block again, and uncomment with: `:norm ^x`
@@ -479,7 +511,7 @@
 - Uncomment: `:UC`
 - To prepend a XXXX in front of each line of a block: `:'<,'>s/^/XXXX/`
 
-# vim-commentary
+## vim-commentary
 
 - Plugin: `tpope/vim-commentary` (https://github.com/tpope/vim-commentary)
 - Install via vim-plug: add `Plug 'tpope/vim-commentary'` to `.vimrc`, then run
@@ -489,14 +521,14 @@
   or `gc` in visual mode
 
 <!--
-# CTRLP
+## CTRLP
 
 // https://vimawesome.com/plugin/ctrlp-vim-everything-has-changed
 
 - Fuzzy, buffer, mru, tag finder
 - To find a font
 
-# VimTaglist
+## VimTaglist
 
 // http://vim-taglist.sourceforge.net/manual.html
 :TlistToggle
@@ -504,7 +536,7 @@
 :help TlistToggle
 -->
 
-# ctags
+## ctags
 
 - Jump to the tag underneath the cursor: `g]` or `:tag CTRL+(gr)`
 - Jump back up in the tag stack: `Ctrl-t`
@@ -518,7 +550,7 @@
 
 - Copy word under cursor to command line: `CTRL + (gr)`
 
-# Alternate
+## Alternate
 - Switches to the file corresponding to the current file being edited: `:A`
 - Splits and switches: `:AS`
 - Vertical splits and switches: `:AV`
@@ -534,7 +566,7 @@
 - (e.g. on <foo.h> switches to foo.cpp): ``
 - Cycles through matches: `<Leader>ihn`
 
-# ShowMarks
+## ShowMarks
 
 - Help about marks: `:tab help showmarks`
 - Toggles ShowMarks on and off.: `\mt`
@@ -542,7 +574,7 @@
 - Hides all marks in the current buffer.: `\ma`
 - Places the next available mark.: `\mm`
 
-# Cscope
+## Cscope
 
 <!--
 :cs help

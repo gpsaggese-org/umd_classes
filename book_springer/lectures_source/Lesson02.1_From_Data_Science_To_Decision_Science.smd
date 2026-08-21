@@ -3,7 +3,7 @@
 // lesson_title=Lesson 02.1: From Data Science to Decision Science
 // slides_engine=typst
 
-// gen_slides.py book_springer/02.01 --daemon --slides_engine typst
+// gen_slides.py book_springer/02.1 --daemon
 
 # Why Decisions, Not Predictions
 
