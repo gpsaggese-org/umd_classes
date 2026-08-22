@@ -154,8 +154,11 @@ class Agent:
 
 
 # #############################################################################
+# TODO(ai_gp): Add descriptive header for this section (coding.rules.md:## Organize Functions Into Logical Layers)
+# #############################################################################
 
 
+# TODO(ai_gp): Move n_agents before * to force keyword-only: create_population(*, n_agents: int = 100, seed: int = 42) (coding.rules.md:## Use Default Values Rarely and Force Keyword-Only via *)
 def create_population(n_agents: int = 100, *, seed: int = 42) -> List[Agent]:
     """
     Create a population of agents with normally distributed talents.
@@ -175,6 +178,7 @@ def create_population(n_agents: int = 100, *, seed: int = 42) -> List[Agent]:
     return agents
 
 
+# TODO(ai_gp): Rename to _calculate_gini() and update callers, as this is only used internally (coding.rules.md:## Mark Private Functions)
 def calculate_gini(values: np.ndarray) -> float:
     """
     Compute the Gini coefficient for non-negative values.
@@ -203,6 +207,7 @@ def calculate_gini(values: np.ndarray) -> float:
     return float(np.clip(gini, 0.0, 1.0))
 
 
+# TODO(ai_gp): Rename to _get_results_dataframe() and update callers, as this is only used internally (coding.rules.md:## Mark Private Functions)
 def get_results_dataframe(agents: List[Agent]) -> pd.DataFrame:
     """
     Convert a list of agents to a DataFrame for analysis.
@@ -311,6 +316,7 @@ def validate_simulation_results(agents: List[Agent]) -> bool:
     )
     for a in agents:
         expected = 1 + a.lucky_events + a.unlucky_events
+        # TODO(ai_gp): Remove redundant (expected, got): from message and remove duplicate parameter values since dassert_eq() already prints them (coding.rules.md:## Add Message to dassert)
         hdbg.dassert_eq(
             len(a.capital_history),
             expected,
@@ -331,6 +337,7 @@ def run_simulation(
     lucky_std: float = 0.08,
     unlucky_mean: float = 0.15,
     unlucky_std: float = 0.05,
+    # TODO(ai_gp): Change to seed: int = 42 (remove Optional since default is meaningful, not None) (coding.rules.md:## Minimize Default Values of None in Function Interfaces)
     seed: Optional[int] = 42,
     verbose: bool = False,
 ) -> List[Agent]:
@@ -359,6 +366,7 @@ def run_simulation(
     rng = np.random.default_rng(seed)
     n_agents = len(agents)
     if verbose:
+        # TODO(ai_gp): Avoid try-except for optional import; consider making tqdm required or use alternative approach (coding.rules.md:## Do Not Use try-except)
         try:
             from tqdm import tqdm  # type: ignore
 
@@ -425,6 +433,7 @@ def run_policy_simulation(
     *,
     policy: str = "egalitarian",
     resource_amount: float = 100.0,
+    # TODO(ai_gp): Avoid None default for cate_values; consider alternative design or use empty array default (coding.rules.md:## Minimize Default Values of None in Function Interfaces)
     cate_values: Optional[np.ndarray] = None,
     **simulation_kwargs,
 ) -> List[Agent]:
@@ -499,6 +508,7 @@ def run_policy_simulation(
             "cate_values must be provided when policy='cate_optimal'.",
         )
         cate_array = np.asarray(cate_values, dtype=float)
+        # TODO(ai_gp): Remove redundant (expected, got): from message and remove duplicate parameter values since dassert_eq() already prints them (coding.rules.md:## Add Message to dassert)
         hdbg.dassert_eq(
             cate_array.shape[0],
             n,
@@ -544,6 +554,7 @@ def fit_bayesian_luck_model(
     """
     Fit a Bayesian regression model to estimate causal effect of luck on capital.
 
+    # TODO(ai_gp): Wrap function reference in backticks: `get_results_dataframe()` (coding.rules.md:## Use Verbatim to Refer to Python Objects)
     :param df: DataFrame from get_results_dataframe(agents), must have:
                'capital', 'lucky_events', 'talent_intensity', 'talent_iq', 'talent_networking'
     :param draws: Number of posterior draws per chain (default 1000)
@@ -555,6 +566,7 @@ def fit_bayesian_luck_model(
     :param random_seed: RNG seed for reproducibility (default 42)
 
     :return: Tuple (model, idata):
+        # TODO(ai_gp): Wrap class references in backticks: `Model`, `InferenceData` (coding.rules.md:## Use Verbatim to Refer to Python Objects)
         - model: PyMC Model object (for diagnostics, re-sampling, etc.)
         - idata: ArviZ InferenceData object containing posterior samples
                 Use with summarize_bayesian_fit() or posterior_predictive_check()
@@ -627,6 +639,7 @@ def fit_bayesian_luck_model(
     return model, idata
 
 
+# TODO(ai_gp): Avoid None default for var_names; consider default list or separate method to build default (coding.rules.md:## Minimize Default Values of None in Function Interfaces)
 def summarize_bayesian_fit(
     idata, *, var_names: Optional[List[str]] = None
 ) -> pd.DataFrame:
@@ -635,6 +648,7 @@ def summarize_bayesian_fit(
 
     For the Bayesian model parameters.
 
+    # TODO(ai_gp): Wrap function reference in backticks: `fit_bayesian_luck_model()` (coding.rules.md:## Use Verbatim to Refer to Python Objects)
     :param idata: ArviZ InferenceData returned by fit_bayesian_luck_model
     :param var_names: optional subset of parameter names to summarize
     :return: pandas DataFrame with summary statistics (mean, sd, hdi, etc.)
@@ -666,6 +680,7 @@ def posterior_predictive_check(
     This function draws from the posterior predictive distribution and compares
     simulated log-capital to the observed log-capital.
 
+    # TODO(ai_gp): Wrap function and class references in backticks: `fit_bayesian_luck_model()`, `InferenceData` (coding.rules.md:## Use Verbatim to Refer to Python Objects)
     :param model: PyMC model returned by fit_bayesian_luck_model
     :param idata: ArviZ InferenceData with posterior draws
     :param df: same DataFrame used for fitting

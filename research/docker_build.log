@@ -1,502 +1,1394 @@
-#0 building with "desktop-linux" instance using docker driver
-
-#1 [internal] load build definition from Dockerfile
-#1 transferring dockerfile: 1.31kB done
-#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 2)
+#1 [resolver] fetching image...docker.io/library/ubuntu:24.04
 #1 DONE 0.0s
 
-#2 [internal] load metadata for docker.io/library/ubuntu:24.04
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.04kB 0.0s done
 #2 DONE 0.0s
 
 #3 [internal] load .dockerignore
 #3 transferring context: 2B done
 #3 DONE 0.0s
 
-#4 [ 1/16] FROM docker.io/library/ubuntu:24.04
+#4 [internal] load build context
 #4 DONE 0.0s
 
-#5 [internal] load build context
-#5 transferring context: 1.94kB done
-#5 DONE 0.0s
+#5 oci-layout://docker.io/library/ubuntu:24.04@sha256:1428a953896eef9e62fc6ef60cad05bbf98769f6ea5f8c278e519b9dd168ab26
+#5 resolve docker.io/library/ubuntu:24.04@sha256:1428a953896eef9e62fc6ef60cad05bbf98769f6ea5f8c278e519b9dd168ab26 0.0s done
+#5 ...
 
-#6 [ 6/16] RUN python3 -m venv /venv
-#6 CACHED
+#4 [internal] load build context
+#4 transferring context: 1.71kB 0.0s done
+#4 DONE 0.0s
 
-#7 [ 3/16] RUN apt-get -y upgrade
-#7 CACHED
+#5 oci-layout://docker.io/library/ubuntu:24.04@sha256:1428a953896eef9e62fc6ef60cad05bbf98769f6ea5f8c278e519b9dd168ab26
+#5 sha256:0b613318ea879878918380aa3aeb220dfe824e311b83bc955cb8a1d4319650ab 14.68MB / 28.89MB 0.2s
+#5 sha256:0b613318ea879878918380aa3aeb220dfe824e311b83bc955cb8a1d4319650ab 28.89MB / 28.89MB 0.3s done
+#5 extracting sha256:0b613318ea879878918380aa3aeb220dfe824e311b83bc955cb8a1d4319650ab
+#5 extracting sha256:0b613318ea879878918380aa3aeb220dfe824e311b83bc955cb8a1d4319650ab 0.6s done
+#5 DONE 1.0s
 
-#8 [ 2/16] RUN apt-get -y update
-#8 CACHED
+#6 [linux/arm64  1/11] RUN apt-get update &&     apt-get upgrade -y &&     apt-get install -y --no-install-recommends       sudo       curl       git       build-essential       python3       python3-pip       python3-dev       python3-venv     && rm -rf /var/lib/apt/lists/*
+#6 0.382 Get:1 http://ports.ubuntu.com/ubuntu-ports noble InRelease [256 kB]
+#6 0.952 Get:2 http://ports.ubuntu.com/ubuntu-ports noble-updates InRelease [126 kB]
+#6 1.120 Get:3 http://ports.ubuntu.com/ubuntu-ports noble-backports InRelease [126 kB]
+#6 1.288 Get:4 http://ports.ubuntu.com/ubuntu-ports noble-security InRelease [126 kB]
+#6 1.362 Get:5 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 Packages [1776 kB]
+#6 1.720 Get:6 http://ports.ubuntu.com/ubuntu-ports noble/universe arm64 Packages [19.0 MB]
+#6 4.239 Get:7 http://ports.ubuntu.com/ubuntu-ports noble/restricted arm64 Packages [113 kB]
+#6 4.244 Get:8 http://ports.ubuntu.com/ubuntu-ports noble/multiverse arm64 Packages [274 kB]
+#6 4.391 Get:9 http://ports.ubuntu.com/ubuntu-ports noble-updates/multiverse arm64 Packages [90.2 kB]
+#6 4.391 Get:10 http://ports.ubuntu.com/ubuntu-ports noble-updates/universe arm64 Packages [2178 kB]
+#6 4.540 Get:11 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 Packages [1558 kB]
+#6 4.819 Get:12 http://ports.ubuntu.com/ubuntu-ports noble-updates/restricted arm64 Packages [2672 kB]
+#6 5.161 Get:13 http://ports.ubuntu.com/ubuntu-ports noble-backports/main arm64 Packages [48.9 kB]
+#6 5.162 Get:14 http://ports.ubuntu.com/ubuntu-ports noble-backports/multiverse arm64 Packages [671 B]
+#6 5.162 Get:15 http://ports.ubuntu.com/ubuntu-ports noble-backports/universe arm64 Packages [36.3 kB]
+#6 5.162 Get:16 http://ports.ubuntu.com/ubuntu-ports noble-security/multiverse arm64 Packages [85.7 kB]
+#6 5.163 Get:17 http://ports.ubuntu.com/ubuntu-ports noble-security/main arm64 Packages [1226 kB]
+#6 5.250 Get:18 http://ports.ubuntu.com/ubuntu-ports noble-security/restricted arm64 Packages [2520 kB]
+#6 5.562 Get:19 http://ports.ubuntu.com/ubuntu-ports noble-security/universe arm64 Packages [1602 kB]
+#6 5.802 Fetched 33.8 MB in 6s (5903 kB/s)
+#6 5.802 Reading package lists...
+#6 7.117 Reading package lists...
+#6 7.898 Building dependency tree...
+#6 8.084 Reading state information...
+#6 8.127 Calculating upgrade...
+#6 8.338 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+#6 8.342 Reading package lists...
+#6 9.111 Building dependency tree...
+#6 9.290 Reading state information...
+#6 9.509 The following additional packages will be installed:
+#6 9.509   binutils binutils-aarch64-linux-gnu binutils-common bzip2 ca-certificates
+#6 9.509   cpp cpp-13 cpp-13-aarch64-linux-gnu cpp-aarch64-linux-gnu dpkg-dev g++
+#6 9.509   g++-13 g++-13-aarch64-linux-gnu g++-aarch64-linux-gnu gcc gcc-13
+#6 9.509   gcc-13-aarch64-linux-gnu gcc-13-base gcc-aarch64-linux-gnu git-man
+#6 9.509   libapparmor1 libasan8 libatomic1 libbinutils libbrotli1 libc-dev-bin
+#6 9.509   libc6-dev libcc1-0 libcrypt-dev libctf-nobfd0 libctf0 libcurl3t64-gnutls
+#6 9.509   libcurl4t64 libdpkg-perl liberror-perl libexpat1 libexpat1-dev libgcc-13-dev
+#6 9.509   libgdbm-compat4t64 libgdbm6t64 libgomp1 libgprofng0 libgssapi-krb5-2
+#6 9.509   libhwasan0 libisl23 libitm1 libjansson4 libjs-jquery libjs-sphinxdoc
+#6 9.509   libjs-underscore libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0
+#6 9.509   libldap2 liblsan0 libmpc3 libmpfr6 libnghttp2-14 libperl5.38t64 libpsl5t64
+#6 9.509   libpython3-dev libpython3-stdlib libpython3.12-dev libpython3.12-minimal
+#6 9.509   libpython3.12-stdlib libpython3.12t64 libreadline8t64 librtmp1 libsasl2-2
+#6 9.509   libsasl2-modules-db libsframe1 libsqlite3-0 libssh-4 libstdc++-13-dev
+#6 9.510   libtsan2 libubsan1 linux-libc-dev lto-disabled-list make media-types netbase
+#6 9.510   openssl patch perl perl-modules-5.38 python3-minimal python3-pip-whl
+#6 9.510   python3-pkg-resources python3-setuptools python3-setuptools-whl
+#6 9.510   python3-wheel python3.12 python3.12-dev python3.12-minimal python3.12-venv
+#6 9.512   readline-common rpcsvc-proto tzdata xz-utils zlib1g-dev
+#6 9.512 Suggested packages:
+#6 9.512   binutils-doc gprofng-gui bzip2-doc cpp-doc gcc-13-locales cpp-13-doc
+#6 9.512   debian-keyring gcc-13-doc gcc-multilib manpages-dev autoconf automake
+#6 9.512   libtool flex bison gdb gcc-doc gdb-aarch64-linux-gnu gettext-base
+#6 9.512   git-daemon-run | git-daemon-sysvinit git-doc git-email git-gui gitk gitweb
+#6 9.512   git-cvs git-mediawiki git-svn glibc-doc gnupg | sq | sqop | pgpainless-cli
+#6 9.512   | sequoia-chameleon-gnupg bzr gdbm-l10n krb5-doc krb5-user libstdc++-13-doc
+#6 9.512   make-doc ed diffutils-doc perl-doc libterm-readline-gnu-perl
+#6 9.512   | libterm-readline-perl-perl libtap-harness-archive-perl python3-doc
+#6 9.512   python3-tk python-setuptools-doc python3.12-doc binfmt-support readline-doc
+#6 9.512 Recommended packages:
+#6 9.512   fakeroot gnupg | sq | sqop | pgpainless-cli | sequoia-chameleon-gnupg
+#6 9.512   libalgorithm-merge-perl less ssh-client manpages manpages-dev libc-devtools
+#6 9.512   libfile-fcntllock-perl liblocale-gettext-perl javascript-common krb5-locales
+#6 9.512   libldap-common publicsuffix libsasl2-modules
+#6 9.687 The following NEW packages will be installed:
+#6 9.687   binutils binutils-aarch64-linux-gnu binutils-common build-essential bzip2
+#6 9.687   ca-certificates cpp cpp-13 cpp-13-aarch64-linux-gnu cpp-aarch64-linux-gnu
+#6 9.687   curl dpkg-dev g++ g++-13 g++-13-aarch64-linux-gnu g++-aarch64-linux-gnu gcc
+#6 9.687   gcc-13 gcc-13-aarch64-linux-gnu gcc-13-base gcc-aarch64-linux-gnu git
+#6 9.687   git-man libapparmor1 libasan8 libatomic1 libbinutils libbrotli1 libc-dev-bin
+#6 9.687   libc6-dev libcc1-0 libcrypt-dev libctf-nobfd0 libctf0 libcurl3t64-gnutls
+#6 9.687   libcurl4t64 libdpkg-perl liberror-perl libexpat1 libexpat1-dev libgcc-13-dev
+#6 9.687   libgdbm-compat4t64 libgdbm6t64 libgomp1 libgprofng0 libgssapi-krb5-2
+#6 9.687   libhwasan0 libisl23 libitm1 libjansson4 libjs-jquery libjs-sphinxdoc
+#6 9.687   libjs-underscore libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0
+#6 9.687   libldap2 liblsan0 libmpc3 libmpfr6 libnghttp2-14 libperl5.38t64 libpsl5t64
+#6 9.687   libpython3-dev libpython3-stdlib libpython3.12-dev libpython3.12-minimal
+#6 9.687   libpython3.12-stdlib libpython3.12t64 libreadline8t64 librtmp1 libsasl2-2
+#6 9.687   libsasl2-modules-db libsframe1 libsqlite3-0 libssh-4 libstdc++-13-dev
+#6 9.687   libtsan2 libubsan1 linux-libc-dev lto-disabled-list make media-types netbase
+#6 9.687   openssl patch perl perl-modules-5.38 python3 python3-dev python3-minimal
+#6 9.687   python3-pip python3-pip-whl python3-pkg-resources python3-setuptools
+#6 9.687   python3-setuptools-whl python3-venv python3-wheel python3.12 python3.12-dev
+#6 9.687   python3.12-minimal python3.12-venv readline-common rpcsvc-proto sudo tzdata
+#6 9.687   xz-utils zlib1g-dev
+#6 9.770 0 upgraded, 109 newly installed, 0 to remove and 0 not upgraded.
+#6 9.770 Need to get 105 MB of archives.
+#6 9.770 After this operation, 412 MB of additional disk space will be used.
+#6 9.770 Get:1 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libpython3.12-minimal arm64 3.12.3-1ubuntu0.15 [835 kB]
+#6 10.06 Get:2 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libexpat1 arm64 2.6.1-2ubuntu0.4 [77.5 kB]
+#6 10.12 Get:3 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 python3.12-minimal arm64 3.12.3-1ubuntu0.15 [2253 kB]
+#6 10.37 Get:4 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 python3-minimal arm64 3.12.3-0ubuntu2.1 [27.4 kB]
+#6 10.37 Get:5 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 media-types all 10.1.0 [27.5 kB]
+#6 10.37 Get:6 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 netbase all 6.4 [13.1 kB]
+#6 10.38 Get:7 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 tzdata all 2026c-0ubuntu0.24.04.1 [280 kB]
+#6 10.41 Get:8 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 readline-common all 8.2-4build1 [56.5 kB]
+#6 10.42 Get:9 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 libreadline8t64 arm64 8.2-4build1 [153 kB]
+#6 10.52 Get:10 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libsqlite3-0 arm64 3.45.1-1ubuntu2.7 [705 kB]
+#6 10.57 Get:11 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libpython3.12-stdlib arm64 3.12.3-1ubuntu0.15 [2040 kB]
+#6 10.79 Get:12 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 python3.12 arm64 3.12.3-1ubuntu0.15 [651 kB]
+#6 10.87 Get:13 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libpython3-stdlib arm64 3.12.3-0ubuntu2.1 [10.1 kB]
+#6 10.88 Get:14 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 python3 arm64 3.12.3-0ubuntu2.1 [23.0 kB]
+#6 10.88 Get:15 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 perl-modules-5.38 all 5.38.2-3.2ubuntu0.3 [3110 kB]
+#6 11.30 Get:16 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 libgdbm6t64 arm64 1.23-5.1build1 [34.4 kB]
+#6 11.30 Get:17 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 libgdbm-compat4t64 arm64 1.23-5.1build1 [6578 B]
+#6 11.30 Get:18 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libperl5.38t64 arm64 5.38.2-3.2ubuntu0.3 [4779 kB]
+#6 11.81 Get:19 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 perl arm64 5.38.2-3.2ubuntu0.3 [231 kB]
+#6 11.82 Get:20 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 openssl arm64 3.0.13-0ubuntu3.12 [985 kB]
+#6 11.96 Get:21 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 ca-certificates all 20260601~24.04.1 [139 kB]
+#6 11.97 Get:22 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libapparmor1 arm64 4.0.1really4.0.1-0ubuntu0.24.04.7 [51.8 kB]
+#6 11.97 Get:23 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libkrb5support0 arm64 1.20.1-6ubuntu2.8 [35.1 kB]
+#6 11.97 Get:24 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libk5crypto3 arm64 1.20.1-6ubuntu2.8 [85.8 kB]
+#6 11.97 Get:25 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 libkeyutils1 arm64 1.6.3-3build1 [9654 B]
+#6 11.97 Get:26 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libkrb5-3 arm64 1.20.1-6ubuntu2.8 [349 kB]
+#6 11.98 Get:27 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libgssapi-krb5-2 arm64 1.20.1-6ubuntu2.8 [142 kB]
+#6 11.98 Get:28 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 python3-pkg-resources all 68.1.2-2ubuntu1.2 [168 kB]
+#6 11.98 Get:29 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 sudo arm64 1.9.15p5-3ubuntu5.24.04.2 [929 kB]
+#6 12.10 Get:30 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 libjansson4 arm64 2.14-2build2 [34.4 kB]
+#6 12.16 Get:31 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libnghttp2-14 arm64 1.59.0-1ubuntu0.4 [74.8 kB]
+#6 12.18 Get:32 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 libpsl5t64 arm64 0.21.2-1.1build1 [57.4 kB]
+#6 12.18 Get:33 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 xz-utils arm64 5.6.1+really5.4.5-1ubuntu0.3 [268 kB]
+#6 12.18 Get:34 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 binutils-common arm64 2.42-4ubuntu2.10 [240 kB]
+#6 12.23 Get:35 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libsframe1 arm64 2.42-4ubuntu2.10 [15.4 kB]
+#6 12.24 Get:36 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libbinutils arm64 2.42-4ubuntu2.10 [766 kB]
+#6 12.43 Get:37 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libctf-nobfd0 arm64 2.42-4ubuntu2.10 [101 kB]
+#6 12.44 Get:38 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libctf0 arm64 2.42-4ubuntu2.10 [95.7 kB]
+#6 12.44 Get:39 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libgprofng0 arm64 2.42-4ubuntu2.10 [776 kB]
+#6 12.50 Get:40 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 binutils-aarch64-linux-gnu arm64 2.42-4ubuntu2.10 [3304 kB]
+#6 12.80 Get:41 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 binutils arm64 2.42-4ubuntu2.10 [18.1 kB]
+#6 12.81 Get:42 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libc-dev-bin arm64 2.39-0ubuntu8.8 [19.7 kB]
+#6 12.93 Get:43 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 linux-libc-dev arm64 6.8.0-138.138 [1496 kB]
+#6 13.04 Get:44 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 libcrypt-dev arm64 1:4.4.36-4build1 [118 kB]
+#6 13.04 Get:45 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 rpcsvc-proto arm64 1.4.2-0ubuntu7 [64.8 kB]
+#6 13.04 Get:46 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libc6-dev arm64 2.39-0ubuntu8.8 [1596 kB]
+#6 13.24 Get:47 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 gcc-13-base arm64 13.3.0-6ubuntu2~24.04.1 [51.6 kB]
+#6 13.25 Get:48 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libisl23 arm64 0.26-3build1.1 [669 kB]
+#6 13.31 Get:49 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libmpfr6 arm64 4.2.1-1build1.1 [329 kB]
+#6 13.32 Get:50 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libmpc3 arm64 1.3.1-1build1.1 [56.4 kB]
+#6 13.37 Get:51 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 cpp-13-aarch64-linux-gnu arm64 13.3.0-6ubuntu2~24.04.1 [9560 kB]
+#6 14.27 Get:52 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 cpp-13 arm64 13.3.0-6ubuntu2~24.04.1 [1038 B]
+#6 14.27 Get:53 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 cpp-aarch64-linux-gnu arm64 4:13.2.0-7ubuntu1 [5316 B]
+#6 14.27 Get:54 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 cpp arm64 4:13.2.0-7ubuntu1 [22.4 kB]
+#6 14.27 Get:55 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libcc1-0 arm64 14.2.0-4ubuntu2~24.04.1 [49.7 kB]
+#6 14.30 Get:56 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libgomp1 arm64 14.2.0-4ubuntu2~24.04.1 [145 kB]
+#6 14.31 Get:57 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libitm1 arm64 14.2.0-4ubuntu2~24.04.1 [28.2 kB]
+#6 14.35 Get:58 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libatomic1 arm64 14.2.0-4ubuntu2~24.04.1 [11.6 kB]
+#6 14.37 Get:59 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libasan8 arm64 14.2.0-4ubuntu2~24.04.1 [2928 kB]
+#6 14.82 Get:60 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 liblsan0 arm64 14.2.0-4ubuntu2~24.04.1 [1289 kB]
+#6 14.85 Get:61 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libtsan2 arm64 14.2.0-4ubuntu2~24.04.1 [2697 kB]
+#6 15.27 Get:62 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libubsan1 arm64 14.2.0-4ubuntu2~24.04.1 [1157 kB]
+#6 15.46 Get:63 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libhwasan0 arm64 14.2.0-4ubuntu2~24.04.1 [1605 kB]
+#6 15.48 Get:64 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libgcc-13-dev arm64 13.3.0-6ubuntu2~24.04.1 [2473 kB]
+#6 15.68 Get:65 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 gcc-13-aarch64-linux-gnu arm64 13.3.0-6ubuntu2~24.04.1 [18.7 MB]
+#6 17.51 Get:66 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 gcc-13 arm64 13.3.0-6ubuntu2~24.04.1 [484 kB]
+#6 17.53 Get:67 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 gcc-aarch64-linux-gnu arm64 4:13.2.0-7ubuntu1 [1198 B]
+#6 17.53 Get:68 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 gcc arm64 4:13.2.0-7ubuntu1 [5018 B]
+#6 17.54 Get:69 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libstdc++-13-dev arm64 13.3.0-6ubuntu2~24.04.1 [2397 kB]
+#6 17.73 Get:70 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 g++-13-aarch64-linux-gnu arm64 13.3.0-6ubuntu2~24.04.1 [10.9 MB]
+#6 18.79 Get:71 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 g++-13 arm64 13.3.0-6ubuntu2~24.04.1 [16.0 kB]
+#6 18.79 Get:72 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 g++-aarch64-linux-gnu arm64 4:13.2.0-7ubuntu1 [962 B]
+#6 18.79 Get:73 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 g++ arm64 4:13.2.0-7ubuntu1 [1082 B]
+#6 18.80 Get:74 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 make arm64 4.3-4.1build2 [178 kB]
+#6 18.80 Get:75 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libdpkg-perl all 1.22.6ubuntu6.6 [268 kB]
+#6 18.80 Get:76 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 bzip2 arm64 1.0.8-5.1build0.1 [34.0 kB]
+#6 18.80 Get:77 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 patch arm64 2.7.6-7build3 [101 kB]
+#6 18.81 Get:78 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 lto-disabled-list all 47 [12.4 kB]
+#6 18.81 Get:79 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 dpkg-dev all 1.22.6ubuntu6.6 [1074 kB]
+#6 18.96 Get:80 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 build-essential arm64 12.10ubuntu1 [4932 B]
+#6 18.96 Get:81 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 libbrotli1 arm64 1.1.0-2build2 [339 kB]
+#6 19.00 Get:82 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libsasl2-modules-db arm64 2.1.28+dfsg1-5ubuntu3.1 [21.6 kB]
+#6 19.00 Get:83 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libsasl2-2 arm64 2.1.28+dfsg1-5ubuntu3.1 [54.7 kB]
+#6 19.01 Get:84 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libldap2 arm64 2.6.10+dfsg-0ubuntu0.24.04.1 [196 kB]
+#6 19.01 Get:85 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 librtmp1 arm64 2.4+20151223.gitfa8646d.1-2build7 [57.8 kB]
+#6 19.01 Get:86 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libssh-4 arm64 0.10.6-2ubuntu0.4 [191 kB]
+#6 19.03 Get:87 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libcurl4t64 arm64 8.5.0-2ubuntu10.11 [335 kB]
+#6 19.15 Get:88 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 curl arm64 8.5.0-2ubuntu10.11 [222 kB]
+#6 19.16 Get:89 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libcurl3t64-gnutls arm64 8.5.0-2ubuntu10.11 [329 kB]
+#6 19.16 Get:90 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 liberror-perl all 0.17029-2 [25.6 kB]
+#6 19.17 Get:91 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 git-man all 1:2.43.0-1ubuntu7.3 [1100 kB]
+#6 19.35 Get:92 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 git arm64 1:2.43.0-1ubuntu7.3 [3774 kB]
+#6 19.76 Get:93 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libexpat1-dev arm64 2.6.1-2ubuntu0.4 [128 kB]
+#6 19.76 Get:94 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 libjs-jquery all 3.6.1+dfsg+~3.5.14-1 [328 kB]
+#6 19.77 Get:95 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 libjs-underscore all 1.13.4~dfsg+~1.11.4-3 [118 kB]
+#6 19.77 Get:96 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 libjs-sphinxdoc all 7.2.6-6 [149 kB]
+#6 19.84 Get:97 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libpython3.12t64 arm64 3.12.3-1ubuntu0.15 [2280 kB]
+#6 20.29 Get:98 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 zlib1g-dev arm64 1:1.3.dfsg-3.1ubuntu2.1 [894 kB]
+#6 20.37 Get:99 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libpython3.12-dev arm64 3.12.3-1ubuntu0.15 [5538 kB]
+#6 20.93 Get:100 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 libpython3-dev arm64 3.12.3-0ubuntu2.1 [10.4 kB]
+#6 20.93 Get:101 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 python3.12-dev arm64 3.12.3-1ubuntu0.15 [498 kB]
+#6 21.00 Get:102 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 python3-dev arm64 3.12.3-0ubuntu2.1 [26.7 kB]
+#6 21.00 Get:103 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 python3-setuptools all 68.1.2-2ubuntu1.2 [397 kB]
+#6 21.05 Get:104 http://ports.ubuntu.com/ubuntu-ports noble/universe arm64 python3-wheel all 0.42.0-2 [53.1 kB]
+#6 21.05 Get:105 http://ports.ubuntu.com/ubuntu-ports noble-updates/universe arm64 python3-pip all 24.0+dfsg-1ubuntu1.3 [1320 kB]
+#6 21.29 Get:106 http://ports.ubuntu.com/ubuntu-ports noble-updates/universe arm64 python3-pip-whl all 24.0+dfsg-1ubuntu1.3 [1707 kB]
+#6 21.45 Get:107 http://ports.ubuntu.com/ubuntu-ports noble-updates/universe arm64 python3-setuptools-whl all 68.1.2-2ubuntu1.2 [716 kB]
+#6 21.46 Get:108 http://ports.ubuntu.com/ubuntu-ports noble-updates/universe arm64 python3.12-venv arm64 3.12.3-1ubuntu0.15 [5674 B]
+#6 21.46 Get:109 http://ports.ubuntu.com/ubuntu-ports noble-updates/universe arm64 python3-venv arm64 3.12.3-0ubuntu2.1 [1032 B]
+#6 21.70 debconf: delaying package configuration, since apt-utils is not installed
+#6 21.72 Fetched 105 MB in 12s (8952 kB/s)
+#6 21.73 Selecting previously unselected package libpython3.12-minimal:arm64.
+#6 21.73 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 4376 files and directories currently installed.)
+#6 21.73 Preparing to unpack .../libpython3.12-minimal_3.12.3-1ubuntu0.15_arm64.deb ...
+#6 21.73 Unpacking libpython3.12-minimal:arm64 (3.12.3-1ubuntu0.15) ...
+#6 21.79 Selecting previously unselected package libexpat1:arm64.
+#6 21.79 Preparing to unpack .../libexpat1_2.6.1-2ubuntu0.4_arm64.deb ...
+#6 21.79 Unpacking libexpat1:arm64 (2.6.1-2ubuntu0.4) ...
+#6 21.80 Selecting previously unselected package python3.12-minimal.
+#6 21.80 Preparing to unpack .../python3.12-minimal_3.12.3-1ubuntu0.15_arm64.deb ...
+#6 21.80 Unpacking python3.12-minimal (3.12.3-1ubuntu0.15) ...
+#6 21.86 Setting up libpython3.12-minimal:arm64 (3.12.3-1ubuntu0.15) ...
+#6 21.86 Setting up libexpat1:arm64 (2.6.1-2ubuntu0.4) ...
+#6 21.86 Setting up python3.12-minimal (3.12.3-1ubuntu0.15) ...
+#6 22.49 Selecting previously unselected package python3-minimal.
+#6 22.49 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 4695 files and directories currently installed.)
+#6 22.49 Preparing to unpack .../0-python3-minimal_3.12.3-0ubuntu2.1_arm64.deb ...
+#6 22.49 Unpacking python3-minimal (3.12.3-0ubuntu2.1) ...
+#6 22.50 Selecting previously unselected package media-types.
+#6 22.50 Preparing to unpack .../1-media-types_10.1.0_all.deb ...
+#6 22.50 Unpacking media-types (10.1.0) ...
+#6 22.51 Selecting previously unselected package netbase.
+#6 22.51 Preparing to unpack .../2-netbase_6.4_all.deb ...
+#6 22.51 Unpacking netbase (6.4) ...
+#6 22.52 Selecting previously unselected package tzdata.
+#6 22.52 Preparing to unpack .../3-tzdata_2026c-0ubuntu0.24.04.1_all.deb ...
+#6 22.52 Unpacking tzdata (2026c-0ubuntu0.24.04.1) ...
+#6 22.56 Selecting previously unselected package readline-common.
+#6 22.56 Preparing to unpack .../4-readline-common_8.2-4build1_all.deb ...
+#6 22.56 Unpacking readline-common (8.2-4build1) ...
+#6 22.58 Selecting previously unselected package libreadline8t64:arm64.
+#6 22.58 Preparing to unpack .../5-libreadline8t64_8.2-4build1_arm64.deb ...
+#6 22.58 Adding 'diversion of /lib/aarch64-linux-gnu/libhistory.so.8 to /lib/aarch64-linux-gnu/libhistory.so.8.usr-is-merged by libreadline8t64'
+#6 22.59 Adding 'diversion of /lib/aarch64-linux-gnu/libhistory.so.8.2 to /lib/aarch64-linux-gnu/libhistory.so.8.2.usr-is-merged by libreadline8t64'
+#6 22.59 Adding 'diversion of /lib/aarch64-linux-gnu/libreadline.so.8 to /lib/aarch64-linux-gnu/libreadline.so.8.usr-is-merged by libreadline8t64'
+#6 22.59 Adding 'diversion of /lib/aarch64-linux-gnu/libreadline.so.8.2 to /lib/aarch64-linux-gnu/libreadline.so.8.2.usr-is-merged by libreadline8t64'
+#6 22.59 Unpacking libreadline8t64:arm64 (8.2-4build1) ...
+#6 22.61 Selecting previously unselected package libsqlite3-0:arm64.
+#6 22.61 Preparing to unpack .../6-libsqlite3-0_3.45.1-1ubuntu2.7_arm64.deb ...
+#6 22.61 Unpacking libsqlite3-0:arm64 (3.45.1-1ubuntu2.7) ...
+#6 22.63 Selecting previously unselected package libpython3.12-stdlib:arm64.
+#6 22.63 Preparing to unpack .../7-libpython3.12-stdlib_3.12.3-1ubuntu0.15_arm64.deb ...
+#6 22.63 Unpacking libpython3.12-stdlib:arm64 (3.12.3-1ubuntu0.15) ...
+#6 22.73 Selecting previously unselected package python3.12.
+#6 22.74 Preparing to unpack .../8-python3.12_3.12.3-1ubuntu0.15_arm64.deb ...
+#6 22.74 Unpacking python3.12 (3.12.3-1ubuntu0.15) ...
+#6 22.75 Selecting previously unselected package libpython3-stdlib:arm64.
+#6 22.75 Preparing to unpack .../9-libpython3-stdlib_3.12.3-0ubuntu2.1_arm64.deb ...
+#6 22.75 Unpacking libpython3-stdlib:arm64 (3.12.3-0ubuntu2.1) ...
+#6 22.76 Setting up python3-minimal (3.12.3-0ubuntu2.1) ...
+#6 22.88 Selecting previously unselected package python3.
+#6 22.88 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 5701 files and directories currently installed.)
+#6 22.88 Preparing to unpack .../00-python3_3.12.3-0ubuntu2.1_arm64.deb ...
+#6 22.88 Unpacking python3 (3.12.3-0ubuntu2.1) ...
+#6 22.89 Selecting previously unselected package perl-modules-5.38.
+#6 22.89 Preparing to unpack .../01-perl-modules-5.38_5.38.2-3.2ubuntu0.3_all.deb ...
+#6 22.89 Unpacking perl-modules-5.38 (5.38.2-3.2ubuntu0.3) ...
+#6 23.21 Selecting previously unselected package libgdbm6t64:arm64.
+#6 23.21 Preparing to unpack .../02-libgdbm6t64_1.23-5.1build1_arm64.deb ...
+#6 23.21 Unpacking libgdbm6t64:arm64 (1.23-5.1build1) ...
+#6 23.23 Selecting previously unselected package libgdbm-compat4t64:arm64.
+#6 23.23 Preparing to unpack .../03-libgdbm-compat4t64_1.23-5.1build1_arm64.deb ...
+#6 23.23 Unpacking libgdbm-compat4t64:arm64 (1.23-5.1build1) ...
+#6 23.24 Selecting previously unselected package libperl5.38t64:arm64.
+#6 23.24 Preparing to unpack .../04-libperl5.38t64_5.38.2-3.2ubuntu0.3_arm64.deb ...
+#6 23.24 Unpacking libperl5.38t64:arm64 (5.38.2-3.2ubuntu0.3) ...
+#6 23.50 Selecting previously unselected package perl.
+#6 23.51 Preparing to unpack .../05-perl_5.38.2-3.2ubuntu0.3_arm64.deb ...
+#6 23.51 Unpacking perl (5.38.2-3.2ubuntu0.3) ...
+#6 23.53 Selecting previously unselected package openssl.
+#6 23.53 Preparing to unpack .../06-openssl_3.0.13-0ubuntu3.12_arm64.deb ...
+#6 23.53 Unpacking openssl (3.0.13-0ubuntu3.12) ...
+#6 23.55 Selecting previously unselected package ca-certificates.
+#6 23.55 Preparing to unpack .../07-ca-certificates_20260601~24.04.1_all.deb ...
+#6 23.55 Unpacking ca-certificates (20260601~24.04.1) ...
+#6 23.57 Selecting previously unselected package libapparmor1:arm64.
+#6 23.57 Preparing to unpack .../08-libapparmor1_4.0.1really4.0.1-0ubuntu0.24.04.7_arm64.deb ...
+#6 23.58 Unpacking libapparmor1:arm64 (4.0.1really4.0.1-0ubuntu0.24.04.7) ...
+#6 23.58 Selecting previously unselected package libkrb5support0:arm64.
+#6 23.58 Preparing to unpack .../09-libkrb5support0_1.20.1-6ubuntu2.8_arm64.deb ...
+#6 23.59 Unpacking libkrb5support0:arm64 (1.20.1-6ubuntu2.8) ...
+#6 23.59 Selecting previously unselected package libk5crypto3:arm64.
+#6 23.59 Preparing to unpack .../10-libk5crypto3_1.20.1-6ubuntu2.8_arm64.deb ...
+#6 23.59 Unpacking libk5crypto3:arm64 (1.20.1-6ubuntu2.8) ...
+#6 23.60 Selecting previously unselected package libkeyutils1:arm64.
+#6 23.60 Preparing to unpack .../11-libkeyutils1_1.6.3-3build1_arm64.deb ...
+#6 23.60 Unpacking libkeyutils1:arm64 (1.6.3-3build1) ...
+#6 23.61 Selecting previously unselected package libkrb5-3:arm64.
+#6 23.61 Preparing to unpack .../12-libkrb5-3_1.20.1-6ubuntu2.8_arm64.deb ...
+#6 23.61 Unpacking libkrb5-3:arm64 (1.20.1-6ubuntu2.8) ...
+#6 23.63 Selecting previously unselected package libgssapi-krb5-2:arm64.
+#6 23.64 Preparing to unpack .../13-libgssapi-krb5-2_1.20.1-6ubuntu2.8_arm64.deb ...
+#6 23.64 Unpacking libgssapi-krb5-2:arm64 (1.20.1-6ubuntu2.8) ...
+#6 23.65 Selecting previously unselected package python3-pkg-resources.
+#6 23.65 Preparing to unpack .../14-python3-pkg-resources_68.1.2-2ubuntu1.2_all.deb ...
+#6 23.65 Unpacking python3-pkg-resources (68.1.2-2ubuntu1.2) ...
+#6 23.67 Selecting previously unselected package sudo.
+#6 23.68 Preparing to unpack .../15-sudo_1.9.15p5-3ubuntu5.24.04.2_arm64.deb ...
+#6 23.68 Unpacking sudo (1.9.15p5-3ubuntu5.24.04.2) ...
+#6 23.71 Selecting previously unselected package libjansson4:arm64.
+#6 23.71 Preparing to unpack .../16-libjansson4_2.14-2build2_arm64.deb ...
+#6 23.72 Unpacking libjansson4:arm64 (2.14-2build2) ...
+#6 23.72 Selecting previously unselected package libnghttp2-14:arm64.
+#6 23.73 Preparing to unpack .../17-libnghttp2-14_1.59.0-1ubuntu0.4_arm64.deb ...
+#6 23.73 Unpacking libnghttp2-14:arm64 (1.59.0-1ubuntu0.4) ...
+#6 23.74 Selecting previously unselected package libpsl5t64:arm64.
+#6 23.74 Preparing to unpack .../18-libpsl5t64_0.21.2-1.1build1_arm64.deb ...
+#6 23.74 Unpacking libpsl5t64:arm64 (0.21.2-1.1build1) ...
+#6 23.75 Selecting previously unselected package xz-utils.
+#6 23.75 Preparing to unpack .../19-xz-utils_5.6.1+really5.4.5-1ubuntu0.3_arm64.deb ...
+#6 23.75 Unpacking xz-utils (5.6.1+really5.4.5-1ubuntu0.3) ...
+#6 23.76 Selecting previously unselected package binutils-common:arm64.
+#6 23.76 Preparing to unpack .../20-binutils-common_2.42-4ubuntu2.10_arm64.deb ...
+#6 23.76 Unpacking binutils-common:arm64 (2.42-4ubuntu2.10) ...
+#6 23.77 Selecting previously unselected package libsframe1:arm64.
+#6 23.77 Preparing to unpack .../21-libsframe1_2.42-4ubuntu2.10_arm64.deb ...
+#6 23.77 Unpacking libsframe1:arm64 (2.42-4ubuntu2.10) ...
+#6 23.78 Selecting previously unselected package libbinutils:arm64.
+#6 23.78 Preparing to unpack .../22-libbinutils_2.42-4ubuntu2.10_arm64.deb ...
+#6 23.78 Unpacking libbinutils:arm64 (2.42-4ubuntu2.10) ...
+#6 23.81 Selecting previously unselected package libctf-nobfd0:arm64.
+#6 23.81 Preparing to unpack .../23-libctf-nobfd0_2.42-4ubuntu2.10_arm64.deb ...
+#6 23.81 Unpacking libctf-nobfd0:arm64 (2.42-4ubuntu2.10) ...
+#6 23.82 Selecting previously unselected package libctf0:arm64.
+#6 23.82 Preparing to unpack .../24-libctf0_2.42-4ubuntu2.10_arm64.deb ...
+#6 23.82 Unpacking libctf0:arm64 (2.42-4ubuntu2.10) ...
+#6 23.83 Selecting previously unselected package libgprofng0:arm64.
+#6 23.83 Preparing to unpack .../25-libgprofng0_2.42-4ubuntu2.10_arm64.deb ...
+#6 23.83 Unpacking libgprofng0:arm64 (2.42-4ubuntu2.10) ...
+#6 23.85 Selecting previously unselected package binutils-aarch64-linux-gnu.
+#6 23.85 Preparing to unpack .../26-binutils-aarch64-linux-gnu_2.42-4ubuntu2.10_arm64.deb ...
+#6 23.85 Unpacking binutils-aarch64-linux-gnu (2.42-4ubuntu2.10) ...
+#6 23.96 Selecting previously unselected package binutils.
+#6 23.96 Preparing to unpack .../27-binutils_2.42-4ubuntu2.10_arm64.deb ...
+#6 23.96 Unpacking binutils (2.42-4ubuntu2.10) ...
+#6 23.97 Selecting previously unselected package libc-dev-bin.
+#6 23.97 Preparing to unpack .../28-libc-dev-bin_2.39-0ubuntu8.8_arm64.deb ...
+#6 23.97 Unpacking libc-dev-bin (2.39-0ubuntu8.8) ...
+#6 23.98 Selecting previously unselected package linux-libc-dev:arm64.
+#6 23.98 Preparing to unpack .../29-linux-libc-dev_6.8.0-138.138_arm64.deb ...
+#6 23.98 Unpacking linux-libc-dev:arm64 (6.8.0-138.138) ...
+#6 25.58 Selecting previously unselected package libcrypt-dev:arm64.
+#6 25.58 Preparing to unpack .../30-libcrypt-dev_1%3a4.4.36-4build1_arm64.deb ...
+#6 25.59 Unpacking libcrypt-dev:arm64 (1:4.4.36-4build1) ...
+#6 25.60 Selecting previously unselected package rpcsvc-proto.
+#6 25.60 Preparing to unpack .../31-rpcsvc-proto_1.4.2-0ubuntu7_arm64.deb ...
+#6 25.60 Unpacking rpcsvc-proto (1.4.2-0ubuntu7) ...
+#6 25.61 Selecting previously unselected package libc6-dev:arm64.
+#6 25.61 Preparing to unpack .../32-libc6-dev_2.39-0ubuntu8.8_arm64.deb ...
+#6 25.61 Unpacking libc6-dev:arm64 (2.39-0ubuntu8.8) ...
+#6 25.71 Selecting previously unselected package gcc-13-base:arm64.
+#6 25.72 Preparing to unpack .../33-gcc-13-base_13.3.0-6ubuntu2~24.04.1_arm64.deb ...
+#6 25.72 Unpacking gcc-13-base:arm64 (13.3.0-6ubuntu2~24.04.1) ...
+#6 25.73 Selecting previously unselected package libisl23:arm64.
+#6 25.73 Preparing to unpack .../34-libisl23_0.26-3build1.1_arm64.deb ...
+#6 25.73 Unpacking libisl23:arm64 (0.26-3build1.1) ...
+#6 25.75 Selecting previously unselected package libmpfr6:arm64.
+#6 25.75 Preparing to unpack .../35-libmpfr6_4.2.1-1build1.1_arm64.deb ...
+#6 25.75 Unpacking libmpfr6:arm64 (4.2.1-1build1.1) ...
+#6 25.77 Selecting previously unselected package libmpc3:arm64.
+#6 25.77 Preparing to unpack .../36-libmpc3_1.3.1-1build1.1_arm64.deb ...
+#6 25.77 Unpacking libmpc3:arm64 (1.3.1-1build1.1) ...
+#6 25.78 Selecting previously unselected package cpp-13-aarch64-linux-gnu.
+#6 25.78 Preparing to unpack .../37-cpp-13-aarch64-linux-gnu_13.3.0-6ubuntu2~24.04.1_arm64.deb ...
+#6 25.78 Unpacking cpp-13-aarch64-linux-gnu (13.3.0-6ubuntu2~24.04.1) ...
+#6 25.96 Selecting previously unselected package cpp-13.
+#6 25.96 Preparing to unpack .../38-cpp-13_13.3.0-6ubuntu2~24.04.1_arm64.deb ...
+#6 25.96 Unpacking cpp-13 (13.3.0-6ubuntu2~24.04.1) ...
+#6 25.96 Selecting previously unselected package cpp-aarch64-linux-gnu.
+#6 25.96 Preparing to unpack .../39-cpp-aarch64-linux-gnu_4%3a13.2.0-7ubuntu1_arm64.deb ...
+#6 25.96 Unpacking cpp-aarch64-linux-gnu (4:13.2.0-7ubuntu1) ...
+#6 25.97 Selecting previously unselected package cpp.
+#6 25.97 Preparing to unpack .../40-cpp_4%3a13.2.0-7ubuntu1_arm64.deb ...
+#6 25.98 Unpacking cpp (4:13.2.0-7ubuntu1) ...
+#6 25.98 Selecting previously unselected package libcc1-0:arm64.
+#6 25.99 Preparing to unpack .../41-libcc1-0_14.2.0-4ubuntu2~24.04.1_arm64.deb ...
+#6 25.99 Unpacking libcc1-0:arm64 (14.2.0-4ubuntu2~24.04.1) ...
+#6 26.00 Selecting previously unselected package libgomp1:arm64.
+#6 26.00 Preparing to unpack .../42-libgomp1_14.2.0-4ubuntu2~24.04.1_arm64.deb ...
+#6 26.00 Unpacking libgomp1:arm64 (14.2.0-4ubuntu2~24.04.1) ...
+#6 26.01 Selecting previously unselected package libitm1:arm64.
+#6 26.01 Preparing to unpack .../43-libitm1_14.2.0-4ubuntu2~24.04.1_arm64.deb ...
+#6 26.01 Unpacking libitm1:arm64 (14.2.0-4ubuntu2~24.04.1) ...
+#6 26.02 Selecting previously unselected package libatomic1:arm64.
+#6 26.02 Preparing to unpack .../44-libatomic1_14.2.0-4ubuntu2~24.04.1_arm64.deb ...
+#6 26.02 Unpacking libatomic1:arm64 (14.2.0-4ubuntu2~24.04.1) ...
+#6 26.03 Selecting previously unselected package libasan8:arm64.
+#6 26.03 Preparing to unpack .../45-libasan8_14.2.0-4ubuntu2~24.04.1_arm64.deb ...
+#6 26.03 Unpacking libasan8:arm64 (14.2.0-4ubuntu2~24.04.1) ...
+#6 26.10 Selecting previously unselected package liblsan0:arm64.
+#6 26.10 Preparing to unpack .../46-liblsan0_14.2.0-4ubuntu2~24.04.1_arm64.deb ...
+#6 26.10 Unpacking liblsan0:arm64 (14.2.0-4ubuntu2~24.04.1) ...
+#6 26.13 Selecting previously unselected package libtsan2:arm64.
+#6 26.13 Preparing to unpack .../47-libtsan2_14.2.0-4ubuntu2~24.04.1_arm64.deb ...
+#6 26.13 Unpacking libtsan2:arm64 (14.2.0-4ubuntu2~24.04.1) ...
+#6 26.20 Selecting previously unselected package libubsan1:arm64.
+#6 26.20 Preparing to unpack .../48-libubsan1_14.2.0-4ubuntu2~24.04.1_arm64.deb ...
+#6 26.20 Unpacking libubsan1:arm64 (14.2.0-4ubuntu2~24.04.1) ...
+#6 26.22 Selecting previously unselected package libhwasan0:arm64.
+#6 26.22 Preparing to unpack .../49-libhwasan0_14.2.0-4ubuntu2~24.04.1_arm64.deb ...
+#6 26.22 Unpacking libhwasan0:arm64 (14.2.0-4ubuntu2~24.04.1) ...
+#6 26.26 Selecting previously unselected package libgcc-13-dev:arm64.
+#6 26.26 Preparing to unpack .../50-libgcc-13-dev_13.3.0-6ubuntu2~24.04.1_arm64.deb ...
+#6 26.26 Unpacking libgcc-13-dev:arm64 (13.3.0-6ubuntu2~24.04.1) ...
+#6 26.36 Selecting previously unselected package gcc-13-aarch64-linux-gnu.
+#6 26.36 Preparing to unpack .../51-gcc-13-aarch64-linux-gnu_13.3.0-6ubuntu2~24.04.1_arm64.deb ...
+#6 26.36 Unpacking gcc-13-aarch64-linux-gnu (13.3.0-6ubuntu2~24.04.1) ...
+#6 26.67 Selecting previously unselected package gcc-13.
+#6 26.68 Preparing to unpack .../52-gcc-13_13.3.0-6ubuntu2~24.04.1_arm64.deb ...
+#6 26.68 Unpacking gcc-13 (13.3.0-6ubuntu2~24.04.1) ...
+#6 26.69 Selecting previously unselected package gcc-aarch64-linux-gnu.
+#6 26.69 Preparing to unpack .../53-gcc-aarch64-linux-gnu_4%3a13.2.0-7ubuntu1_arm64.deb ...
+#6 26.69 Unpacking gcc-aarch64-linux-gnu (4:13.2.0-7ubuntu1) ...
+#6 26.70 Selecting previously unselected package gcc.
+#6 26.70 Preparing to unpack .../54-gcc_4%3a13.2.0-7ubuntu1_arm64.deb ...
+#6 26.70 Unpacking gcc (4:13.2.0-7ubuntu1) ...
+#6 26.71 Selecting previously unselected package libstdc++-13-dev:arm64.
+#6 26.71 Preparing to unpack .../55-libstdc++-13-dev_13.3.0-6ubuntu2~24.04.1_arm64.deb ...
+#6 26.71 Unpacking libstdc++-13-dev:arm64 (13.3.0-6ubuntu2~24.04.1) ...
+#6 26.87 Selecting previously unselected package g++-13-aarch64-linux-gnu.
+#6 26.87 Preparing to unpack .../56-g++-13-aarch64-linux-gnu_13.3.0-6ubuntu2~24.04.1_arm64.deb ...
+#6 26.87 Unpacking g++-13-aarch64-linux-gnu (13.3.0-6ubuntu2~24.04.1) ...
+#6 27.44 Selecting previously unselected package g++-13.
+#6 27.44 Preparing to unpack .../57-g++-13_13.3.0-6ubuntu2~24.04.1_arm64.deb ...
+#6 27.44 Unpacking g++-13 (13.3.0-6ubuntu2~24.04.1) ...
+#6 27.45 Selecting previously unselected package g++-aarch64-linux-gnu.
+#6 27.45 Preparing to unpack .../58-g++-aarch64-linux-gnu_4%3a13.2.0-7ubuntu1_arm64.deb ...
+#6 27.45 Unpacking g++-aarch64-linux-gnu (4:13.2.0-7ubuntu1) ...
+#6 27.46 Selecting previously unselected package g++.
+#6 27.46 Preparing to unpack .../59-g++_4%3a13.2.0-7ubuntu1_arm64.deb ...
+#6 27.46 Unpacking g++ (4:13.2.0-7ubuntu1) ...
+#6 27.47 Selecting previously unselected package make.
+#6 27.47 Preparing to unpack .../60-make_4.3-4.1build2_arm64.deb ...
+#6 27.47 Unpacking make (4.3-4.1build2) ...
+#6 27.48 Selecting previously unselected package libdpkg-perl.
+#6 27.48 Preparing to unpack .../61-libdpkg-perl_1.22.6ubuntu6.6_all.deb ...
+#6 27.48 Unpacking libdpkg-perl (1.22.6ubuntu6.6) ...
+#6 27.51 Selecting previously unselected package bzip2.
+#6 27.51 Preparing to unpack .../62-bzip2_1.0.8-5.1build0.1_arm64.deb ...
+#6 27.51 Unpacking bzip2 (1.0.8-5.1build0.1) ...
+#6 27.52 Selecting previously unselected package patch.
+#6 27.52 Preparing to unpack .../63-patch_2.7.6-7build3_arm64.deb ...
+#6 27.52 Unpacking patch (2.7.6-7build3) ...
+#6 27.53 Selecting previously unselected package lto-disabled-list.
+#6 27.53 Preparing to unpack .../64-lto-disabled-list_47_all.deb ...
+#6 27.53 Unpacking lto-disabled-list (47) ...
+#6 27.54 Selecting previously unselected package dpkg-dev.
+#6 27.54 Preparing to unpack .../65-dpkg-dev_1.22.6ubuntu6.6_all.deb ...
+#6 27.54 Unpacking dpkg-dev (1.22.6ubuntu6.6) ...
+#6 27.56 Selecting previously unselected package build-essential.
+#6 27.56 Preparing to unpack .../66-build-essential_12.10ubuntu1_arm64.deb ...
+#6 27.56 Unpacking build-essential (12.10ubuntu1) ...
+#6 27.57 Selecting previously unselected package libbrotli1:arm64.
+#6 27.58 Preparing to unpack .../67-libbrotli1_1.1.0-2build2_arm64.deb ...
+#6 27.58 Unpacking libbrotli1:arm64 (1.1.0-2build2) ...
+#6 27.59 Selecting previously unselected package libsasl2-modules-db:arm64.
+#6 27.59 Preparing to unpack .../68-libsasl2-modules-db_2.1.28+dfsg1-5ubuntu3.1_arm64.deb ...
+#6 27.59 Unpacking libsasl2-modules-db:arm64 (2.1.28+dfsg1-5ubuntu3.1) ...
+#6 27.60 Selecting previously unselected package libsasl2-2:arm64.
+#6 27.60 Preparing to unpack .../69-libsasl2-2_2.1.28+dfsg1-5ubuntu3.1_arm64.deb ...
+#6 27.60 Unpacking libsasl2-2:arm64 (2.1.28+dfsg1-5ubuntu3.1) ...
+#6 27.61 Selecting previously unselected package libldap2:arm64.
+#6 27.61 Preparing to unpack .../70-libldap2_2.6.10+dfsg-0ubuntu0.24.04.1_arm64.deb ...
+#6 27.61 Unpacking libldap2:arm64 (2.6.10+dfsg-0ubuntu0.24.04.1) ...
+#6 27.63 Selecting previously unselected package librtmp1:arm64.
+#6 27.63 Preparing to unpack .../71-librtmp1_2.4+20151223.gitfa8646d.1-2build7_arm64.deb ...
+#6 27.63 Unpacking librtmp1:arm64 (2.4+20151223.gitfa8646d.1-2build7) ...
+#6 27.64 Selecting previously unselected package libssh-4:arm64.
+#6 27.64 Preparing to unpack .../72-libssh-4_0.10.6-2ubuntu0.4_arm64.deb ...
+#6 27.64 Unpacking libssh-4:arm64 (0.10.6-2ubuntu0.4) ...
+#6 27.65 Selecting previously unselected package libcurl4t64:arm64.
+#6 27.65 Preparing to unpack .../73-libcurl4t64_8.5.0-2ubuntu10.11_arm64.deb ...
+#6 27.65 Unpacking libcurl4t64:arm64 (8.5.0-2ubuntu10.11) ...
+#6 27.66 Selecting previously unselected package curl.
+#6 27.66 Preparing to unpack .../74-curl_8.5.0-2ubuntu10.11_arm64.deb ...
+#6 27.66 Unpacking curl (8.5.0-2ubuntu10.11) ...
+#6 27.68 Selecting previously unselected package libcurl3t64-gnutls:arm64.
+#6 27.68 Preparing to unpack .../75-libcurl3t64-gnutls_8.5.0-2ubuntu10.11_arm64.deb ...
+#6 27.68 Unpacking libcurl3t64-gnutls:arm64 (8.5.0-2ubuntu10.11) ...
+#6 27.69 Selecting previously unselected package liberror-perl.
+#6 27.69 Preparing to unpack .../76-liberror-perl_0.17029-2_all.deb ...
+#6 27.69 Unpacking liberror-perl (0.17029-2) ...
+#6 27.70 Selecting previously unselected package git-man.
+#6 27.70 Preparing to unpack .../77-git-man_1%3a2.43.0-1ubuntu7.3_all.deb ...
+#6 27.70 Unpacking git-man (1:2.43.0-1ubuntu7.3) ...
+#6 27.72 Selecting previously unselected package git.
+#6 27.72 Preparing to unpack .../78-git_1%3a2.43.0-1ubuntu7.3_arm64.deb ...
+#6 27.72 Unpacking git (1:2.43.0-1ubuntu7.3) ...
+#6 27.84 Selecting previously unselected package libexpat1-dev:arm64.
+#6 27.85 Preparing to unpack .../79-libexpat1-dev_2.6.1-2ubuntu0.4_arm64.deb ...
+#6 27.85 Unpacking libexpat1-dev:arm64 (2.6.1-2ubuntu0.4) ...
+#6 27.87 Selecting previously unselected package libjs-jquery.
+#6 27.87 Preparing to unpack .../80-libjs-jquery_3.6.1+dfsg+~3.5.14-1_all.deb ...
+#6 27.87 Unpacking libjs-jquery (3.6.1+dfsg+~3.5.14-1) ...
+#6 27.89 Selecting previously unselected package libjs-underscore.
+#6 27.89 Preparing to unpack .../81-libjs-underscore_1.13.4~dfsg+~1.11.4-3_all.deb ...
+#6 27.89 Unpacking libjs-underscore (1.13.4~dfsg+~1.11.4-3) ...
+#6 27.90 Selecting previously unselected package libjs-sphinxdoc.
+#6 27.90 Preparing to unpack .../82-libjs-sphinxdoc_7.2.6-6_all.deb ...
+#6 27.90 Unpacking libjs-sphinxdoc (7.2.6-6) ...
+#6 27.91 Selecting previously unselected package libpython3.12t64:arm64.
+#6 27.92 Preparing to unpack .../83-libpython3.12t64_3.12.3-1ubuntu0.15_arm64.deb ...
+#6 27.92 Unpacking libpython3.12t64:arm64 (3.12.3-1ubuntu0.15) ...
+#6 27.98 Selecting previously unselected package zlib1g-dev:arm64.
+#6 27.98 Preparing to unpack .../84-zlib1g-dev_1%3a1.3.dfsg-3.1ubuntu2.1_arm64.deb ...
+#6 27.98 Unpacking zlib1g-dev:arm64 (1:1.3.dfsg-3.1ubuntu2.1) ...
+#6 28.00 Selecting previously unselected package libpython3.12-dev:arm64.
+#6 28.00 Preparing to unpack .../85-libpython3.12-dev_3.12.3-1ubuntu0.15_arm64.deb ...
+#6 28.00 Unpacking libpython3.12-dev:arm64 (3.12.3-1ubuntu0.15) ...
+#6 28.18 Selecting previously unselected package libpython3-dev:arm64.
+#6 28.18 Preparing to unpack .../86-libpython3-dev_3.12.3-0ubuntu2.1_arm64.deb ...
+#6 28.18 Unpacking libpython3-dev:arm64 (3.12.3-0ubuntu2.1) ...
+#6 28.19 Selecting previously unselected package python3.12-dev.
+#6 28.19 Preparing to unpack .../87-python3.12-dev_3.12.3-1ubuntu0.15_arm64.deb ...
+#6 28.19 Unpacking python3.12-dev (3.12.3-1ubuntu0.15) ...
+#6 28.20 Selecting previously unselected package python3-dev.
+#6 28.20 Preparing to unpack .../88-python3-dev_3.12.3-0ubuntu2.1_arm64.deb ...
+#6 28.20 Unpacking python3-dev (3.12.3-0ubuntu2.1) ...
+#6 28.21 Selecting previously unselected package python3-setuptools.
+#6 28.21 Preparing to unpack .../89-python3-setuptools_68.1.2-2ubuntu1.2_all.deb ...
+#6 28.21 Unpacking python3-setuptools (68.1.2-2ubuntu1.2) ...
+#6 28.25 Selecting previously unselected package python3-wheel.
+#6 28.25 Preparing to unpack .../90-python3-wheel_0.42.0-2_all.deb ...
+#6 28.25 Unpacking python3-wheel (0.42.0-2) ...
+#6 28.27 Selecting previously unselected package python3-pip.
+#6 28.27 Preparing to unpack .../91-python3-pip_24.0+dfsg-1ubuntu1.3_all.deb ...
+#6 28.27 Unpacking python3-pip (24.0+dfsg-1ubuntu1.3) ...
+#6 28.41 Selecting previously unselected package python3-pip-whl.
+#6 28.41 Preparing to unpack .../92-python3-pip-whl_24.0+dfsg-1ubuntu1.3_all.deb ...
+#6 28.41 Unpacking python3-pip-whl (24.0+dfsg-1ubuntu1.3) ...
+#6 28.43 Selecting previously unselected package python3-setuptools-whl.
+#6 28.43 Preparing to unpack .../93-python3-setuptools-whl_68.1.2-2ubuntu1.2_all.deb ...
+#6 28.43 Unpacking python3-setuptools-whl (68.1.2-2ubuntu1.2) ...
+#6 28.45 Selecting previously unselected package python3.12-venv.
+#6 28.45 Preparing to unpack .../94-python3.12-venv_3.12.3-1ubuntu0.15_arm64.deb ...
+#6 28.45 Unpacking python3.12-venv (3.12.3-1ubuntu0.15) ...
+#6 28.46 Selecting previously unselected package python3-venv.
+#6 28.46 Preparing to unpack .../95-python3-venv_3.12.3-0ubuntu2.1_arm64.deb ...
+#6 28.46 Unpacking python3-venv (3.12.3-0ubuntu2.1) ...
+#6 28.47 Setting up media-types (10.1.0) ...
+#6 28.47 Setting up python3-setuptools-whl (68.1.2-2ubuntu1.2) ...
+#6 28.47 Setting up libkeyutils1:arm64 (1.6.3-3build1) ...
+#6 28.47 Setting up lto-disabled-list (47) ...
+#6 28.47 Setting up libapparmor1:arm64 (4.0.1really4.0.1-0ubuntu0.24.04.7) ...
+#6 28.48 Setting up libgdbm6t64:arm64 (1.23-5.1build1) ...
+#6 28.48 Setting up libgdbm-compat4t64:arm64 (1.23-5.1build1) ...
+#6 28.48 Setting up libbrotli1:arm64 (1.1.0-2build2) ...
+#6 28.48 Setting up libsqlite3-0:arm64 (3.45.1-1ubuntu2.7) ...
+#6 28.48 Setting up binutils-common:arm64 (2.42-4ubuntu2.10) ...
+#6 28.48 Setting up libpsl5t64:arm64 (0.21.2-1.1build1) ...
+#6 28.49 Setting up libnghttp2-14:arm64 (1.59.0-1ubuntu0.4) ...
+#6 28.49 Setting up linux-libc-dev:arm64 (6.8.0-138.138) ...
+#6 28.49 Setting up libctf-nobfd0:arm64 (2.42-4ubuntu2.10) ...
+#6 28.49 Setting up libgomp1:arm64 (14.2.0-4ubuntu2~24.04.1) ...
+#6 28.49 Setting up bzip2 (1.0.8-5.1build0.1) ...
+#6 28.49 Setting up libsframe1:arm64 (2.42-4ubuntu2.10) ...
+#6 28.50 Setting up libjansson4:arm64 (2.14-2build2) ...
+#6 28.51 Setting up libkrb5support0:arm64 (1.20.1-6ubuntu2.8) ...
+#6 28.51 Setting up libsasl2-modules-db:arm64 (2.1.28+dfsg1-5ubuntu3.1) ...
+#6 28.51 Setting up tzdata (2026c-0ubuntu0.24.04.1) ...
+#6 28.57 
+#6 28.57 Current default time zone: 'Etc/UTC'
+#6 28.57 Local time is now:      Tue Aug 18 22:05:14 UTC 2026.
+#6 28.57 Universal Time is now:  Tue Aug 18 22:05:14 UTC 2026.
+#6 28.57 Run 'dpkg-reconfigure tzdata' if you wish to change it.
+#6 28.57 
+#6 28.57 Setting up rpcsvc-proto (1.4.2-0ubuntu7) ...
+#6 28.57 Setting up gcc-13-base:arm64 (13.3.0-6ubuntu2~24.04.1) ...
+#6 28.58 Setting up make (4.3-4.1build2) ...
+#6 28.58 Setting up libmpfr6:arm64 (4.2.1-1build1.1) ...
+#6 28.58 Setting up librtmp1:arm64 (2.4+20151223.gitfa8646d.1-2build7) ...
+#6 28.58 Setting up xz-utils (5.6.1+really5.4.5-1ubuntu0.3) ...
+#6 28.58 update-alternatives: using /usr/bin/xz to provide /usr/bin/lzma (lzma) in auto mode
+#6 28.59 update-alternatives: warning: skip creation of /usr/share/man/man1/lzma.1.gz because associated file /usr/share/man/man1/xz.1.gz (of link group lzma) doesn't exist
+#6 28.59 update-alternatives: warning: skip creation of /usr/share/man/man1/unlzma.1.gz because associated file /usr/share/man/man1/unxz.1.gz (of link group lzma) doesn't exist
+#6 28.59 update-alternatives: warning: skip creation of /usr/share/man/man1/lzcat.1.gz because associated file /usr/share/man/man1/xzcat.1.gz (of link group lzma) doesn't exist
+#6 28.59 update-alternatives: warning: skip creation of /usr/share/man/man1/lzmore.1.gz because associated file /usr/share/man/man1/xzmore.1.gz (of link group lzma) doesn't exist
+#6 28.59 update-alternatives: warning: skip creation of /usr/share/man/man1/lzless.1.gz because associated file /usr/share/man/man1/xzless.1.gz (of link group lzma) doesn't exist
+#6 28.59 update-alternatives: warning: skip creation of /usr/share/man/man1/lzdiff.1.gz because associated file /usr/share/man/man1/xzdiff.1.gz (of link group lzma) doesn't exist
+#6 28.59 update-alternatives: warning: skip creation of /usr/share/man/man1/lzcmp.1.gz because associated file /usr/share/man/man1/xzcmp.1.gz (of link group lzma) doesn't exist
+#6 28.59 update-alternatives: warning: skip creation of /usr/share/man/man1/lzgrep.1.gz because associated file /usr/share/man/man1/xzgrep.1.gz (of link group lzma) doesn't exist
+#6 28.59 update-alternatives: warning: skip creation of /usr/share/man/man1/lzegrep.1.gz because associated file /usr/share/man/man1/xzegrep.1.gz (of link group lzma) doesn't exist
+#6 28.59 update-alternatives: warning: skip creation of /usr/share/man/man1/lzfgrep.1.gz because associated file /usr/share/man/man1/xzfgrep.1.gz (of link group lzma) doesn't exist
+#6 28.59 Setting up perl-modules-5.38 (5.38.2-3.2ubuntu0.3) ...
+#6 28.59 Setting up libmpc3:arm64 (1.3.1-1build1.1) ...
+#6 28.59 Setting up libatomic1:arm64 (14.2.0-4ubuntu2~24.04.1) ...
+#6 28.59 Setting up patch (2.7.6-7build3) ...
+#6 28.59 Setting up sudo (1.9.15p5-3ubuntu5.24.04.2) ...
+#6 28.60 Setting up libk5crypto3:arm64 (1.20.1-6ubuntu2.8) ...
+#6 28.60 Setting up libsasl2-2:arm64 (2.1.28+dfsg1-5ubuntu3.1) ...
+#6 28.60 Setting up libubsan1:arm64 (14.2.0-4ubuntu2~24.04.1) ...
+#6 28.60 Setting up libhwasan0:arm64 (14.2.0-4ubuntu2~24.04.1) ...
+#6 28.60 Setting up libcrypt-dev:arm64 (1:4.4.36-4build1) ...
+#6 28.61 Setting up libasan8:arm64 (14.2.0-4ubuntu2~24.04.1) ...
+#6 28.61 Setting up git-man (1:2.43.0-1ubuntu7.3) ...
+#6 28.61 Setting up netbase (6.4) ...
+#6 28.61 Setting up libkrb5-3:arm64 (1.20.1-6ubuntu2.8) ...
+#6 28.62 Setting up libperl5.38t64:arm64 (5.38.2-3.2ubuntu0.3) ...
+#6 28.62 Setting up libtsan2:arm64 (14.2.0-4ubuntu2~24.04.1) ...
+#6 28.62 Setting up libjs-jquery (3.6.1+dfsg+~3.5.14-1) ...
+#6 28.62 Setting up libbinutils:arm64 (2.42-4ubuntu2.10) ...
+#6 28.63 Setting up libisl23:arm64 (0.26-3build1.1) ...
+#6 28.63 Setting up libc-dev-bin (2.39-0ubuntu8.8) ...
+#6 28.63 Setting up openssl (3.0.13-0ubuntu3.12) ...
+#6 28.63 Setting up readline-common (8.2-4build1) ...
+#6 28.63 Setting up libcc1-0:arm64 (14.2.0-4ubuntu2~24.04.1) ...
+#6 28.64 Setting up libldap2:arm64 (2.6.10+dfsg-0ubuntu0.24.04.1) ...
+#6 28.64 Setting up liblsan0:arm64 (14.2.0-4ubuntu2~24.04.1) ...
+#6 28.64 Setting up libitm1:arm64 (14.2.0-4ubuntu2~24.04.1) ...
+#6 28.64 Setting up libjs-underscore (1.13.4~dfsg+~1.11.4-3) ...
+#6 28.64 Setting up libctf0:arm64 (2.42-4ubuntu2.10) ...
+#6 28.64 Setting up cpp-13-aarch64-linux-gnu (13.3.0-6ubuntu2~24.04.1) ...
+#6 28.64 Setting up ca-certificates (20260601~24.04.1) ...
+#6 28.84 Updating certificates in /etc/ssl/certs...
+#6 29.06 121 added, 0 removed; done.
+#6 29.07 Setting up perl (5.38.2-3.2ubuntu0.3) ...
+#6 29.07 Setting up cpp-aarch64-linux-gnu (4:13.2.0-7ubuntu1) ...
+#6 29.07 Setting up libgprofng0:arm64 (2.42-4ubuntu2.10) ...
+#6 29.07 Setting up libgssapi-krb5-2:arm64 (1.20.1-6ubuntu2.8) ...
+#6 29.08 Setting up libjs-sphinxdoc (7.2.6-6) ...
+#6 29.08 Setting up libdpkg-perl (1.22.6ubuntu6.6) ...
+#6 29.08 Setting up libssh-4:arm64 (0.10.6-2ubuntu0.4) ...
+#6 29.08 Setting up libreadline8t64:arm64 (8.2-4build1) ...
+#6 29.08 Setting up libgcc-13-dev:arm64 (13.3.0-6ubuntu2~24.04.1) ...
+#6 29.08 Setting up libc6-dev:arm64 (2.39-0ubuntu8.8) ...
+#6 29.09 Setting up libstdc++-13-dev:arm64 (13.3.0-6ubuntu2~24.04.1) ...
+#6 29.09 Setting up libpython3.12-stdlib:arm64 (3.12.3-1ubuntu0.15) ...
+#6 29.09 Setting up cpp-13 (13.3.0-6ubuntu2~24.04.1) ...
+#6 29.09 Setting up libcurl4t64:arm64 (8.5.0-2ubuntu10.11) ...
+#6 29.09 Setting up python3-pip-whl (24.0+dfsg-1ubuntu1.3) ...
+#6 29.09 Setting up python3.12 (3.12.3-1ubuntu0.15) ...
+#6 30.22 Setting up libcurl3t64-gnutls:arm64 (8.5.0-2ubuntu10.11) ...
+#6 30.25 Setting up binutils-aarch64-linux-gnu (2.42-4ubuntu2.10) ...
+#6 30.25 Setting up binutils (2.42-4ubuntu2.10) ...
+#6 30.26 Setting up gcc-13-aarch64-linux-gnu (13.3.0-6ubuntu2~24.04.1) ...
+#6 30.26 Setting up dpkg-dev (1.22.6ubuntu6.6) ...
+#6 30.27 Setting up liberror-perl (0.17029-2) ...
+#6 30.27 Setting up libpython3.12t64:arm64 (3.12.3-1ubuntu0.15) ...
+#6 30.27 Setting up libexpat1-dev:arm64 (2.6.1-2ubuntu0.4) ...
+#6 30.27 Setting up gcc-13 (13.3.0-6ubuntu2~24.04.1) ...
+#6 30.27 Setting up git (1:2.43.0-1ubuntu7.3) ...
+#6 30.28 Setting up zlib1g-dev:arm64 (1:1.3.dfsg-3.1ubuntu2.1) ...
+#6 30.28 Setting up cpp (4:13.2.0-7ubuntu1) ...
+#6 30.28 Setting up curl (8.5.0-2ubuntu10.11) ...
+#6 30.29 Setting up libpython3-stdlib:arm64 (3.12.3-0ubuntu2.1) ...
+#6 30.29 Setting up g++-13-aarch64-linux-gnu (13.3.0-6ubuntu2~24.04.1) ...
+#6 30.29 Setting up gcc-aarch64-linux-gnu (4:13.2.0-7ubuntu1) ...
+#6 30.29 Setting up g++-13 (13.3.0-6ubuntu2~24.04.1) ...
+#6 30.29 Setting up python3.12-venv (3.12.3-1ubuntu0.15) ...
+#6 30.32 Setting up python3 (3.12.3-0ubuntu2.1) ...
+#6 30.40 Setting up libpython3.12-dev:arm64 (3.12.3-1ubuntu0.15) ...
+#6 30.40 Setting up python3-wheel (0.42.0-2) ...
+#6 30.50 Setting up gcc (4:13.2.0-7ubuntu1) ...
+#6 30.51 Setting up python3-venv (3.12.3-0ubuntu2.1) ...
+#6 30.51 Setting up python3.12-dev (3.12.3-1ubuntu0.15) ...
+#6 30.51 Setting up g++-aarch64-linux-gnu (4:13.2.0-7ubuntu1) ...
+#6 30.51 Setting up python3-pkg-resources (68.1.2-2ubuntu1.2) ...
+#6 30.67 Setting up libpython3-dev:arm64 (3.12.3-0ubuntu2.1) ...
+#6 30.67 Setting up python3-setuptools (68.1.2-2ubuntu1.2) ...
+#6 31.01 Setting up python3-dev (3.12.3-0ubuntu2.1) ...
+#6 31.02 Setting up python3-pip (24.0+dfsg-1ubuntu1.3) ...
+#6 31.96 Setting up g++ (4:13.2.0-7ubuntu1) ...
+#6 31.97 update-alternatives: using /usr/bin/g++ to provide /usr/bin/c++ (c++) in auto mode
+#6 31.97 update-alternatives: warning: skip creation of /usr/share/man/man1/c++.1.gz because associated file /usr/share/man/man1/g++.1.gz (of link group c++) doesn't exist
+#6 31.97 Setting up build-essential (12.10ubuntu1) ...
+#6 31.97 Processing triggers for libc-bin (2.39-0ubuntu8.8) ...
+#6 31.98 Processing triggers for ca-certificates (20260601~24.04.1) ...
+#6 31.98 Updating certificates in /etc/ssl/certs...
+#6 32.15 0 added, 0 removed; done.
+#6 32.15 Running hooks in /etc/ca-certificates/update.d...
+#6 32.15 done.
+#6 DONE 32.2s
 
-#9 [ 4/16] RUN apt install -y --no-install-recommends     sudo     curl     systemctl     gnupg     git     vim
-#9 CACHED
+#7 [linux/arm64  2/11] RUN python3 -m venv /opt/venv
+#7 DONE 2.8s
 
-#10 [ 5/16] RUN apt-get update && apt-get install -y --no-install-recommends     build-essential     python3     python3-pip     python3-dev     python3-venv     && rm -rf /var/lib/apt/lists/*
-#10 CACHED
+#8 [linux/arm64  3/11] RUN mkdir /install
+#8 DONE 0.1s
 
-#11 [ 7/16] RUN python -m pip install --upgrade pip
-#11 CACHED
+#9 [linux/arm64/v8  4/11] COPY requirements.txt /install/requirements.txt
+#9 DONE 0.0s
 
-#12 [ 8/16] RUN pip3 install jupyterlab
-#12 CACHED
+#10 [linux/arm64  5/11] RUN pip install --upgrade pip &&     pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext -r /install/requirements.txt
+#10 0.265 Requirement already satisfied: pip in /opt/venv/lib/python3.12/site-packages (24.0)
+#10 0.453 Collecting pip
+#10 0.580   Downloading pip-26.2.1-py3-none-any.whl.metadata (4.6 kB)
+#10 0.619 Downloading pip-26.2.1-py3-none-any.whl (1.8 MB)
+#10 1.100    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 3.9 MB/s eta 0:00:00
+#10 1.123 Installing collected packages: pip
+#10 1.123   Attempting uninstall: pip
+#10 1.124     Found existing installation: pip 24.0
+#10 1.148     Uninstalling pip-24.0:
+#10 1.365       Successfully uninstalled pip-24.0
+#10 2.170 Successfully installed pip-26.2.1
+#10 2.820 Collecting jupyterlab
+#10 2.938   Downloading jupyterlab-4.6.3-py3-none-any.whl.metadata (16 kB)
+#10 2.971 Collecting jupyterlab_vim
+#10 3.000   Downloading jupyterlab_vim-4.1.4-py3-none-any.whl.metadata (8.7 kB)
+#10 3.037 Collecting jupytext
+#10 3.064   Downloading jupytext-1.19.5-py3-none-any.whl.metadata (15 kB)
+#10 3.112 Collecting arviz==0.18.0 (from -r /install/requirements.txt (line 1))
+#10 3.140   Downloading arviz-0.18.0-py3-none-any.whl.metadata (8.7 kB)
+#10 3.193 Collecting econml (from -r /install/requirements.txt (line 2))
+#10 3.222   Downloading econml-0.17.0.tar.gz (1.8 MB)
+#10 3.697      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 3.9 MB/s  0:00:00
+#10 3.847   Installing build dependencies: started
+#10 26.45   Installing build dependencies: finished with status 'done'
+#10 26.46   Getting requirements to build wheel: started
+#10 27.14   Getting requirements to build wheel: finished with status 'done'
+#10 27.14   Preparing metadata (pyproject.toml): started
+#10 27.37   Preparing metadata (pyproject.toml): finished with status 'done'
+#10 27.52 Collecting matplotlib (from -r /install/requirements.txt (line 3))
+#10 27.55   Downloading matplotlib-3.11.1-cp312-cp312-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (80 kB)
+#10 28.16 Collecting numpy (from -r /install/requirements.txt (line 4))
+#10 28.20   Downloading numpy-2.5.2-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (6.6 kB)
+#10 28.32 Collecting pandas (from -r /install/requirements.txt (line 5))
+#10 28.35   Downloading pandas-3.0.5-cp312-cp312-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (79 kB)
+#10 28.41 Collecting pymc==5.16.2 (from -r /install/requirements.txt (line 6))
+#10 28.44   Downloading pymc-5.16.2-py3-none-any.whl.metadata (15 kB)
+#10 28.52 Collecting scikit-learn (from -r /install/requirements.txt (line 7))
+#10 28.55   Downloading scikit_learn-1.9.0-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (11 kB)
+#10 28.68 Collecting scipy (from -r /install/requirements.txt (line 8))
+#10 28.70   Downloading scipy-1.18.0-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (62 kB)
+#10 28.77 Collecting seaborn (from -r /install/requirements.txt (line 9))
+#10 28.80   Downloading seaborn-0.13.2-py3-none-any.whl.metadata (5.4 kB)
+#10 28.85 Collecting statsmodels (from -r /install/requirements.txt (line 10))
+#10 28.88   Downloading statsmodels-0.14.6-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (9.5 kB)
+#10 28.92 Collecting tqdm (from -r /install/requirements.txt (line 11))
+#10 28.95   Downloading tqdm-4.70.0-py3-none-any.whl.metadata (57 kB)
+#10 29.04 Collecting setuptools>=60.0.0 (from arviz==0.18.0->-r /install/requirements.txt (line 1))
+#10 29.07   Downloading setuptools-84.0.0-py3-none-any.whl.metadata (6.6 kB)
+#10 29.08 Collecting numpy (from -r /install/requirements.txt (line 4))
+#10 29.10   Downloading numpy-1.26.4-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (62 kB)
+#10 29.15 Collecting packaging (from arviz==0.18.0->-r /install/requirements.txt (line 1))
+#10 29.18   Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+#10 29.21 Collecting dm-tree>=0.1.8 (from arviz==0.18.0->-r /install/requirements.txt (line 1))
+#10 29.24   Downloading dm_tree-0.1.10-cp312-cp312-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (2.6 kB)
+#10 29.28 Collecting xarray>=2022.6.0 (from arviz==0.18.0->-r /install/requirements.txt (line 1))
+#10 29.30   Downloading xarray-2026.7.0-py3-none-any.whl.metadata (12 kB)
+#10 29.34 Collecting h5netcdf>=1.0.2 (from arviz==0.18.0->-r /install/requirements.txt (line 1))
+#10 29.37   Downloading h5netcdf-1.8.1-py3-none-any.whl.metadata (15 kB)
+#10 29.41 Collecting typing-extensions>=4.1.0 (from arviz==0.18.0->-r /install/requirements.txt (line 1))
+#10 29.43   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+#10 29.47 Collecting xarray-einstats>=0.3 (from arviz==0.18.0->-r /install/requirements.txt (line 1))
+#10 29.51   Downloading xarray_einstats-0.11.0-py3-none-any.whl.metadata (5.8 kB)
+#10 29.56 Collecting cachetools>=4.2.1 (from pymc==5.16.2->-r /install/requirements.txt (line 6))
+#10 29.59   Downloading cachetools-7.1.7-py3-none-any.whl.metadata (5.5 kB)
+#10 29.63 Collecting cloudpickle (from pymc==5.16.2->-r /install/requirements.txt (line 6))
+#10 29.67   Downloading cloudpickle-3.1.2-py3-none-any.whl.metadata (7.1 kB)
+#10 29.85 Collecting pytensor<2.26,>=2.25.1 (from pymc==5.16.2->-r /install/requirements.txt (line 6))
+#10 29.89   Downloading pytensor-2.25.5-py2.py3-none-any.whl.metadata (9.9 kB)
+#10 29.93 Collecting rich>=13.7.1 (from pymc==5.16.2->-r /install/requirements.txt (line 6))
+#10 29.96   Downloading rich-15.0.0-py3-none-any.whl.metadata (18 kB)
+#10 29.99 Collecting threadpoolctl<4.0.0,>=3.1.0 (from pymc==5.16.2->-r /install/requirements.txt (line 6))
+#10 30.02   Downloading threadpoolctl-3.6.0-py3-none-any.whl.metadata (13 kB)
+#10 30.07 Collecting filelock>=3.15 (from pytensor<2.26,>=2.25.1->pymc==5.16.2->-r /install/requirements.txt (line 6))
+#10 30.10   Downloading filelock-3.32.3-py3-none-any.whl.metadata (2.0 kB)
+#10 30.13 Collecting etuples (from pytensor<2.26,>=2.25.1->pymc==5.16.2->-r /install/requirements.txt (line 6))
+#10 30.16   Downloading etuples-0.3.10-py3-none-any.whl.metadata (4.8 kB)
+#10 30.19 Collecting logical-unification (from pytensor<2.26,>=2.25.1->pymc==5.16.2->-r /install/requirements.txt (line 6))
+#10 30.23   Downloading logical_unification-0.4.7-py3-none-any.whl.metadata (15 kB)
+#10 30.26 Collecting miniKanren (from pytensor<2.26,>=2.25.1->pymc==5.16.2->-r /install/requirements.txt (line 6))
+#10 30.30   Downloading minikanren-1.0.5-py3-none-any.whl.metadata (7.6 kB)
+#10 30.35 Collecting cons (from pytensor<2.26,>=2.25.1->pymc==5.16.2->-r /install/requirements.txt (line 6))
+#10 30.38   Downloading cons-0.4.7-py3-none-any.whl.metadata (3.8 kB)
+#10 30.39 INFO: pip is looking at multiple versions of scipy to determine which version is compatible with other requirements. This could take a while.
+#10 30.39 Collecting scipy (from -r /install/requirements.txt (line 8))
+#10 30.43   Downloading scipy-1.17.1-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (62 kB)
+#10 30.49 Collecting async-lru>=1.0.0 (from jupyterlab)
+#10 30.52   Downloading async_lru-2.3.0-py3-none-any.whl.metadata (7.6 kB)
+#10 30.56 Collecting httpx<1,>=0.25.0 (from jupyterlab)
+#10 30.59   Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+#10 30.65 Collecting ipykernel!=6.30.0,>=6.5.0 (from jupyterlab)
+#10 30.67   Downloading ipykernel-7.3.0-py3-none-any.whl.metadata (4.5 kB)
+#10 30.71 Collecting jinja2>=3.0.3 (from jupyterlab)
+#10 30.77   Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+#10 30.81 Collecting jupyter-builder>=1.0.2 (from jupyterlab)
+#10 30.84   Downloading jupyter_builder-1.2.2-py3-none-any.whl.metadata (7.7 kB)
+#10 30.90 Collecting jupyter-core (from jupyterlab)
+#10 30.93   Downloading jupyter_core-5.9.1-py3-none-any.whl.metadata (1.5 kB)
+#10 30.97 Collecting jupyter-lsp>=2.0.0 (from jupyterlab)
+#10 31.00   Downloading jupyter_lsp-2.3.1-py3-none-any.whl.metadata (1.8 kB)
+#10 31.06 Collecting jupyter-server<3,>=2.19.0 (from jupyterlab)
+#10 31.09   Downloading jupyter_server-2.20.0-py3-none-any.whl.metadata (8.5 kB)
+#10 31.14 Collecting jupyterlab-server<3,>=2.28.0 (from jupyterlab)
+#10 31.17   Downloading jupyterlab_server-2.28.0-py3-none-any.whl.metadata (5.9 kB)
+#10 31.20 Collecting notebook-shim>=0.2 (from jupyterlab)
+#10 31.23   Downloading notebook_shim-0.2.4-py3-none-any.whl.metadata (4.0 kB)
+#10 31.30 Collecting tornado>=6.2.0 (from jupyterlab)
+#10 31.34   Downloading tornado-6.5.8-cp39-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (2.8 kB)
+#10 31.38 Collecting traitlets (from jupyterlab)
+#10 31.41   Downloading traitlets-5.16.1-py3-none-any.whl.metadata (10 kB)
+#10 31.45 Collecting anyio (from httpx<1,>=0.25.0->jupyterlab)
+#10 31.50   Downloading anyio-4.14.2-py3-none-any.whl.metadata (4.6 kB)
+#10 31.54 Collecting certifi (from httpx<1,>=0.25.0->jupyterlab)
+#10 31.57   Downloading certifi-2026.7.22-py3-none-any.whl.metadata (2.5 kB)
+#10 31.61 Collecting httpcore==1.* (from httpx<1,>=0.25.0->jupyterlab)
+#10 31.64   Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+#10 31.69 Collecting idna (from httpx<1,>=0.25.0->jupyterlab)
+#10 31.72   Downloading idna-3.19-py3-none-any.whl.metadata (9.2 kB)
+#10 31.76 Collecting h11>=0.16 (from httpcore==1.*->httpx<1,>=0.25.0->jupyterlab)
+#10 31.79   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+#10 31.84 Collecting argon2-cffi>=21.1 (from jupyter-server<3,>=2.19.0->jupyterlab)
+#10 31.87   Downloading argon2_cffi-25.1.0-py3-none-any.whl.metadata (4.1 kB)
+#10 31.92 Collecting jupyter-client>=7.4.4 (from jupyter-server<3,>=2.19.0->jupyterlab)
+#10 31.95   Downloading jupyter_client-8.9.1-py3-none-any.whl.metadata (8.5 kB)
+#10 31.98 Collecting jupyter-events>=0.11.0 (from jupyter-server<3,>=2.19.0->jupyterlab)
+#10 32.01   Downloading jupyter_events-0.12.1-py3-none-any.whl.metadata (5.8 kB)
+#10 32.05 Collecting jupyter-server-terminals>=0.4.4 (from jupyter-server<3,>=2.19.0->jupyterlab)
+#10 32.08   Downloading jupyter_server_terminals-0.5.4-py3-none-any.whl.metadata (5.9 kB)
+#10 32.17 Collecting nbconvert>=6.4.4 (from jupyter-server<3,>=2.19.0->jupyterlab)
+#10 32.19   Downloading nbconvert-7.17.1-py3-none-any.whl.metadata (8.4 kB)
+#10 32.22 Collecting nbformat>=5.3.0 (from jupyter-server<3,>=2.19.0->jupyterlab)
+#10 32.25   Downloading nbformat-5.11.1-py3-none-any.whl.metadata (3.7 kB)
+#10 32.28 Collecting prometheus-client>=0.9 (from jupyter-server<3,>=2.19.0->jupyterlab)
+#10 32.31   Downloading prometheus_client-0.26.0-py3-none-any.whl.metadata (2.1 kB)
+#10 32.55 Collecting pyzmq>=24 (from jupyter-server<3,>=2.19.0->jupyterlab)
+#10 32.58   Downloading pyzmq-27.1.0-cp312-abi3-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (6.0 kB)
+#10 32.61 Collecting send2trash>=1.8.2 (from jupyter-server<3,>=2.19.0->jupyterlab)
+#10 32.64   Downloading send2trash-2.1.0-py3-none-any.whl.metadata (4.1 kB)
+#10 32.66 Collecting terminado>=0.8.3 (from jupyter-server<3,>=2.19.0->jupyterlab)
+#10 32.69   Downloading terminado-0.18.1-py3-none-any.whl.metadata (5.8 kB)
+#10 32.72 Collecting websocket-client>=1.7 (from jupyter-server<3,>=2.19.0->jupyterlab)
+#10 32.76   Downloading websocket_client-1.9.0-py3-none-any.whl.metadata (8.3 kB)
+#10 32.79 Collecting babel>=2.10 (from jupyterlab-server<3,>=2.28.0->jupyterlab)
+#10 32.81   Downloading babel-2.18.0-py3-none-any.whl.metadata (2.2 kB)
+#10 32.90 Collecting json5>=0.9.0 (from jupyterlab-server<3,>=2.28.0->jupyterlab)
+#10 32.94   Downloading json5-0.15.0-py3-none-any.whl.metadata (37 kB)
+#10 33.00 Collecting jsonschema>=4.18.0 (from jupyterlab-server<3,>=2.28.0->jupyterlab)
+#10 33.03   Downloading jsonschema-4.26.0-py3-none-any.whl.metadata (7.6 kB)
+#10 33.26 Collecting requests>=2.31 (from jupyterlab-server<3,>=2.28.0->jupyterlab)
+#10 33.33   Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+#10 33.39 Collecting markdown-it-py>=1.0 (from jupytext)
+#10 33.43   Downloading markdown_it_py-4.2.0-py3-none-any.whl.metadata (7.4 kB)
+#10 33.48 Collecting mdit-py-plugins (from jupytext)
+#10 33.52   Downloading mdit_py_plugins-0.6.1-py3-none-any.whl.metadata (2.9 kB)
+#10 33.58 Collecting pyyaml (from jupytext)
+#10 33.61   Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (2.4 kB)
+#10 33.61 INFO: pip is looking at multiple versions of econml to determine which version is compatible with other requirements. This could take a while.
+#10 33.61 Collecting econml (from -r /install/requirements.txt (line 2))
+#10 33.64   Downloading econml-0.16.0.tar.gz (1.7 MB)
+#10 34.16      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.7/1.7 MB 3.3 MB/s  0:00:00
+#10 34.29   Installing build dependencies: started
+#10 37.77   Installing build dependencies: finished with status 'done'
+#10 37.77   Getting requirements to build wheel: started
+#10 38.47   Getting requirements to build wheel: finished with status 'done'
+#10 38.47   Preparing metadata (pyproject.toml): started
+#10 38.73   Preparing metadata (pyproject.toml): finished with status 'done'
+#10 38.74 Collecting scikit-learn (from -r /install/requirements.txt (line 7))
+#10 38.77   Downloading scikit_learn-1.6.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (18 kB)
+#10 38.80 Collecting sparse (from econml->-r /install/requirements.txt (line 2))
+#10 38.83   Downloading sparse-0.19.2-py2.py3-none-any.whl.metadata (5.3 kB)
+#10 38.87 Collecting joblib>=0.13.0 (from econml->-r /install/requirements.txt (line 2))
+#10 38.89   Downloading joblib-1.5.3-py3-none-any.whl.metadata (5.5 kB)
+#10 38.94 Collecting shap<0.49.0,>=0.38.1 (from econml->-r /install/requirements.txt (line 2))
+#10 38.97   Downloading shap-0.48.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (25 kB)
+#10 39.02 Collecting lightgbm (from econml->-r /install/requirements.txt (line 2))
+#10 39.04   Downloading lightgbm-4.7.0-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (18 kB)
+#10 39.08 Collecting slicer==0.0.8 (from shap<0.49.0,>=0.38.1->econml->-r /install/requirements.txt (line 2))
+#10 39.11   Downloading slicer-0.0.8-py3-none-any.whl.metadata (4.0 kB)
+#10 39.22 Collecting numba>=0.54 (from shap<0.49.0,>=0.38.1->econml->-r /install/requirements.txt (line 2))
+#10 39.25   Downloading numba-0.67.0-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (2.7 kB)
+#10 39.34 Collecting contourpy>=1.0.1 (from matplotlib->-r /install/requirements.txt (line 3))
+#10 39.37   Downloading contourpy-1.3.3-cp312-cp312-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (5.5 kB)
+#10 39.40 Collecting cycler>=0.10 (from matplotlib->-r /install/requirements.txt (line 3))
+#10 39.42   Downloading cycler-0.12.1-py3-none-any.whl.metadata (3.8 kB)
+#10 39.85 Collecting fonttools>=4.28.2 (from matplotlib->-r /install/requirements.txt (line 3))
+#10 39.89   Downloading fonttools-4.63.0-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (118 kB)
+#10 40.02 Collecting kiwisolver>=1.3.1 (from matplotlib->-r /install/requirements.txt (line 3))
+#10 40.05   Downloading kiwisolver-1.5.0-cp312-cp312-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (5.1 kB)
+#10 40.27 Collecting pillow>=9 (from matplotlib->-r /install/requirements.txt (line 3))
+#10 40.31   Downloading pillow-12.3.0-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (9.1 kB)
+#10 40.36 Collecting pyparsing>=3 (from matplotlib->-r /install/requirements.txt (line 3))
+#10 40.38   Downloading pyparsing-3.3.2-py3-none-any.whl.metadata (5.8 kB)
+#10 40.41 Collecting python-dateutil>=2.7 (from matplotlib->-r /install/requirements.txt (line 3))
+#10 40.44   Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+#10 40.48 Collecting patsy>=0.5.6 (from statsmodels->-r /install/requirements.txt (line 10))
+#10 40.50   Downloading patsy-1.0.2-py2.py3-none-any.whl.metadata (3.6 kB)
+#10 40.54 Collecting argon2-cffi-bindings (from argon2-cffi>=21.1->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 40.57   Downloading argon2_cffi_bindings-25.1.0-cp39-abi3-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (7.4 kB)
+#10 40.60 Collecting absl-py>=0.6.1 (from dm-tree>=0.1.8->arviz==0.18.0->-r /install/requirements.txt (line 1))
+#10 40.62   Downloading absl_py-2.5.0-py3-none-any.whl.metadata (3.3 kB)
+#10 40.66 Collecting attrs>=18.2.0 (from dm-tree>=0.1.8->arviz==0.18.0->-r /install/requirements.txt (line 1))
+#10 40.69   Downloading attrs-26.1.0-py3-none-any.whl.metadata (8.8 kB)
+#10 41.07 Collecting wrapt>=1.11.2 (from dm-tree>=0.1.8->arviz==0.18.0->-r /install/requirements.txt (line 1))
+#10 41.11   Downloading wrapt-2.3.0-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (7.4 kB)
+#10 41.14 Collecting comm>=0.1.1 (from ipykernel!=6.30.0,>=6.5.0->jupyterlab)
+#10 41.16   Downloading comm-0.2.3-py3-none-any.whl.metadata (3.7 kB)
+#10 41.32 Collecting debugpy>=1.6.5 (from ipykernel!=6.30.0,>=6.5.0->jupyterlab)
+#10 41.35   Downloading debugpy-1.8.21-py2.py3-none-any.whl.metadata (1.5 kB)
+#10 41.41 Collecting ipython>=7.23.1 (from ipykernel!=6.30.0,>=6.5.0->jupyterlab)
+#10 41.44   Downloading ipython-9.16.1-py3-none-any.whl.metadata (4.6 kB)
+#10 41.47 Collecting matplotlib-inline>=0.1 (from ipykernel!=6.30.0,>=6.5.0->jupyterlab)
+#10 41.50   Downloading matplotlib_inline-0.2.2-py3-none-any.whl.metadata (2.4 kB)
+#10 41.52 Collecting nest-asyncio2>=1.7.0 (from ipykernel!=6.30.0,>=6.5.0->jupyterlab)
+#10 41.55   Downloading nest_asyncio2-1.7.2-py3-none-any.whl.metadata (6.3 kB)
+#10 41.64 Collecting psutil>=5.7 (from ipykernel!=6.30.0,>=6.5.0->jupyterlab)
+#10 41.67   Downloading psutil-7.2.2-cp36-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (22 kB)
+#10 41.70 Collecting ipython-pygments-lexers>=1.0.0 (from ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab)
+#10 41.73   Downloading ipython_pygments_lexers-1.1.1-py3-none-any.whl.metadata (1.1 kB)
+#10 41.76 Collecting jedi>=0.18.2 (from ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab)
+#10 41.79   Downloading jedi-0.20.0-py2.py3-none-any.whl.metadata (23 kB)
+#10 41.83 Collecting pexpect>4.6 (from ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab)
+#10 41.85   Downloading pexpect-4.9.0-py2.py3-none-any.whl.metadata (2.5 kB)
+#10 41.91 Collecting prompt_toolkit<3.1.0,>=3.0.41 (from ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab)
+#10 41.94   Downloading prompt_toolkit-3.0.53-py3-none-any.whl.metadata (6.4 kB)
+#10 41.98 Collecting pygments>=2.14.0 (from ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab)
+#10 42.01   Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+#10 42.04 Collecting stack_data>=0.6.0 (from ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab)
+#10 42.07   Downloading stack_data-0.6.3-py3-none-any.whl.metadata (18 kB)
+#10 42.13 Collecting wcwidth>=0.1.4 (from prompt_toolkit<3.1.0,>=3.0.41->ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab)
+#10 42.15   Downloading wcwidth-0.8.2-py3-none-any.whl.metadata (43 kB)
+#10 42.20 Collecting parso<0.9.0,>=0.8.6 (from jedi>=0.18.2->ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab)
+#10 42.23   Downloading parso-0.8.7-py2.py3-none-any.whl.metadata (8.2 kB)
+#10 42.32 Collecting MarkupSafe>=2.0 (from jinja2>=3.0.3->jupyterlab)
+#10 42.34   Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (2.7 kB)
+#10 42.38 Collecting jsonschema-specifications>=2023.03.6 (from jsonschema>=4.18.0->jupyterlab-server<3,>=2.28.0->jupyterlab)
+#10 42.40   Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl.metadata (2.9 kB)
+#10 42.45 Collecting referencing>=0.28.4 (from jsonschema>=4.18.0->jupyterlab-server<3,>=2.28.0->jupyterlab)
+#10 42.48   Downloading referencing-0.37.0-py3-none-any.whl.metadata (2.8 kB)
+#10 42.78 Collecting rpds-py>=0.25.0 (from jsonschema>=4.18.0->jupyterlab-server<3,>=2.28.0->jupyterlab)
+#10 42.81   Downloading rpds_py-2026.6.3-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (4.1 kB)
+#10 42.85 Collecting platformdirs>=2.5 (from jupyter-core->jupyterlab)
+#10 42.88   Downloading platformdirs-4.11.3-py3-none-any.whl.metadata (5.5 kB)
+#10 42.91 Collecting python-json-logger>=2.0.4 (from jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 42.94   Downloading python_json_logger-4.2.0-py3-none-any.whl.metadata (2.9 kB)
+#10 42.97 Collecting rfc3339-validator (from jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 42.99   Downloading rfc3339_validator-0.1.4-py2.py3-none-any.whl.metadata (1.5 kB)
+#10 43.02 Collecting rfc3986-validator>=0.1.1 (from jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 43.05   Downloading rfc3986_validator-0.1.1-py2.py3-none-any.whl.metadata (1.7 kB)
+#10 43.07 Collecting fqdn (from jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 43.09   Downloading fqdn-1.5.1-py3-none-any.whl.metadata (1.4 kB)
+#10 43.12 Collecting isoduration (from jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 43.15   Downloading isoduration-20.11.0-py3-none-any.whl.metadata (5.7 kB)
+#10 43.20 Collecting jsonpointer>1.13 (from jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 43.22   Downloading jsonpointer-3.1.1-py3-none-any.whl.metadata (2.4 kB)
+#10 43.26 Collecting rfc3987-syntax>=1.1.0 (from jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 43.29   Downloading rfc3987_syntax-1.1.0-py3-none-any.whl.metadata (7.7 kB)
+#10 43.33 Collecting uri-template (from jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 43.36   Downloading uri_template-1.3.0-py3-none-any.whl.metadata (8.8 kB)
+#10 43.40 Collecting webcolors>=24.6.0 (from jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 43.43   Downloading webcolors-25.10.0-py3-none-any.whl.metadata (2.2 kB)
+#10 43.47 Collecting mdurl~=0.1 (from markdown-it-py>=1.0->jupytext)
+#10 43.50   Downloading mdurl-0.1.2-py3-none-any.whl.metadata (1.6 kB)
+#10 43.56 Collecting beautifulsoup4 (from nbconvert>=6.4.4->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 43.59   Downloading beautifulsoup4-4.15.0-py3-none-any.whl.metadata (3.8 kB)
+#10 43.64 Collecting bleach!=5.0.0 (from bleach[css]!=5.0.0->nbconvert>=6.4.4->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 43.67   Downloading bleach-6.4.0-py3-none-any.whl.metadata (32 kB)
+#10 43.71 Collecting defusedxml (from nbconvert>=6.4.4->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 43.74   Downloading defusedxml-0.7.1-py2.py3-none-any.whl.metadata (32 kB)
+#10 43.79 Collecting jupyterlab-pygments (from nbconvert>=6.4.4->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 43.82   Downloading jupyterlab_pygments-0.3.0-py3-none-any.whl.metadata (4.4 kB)
+#10 43.86 Collecting mistune<4,>=2.0.3 (from nbconvert>=6.4.4->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 43.90   Downloading mistune-3.3.4-py3-none-any.whl.metadata (1.9 kB)
+#10 43.95 Collecting nbclient>=0.5.0 (from nbconvert>=6.4.4->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 43.98   Downloading nbclient-0.11.0-py3-none-any.whl.metadata (7.3 kB)
+#10 44.02 Collecting pandocfilters>=1.4.1 (from nbconvert>=6.4.4->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 44.06   Downloading pandocfilters-1.5.1-py2.py3-none-any.whl.metadata (9.0 kB)
+#10 44.11 Collecting webencodings (from bleach!=5.0.0->bleach[css]!=5.0.0->nbconvert>=6.4.4->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 44.13   Downloading webencodings-0.6.1-py3-none-any.whl.metadata (3.4 kB)
+#10 44.17 Collecting tinycss2>=1.1.0 (from bleach[css]!=5.0.0->nbconvert>=6.4.4->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 44.20   Downloading tinycss2-1.5.1-py3-none-any.whl.metadata (3.0 kB)
+#10 44.25 Collecting fastjsonschema>=2.15 (from nbformat>=5.3.0->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 44.28   Downloading fastjsonschema-2.22.2-py3-none-any.whl.metadata (2.1 kB)
+#10 44.63 Collecting llvmlite<0.50,>=0.49.0dev0 (from numba>=0.54->shap<0.49.0,>=0.38.1->econml->-r /install/requirements.txt (line 2))
+#10 44.67   Downloading llvmlite-0.49.0-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (5.0 kB)
+#10 44.72 Collecting ptyprocess>=0.5 (from pexpect>4.6->ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab)
+#10 44.75   Downloading ptyprocess-0.7.0-py2.py3-none-any.whl.metadata (1.3 kB)
+#10 44.81 Collecting six>=1.5 (from python-dateutil>=2.7->matplotlib->-r /install/requirements.txt (line 3))
+#10 44.85   Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+#10 45.41 Collecting charset_normalizer<4,>=2 (from requests>=2.31->jupyterlab-server<3,>=2.28.0->jupyterlab)
+#10 45.44   Downloading charset_normalizer-3.5.1-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (45 kB)
+#10 45.52 Collecting urllib3<3,>=1.26 (from requests>=2.31->jupyterlab-server<3,>=2.28.0->jupyterlab)
+#10 45.55   Downloading urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+#10 45.58 Collecting lark>=1.2.2 (from rfc3987-syntax>=1.1.0->jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 45.61   Downloading lark-1.3.1-py3-none-any.whl.metadata (1.8 kB)
+#10 45.66 Collecting executing>=1.2.0 (from stack_data>=0.6.0->ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab)
+#10 45.69   Downloading executing-2.2.1-py2.py3-none-any.whl.metadata (8.9 kB)
+#10 45.72 Collecting asttokens>=2.1.0 (from stack_data>=0.6.0->ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab)
+#10 45.75   Downloading asttokens-3.0.2-py3-none-any.whl.metadata (5.7 kB)
+#10 45.77 Collecting pure-eval (from stack_data>=0.6.0->ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab)
+#10 45.80   Downloading pure_eval-0.2.3-py3-none-any.whl.metadata (6.3 kB)
+#10 45.83 INFO: pip is looking at multiple versions of xarray-einstats to determine which version is compatible with other requirements. This could take a while.
+#10 45.83 Collecting xarray-einstats>=0.3 (from arviz==0.18.0->-r /install/requirements.txt (line 1))
+#10 45.86   Downloading xarray_einstats-0.10.0-py3-none-any.whl.metadata (5.9 kB)
+#10 45.89   Downloading xarray_einstats-0.9.1-py3-none-any.whl.metadata (5.9 kB)
+#10 46.08 Collecting cffi>=1.0.1 (from argon2-cffi-bindings->argon2-cffi>=21.1->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 46.11   Downloading cffi-2.1.1-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (2.5 kB)
+#10 46.14 Collecting pycparser (from cffi>=1.0.1->argon2-cffi-bindings->argon2-cffi>=21.1->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 46.17   Downloading pycparser-3.0-py3-none-any.whl.metadata (8.2 kB)
+#10 46.21 Collecting soupsieve>=1.6.1 (from beautifulsoup4->nbconvert>=6.4.4->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 46.23   Downloading soupsieve-2.9.2-py3-none-any.whl.metadata (4.6 kB)
+#10 46.27 Collecting toolz (from logical-unification->pytensor<2.26,>=2.25.1->pymc==5.16.2->-r /install/requirements.txt (line 6))
+#10 46.30   Downloading toolz-1.1.0-py3-none-any.whl.metadata (5.1 kB)
+#10 46.33 Collecting multipledispatch (from logical-unification->pytensor<2.26,>=2.25.1->pymc==5.16.2->-r /install/requirements.txt (line 6))
+#10 46.36   Downloading multipledispatch-1.0.0-py3-none-any.whl.metadata (3.8 kB)
+#10 46.41 Collecting arrow>=0.15.0 (from isoduration->jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 46.45   Downloading arrow-1.4.0-py3-none-any.whl.metadata (7.7 kB)
+#10 46.49 Collecting tzdata (from arrow>=0.15.0->isoduration->jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab)
+#10 46.52   Downloading tzdata-2026.3-py2.py3-none-any.whl.metadata (1.4 kB)
+#10 46.61 Collecting narwhals>=1.15 (from lightgbm->econml->-r /install/requirements.txt (line 2))
+#10 46.64   Downloading narwhals-2.24.0-py3-none-any.whl.metadata (15 kB)
+#10 46.71 Downloading arviz-0.18.0-py3-none-any.whl (1.7 MB)
+#10 47.46    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.7/1.7 MB 3.1 MB/s  0:00:00
+#10 47.49 Downloading pymc-5.16.2-py3-none-any.whl (489 kB)
+#10 47.67 Downloading numpy-1.26.4-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (13.9 MB)
+#10 53.95    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 13.9/13.9 MB 2.2 MB/s  0:00:06
+#10 53.98 Downloading pytensor-2.25.5-py2.py3-none-any.whl (1.2 MB)
+#10 54.41    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 2.9 MB/s  0:00:00
+#10 54.44 Downloading scipy-1.17.1-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (32.9 MB)
+#10 64.78    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 32.9/32.9 MB 3.2 MB/s  0:00:10
+#10 64.81 Downloading threadpoolctl-3.6.0-py3-none-any.whl (18 kB)
+#10 64.84 Downloading jupyterlab-4.6.3-py3-none-any.whl (17.2 MB)
+#10 70.10    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 17.2/17.2 MB 3.3 MB/s  0:00:05
+#10 70.13 Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+#10 70.17 Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+#10 70.22 Downloading jupyter_server-2.20.0-py3-none-any.whl (393 kB)
+#10 70.36 Downloading jupyterlab_server-2.28.0-py3-none-any.whl (59 kB)
+#10 70.40 Downloading jupyterlab_vim-4.1.4-py3-none-any.whl (67 kB)
+#10 70.44 Downloading jupytext-1.19.5-py3-none-any.whl (229 kB)
+#10 70.54 Downloading scikit_learn-1.6.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (12.3 MB)
+#10 73.75    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.3/12.3 MB 3.8 MB/s  0:00:03
+#10 73.78 Downloading shap-0.48.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (1.0 MB)
+#10 74.44    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.0/1.0 MB 1.4 MB/s  0:00:00
+#10 74.47 Downloading slicer-0.0.8-py3-none-any.whl (15 kB)
+#10 74.50 Downloading matplotlib-3.11.1-cp312-cp312-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl (10.8 MB)
+#10 79.89    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.8/10.8 MB 2.0 MB/s  0:00:05
+#10 79.93 Downloading pandas-3.0.5-cp312-cp312-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl (10.5 MB)
+#10 84.33    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.5/10.5 MB 2.4 MB/s  0:00:04
+#10 84.38 Downloading seaborn-0.13.2-py3-none-any.whl (294 kB)
+#10 84.55 Downloading statsmodels-0.14.6-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (10.1 MB)
+#10 88.37    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.1/10.1 MB 2.6 MB/s  0:00:03
+#10 88.40 Downloading tqdm-4.70.0-py3-none-any.whl (80 kB)
+#10 88.44 Downloading anyio-4.14.2-py3-none-any.whl (125 kB)
+#10 88.49 Downloading argon2_cffi-25.1.0-py3-none-any.whl (14 kB)
+#10 88.52 Downloading async_lru-2.3.0-py3-none-any.whl (8.4 kB)
+#10 88.55 Downloading babel-2.18.0-py3-none-any.whl (10.2 MB)
+#10 92.03    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.2/10.2 MB 2.9 MB/s  0:00:03
+#10 92.06 Downloading cachetools-7.1.7-py3-none-any.whl (16 kB)
+#10 92.09 Downloading contourpy-1.3.3-cp312-cp312-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl (332 kB)
+#10 92.23 Downloading cycler-0.12.1-py3-none-any.whl (8.3 kB)
+#10 92.26 Downloading dm_tree-0.1.10-cp312-cp312-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl (184 kB)
+#10 92.34 Downloading absl_py-2.5.0-py3-none-any.whl (137 kB)
+#10 92.40 Downloading attrs-26.1.0-py3-none-any.whl (67 kB)
+#10 92.44 Downloading filelock-3.32.3-py3-none-any.whl (98 kB)
+#10 92.51 Downloading fonttools-4.63.0-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (5.0 MB)
+#10 94.03    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.0/5.0 MB 3.3 MB/s  0:00:01
+#10 94.06 Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+#10 94.09 Downloading h5netcdf-1.8.1-py3-none-any.whl (62 kB)
+#10 94.13 Downloading idna-3.19-py3-none-any.whl (68 kB)
+#10 94.16 Downloading ipykernel-7.3.0-py3-none-any.whl (120 kB)
+#10 94.22 Downloading comm-0.2.3-py3-none-any.whl (7.3 kB)
+#10 94.25 Downloading debugpy-1.8.21-py2.py3-none-any.whl (5.4 MB)
+#10 96.05    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.4/5.4 MB 2.9 MB/s  0:00:01
+#10 96.08 Downloading ipython-9.16.1-py3-none-any.whl (625 kB)
+#10 96.25    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 626.0/626.0 kB 4.5 MB/s  0:00:00
+#10 96.28 Downloading prompt_toolkit-3.0.53-py3-none-any.whl (392 kB)
+#10 96.40 Downloading ipython_pygments_lexers-1.1.1-py3-none-any.whl (8.1 kB)
+#10 96.43 Downloading jedi-0.20.0-py2.py3-none-any.whl (4.9 MB)
+#10 97.71    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.9/4.9 MB 3.8 MB/s  0:00:01
+#10 97.76 Downloading parso-0.8.7-py2.py3-none-any.whl (107 kB)
+#10 97.80 Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+#10 97.87 Downloading joblib-1.5.3-py3-none-any.whl (309 kB)
+#10 97.97 Downloading json5-0.15.0-py3-none-any.whl (36 kB)
+#10 98.00 Downloading jsonschema-4.26.0-py3-none-any.whl (90 kB)
+#10 98.04 Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)
+#10 98.07 Downloading jupyter_builder-1.2.2-py3-none-any.whl (915 kB)
+#10 98.59    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 915.3/915.3 kB 1.4 MB/s  0:00:00
+#10 98.62 Downloading jupyter_client-8.9.1-py3-none-any.whl (109 kB)
+#10 98.67 Downloading jupyter_core-5.9.1-py3-none-any.whl (29 kB)
+#10 98.71 Downloading jupyter_events-0.12.1-py3-none-any.whl (19 kB)
+#10 98.74 Downloading jsonpointer-3.1.1-py3-none-any.whl (7.7 kB)
+#10 98.77 Downloading jupyter_lsp-2.3.1-py3-none-any.whl (77 kB)
+#10 98.81 Downloading jupyter_server_terminals-0.5.4-py3-none-any.whl (13 kB)
+#10 98.86 Downloading kiwisolver-1.5.0-cp312-cp312-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl (1.3 MB)
+#10 99.23    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 3.3 MB/s  0:00:00
+#10 99.26 Downloading markdown_it_py-4.2.0-py3-none-any.whl (91 kB)
+#10 99.31 Downloading mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+#10 99.34 Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (24 kB)
+#10 99.36 Downloading matplotlib_inline-0.2.2-py3-none-any.whl (9.5 kB)
+#10 99.39 Downloading nbconvert-7.17.1-py3-none-any.whl (261 kB)
+#10 99.50 Downloading mistune-3.3.4-py3-none-any.whl (66 kB)
+#10 99.55 Downloading bleach-6.4.0-py3-none-any.whl (165 kB)
+#10 99.61 Downloading nbclient-0.11.0-py3-none-any.whl (25 kB)
+#10 99.65 Downloading nbformat-5.11.1-py3-none-any.whl (79 kB)
+#10 99.69 Downloading fastjsonschema-2.22.2-py3-none-any.whl (27 kB)
+#10 99.71 Downloading nest_asyncio2-1.7.2-py3-none-any.whl (7.8 kB)
+#10 99.74 Downloading notebook_shim-0.2.4-py3-none-any.whl (13 kB)
+#10 99.78 Downloading numba-0.67.0-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (3.6 MB)
+#10 100.7    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.6/3.6 MB 3.8 MB/s  0:00:00
+#10 100.8 Downloading llvmlite-0.49.0-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (58.3 MB)
+#10 121.0    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 58.3/58.3 MB 2.9 MB/s  0:00:20
+#10 121.1 Downloading packaging-26.3-py3-none-any.whl (129 kB)
+#10 121.2 Downloading pandocfilters-1.5.1-py2.py3-none-any.whl (8.7 kB)
+#10 121.3 Downloading patsy-1.0.2-py2.py3-none-any.whl (233 kB)
+#10 121.4 Downloading pexpect-4.9.0-py2.py3-none-any.whl (63 kB)
+#10 121.5 Downloading pillow-12.3.0-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (6.3 MB)
+#10 124.6    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.3/6.3 MB 2.0 MB/s  0:00:03
+#10 124.7 Downloading platformdirs-4.11.3-py3-none-any.whl (23 kB)
+#10 124.7 Downloading prometheus_client-0.26.0-py3-none-any.whl (64 kB)
+#10 124.7 Downloading psutil-7.2.2-cp36-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (156 kB)
+#10 124.8 Downloading ptyprocess-0.7.0-py2.py3-none-any.whl (13 kB)
+#10 124.8 Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+#10 125.3    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 2.9 MB/s  0:00:00
+#10 125.3 Downloading pyparsing-3.3.2-py3-none-any.whl (122 kB)
+#10 125.4 Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+#10 125.5 Downloading python_json_logger-4.2.0-py3-none-any.whl (14 kB)
+#10 125.5 Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (775 kB)
+#10 125.7    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 775.1/775.1 kB 3.5 MB/s  0:00:00
+#10 125.7 Downloading pyzmq-27.1.0-cp312-abi3-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl (652 kB)
+#10 125.9    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 652.6/652.6 kB 3.8 MB/s  0:00:00
+#10 126.0 Downloading referencing-0.37.0-py3-none-any.whl (26 kB)
+#10 126.0 Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+#10 126.0 Downloading charset_normalizer-3.5.1-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (238 kB)
+#10 126.1 Downloading urllib3-2.7.0-py3-none-any.whl (131 kB)
+#10 126.2 Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+#10 126.2 Downloading rfc3986_validator-0.1.1-py2.py3-none-any.whl (4.2 kB)
+#10 126.3 Downloading rfc3987_syntax-1.1.0-py3-none-any.whl (8.0 kB)
+#10 126.3 Downloading lark-1.3.1-py3-none-any.whl (113 kB)
+#10 126.3 Downloading rich-15.0.0-py3-none-any.whl (310 kB)
+#10 126.4 Downloading rpds_py-2026.6.3-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (368 kB)
+#10 126.6 Downloading send2trash-2.1.0-py3-none-any.whl (17 kB)
+#10 126.6 Downloading setuptools-84.0.0-py3-none-any.whl (818 kB)
+#10 126.8    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 818.2/818.2 kB 3.6 MB/s  0:00:00
+#10 126.9 Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+#10 126.9 Downloading stack_data-0.6.3-py3-none-any.whl (24 kB)
+#10 126.9 Downloading asttokens-3.0.2-py3-none-any.whl (28 kB)
+#10 126.9 Downloading executing-2.2.1-py2.py3-none-any.whl (28 kB)
+#10 127.0 Downloading terminado-0.18.1-py3-none-any.whl (14 kB)
+#10 127.0 Downloading tinycss2-1.5.1-py3-none-any.whl (28 kB)
+#10 127.0 Downloading tornado-6.5.8-cp39-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (451 kB)
+#10 127.2 Downloading traitlets-5.16.1-py3-none-any.whl (86 kB)
+#10 127.2 Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+#10 127.3 Downloading wcwidth-0.8.2-py3-none-any.whl (323 kB)
+#10 127.6 Downloading webcolors-25.10.0-py3-none-any.whl (14 kB)
+#10 127.6 Downloading webencodings-0.6.1-py3-none-any.whl (8.7 kB)
+#10 127.7 Downloading websocket_client-1.9.0-py3-none-any.whl (82 kB)
+#10 127.7 Downloading wrapt-2.3.0-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (174 kB)
+#10 127.8 Downloading xarray-2026.7.0-py3-none-any.whl (1.4 MB)
+#10 128.3    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.4/1.4 MB 3.1 MB/s  0:00:00
+#10 128.3 Downloading xarray_einstats-0.9.1-py3-none-any.whl (39 kB)
+#10 128.3 Downloading argon2_cffi_bindings-25.1.0-cp39-abi3-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl (81 kB)
+#10 128.4 Downloading cffi-2.1.1-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.whl (222 kB)
+#10 128.5 Downloading beautifulsoup4-4.15.0-py3-none-any.whl (109 kB)
+#10 128.5 Downloading soupsieve-2.9.2-py3-none-any.whl (37 kB)
+#10 128.6 Downloading cloudpickle-3.1.2-py3-none-any.whl (22 kB)
+#10 128.6 Downloading cons-0.4.7-py3-none-any.whl (8.6 kB)
+#10 128.6 Downloading logical_unification-0.4.7-py3-none-any.whl (13 kB)
+#10 128.7 Downloading defusedxml-0.7.1-py2.py3-none-any.whl (25 kB)
+#10 128.7 Downloading etuples-0.3.10-py3-none-any.whl (12 kB)
+#10 128.7 Downloading fqdn-1.5.1-py3-none-any.whl (9.1 kB)
+#10 128.7 Downloading isoduration-20.11.0-py3-none-any.whl (11 kB)
+#10 128.8 Downloading arrow-1.4.0-py3-none-any.whl (68 kB)
+#10 128.8 Downloading jupyterlab_pygments-0.3.0-py3-none-any.whl (15 kB)
+#10 128.9 Downloading lightgbm-4.7.0-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl (3.3 MB)
+#10 131.1    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.3/3.3 MB 1.6 MB/s  0:00:02
+#10 131.2 Downloading narwhals-2.24.0-py3-none-any.whl (461 kB)
+#10 131.4 Downloading mdit_py_plugins-0.6.1-py3-none-any.whl (66 kB)
+#10 131.5 Downloading minikanren-1.0.5-py3-none-any.whl (24 kB)
+#10 131.5 Downloading multipledispatch-1.0.0-py3-none-any.whl (12 kB)
+#10 131.5 Downloading pure_eval-0.2.3-py3-none-any.whl (11 kB)
+#10 131.5 Downloading pycparser-3.0-py3-none-any.whl (48 kB)
+#10 131.6 Downloading rfc3339_validator-0.1.4-py2.py3-none-any.whl (3.5 kB)
+#10 131.6 Downloading sparse-0.19.2-py2.py3-none-any.whl (155 kB)
+#10 131.7 Downloading toolz-1.1.0-py3-none-any.whl (58 kB)
+#10 131.8 Downloading tzdata-2026.3-py2.py3-none-any.whl (348 kB)
+#10 131.9 Downloading uri_template-1.3.0-py3-none-any.whl (11 kB)
+#10 132.5 Building wheels for collected packages: econml
+#10 132.5   Building wheel for econml (pyproject.toml): started
+#10 168.9   Building wheel for econml (pyproject.toml): finished with status 'done'
+#10 168.9   Created wheel for econml: filename=econml-0.16.0-cp312-cp312-linux_aarch64.whl size=4926836 sha256=7c70de5bc4684989be7fc19420a1b2a44cd4bf3aecc9a2f6bdb4218b8ac783d9
+#10 168.9   Stored in directory: /tmp/pip-ephem-wheel-cache-sbqoe244/wheels/93/d6/1b/029b64a786e9f842008d2d2a1333db8b3bf399cb8e817409c0
+#10 168.9 Successfully built econml
+#10 169.1 Installing collected packages: pure-eval, ptyprocess, multipledispatch, wrapt, websocket-client, webencodings, webcolors, wcwidth, urllib3, uri-template, tzdata, typing-extensions, traitlets, tqdm, tornado, toolz, threadpoolctl, soupsieve, slicer, six, setuptools, send2trash, rpds-py, rfc3986-validator, pyzmq, pyyaml, python-json-logger, pyparsing, pygments, pycparser, psutil, prometheus-client, platformdirs, pillow, pexpect, parso, pandocfilters, packaging, numpy, nest-asyncio2, narwhals, mistune, mdurl, MarkupSafe, llvmlite, lark, kiwisolver, jupyterlab-pygments, jsonpointer, json5, joblib, idna, h11, fqdn, fonttools, filelock, fastjsonschema, executing, defusedxml, debugpy, cycler, comm, cloudpickle, charset_normalizer, certifi, cachetools, babel, attrs, async-lru, asttokens, absl-py, tinycss2, terminado, stack_data, scipy, rfc3987-syntax, rfc3339-validator, requests, referencing, python-dateutil, prompt_toolkit, patsy, numba, matplotlib-inline, markdown-it-py, logical-unification, jupyter-core, jinja2, jedi, ipython-pygments-lexers, httpcore, h5netcdf, dm-tree, contourpy, cffi, bleach, beautifulsoup4, anyio, sparse, scikit-learn, rich, pandas, mdit-py-plugins, matplotlib, lightgbm, jupyter-server-terminals, jupyter-client, jupyter-builder, jsonschema-specifications, ipython, httpx, cons, arrow, argon2-cffi-bindings, xarray, statsmodels, shap, seaborn, jsonschema, isoduration, ipykernel, etuples, argon2-cffi, xarray-einstats, nbformat, miniKanren, econml, pytensor, nbclient, jupytext, jupyter-events, arviz, pymc, nbconvert, jupyter-server, notebook-shim, jupyterlab-server, jupyter-lsp, jupyterlab, jupyterlab_vim
+#10 202.8 
+#10 202.8 Successfully installed MarkupSafe-3.0.3 absl-py-2.5.0 anyio-4.14.2 argon2-cffi-25.1.0 argon2-cffi-bindings-25.1.0 arrow-1.4.0 arviz-0.18.0 asttokens-3.0.2 async-lru-2.3.0 attrs-26.1.0 babel-2.18.0 beautifulsoup4-4.15.0 bleach-6.4.0 cachetools-7.1.7 certifi-2026.7.22 cffi-2.1.1 charset_normalizer-3.5.1 cloudpickle-3.1.2 comm-0.2.3 cons-0.4.7 contourpy-1.3.3 cycler-0.12.1 debugpy-1.8.21 defusedxml-0.7.1 dm-tree-0.1.10 econml-0.16.0 etuples-0.3.10 executing-2.2.1 fastjsonschema-2.22.2 filelock-3.32.3 fonttools-4.63.0 fqdn-1.5.1 h11-0.16.0 h5netcdf-1.8.1 httpcore-1.0.9 httpx-0.28.1 idna-3.19 ipykernel-7.3.0 ipython-9.16.1 ipython-pygments-lexers-1.1.1 isoduration-20.11.0 jedi-0.20.0 jinja2-3.1.6 joblib-1.5.3 json5-0.15.0 jsonpointer-3.1.1 jsonschema-4.26.0 jsonschema-specifications-2025.9.1 jupyter-builder-1.2.2 jupyter-client-8.9.1 jupyter-core-5.9.1 jupyter-events-0.12.1 jupyter-lsp-2.3.1 jupyter-server-2.20.0 jupyter-server-terminals-0.5.4 jupyterlab-4.6.3 jupyterlab-pygments-0.3.0 jupyterlab-server-2.28.0 jupyterlab_vim-4.1.4 jupytext-1.19.5 kiwisolver-1.5.0 lark-1.3.1 lightgbm-4.7.0 llvmlite-0.49.0 logical-unification-0.4.7 markdown-it-py-4.2.0 matplotlib-3.11.1 matplotlib-inline-0.2.2 mdit-py-plugins-0.6.1 mdurl-0.1.2 miniKanren-1.0.5 mistune-3.3.4 multipledispatch-1.0.0 narwhals-2.24.0 nbclient-0.11.0 nbconvert-7.17.1 nbformat-5.11.1 nest-asyncio2-1.7.2 notebook-shim-0.2.4 numba-0.67.0 numpy-1.26.4 packaging-26.3 pandas-3.0.5 pandocfilters-1.5.1 parso-0.8.7 patsy-1.0.2 pexpect-4.9.0 pillow-12.3.0 platformdirs-4.11.3 prometheus-client-0.26.0 prompt_toolkit-3.0.53 psutil-7.2.2 ptyprocess-0.7.0 pure-eval-0.2.3 pycparser-3.0 pygments-2.21.0 pymc-5.16.2 pyparsing-3.3.2 pytensor-2.25.5 python-dateutil-2.9.0.post0 python-json-logger-4.2.0 pyyaml-6.0.3 pyzmq-27.1.0 referencing-0.37.0 requests-2.34.2 rfc3339-validator-0.1.4 rfc3986-validator-0.1.1 rfc3987-syntax-1.1.0 rich-15.0.0 rpds-py-2026.6.3 scikit-learn-1.6.1 scipy-1.17.1 seaborn-0.13.2 send2trash-2.1.0 setuptools-84.0.0 shap-0.48.0 six-1.17.0 slicer-0.0.8 soupsieve-2.9.2 sparse-0.19.2 stack_data-0.6.3 statsmodels-0.14.6 terminado-0.18.1 threadpoolctl-3.6.0 tinycss2-1.5.1 toolz-1.1.0 tornado-6.5.8 tqdm-4.70.0 traitlets-5.16.1 typing-extensions-4.16.0 tzdata-2026.3 uri-template-1.3.0 urllib3-2.7.0 wcwidth-0.8.2 webcolors-25.10.0 webencodings-0.6.1 websocket-client-1.9.0 wrapt-2.3.0 xarray-2026.7.0 xarray-einstats-0.9.1
+#10 DONE 204.2s
 
-#13 [ 9/16] COPY requirements.txt requirements.txt
+#11 [linux/arm64/v8  6/11] COPY etc_sudoers /install/
+#11 DONE 0.2s
+
+#12 [linux/arm64/v8  7/11] COPY etc_sudoers /etc/sudoers
+#12 DONE 0.0s
+
+#13 [linux/arm64/v8  8/11] COPY bashrc /root/.bashrc
 #13 DONE 0.0s
 
-#14 [10/16] RUN pip3 install -r requirements.txt
-#14 0.524 Collecting numpy (from -r requirements.txt (line 1))
-#14 0.619   Downloading numpy-2.4.2-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (6.6 kB)
-#14 0.693 Collecting pandas (from -r requirements.txt (line 2))
-#14 0.713   Downloading pandas-3.0.1-cp312-cp312-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (79 kB)
-#14 0.841 Collecting scipy (from -r requirements.txt (line 3))
-#14 0.866   Downloading scipy-1.17.1-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (62 kB)
-#14 0.975 Collecting matplotlib (from -r requirements.txt (line 5))
-#14 0.996   Downloading matplotlib-3.10.8-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (52 kB)
-#14 1.023 Collecting seaborn (from -r requirements.txt (line 6))
-#14 1.038   Downloading seaborn-0.13.2-py3-none-any.whl.metadata (5.4 kB)
-#14 1.100 Collecting scikit-learn (from -r requirements.txt (line 8))
-#14 1.122   Downloading scikit_learn-1.8.0-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (11 kB)
-#14 1.167 Collecting statsmodels (from -r requirements.txt (line 9))
-#14 1.189   Downloading statsmodels-0.14.6-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (9.5 kB)
-#14 1.233 Collecting econml (from -r requirements.txt (line 10))
-#14 1.253   Downloading econml-0.16.0.tar.gz (1.7 MB)
-#14 1.449      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.7/1.7 MB 8.9 MB/s  0:00:00
-#14 1.522   Installing build dependencies: started
-#14 10.80   Installing build dependencies: finished with status 'done'
-#14 10.80   Getting requirements to build wheel: started
-#14 11.25   Getting requirements to build wheel: finished with status 'done'
-#14 11.25   Preparing metadata (pyproject.toml): started
-#14 11.44   Preparing metadata (pyproject.toml): finished with status 'done'
-#14 11.44 Requirement already satisfied: jupyterlab in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 12)) (4.5.4)
-#14 11.47 Collecting jupyterlab-vim (from -r requirements.txt (line 13))
-#14 11.49   Downloading jupyterlab_vim-4.1.4-py3-none-any.whl.metadata (8.7 kB)
-#14 11.52 Collecting tqdm (from -r requirements.txt (line 14))
-#14 11.54   Downloading tqdm-4.67.3-py3-none-any.whl.metadata (57 kB)
-#14 11.59 Collecting pymc==5.16.2 (from -r requirements.txt (line 16))
-#14 11.60   Downloading pymc-5.16.2-py3-none-any.whl.metadata (15 kB)
-#14 11.64 Collecting arviz==0.18.0 (from -r requirements.txt (line 17))
-#14 11.67   Downloading arviz-0.18.0-py3-none-any.whl.metadata (8.7 kB)
-#14 11.69 Collecting cachetools>=4.2.1 (from pymc==5.16.2->-r requirements.txt (line 16))
-#14 11.71   Downloading cachetools-7.0.4-py3-none-any.whl.metadata (5.6 kB)
-#14 11.75 Collecting cloudpickle (from pymc==5.16.2->-r requirements.txt (line 16))
-#14 11.77   Downloading cloudpickle-3.1.2-py3-none-any.whl.metadata (7.1 kB)
-#14 11.84 Collecting pytensor<2.26,>=2.25.1 (from pymc==5.16.2->-r requirements.txt (line 16))
-#14 11.86   Downloading pytensor-2.25.5-py2.py3-none-any.whl.metadata (9.9 kB)
-#14 11.89 Collecting rich>=13.7.1 (from pymc==5.16.2->-r requirements.txt (line 16))
-#14 11.91   Downloading rich-14.3.3-py3-none-any.whl.metadata (18 kB)
-#14 11.94 Collecting threadpoolctl<4.0.0,>=3.1.0 (from pymc==5.16.2->-r requirements.txt (line 16))
-#14 11.95   Downloading threadpoolctl-3.6.0-py3-none-any.whl.metadata (13 kB)
-#14 11.96 Requirement already satisfied: typing-extensions>=3.7.4 in ./venv/lib/python3.12/site-packages (from pymc==5.16.2->-r requirements.txt (line 16)) (4.15.0)
-#14 11.96 Requirement already satisfied: setuptools>=60.0.0 in ./venv/lib/python3.12/site-packages (from arviz==0.18.0->-r requirements.txt (line 17)) (82.0.0)
-#14 11.96 Collecting numpy (from -r requirements.txt (line 1))
-#14 11.99   Downloading numpy-1.26.4-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (62 kB)
-#14 12.01 Requirement already satisfied: packaging in ./venv/lib/python3.12/site-packages (from arviz==0.18.0->-r requirements.txt (line 17)) (26.0)
-#14 12.03 Collecting dm-tree>=0.1.8 (from arviz==0.18.0->-r requirements.txt (line 17))
-#14 12.05   Downloading dm_tree-0.1.9-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (2.4 kB)
-#14 12.09 Collecting xarray>=2022.6.0 (from arviz==0.18.0->-r requirements.txt (line 17))
-#14 12.11   Downloading xarray-2026.2.0-py3-none-any.whl.metadata (12 kB)
-#14 12.16 Collecting h5netcdf>=1.0.2 (from arviz==0.18.0->-r requirements.txt (line 17))
-#14 12.18   Downloading h5netcdf-1.8.1-py3-none-any.whl.metadata (15 kB)
-#14 12.21 Collecting xarray-einstats>=0.3 (from arviz==0.18.0->-r requirements.txt (line 17))
-#14 12.25   Downloading xarray_einstats-0.10.0-py3-none-any.whl.metadata (5.9 kB)
-#14 12.28 Collecting filelock>=3.15 (from pytensor<2.26,>=2.25.1->pymc==5.16.2->-r requirements.txt (line 16))
-#14 12.29   Downloading filelock-3.25.0-py3-none-any.whl.metadata (2.0 kB)
-#14 12.32 Collecting etuples (from pytensor<2.26,>=2.25.1->pymc==5.16.2->-r requirements.txt (line 16))
-#14 12.34   Downloading etuples-0.3.10-py3-none-any.whl.metadata (4.8 kB)
-#14 12.36 Collecting logical-unification (from pytensor<2.26,>=2.25.1->pymc==5.16.2->-r requirements.txt (line 16))
-#14 12.39   Downloading logical_unification-0.4.7-py3-none-any.whl.metadata (15 kB)
-#14 12.43 Collecting miniKanren (from pytensor<2.26,>=2.25.1->pymc==5.16.2->-r requirements.txt (line 16))
-#14 12.45   Downloading minikanren-1.0.5-py3-none-any.whl.metadata (7.6 kB)
-#14 12.53 Collecting cons (from pytensor<2.26,>=2.25.1->pymc==5.16.2->-r requirements.txt (line 16))
-#14 12.57   Downloading cons-0.4.7-py3-none-any.whl.metadata (3.8 kB)
-#14 12.58 Requirement already satisfied: python-dateutil>=2.8.2 in ./venv/lib/python3.12/site-packages (from pandas->-r requirements.txt (line 2)) (2.9.0.post0)
-#14 12.67 Collecting contourpy>=1.0.1 (from matplotlib->-r requirements.txt (line 5))
-#14 12.69   Downloading contourpy-1.3.3-cp312-cp312-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (5.5 kB)
-#14 12.72 Collecting cycler>=0.10 (from matplotlib->-r requirements.txt (line 5))
-#14 12.73   Downloading cycler-0.12.1-py3-none-any.whl.metadata (3.8 kB)
-#14 12.85 Collecting fonttools>=4.22.0 (from matplotlib->-r requirements.txt (line 5))
-#14 12.87   Downloading fonttools-4.61.1-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (114 kB)
-#14 12.94 Collecting kiwisolver>=1.3.1 (from matplotlib->-r requirements.txt (line 5))
-#14 12.96   Downloading kiwisolver-1.4.9-cp312-cp312-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (6.3 kB)
-#14 13.15 Collecting pillow>=8 (from matplotlib->-r requirements.txt (line 5))
-#14 13.17   Downloading pillow-12.1.1-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (8.8 kB)
-#14 13.21 Collecting pyparsing>=3 (from matplotlib->-r requirements.txt (line 5))
-#14 13.23   Downloading pyparsing-3.3.2-py3-none-any.whl.metadata (5.8 kB)
-#14 13.26 Collecting joblib>=1.3.0 (from scikit-learn->-r requirements.txt (line 8))
-#14 13.28   Downloading joblib-1.5.3-py3-none-any.whl.metadata (5.5 kB)
-#14 13.32 Collecting patsy>=0.5.6 (from statsmodels->-r requirements.txt (line 9))
-#14 13.34   Downloading patsy-1.0.2-py2.py3-none-any.whl.metadata (3.6 kB)
-#14 13.35 Collecting scikit-learn (from -r requirements.txt (line 8))
-#14 13.37   Downloading scikit_learn-1.6.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (18 kB)
-#14 13.40 Collecting sparse (from econml->-r requirements.txt (line 10))
-#14 13.42   Downloading sparse-0.18.0-py2.py3-none-any.whl.metadata (5.3 kB)
-#14 13.46 Collecting shap<0.49.0,>=0.38.1 (from econml->-r requirements.txt (line 10))
-#14 13.49   Downloading shap-0.48.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (25 kB)
-#14 13.53 Collecting lightgbm (from econml->-r requirements.txt (line 10))
-#14 13.55   Downloading lightgbm-4.6.0-py3-none-manylinux2014_aarch64.whl.metadata (17 kB)
-#14 13.58 Collecting slicer==0.0.8 (from shap<0.49.0,>=0.38.1->econml->-r requirements.txt (line 10))
-#14 13.59   Downloading slicer-0.0.8-py3-none-any.whl.metadata (4.0 kB)
-#14 13.67 Collecting numba>=0.54 (from shap<0.49.0,>=0.38.1->econml->-r requirements.txt (line 10))
-#14 13.68   Downloading numba-0.64.0-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (2.9 kB)
-#14 13.69 Requirement already satisfied: async-lru>=1.0.0 in ./venv/lib/python3.12/site-packages (from jupyterlab->-r requirements.txt (line 12)) (2.2.0)
-#14 13.69 Requirement already satisfied: httpx<1,>=0.25.0 in ./venv/lib/python3.12/site-packages (from jupyterlab->-r requirements.txt (line 12)) (0.28.1)
-#14 13.69 Requirement already satisfied: ipykernel!=6.30.0,>=6.5.0 in ./venv/lib/python3.12/site-packages (from jupyterlab->-r requirements.txt (line 12)) (7.2.0)
-#14 13.69 Requirement already satisfied: jinja2>=3.0.3 in ./venv/lib/python3.12/site-packages (from jupyterlab->-r requirements.txt (line 12)) (3.1.6)
-#14 13.69 Requirement already satisfied: jupyter-core in ./venv/lib/python3.12/site-packages (from jupyterlab->-r requirements.txt (line 12)) (5.9.1)
-#14 13.69 Requirement already satisfied: jupyter-lsp>=2.0.0 in ./venv/lib/python3.12/site-packages (from jupyterlab->-r requirements.txt (line 12)) (2.3.0)
-#14 13.69 Requirement already satisfied: jupyter-server<3,>=2.4.0 in ./venv/lib/python3.12/site-packages (from jupyterlab->-r requirements.txt (line 12)) (2.17.0)
-#14 13.69 Requirement already satisfied: jupyterlab-server<3,>=2.28.0 in ./venv/lib/python3.12/site-packages (from jupyterlab->-r requirements.txt (line 12)) (2.28.0)
-#14 13.69 Requirement already satisfied: notebook-shim>=0.2 in ./venv/lib/python3.12/site-packages (from jupyterlab->-r requirements.txt (line 12)) (0.2.4)
-#14 13.69 Requirement already satisfied: tornado>=6.2.0 in ./venv/lib/python3.12/site-packages (from jupyterlab->-r requirements.txt (line 12)) (6.5.4)
-#14 13.69 Requirement already satisfied: traitlets in ./venv/lib/python3.12/site-packages (from jupyterlab->-r requirements.txt (line 12)) (5.14.3)
-#14 13.69 Requirement already satisfied: anyio in ./venv/lib/python3.12/site-packages (from httpx<1,>=0.25.0->jupyterlab->-r requirements.txt (line 12)) (4.12.1)
-#14 13.69 Requirement already satisfied: certifi in ./venv/lib/python3.12/site-packages (from httpx<1,>=0.25.0->jupyterlab->-r requirements.txt (line 12)) (2026.1.4)
-#14 13.69 Requirement already satisfied: httpcore==1.* in ./venv/lib/python3.12/site-packages (from httpx<1,>=0.25.0->jupyterlab->-r requirements.txt (line 12)) (1.0.9)
-#14 13.69 Requirement already satisfied: idna in ./venv/lib/python3.12/site-packages (from httpx<1,>=0.25.0->jupyterlab->-r requirements.txt (line 12)) (3.11)
-#14 13.69 Requirement already satisfied: h11>=0.16 in ./venv/lib/python3.12/site-packages (from httpcore==1.*->httpx<1,>=0.25.0->jupyterlab->-r requirements.txt (line 12)) (0.16.0)
-#14 13.69 Requirement already satisfied: argon2-cffi>=21.1 in ./venv/lib/python3.12/site-packages (from jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (25.1.0)
-#14 13.70 Requirement already satisfied: jupyter-client>=7.4.4 in ./venv/lib/python3.12/site-packages (from jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (8.8.0)
-#14 13.70 Requirement already satisfied: jupyter-events>=0.11.0 in ./venv/lib/python3.12/site-packages (from jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (0.12.0)
-#14 13.70 Requirement already satisfied: jupyter-server-terminals>=0.4.4 in ./venv/lib/python3.12/site-packages (from jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (0.5.4)
-#14 13.70 Requirement already satisfied: nbconvert>=6.4.4 in ./venv/lib/python3.12/site-packages (from jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (7.17.0)
-#14 13.70 Requirement already satisfied: nbformat>=5.3.0 in ./venv/lib/python3.12/site-packages (from jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (5.10.4)
-#14 13.70 Requirement already satisfied: prometheus-client>=0.9 in ./venv/lib/python3.12/site-packages (from jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (0.24.1)
-#14 13.70 Requirement already satisfied: pyzmq>=24 in ./venv/lib/python3.12/site-packages (from jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (27.1.0)
-#14 13.70 Requirement already satisfied: send2trash>=1.8.2 in ./venv/lib/python3.12/site-packages (from jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (2.1.0)
-#14 13.70 Requirement already satisfied: terminado>=0.8.3 in ./venv/lib/python3.12/site-packages (from jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (0.18.1)
-#14 13.70 Requirement already satisfied: websocket-client>=1.7 in ./venv/lib/python3.12/site-packages (from jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (1.9.0)
-#14 13.70 Requirement already satisfied: babel>=2.10 in ./venv/lib/python3.12/site-packages (from jupyterlab-server<3,>=2.28.0->jupyterlab->-r requirements.txt (line 12)) (2.18.0)
-#14 13.70 Requirement already satisfied: json5>=0.9.0 in ./venv/lib/python3.12/site-packages (from jupyterlab-server<3,>=2.28.0->jupyterlab->-r requirements.txt (line 12)) (0.13.0)
-#14 13.70 Requirement already satisfied: jsonschema>=4.18.0 in ./venv/lib/python3.12/site-packages (from jupyterlab-server<3,>=2.28.0->jupyterlab->-r requirements.txt (line 12)) (4.26.0)
-#14 13.70 Requirement already satisfied: requests>=2.31 in ./venv/lib/python3.12/site-packages (from jupyterlab-server<3,>=2.28.0->jupyterlab->-r requirements.txt (line 12)) (2.32.5)
-#14 13.70 Requirement already satisfied: argon2-cffi-bindings in ./venv/lib/python3.12/site-packages (from argon2-cffi>=21.1->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (25.1.0)
-#14 13.73 Collecting absl-py>=0.6.1 (from dm-tree>=0.1.8->arviz==0.18.0->-r requirements.txt (line 17))
-#14 13.74   Downloading absl_py-2.4.0-py3-none-any.whl.metadata (3.3 kB)
-#14 13.75 Requirement already satisfied: attrs>=18.2.0 in ./venv/lib/python3.12/site-packages (from dm-tree>=0.1.8->arviz==0.18.0->-r requirements.txt (line 17)) (25.4.0)
-#14 13.86 Collecting wrapt>=1.11.2 (from dm-tree>=0.1.8->arviz==0.18.0->-r requirements.txt (line 17))
-#14 13.88   Downloading wrapt-2.1.2-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (7.4 kB)
-#14 13.89 Requirement already satisfied: comm>=0.1.1 in ./venv/lib/python3.12/site-packages (from ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (0.2.3)
-#14 13.89 Requirement already satisfied: debugpy>=1.6.5 in ./venv/lib/python3.12/site-packages (from ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (1.8.20)
-#14 13.89 Requirement already satisfied: ipython>=7.23.1 in ./venv/lib/python3.12/site-packages (from ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (9.10.0)
-#14 13.89 Requirement already satisfied: matplotlib-inline>=0.1 in ./venv/lib/python3.12/site-packages (from ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (0.2.1)
-#14 13.89 Requirement already satisfied: nest-asyncio>=1.4 in ./venv/lib/python3.12/site-packages (from ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (1.6.0)
-#14 13.89 Requirement already satisfied: psutil>=5.7 in ./venv/lib/python3.12/site-packages (from ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (7.2.2)
-#14 13.89 Requirement already satisfied: decorator>=4.3.2 in ./venv/lib/python3.12/site-packages (from ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (5.2.1)
-#14 13.89 Requirement already satisfied: ipython-pygments-lexers>=1.0.0 in ./venv/lib/python3.12/site-packages (from ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (1.1.1)
-#14 13.89 Requirement already satisfied: jedi>=0.18.1 in ./venv/lib/python3.12/site-packages (from ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (0.19.2)
-#14 13.89 Requirement already satisfied: pexpect>4.3 in ./venv/lib/python3.12/site-packages (from ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (4.9.0)
-#14 13.89 Requirement already satisfied: prompt_toolkit<3.1.0,>=3.0.41 in ./venv/lib/python3.12/site-packages (from ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (3.0.52)
-#14 13.89 Requirement already satisfied: pygments>=2.11.0 in ./venv/lib/python3.12/site-packages (from ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (2.19.2)
-#14 13.89 Requirement already satisfied: stack_data>=0.6.0 in ./venv/lib/python3.12/site-packages (from ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (0.6.3)
-#14 13.89 Requirement already satisfied: wcwidth in ./venv/lib/python3.12/site-packages (from prompt_toolkit<3.1.0,>=3.0.41->ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (0.6.0)
-#14 13.89 Requirement already satisfied: parso<0.9.0,>=0.8.4 in ./venv/lib/python3.12/site-packages (from jedi>=0.18.1->ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (0.8.6)
-#14 13.90 Requirement already satisfied: MarkupSafe>=2.0 in ./venv/lib/python3.12/site-packages (from jinja2>=3.0.3->jupyterlab->-r requirements.txt (line 12)) (3.0.3)
-#14 13.90 Requirement already satisfied: jsonschema-specifications>=2023.03.6 in ./venv/lib/python3.12/site-packages (from jsonschema>=4.18.0->jupyterlab-server<3,>=2.28.0->jupyterlab->-r requirements.txt (line 12)) (2025.9.1)
-#14 13.90 Requirement already satisfied: referencing>=0.28.4 in ./venv/lib/python3.12/site-packages (from jsonschema>=4.18.0->jupyterlab-server<3,>=2.28.0->jupyterlab->-r requirements.txt (line 12)) (0.37.0)
-#14 13.90 Requirement already satisfied: rpds-py>=0.25.0 in ./venv/lib/python3.12/site-packages (from jsonschema>=4.18.0->jupyterlab-server<3,>=2.28.0->jupyterlab->-r requirements.txt (line 12)) (0.30.0)
-#14 13.90 Requirement already satisfied: platformdirs>=2.5 in ./venv/lib/python3.12/site-packages (from jupyter-core->jupyterlab->-r requirements.txt (line 12)) (4.9.2)
-#14 13.90 Requirement already satisfied: python-json-logger>=2.0.4 in ./venv/lib/python3.12/site-packages (from jupyter-events>=0.11.0->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (4.0.0)
-#14 13.90 Requirement already satisfied: pyyaml>=5.3 in ./venv/lib/python3.12/site-packages (from jupyter-events>=0.11.0->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (6.0.3)
-#14 13.90 Requirement already satisfied: rfc3339-validator in ./venv/lib/python3.12/site-packages (from jupyter-events>=0.11.0->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (0.1.4)
-#14 13.90 Requirement already satisfied: rfc3986-validator>=0.1.1 in ./venv/lib/python3.12/site-packages (from jupyter-events>=0.11.0->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (0.1.1)
-#14 13.90 Requirement already satisfied: fqdn in ./venv/lib/python3.12/site-packages (from jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (1.5.1)
-#14 13.90 Requirement already satisfied: isoduration in ./venv/lib/python3.12/site-packages (from jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (20.11.0)
-#14 13.91 Requirement already satisfied: jsonpointer>1.13 in ./venv/lib/python3.12/site-packages (from jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (3.0.0)
-#14 13.91 Requirement already satisfied: rfc3987-syntax>=1.1.0 in ./venv/lib/python3.12/site-packages (from jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (1.1.0)
-#14 13.91 Requirement already satisfied: uri-template in ./venv/lib/python3.12/site-packages (from jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (1.3.0)
-#14 13.91 Requirement already satisfied: webcolors>=24.6.0 in ./venv/lib/python3.12/site-packages (from jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (25.10.0)
-#14 13.91 Requirement already satisfied: beautifulsoup4 in ./venv/lib/python3.12/site-packages (from nbconvert>=6.4.4->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (4.14.3)
-#14 13.91 Requirement already satisfied: bleach!=5.0.0 in ./venv/lib/python3.12/site-packages (from bleach[css]!=5.0.0->nbconvert>=6.4.4->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (6.3.0)
-#14 13.91 Requirement already satisfied: defusedxml in ./venv/lib/python3.12/site-packages (from nbconvert>=6.4.4->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (0.7.1)
-#14 13.91 Requirement already satisfied: jupyterlab-pygments in ./venv/lib/python3.12/site-packages (from nbconvert>=6.4.4->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (0.3.0)
-#14 13.91 Requirement already satisfied: mistune<4,>=2.0.3 in ./venv/lib/python3.12/site-packages (from nbconvert>=6.4.4->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (3.2.0)
-#14 13.91 Requirement already satisfied: nbclient>=0.5.0 in ./venv/lib/python3.12/site-packages (from nbconvert>=6.4.4->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (0.10.4)
-#14 13.91 Requirement already satisfied: pandocfilters>=1.4.1 in ./venv/lib/python3.12/site-packages (from nbconvert>=6.4.4->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (1.5.1)
-#14 13.91 Requirement already satisfied: webencodings in ./venv/lib/python3.12/site-packages (from bleach!=5.0.0->bleach[css]!=5.0.0->nbconvert>=6.4.4->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (0.5.1)
-#14 13.92 Requirement already satisfied: tinycss2<1.5,>=1.1.0 in ./venv/lib/python3.12/site-packages (from bleach[css]!=5.0.0->nbconvert>=6.4.4->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (1.4.0)
-#14 13.92 Requirement already satisfied: fastjsonschema>=2.15 in ./venv/lib/python3.12/site-packages (from nbformat>=5.3.0->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (2.21.2)
-#14 13.96 Collecting llvmlite<0.47,>=0.46.0dev0 (from numba>=0.54->shap<0.49.0,>=0.38.1->econml->-r requirements.txt (line 10))
-#14 13.98   Downloading llvmlite-0.46.0-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (5.0 kB)
-#14 13.99 Requirement already satisfied: ptyprocess>=0.5 in ./venv/lib/python3.12/site-packages (from pexpect>4.3->ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (0.7.0)
-#14 14.00 Requirement already satisfied: six>=1.5 in ./venv/lib/python3.12/site-packages (from python-dateutil>=2.8.2->pandas->-r requirements.txt (line 2)) (1.17.0)
-#14 14.00 Requirement already satisfied: charset_normalizer<4,>=2 in ./venv/lib/python3.12/site-packages (from requests>=2.31->jupyterlab-server<3,>=2.28.0->jupyterlab->-r requirements.txt (line 12)) (3.4.4)
-#14 14.00 Requirement already satisfied: urllib3<3,>=1.21.1 in ./venv/lib/python3.12/site-packages (from requests>=2.31->jupyterlab-server<3,>=2.28.0->jupyterlab->-r requirements.txt (line 12)) (2.6.3)
-#14 14.01 Requirement already satisfied: lark>=1.2.2 in ./venv/lib/python3.12/site-packages (from rfc3987-syntax>=1.1.0->jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (1.3.1)
-#14 14.04 Collecting markdown-it-py>=2.2.0 (from rich>=13.7.1->pymc==5.16.2->-r requirements.txt (line 16))
-#14 14.06   Downloading markdown_it_py-4.0.0-py3-none-any.whl.metadata (7.3 kB)
-#14 14.09 Collecting mdurl~=0.1 (from markdown-it-py>=2.2.0->rich>=13.7.1->pymc==5.16.2->-r requirements.txt (line 16))
-#14 14.10   Downloading mdurl-0.1.2-py3-none-any.whl.metadata (1.6 kB)
-#14 14.12 Requirement already satisfied: executing>=1.2.0 in ./venv/lib/python3.12/site-packages (from stack_data>=0.6.0->ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (2.2.1)
-#14 14.12 Requirement already satisfied: asttokens>=2.1.0 in ./venv/lib/python3.12/site-packages (from stack_data>=0.6.0->ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (3.0.1)
-#14 14.12 Requirement already satisfied: pure-eval in ./venv/lib/python3.12/site-packages (from stack_data>=0.6.0->ipython>=7.23.1->ipykernel!=6.30.0,>=6.5.0->jupyterlab->-r requirements.txt (line 12)) (0.2.3)
-#14 14.17 INFO: pip is looking at multiple versions of xarray-einstats to determine which version is compatible with other requirements. This could take a while.
-#14 14.17 Collecting xarray-einstats>=0.3 (from arviz==0.18.0->-r requirements.txt (line 17))
-#14 14.18   Downloading xarray_einstats-0.9.1-py3-none-any.whl.metadata (5.9 kB)
-#14 14.19 Requirement already satisfied: cffi>=1.0.1 in ./venv/lib/python3.12/site-packages (from argon2-cffi-bindings->argon2-cffi>=21.1->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (2.0.0)
-#14 14.19 Requirement already satisfied: pycparser in ./venv/lib/python3.12/site-packages (from cffi>=1.0.1->argon2-cffi-bindings->argon2-cffi>=21.1->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (3.0)
-#14 14.19 Requirement already satisfied: soupsieve>=1.6.1 in ./venv/lib/python3.12/site-packages (from beautifulsoup4->nbconvert>=6.4.4->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (2.8.3)
-#14 14.24 Collecting toolz (from logical-unification->pytensor<2.26,>=2.25.1->pymc==5.16.2->-r requirements.txt (line 16))
-#14 14.25   Downloading toolz-1.1.0-py3-none-any.whl.metadata (5.1 kB)
-#14 14.28 Collecting multipledispatch (from logical-unification->pytensor<2.26,>=2.25.1->pymc==5.16.2->-r requirements.txt (line 16))
-#14 14.29   Downloading multipledispatch-1.0.0-py3-none-any.whl.metadata (3.8 kB)
-#14 14.30 Requirement already satisfied: arrow>=0.15.0 in ./venv/lib/python3.12/site-packages (from isoduration->jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (1.4.0)
-#14 14.30 Requirement already satisfied: tzdata in ./venv/lib/python3.12/site-packages (from arrow>=0.15.0->isoduration->jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.4.0->jupyterlab->-r requirements.txt (line 12)) (2025.3)
-#14 14.34 Downloading pymc-5.16.2-py3-none-any.whl (489 kB)
-#14 14.41 Downloading arviz-0.18.0-py3-none-any.whl (1.7 MB)
-#14 14.58    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.7/1.7 MB 9.4 MB/s  0:00:00
-#14 14.60 Downloading numpy-1.26.4-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (13.9 MB)
-#14 16.28    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 13.9/13.9 MB 8.2 MB/s  0:00:01
-#14 16.31 Downloading pytensor-2.25.5-py2.py3-none-any.whl (1.2 MB)
-#14 16.45    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 8.8 MB/s  0:00:00
-#14 16.45 Using cached scipy-1.17.1-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (32.9 MB)
-#14 16.50 Downloading threadpoolctl-3.6.0-py3-none-any.whl (18 kB)
-#14 16.52 Downloading pandas-3.0.1-cp312-cp312-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl (10.4 MB)
-#14 17.54    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.4/10.4 MB 10.1 MB/s  0:00:01
-#14 17.55 Downloading matplotlib-3.10.8-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (9.6 MB)
-#14 18.49    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 9.6/9.6 MB 10.3 MB/s  0:00:00
-#14 18.51 Downloading seaborn-0.13.2-py3-none-any.whl (294 kB)
-#14 18.56 Downloading statsmodels-0.14.6-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (10.1 MB)
-#14 19.62    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.1/10.1 MB 9.7 MB/s  0:00:01
-#14 19.68 Downloading scikit_learn-1.6.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (12.3 MB)
-#14 21.23    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.3/12.3 MB 7.8 MB/s  0:00:01
-#14 21.28 Downloading shap-0.48.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (1.0 MB)
-#14 21.38    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.0/1.0 MB 11.4 MB/s  0:00:00
-#14 21.40 Downloading slicer-0.0.8-py3-none-any.whl (15 kB)
-#14 21.43 Downloading jupyterlab_vim-4.1.4-py3-none-any.whl (67 kB)
-#14 21.45 Downloading tqdm-4.67.3-py3-none-any.whl (78 kB)
-#14 21.50 Downloading cachetools-7.0.4-py3-none-any.whl (13 kB)
-#14 21.54 Downloading contourpy-1.3.3-cp312-cp312-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl (332 kB)
-#14 21.59 Downloading cycler-0.12.1-py3-none-any.whl (8.3 kB)
-#14 21.62 Downloading dm_tree-0.1.9-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (147 kB)
-#14 21.66 Downloading absl_py-2.4.0-py3-none-any.whl (135 kB)
-#14 21.70 Downloading filelock-3.25.0-py3-none-any.whl (26 kB)
-#14 21.72 Downloading fonttools-4.61.1-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (5.0 MB)
-#14 22.31    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.0/5.0 MB 8.4 MB/s  0:00:00
-#14 22.34 Downloading h5netcdf-1.8.1-py3-none-any.whl (62 kB)
-#14 22.36 Downloading joblib-1.5.3-py3-none-any.whl (309 kB)
-#14 22.42 Downloading kiwisolver-1.4.9-cp312-cp312-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl (1.3 MB)
-#14 22.56    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 9.4 MB/s  0:00:00
-#14 22.63 Downloading numba-0.64.0-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (3.5 MB)
-#14 22.97    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.5/3.5 MB 10.2 MB/s  0:00:00
-#14 22.99 Downloading llvmlite-0.46.0-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (55.1 MB)
-#14 29.42    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 55.1/55.1 MB 8.6 MB/s  0:00:06
-#14 29.43 Downloading patsy-1.0.2-py2.py3-none-any.whl (233 kB)
-#14 29.49 Downloading pillow-12.1.1-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (6.3 MB)
-#14 30.24    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.3/6.3 MB 8.4 MB/s  0:00:00
-#14 30.26 Downloading pyparsing-3.3.2-py3-none-any.whl (122 kB)
-#14 30.29 Downloading rich-14.3.3-py3-none-any.whl (310 kB)
-#14 30.37 Downloading markdown_it_py-4.0.0-py3-none-any.whl (87 kB)
-#14 30.40 Downloading mdurl-0.1.2-py3-none-any.whl (10.0 kB)
-#14 30.43 Downloading wrapt-2.1.2-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (123 kB)
-#14 30.46 Downloading xarray-2026.2.0-py3-none-any.whl (1.4 MB)
-#14 30.58    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.4/1.4 MB 11.9 MB/s  0:00:00
-#14 30.61 Downloading xarray_einstats-0.9.1-py3-none-any.whl (39 kB)
-#14 30.63 Downloading cloudpickle-3.1.2-py3-none-any.whl (22 kB)
-#14 30.65 Downloading cons-0.4.7-py3-none-any.whl (8.6 kB)
-#14 30.68 Downloading logical_unification-0.4.7-py3-none-any.whl (13 kB)
-#14 30.71 Downloading etuples-0.3.10-py3-none-any.whl (12 kB)
-#14 30.74 Downloading lightgbm-4.6.0-py3-none-manylinux2014_aarch64.whl (3.5 MB)
-#14 31.04    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.5/3.5 MB 11.1 MB/s  0:00:00
-#14 31.06 Downloading minikanren-1.0.5-py3-none-any.whl (24 kB)
-#14 31.08 Downloading multipledispatch-1.0.0-py3-none-any.whl (12 kB)
-#14 31.10 Downloading sparse-0.18.0-py2.py3-none-any.whl (151 kB)
-#14 31.15 Downloading toolz-1.1.0-py3-none-any.whl (58 kB)
-#14 31.29 Building wheels for collected packages: econml
-#14 31.29   Building wheel for econml (pyproject.toml): started
-#14 53.53   Building wheel for econml (pyproject.toml): finished with status 'done'
-#14 53.53   Created wheel for econml: filename=econml-0.16.0-cp312-cp312-linux_aarch64.whl size=4926854 sha256=79640f5f76e4550c55a4790c716992e26cfdb4b52b2b5334ce512b4315ff400d
-#14 53.53   Stored in directory: /root/.cache/pip/wheels/93/d6/1b/029b64a786e9f842008d2d2a1333db8b3bf399cb8e817409c0
-#14 53.53 Successfully built econml
-#14 53.63 Installing collected packages: multipledispatch, wrapt, tqdm, toolz, threadpoolctl, slicer, pyparsing, pillow, numpy, mdurl, llvmlite, kiwisolver, joblib, fonttools, filelock, cycler, cloudpickle, cachetools, absl-py, scipy, patsy, pandas, numba, markdown-it-py, logical-unification, h5netcdf, dm-tree, contourpy, xarray, statsmodels, sparse, scikit-learn, rich, matplotlib, lightgbm, cons, xarray-einstats, shap, seaborn, etuples, miniKanren, econml, arviz, pytensor, pymc, jupyterlab-vim
-#14 67.59 
-#14 67.59 Successfully installed absl-py-2.4.0 arviz-0.18.0 cachetools-7.0.4 cloudpickle-3.1.2 cons-0.4.7 contourpy-1.3.3 cycler-0.12.1 dm-tree-0.1.9 econml-0.16.0 etuples-0.3.10 filelock-3.25.0 fonttools-4.61.1 h5netcdf-1.8.1 joblib-1.5.3 jupyterlab-vim-4.1.4 kiwisolver-1.4.9 lightgbm-4.6.0 llvmlite-0.46.0 logical-unification-0.4.7 markdown-it-py-4.0.0 matplotlib-3.10.8 mdurl-0.1.2 miniKanren-1.0.5 multipledispatch-1.0.0 numba-0.64.0 numpy-1.26.4 pandas-3.0.1 patsy-1.0.2 pillow-12.1.1 pymc-5.16.2 pyparsing-3.3.2 pytensor-2.25.5 rich-14.3.3 scikit-learn-1.6.1 scipy-1.17.1 seaborn-0.13.2 shap-0.48.0 slicer-0.0.8 sparse-0.18.0 statsmodels-0.14.6 threadpoolctl-3.6.0 toolz-1.1.0 tqdm-4.67.3 wrapt-2.1.2 xarray-2026.2.0 xarray-einstats-0.9.1
-#14 DONE 69.4s
+#14 [linux/arm64/v8  9/11] COPY version.sh /install/
+#14 DONE 0.0s
 
-#15 [11/16] RUN mkdir /install
-#15 DONE 0.1s
+#15 [linux/arm64 10/11] RUN /install/version.sh 2>&1 | tee version.log
+#15 0.042 # Python3
+#15 0.044 Python 3.12.3
+#15 0.045 # pip3
+#15 0.215 pip 26.2.1 from /opt/venv/lib/python3.12/site-packages/pip (python 3.12)
+#15 0.236 # jupyter
+#15 1.797 Selected Jupyter core packages...
+#15 1.797 IPython          : 9.16.1
+#15 1.797 ipykernel        : 7.3.0
+#15 1.797 ipywidgets       : not installed
+#15 1.797 jupyter_client   : 8.9.1
+#15 1.797 jupyter_core     : 5.9.1
+#15 1.797 jupyter_server   : 2.20.0
+#15 1.797 jupyterlab       : 4.6.3
+#15 1.797 nbclient         : 0.11.0
+#15 1.797 nbconvert        : 7.17.1
+#15 1.797 nbformat         : 5.11.1
+#15 1.797 notebook         : not installed
+#15 1.797 qtconsole        : not installed
+#15 1.797 traitlets        : 5.16.1
+#15 1.961 # Python packages
+#15 2.181 Package                   Version
+#15 2.181 ------------------------- -----------
+#15 2.181 absl-py                   2.5.0
+#15 2.181 anyio                     4.14.2
+#15 2.181 argon2-cffi               25.1.0
+#15 2.181 argon2-cffi-bindings      25.1.0
+#15 2.183 arrow                     1.4.0
+#15 2.183 arviz                     0.18.0
+#15 2.183 asttokens                 3.0.2
+#15 2.183 async-lru                 2.3.0
+#15 2.183 attrs                     26.1.0
+#15 2.183 babel                     2.18.0
+#15 2.183 beautifulsoup4            4.15.0
+#15 2.183 bleach                    6.4.0
+#15 2.183 cachetools                7.1.7
+#15 2.183 certifi                   2026.7.22
+#15 2.183 cffi                      2.1.1
+#15 2.183 charset-normalizer        3.5.1
+#15 2.183 cloudpickle               3.1.2
+#15 2.183 comm                      0.2.3
+#15 2.183 cons                      0.4.7
+#15 2.183 contourpy                 1.3.3
+#15 2.183 cycler                    0.12.1
+#15 2.183 debugpy                   1.8.21
+#15 2.183 defusedxml                0.7.1
+#15 2.183 dm-tree                   0.1.10
+#15 2.183 econml                    0.16.0
+#15 2.183 etuples                   0.3.10
+#15 2.183 executing                 2.2.1
+#15 2.183 fastjsonschema            2.22.2
+#15 2.183 filelock                  3.32.3
+#15 2.183 fonttools                 4.63.0
+#15 2.183 fqdn                      1.5.1
+#15 2.183 h11                       0.16.0
+#15 2.183 h5netcdf                  1.8.1
+#15 2.183 httpcore                  1.0.9
+#15 2.183 httpx                     0.28.1
+#15 2.183 idna                      3.19
+#15 2.183 ipykernel                 7.3.0
+#15 2.183 ipython                   9.16.1
+#15 2.183 ipython_pygments_lexers   1.1.1
+#15 2.183 isoduration               20.11.0
+#15 2.187 jedi                      0.20.0
+#15 2.187 Jinja2                    3.1.6
+#15 2.187 joblib                    1.5.3
+#15 2.187 json5                     0.15.0
+#15 2.187 jsonpointer               3.1.1
+#15 2.187 jsonschema                4.26.0
+#15 2.187 jsonschema-specifications 2025.9.1
+#15 2.187 jupyter_builder           1.2.2
+#15 2.187 jupyter_client            8.9.1
+#15 2.187 jupyter_core              5.9.1
+#15 2.187 jupyter-events            0.12.1
+#15 2.187 jupyter-lsp               2.3.1
+#15 2.187 jupyter_server            2.20.0
+#15 2.187 jupyter_server_terminals  0.5.4
+#15 2.187 jupyterlab                4.6.3
+#15 2.187 jupyterlab_pygments       0.3.0
+#15 2.187 jupyterlab_server         2.28.0
+#15 2.187 jupyterlab-vim            4.1.4
+#15 2.187 jupytext                  1.19.5
+#15 2.187 kiwisolver                1.5.0
+#15 2.187 lark                      1.3.1
+#15 2.187 lightgbm                  4.7.0
+#15 2.187 llvmlite                  0.49.0
+#15 2.187 logical-unification       0.4.7
+#15 2.187 markdown-it-py            4.2.0
+#15 2.187 MarkupSafe                3.0.3
+#15 2.187 matplotlib                3.11.1
+#15 2.187 matplotlib-inline         0.2.2
+#15 2.187 mdit-py-plugins           0.6.1
+#15 2.187 mdurl                     0.1.2
+#15 2.187 miniKanren                1.0.5
+#15 2.187 mistune                   3.3.4
+#15 2.187 multipledispatch          1.0.0
+#15 2.187 narwhals                  2.24.0
+#15 2.187 nbclient                  0.11.0
+#15 2.187 nbconvert                 7.17.1
+#15 2.187 nbformat                  5.11.1
+#15 2.187 nest-asyncio2             1.7.2
+#15 2.187 notebook_shim             0.2.4
+#15 2.187 numba                     0.67.0
+#15 2.187 numpy                     1.26.4
+#15 2.187 packaging                 26.3
+#15 2.187 pandas                    3.0.5
+#15 2.187 pandocfilters             1.5.1
+#15 2.187 parso                     0.8.7
+#15 2.187 patsy                     1.0.2
+#15 2.187 pexpect                   4.9.0
+#15 2.187 pillow                    12.3.0
+#15 2.187 pip                       26.2.1
+#15 2.187 platformdirs              4.11.3
+#15 2.187 prometheus_client         0.26.0
+#15 2.187 prompt_toolkit            3.0.53
+#15 2.187 psutil                    7.2.2
+#15 2.187 ptyprocess                0.7.0
+#15 2.187 pure_eval                 0.2.3
+#15 2.187 pycparser                 3.0
+#15 2.187 Pygments                  2.21.0
+#15 2.187 pymc                      5.16.2
+#15 2.187 pyparsing                 3.3.2
+#15 2.187 pytensor                  2.25.5
+#15 2.187 python-dateutil           2.9.0.post0
+#15 2.187 python-json-logger        4.2.0
+#15 2.187 PyYAML                    6.0.3
+#15 2.187 pyzmq                     27.1.0
+#15 2.187 referencing               0.37.0
+#15 2.187 requests                  2.34.2
+#15 2.187 rfc3339-validator         0.1.4
+#15 2.187 rfc3986-validator         0.1.1
+#15 2.187 rfc3987-syntax            1.1.0
+#15 2.187 rich                      15.0.0
+#15 2.187 rpds-py                   2026.6.3
+#15 2.187 scikit-learn              1.6.1
+#15 2.187 scipy                     1.17.1
+#15 2.187 seaborn                   0.13.2
+#15 2.191 Send2Trash                2.1.0
+#15 2.191 setuptools                84.0.0
+#15 2.191 shap                      0.48.0
+#15 2.191 six                       1.17.0
+#15 2.191 slicer                    0.0.8
+#15 2.191 soupsieve                 2.9.2
+#15 2.191 sparse                    0.19.2
+#15 2.191 stack-data                0.6.3
+#15 2.191 statsmodels               0.14.6
+#15 2.191 terminado                 0.18.1
+#15 2.191 threadpoolctl             3.6.0
+#15 2.191 tinycss2                  1.5.1
+#15 2.191 toolz                     1.1.0
+#15 2.191 tornado                   6.5.8
+#15 2.191 tqdm                      4.70.0
+#15 2.191 traitlets                 5.16.1
+#15 2.191 typing_extensions         4.16.0
+#15 2.191 tzdata                    2026.3
+#15 2.191 uri-template              1.3.0
+#15 2.191 urllib3                   2.7.0
+#15 2.191 wcwidth                   0.8.2
+#15 2.191 webcolors                 25.10.0
+#15 2.191 webencodings              0.6.1
+#15 2.191 websocket-client          1.9.0
+#15 2.191 wrapt                     2.3.0
+#15 2.191 xarray                    2026.7.0
+#15 2.191 xarray-einstats           0.9.1
+#15 DONE 2.2s
 
-#16 [12/16] ADD etc_sudoers /install/
-#16 DONE 0.1s
-
-#17 [13/16] COPY etc_sudoers /etc/sudoers
-#17 DONE 0.0s
-
-#18 [14/16] COPY bashrc /root/.bashrc
-#18 DONE 0.1s
-
-#19 [15/16] ADD version.sh /install/
-#19 DONE 0.0s
-
-#20 [16/16] RUN /install/version.sh 2>&1 | tee version.log
-#20 0.109 # Python3
-#20 0.110 Python 3.12.3
-#20 0.110 # pip3
-#20 0.193 pip 26.0.1 from /venv/lib/python3.12/site-packages/pip (python 3.12)
-#20 0.207 # jupyter
-#20 1.133 Selected Jupyter core packages...
-#20 1.133 IPython          : 9.10.0
-#20 1.133 ipykernel        : 7.2.0
-#20 1.133 ipywidgets       : not installed
-#20 1.133 jupyter_client   : 8.8.0
-#20 1.133 jupyter_core     : 5.9.1
-#20 1.133 jupyter_server   : 2.17.0
-#20 1.133 jupyterlab       : 4.5.4
-#20 1.133 nbclient         : 0.10.4
-#20 1.133 nbconvert        : 7.17.0
-#20 1.133 nbformat         : 5.10.4
-#20 1.133 notebook         : not installed
-#20 1.133 qtconsole        : not installed
-#20 1.133 traitlets        : 5.14.3
-#20 1.294 # Python packages
-#20 1.434 Package                   Version
-#20 1.434 ------------------------- -----------
-#20 1.434 absl-py                   2.4.0
-#20 1.434 anyio                     4.12.1
-#20 1.434 argon2-cffi               25.1.0
-#20 1.434 argon2-cffi-bindings      25.1.0
-#20 1.434 arrow                     1.4.0
-#20 1.434 arviz                     0.18.0
-#20 1.434 asttokens                 3.0.1
-#20 1.434 async-lru                 2.2.0
-#20 1.434 attrs                     25.4.0
-#20 1.434 babel                     2.18.0
-#20 1.435 beautifulsoup4            4.14.3
-#20 1.435 bleach                    6.3.0
-#20 1.435 cachetools                7.0.4
-#20 1.435 certifi                   2026.1.4
-#20 1.436 cffi                      2.0.0
-#20 1.436 charset-normalizer        3.4.4
-#20 1.436 cloudpickle               3.1.2
-#20 1.436 comm                      0.2.3
-#20 1.436 cons                      0.4.7
-#20 1.436 contourpy                 1.3.3
-#20 1.436 cycler                    0.12.1
-#20 1.436 debugpy                   1.8.20
-#20 1.436 decorator                 5.2.1
-#20 1.436 defusedxml                0.7.1
-#20 1.436 dm-tree                   0.1.9
-#20 1.436 econml                    0.16.0
-#20 1.436 etuples                   0.3.10
-#20 1.436 executing                 2.2.1
-#20 1.436 fastjsonschema            2.21.2
-#20 1.436 filelock                  3.25.0
-#20 1.436 fonttools                 4.61.1
-#20 1.436 fqdn                      1.5.1
-#20 1.436 h11                       0.16.0
-#20 1.436 h5netcdf                  1.8.1
-#20 1.436 httpcore                  1.0.9
-#20 1.436 httpx                     0.28.1
-#20 1.436 idna                      3.11
-#20 1.436 ipykernel                 7.2.0
-#20 1.436 ipython                   9.10.0
-#20 1.436 ipython_pygments_lexers   1.1.1
-#20 1.436 isoduration               20.11.0
-#20 1.436 jedi                      0.19.2
-#20 1.436 Jinja2                    3.1.6
-#20 1.436 joblib                    1.5.3
-#20 1.436 json5                     0.13.0
-#20 1.436 jsonpointer               3.0.0
-#20 1.436 jsonschema                4.26.0
-#20 1.436 jsonschema-specifications 2025.9.1
-#20 1.436 jupyter_client            8.8.0
-#20 1.436 jupyter_core              5.9.1
-#20 1.436 jupyter-events            0.12.0
-#20 1.436 jupyter-lsp               2.3.0
-#20 1.437 jupyter_server            2.17.0
-#20 1.437 jupyter_server_terminals  0.5.4
-#20 1.437 jupyterlab                4.5.4
-#20 1.437 jupyterlab_pygments       0.3.0
-#20 1.437 jupyterlab_server         2.28.0
-#20 1.437 jupyterlab-vim            4.1.4
-#20 1.437 kiwisolver                1.4.9
-#20 1.437 lark                      1.3.1
-#20 1.437 lightgbm                  4.6.0
-#20 1.437 llvmlite                  0.46.0
-#20 1.437 logical-unification       0.4.7
-#20 1.437 markdown-it-py            4.0.0
-#20 1.437 MarkupSafe                3.0.3
-#20 1.437 matplotlib                3.10.8
-#20 1.437 matplotlib-inline         0.2.1
-#20 1.437 mdurl                     0.1.2
-#20 1.438 miniKanren                1.0.5
-#20 1.438 mistune                   3.2.0
-#20 1.438 multipledispatch          1.0.0
-#20 1.438 nbclient                  0.10.4
-#20 1.438 nbconvert                 7.17.0
-#20 1.438 nbformat                  5.10.4
-#20 1.438 nest-asyncio              1.6.0
-#20 1.438 notebook_shim             0.2.4
-#20 1.438 numba                     0.64.0
-#20 1.438 numpy                     1.26.4
-#20 1.438 packaging                 26.0
-#20 1.438 pandas                    3.0.1
-#20 1.438 pandocfilters             1.5.1
-#20 1.438 parso                     0.8.6
-#20 1.438 patsy                     1.0.2
-#20 1.438 pexpect                   4.9.0
-#20 1.438 pillow                    12.1.1
-#20 1.438 pip                       26.0.1
-#20 1.438 platformdirs              4.9.2
-#20 1.438 prometheus_client         0.24.1
-#20 1.438 prompt_toolkit            3.0.52
-#20 1.438 psutil                    7.2.2
-#20 1.438 ptyprocess                0.7.0
-#20 1.438 pure_eval                 0.2.3
-#20 1.439 pycparser                 3.0
-#20 1.439 Pygments                  2.19.2
-#20 1.439 pymc                      5.16.2
-#20 1.439 pyparsing                 3.3.2
-#20 1.439 pytensor                  2.25.5
-#20 1.439 python-dateutil           2.9.0.post0
-#20 1.439 python-json-logger        4.0.0
-#20 1.439 PyYAML                    6.0.3
-#20 1.439 pyzmq                     27.1.0
-#20 1.439 referencing               0.37.0
-#20 1.439 requests                  2.32.5
-#20 1.439 rfc3339-validator         0.1.4
-#20 1.439 rfc3986-validator         0.1.1
-#20 1.439 rfc3987-syntax            1.1.0
-#20 1.439 rich                      14.3.3
-#20 1.439 rpds-py                   0.30.0
-#20 1.439 scikit-learn              1.6.1
-#20 1.439 scipy                     1.17.1
-#20 1.440 seaborn                   0.13.2
-#20 1.440 Send2Trash                2.1.0
-#20 1.440 setuptools                82.0.0
-#20 1.440 shap                      0.48.0
-#20 1.440 six                       1.17.0
-#20 1.440 slicer                    0.0.8
-#20 1.440 soupsieve                 2.8.3
-#20 1.440 sparse                    0.18.0
-#20 1.440 stack-data                0.6.3
-#20 1.440 statsmodels               0.14.6
-#20 1.440 terminado                 0.18.1
-#20 1.440 threadpoolctl             3.6.0
-#20 1.440 tinycss2                  1.4.0
-#20 1.440 toolz                     1.1.0
-#20 1.440 tornado                   6.5.4
-#20 1.440 tqdm                      4.67.3
-#20 1.440 traitlets                 5.14.3
-#20 1.440 typing_extensions         4.15.0
-#20 1.440 tzdata                    2025.3
-#20 1.440 uri-template              1.3.0
-#20 1.440 urllib3                   2.6.3
-#20 1.440 wcwidth                   0.6.0
-#20 1.440 webcolors                 25.10.0
-#20 1.441 webencodings              0.5.1
-#20 1.441 websocket-client          1.9.0
-#20 1.441 wrapt                     2.1.2
-#20 1.441 xarray                    2026.2.0
-#20 1.441 xarray-einstats           0.9.1
-#20 DONE 1.5s
-
-#21 exporting to image
-#21 exporting layers
-#21 exporting layers 1.8s done
-#21 writing image sha256:501bea8ef5c78225683a1616ee55d0d6a7d0246f425d1c3921e3ecd61bea5742
-#21 writing image sha256:501bea8ef5c78225683a1616ee55d0d6a7d0246f425d1c3921e3ecd61bea5742 done
-#21 naming to docker.io/gpsaggese/umd_causal_success_analysis done
-#21 DONE 1.9s
-
- [33m1 warning found (use docker --debug to expand):
-[0m - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 2)
+#16 exporting to oci image format
+#16 exporting layers
+#16 exporting layers 39.4s done
+#16 exporting manifest sha256:40b772e584c5f581c4ba4e01649bb5ea7622a637cd0aa864f6cde4395ad3badb done
+#16 exporting config sha256:e6ad7b1db6002cbabb16f6a5ba5b5cb5512b81f9d831905ebf23b4dd8802ea05 done
+#16 exporting manifest list sha256:c97ac62f4a39568e783f6f4d01670d2a42c8bb6e4afdc128a1dfa45c79075a3b done
+#16 sending tarball
+#16 sending tarball 7.0s done
+#16 DONE 46.4s
+gpsaggese/umd_causal_success_analysis:latest

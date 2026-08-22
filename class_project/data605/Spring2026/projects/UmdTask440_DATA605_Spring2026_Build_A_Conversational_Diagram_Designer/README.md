@@ -1,802 +1,171 @@
-# Summary
-This directory contains a Docker-based development environment template with:
+# Conversational Diagram Designer (CDD)
 
-- Utility scripts for Docker operations (build, run, clean, push)
-- Configuration files for Dockerfile and environment setup
-- Jupyter notebook templates for standardized project development
-- Shell utilities and Python helpers for container-based workflows
+DATA 605 - Big Data Systems | Spring 2026 | Prof. GP Saggese
 
-A guide to set up Docker-based projects using the template, customize it for
-your needs, and maintain it over time.
+CDD is a browser-based diagramming tool that turns natural-language descriptions into rendered technical diagrams. The user types a request, an LLM generates valid diagram source code in one of three formats, the system renders it to an image, and a multimodal vision-feedback loop inspects the rendered output and self-corrects up to three times. The full stack runs from a single Docker image and supports both a notebook-driven workflow (Jupyter) and a web application (FastAPI + React).
 
-## Description of Files
-- `bashrc`
-  - Bash configuration file enabling `vi` mode for command-line editing
+The project is framed as a multi-stage inference pipeline with vision-in-the-loop validation, response caching, and an empirical evaluation comparing diagram quality with the loop on versus off.
 
-- `copy_docker_files.py`
-  - Python script for copying Docker configuration files to destination
-    directories
+## What the system does
 
-- `docker_build.version.log`
-  - Log file containing Python, `pip`, Jupyter, and package version information
-    from Docker build
+1. The user describes a diagram in plain English ("class diagram for an e-commerce app", "state machine for an order lifecycle").
+2. CDD selects a format (Graphviz DOT, Mermaid, or PlantUML) and asks the LLM to produce valid source code.
+3. The renderer converts source code to a PNG image and an SVG.
+4. With vision feedback enabled, the rendered image and the original user intent go back to the multimodal model. The model returns a structured critique: is the diagram acceptable, what is wrong, what should change.
+5. If the critique flags issues and the iteration counter is below the cap, the orchestrator regenerates the diagram with the critique appended to the prompt.
+6. The user sees the final diagram, the source code, and the iteration trace. They can refine through follow-up messages, export to PNG, SVG, or source, or switch formats mid-conversation.
 
-- `docker_cmd.sh`
-  - Shell script for executing arbitrary commands inside Docker containers with
-    volume mounting
+The design honors three explicit goals from the project brief: browser-based delivery, real-time rendering, and vision-driven self-correction. It also stays inside the brief's stated non-goals: no multi-user collaboration, no authentication, no diagram persistence beyond the active session.
 
-- `docker_jupyter.sh`
-  - Shell script for launching Jupyter Lab server inside Docker containers
+## Supported formats
 
-- `docker_name.sh`
-  - Configuration file defining Docker repository and image naming variables
+| Format | Renderer | Local | Notes |
+|---|---|---|---|
+| Graphviz DOT | `graphviz` Python binding (system `dot`) | Yes | Used for flowcharts, class diagrams, ER diagrams, state machines, mind maps. |
+| Mermaid | Kroki public render server | No | Used for sequence diagrams, modern flowcharts, journey maps. |
+| PlantUML | Public PlantUML render server | No | Used for UML sequence, class, state, and component diagrams. |
 
-- `Dockerfile`
-  - Docker image build configuration with Ubuntu, Python, Jupyter, and project
-    dependencies
+The Mermaid and PlantUML choices are documented as deliberate trade-offs. Both formats have browser-only library options, but the CheerpJ-based PlantUML library has known correctness issues on complex diagrams, and Mermaid's bundle size adds non-trivial weight to the frontend. Server-rendering through Kroki and the official PlantUML server produces consistent output and keeps the frontend lean.
 
-- `etc_sudoers`
-  - Sudoers configuration file granting passwordless sudo access for postgres
-    user
+## Architecture
 
-- `README.md`
-  - Documentation file describing directory contents, files, and executable
-    scripts
+The diagram below shows the full request lifecycle — from user message through LLM code generation, rendering, and the optional vision-feedback loop, down to the evaluation harness that benchmarks the pipeline in both vision-on and vision-off modes.
 
-- `template_utils.py`
-  - Python utility functions supporting tutorial notebooks with data processing
-    and modeling helpers
 
-- `template.API.ipynb`
-  - Jupyter notebook template for API exploration and library usage examples
+<img width="1175" height="1600" alt="image" src="https://github.com/user-attachments/assets/0ce06fca-0a72-42bf-8d96-49cbfa0220a3" />
 
-- `template.example.ipynb`
-  - Jupyter notebook template for project examples and demonstrations
 
-- `utils.sh`
-  - Bash utility library with reusable functions for Docker operations
-  - Provides centralized argument parsing (`parse_default_args`) for `-h` and
-    `-v` flags used by all `docker_*.sh` scripts
-  - Provides Jupyter configuration logic: vim keybindings, notification
-    settings, and Docker run option builders
-  - All `docker_*.sh`, `docker_jupyter.sh`, and `run_jupyter.sh` scripts across
-    the repo source this file from `class_project/project_template/utils.sh`
 
-## Workflows
-- All commands should be run from inside the project directory
-  ```bash
-  > cd tutorials/FilterPy
-  ```
+Pipeline walkthrough
+user message
+  -> cdd_llm.generate(prompt, format)            text -> diagram code
+  -> cdd_renderer.render(code, format)           code -> PNG / SVG
+  -> if vision feedback enabled:
+       -> cdd_llm.critique_image(png, intent)    PNG + intent -> JSON critique
+       -> if not acceptable and iter < 3:
+            regenerate with critique appended
+            loop
+  -> return final code, image, and trace
+  
 
-- To build the container for a project
-  ```bash
-  > cd $PROJECT
-  # Build the container.
-  > docker_build.sh
-  # Build without cache (pass extra args after -v).
-  > docker_build.sh --no-cache
-  # Test the container.
-  > docker_bash.sh ls
-  ```
+The entire pipeline lives behind a single `CDDOrchestrator` class. The frontend talks to the orchestrator through a small FastAPI surface (`/api/chat`, `/api/export`, `/api/reset`, `/api/config`). The orchestrator records every step of the pipeline so the report can show what happened during a turn: which mode ran, how many iterations the vision loop used, what each iteration produced.
 
-- Enable verbose (trace) output with `-v`
-  ```bash
-  > docker_build.sh -v
-  > docker_bash.sh -v
-  ```
+## Web APP Screenshot
+The screenshot below shows the CDD web interface after a user requested a User Authentication Flowchart. The left panel displays the diagram description and LLM-generated suggestions for improvement (e.g., combining redundant steps, adjusting node shapes for terminal states). The center panel renders the live Graphviz diagram, and the bottom strip shows the revision history — two iterations are visible, reflecting the vision-feedback loop refining the diagram from the initial generation to a corrected revision. Export controls for .png, .svg, and .dot source are available in the top-right corner.
 
-- Get help for any docker script
-  ```bash
-  > docker_build.sh -h
-  > docker_jupyter.sh -h
-  ```
+<img width="1917" height="870" alt="Screenshot 2026-05-07 124657" src="https://github.com/user-attachments/assets/ffd10f41-bdb2-47d9-a27d-13f77c726176" />
 
-- Start Jupyter
-  ```bash
-  > docker_jupyter.sh
-  # Go to localhost:8888
-  ```
 
-- Start Jupyter on a specific port with vim support
-  ```bash
-  > docker_jupyter.sh -p 8890 -u
-  # Go to localhost:8890
-  ```
+## Layout
 
-## How to Customize a Project Template
-- Copy the template
-  ```bash
-  > cp -r class_project/project_template $TARGET
-  ```
+```
+cdd_config.py           Provider settings, format definitions, system prompts, vision config
+cdd_llm.py              Unified text and multimodal client. Gemini primary; OpenAI / Anthropic optional fallbacks
+cdd_renderer.py         Three-format render(code, format). Validation and image conversion
+cdd_orchestrator.py     The user-turn state machine and the vision-feedback loop
+cdd_eval.py             Benchmark harness. Vision-on vs vision-off comparison
+cdd_server.py           FastAPI backend. Serves the React app and the API
 
-## Description of Executables
+cdd.API.ipynb           API tutorial notebook (paired with cdd.API.py via jupytext)
+cdd.example.ipynb       Evaluation study notebook (paired with cdd.example.py via jupytext)
 
-### `copy_docker_files.py`
-- **What It Does**
-  - Copies Docker configuration and utility files from project_template to a
-    destination directory
-  - Preserves all file permissions and attributes during copying
-  - Creates destination directory if it doesn't exist
+frontend/               React + Vite single-page chat UI
+test/                   Pytest suite (46 passing, 2 network-only skipped)
 
-- Copy all Docker files to a target directory:
-  ```bash
-  > ./copy_docker_files.py --dst_dir /path/to/destination
-  ```
+Dockerfile              Single image: Python 3.11 + Jupyter + FastAPI + built React
+docker_build.sh         Build the image
+docker_jupyter.sh       Run with Jupyter on :8888 (the notebook-driven workflow)
+docker_app.sh           Run as a web app on :8000 (FastAPI + React UI)
+docker_bash.sh          Open an interactive shell inside the container
 
-- Copy with verbose logging:
-  ```bash
-  > ./copy_docker_files.py --dst_dir /path/to/destination -v DEBUG
-  ```
+requirements.txt        Python dependencies
+.env.example            Environment variable template (copy to .env)
+CONTRIBUTORS.md         File-ownership map
+README.md               This file
+```
 
-### `docker_bash.sh`
-- **What It Does**
-  - Launches an interactive bash shell inside a Docker container
-  - Mounts the current working directory as `/data` inside the container
-  - Exposes port 8888 for potential services running in the container
-  - Accepts `-h` (help) and `-v` (verbose/trace) flags via `parse_default_args`
+## Quickstart
 
-- Launch bash shell in the container:
-  ```bash
-  > ./docker_bash.sh
-  ```
+### 1. Get a Gemini API key
 
-- Launch with verbose output (prints each command):
-  ```bash
-  > ./docker_bash.sh -v
-  ```
+The default LLM provider is Gemini 2.5 Flash. Get a free-tier key at [aistudio.google.com/apikey](https://aistudio.google.com/apikey).
 
-### `docker_build.sh`
-- **What It Does**
-  - Builds Docker container images using Docker BuildKit
-  - Supports single-architecture builds (default) or multi-architecture builds
-    (`linux/arm64`, `linux/amd64`)
-  - Copies project files to temporary build directory and generates build logs
-  - Accepts `-h` (help) and `-v` (verbose/trace) flags; any extra arguments
-    after flags are forwarded to `docker build`
+### 2. Configure environment
 
-- Build container image for current architecture:
-  ```bash
-  > ./docker_build.sh
-  ```
-
-- Build without Docker layer cache:
-  ```bash
-  > ./docker_build.sh --no-cache
-  ```
-
-- Build multi-architecture image (requires setting `DOCKER_BUILD_MULTI_ARCH=1`
-  in the script):
-  ```bash
-  > # Edit docker_build.sh to set DOCKER_BUILD_MULTI_ARCH=1
-  > ./docker_build.sh
-  ```
-
-### `docker_clean.sh`
-- **What It Does**
-
-- Removes all Docker images matching the project's full image name
-- Lists images before and after removal for verification
-- Uses force removal to ensure cleanup completes
-
-- Remove project's Docker images:
-  ```bash
-  > ./docker_clean.sh
-  ```
-
-### `docker_cmd.sh`
-- **What It Does**
-  - Executes arbitrary commands inside a Docker container
-  - Mounts current directory as `/data` for accessing project files
-  - Automatically removes container after command execution completes
-  - Accepts `-h` (help) and `-v` (verbose/trace) flags; remaining arguments
-    form the command to execute
-
-- Run Python script inside container:
-  ```bash
-  > ./docker_cmd.sh python script.py --arg value
-  ```
-
-- List files in the container:
-  ```bash
-  > ./docker_cmd.sh ls -la /data
-  ```
-
-- Run tests inside container:
-  ```bash
-  > ./docker_cmd.sh pytest tests/
-  ```
-
-### `docker_exec.sh`
-- **What It Does**
-  - Attaches to an already running Docker container with an interactive bash
-    shell
-  - Finds the container ID automatically based on the image name
-  - Useful for debugging or inspecting running containers
-  - Accepts `-h` (help) and `-v` (verbose/trace) flags via `parse_default_args`
-
-- Attach to running container:
-  ```bash
-  > ./docker_exec.sh
-  ```
-
-### `docker_jupyter.sh`
-- **What It Does**
-  - Launches Jupyter Lab server inside a Docker container
-  - Supports custom port configuration (default 8888), vim keybindings, and
-    custom directory mounting
-  - Runs `run_jupyter.sh` script inside the container with specified options
-
-- Start Jupyter on default port 8888:
-  ```bash
-  > ./docker_jupyter.sh
-  ```
-
-- Start Jupyter on custom port with vim bindings:
-  ```bash
-  > ./docker_jupyter.sh -p 8889 -u
-  ```
-
-- Start Jupyter with external directory mounted:
-  ```bash
-  > ./docker_jupyter.sh -d /path/to/notebooks -p 8889
-  ```
-
-- Start Jupyter in verbose mode:
-  ```bash
-  > ./docker_jupyter.sh -v -p 8890
-  ```
-
-### `docker_push.sh`
-- **What It Does**
-  - Authenticates to Docker registry using credentials from
-    `~/.docker/passwd.$REPO_NAME.txt`
-  - Pushes the project's Docker image to the remote repository
-  - Lists images before pushing for verification
-
-- Push container image to registry:
-  ```bash
-  > ./docker_push.sh
-  ```
-
-### `run_jupyter.sh`
-- **What It Does**
-  - Launches Jupyter Lab server with no authentication (token and password
-    disabled)
-  - Binds to all network interfaces (0.0.0.0) on port 8888
-  - Allows root access for container environments
-  - When `JUPYTER_USE_VIM=1`, verifies that `jupyterlab_vim` is installed
-    before enabling vim keybindings; exits with an error if not found
-
-- Start Jupyter Lab server (typically called from docker_jupyter.sh):
-  ```bash
-  > ./run_jupyter.sh
-  ```
-
-- Start with vim keybindings (requires `jupyterlab_vim` installed in the
-  container):
-  ```bash
-  > JUPYTER_USE_VIM=1 ./run_jupyter.sh
-  ```
-
-### `utils.sh`
-- **What It Does**
-  - Central Bash library sourced by all `docker_*.sh` and `run_jupyter.sh`
-    scripts across the repository
-  - Provides `parse_default_args` which adds `-h` (help) and `-v`
-    (verbose/`set -x`) flags to every docker script
-  - Provides `build_container_image`, `push_container_image`,
-    `remove_container_image`, `kill_container`, `exec_container` utilities
-  - Provides Jupyter configuration helpers: vim keybindings, notification
-    suppression, and Docker run option builders
-
-### `version.sh`
-- **What It Does**
-  - Reports version information for Python3, pip3, and Jupyter
-  - Lists all installed Python packages with versions
-  - Used during Docker image builds to log environment configuration
-
-- Display version information:
-  ```bash
-  > ./version.sh
-  ```
-
-- Save version information to a log file:
-  ```bash
-  > ./version.sh 2>&1 | tee version.log
-  ```
-
-# Template Customization and Maintenance
-
-## Quick Start for New Projects
-
-### Step 1: Copy the Template
 ```bash
-> cd class_project/project_template
-> cp -r . /path/to/your/new/project
-> cd /path/to/your/new/project
+cp .env.example .env
+# Open .env and paste your GEMINI_API_KEY
 ```
 
-### Step 2: Choose a Base Image
-The template includes three Dockerfile options. Choose the one that best fits
-your project:
+OpenAI and Anthropic keys can also be added; the system will surface whichever providers are configured.
 
-| Option                     | File                     | Best For                                                         |
-| -------------------------- | ------------------------ | ---------------------------------------------------------------- |
-| **Standard**               | `Dockerfile.ubuntu`      | Full Ubuntu environment with system tools                        |
-| **Lightweight**            | `Dockerfile.python_slim` | Minimal Python environment; reduced image size                   |
-| **Modern Package Manager** | `Dockerfile.uv`          | Fast dependency resolution with [uv](https://docs.astral.sh/uv/) |
+### 3. Build the Docker image
 
-**How to choose:**
-
-- **Use Standard** if you need system-level tools (git, curl, graphviz, etc.)
-- **Use Python Slim** to minimize image size and build time
-- **Use uv** if you want faster, more reliable dependency management
-
-### Step 3: Set Up Your Dockerfile
-- Delete unused reference files
-  ```bash
-  > rm Dockerfile.ubuntu Dockerfile.python_slim Dockerfile.uv
-  ```
-
-- Create your working Dockerfile
-  ```bash
-  > cp Dockerfile.ubuntu Dockerfile
-  ```
-
-- Add your dependencies
-  ```bash
-  > echo "numpy\npandas\nscikit-learn" > requirements.in
-  > pip-compile requirements.in > requirements.txt
-  ```
-
-### Step 4: Keep Customization Minimal
-- Only modify what's necessary for your project
-- Use `requirements.txt` for all Python packages (don't edit Dockerfile for
-  this)
-- Keep `bashrc` and `etc_sudoers` as-is unless you need custom shell setup
-- Keep base image and Python version unless you have specific requirements
-
-## Understanding the Dockerfile Flow
-Each Dockerfile follows the same structure. Here are the key stages:
-
-### Stage 1: Base Image and System Setup
-```dockerfile
-FROM ubuntu:24.04  # or python:3.12-slim, depending on your requirement
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get -y update && apt-get -y upgrade
+```bash
+./docker_build.sh
 ```
 
-- **Purpose**: Start with a clean base image and disable interactive
-  installation prompts
+### 4. Run
 
-- **When to customize**: Only change the base image or version if your project
-  has specific requirements (different Ubuntu version, specific Python version,
-  etc.)
+Two run modes share the same image. Pick whichever fits the task.
 
-### Stage 2: System Utilities (Ubuntu-based Dockerfiles Only)
-```dockerfile
-RUN apt install -y --no-install-recommends \
-    sudo \
-    curl \
-    systemctl \
-    gnupg \
-    git \
-    vim
+**Notebook workflow.** Start Jupyter and open the tutorial notebooks. This is the workflow used for grading.
+
+```bash
+./docker_jupyter.sh
+```
+Open [http://localhost:8888](http://localhost:8888) and run `cdd.API.ipynb` for the API tour, or `cdd.example.ipynb` for the evaluation study.
+
+**Web app.** Start the FastAPI server and open the React UI.
+
+```bash
+./docker_app.sh
+```
+Open [http://localhost:8000](http://localhost:8000). Type a description, switch formats from the dropdown, toggle the vision feedback loop, refine through follow-up messages, and export to PNG / SVG / source.
+
+### 5. Run the test suite
+
+```bash
+./docker_bash.sh
+# Inside the container:
+pytest test/test_docker_all.py -v
 ```
 
-- **Purpose**: Install essential system tools for development and container
-  management
+Expected result: 46 tests pass, 2 skipped. The skipped tests are integration tests against Kroki (Mermaid) and the public PlantUML server; they are skipped by default to keep the suite hermetic.
 
-- **When to customize**: Add only if needed for your project
-  - `postgresql-client`: for database connections
-  - `graphviz`: for graph visualizations
-  - `ffmpeg`: for media processing
+## Vision-feedback loop
 
-- **Best practice**: Use `--no-install-recommends` to keep the image small
+The vision loop is the project's central novel feature. Most chat-to-diagram systems generate code blind: the LLM never sees what its own output looks like. CDD closes that loop by sending the rendered diagram back to a multimodal model along with the original intent and a structured critique prompt. The model returns a JSON critique with three fields: `is_acceptable`, a list of `issues`, and a `suggested_changes` string. If the critique flags issues and the iteration counter is below three, the orchestrator builds a correction prompt that includes the critique and regenerates.
 
-### Stage 3: Python and Build Tools (Ubuntu-based Dockerfiles Only)
-```dockerfile
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    python3 \
-    python3-pip \
-    python3-dev \
-    python3-venv \
-    && rm -rf /var/lib/apt/lists/*
-```
+The loop is bounded. Three iterations is the hard cap, matching the recommendation in the project brief. Each iteration is logged in the turn trace so the report can show how often the loop converges, when it makes a diagram better, and the rare cases where it makes a diagram worse.
 
-- **Purpose**: Install Python 3, pip, and build tools needed for compiled
-  packages
+## Evaluation
 
-- **Why venv**: Creates an isolated Python environment separate from system
-  Python
+`cdd_eval.py` runs a curated benchmark of prompts across all three formats and three complexity tiers. Each prompt is generated twice: once with the vision feedback loop disabled (a single-shot baseline) and once with it enabled (up to three iterations). Per-output metrics include syntax validity, render success, node count, edge count, label presence, and styling presence. An optional LLM-as-judge step rates semantic correctness and visual quality on a 1-5 scale using a versioned rubric prompt.
 
-- **When to customize**: Rarely. Only change if you need a specific Python
-  version (e.g., `python3.11` instead of `python3`)
+The full evaluation, summary tables, and side-by-side renderings live in `cdd.example.ipynb`. Results are written to a JSON file for downstream analysis and the project report.
 
-### Stage 4: Virtual Environment Setup
-```dockerfile
-RUN python3 -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
-RUN python -m pip install --upgrade pip
-```
+## Configuration
 
-- **Purpose**: Create and activate an isolated virtual environment for your
-  project
+All knobs live in `cdd_config.py` and `.env`.
 
-- **Why this matters**: Ensures reproducibility and prevents dependency
-  conflicts across projects
+| Variable | Default | Effect |
+|---|---|---|
+| `CDD_LLM_PROVIDER` | `gemini` | One of `gemini`, `openai`, `anthropic` |
+| `GEMINI_API_KEY` | (required for default) | Free-tier key from Google AI Studio |
+| `CDD_GEMINI_MODEL` | `gemini-2.5-flash` | Multimodal model used for both generation and critique |
+| `OPENAI_API_KEY` | (optional) | Enables OpenAI as a fallback provider |
+| `ANTHROPIC_API_KEY` | (optional) | Enables Anthropic as a fallback provider |
+| `VISION_FEEDBACK_ENABLED` | `True` | Master switch for the vision loop |
+| `VISION_MAX_ITERATIONS` | `3` | Hard cap on loop iterations per turn |
 
-- **When to customize**: Never. This is a standard best practice
+## Engineering notes
 
-### Stage 5: Jupyter Installation
-```dockerfile
-RUN pip install jupyterlab jupyterlab_vim
-```
+- The system has one Docker image. Both run modes (Jupyter and web app) use the same image with different entrypoints. This keeps the build cache hot, the dependency graph in sync, and the grading flow simple.
+- Frontend is a single-file React component (no build pipeline beyond Vite, no UI framework, no state library). The render code paths and the orchestrator state machine are exercised the same way in tests as they are in the UI.
+- The renderer accepts any of the three formats through one entry point, which keeps the orchestrator format-agnostic and lets the eval harness sweep across formats with a single loop.
+- Jupytext-paired `.py` and `.ipynb` files mean the notebooks can be diffed and code-reviewed as plain Python, while staying executable as full notebooks. This matches the project template convention.
 
-- **Purpose**: Install JupyterLab and the Vim keybinding extension for
-  interactive development
-  - `jupyterlab`: the main IDE for running notebooks in the browser
-  - `jupyterlab_vim`: adds Vim-style navigation to notebook cells
+## What is explicitly out of scope
 
-- **Why in Dockerfile, not requirements.txt**: These are infrastructure
-  packages (the IDE itself), not project-specific dependencies
-  - Do NOT add `jupyterlab`, `jupyterlab-vim`, or `ipywidgets` to
-    `requirements.txt`; they are already installed here
-
-- **When to customize**:
-  - **Remove** this line if your project doesn't use Jupyter
-  - **Add more extensions** if needed (e.g., `jupyterlab-git`,
-    `jupyterlab-variableinspector`)
-
-### Stage 6: Project Dependencies
-```dockerfile
-COPY requirements.txt /install/requirements.txt
-RUN pip install --no-cache-dir -r /install/requirements.txt
-```
-
-- **Purpose**: Install your project-specific Python packages
-
-- **When to customize**: This is the primary place to customize. Define all your
-  dependencies in `requirements.txt`
-
-- **Best practice**:
-  - **Pin all versions**: `numpy==1.24.0` (not `numpy>=1.20.0`)
-  - **Use `--no-cache-dir`**: Reduces image size by skipping pip cache
-  - **For complex dependencies**: Use `requirements.in` with `pip-tools` or
-    `pip-compile`
-
-- **Example requirements.txt**:
-  ```text
-  numpy==1.24.0
-  pandas==2.0.0
-  scikit-learn==1.2.2
-  tensorflow==2.13.0
-  ```
-
-### Stage 7: Configuration
-```dockerfile
-COPY etc_sudoers /etc/sudoers
-COPY bashrc /root/.bashrc
-```
-
-- **Purpose**: Apply custom bash configuration and sudo permissions
-
-- **When to customize**:
-  - **Edit `bashrc`**: to add aliases, environment variables, or custom prompt
-  - **Edit `etc_sudoers`**: if additional users need passwordless sudo access
-
-### Stage 8: Version Logging
-```dockerfile
-ADD version.sh /install/
-RUN /install/version.sh 2>&1 | tee version.log
-```
-
-- **Purpose**: Document the exact versions of Python, pip, Jupyter, and all
-  installed packages
-
-- **What it logs**:
-  - Python 3 version
-  - Pip version
-  - Jupyter version
-  - Complete list of all installed Python packages
-
-- **Why it matters**: Creates a detailed record of your container's environment
-  for troubleshooting and reproducibility
-
-- **How to use**: After building, review `version.log` to verify all
-  dependencies installed correctly
-  ```bash
-  > docker build -t my-project .
-  > cat version.log
-  ```
-
-- **Extending it**: If you need to log additional tools (MongoDB, Node.js,
-  etc.), add them to `version.sh`:
-  ```bash
-  > echo "# mongo"
-  > mongod --version
-  ```
-
-### Stage 9: Port Declaration
-```dockerfile
-EXPOSE 8888
-```
-
-- **Purpose**: Declare that the container uses port 8888 (informational for
-  Docker)
-
-- **When to customize**: Add additional ports if your application needs them
-  (e.g., `EXPOSE 8888 5432 3000`)
-
-## Best Practices: Keep It Simple
-
-### The Core Principle
-Only change what's necessary for your project. Everything else should inherit
-from the template.
-
-This approach:
-
-- Makes Dockerfiles easier to understand and maintain
-- Keeps images smaller and faster to build
-- Simplifies future updates from the template
-- Ensures consistency across similar projects
-
-### How to Do It Right
-| What                         | Where                        | Example                         |
-| :--------------------------- | :--------------------------- | :------------------------------ |
-| Project Python packages      | `requirements.txt`           | `numpy==1.24.0`                 |
-| Jupyter + Vim (always there) | Dockerfile Stage 5           | `jupyterlab jupyterlab_vim`     |
-| System tools                 | Dockerfile `apt-get` section | `postgresql-client`             |
-| Shell aliases                | `bashrc`                     | `alias jlab="jupyter lab"`      |
-| Custom scripts               | `scripts/` directory         | Setup or initialization scripts |
-| User permissions             | `etc_sudoers`                | Grant passwordless sudo         |
-
-- **Do NOT add to `requirements.txt`**: `jupyterlab`, `jupyterlab-vim`,
-  `jupyterlab_vim`, or `ipywidgets` — these are Jupyter infrastructure packages
-  and are already installed in Stage 5 of the Dockerfile
-
-### Wrong Vs. Right Approach
-- **Wrong**: Embed everything in the Dockerfile
-  ```dockerfile
-  RUN pip install my-package && python my_setup.py && npm install
-  ```
-
-- **Right**: Use separate files and keep Dockerfile clean
-  ```dockerfile
-  COPY requirements.txt /install/
-  RUN pip install -r /install/requirements.txt
-  COPY scripts/setup.sh /install/
-  RUN /install/setup.sh
-  ```
-
-## .Dockerignore Policy
-
-### Why It Matters
-The `.dockerignore` file prevents unnecessary files from being added to the
-Docker build context:
-
-- **Reduces build time**: Fewer files to transfer to Docker daemon
-- **Reduces image size**: Only necessary files are included
-- **Improves security**: Prevents leaking sensitive data
-
-### What to Exclude: Category Breakdown
-- Python Artifacts (Always Exclude)
-  ```verbatim
-  __pycache__/
-  *.pyc
-  *.pyo
-  *.pyd
-  ```
-  - Why: Compiled bytecode generated at runtime. Regenerated in container, adds
-    bloat
-
-- Virtual Environments (Always Exclude)
-  ```verbatim
-  venv/
-  .venv/
-  env/
-  .env/
-  ```
-  - Why: Local venvs aren't portable to containers. The Dockerfile creates its
-    own
-
-- Jupyter Checkpoints (Always Exclude)
-  ```verbatim
-  .ipynb_checkpoints/
-  ```
-  - Why: Auto-generated by Jupyter, not needed in the image
-
-- Git and Version Control (Always Exclude)
-  ```verbatim
-  .git/
-  .gitignore
-  .gitattributes
-  ```
-  - Why: Repository history not needed at runtime
-
-- Docker Build Scripts (Always Exclude)
-  ```verbatim
-  docker_build.sh
-  docker_push.sh
-  docker_clean.sh
-  docker_exec.sh
-  docker_cmd.sh
-  docker_bash.sh
-  docker_jupyter.sh
-  docker_name.sh
-  Dockerfile.*
-  ```
-  - Why: Local development scripts don't run inside the container
-
-- Large Data Files (Recommended)
-  ```verbatim
-  data/
-  *.csv
-  *.pkl
-  *.h5
-  *.parquet
-  ```
-  - Why: Don't ship large training and test data in the image. Mount via volume
-    instead
-  - Best practice: `bash     > docker run -v /path/to/data:/data my-image     `
-
-- Test Files (Project-Dependent)
-  ```verbatim
-  tests/
-  tutorials/
-  ```
-  - Why: Exclude if tests don't run in the container
-  - When to include: If CI and CD runs tests inside the container
-
-- Documentation (Recommended)
-  ```verbatim
-  README.md
-  docs/
-  *.md
-  ```
-  - Why: Not needed at runtime
-  - Exception: Only keep if your app reads these files at runtime
-
-- Generated Files (Always Exclude)
-  ```verbatim
-  *.log
-  *.tmp
-  *.cache
-  build/
-  dist/
-  ```
-  - Why: Generated at runtime, not needed in the image
-
-## Workflow: From Template to Your Project
-
-### Complete Setup Checklist
-- Copy the template
-  ```bash
-  > cp -r project_template my-new-project
-  > cd my-new-project
-  ```
-
-- Keep all reference Dockerfiles
-  ```verbatim
-  Dockerfile.ubuntu_24_04
-  Dockerfile.python_slim
-  Dockerfile.uv
-  ```
-
-- Create your working Dockerfile
-  ```bash
-  > cp Dockerfile.ubuntu_24_04 Dockerfile
-  ```
-
-- Add your dependencies
-  ```bash
-  > pip freeze > requirements.txt
-  ```
-
-- Configure `.dockerignore`: Review the template `.dockerignore` and add your
-  project-specific exclusions (e.g., data directories)
-
-- Test the build
-  ```bash
-  > docker build -t my-project:latest .
-  > docker run -it my-project:latest bash
-  ```
-
-- Test Jupyter (if using)
-  ```bash
-  > ./docker_jupyter.sh -p 8888
-  ```
-
-- Document customizations in your project README:
-  - Base image chosen and why
-  - Key dependencies
-  - Any Dockerfile modifications
-  - How to build and run
-
-## Maintaining Your Setup
-
-### Document Any Changes
-- If you modify the Dockerfile, add explanatory comments:
-  ```dockerfile
-  # Custom: PostgreSQL client for database access
-  postgresql-client \
-
-  # Custom: Node.js for frontend builds
-  nodejs \
-  ```
-
-### Monitor Package Versions
-- After each build, review `version.log`:
-  ```bash
-  > docker build -t my-project .
-  > cat version.log
-  ```
-
-### Keep `.dockerignore` Updated
-- If you add new directories or files, update `.dockerignore`. Add to
-  `.dockerignore` if the directory shouldn't be in the image:
-  ```verbatim
-  data/
-  cache/
-  .temp/
-  ```
-
-### Contribute Improvements Back
-When you improve your project's Docker setup:
-
-- Test thoroughly in your project
-- Document the improvement clearly
-- Submit back to `project_template`
-- Other projects can adopt it when they update
-
-Example improvements:
-
-- Better way to install TensorFlow with GPU support
-- Optimized `.dockerignore` for data science projects
-- Security hardening (non-root user setup)
-
-## Troubleshooting
-
-### Build Is Slow
-- Check `.dockerignore`: Ensure large directories (data/, .git/) are excluded
-- Check Docker daemon: Verify Docker is running properly
-- Check layer caching: Docker reuses cached layers; avoid changing early layers
-
-### Image Is Too Large
-- Check layer sizes:
-  ```bash
-  > docker history my-project:latest
-  ```
-
-- Remove unnecessary packages or use `python_slim` base image
-
-### Package Not Found Error
-- Verify package name in PyPI (packages are case-sensitive)
-- Check Python version compatibility
-- Pin specific version if needed
-
-### Permission Issues in Container
-- Check `etc_sudoers`: Ensure user has appropriate permissions
-- Check file ownership: Ensure COPY doesn't create root-only files
-
-### Jupyter Won't Connect
-- Run Jupyter
-  ```bash
-  > ./docker_jupyter.sh -p 8888
-  ```
-
-- Verify http://localhost:8888 (not https). Check firewall if remote access
-  needed
-
-### Vim Keybindings Not Working
-- If `run_jupyter.sh` exits with `ERROR: jupyterlab_vim is not installed`, it
-  means `jupyterlab_vim` is missing from the container image
-- Make sure `jupyterlab_vim` is installed in the Dockerfile:
-  ```dockerfile
-  RUN pip install jupyterlab jupyterlab_vim
-  ```
-- Rebuild the image after adding the package:
-  ```bash
-  > ./docker_build.sh
-  ```
+The project brief lists multi-user collaboration, authentication, and diagram persistence as non-goals for V1, and the design respects all three. No login system, no shared sessions, no database. The cache that exists is for LLM responses only, not user content. AWS deployment is a possible follow-up but is not part of the current deliverable.
