@@ -137,7 +137,7 @@
 - **KIMI K2** is an open agentic intelligence model developed to demonstrate reproducible large-scale agent training
 
 - **Scale**
-  - Model: 671B parameters (mixture-of-experts with 1.5T total params)
+  - Model: 32B active parameters (mixture-of-experts with 1T total params)
   - Training: billions of agent trajectories from synthetic and real environments
   - Deployment: multi-turn interactions with tools and reasoning
 
@@ -259,7 +259,7 @@
   - Code + execution traces: code generation paired with test results
   - Instruction following: diverse task-instruction pairs
 
-- **Data volume**: ~14.6 trillion tokens (similar to K2)
+- **Data volume**: ~14.8 trillion tokens (similar to K2)
 
 - **Quality emphasis**: unlike raw language model training, agentic training prioritizes _correctness over diversity_
   - Prefer a verified-correct trajectory over an arbitrary one
@@ -304,7 +304,7 @@
 - **Problem**: as models get larger and agentic tasks get more complex, training becomes unstable
   - RL reward signals are noisy (agents succeed or fail on different task subsets)
   - Gradient updates are large; small changes in learning rate cause divergence
-  - Multi-expert routing creates additional source of variance
+  - Multi-expert routing creates an additional source of variance
 
 - **Instability symptoms**
   - Reward plateau followed by sudden collapse
@@ -332,7 +332,7 @@
 
 - **Technique 3: Reward shaping**
   - Decompose sparse task reward into multiple intermediate rewards
-  - Example: agent trying to buy item from website
+  - Example: an agent trying to buy an item from a website
     - Raw reward: 0 (failure) or 1 (success)
     - Shaped reward: +0.1 (find product), +0.2 (add to cart), +0.3 (checkout), +1 (purchase complete)
   - Risk: over-shaping can trick the agent into optimizing fake rewards instead of real task
@@ -349,7 +349,7 @@
 - **Verification overhead**: every trajectory must be executed and checked
   - A 100-step trajectory requires 100 environment steps
   - If you generate 10M trajectories for RL, that's 1B environment steps
-  - At even 1ms per step, that's millions of compute-seconds
+  - At even 1ms per step, that's a million compute-seconds
 
 - **Verification cost breakdown**
   - Model inference: generate next token, stop, execute action
@@ -406,7 +406,7 @@
 
 * Pitfall 2: Domain Generalization
 
-- **Problem**: agent trained on web-browsing tasks struggles on API interactions
+- **Problem**: agent trained on web-browsing tasks struggles with API interactions
   - Skills don't transfer across domains even if they're conceptually similar
 
 - **Why?**
@@ -508,7 +508,7 @@
 - **If you're training at scale** (> 100B params, especially MoE)
   - Invest heavily in data curation and verification infrastructure
   - Use multiple stabilization techniques (KL, advantage whitening, reward shaping)
-  - Plan for 3–6 months of iteration; first model is rarely the final one
+  - Plan for 3–6 months of iteration; the first model is rarely the final one
 
 - **General**
   - Build robust verifiers _first_; they are your training signal
@@ -524,7 +524,7 @@
 
 - **Problem 2: Trustworthy verification**
   - Question: how do we design verifiers that can't be fooled?
-  - Challenge: any learned verifier can be exploited; moving goal post
+  - Challenge: any learned verifier can be exploited; the goalposts keep moving
 
 - **Problem 3: Generalization across tools and domains**
   - Question: can a single agent model master heterogeneous tools (web + APIs + CLIs + code)?

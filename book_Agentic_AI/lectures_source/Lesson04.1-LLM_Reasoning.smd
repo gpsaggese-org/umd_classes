@@ -66,8 +66,8 @@
 
 * Chain-of-Thought: Quick Recap
 
-- **Recap** _Chain-of-thought_ (CoT) prompting (Wei et al., 2022) makes the model
-  emit intermediate steps before the answer
+- **Recap**: _Chain-of-thought_ (CoT) prompting (Wei et al., 2022) makes the
+  model emit intermediate steps before the answer
   ```
   prompt> Let's think step by step
   ```
@@ -262,8 +262,8 @@ digraph ToT {
 
 * Premise Order Matters: The Finding
 
-- **Question**: does an LLM respect this invariance, or does merely _reordering_
-  the same facts change its answer?
+- **Question**: does an LLM respect order invariance, or does merely
+  _reordering_ the same facts change its answer?
   - Robustness to irrelevant changes is a basic test of whether a model _reasons_
     or _pattern-matches_
 
@@ -330,8 +330,8 @@ digraph ToT {
     chain forward)
   - It is easier to attend to the _next_ needed premise if it is _nearby and
     ahead_, not buried earlier or later
-  - Out-of-order premises force long-range, non-monotonic lookups the model does
-    poorly
+  - Out-of-order premises force long-range, non-monotonic lookups that the
+    model handles poorly
   - The same causal mechanism that _enables_ serial reasoning also _biases_ it
     toward a particular input order
 

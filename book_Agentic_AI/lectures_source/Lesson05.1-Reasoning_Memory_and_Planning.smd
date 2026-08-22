@@ -21,8 +21,8 @@
   episode
   - Real agents run _many_ episodes, over _long_ horizons, revisiting the
     _same_ world
-  - A reasoner that forgets everything between episodes cannot improve, keep
-    repeat the same mistakes, or cannot act on facts learned yesterday
+  - A reasoner that forgets everything between episodes cannot improve, keeps
+    repeating the same mistakes, or cannot act on facts learned yesterday
 
 - **Question**:
   - How reasoning, memory, and planning combine to fix long-horizon failures?
@@ -154,11 +154,11 @@
 
 - **Fact**: in mammalian brains, the _hippocampus_ and _neocortex_ play
   distinct memory roles
-  - The neocortex stores rich, slowly-consolidated knowledge
+  - The neocortex stores rich, slowly consolidated knowledge
   - The hippocampus builds a fast, sparse index of associations between
     pieces of that knowledge, without duplicating the knowledge itself
 
-- **Key idea**: the hippocampus does not store facts, it stores _pointers
+- **Key idea**: the hippocampus does not store facts; it stores _pointers
   between_ facts, which is what makes multi-hop association fast
 
 - **Mapping to LLMs**:
@@ -177,7 +177,7 @@
   retrieval pass
 
 - Three stages
-  1. (Offline) Extract facts from the corpus (aka open information extraction)
+  1. (Offline): Extract facts from the corpus (aka open information extraction)
   2. (Offline): assemble facts into a knowledge graph
   3. (Online): retrieve via personalized PageRank over that graph
 ::::
@@ -232,7 +232,7 @@ digraph HippoRAG {
 
 - **Example**: 
   - _"Director"_ and _"University"_ never appear in the same sentence
-  - Still they are both connect through _"Film"_ and _"Studio"_ nodes
+  - Still they are both connected through _"Film"_ and _"Studio"_ nodes
 
 * Step 3: Online Retrieval via Personalized PageRank
 
@@ -287,13 +287,13 @@ digraph HippoRAG {
   - This would be reasoning stored as _parametric long-term memory_
 
 - **Motivation**:
-  - We a forward that a forward pass is fixed-depth and needs CoT tokens for
+  - We saw that a forward pass is fixed-depth and needs CoT tokens for
     serial reasoning
   - Could training, rather than more tokens, give a model the equivalent of a
     pre-computed reasoning chain?
 
 * What Is Grokking?
-- Aka "Delayed generalization" (related but different then "double descent")
+- Aka "Delayed generalization" (related but different from "double descent")
 
 - **Definition**: _grokking_ is a training phenomenon where a model
   - first _memorizes_ the training set (near-zero training loss, poor test
@@ -352,7 +352,7 @@ digraph HippoRAG {
   parameter-efficient for that task
   - _Comparison_ admits a compact generalizing circuit that outcompetes
     memorization once training continues long enough
-  - _Composition_ generalizing circuit is comparatively less efficient, so
+  - The _Composition_ generalizing circuit is comparatively less efficient, so
     memorization keeps winning even after prolonged training
 
 * Grokked Transformers vs. Frontier Models
@@ -360,13 +360,13 @@ digraph HippoRAG {
 - **Finding** (Wang et al., 2024): on complex composition and comparison
   reasoning tasks built from their synthetic facts, fully grokked (small,
   task-specific) transformers achieve near-perfect accuracy where frontier models
-  (as of 2024) prompted with the same facts in context, fail substantially
+  (as of 2024) prompted with the same facts in context fail substantially
 
 - **Interpretation**: this is not a claim that grokked models are smarter in
   general
   - It shows that reasoning _compiled into weights_ over a fixed body of facts
     can outperform reasoning _read off_ the same facts placed in a context
-    window, at least on certain evaluation
+    window, at least on certain evaluations
 
 * Weights as Implicit Long-Term Memory
 
@@ -383,7 +383,7 @@ digraph HippoRAG {
   - Updating parametric memory means re-training, unlike appending a document
     to a retrieval index
 
-- **Open question**: how do we get the update-ability of external memory with
+- **Open question**: how do we get the updatability of external memory with
   the low latency of parametric memory?
 
 ## World Models for Planning
@@ -394,7 +394,7 @@ digraph HippoRAG {
   choose the next
   - Every candidate action is tried for real before its outcome is known
 
-- **Problem**: many actions are irreversible, slow, can have side effects
+- **Problem**: many actions are irreversible, slow, or can have side effects
   - E.g., on the web: submit an order, delete a file, send a message
   - Test-time tree search (e.g., Tree-of-Thought, applied to actions) would try
     and backtrack through several candidates, but backtracking is unavailable
@@ -520,7 +520,7 @@ digraph WebDreamer {
 
 - **Open questions**:
   - Can external and parametric long-term memory be combined into a single
-    update-able, low-latency system?
+    updatable, low-latency system?
   - How accurate must a world model be before simulated search becomes
     unreliable, and how would an agent know?
   - How do these mechanisms trade off against the inference-time techniques?

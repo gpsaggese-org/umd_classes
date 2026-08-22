@@ -185,7 +185,7 @@ digraph Autonomy {
     - Does not scale: a human must be available for every approval
     - Slows down tasks that need many quick steps (e.g., debugging loops)
 
-- **Full-autonomy**
+- **Full autonomy**
   - _Pros_
     - Scales to long-horizon tasks no human has time to supervise step by step
     - Can react and re-plan faster than a human reviewer

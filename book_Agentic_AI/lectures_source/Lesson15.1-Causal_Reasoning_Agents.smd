@@ -40,7 +40,7 @@ MSML610: Advanced Machine Learning
 ## LLMs: Strengths and Limitations
 ## ##############################################################################
 
-* Where LLMs They Excel
+* Where LLMs Excel
 
 - **LLMs excel at pattern matching at scale**
   - Trained on massive text corpora to capture statistical regularities
@@ -55,7 +55,7 @@ MSML610: Advanced Machine Learning
   - Transfer learning from pre-training to diverse downstream tasks
   - Few-shot learning through in-context examples
 
-* Critical LLMs Limitations
+* Critical LLM Limitations
 
 - **LLMs struggle with explicit causal reasoning**
   - Pattern matching cannot distinguish correlation from causation
@@ -176,7 +176,7 @@ MSML610: Advanced Machine Learning
   2. Brand awareness increases purchase intent (mechanism)
   3. Purchase intent leads to sales (mechanism)
   4. Check for confounders (Are we only increasing budget in growing markets?)
-  5. Feedback loops: Does higher sales justify more spending?"
+  5. Feedback loops: Do higher sales justify more spending?"
 
 - **Limitations of plain CoT**:
   - Pattern-based, not mechanistic
@@ -423,7 +423,7 @@ digraph CausalAgent {
   - Offline learning: learn from historical data with unknown confounding
 
 - **Q-function with causal effects**:
-  $$Q(s, a) = \Pr(\text{Reward} | do(A = a), S = s)$$
+  $$Q(s, a) = \EE[\text{Reward} | do(A = a), S = s]$$
 
   - Standard RL assumes known transition:
     $$\Pr(\text{next state} | a, s) = \Pr(s' | a, s)$$
@@ -471,8 +471,8 @@ digraph CausalAgent {
 
 - **Example**: Loan approval decision
   - Black-box: Model says _"Loan denied"_
-  - Causal: Model says _"Loan denied because credit score drops effect on
-    default rate by 15%, controlling for income and employment"_
+  - Causal: Model says _"Loan denied because credit score has a 15% effect on
+    default rate, controlling for income and employment"_
 
 * Causal Explanations for Decisions
 

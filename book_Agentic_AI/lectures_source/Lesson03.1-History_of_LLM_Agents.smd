@@ -144,7 +144,7 @@ digraph Timeline {
 
 - **Remark**: 
   - This shift is the conceptual birth of the _LLM agent_
-  - The same model (wrapped in a loop with tools) become a qualitatively
+  - The same model (wrapped in a loop with tools) becomes a qualitatively
     different kind of system
 
 ## ReAct and the Reasoning-Acting Synergy
@@ -353,7 +353,7 @@ digraph ReActLoop {
 * Failure: Compounding Errors
 
 - **Problem**: in a multi-step task, a small early mistake propagates
-  - E.g., if agent misreads the goal, every later step builds on the error
+  - E.g., if the agent misreads the goal, every later step builds on the error
   - With per-step success probability $p$ and $n$ independent steps, end-to-end
     success scales like $p^{\,n}$
     - E.g., even $p = 0.95$ gives only $\approx 0.60$ over $10$ steps
@@ -378,7 +378,7 @@ digraph ReActLoop {
 * Failure: Getting Stuck in Loops
 
 - **Problem**: without memory of what it already tried, an agent repeats the
-  same failing action, e.g.,
+  same failing action
 
 - **Example**: a web agent that
   - Keeps searching the exact same query, observing the same empty result, and

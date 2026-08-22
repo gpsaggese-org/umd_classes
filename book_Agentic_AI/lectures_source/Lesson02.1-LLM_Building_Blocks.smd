@@ -122,7 +122,7 @@ digraph Transformer {
   // TODO(ai_gp): Elaborate example
 
 * Positional Encoding
-- **Problem**: attention is _permutation invariant_, so the raw model has no
+- **Problem**: attention is _permutation equivariant_, so the raw model has no
   notion of token order
   - _"dog bites man"_ and _"man bites dog"_ would look identical
 
@@ -135,8 +135,8 @@ digraph Transformer {
 
 * The Transformer Block
 
-- **Definition**: a _transformer_ is composed of two sublayers, each wrapped with
-  a residual connection and normalization
+- **Definition**: a _transformer block_ is composed of two sublayers, each
+  wrapped with a residual connection and normalization
   1. _Multi-head self-attention_: mixes information across positions
   2. _Feed-forward network_ (FFN): transforms each position independently
 
@@ -253,7 +253,7 @@ digraph Transformer {
 * Multi-Head Attention
 
 - **Problem**: a single attention pattern can only capture one kind of
-  relationship at a time (e.g., -syntax_ or _coreference_)
+  relationship at a time (e.g., _syntax_ or _coreference_)
 
 - **Solution**:
   - Run $h$ attention operations (_heads_) in parallel
@@ -309,7 +309,7 @@ digraph Transformer {
 - **Problem**: computing $Q K^\top$ compares every token with every other token
   - Time and memory scale as $O(T^2)$ in the sequence length $T$
 
-- **Consequence**: 2x the context length \implies 4x the attention cost
+- **Consequence**: 2x the context length $\implies$ 4x the attention cost
   - This is the main obstacle to very long context windows
   - This $O(T^2)$ cost is why context length is a scarce, expensive resource for
     agents
@@ -409,7 +409,7 @@ digraph Transformer {
   enough at each intermediate step
 
 // TODO(ai_gp): Unclear
-- **Remark**: emergence is debated — partly real, partly an artifact of
+- **Remark**: emergence is debated: partly real, partly an artifact of
   discontinuous, all-or-nothing metrics
 
 - **Connection**: in-context learning is what lets agents adapt from a few
@@ -557,7 +557,7 @@ digraph Decode {
   far more powerful, approaching general computation
 
 - **Interpretation**:
-  - Its effective computational power of a model depends on _how many steps_ it
+  - The effective computational power of a model depends on _how many steps_ it
     is allowed to take, which motivates agentic loops
 
 * Summary and Open Questions

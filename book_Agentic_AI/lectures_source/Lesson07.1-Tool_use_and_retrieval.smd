@@ -56,7 +56,7 @@
   4. Ask whether a large enough context window can replace retrieval, and
      how the needle-in-a-haystack test answers that
 
-- **Key idea**: retrieval is not a single algorithm, it is set of tools with
+- **Key idea**: retrieval is not a single algorithm, it is a set of tools with
   cost, freshness, and reliability trade-offs at every step
 
 ## Retrieval as a Tool Call
@@ -64,7 +64,7 @@
 * Retrieval-Augmented Generation: The Loop
 
 - **Definition**: _retrieval-augmented generation_ (RAG) answers a query
-  by splits answering into two separable problems:
+  by splitting answering into two separable problems:
   - Finding the right passages
   - Writing an answer given they are found
 
@@ -173,7 +173,7 @@
   1. Build a multi-layer graph where each stored vector is a node
      - Upper layers hold few nodes with long-range links
      - Lower layers hold all nodes with short-range links
-  4. At query time, descend from long-range hops at the top layer to
+  2. At query time, descend from long-range hops at the top layer to
      short-range hops at the bottom, greedily moving toward the query
 
 - **Algorithm** (_inverted-file indexes_):
@@ -273,7 +273,7 @@ digraph VectorDB {
 
 - **Solution**: _dynamic retrieval_ classifies each query before
   answering
-  - Fast-changing facts : route to a retrieval tool
+  - Fast-changing facts: route to a retrieval tool
     - E.g., _"who won last night's game"_
   - Static, well-known facts answer directly from parametric knowledge
     - E.g., _"what is the capital of France"_
@@ -459,7 +459,7 @@ digraph VectorDB {
 
 * Tool Use and Retrieval: The Full Picture
 
-// TODO(ai_gp): Talbe
+// TODO(ai_gp): Table
 - **Putting it together**:
   - _Retrieval_ is a tool call like any other: query in, passages out,
     invoked when the agent decides it is worth the cost

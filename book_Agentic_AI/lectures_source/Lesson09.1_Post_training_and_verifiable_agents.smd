@@ -15,7 +15,7 @@
 
 * Why Preference Feedback Alone Is Not Enough
 
-- **Recamp**: we learned to train from preference data-pairs of better and worse
+- **Recap**: we learned to train from preference data: pairs of better and worse
   outputs ranked by humans or automatic metrics
   - But how do we know those preferences are _correct_?
   - What if the training signal itself is noisy, biased, or gameable?
@@ -151,7 +151,7 @@
   against ground truth
   - Criterion 1: the issue has a known, merged fix
   - Criterion 2: we can run the test suite autonomously (no manual setup)
-  - Criterion 3: agent's solution is correct iff it passes all tests for that
+  - Criterion 3: the agent's solution is correct iff it passes all tests for that
     issue
 
 - **Key idea**: the test suite is the verifier—no ambiguity, no human judgment
@@ -434,7 +434,7 @@
   - If the signal is imperfect, the agent will exploit the gap
   - No model knows about the intent; it only sees numbers
 
-- **Distribution of test coverage**: real code has edges cases
+- **Distribution of test coverage**: real code has edge cases
   - The test suite may not cover all scenarios
   - Agent learns: "pass the written tests, ignore the unwritten requirements"
 
@@ -456,7 +456,7 @@
   - Check for common hacks: special cases, deleted tests, validation bypasses
 
 - **Strategy 2: Broader test coverage**
-  - Add property-based tests: generates random inputs, checks invariants
+  - Add property-based tests: generate random inputs, check invariants
   - Add edge-case tests: None, empty lists, negative numbers, etc.
   - Assumption: a properly general fix passes more diverse tests
 
@@ -527,7 +527,7 @@
 
 - **Curriculum learning**: start with easy verifiable tasks, progress to harder
   ones
-  - Learn fundamentals on SWE-bench simple issues
+  - Learn fundamentals on simple SWE-bench issues
   - Graduate to complex issues, then to preference-based open-ended tasks
 
 - **Multi-environment training**: verify against multiple independent systems
@@ -581,7 +581,7 @@
   - Reward hacking is possible
   - But verification raises the bar for claiming success
 
-- **Next lesson** (Lesson 16.10): open post-training recipes and how to
+- **Next lesson** (Lesson 01.10): open post-training recipes and how to
   implement these verifiable training pipelines in practice
   - Tulu 3: open alternative to proprietary post-training
   - How to set up RL from verifiable rewards

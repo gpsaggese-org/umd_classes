@@ -17,7 +17,7 @@
 
 * Why Learning to Reason
 
-- **Motivation**: every reasoning technique so far (e.g., chain-of-thought to
+- **Motivation**: every reasoning technique so far (e.g., chain-of-thought,
   OPRO, Self-Debug, and compute-optimal search) operates entirely at
   _inference time_
   - The weights stay fixed
@@ -76,7 +76,7 @@
 - **Definition**: a _preference pair_ is a tuple $(x, y_w, y_l)$ where
   - $x$ is a prompt
   - $y_w$ is a preferred (winning) response
-  - $y_l$ is a dispreferred (losing) response 
+  - $y_l$ is a dispreferred (losing) response
 
 - **Example**:
   - $x$ is _"Summarize this article"_

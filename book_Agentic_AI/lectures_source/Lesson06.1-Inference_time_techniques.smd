@@ -296,8 +296,8 @@
     own judgment
     - E.g., a test passes or fails, a score is measured on held-out data, a query
       result is well-formed
-    - OPRO's scores and Self-Debug's test results are both _grounded feedback_
-      sense
+    - OPRO's scores and Self-Debug's test results are both examples of
+      _grounded feedback_
   - _Self-judged_ feedback: the same model that produced the answer also
     decides whether it is right, with no independent check
     - Intrinsic self-correction is _self-judged_

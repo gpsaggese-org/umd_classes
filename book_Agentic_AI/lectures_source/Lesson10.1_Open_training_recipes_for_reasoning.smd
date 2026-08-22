@@ -34,9 +34,9 @@
 
 * The Reproducibility Challenge
 
-- **Definition**: _open post-training recipe_ is a combination of model, data,
-  training objective, hyperparameters, and evaluation protocol, all disclosed
-  and reproducible
+- **Definition**: an _open post-training recipe_ is a combination of model,
+  data, training objective, hyperparameters, and evaluation protocol, all
+  disclosed and reproducible
 
 - **Roadmap**
   1. DPO vs. PPO: when to use each, best practices, and pitfalls
@@ -146,7 +146,7 @@
 * Tulu 3: Overview and Goals
 
 - **Definition**: _Tulu 3_ is an open, reproducible post-training pipeline for
-  reasoning models, published by the ALLENAI team
+  reasoning models, published by the Allen Institute for AI team
 
 - **Motivation**: show that careful curation and scale of preference data can
   close the gap between open (Llama) and proprietary models (GPT-4) on reasoning
@@ -245,8 +245,8 @@
 
 * Preference Feedback at Scale
 
-- **Definition**: _preference feedback_ is human or automatic comparison of two
-  outputs for the same input, labeling one as better
+- **Definition**: _preference feedback_ is a human or automatic comparison of
+  two outputs for the same input, labeling one as better
 
 - **Scale challenge**: collecting 50k–200k preference pairs is expensive at
   typical human annotation rates ($10–50 per pair)
@@ -318,7 +318,8 @@
   $$
 
 - **Validation**: hold out a subset of high-confidence human preferences for
-  evaluation; measure if model improves on those even when trained on noisy mix
+  evaluation; measure if the model improves on those even when trained on a
+  noisy mix
 
 * Handling Edge Cases in Preference Data
 
@@ -330,7 +331,7 @@
 - **Edge case 2: Ambiguous prompt**
   - Prompt is unclear; different annotators interpret it differently
   - Option A: exclude (high-quality principle)
-  - Option B: only keep if both interpretations lead to same preference
+  - Option B: only keep if both interpretations lead to the same preference
 
 - **Edge case 3: Adversarial or off-topic responses**
   - One response is clearly harmful, unrelated, or nonsensical
@@ -350,7 +351,7 @@
 - **Problem**: automated scientific synthesis requires
   - Retrieval: finding relevant papers
   - Reasoning: synthesizing across sources into a coherent narrative
-  - Verification: citations are accurate and support claims
+  - Verification: ensuring citations are accurate and support claims
 
 - **Key idea**: combine open post-training recipes (DPO/PPO) with retrieval to
   teach models to write better syntheses
@@ -359,7 +360,7 @@
 
 - **Stage 1: Retrieval**
   - Query: a scientific question or topic
-  - Retrieve top-k papers using dense retrieval (e.g., embedding search)
+  - Retrieve: top-k papers using dense retrieval (e.g., embedding search)
   - Augment: pass retrieved papers' abstracts and titles to the model
 
 - **Stage 2: Reasoning**
@@ -383,7 +384,7 @@
   - Losing synthesis: hallucinated citations, poor integration, contradictions
 
 - **Data sources**
-  - Real paper collections (ArXiv, PubMed, domain-specific corpora)
+  - Real paper collections (arXiv, PubMed, domain-specific corpora)
   - Automatic synthesis generation (base model + retrieval)
   - Human rating: annotators compare syntheses for quality, coherence, citation
     accuracy
