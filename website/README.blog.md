@@ -282,5 +282,5 @@ Total: 56 draft blogs
 
 - Update the readme:
   ```bash
-  > cc -p "Execute website/prompt.update_README_blog.md"
+  > ccp "Execute website/prompt.update_README_blog.md"
   ```
