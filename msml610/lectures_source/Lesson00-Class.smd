@@ -10,28 +10,30 @@
 
 ::: columns
 :::: {.column width=60%}
-- AI can:
+- @AI can@
   - _Answer any question_ with depth and proficiency
   - _Write a book / class_ on any topic you are interested in tailored to the level you
     are at (from ELI5 to PhD)
   - _Be a tutor_ that can patiently answer questions and explain concepts
   - All of this _instantaneously_ and (almost) for free
 
-- Readers face constant pressure toward _shortcuts_ and clickbait
+- Readers face constant pressure toward @shortcuts and clickbait@
     - E.g., "a little-known secret", "the 1-hour trick billionaires use"
+
+- @Why are we doing here?@
 
 ::::
 :::: {.column width=40%}
 
-![](msml610/lectures_source/figures/L00.1.Rick_Rubin1.jpg){ height=40% }
-![](msml610/lectures_source/figures/L00.1.Rick_Rubin2.jpg){ height=40% }
+![](msml610/lectures_source/figures/L00.1.Rick_Rubin1.jpg){ height=60% }
 
 ::::
 :::
 
-- @Why are we doing here?@
-
 * A College Course in the Age of AI
+
+::: columns
+:::: {.column width=60%}
 
 - AI optimizes for @consensus and average@, since it is trained to predict the most
   likely next token
@@ -46,24 +48,32 @@
     - How to critique a result or an approach
     - How to hold a mental model of competing approaches
 
+::::
+:::: {.column width=40%}
+
+![](msml610/lectures_source/figures/L00.1.Rick_Rubin2.jpg){ height=60% }
+
+::::
+:::
+
 * AI Policy
 
-website/docs/blog/posts/draft.My_AI_Policy.md
-
+- From https://gpsaggese.github.io/blog/my-ai-policy
+// TODO(ai_gp): Add a set of bullet points from the policy above
 
 * Invariants of a Class Lecture
 - @Invariants@
-  - Focus on intuition over math (unless necessary)
-  - Emphasize realistic assumptions and numerical methods
+  - Focus on **intuition over math**, unless math is necessary
+  - Emphasize **realistic assumptions and numerical methods**
     - Analytical solutions are so 1800s
-  - Interactive Jupyter notebook tutorials for hands-on approach
+  - **Interactive Jupyter notebook** tutorials for hands-on approach
     - Tutorials are mainly done at home
     - Videos of each tutorial will be added over time
 
 - @Class flow@
   - Lessons alternate between slides, whiteboard, tutorials
   - 2:45 hours per class lessons
-    - Alternating 50 mins of discussion and 10 mins break
+    - 50 mins of discussion and 10 mins break
 
 * Books of the Class
 ::: columns
@@ -77,8 +87,7 @@ website/docs/blog/posts/draft.My_AI_Policy.md
   - **Medium**
     - Abu-Mostafa et al.: _"Learning From Data"_ (2012)
     - Martin: _"Bayesian Analysis with Python"_ (2nd ed, 2021)
-    - Russell et al.: _"Artificial Intelligence: A Modern Approach"_ (4th ed,
-      2020)
+    - Russell et al.: _"Artificial Intelligence: A Modern Approach"_ (4th ed, 2020)
   - **Hardcore**
     - Hastie et al.: _"The Elements of Statistical Learning"_ (2nd ed, 2009)
     - Koller et al.: _"Probabilistic Graphical Models: Principles and
@@ -104,6 +113,14 @@ website/docs/blog/posts/draft.My_AI_Policy.md
 ![](msml610/lectures_source/figures/book_covers/Book_cover_Reinforcement_learning.jpg){ height=15% }
 ::::
 :::
+
+* Links
+
+- @Course Management@:
+  [ELMS](https://umd.instructure.com/courses/1391619/pages/homepage)
+
+- @Syllabus@: [Google Doc](TBD)
+  - Schedule, GitHub project, Class FAQs
 
 * Grading
 - @Quizzes@ (40%)
@@ -136,22 +153,13 @@ website/docs/blog/posts/draft.My_AI_Policy.md
   - Is individual or group ($n < 4$)
   - Has different levels of difficulty
 
-// TODO(ai_gp): Add link
+// TODO(ai_gp): Add links to the repo
 
 * Class Projects: Small Research
 
-// TODO(ai_gp): Add link
+// TODO(ai_gp): Add links to the repo
 
-* Links
-
-// TODO(ai_gp): Make the links look like links
-- @Course Management@:
-  [ELMS](https://umd.instructure.com/courses/1391619/pages/homepage)
-
-- @Syllabus@: [\textcolor{blue}{\underline{Google Doc}}](TBD)
-  - Schedule, GitHub project, Class FAQs
-
-- @Project Specifications@: [\textcolor{blue}{\underline{TBD}}](TBD)
+- @Project Specifications@: 
 
 * Yours Truly
 ::: columns
@@ -170,13 +178,12 @@ website/docs/blog/posts/draft.My_AI_Policy.md
 
 - @Academic@
   - 20+ papers, 2 US patents
-  - [\textcolor{blue}{\underline{LinkedIn}}](https://www.linkedin.com/in/gpsaggese/)
-  - Email: gsaggese@umd.edu
-  // TODO(ai_gp): Make the links clickable
-  - Research website: https://gpsaggese.github.io/
-  - Blog: https://gpsaggese.github.io/blog/
-  - Publications: https://gpsaggese.github.io/05_publications/
-  - Research: https://gpsaggese.github.io/06_research/
+  - [LinkedIn](https://www.linkedin.com/in/gpsaggese/)
+  - [Email](gsaggese@umd.edu)
+  - [Research website](https://gpsaggese.github.io/)
+  - [Blog](https://gpsaggese.github.io/blog/)
+  - [Publications](https://gpsaggese.github.io/05_publications/)
+  - [Research](https://gpsaggese.github.io/06_research/)
 
 ::::
 :::: {.column width=40%}

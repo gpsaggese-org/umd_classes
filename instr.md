@@ -1,17 +1,21 @@
-1) 
-Why in https://gpsaggese.github.io/class_links/data605.links.html
+In ./helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py add
+a transform that converts links between ! into text that resembles a link
+(blue with underlying) using 
 
-https://htmlpreview.github.io/?https://github.com/gpsaggese/gpsaggese.github.io/blob/master/data605/lectures_commentary/Lesson01.1-Intro.book_chapter.html
+From
+[ELMS](https://umd.instructure.com/courses/1391619/pages/homepage)
 
-renders like
+to
 
-version https://git-lfs.github.com/spec/v1 oid sha256:ccefc9693da54dc8f1d3a10d8be3848d5e0926ad284d1e7319dc5fba211a78aa size 1552904
 
-I want to see the html
+[\textcolor{blue}{\underline{ELMS}}](https://umd.instructure.com/courses/1391619/pages/homepage)
 
-2) How to make sure that the Tutorials 
+From
 
-E.g., https://gpsaggese.github.io/jupyter_books/data605/
+- From https://gpsaggese.github.io/blog/my-ai-policy/
 
-are always rendered as part of the website/preview_website.sh and publish_website.sh
+to
 
+- From [\textcolor{blue}{\underline{https://gpsaggese.github.io/blog/my-ai-policy/}}](https://www.linkedin.com/in/gpsaggese/)
+
+Use msml610/lectures_source/Lesson00-Class.smd to find examples

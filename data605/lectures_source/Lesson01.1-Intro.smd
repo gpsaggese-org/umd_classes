@@ -1,27 +1,8 @@
-// https://docs.google.com/presentation/d/1dWY49EVhAEiOJBbw07oMUDrA3D7QQAGubPAO4SYQvgE
-
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-UMD DATA605: Big Data Systems
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{01.1: Introduction}}$$**
-\endgroup
-
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
+// type=UMD_slides
+// course_title=UMD DATA605: Big Data Systems
+// lesson_title=L01.1: Introduction
+// slides_engine=typst
+// references=
 
 * Invariants of a Class Lecture
 - @Invariants of a class lecture@
