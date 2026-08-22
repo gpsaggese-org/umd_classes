@@ -292,3 +292,9 @@ Total: 57 draft blogs
   ```bash
   > ccp "Execute website/prompt.update_README_blog.md"
   ```
+
+- Check for dead links
+  ```bash
+  > uvx linkchecker http://127.0.0.1:8000/ 2>&1 | tee linkchecker.log
+  > uvx linkchecker https://gpsaggese.github.io/ 2>&1 | tee linkchecker.log
+  ```

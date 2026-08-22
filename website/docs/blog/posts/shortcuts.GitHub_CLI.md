@@ -9,6 +9,11 @@ categories:
   - Developer Tools
 ---
 
+TL;DR: A cheat sheet of `gh` (GitHub CLI) commands for repos, issues, PRs, and
+workflows.
+
+<!-- more -->
+
 # GitHub CLI Shortcuts
 
 A short guide to the most useful GitHub CLI commands for managing repositories,
