@@ -9,30 +9,35 @@
 * A College Course in the Age of AI
 
 - AI can:
-  - Answer any question with depth and proficiency
-  - Write a book / class on any topic you are interested in tailored to the level you
+  - _Answer any question_ with depth and proficiency
+  - _Write a book / class_ on any topic you are interested in tailored to the level you
     are at (from ELI5 to PhD)
-  - Be a tutor that can patiently answer questions, all of this instantaneously and
-    (almost for free)
+  - _Be a tutor_ that can patiently answer questions and explain concepts
+  - All of this _instantaneously_ and (almost) for free
 
-- **Why are we doing here?**
+- Readers face constant pressure toward _shortcuts_ and clickbait
+    - E.g., "a little-known secret", "the 1-hour trick billionaires use"
+
+- @Why are we doing here?@
 
 * A College Course in the Age of AI
 
-- AI optimizes for consensus and average, since it is trained to predict the
-  most likely next token
-    - It underrepresents edge cases and non-linear paths to success
-    - A human author can add hard-won lessons from the field that AI cannot
-      reconstruct on its own
+- AI optimizes for @consensus and average@, since it is trained to predict the most
+  likely next token
+  - It underrepresents _edge cases_ and non-linear paths to success
+  - A human can add _hard-won lessons_ from the field that AI cannot reconstruct
+    on its own
+  - A human can provide _taste_
 
-- Readers face constant pressure toward shortcuts and clickbait
-    - E.g., "a little-known secret", "the 1-hour trick billionaires use"
-
-- What is worth teaching is **judgment** (and taste), not syntax
+- What is worth teaching is @judgment@ (and taste), not syntax
     - When to apply a technique
     - What to do when results do not match expectations
     - How to critique a result or an approach
     - How to hold a mental model of competing approaches
+
+* AI Policy
+
+website/docs/blog/posts/draft.My_AI_Policy.md
 
 
 * Invariants of a Class Lecture
@@ -154,17 +159,24 @@
 
 - @Academic@
   - 20+ papers, 2 US patents
-  - [\textcolor{blue}{\underline{LinkedIn}}]\
-(https://www.linkedin.com/in/gpsaggese/)
-  - gsaggese@umd.edu
-
-https://gpsaggese.github.io/
+  - [\textcolor{blue}{\underline{LinkedIn}}](https://www.linkedin.com/in/gpsaggese/)
+  - Email: gsaggese@umd.edu
+  // TODO(ai_gp): Make the links clickable
+  - Research website: https://gpsaggese.github.io/
+  - Blog: https://gpsaggese.github.io/blog/
+  - Publications: https://gpsaggese.github.io/05_publications/
+  - Research: https://gpsaggese.github.io/06_research/
 
 ::::
 :::: {.column width=40%}
 ![](msml610/lectures_source/figures/GP_in_coding_state.png)
 ::::
 :::
+
+* How to Join GP's team
+- how_to_join_the_research_team.md
+- policies/FAQ.md
+- Publications https://gpsaggese.github.io/05_publications/
 
 # Class Map
 
