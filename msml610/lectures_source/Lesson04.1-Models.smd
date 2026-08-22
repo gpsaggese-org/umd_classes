@@ -9,7 +9,7 @@
 ## Naive Bayes Model
 
 * Naive Bayes Model
-- **Problem**: predict classes $H_1, ..., H_n$ using evidence $\vE$:
+- @Problem@: predict classes $H_1, ..., H_n$ using evidence $\vE$:
   - Use Bayes' rule of conditional probability to decide output class
     $H_1, ... H_n$ given evidence $\vE$:
     $$
@@ -32,7 +32,7 @@
 ::: columns
 :::: {.column width=55%}
 
-- **Problem**
+- @Problem@
   - Predict if kids play outside using past weather observations
 
 - **Supervised learning problem**
@@ -93,7 +93,8 @@
   $$
   \endgroup
   where:
-  - $\Pr(H_j)$: **prior probability** (probability of the outcome before evidence
+  - $\Pr(H_j)$: **prior probability** (probability of the outcome before
+    evidence
     $\vv{E}$)
     - E.g., $\Pr(\text{play = yes})$
     - Computed from training set as:
@@ -125,7 +126,7 @@
 
 - Aka "tree stump", i.e., a decision tree with a single node
 
-- **Algorithm**
+- @Algorithm@
   - Pick a single feature (e.g., `outlook`):
     - Most discriminant; or
     - Based on expert opinion
@@ -159,11 +160,11 @@
   &\approx \Pr(E_1=e_1|H_j) \cdot ... \cdot \Pr(E_n=e_n|H_j) \\
   \end{alignat*}
 
-- **Pros**:
+- @Pros@: 
   - Simplifies probability computation
   - Aids generalization due to few samples needed
 
-- **Cons**:
+- @Cons@: 
   - Assumption may not be true
 
 * Estimating Probabilities: MLE
@@ -179,7 +180,7 @@
   $$
 
 \vspace{-0.5cm}
-- **Problem**
+- @Problem@
   - Value $e'$ of feature $E_i$ not in training set with output class $H_j$
   - Estimated probability $\Pr(E_i=e'|H_j) = 0$
   - Plugging $\Pr(E_i=e'|H_j) = 0$ into
@@ -213,7 +214,7 @@
 ::: columns
 :::: {.column width=55%}
 
-- **Characteristics**
+- @Characteristics@
   - Supervised learning
   - Classification and regression
   - Non-parametric (i.e., no functional form)
@@ -376,7 +377,8 @@
 - **Consider the $m$-th node** of a decision tree
   - Given $p_i = (\vx_i, y_i)$ where $i = 1, ..., N_m$, with training vectors
     $\vx_i$ and labels $y_i$
-  - Candidate splits are $\theta = (j, t_m)$ with feature $j$ and threshold $t_m$
+  - Candidate splits are $\theta = (j, t_m)$ with feature $j$ and threshold
+    $t_m$
   - Each split partitions data into subsets:
     \begin{alignat*}{2}
     Q_{L}(j, t_m) & = \{ p_i = (\vx_i, y_i): x_j \le t_m \} \\
@@ -424,7 +426,7 @@
   $$
   where $y_i = c(x_i)$ is the correct class for element $x_i$
 
-- E.g., if there are $N_m = 10$ objects belonging to $K=3$ classes
+- @Example@
   - 3 red, 6 blue, 1 green
   - The probability of classification $\hat{f}_{m, k}$ are:
     - Red = 3/10
@@ -538,7 +540,7 @@
   - Normalize sum of sample weights for each class
 
 * Feature Selection with Trees
-- **Intuition**
+- @Intuition@
   - Top tree features predict more samples
 
 - **Importance of a variable**
@@ -550,7 +552,7 @@
     randomized trees (random forest)
 
 * Embeddings with Trees
-- **Intuition**
+- @Intuition@
   - Learning a tree is like a non-parametric density estimation
   - Neighboring data points likely lie within the same leaf
 
@@ -584,7 +586,8 @@
   - Forest variance reduced by averaging, usually compensating for bias increase
 
 * Randomization in Trees
-- **Bagging** (bootstrap aggregate) / perturb-and-combine techniques designed for
+- **Bagging** (bootstrap aggregate) / perturb-and-combine techniques designed
+  for
   trees
   1. Training samples (with replacement)
   2. Picking features (random subspaces)
@@ -608,10 +611,10 @@
 * Random Forests: Pros and Cons
 - Pros and cons are the same as ensemble learning
 
-- **Pros**
+- @Pros@
   - Increased accuracy
 
-- **Cons**
+- @Cons@
   - Lower training and evaluation speed
   - Loss of interpretability
   - Overfitting (cross-validation is needed)
@@ -687,12 +690,14 @@
   - Complexity of one-step learning is $O(P^3)$
 
 * Linear Models Are Linear in What?
-- A **model is linear** when the signal $s = \sum_{i=0}^P w_i x_i = \vw^T \vx$ is
+- A **model is linear** when the signal $s = \sum_{i=0}^P w_i x_i = \vw^T \vx$
+  is
   linear **with variables**
   - Unknown variables: weights $w_i$
   - Inputs $x_i$ are fixed
 
-- Applying a **non-linear transform to inputs** $z_i = \Phi(x_i)$ keeps the model
+- Applying a **non-linear transform to inputs** $z_i = \Phi(x_i)$ keeps the
+  model
   linear, e.g.,
   - Positive/negative part (e.g., $z_i = RELU(x_i), RELU(-x_i)$)
   - Waterfall (conditioning model to different feature ranges)
@@ -706,7 +711,8 @@
 * Non-Linear Transformations in Linear Models
 - **Transform variables**
   - Use $\Phi: \calX \rightarrow \calZ$
-  - Transform each point $\vx_n \in \calX = \bbR^d$ into a point in feature space
+  - Transform each point $\vx_n \in \calX = \bbR^d$ into a point in feature
+    space
     $\vz_n = \Phi(\vx_n) \in \calZ = \bbR^{\tilde{d}}$ with $d \ne \tilde{d}$
 
 - **Learn**
@@ -753,7 +759,7 @@
 * Perceptron Learning Algorithm (PLA)
 - First machine learning algorithm discovered
 
-- **Algorithm**
+- @Algorithm@
   - Training set $\calD = \{(\vx_1, y_1), ..., (\vx_n, y_n) \}$
   - Initialize weights $\vw$
     - Random values

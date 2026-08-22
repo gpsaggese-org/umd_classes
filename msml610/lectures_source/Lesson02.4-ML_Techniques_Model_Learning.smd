@@ -18,7 +18,7 @@
 
 ::: columns
 :::: {.column width=75%}
-- **Goal**: minimize scalar function $J(\vw)$ of $n$-variables $\vw$
+- @Goal@: minimize scalar function $J(\vw)$ of $n$-variables $\vw$
   - E.g., in-sample error $E_{in}(\vw)$
 
 - **Solutions**:
@@ -41,10 +41,11 @@
 
 ::: columns
 :::: {.column width=75%}
-- **Problem**:
-  - You are on a hilly surface and we want to walk down to the bottom of the hill
+- @Problem@: 
+  - You are on a hilly surface and we want to walk down to the bottom of the
+    hill
 
-- **Solution**:
+- @Solution@: 
   - At each point:
     - You look around
     - You move a step in the direction where the surface is steepest
@@ -75,7 +76,8 @@
   $$
   where $\hat{\vvv}$ is a unit vector
 
-  - Pick $\hat{\vvv}$ to move to a value of $E_{in}(\vw)$ as negative as possible
+  - Pick $\hat{\vvv}$ to move to a value of $E_{in}(\vw)$ as negative as
+    possible
 
 - The **change for $E_{in}$** is:
   \begingroup \footnotesize
@@ -166,7 +168,7 @@
 - **Idea**: vary learning rate $\eta$ during gradient descent
   - Smaller learning rates may find a better minimum
   - Reduce $\eta$ as a function of iterations
-  - **Cons**: introduces an additional parameter to tune
+  - @Cons@: introduces an additional parameter to tune
 
 * Gradient Descent with Variable Learning Rate
 - In **gradient descent with fixed learning rate** (constant change in weight
@@ -189,13 +191,13 @@
 
 * Feature Scaling in Gradient Descent
 
-- **Problem**: Different gradient components have different errors due to
+- @Problem@: Different gradient components have different errors due to
   numerical approximation, causing bouncing
   - Unscaled features lead to slow, unstable convergence
   - E.g., feature ranging from 1 to 1000 vs. 0.01 to 1 causes inefficient
     updates
 
-- **Solution**: Converge faster by scaling features to the same range
+- @Solution@: Converge faster by scaling features to the same range
   - Min-max scaling
   - Standardization (transforms feature values to mean 0, standard deviation 1)
 
@@ -219,7 +221,7 @@
     \frac{\partial h_{\vw}(\vx_i)}{\partial w_j}
     $$
 
-  - **Cons**: gradient descent with many training examples (e.g., $N = 10^6$)
+  - @Cons@: gradient descent with many training examples (e.g., $N = 10^6$)
     - Is computationally expensive, requiring gradient evaluation from all
       examples for one update
     - Requires storing all data in memory
@@ -230,7 +232,7 @@
 - Idea of **Stochastic Gradient Descent (SGD)**: update the weights only for one
   training example picked at random
 
-- **Algorithm**
+- @Algorithm@
   - Pick one $(\vx_n, y_n)$ at a time from the available examples
   - Compute $\nabla e(h(\vx_n), y_n)$ to update the weights:
     $\Delta \vw = -\eta \nabla e$
@@ -242,7 +244,7 @@
     \frac{\partial h_{\vw}(\vx_t)}{\partial w_j}
     $$
 
-- **Cons**: in Stochastic Gradient Descent
+- @Cons@: in Stochastic Gradient Descent
   - Path in weight space is random
   - Oscillates around local minimum
 
@@ -270,7 +272,8 @@
 ::: columns
 :::: {.column width=65%}
 
-- In many applications, **continuous stream** of training examples $\to$ requires
+- In many applications, **continuous stream** of training examples $\to$
+  requires
   updating the model
   - In real-time systems, adapt model with new data points without full
     retraining
@@ -279,7 +282,8 @@
 - Stochastic GD and mini-batch GD **suitable for online learning**
   - Update model one example at a time
   - Discard examples for "compressed" model representation
-    - Useful for large data streams where storing every data point is impractical
+    - Useful for large data streams where storing every data point is
+      impractical
     - E.g., in stock market prediction
     - E.g., in training a language model on live chat data, discard older
       conversations after updates
@@ -399,7 +403,7 @@ digraph BayesianFlow {
   at a time
   - Instead of computing all derivatives
 
-- **Algorithm**
+- @Algorithm@
   - Pick a random starting point $\vw(0)$
   - Pick a random order for the coordinates $\{ x_i \}$
   - Find the minimum along the current coordinate (1D optimization problem)

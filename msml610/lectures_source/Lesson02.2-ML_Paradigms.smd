@@ -93,7 +93,7 @@
 
 - **Classification**: output is a discrete label, e.g.,
   - `Spam` vs `Not Spam`
-  - Digit recognition `0`, `1`, ...
+  - Digit recognition `0`, `1`, ..
   - Sentiment analysis `Pos`, `Neg`, `Neutral`
 
 - **Regression**: output is a continuous value, e.g.,
@@ -106,7 +106,7 @@
   - Decision Trees
   - K-nearest neighbors
   - Neural Networks
-  - ...
+  - ..
 
 * Unsupervised Learning
 - Learn from data **without** labeled outputs
@@ -193,13 +193,13 @@ digraph BayesianFlow {
 ## Machine Learning in Practice
 
 * Machine Learning Flow (1/2)
-- **Question**
+- @Question@
   - E.g., "How can we predict house prices?"
 - **Input data**
   - E.g., historical data of house sales
 - **Features**
   - E.g., number of bedrooms, location, square footage
-- **Algorithm**
+- @Algorithm@
   - E.g., linear regression, decision trees
 - **Parameters**
   - E.g., learning rate, number of trees in a random forest
@@ -238,7 +238,7 @@ digraph BayesianFlow {
 - Clarity of the **question** impacts project success
 - Quality and relevance of **data** are crucial for performance
 - Proper **feature** selection simplifies the model and improves accuracy
-- **Algorithm** is often less important (contrary to popular belief!)
+- @Algorithm@: is often less important (contrary to popular belief!)
 
 * Question
 - **Make the question concrete and precise**
@@ -255,7 +255,7 @@ digraph BayesianFlow {
   - Misunderstanding leads to:
     - Solving the wrong problem
     - Collecting wrong data
-    - ...
+    - ..
 
 - _"If I were given one hour to save the planet, I would spend 59 minutes
   defining the problem and one minute resolving it"_ (Einstein)
@@ -340,7 +340,7 @@ digraph BayesianFlow {
 
 * Example of Photo OCR System
 
-- **Goal**: build systems to read text in a picture
+- @Goal@: build systems to read text in a picture
   - OCR = "Optical Character Recognition"
 
 - **Stages of ML pipeline for OCR:**
@@ -352,7 +352,7 @@ digraph BayesianFlow {
     - E.g., `hell0` corrected to `hello`
 
 - **Sliding window approach**
-  - **Problem**: Unknown text location and size
+  - @Problem@: Unknown text location and size
   - Text detection
     - Train classifier to recognize letters vs non-letters
     - Scan image in two directions with different sizes for text
@@ -381,7 +381,7 @@ digraph BayesianFlow {
      - E.g., crowd sourcing like Amazon Mechanical Turk
 
 * OCR Pipeline: Example of Artificial Data Synthesis
-- How can we increase data set size?
+- @Question@: How can we increase data set size?
   1. Synthesize data set
      - Use font libraries to generate large training sets
      - Paste characters against random backgrounds
@@ -397,9 +397,9 @@ digraph BayesianFlow {
   - You work on optimization for months
   - Find out that the optimization doesn't make much difference
 
-- **Problem**: On which part of the pipeline should time/resource be spent?
+- @Problem@: On which part of the pipeline should time/resource be spent?
 
-- **Solution**: Ceiling analysis to Analyze pipeline performance
+- @Solution@: Ceiling analysis to Analyze pipeline performance
   - Single number for system performance
     - E.g., accuracy for OCR
   - For each component:

@@ -43,7 +43,6 @@
   - Have realizations:
     - _"Patient with $\vx_1$ had a heart attack"_
     - _"Patient with $\vx_2$ didn't"_
-    - ...
 
 - Learn $\Pr(y | \vx)$
   - Find best parameters $\vw$ for logistic regression model to explain data
@@ -272,7 +271,7 @@
 * One-Vs-All Multi-Class Classification
 - Aka "one-vs-rest" classifier
 
-- **Problem**: you have $n$ classes $c_1, ... , c_n$ to distinguish given $\vx$
+- @Problem@: you have $n$ classes $c_1, ... , c_n$ to distinguish given $\vx$
 
 - **Learn**
   - Create $n$ binary classification problems where we classify $c_i$ vs
@@ -317,12 +316,12 @@
   - Known functional form
   - Parametrized with unknown parameters to estimate
 
-- **Pros**
+- @Pros@
   - Utilize data structure
   - Easy to fit: few parameters
   - Accurate predictions if assumptions correct
 
-- **Cons**
+- @Cons@
   - Strong data assumptions
   - Low accuracy if assumptions incorrect
 
@@ -333,12 +332,12 @@
   - Assume each class generating process is multivariate Gaussian
   - Classifiers with linear and quadratic decision surface
 
-- **Pros**
+- @Pros@
   - Closed-form solutions easy to compute (sample mean and covariance)
   - Inherently multiclass
   - No hyperparams to tune
 
-- **Cons**
+- @Cons@
   - Strong assumptions about the data
 
 * LDA / QDA: Model Form
@@ -368,7 +367,8 @@
 
 - Use **Bayes theorem**:
   $$
-  \Pr(Y = k | X = \vx) = \frac{\Pr(X = \vx | Y = k) \cdot \Pr(Y = k)}{\Pr(X = \vx)}
+  \Pr(Y = k | X = \vx) = \frac{\Pr(X = \vx | Y = k) \cdot \Pr(Y = k)}{\Pr(X =
+  \vx)}
   $$
   where:
   - $\Pr(X = \vx | Y = k)$: given a class, estimate probability of $\vx$
@@ -481,7 +481,7 @@
 ::: columns
 :::: {.column width=50%}
 
-- Why doing this?
+- @Question@: Why doing this?
 
 ::::
 :::: {.column width=45%}
@@ -493,7 +493,8 @@
 * Kernel: Expression From the Transform
 - If you have an expression for $\Phi$, compute a closed formula for the kernel
 
-- E.g., if transformation is $\Phi: \bbR^2 \to \bbR^6$, it introduces interaction
+- @Example@: E.g., if transformation is $\Phi: \bbR^2 \to \bbR^6$, it introduces
+  interaction
   terms:
   $$
   \vz = \Phi(\vx) = \Phi(x_1, x_2) = (1, x_1, x_2, x_1^2, x_2^2, x_1 x_2)
@@ -519,7 +520,7 @@
 - It can be shown to be an inner product in an infinite dimension $\calZ$
 
 * Kernel as Way to Measure Similarity
-- **Intuition**: The Gaussian kernel
+- @Intuition@: The Gaussian kernel
   $$
   K(\vx, \vx')
   = \exp(- \gamma \|\vx - \vx'\|^2)
@@ -554,8 +555,9 @@
 - It can be proved that this is always a kernel
 
 * Kernel: Identifying a Function as a Kernel
-- **Problem**:
-  - You have a certain function $K(\vx, \vx')$ and you want to show that $K(\cdot)$
+- @Problem@: 
+  - You have a certain function $K(\vx, \vx')$ and you want to show that
+    $K(\cdot)$
     is an inner product in the form for some function $\Phi(\cdot)$
     $$
     K(\vx, \vx') = \Phi(\vx)^T \Phi(\vx') \quad \forall \vx, \vx'
@@ -579,20 +581,24 @@
   $$
   with $q \gg d$, such that $K_{\Phi} = (k + \vx^T \vx')^d$
 
-- **Example**
-  - $\calX = \bbR^2$, $K(\vx, \vx') = (1 + \vx^T \vx')^2 = (1 + x_1 x'_1 + x_2 x'_2)^2$
+- @Example@
+  - $\calX = \bbR^2$, $K(\vx, \vx') = (1 + \vx^T \vx')^2 = (1 + x_1 x'_1 + x_2
+    x'_2)^2$
   - Compute the full expression in terms of the coordinates:
     $$
     K(\vx, \vx')
-    = (1 + x_1^2 {x'}_1^2 + x_2^2 {x'}_2^2 + 2 x_1 x'_1 + 2 x_2 x'_2 + 2 x_1 x'_1 x_2 x'_2)
+    = (1 + x_1^2 {x'}_1^2 + x_2^2 {x'}_2^2 + 2 x_1 x'_1 + 2 x_2 x'_2 + 2 x_1
+    x'_1 x_2 x'_2)
     $$
   - Choose:
     - $\calZ = \bbR^6$
-    - $\Phi(x_1, x_2) = (1, x_1^2, x_2^2, \sqrt{2} x_1, \sqrt{2} x_2, \sqrt{2} x_1 x_2)$
+    - $\Phi(x_1, x_2) = (1, x_1^2, x_2^2, \sqrt{2} x_1, \sqrt{2} x_2, \sqrt{2}
+      x_1 x_2)$
   - This is a particular case of the polynomial kernel
 
 * A Kernel Is a Computational Shortcut
-- In literature, the **kernel trick** is a **computational shortcut** for the dot
+- In literature, the **kernel trick** is a **computational shortcut** for the
+  dot
   product of transformed vectors
 
 - Compare 2 ways to compute the inner product of transformed vectors for a
@@ -637,7 +643,7 @@
 
 ::: columns
 :::: {.column width=50%}
-- Why **large margin** classifier is good?
+- @Question@: Why **large margin** classifier is good?
 
 - Given a linearly separable data set, the optimal separating line maximizes the
   margin:
@@ -694,14 +700,16 @@
   \begin{aligned}
   \text{find $\vw, b$} \eqspace & \\
   \text{minimize } \eqspace & \frac{1}{2} \vw^T \vw\\
-  \text{subject to } \eqspace & y_i (\vw^T \vx_i + b) \ge 1 \; \forall i = 1, ..., n\\
+  \text{subject to } \eqspace & y_i (\vw^T \vx_i + b) \ge 1 \; \forall i = 1,
+  ..., n\\
   \end{aligned}
   $$
 
 - Note that under $\vw$ minimal and linear separable classes, it is guaranteed
   that for at least one $\vx_i$ in the second equation will be equal to $1$ (as
   in the original problem)
-  - In fact otherwise we could scale down $\vw$ and $b$ (which does not change the
+  - In fact otherwise we could scale down $\vw$ and $b$ (which does not change
+    the
     plane) to use the slack, against the hypothesis of minimality of $\vw$
 
 * Dual (Lagrangian) Form of SVM Problem
@@ -711,7 +719,8 @@
   \text{minimize with respect to } \valpha \eqspace &
   \calL(\valpha) =
   \sum_{i=1}^N \alpha_i -
-  \frac{1}{2} \sum_{i=1}^N \sum_{j=1}^N y_i y_j \alpha_i \alpha_j \vx_i^T \vx_j \\
+  \frac{1}{2} \sum_{i=1}^N \sum_{j=1}^N y_i y_j \alpha_i \alpha_j \vx_i^T \vx_j
+  \\
   %
   \text{subject to } \eqspace &
   \valpha \ge \vv{0}, \sum_{i=1}^N \alpha_i y_i = 0 \\
@@ -750,7 +759,8 @@
   - From $\valpha$ recover the plane $\vw$ from the equation:
     $\vw = \sum_{i=1}^N \alpha_i y_i \vx_i$
   - Looking at the optimal $\alpha_i$, you can observe that many of them are $0$
-  - This is because when you applied the Lagrange multipliers to the inequalities:
+  - This is because when you applied the Lagrange multipliers to the
+    inequalities:
     $y_i (\vw^T \vx_i + b) \ge 1$, you got the KKT condition:
     $$
     \alpha_i (y_i (\vw^T \vx_i + b) - 1) = 0
@@ -758,7 +768,8 @@
   - From these equations, either
     - $\alpha_i = 0$ and $\vx_i$ is an _interior point_ since it has
       non-null distance from the plane (i.e., slack) from the plane; or
-    - $\alpha_i \ne 0$ and the slack is $0$, which implies that the $\vx_i$ point
+    - $\alpha_i \ne 0$ and the slack is $0$, which implies that the $\vx_i$
+      point
       touches the margin, i.e., it is a _support vector_
 
 * Solving Dual Formulation of SVM Problem (2/2)
@@ -810,7 +821,7 @@
   \frac{1}{2} \sum_{i=1}^N \sum_{j=1}^N \alpha_i \alpha_j y_i y_j \vz_i^T \vz_j
   $$
 
-- Note:
+- @Remark@
   - Optimization problem has same number of unknowns as original space (number
     of points $N$)
   - Support vectors live in $\calZ$: they have $\alpha = 0$. In $\calX$, they
@@ -839,7 +850,7 @@
 :::
 
 * SVM in Higher Dimensional Space
-- **Pros**
+- @Pros@
   - You don't pay the price in terms of complexity of optimization problem
     - Number of unknowns is still $N$ (different than a linear problem)
   - You don't pay the price in terms of increased generalization bounds
@@ -847,8 +858,9 @@
     - This is because each hypothesis $h$ can be complex but the cardinality of
       the hypothesis set $\calH$ is the same
 
-- **Cons**
-  - You pay a price to compute $\Phi(\vx_i)^T \Phi(\vx_j)$, since $\Phi$ could be
+- @Cons@
+  - You pay a price to compute $\Phi(\vx_i)^T \Phi(\vx_j)$, since $\Phi$ could
+    be
     very complex
     - The kernel trick will remove this extra complexity by doing
       $\Phi(\vx_i)^T \Phi(\vx_j) = K_{\Phi}(\vx_i, \vx_j)$
@@ -857,7 +869,7 @@
 - The trivial approach is:
   - Transform vectors with $\Phi(\cdot)$
   - Apply all SVM machinery to the transformed vectors
-  - **Cons**: $\Phi$ might be very complex, e.g., potentially exponential number
+  - @Cons@: $\Phi$ might be very complex, e.g., potentially exponential number
     of terms
 
 - You can express the SVM problem formulation and the prediction in terms of a
@@ -869,7 +881,8 @@
     $\Phi(\cdot)$ and not $\Phi(\cdot)$ itself
 
 * SVM in Terms of Kernel: Optimization Step
-- When you build the QP formulation for the Lagrangian to compute the $\alpha$ we
+- @Question@: When you build the QP formulation for the Lagrangian to compute
+  the $\alpha$ we
   can use $K_{\Phi}(\vx_i, \vx_j)$ instead of $\vz_i^T \vz_j$
   $$
   \calL(\valpha) =
@@ -956,7 +969,7 @@
   the cost of worse $E_{in}$
   - Trade-off between in-sample and out-of-sample performance
 
-- E.g., outliers force a smaller margin
+- @Example@
   - Ignoring outliers could increase margin
 
 - Large $C$ parameter in SVM requires minimizing error, trading off large margin

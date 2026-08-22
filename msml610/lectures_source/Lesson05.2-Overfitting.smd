@@ -14,7 +14,8 @@
 ::: columns
 :::: {.column width=50%}
 
-- **Overfitting** occurs when the model fits the data more than what is warranted
+- **Overfitting** occurs when the model fits the data more than what is
+  warranted
 
 - Surpass point where $E_{out}$ is minimal (optimal fit)
   - Model complexity too high for data/noise
@@ -158,14 +159,14 @@
   - Approximation (in-sample) vs generalization (out-of-sample)
 
 * Decomposing Error in Bias-Variance (1/4)
-- **Problem**
+- @Problem@
   - Regression set-up: target is a real-valued function
   - Hypothesis set $\calH = \{ h_1(\vx), h_2(\vx), ... h_n(\vx) \}$
   - Training data $\calD$ with $N$ examples
   - Squared error $E_out = \EE[(g(\vx) - f(\vx))^2]$
   - Choose the best function $g \in \calH$ that approximates unknown $f$
 
-- **Question**
+- @Question@
   - What is the out-of-sample error $E_{out}(g)$ as function of $\calH$ for a
     training set of $N$ examples?
 
@@ -513,7 +514,8 @@
 :::: {.column width=65%}
 - The bias term can be interpreted as **deterministic noise**
 
-- **Bias** is the part of the target function that hypothesis set cannot capture:
+- **Bias** is the part of the target function that hypothesis set cannot
+  capture:
   $$
   h^*(\vx) - f(\vx)
   $$
@@ -637,7 +639,8 @@
 
   - $\uparrow$ data resources $N \implies \downarrow$ overfitting
   - $\uparrow$ model complexity $d_{VC} \implies \uparrow$ overfitting
-  - $\uparrow$ deterministic noise (target complexity) $\implies \uparrow$ overfitting
+  - $\uparrow$ deterministic noise (target complexity) $\implies \uparrow$
+    overfitting
   - $\uparrow$ stochastic noise $\sigma^2 \implies \uparrow$ overfitting
 
 # Learning Curves

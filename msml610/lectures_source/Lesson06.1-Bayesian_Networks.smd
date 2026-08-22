@@ -23,7 +23,7 @@
 
 - @Example@:
   - _"If I turn the car key, the engine starts"_
-  - But the battery might be dead, there's no fuel, the starter is broken, ...
+  - But the battery might be dead, there's no fuel, the starter is broken, ..
 
 - @Problem@: Real-world agents face _uncertainty_ from:
   1. _Partial observability_
@@ -35,12 +35,14 @@
 
 * Logic-Based Under Uncertainty: Naive Solution
 
-- @Naive Solution@: A possible solution to logic-based AI under uncertainty is to
+- @Naive Solution@: A possible solution to logic-based AI under uncertainty is
+  to
   use:
   1. **Belief state**, i.e., set of all possible current world states
      - _Cons_: difficult to enumerate and track
   2. **Causal and exhaustive augmentation** for rules
-     - _Cons_: Must consider all possible preconditions for acting, even unlikely
+     - _Cons_: Must consider all possible preconditions for acting, even
+       unlikely
        ones
   3. **Contingent plans** to handle every possible sensor report and belief
      - _Cons_:
@@ -55,14 +57,14 @@
   - Car has fuel
   - Car battery is charged
   - Car key is the right one
-  - ...
+  - ..
 
 - @Remark@: Less obvious preconditions
   - Electrical system is intact
   - Fuel pump is working
   - Fuel lines are not clogged
   - Engine oil level is sufficient
-  - ...
+  - ..
 
 - @Problem@: Every precondition requires something else to achieve the goal
 
@@ -216,7 +218,8 @@ digraph BayesianFlow {
     - Current belief: _"80% chance it rained if grass is wet"_ (Bayesian prior)
   - Further observe _"sprinkler was on"_
     - Wet grass could be due to sprinkler, not rain
-    - Belief changes: $\Pr(Rain | WetGrass \land Sprinkler) = 0.4$ (Bayesian update)
+    - Belief changes: $\Pr(Rain | WetGrass \land Sprinkler) = 0.4$ (Bayesian
+      update)
   - Learn from weather report that there was no rain
     - Belief changes: _"It didn't rain"_
     - Evidence overrides prior: $\Pr(Rain | WetGrass \land WeatherReport) = 0$
@@ -334,7 +337,8 @@ digraph BayesianFlow {
     nodesep=1.0;
     ranksep=0.75;
 
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12,
+    penwidth=1.4];
 
     Fire   [label="Fire",       fillcolor="#F4A6A6"];
     Toast  [label="Toast",      fillcolor="#FFD1A6"];
@@ -357,7 +361,8 @@ digraph BayesianFlow {
   - Once alarm rang, the specific cause doesn't affect whether friend calls
     $$\Pr(Call | Alarm, Fire, Toast) = \Pr(Call | Alarm)$$
 
-- @Interpretation@: Knowing alarm rang "blocks" path of influence from $Fire$ and
+- @Interpretation@: Knowing alarm rang "blocks" path of influence from $Fire$
+  and
   $Toast$ to $Call$
 
 ### Conditional Independence in Garden World
@@ -386,7 +391,8 @@ digraph BayesianFlow {
     nodesep=1.0;
     ranksep=0.75;
 
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12,
+    penwidth=1.4];
 
     Rain       [label="Rain",       fillcolor="#A6C8F4"];
     Sprinkler  [label="Sprinkler",  fillcolor="#FFD1A6"];
@@ -493,12 +499,13 @@ digraph BayesianFlow {
     nodesep=1.0;
     ranksep=0.75;
 
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12,
+    penwidth=1.4];
 
     Weather       [label="Weather",       fillcolor="#A6E7F4", xlabel="P(W)"];
-    Rain          [label="Rain",          fillcolor="#A6C8F4", xlabel="P(R | W)"];
-    Sprinkler     [label="Sprinkler",     fillcolor="#FFD1A6", xlabel="P(S | W)"];
-    WetGrass      [label="WetGrass",      fillcolor="#B2E2B2", xlabel="P(G | R, S)"];
+    Rain [label="Rain", fillcolor="#A6C8F4", xlabel="P(R | W)"];
+    Sprinkler [label="Sprinkler", fillcolor="#FFD1A6", xlabel="P(S | W)"];
+    WetGrass [label="WetGrass", fillcolor="#B2E2B2", xlabel="P(G | R, S)"];
     StockMarketUp [label="StockMarketUp", fillcolor="#C6A6F4", xlabel="P(M)"];
 
     { rank = same; Rain; Sprinkler; }
@@ -518,7 +525,8 @@ digraph BayesianFlow {
 :::: {.column width=60%}
 - $Rain$ and $Sprinkler$ are **dependent** (marginally)
   $$Rain \not\perp Sprinkler \iff Rain \leftrightarrow Sprinkler$$
-  - If no $Rain$, then $Weather = sunny$ and $Sprinkler$ more likely (sprinklers on in sunny weather)
+  - If no $Rain$, then $Weather = sunny$ and $Sprinkler$ more likely (sprinklers
+    on in sunny weather)
   - $Rain$ and $Sprinkler$ related since they share common parent $Weather$
 
 - $Rain$ and $Sprinkler$ are **conditionally independent** given $Weather$
@@ -534,12 +542,13 @@ digraph BayesianFlow {
     nodesep=1.0;
     ranksep=0.75;
 
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12,
+    penwidth=1.4];
 
     Weather       [label="Weather",       fillcolor="#A6E7F4", xlabel="P(W)"];
-    Rain          [label="Rain",          fillcolor="#A6C8F4", xlabel="P(R | W)"];
-    Sprinkler     [label="Sprinkler",     fillcolor="#FFD1A6", xlabel="P(S | W)"];
-    WetGrass      [label="WetGrass",      fillcolor="#B2E2B2", xlabel="P(G | R, S)"];
+    Rain [label="Rain", fillcolor="#A6C8F4", xlabel="P(R | W)"];
+    Sprinkler [label="Sprinkler", fillcolor="#FFD1A6", xlabel="P(S | W)"];
+    WetGrass [label="WetGrass", fillcolor="#B2E2B2", xlabel="P(G | R, S)"];
     StockMarketUp [label="StockMarketUp", fillcolor="#C6A6F4", xlabel="P(M)"];
 
     { rank = same; Rain; Sprinkler; }
@@ -557,14 +566,18 @@ digraph BayesianFlow {
 
 ::: columns
 :::: {.column width=60%}
-- $Rain$ and $Sprinkler$ are **conditionally independent** given $WetGrass$ (but only if $Weather$ not observed)
+- $Rain$ and $Sprinkler$ are **conditionally independent** given $WetGrass$ (but
+  only if $Weather$ not observed)
   $$Rain \perp Sprinkler | WetGrass \text{(but not } Weather)$$
-  - If we condition on $WetGrass$ (grass is wet), knowing sprinkler was off increases chances it rained (and vice versa)
+  - If we condition on $WetGrass$ (grass is wet), knowing sprinkler was off
+    increases chances it rained (and vice versa)
 
-- $Rain$ and $Sprinkler$ are **conditionally dependent** given $WetGrass$ and $Weather$
+- $Rain$ and $Sprinkler$ are **conditionally dependent** given $WetGrass$ and
+  $Weather$
   $$Rain \not\perp Sprinkler | WetGrass, Weather$$
   - If you know it's sunny, rain unlikely and sprinkler likely
-  - If you also know $WetGrass$, learning $Sprinkler$ off $\implies$ must have $Rain$
+  - If you also know $WetGrass$, learning $Sprinkler$ off $\implies$ must have
+    $Rain$
 
 - **Fork path** (common cause) and **collider path** (common effect)
 
@@ -576,12 +589,13 @@ digraph BayesianFlow {
     nodesep=1.0;
     ranksep=0.75;
 
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12,
+    penwidth=1.4];
 
     Weather       [label="Weather",       fillcolor="#A6E7F4", xlabel="P(W)"];
-    Rain          [label="Rain",          fillcolor="#A6C8F4", xlabel="P(R | W)"];
-    Sprinkler     [label="Sprinkler",     fillcolor="#FFD1A6", xlabel="P(S | W)"];
-    WetGrass      [label="WetGrass",      fillcolor="#B2E2B2", xlabel="P(G | R, S)"];
+    Rain [label="Rain", fillcolor="#A6C8F4", xlabel="P(R | W)"];
+    Sprinkler [label="Sprinkler", fillcolor="#FFD1A6", xlabel="P(S | W)"];
+    WetGrass [label="WetGrass", fillcolor="#B2E2B2", xlabel="P(G | R, S)"];
     StockMarketUp [label="StockMarketUp", fillcolor="#C6A6F4", xlabel="P(M)"];
 
     { rank = same; Rain; Sprinkler; }
@@ -614,12 +628,13 @@ digraph BayesianFlow {
     nodesep=1.0;
     ranksep=0.75;
 
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12,
+    penwidth=1.4];
 
     Weather       [label="Weather",       fillcolor="#A6E7F4", xlabel="P(W)"];
-    Rain          [label="Rain",          fillcolor="#A6C8F4", xlabel="P(R | W)"];
-    Sprinkler     [label="Sprinkler",     fillcolor="#FFD1A6", xlabel="P(S | W)"];
-    WetGrass      [label="WetGrass",      fillcolor="#B2E2B2", xlabel="P(G | R, S)"];
+    Rain [label="Rain", fillcolor="#A6C8F4", xlabel="P(R | W)"];
+    Sprinkler [label="Sprinkler", fillcolor="#FFD1A6", xlabel="P(S | W)"];
+    WetGrass [label="WetGrass", fillcolor="#B2E2B2", xlabel="P(G | R, S)"];
     StockMarketUp [label="StockMarketUp", fillcolor="#C6A6F4", xlabel="P(M)"];
 
     { rank = same; Rain; Sprinkler; }
@@ -637,12 +652,14 @@ digraph BayesianFlow {
 
 * Conditional Probability Table
 
-- @Definition@: _Conditional Probability Table_ (CPT) encodes probability of node $X_i$ given parents $Parents(X_i)$
+- @Definition@: _Conditional Probability Table_ (CPT) encodes probability of
+  node $X_i$ given parents $Parents(X_i)$
   $$
   \Pr(X_i | Parents(X_i))
   $$
 
-- Each row of CPT contains conditional probability of node under conditioning case (possible combination of parent values)
+- Each row of CPT contains conditional probability of node under conditioning
+  case (possible combination of parent values)
 
 - **Note**
   - Natural for discrete variables, but can extend to continuous variables
@@ -665,7 +682,7 @@ digraph BayesianFlow {
   - Sum of probabilities on left side of conditioning is 1
   - Not on right side
 
-- **Interpretation**
+- @Interpretation@
   - Traffic highly likely when both snow and rush hour
   - Traffic unlikely when neither condition holds
 
@@ -682,7 +699,8 @@ digraph BayesianFlow {
 :::: {.column width=60%}
 - Structure of graph shows:
   - $Burglary$ and $Earthquake$ affect $Alarm$
-  - $JohnCalls$ and $MaryCalls$ depend only on $Alarm$, not on $Burglary$ and $Earthquake$
+  - $JohnCalls$ and $MaryCalls$ depend only on $Alarm$, not on $Burglary$ and
+    $Earthquake$
 
 ::::
 :::: {.column width=35%}
@@ -692,7 +710,8 @@ digraph BayesianFlow {
     nodesep=1.0;
     ranksep=0.75;
 
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12,
+    penwidth=1.4];
 
     Burglary [label="Burglary", fillcolor="#A6C8F4"];
     Earthquake [label="Earthquake", fillcolor="#FFD1A6"];
@@ -734,7 +753,8 @@ digraph BayesianFlow {
 \endgroup
 
 - Events conditionally independent:
-  $$\Pr(Alarm) = \Pr(Alarm | Burglary, Earthquake) \Pr(Burglary) \Pr(Earthquake)$$
+  $$\Pr(Alarm) = \Pr(Alarm | Burglary, Earthquake) \Pr(Burglary)
+  \Pr(Earthquake)$$
 
 ::::
 :::: {.column width=35%}
@@ -744,11 +764,12 @@ digraph BayesianFlow {
     nodesep=1.0;
     ranksep=0.75;
 
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12,
+    penwidth=1.4];
 
-    Burglary     [label="Burglary",     fillcolor="#A6C8F4", xlabel="P(B) = 0.001"];
-    Earthquake   [label="Earthquake",   fillcolor="#FFD1A6", xlabel="P(E) = 0.002"];
-    Alarm        [label="Alarm",        fillcolor="#B2E2B2", xlabel="P(A | B,E)"];
+    Burglary [label="Burglary", fillcolor="#A6C8F4", xlabel="P(B) = 0.001"];
+    Earthquake [label="Earthquake", fillcolor="#FFD1A6", xlabel="P(E) = 0.002"];
+    Alarm [label="Alarm", fillcolor="#B2E2B2", xlabel="P(A | B,E)"];
     JohnCalls    [label="JohnCalls",    fillcolor="#C6A6F4", xlabel="P(J | A)"];
     MaryCalls    [label="MaryCalls",    fillcolor="#C6A6F4", xlabel="P(M | A)"];
 

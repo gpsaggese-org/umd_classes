@@ -134,7 +134,8 @@
   - Use learning curves
 
 * In-Sample vs Out-Of-Sample Error Expressions
-- **Goal of ML**: find a function $h$ that approximates the unknown function $f$,
+- **Goal of ML**: find a function $h$ that approximates the unknown function
+  $f$,
   $h \approx f$ over the space of inputs $\vx \in \calX$ ("script X")
 
 - Usually the **error is point-wise**:
@@ -255,7 +256,7 @@
 ### Precision and Recall
 
 * Error Metrics for Skewed Classes
-- When **classes are skewed** (i.e., one class is very rare)
+- @Question@
   - Accuracy can be misleading
   - Use metrics like confusion matrix, precision, and recall
 
@@ -412,7 +413,7 @@
 - In practice, you can modify the threshold of a probabilistic classifier to
   **trade off precision and recall**
 
-- E.g., use logistic regression to predict cancer:
+- @Example@
   - With a threshold $\theta = 0.5$, the classifier has:
     - Precision = $\frac{\text{TP}}{|\text{pred == 1}|}$
     - Recall = $\frac{\text{TP}}{|\text{act == 1}|}$
@@ -440,7 +441,8 @@
 - Aka ROC curves
 
 - Show precision vs recall trade-off for a classifier
-  - Plot the curve on a precision-recall plane ($y =$ precision, $1 - x =$ recall)
+  - Plot the curve on a precision-recall plane ($y =$ precision, $1 - x =$
+    recall)
   - E.g., changing threshold of logistic regression
 
 - Precision-recall plot can have **different shapes**, e.g.,
@@ -466,7 +468,7 @@
   - Does not require selecting a threshold for performance calculation
   - Handles imbalanced datasets effectively
 
-- E.g., consider a classifier for medical diagnosis
+- @Example@
   - AUC helps understand model's ability to distinguish between patients with
     and without a disease
 
@@ -486,7 +488,7 @@
     - $P = R = 1$ $\implies$ F-score = 1
   - For F-score to be large, both $P$ and $R$ must be high
 
-- Why not just averaging $P, R$?
+- @Question@
   - A classifier that always outputs 1 has:
     - $R = 1$ and $P = 0$
     - $\frac{P + R}{2} = \frac{1}{2}$
@@ -573,7 +575,7 @@
   - Each model contributes its unique perspective, reducing overfitting
   - E.g., like a panel of voting experts
 
-- **Example**: in computer vision detecting a face is difficult task (circa 2010)
+- @Example@: in computer vision detecting a face is difficult task (circa 2010)
   - Look for different features:
     - Are there eyes?
     - Is there a nose?
@@ -623,11 +625,11 @@
     \end{alignat*}
 
 * Ensemble Learning: Pros and Cons
-- **Pros**
+- @Pros@
   - Hypothesis set $\calH$ is increased by combining hypotheses from different
     models
 
-- **Cons**
+- @Cons@
   - More computationally intensive to train and evaluate
   - Loss of interpretability
   - Risk of overfitting (model complexity is increased)

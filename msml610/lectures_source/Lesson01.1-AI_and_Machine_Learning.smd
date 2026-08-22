@@ -5,7 +5,8 @@
 // references=
 // - AIMA (Artificial Intelligence: a Modern Approach), Chap 1
 
-// ![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
+// ![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){
+height=20% }
 
 # AI and Machine Learning
 
@@ -22,7 +23,8 @@
   - What is intelligence?
 
 * Human Intelligence
-- We call ourselves "homo sapiens" because intelligence sets us apart from animals
+- We call ourselves "homo sapiens" because intelligence sets us apart from
+  animals
 
 - For thousands of years, we tried to understand how we think
 
@@ -61,9 +63,9 @@
   3. Act humanly
   4. Act rationally
 
-- **Question**: Which definition best captures what AI should aim for?
+- @Question@: Which definition best captures what AI should aim for?
 
-- **Key insight**: Building machines that **act rationally** should be the
+- @Key insight@: Building machines that **act rationally** should be the
   ultimate goal of AI
 
 * 1. AI as Thinking Humanly
@@ -71,10 +73,10 @@
 - @Problem@: To build machines that think like humans, we need to first
   **determine how humans think**
 
-- **Pros**
+- @Pros@
   - Express precise theory of the human mind as a computer program
 
-- **Cons**
+- @Cons@
   - Unknown workings of the human mind
   - Anthropocentric definition
 
@@ -146,13 +148,13 @@
 
 * Turing Test: Pros and Cons
 
-- **Pros**
+- @Pros@
   - Operational definition of intelligence
   - Sidestep philosophical vagueness
     - What is consciousness?
     - Can a machine think?
 
-- **Cons**
+- @Cons@
   - Intelligence defined by **anthropomorphic** criteria in human terms
     - Multiple forms of non-human intelligence exist
   - Intelligence by Turing test means **fooling humans** into thinking it is

@@ -302,7 +302,8 @@
   - Rule-based systems with limited robustness
   - Cons
     - Ad-hoc, fragile
-  - _"Every time I fire a linguist, the performance of the speech recognizer goes
+  - _"Every time I fire a linguist, the performance of the speech recognizer
+    goes
     up" (Jelinek, 1988)
 
 - **1980s: hidden Markov Models**
@@ -325,7 +326,7 @@
   - Efficiently represent uncertainty
   - Provide rigorous reasoning
 
-- **Examples**
+- @Examples@
   - Diagnosing diseases based on symptoms
   - Predictive text input in smartphones
   - Fraud detection in banking
@@ -456,12 +457,12 @@
 - **Image understanding**
   - Object recognition
   - Image captioning
-  - ...
+  - ..
 
 - **Medicine**
   - AI equivalent to health care professionals
 
-- When will we reach AGI (Artificial General Intelligence)?
+- @Question@: When will we reach AGI (Artificial General Intelligence)?
 
 ## Risks and Benefits of AI
 
@@ -611,11 +612,12 @@
 
 * Solutions to Problem of Control
 - **Checks-and-balances**
-  - Researchers and corporations develop voluntary self-governance principles for
+  - Researchers and corporations develop voluntary self-governance principles
+    for
     AI
   - Governments and international organizations established advisory bodies
 
-- **Cons**
+- @Cons@
   - Corporations checking themselves? What can possibly go wrong?
   - Preferences are not easy to invert and are inconsistent
 

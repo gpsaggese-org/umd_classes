@@ -25,10 +25,10 @@
 - Corollary:
   - Trim the model to the bare minimum necessary to explain the data
 
-- What does **simple** mean?
+- @Question@
   - A model is simple when it is one of few possible objects
 
-- What does **better** mean?
+- @Question@
   - A model is better means better out of sample performance
 
 - **Why it's true**?
@@ -38,7 +38,7 @@
 * What is a "simple model"?
 - An object is **simple** when it is one of few possible objects
 
-- **Examples**:
+- @Examples@: 
   - Polynomial of order 2 is simpler than order 17
     - More polynomials of order 17 than order 2, though both are infinite sets
   - SVM (Support Vector Machine) characteristics:
@@ -94,7 +94,7 @@
   - Leads to incorrect or unfair decisions
 
 * Sampling Bias (2/2)
-- **Examples**
+- @Examples@
   - Training facial recognition on lighter-skinned faces reduces accuracy on
     darker-skinned faces
   - Predicting income using data only from employed individuals omits unemployed
@@ -126,7 +126,7 @@
   - Common pitfall in machine learning workflows
 
 * Data Snooping (2/2)
-- **Examples**
+- @Examples@
   - Choosing features based on the full dataset before splitting gives foresight
     not present in deployment
   - E.g., demean the entire data and then split in train / test
@@ -137,7 +137,7 @@
   - Fit preprocessing steps only on training data, then apply to test data
 
 * "Burning the Test Set"
-- **Problem**
+- @Problem@
   - Repeated test set use during development leaks into training
   - Overfitting to test data
   - _"If you torture the data long enough, it will confess whatever you want"_
@@ -161,14 +161,14 @@
 ### Research Methodology
 
 * How to Achieve Out-Of-Sample Fit
-- **Goal**: Choose an hypothesis $g \in \calH$ approximates the unknown target
+- @Goal@: Choose an hypothesis $g \in \calH$ approximates the unknown target
   function $f$
   - What does $g \approx f$ mean?
     $$
     g \approx f \iff E_{out}(g) \approx 0
     $$
 
-- **Solution**:
+- @Solution@: 
   - Achieve:
     - Good in-sample performance $E_{in}(g) \approx 0$
     - Good generalization $E_{out}(g) \approx E_{in}(g)$
@@ -176,7 +176,8 @@
     $E_{out}(g) \approx 0$
 
 * What If Out-Of-Sample Fit Is Poor?
-- The model performs well in sample ($E_{in} \approx 0$) but poorly out of sample
+- The model performs well in sample ($E_{in} \approx 0$) but poorly out of
+  sample
   ($E_{out} \gg E_{in}$)
 
 - **What does it mean?**
@@ -225,14 +226,15 @@
 * What to Do When You Have Lots of Data?
 - You have $m$ = 100M examples in data set: great!
 
-- **Cons**
+- @Cons@
   - Scalability issue (slow, lots of compute)
   - Require work on infrastructure
 
 ::: columns
 :::: {.column width=55%}
 - **First step**:
-  - Plot learning curves (in-sample and out-of-sample performance) for increasing
+  - Plot learning curves (in-sample and out-of-sample performance) for
+    increasing
     amount of data $m = 1k, 10k, 100k, 1M, ...$
 - **Next step**:
   - If model has large bias
@@ -256,13 +258,13 @@
   - Avoid going through the motions
   - Prioritize tasks by importance and impact
 
-- E.g., when conducting a customer survey:
+- @Example@
   - Q: _"Why is the feedback being collected?"_
     - A: To improve product features and customer service
   - Q: _"What is the desired outcome?"_
     - A: To identify areas for improvement and innovation
 
-- E.g., before starting a marketing campaign:
+- @Example@
   - Q: _"Why is this campaign run?"_
     - A: To increase brand awareness or drive sales
   - Q: _"What are the specific goals?"_
@@ -294,7 +296,7 @@
   logistic regression
   - Words are `buy`, `now`, `deal`, `discount`, `your name`
 
-- **Goal**: improve classifier performance
+- @Goal@: improve classifier performance
   1. **Collect more data**
      - Honeypot project: fake email account to collect spam
   2. **Use better features**

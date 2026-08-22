@@ -19,7 +19,6 @@
   where the error can be:
   - Squared error $(h(\vx) - y)^2$
   - Binary error $I[h(\vx) - y]$
-  - ...
 
 - The **error on an out-of-sample point** is an **unbiased estimate** of
   $E_{out}$, since:
@@ -58,7 +57,7 @@
   \endgroup
 
 * Trade-Off Between Training and Validation Set
-- **Problem**: you have finite amount of data points $N$
+- @Problem@: you have finite amount of data points $N$
 
 ::: columns
 :::: {.column width=60%}
@@ -89,7 +88,7 @@
 ::::
 :::
 
-- **Solution**:
+- @Solution@: 
   - Rule of thumb: 70-30 or 80-20 split between train and validation
 
 * Error From VC Analysis vs Learn-Validation Approach
@@ -116,7 +115,8 @@
   - Is biased and optimistic
   - Cannot used to assess the learned model
 
-- **Never use** $D_{val}$ / $D_{test}$ for training or $D_{train}$ for evaluation
+- **Never use** $D_{val}$ / $D_{test}$ for training or $D_{train}$ for
+  evaluation
 
 - After research is done, all available data can be used to learn
 
@@ -145,11 +145,11 @@
 // TODO: Add pic
 
 * Learn-Validation Approach: Pros and Cons
-- **Pros**
+- @Pros@
   - Estimate $E_{out}$ using $E_{val}$
   - Simple to compute, no complexity from VC analysis
 
-- **Cons**
+- @Cons@
   - Cannot use all data for learning and validation; need a compromise
   - Learned model and $E_{val}$ depend on the split; different splits can give
     different results
@@ -256,13 +256,13 @@ _5x cross-validation_
 :::
 
 * Cross-Validation: Pros and Cons
-- **Pros**
+- @Pros@
   - Efficient data usage
     - All data used for learning and validation
   - Better estimate of $E_{val}$ than separate training/validation sets
   - Folds can be stratified
 
-- **Cons**
+- @Cons@
   - Computationally intensive: $K$ learning phases
   - Dependency on fold selection
   - Errors $E_{val}$ are not independent
@@ -281,7 +281,8 @@ _5x cross-validation_
 - **Leave-one-out** (LOO) cross-validation
   - There are $N$ training sessions
   - Each session trains on $N - 1$ points and validates on 1 point
-  - Equivalent to "$N$-fold cross-validation" where $N$ is the number of examples
+  - Equivalent to "$N$-fold cross-validation" where $N$ is the number of
+    examples
     in the dataset
 
 - **Train**
@@ -299,27 +300,27 @@ _5x cross-validation_
     $$
 
 * Leave-One-Out Cross-Validation: Pros and Cons
-- **Pros**
+- @Pros@
   - Max data used for training
   - Deterministic procedure
     - No dependency on fold selection
 
-- **Cons**
+- @Cons@
   - High computational cost (as many learning phases as data points)
   - Cannot be stratified
   - Higher correlation between cross-validation estimates
 
 * Bootstrap
-- **Algorithm**
+- @Algorithm@
   - Pick $N$ samples with replacement from a data set with $N$ instances to
     build training set
   - Pick the elements never chosen to build the test set ("out-of-bag" samples)
   - Training set contains 63.2\% of all the samples, 36.8\% in the test set
 
-- **Pros**
+- @Pros@
   - Works for small data sets since it "expands" the data
 
-- **Cons**
+- @Cons@
   - Not flexible
   - Smaller percentage of instances are used for training set than 10-fold cross
     validation
@@ -329,7 +330,7 @@ _5x cross-validation_
   - Given $X \sim F$
   - Draw $n$ IID samples $X_i$ from $F$
 
-- **Goal**:
+- @Goal@: 
   - Consider a sampling statistic $T = g(X_1, ..., X_n)$
     - E.g., mean, median, OLS coefficients, ...
   - You want to:
@@ -371,7 +372,7 @@ _5x cross-validation_
     asymptotics
 
 * Bootstrap: Example of Die Rolls
-- **Problem**
+- @Problem@
   - Compute distribution of sum of rolling a die 50 times
     $$Y = \sum_{i=1}^{50} X_i = g(X_1, ..., X_{50})$$
   - Sample statistics similar to sample mean, but can be anything

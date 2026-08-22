@@ -82,7 +82,8 @@
   - Some have a value of -1 on the test point, others +1
   - Which one is it?
 
-- How can a limited data set reveal enough information to define the entire
+- @Question@: How can a limited data set reveal enough information to define the
+  entire
   target function?
   - **\black{Is machine learning possible?}**
 ::::
@@ -165,7 +166,7 @@
 ::::
 :::
 
-- Does $\nu$ say anything about $\mu$?
+- @Question@
   - **"No"**
     - In strict terms, we don't know anything about the marbles we didn't pick
     - The sample can be mostly \green{green}, while the bin is mostly \red{red}
@@ -251,14 +252,16 @@
     \\
     \end{alignat*}
     \endgroup
-- **Problem**: the bound is weak
+- @Problem@: the bound is weak
 
 * Validation vs Learning: Coin Analogy
-- In a **validation set-up**, you have a coin and want to determine if it is fair
+- In a **validation set-up**, you have a coin and want to determine if it is
+  fair
 
 - Assume the coin is unbiased: $\mu = 0.5$
 - Toss the coin 10 times
-- How likely is that you get 10 heads (i.e., the coin looks biased $\nu = 0$)?
+- @Question@: How likely is that you get 10 heads (i.e., the coin looks biased
+  $\nu = 0$)?
   $$
   \Pr(\text{coin shows } \nu = 0) = 1 / 2^{10} = 1 / 1024 \approx 0.1\%
   $$
@@ -271,7 +274,8 @@
 - In a **learning set-up**, you have many coins and you need to choose one and
   determine if it's fair
 
-- If you have 1000 fair coins, how likely is it that at least one appears totally
+- If you have 1000 fair coins, how likely is it that at least one appears
+  totally
   biased using 10 experiments?
   - I.e., out-of-sample performance is completely different from in-sample
     performance
@@ -341,7 +345,8 @@
 
 - The union bound assumes the events are disjoint, leading to a conservative
   estimate if events overlap
-- **In reality**, bad events are extremely overlapping because bad hypotheses are
+- **In reality**, bad events are extremely overlapping because bad hypotheses
+  are
   extremely similar
 
 ::::
@@ -422,13 +427,13 @@ digraph ML_Phases {
     - Motivates you to study
     - Knowing exam problems in advance wouldn't gauge learning effectively
 
-- What matters is how students do once they graduate and find a job
+- @Question@
   - This is the **out-of-sample phase**
 
 # Growth Function
 
 * Dichotomy: Definition
-- **Problem**: classify $N$ (fixed) points $\vx_1, ..., \vx_N$ with an hypothesis
+- @Problem@: classify $N$ (fixed) points $\vx_1, ..., \vx_N$ with an hypothesis
   set $\calH$ of multi-class classifiers
 - Consider an assignment $D$ of the points to certain class $\vd_1, ..., \vd_N$
 - $D$ is a **dichotomy** for hypothesis set $\calH$ $\iff$ there exists
@@ -437,7 +442,7 @@ digraph ML_Phases {
 ::: columns
 :::: {.column width=65%}
 
-- **Example**
+- @Example@
   - 4 points in a plane $A, B, C, D$
   - Binary classification
   - $\calH$ = \{ bidimensional perceptrons \}
@@ -518,7 +523,8 @@ digraph ML_Phases {
 :::
 
 * Dichotomies vs Hypotheses
-- An **hypothesis** classifies each point of $\calX$: $\calX \rightarrow \{-1, +1\}$
+- An **hypothesis** classifies each point of $\calX$: $\calX \rightarrow \{-1,
+  +1\}$
 - A **dichotomy** classifies each point of a fixed set:
   $\{\vx_1, ..., \vx_N\} \rightarrow \{-1, +1\}$
   - Dichotomies are "mini-hypotheses", i.e., hypotheses restricted to given
@@ -586,7 +592,7 @@ digraph ML_Phases {
 
 * Growth Function Is Increasing
 - $m_{\calH}(N)$ increases (although not monotonically) with $N$
-- E.g.,
+- @Example@
   - The number of dichotomies on $N=3$ points $m_{\calH}(3)$ is smaller or equal
     than the number of dichotomies on $N=4$ points
   - In fact we can ignore a new point and get the same classification
@@ -849,11 +855,12 @@ digraph ML_Phases {
   is defined as the largest value of $N$ for which $m_{\calH}(N) = 2^N$
   - I.e., the VC dimension is the most points $\calH$ can shatter
 
-- **Properties** of the VC dimension: if $d_{VC}(\calH) = N$ then
+- @Properties@: of the VC dimension: if $d_{VC}(\calH) = N$ then
 
   - Exists a constellation of $N$ points that can be shattered by $\calH$
     - Not all sets of $N$ points can be shattered
-    - If $N$ points were placed randomly, they could not be necessarily shattered
+    - If $N$ points were placed randomly, they could not be necessarily
+      shattered
 
   - $\calH$ can _shatter_ $N$ points for any $N \le d_{VC}(\calH)$
 
@@ -868,7 +875,7 @@ digraph ML_Phases {
 - The VC dimension **measures the complexity** of a hypothesis set in terms of
   **effective parameters**
 
-- E.g.,
+- @Example@
   - A perceptron in a $d$-dimensional space has $d_{VC} = d + 1$
   - In fact $d_{VC}$ is the number of perceptron parameters!
   - E.g., for a 2D perceptron ($d = 2$), the break point is 2, so $d_{VC} = 3$
@@ -886,7 +893,7 @@ digraph ML_Phases {
   - Requires more examples for training
 
 * VC Generalization Bounds
-- How many data points are needed to obtain
+- @Question@: How many data points are needed to obtain
   $\Pr(|E_{in} - E_{out}| > \varepsilon) \le \delta$?
 
 - The VC inequality states
@@ -941,7 +948,8 @@ digraph ML_Phases {
   - "Given $N$ examples, what's the probability of an error larger than
     $\varepsilon$?"
 
-- You can equate $\delta$ to $4 m_{\calH}(2N) e^{\frac{1}{8}\varepsilon^2 N}$ and
+- You can equate $\delta$ to $4 m_{\calH}(2N) e^{\frac{1}{8}\varepsilon^2 N}$
+  and
   solve for $\varepsilon$, getting
   $$
   \Omega(N, \calH, \delta)

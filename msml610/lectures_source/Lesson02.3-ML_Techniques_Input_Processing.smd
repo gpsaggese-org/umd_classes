@@ -76,7 +76,7 @@
 
 * Normalization and Standardization
 
-- **Goal**: Adjust feature scales for better convergence and learning
+- @Goal@: Adjust feature scales for better convergence and learning
   - _Normalize_: Rescale to $[0, 1]$
   - _Standardize_: Zero mean, unit variance
 
@@ -92,7 +92,7 @@
 
 * Encoding Categorical Data
 
-- **Goal**: Convert non-numeric categories into numeric representations
+- @Goal@: Convert non-numeric categories into numeric representations
 
 - **Label encoding**
   - Assigns an integer to each category
@@ -107,7 +107,7 @@
 
 * Feature Construction
 
-- **Goal**: Derive more informative features from raw inputs
+- @Goal@: Derive more informative features from raw inputs
 
 - **Methods**
   - Combining variables (e.g., area = height × width)
@@ -121,7 +121,7 @@
 
 * Dimensionality Reduction
 
-- **Goal**: Reduce number of features while preserving key information
+- @Goal@: Reduce number of features while preserving key information
 
 - **Why it helps**
   - Reduce overfitting
@@ -133,23 +133,23 @@
   - PCA: linear combinations that maximize variance
   - LDA: projects data to maximize class separability
 
-- **Example**
+- @Example@
   - Reduce 1024x640 image pixels to 10 principal components
   - Quantize color images into gray scale
 
 * Discretization
 
-- **Goal**: Convert continuous values into categorical bins
+- @Goal@: Convert continuous values into categorical bins
 
 - **Why it helps**
   - Simplifies models or enables categorical algorithms
   - Helps detect threshold effects in data
 
-- **Techniques**
+- @Techniques@
   - Equal-width binning
   - Quantile binning
 
-- **Example**
+- @Example@
   - Discretize age
     - `Child`: $[0, 13)$
     - `Teen`: $[13, 20)$
@@ -159,7 +159,7 @@
 
 * Noise Removal
 
-- **Goal**: Remove irrelevant or corrupt data variations
+- @Goal@: Remove irrelevant or corrupt data variations
 
 - **Why it helps**
   - Improves signal clarity and model robustness

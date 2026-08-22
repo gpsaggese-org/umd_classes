@@ -41,7 +41,8 @@
 
 * What is Knowledge Representation?
 
-- @Definition@: **Knowledge Representation (KR)** is the study of how to formally
+- @Definition@: **Knowledge Representation (KR)** is the study of how to
+  formally
   encode information so that machines can reason with it
   - E.g., rules, logic, ontologies, semantic networks
   - KR defines:
@@ -57,7 +58,7 @@
   - Draw conclusions
   - Perform planning
   - Answer queries
-  - ...
+  - ..
 
 * Expressiveness vs. Tractability
 
@@ -124,7 +125,8 @@
   - _Atomic_: treats each state as a single, indivisible entity: simple but
     limited
     - E.g., depth-first search algorithms (e.g., `E3` in chess)
-  - _Factored_: captures relationships between variables but can't express complex
+  - _Factored_: captures relationships between variables but can't express
+    complex
     structures
     - E.g., propositional logic: 
       _"Minesweeper example: breeze at 1,2 iff pit at adjacent cells"_
@@ -202,7 +204,8 @@
     - E.g., "Look!"
 
 - @Concept@: **Sapir-Whorf hypothesis**
-  - _"The language you speak shapes how you perceive, think about, and experience
+  - _"The language you speak shapes how you perceive, think about, and
+    experience
     the world"_
     - Even through arbitrary grammatical features (e.g., gender of nouns)
 
@@ -271,7 +274,7 @@
   - _Inference mechanisms_
     - Modus ponens: from statements "$P$" and "$P \implies Q$", infer "$Q$"
     - Resolution: derive contradictions to infer conclusions
-    - ...
+    - ..
 
 - @Applications@: best used in closed and well-defined environments
   - Digital circuit design
@@ -295,12 +298,14 @@
   - _Semantics_
     - Represents more complex and structured knowledge than propositional logic
     - Can model properties, relationships, and quantification over objects
-      - E.g., $\forall x (Human(x) \implies Mortal(x))$ = _"All humans are mortal"_
+      - E.g., $\forall x (Human(x) \implies Mortal(x))$ = _"All humans are
+        mortal"_
 
   - _Inference mechanisms_
     - Unification: matches predicates with variables
     - Resolution: deduces new facts from known statements
-    - Model checking: verifies truth of statements under specific interpretations
+    - Model checking: verifies truth of statements under specific
+      interpretations
 
 - @Applications@:
   - Knowledge representation
@@ -309,7 +314,8 @@
 
 * Reasoning and Inference in Logic
 
-- **Knowledge base (KB)** is a structured set of facts and rules used for logical
+- **Knowledge base (KB)** is a structured set of facts and rules used for
+  logical
   reasoning
 
 - **Logical inference** is the process of deriving new facts from known ones
@@ -328,7 +334,8 @@
     - A complete inference rule for propositional and first-order logic
     - Useful in automated theorem proving
   - _Entailment_ ($KB \models \alpha$):
-    - Sentence $\alpha$ is entailed by KB if it is true in all models where KB is
+    - Sentence $\alpha$ is entailed by KB if it is true in all models where KB
+      is
       true
 
 * Logic and Knowledge Base: Structure and Semantics
@@ -340,7 +347,8 @@
   - _Rules_
     - E.g, _"If it rains, the ground gets wet"_
 
-- @Definition@: **Knowledge representation language** is a formal way of creating
+- @Definition@: **Knowledge representation language** is a formal way of
+  creating
   sentences about the world
   - **Syntax**: specifies all well-formed sentences in the logic
     - E.g., in arithmetic: "$x + y = 4$" is well-formed, "$x4y+ =$" is not
@@ -349,7 +357,8 @@
 
 - @Definition@: **Axiom** is a sentence taken as given (not derived from others)
 
-- @Definition@: **Inference** is the process of deriving new sentences from old ones
+- @Definition@: **Inference** is the process of deriving new sentences from old
+  ones
   - Should follow logical reasoning rules
 
 - @Definition@: **Truth values** representations
@@ -405,7 +414,8 @@
 ::: columns
 :::: {.column width=50%}
 
-- @Definition@: **Grounding** connects abstract symbols to real-world entities or
+- @Definition@: **Grounding** connects abstract symbols to real-world entities
+  or
   observations
   - E.g., link the symbol in the KB `Apple` to the fruit "apple"
   - It is the bridge between representation in a KB and the world
@@ -433,7 +443,7 @@
 
 * Grounding: Philosophical and Practical Considerations
 
-- How **can we know** that a KB accurately reflects the real world?
+- @Question@
   - We can't be sure!
   - Do we live in a simulation? What is reality?
 
@@ -525,7 +535,8 @@ digraph G {
   - $\alpha$: "(Rain = T, WetGround = T)" entails
     $\beta$: "Rain $\implies$ WetGround"
   - If you know for a fact that it's raining and the ground is wet, then you can
-    confidently conclude that the rule "if it rains, then the ground is wet" must
+    confidently conclude that the rule "if it rains, then the ground is wet"
+    must
     be true (at least in this world)
   - The specific concrete fact supports the general conditional rule
 
@@ -579,7 +590,7 @@ digraph G {
     the models in which $KB$ is true
     - I.e., $M(KB) \subseteq M(\alpha)$
 
-- E.g., **model checking procedure** (brute force)
+- @Example@: E.g., **model checking procedure** (brute force)
   1. Enumerate all the models / possible worlds
   2. Find which models are possible given the $KB$, i.e., $M(KB)$
   3. Check whether the sentence $\alpha$ is true in all the models that are
@@ -663,7 +674,8 @@ digraph EntailmentSemantics {
 * Entailment vs Inference vs Implication
 - **Implication**
   - _"If $A$, then $B$"_
-  - It doesn't say whether A is true; it just says, if it happens, then B follows
+  - It doesn't say whether A is true; it just says, if it happens, then B
+    follows
   - It's a "statement inside the logic system"
 
 - **Inference**
@@ -689,7 +701,8 @@ digraph EntailmentSemantics {
 
 - @Definition@: **Reflex agents** act based on the current percept, ignoring
   percept history
-  - Operate using predefined condition-action rule: _"if condition, then action"_
+  - Operate using predefined condition-action rule: _"if condition, then
+    action"_
     - E.g., a thermostat: _"if temperature < threshold, turn on the heater"_
 
 - @Pros@
@@ -722,7 +735,8 @@ digraph EntailmentSemantics {
 
 * Ontologies (in Computer Science)
 
-- @Definition@: **Ontology:** is a formal and explicit representation of a domain
+- @Definition@: **Ontology:** is a formal and explicit representation of a
+  domain
   - Describes the types of things that exist and how they relate to each other
     - _Classes_: types of things
     - _Individuals_: specific objects
@@ -786,7 +800,8 @@ digraph UniversityOntology {
     splines=true;
     nodesep=1.0;
     ranksep=0.75;
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12,
+    penwidth=1.4];
 
     // Node styles
     Student [label="Student", fillcolor="#A6C8F4"];
@@ -826,7 +841,7 @@ digraph UniversityOntology {
 ::::
 :::
 
-- **Properties**: relationships between Classes
+- @Properties@: relationships between Classes
   - `takesCourse` (`Student` $\rightarrow$ `Course`)
   - `teachesCourse` (`Professor` $\rightarrow$ `Course`)
   - `belongsToDepartment` (Student, Professor $\rightarrow$ `Department`)
@@ -853,7 +868,8 @@ digraph UniversityOntology {
 - **Satisfiability**
   - _"Can an instance of a concept exist?"_
   - Test if a concept is logically consistent (i.e., without contradiction)
-  - E.g., if the concept `FlyingPenguin` requires flying but is also defined as a
+  - E.g., if the concept `FlyingPenguin` requires flying but is also defined as
+    a
     penguin (which cannot fly), it might be not satisfiable
 
 - **Classification**
@@ -892,13 +908,15 @@ digraph UniversityOntology {
 
 - **Deduction**
   - _Infer consequences that logically follow from facts and rules_
-  - E.g., if `John` is a `Student` in `ComputerScience` then he can attend `MSML610`
+  - E.g., if `John` is a `Student` in `ComputerScience` then he can attend
+    `MSML610`
 
 * Example of reasoning tasks in KR (4/4)
 - **Belief Revision**
   - _Update the knowledge base when new, possibly conflicting, information
     arrives_
-  - E.g., learning that not every student in `ComputerScience` can take `MSML610`
+  - E.g., learning that not every student in `ComputerScience` can take
+    `MSML610`
     and revise a previous rule
 
 - **Temporal Reasoning**

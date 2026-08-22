@@ -121,7 +121,8 @@ mindmap
 
 - **\black{How to make decisions when payoffs are result of several actions?}**
   - **Operations research**
-    - Make rational decisions with payoffs for sequence of actions (Bellman, 1957)
+    - Make rational decisions with payoffs for sequence of actions (Bellman,
+      1957)
     - E.g., Markov Decision Processes
   - **Satisficing**
     - Decisions that are good enough
@@ -204,7 +205,7 @@ mindmap
 
 * AI and Computer Science
 - **\black{What can be computed?}**
-  - **Algorithm**
+  - @Algorithm@
     - Procedure to solve problems
     - E.g., algorithm for computing GCD (Euclid, 300 BCE)
   - **Limits to computation**

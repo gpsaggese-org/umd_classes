@@ -20,7 +20,6 @@
   - Theory
   - Models
   - Techniques
-  - ...
 
 ```mermaid
 mindmap
@@ -52,7 +51,7 @@ mindmap
 ```
 
 * Machine Learning Paradigms
-- How do you set up the learning problem?
+- @Question@: How do you set up the learning problem?
 
   - **Supervised learning**
     - The dataset includes inputs with corresponding outputs
@@ -69,8 +68,6 @@ mindmap
   - **Active learning**
     - Not all examples are available initially
     - Request outputs for specific inputs
-
-  - ...
 
 * Machine Learning Theory
 - **VC theory**
@@ -94,7 +91,7 @@ mindmap
   - Assumptions may not align with practical problems
 
 * Machine Learning Models
-- What is the **form of the model** and **how to fit / predict** from the data?
+- @Question@
   - Linear models
   - Generalized linear models
     - E.g., logistic, Poisson regression
@@ -106,10 +103,10 @@ mindmap
     - Model joint distributions with graphs
     - E.g., hidden Markov models (HMM), Kalman filters, Bayesian networks
   - Neural networks
-  - ...
+  - ..
 
 * Machine Learning Techniques
-- What are the stages of a ML pipeline?
+- @Question@: What are the stages of a ML pipeline?
 
   - **Input processing**
     - Data cleaning
