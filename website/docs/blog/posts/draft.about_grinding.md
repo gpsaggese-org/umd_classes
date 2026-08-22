@@ -1,3 +1,17 @@
+---
+title: "About Grinding"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-08-21
+categories:
+  - Productivity
+---
+
+TL;DR: Consistent daily grinding beats sporadic bursts of effort.
+
+<!-- more -->
+
 Grinding is 99.9% of the sucess
 
 You should make progress, only on the days you eat. Which is all gooddamn days.

@@ -1,3 +1,17 @@
+---
+title: "Vim Shortcuts"
+draft: False
+authors:
+  - gpsaggese
+date: 2026-08-20
+categories:
+  - Productivity
+---
+
+TL;DR: A cheat sheet of Vim commands and concepts.
+
+<!-- more -->
+
 # Command line
 
 - Open and run a command in vim: `> vim -c '...'`

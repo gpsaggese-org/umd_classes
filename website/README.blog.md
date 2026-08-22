@@ -272,7 +272,7 @@ Total: 56 draft blogs
 
 - Fix all the problematic blogs, if any
   ```
-  > cc -p "Run website/preview_website.sh and fix the problems following .claude/skills/blog.rules.md"
+  > ccp "Run website/preview_website.sh and fix the problems following .claude/skills/blog.rules.md"
   ```
 
 - Publish the website

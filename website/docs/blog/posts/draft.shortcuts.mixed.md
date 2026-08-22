@@ -1,6 +1,18 @@
-# ##############################################################################
+---
+title: "Mixed Keyboard Shortcuts"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-08-20
+categories:
+  - Productivity
+---
+
+TL;DR: A cheat sheet of keyboard shortcuts across tools.
+
+<!-- more -->
+
 # Conventions
-# ##############################################################################
 
 * Shortcuts: Conventions
 - Combinations to be pressed together are enclosed into parentheses:
@@ -54,15 +66,11 @@ Escape     Esc
   - R_CMD
   - R_SHIFT (S)
 
-# ##############################################################################
 # macOS
-# ##############################################################################
 
 // `https://support.apple.com/en-us/HT201236`
 
-## #############################################################################
 ## Windows
-## #############################################################################
 
 * macOS: Close window
 - `CMD + w`
@@ -80,9 +88,7 @@ Escape     Esc
 * macOS: Select block area in terminal
 - `CMD + OPT + mouse`
 
-## #############################################################################
 ## Screenshot
-## #############################################################################
 
 // From https://support.apple.com/guide/mac-help/take-a-screenshot-or-screen-recording-mh26782/mac
 
@@ -105,9 +111,7 @@ Escape     Esc
 - To Screenshot app dir: `CMD + CTRL + 4`
 - To Clipboard: `CMD + CTRL + SHIFT + 4`
 
-## #############################################################################
 ## Misc
-## #############################################################################
 
 * macOS: Get definition of a word
 - `CTRL + CMD + d`
@@ -124,9 +128,7 @@ Escape     Esc
 * macOS: Enable / disable do not disturb
 - `CTRL + F10`
 
-## #############################################################################
 ## Spaces
-## #############################################################################
 
 * macOS: Move among Spaces
 - `CTRL + arrows`
@@ -148,9 +150,7 @@ Escape     Esc
 - `CMD + OPT + f`
 - MEM: cof
 
-# ##############################################################################
 # Apple Preview
-# ##############################################################################
 
 * Preview: Continuous scroll / single page
 - Continuous scroll: `CMD + 1`
@@ -161,9 +161,7 @@ Escape     Esc
 - Miniatures: `CMD + OPT + 2`
 - Table of contents: `CMD + OPT + 3`
 
-# ##############################################################################
 # Google Chrome
-# ##############################################################################
 
 * Chrome: Moving across tabs
 - Move among tabs: `CMD + {}`, i.e., `CMD + SHIFT + []`
@@ -199,9 +197,7 @@ Escape     Esc
 - Zoom out: `CMD + -`
 - Reset zoom: `CMD + 0`
 
-# ##############################################################################
-# Chrome vimium
-# ##############################################################################
+# Chrome Vimium
 
 // `https://github.com/philc/vimium/wiki`
 
@@ -275,9 +271,7 @@ Escape     Esc
 - Visual mode line-by-line: `V`
 - Copy / paste selected part of page with usual vim shortcuts: `yy`, `p`
 
-# ##############################################################################
 # Gdocs
-# ##############################################################################
 
 * gdocs: Open / search shortcuts
 - `CMD + /`
@@ -301,9 +295,7 @@ Escape     Esc
 - Suggesting mode: `CMD + OPT + SHIFT + x`
 - Editing mode: `CMD + OPT + SHIFT + z` (but doesn't work?)
 
-# ##############################################################################
 # Jupyter
-# ##############################################################################
 
 * Jupyter: Vim bindings
 - `H`, `F1`: shortcut help
@@ -326,9 +318,7 @@ Escape     Esc
 * Jupyter: Header level
 - `CMD + 1`
 
-# ##############################################################################
 # Tmux
-# ##############################################################################
 
 * tmux: Create a session
 - `tmux new -s SESSION`
