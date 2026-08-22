@@ -45,6 +45,54 @@
 - Get help about registers: `:help registers`
 - Get help about copying and moving: `:help copy-move`
 
+# Custom shortcuts (from `.vimrc`)
+
+## Leader key
+- Leader key is set to comma (default is `\`): `,`
+
+## Editing and movement
+- Delete line into the black hole register (doesn't clobber clipboard): `<C-c><C-d>`
+- Open file under cursor in a new tab (overrides default "go to declaration"): `gd`
+- Shift-Down/Shift-Up pass through as normal `<Down>`/`<Up>` (macOS compatibility)
+
+## Tabs
+- Go to next tab: `<C-p>`
+- Go to previous tab: `<C-o>`
+
+## Windows
+- `<C-w><C-w>` is disabled; use directional `<C-w>h/j/k/l` instead
+
+## Navigating
+- Highlight from the current `*` line to the line before the next `*`: `,y`
+- Move to the next `*` line: `,n`
+- Move to the previous `*` line: `,p`
+
+## Autocorrect
+- Autocorrect the word under/before the cursor: `<C-l><C-l>`
+
+## Taglist / tags
+- Toggle the tag list panel: `<C-Y><C-Y>`
+- Open tag under cursor in a new tab (`:TagTab`): `<C-Y><C-T>`
+- Open tag under cursor in a preview window (`:TagPreview`): `<C-Y><C-P>`
+
+## Function keys
+- Quit without saving all buffers: `<F1>`
+- Toggle search highlighting: `<F2>`
+- Toggle spell checking: `<F3>`
+- Toggle paste mode: `<F4>`
+- Re-sync syntax highlighting from the start of the file: `<F5>`
+
+### Quickfix / buffers (non-diff mode)
+- Previous / next quickfix error: `<F9>` / `<F10>`
+- Previous / next buffer: `<S-F9>` / `<S-F10>`
+
+### Diff mode (`vimdiff`)
+- Refresh the diff view: `<F8>`
+- Get diff (pull change from the other file into this one): `<F6>`
+- Put diff (push change from this file into the other one): `<F7>`
+- Accept left side (copy left file to right, keep it as baseline): `<F9>`
+- Accept right side (copy right file to left, overwriting it): `<F10>`
+
 # Settings
 
 - Show value of a variable: `:set var?`
@@ -85,9 +133,8 @@
 
 ## Custom clipboard shortcuts (from `.vimrc`)
 
-- Copy current line to system clipboard (normal or visual mode): `cyy`, `ycc`
-- Copy `file:line 'content'` reference of line under cursor to system
-  clipboard, and echo it: `ycl`
+- Copy current line to system clipboard (normal or visual mode): `ycc` (not standard)
+- Copy `file:line 'content'` reference of line under cursor to clipboard: `ycl`
 
 ## Edit command and search history
 

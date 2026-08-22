@@ -6,6 +6,35 @@
 
 # MSML610
 
+* A College Course in the Age of AI
+
+- AI can:
+  - Answer any question with depth and proficiency
+  - Write a book / class on any topic you are interested in tailored to the level you
+    are at (from ELI5 to PhD)
+  - Be a tutor that can patiently answer questions, all of this instantaneously and
+    (almost for free)
+
+- **Why are we doing here?**
+
+* A College Course in the Age of AI
+
+- AI optimizes for consensus and average, since it is trained to predict the
+  most likely next token
+    - It underrepresents edge cases and non-linear paths to success
+    - A human author can add hard-won lessons from the field that AI cannot
+      reconstruct on its own
+
+- Readers face constant pressure toward shortcuts and clickbait
+    - E.g., "a little-known secret", "the 1-hour trick billionaires use"
+
+- What is worth teaching is **judgment** (and taste), not syntax
+    - When to apply a technique
+    - What to do when results do not match expectations
+    - How to critique a result or an approach
+    - How to hold a mental model of competing approaches
+
+
 * Invariants of a Class Lecture
 - @Invariants@
   - Focus on intuition over math (unless necessary)
