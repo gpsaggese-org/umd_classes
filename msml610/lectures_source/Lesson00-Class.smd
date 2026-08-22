@@ -1,79 +1,49 @@
 // type=UMD_slides
 // course_title=MSML610: Advanced Machine Learning
-// lesson_title=Class Mechanics
+// lesson_title=Class Introduction and Mechanics
 // slides_engine=typst
 // references=
 
 # MSML610
 
-* A College Course in the Age of AI
+## Class Introduction
 
-::: columns
-:::: {.column width=60%}
-- @AI can@
-  - _Answer any question_ with depth and proficiency
-  - _Write a book / class_ on any topic you are interested in tailored to the level you
-    are at (from ELI5 to PhD)
-  - _Be a tutor_ that can patiently answer questions and explain concepts
-  - All of this _instantaneously_ and (almost) for free
+* A College Course in the Age of AI (1/2)
 
-- Readers face constant pressure toward @shortcuts and clickbait@
-    - E.g., "a little-known secret", "the 1-hour trick billionaires use"
+// include:msml610/lectures_source/Class_Mechanics.aux.md "A College Course in the Age of AI (1/2)"
 
-- @Why are we doing here?@
+* A College Course in the Age of AI (2/2)
 
-::::
-:::: {.column width=40%}
-
-![](msml610/lectures_source/figures/L00.1.Rick_Rubin1.jpg){ height=60% }
-
-::::
-:::
-
-* A College Course in the Age of AI
-
-::: columns
-:::: {.column width=60%}
-
-- AI optimizes for @consensus and average@, since it is trained to predict the most
-  likely next token
-  - It underrepresents _edge cases_ and non-linear paths to success
-  - A human can add _hard-won lessons_ from the field that AI cannot reconstruct
-    on its own
-  - A human can provide _taste_
-
-- What is worth teaching is @judgment@ (and taste), not syntax
-    - When to apply a technique
-    - What to do when results do not match expectations
-    - How to critique a result or an approach
-    - How to hold a mental model of competing approaches
-
-::::
-:::: {.column width=40%}
-
-![](msml610/lectures_source/figures/L00.1.Rick_Rubin2.jpg){ height=60% }
-
-::::
-:::
+// include:msml610/lectures_source/Class_Mechanics.aux.md "A College Course in the Age of AI (2/2)"
 
 * AI Policy
 
-- From https://gpsaggese.github.io/blog/my-ai-policy
-// TODO(ai_gp): Add a set of bullet points from the policy above
+// include:msml610/lectures_source/Class_Mechanics.aux.md "AI Policy"
 
 * Invariants of a Class Lecture
-- @Invariants@
-  - Focus on **intuition over math**, unless math is necessary
-  - Emphasize **realistic assumptions and numerical methods**
-    - Analytical solutions are so 1800s
-  - **Interactive Jupyter notebook** tutorials for hands-on approach
-    - Tutorials are mainly done at home
-    - Videos of each tutorial will be added over time
 
-- @Class flow@
-  - Lessons alternate between slides, whiteboard, tutorials
-  - 2:45 hours per class lessons
-    - 50 mins of discussion and 10 mins break
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Invariants of a Class Lecture"
+
+* Class Project Intro
+
+* Grading
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Grading"
+
+* Class Projects: Tutorials
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Class Project: Tutorials"
+
+* Class Projects: Small Research
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Class Project: Small Research"
+
+* Soft Skills to Succeeed in the Workplace
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Soft Skills to Succeed in the Workplace"
+
+* Yours Truly
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Yours Truly"
 
 * Books of the Class
 ::: columns
@@ -114,89 +84,58 @@
 ::::
 :::
 
-* Links
-
-- @Course Management@:
-  [ELMS](https://umd.instructure.com/courses/1391619/pages/homepage)
-
-- @Syllabus@: [Google Doc](TBD)
-  - Schedule, GitHub project, Class FAQs
-
-* Grading
-- @Quizzes@ (40%)
-  - Multi-choice quizzes on previous 2 lessons
-  - 4-5 quizzes to make you study during the semester and don't cram
-
-- @Final Project@ (60%)
-  - A comprehensive application of course concepts
-  - Python project selected from a list of topics
-  - Small AI / ML research topics
-    - Blog, tutorial, and (maybe) publication
-
-* Class Projects: Tutorials
-- The project is _"Build $X$ with $Y$"_, where $X$ is a "use case" and $Y$ is a
-  "technology"
-  - Study and describe technology $Y$
-  - Implement a use case $X$ using the technology $Y$
-  - Create Jupyter notebooks to demo your project
-  - Commit code to GitHub and contribute to open-source repo
-  - Write a blog entry
-  - Present your project in a video
-
-- There is a list of $X$ and $Y$ you can pick from, e.g.,
-  - Statistical learning
-  - Big data
-  - LLMs
-  - Deep learning
-
-- Each project:
-  - Is individual or group ($n < 4$)
-  - Has different levels of difficulty
-
-// TODO(ai_gp): Add links to the repo
-
-* Class Projects: Small Research
-
-// TODO(ai_gp): Add links to the repo
-
-- @Project Specifications@: 
-
-* Yours Truly
+* Learning Outcomes
+// TODO(ai_gp): Update
 ::: columns
-:::: {.column width=60%}
-
-- @Bio@
-  - PhD / Postdoc, University of Illinois at Urbana-Champaign (2001-2006)
-
-- @Current Role@
-  - Lecturer, UMD DATA605: Big Data Systems (2023-)
-  - Lecturer, UMD MSML610: Advanced Machine Learning (2025-)
-
-- @Industry@
-  - Research scientist: NVIDIA, Synopsys, Teza, Engineers' Gate
-  - 3x startup founder: ZeroSoft, June, Causify AI
-
-- @Academic@
-  - 20+ papers, 2 US patents
-  - [LinkedIn](https://www.linkedin.com/in/gpsaggese/)
-  - [Email](gsaggese@umd.edu)
-  - [Research website](https://gpsaggese.github.io/)
-  - [Blog](https://gpsaggese.github.io/blog/)
-  - [Publications](https://gpsaggese.github.io/05_publications/)
-  - [Research](https://gpsaggese.github.io/06_research/)
-
+:::: {.column width=65%}
+- @Model and reason about data@
+- @Process and manipulate data@
+  - E.g., Python, Pandas
+- @Introduce a variety of data models@
+  - E.g., relational, NoSQL, graph DBs
+  - Decide appropriate data model for different applications
+- @Use data management systems@
+  - E.g., PostgreSQL, MongoDB, HBase
+  - Decide appropriate system for scenarios
+- @Build data processing pipelines@
+  - E.g., Docker, Airflow
+- @Build a big-data system end-to-end@
+  - Class project
+  - Contribute to an open-source project
 ::::
-:::: {.column width=40%}
-![](msml610/lectures_source/figures/GP_in_coding_state.png)
+:::: {.column width=30%}
+
 ::::
 :::
 
-* How to Join GP's team
-- how_to_join_the_research_team.md
-- policies/FAQ.md
-- Publications https://gpsaggese.github.io/05_publications/
+* Tools We Will Learn To Use
+// TODO(ai_gp): Update
+- @Programming languages@
+  - Python
 
-# Class Map
+- @Development tools@
+  - Bash/Linux OS
+  - Git: data model, branching
+  - GitHub: Pull Requests (PR), issues
+  - Jupyter notebooks
+  - Docker
+
+- @Big data tools@
+  - Extract-Transform-Load (ETL) pipelines
+  - Relational DBs (PostgreSQL)
+  - NoSQL DBs (HBase, MongoDB, Couchbase, Redis)
+  - Graph DBs (Neo4j, GraphX, Giraph)
+  - Computing framework (Hadoop, Spark, Dask)
+  - Workflow manager (Airflow)
+  - Cloud services (AWS)
+
+- @Tutorials@ for tools used in the class projects
+
+* Todos
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Todos"
+
+## Class Map
 
 // TODO(gp): Refresh this once the slides are complete
 // lectures_source/get_syllabus.sh

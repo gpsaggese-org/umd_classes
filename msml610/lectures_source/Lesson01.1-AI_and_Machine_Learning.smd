@@ -5,8 +5,7 @@
 // references=
 // - AIMA (Artificial Intelligence: a Modern Approach), Chap 1
 
-// ![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){
-height=20% }
+// ![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
 
 # AI and Machine Learning
 
@@ -14,26 +13,22 @@ height=20% }
 
 * ML, AI, and Intelligence
 
-- @Definition@: **Machine Learning** is a subset of AI
-  - Often confused with deep learning, large-language models, predictive
-    analytics, and other related fields
+- @Definition@: **Machine Learning** is a subset of Artificial Intelligence (AI)
+  - Often confused and / or used interchangeably with _deep learning_,
+    _large-language models_, _predictive analytics_, and other related fields
 
-- **Questions to explore**
-  - What is artificial intelligence?
-  - What is intelligence?
+- @What is artificial intelligence?@
+  - Before we should understand what is intelligence and human intelligence
 
-* Human Intelligence
-- We call ourselves "homo sapiens" because intelligence sets us apart from
-  animals
-
-- For thousands of years, we tried to understand how we think
-
-- One of the biggest mysteries
-  - Brain is a small mass of matter
-  - Our brain can understand nature secrets, e.g., theory of relativity, quantum
-    mechanics, black holes in the universe
-  - How can brain understand, predict, and manipulate a world more complicated
-    than itself?
+- @What is human intelligence?@
+  - We call ourselves _"homo sapiens"_ because intelligence sets us apart from
+    animals
+  - For thousands of years, we tried to understand how we think
+  - One of the biggest mysteries
+    - Brain is a small mass of matter but can understand nature secrets
+      - E.g., theory of relativity, quantum mechanics, black holes in the universe
+    - How can brain understand, predict, and manipulate a world more complicated than
+      itself?
 
 * Artificial Intelligence
 

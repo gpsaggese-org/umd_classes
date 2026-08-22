@@ -4,19 +4,40 @@
 // slides_engine=typst
 // references=
 
+## Class Introduction
+
+* A College Course in the Age of AI (1/2)
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "A College Course in the Age of AI (1/2)"
+
+* A College Course in the Age of AI (2/2)
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "A College Course in the Age of AI (2/2)"
+
+* AI Policy
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "AI Policy"
+
 * Invariants of a Class Lecture
-- @Invariants of a class lecture@
-  - Focus on intuition
-  - Interactive Jupyter notebook tutorials
-    - Tutorials done at home
-    - Videos added over time
 
-- @Class flow@
-  - Alternate between slides, whiteboard, tutorials
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Invariants of a Class Lecture"
 
-- @Labs@
-  - Review complete class project examples
-  - Collaborate on class project
+* Class Project Intro
+
+* Grading
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Grading"
+
+* Class Projects: Tutorials
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Class Project: Tutorials"
+
+* Class Projects: Small Research
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Class Project: Small Research"
+
+* Yours Truly
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Yours Truly"
 
 * Books of the Class
 ::: columns
@@ -108,74 +129,6 @@
 - Lessons recorded
   - Still attend class, when possible
 
-* Grading
-- @Quizzes@
-  - 40% of grade
-  - Multi-choice on previous 2 lessons
-  - 20 questions in 20 minutes
-  - 4-5 quizzes to encourage study during semester
-
-- @Final Project@
-  - 60% of grade
-  - Comprehensive application of course concepts
-  - Big data project in Python from a list of topics
-  - Individual or group
-
-* Class Projects
-- @Project@ is _"Build $X$ with $Y$"_, where
-  - $X$ is a "use case"
-  - $Y$ is a "technology"
-
-- @Activities@
-  - Study and describe technology $Y$
-  - Implement use case $X$ using technology $Y$
-  - Create Jupyter notebooks to demo your project
-  - Commit code to GitHub, contribute to open-source repo
-  - Write a blog entry
-  - Present your project in a video
-  - In-class labs + reviews
-
-- @You choose from list@ of $X$ and $Y$, e.g.,
-  - Data engineering
-  - Emerging technologies (e.g., large language models)
-  - ...
-
-- @Each project@:
-  - Individual or group ($n < 4$)
-  - Varying difficulty levels
-
-* Soft Skills to Succeed in the Workplace
-- @Goal@: model class project for workplace preparation
-  - Work in a team
-  - Design software architecture (OOP, Agile, Design Patterns)
-  - Comment your code
-  - Write external documentation (tutorials, manuals, how-tos)
-  - Write understandable code (including for future-you)
-  - Read others' code
-  - Follow code conventions (PEP8, Google Code)
-  - Communicate clearly (emails, Slack)
-  - File a bug report
-  - Reproduce a bug
-  - Intuition of CS constants
-  - Basic understanding of OS (virtual memory, processes)
-
 * Yours Truly
-::: columns
-:::: {.column width=65%}
 
-- @GP Saggese@
-  - 2001-2006, PhD / Postdoc at the University of Illinois at Urbana-Champaign
-  - [LinkedIn](https://www.linkedin.com/in/gpsaggese/)
-  - [gsaggese@umd.edu](gsaggese@umd.edu)
-- @University of Maryland@:
-  - 2023-, Lecturer for UMD DATA605: Big Data Systems
-  - 2025-, Lecturer for UMD MSML610: Advanced Machine Learning
-- @In the real-world@
-  - Research scientist at NVIDIA, Synopys, Teza, Engineers' Gate
-  - 3x AI and fin-tech startup founder (ZeroSoft, June, Causify AI)
-  - 20+ academic papers, 2 US patents
-::::
-:::: {.column width=30%}
-![](msml610/lectures_source/figures/GP_in_coding_state.png)
-::::
-:::
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Yours Truly"
