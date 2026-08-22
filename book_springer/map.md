@@ -60,29 +60,29 @@
 
 // https://docs.google.com/spreadsheets/d/1dU3crReWWLcSG8jI4jTvA4430-yMkqvdOEXEIbmktPQ/edit?gid=831837256#gid=831837256
 
-| Chap                                        | Slides                                                       | Slides       | Criticize | Tutorial | Book |
-| --------------------------------------------| -------------------------------------------------------------| ------------ | --------- | ---------| -----|
-|                                             |                                                              |              |           |          |      |
-| **Motivation**                              |                                                              |              |           |          |      |
-| 01. Why Decisions, Not Predictions          | Lesson01.1_From_Data_Science_To_Decision_Science.smd        | 50%          |           |          |      |
-| 02. The Cost of Ignoring Causality          | Lesson02.1_Integrating_Causality_And_Probability_in_ML.smd  |              |           |          |      |
-| **Advanced Modeling Theory & Tools**        |                                                              |              |           |          |      |
-| 04. Knowledge Representation                | MSML610 Slides                                               |              |           |          |      |
-| 05. Probalistic ML                          | MSML610 Slides                                               |              |           |          |      |
-| 06. Causal ML                               | MSML610 Slides                                               |              |           |          |      |
-| **Data**                                    |                                                              |              |           |          |      |
-| 07. Building Causal Knowledge               | MSML610 Slides                                               |              |           |          |      |
-| 08. Causal data pipelines                   | MSML610 Slides                                               |              |           |          |      |
-| **Decision-Making Theory & Tools**          |                                                              |              |           |          |      |
-| 09. Decision Theory Foundations             | MSML610 Slides                                               |              |           |          |      |
-| 10. Taxonomy of Decision-Making Problems    | Lesson10.1_Taxonomy_of_Decision_Problems.smd                 |              |           |          |      |
-| 11. Simple Decisions                        | Lesson11.1_Simple_Decisions.smd                              |              |           |          |      |
-| 12. Complex Decisions                       | Lesson12.1_Complex_Decisions.smd                             |              |           |          |      |
-| 13. Agentic Causal Reasoning                | Maybe remove                                                 |              |           |          |      |
-| **Implementation, Deployment, & Governance**|                                                              |              |           |          |      |
-| 14. Building Stakeholder Alignment          |                                                              |              |           |          |      |
-| 15. Deployment, Monitoring, and Adaptation  | Lesson15.1_Deployment_Monitoring_And_Adaptation.smd          |              |           |          |      |
-| 16. Trust, Explainability, Fairness, and Governance |                                                      |              |           |          |      |
+| Chap                                        |  Slides       | Criticize | Tutorial | Book |
+| --------------------------------------------|  ------------ | --------- | ---------| -----|
+|                                             |               |           |          |      |
+| **Motivation**                              |               |           |          |      |
+| 01. Why Decisions, Not Predictions          | 50%          |           |          |      |
+| 02. The Cost of Ignoring Causality          |              |           |          |      |
+| **Advanced Modeling Theory & Tools**        |               |           |          |      |
+| 04. Knowledge Representation                |               |           |          |      |
+| 05. Probalistic ML                          |               |           |          |      |
+| 06. Causal ML                               |               |           |          |      |
+| **Data**                                    |               |           |          |      |
+| 07. Building Causal Knowledge               |               |           |          |      |
+| 08. Causal data pipelines                   |               |           |          |      |
+| **Decision-Making Theory & Tools**          |               |           |          |      |
+| 09. Decision Theory Foundations             |               |           |          |      |
+| 10. Taxonomy of Decision-Making Problems    |               |           |          |      |
+| 11. Simple Decisions                        |               |           |          |      |
+| 12. Complex Decisions                       |               |           |          |      |
+| 13. Agentic Causal Reasoning                |               |           |          |      |
+| **Implementation, Deployment, & Governance**|               |           |          |      |
+| 14. Building Stakeholder Alignment          |               |           |          |      |
+| 15. Deployment, Monitoring, and Adaptation  |               |           |          |      |
+| 16. Trust, Explainability, Fairness, and Governance |       |           |          |      |
 
 | Slides                                                                       | Typst | Slides | Criticize | Tutorial |
 | ---------------------------------------------------------------------------- | ----- | -------| --------- | ---------|

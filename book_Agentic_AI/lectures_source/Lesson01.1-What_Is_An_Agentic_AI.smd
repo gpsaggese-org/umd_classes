@@ -15,40 +15,40 @@
 
 * From Language Models to Agents
 
-- **Motivation**: a model that only predicts the next token cannot, by itself,
+- @Motivation@: a model that only predicts the next token cannot, by itself,
   book a flight, fix a bug, or run an experiment
   - Chat interfaces answer questions but the user still does all the acting
   - Many valuable tasks require taking _steps in the world_, not just producing
     text
 
-- **Question**: what to add to a language model so that it can reliably get
+- @Question@: what to add to a language model so that it can reliably get
   things done, not just describe what should be done?
 
-- **Key idea**:
+- @Key idea@:
   - Turn the model into the controller of a loop that observes, decides, and
     acts, repeatedly, until a goal is reached
   - This loop is what we call an _agent_
 
 * The Limits of Pure Text Generation
 
-- **Problem**: a standalone LLM is a stateless function from text to text
+- @Problem@: a standalone LLM is a stateless function from text to text
   - No persistent notion of the external world
   - No way to verify whether its claims are true
   - No mechanism to change the state of anything outside the conversation
-  - You can't "just prompt better"
+  - You can't _"just prompt better"_
 
-- **Cons**:
+- @Cons@:
   - Hallucinated facts cannot be corrected by the model itself
   - Multi-step tasks (e.g., _"refactor this repo and run the tests"_) exceed
     what a single forward pass can verify
   - No feedback signal tells the model whether its last step worked
 
-- **Example**: asking a chatbot to _"deploy this code and tell me if it
+- @Example@: asking a chatbot to _"deploy this code and tell me if it
   works"_ only produces a plausible-sounding answer, not a verified outcome
 
 * What Makes a System "Agentic"?
 
-- **Definition**: an _agentic AI_ is a system that:
+- @Definition@: an **agentic AI** is a system that:
   - Perceives its environment,
   - Decides on actions toward a goal
   - Executes those actions
@@ -64,33 +64,33 @@
   2. A way to _act_ on an environment (tools, APIs, actuators)
   3. A way to _observe_ the effect of its actions and adjust
 
-- **Remark**: "agentic" is a spectrum, not a binary property
+- @Remark@: "agentic" is a spectrum, not a binary property
 
 ## Agents vs. Chatbots
 
 * Chatbots: Definition
 
-- **Definition**: a _chatbot_ is a conversational system that maps a dialogue
+- @Definition@: a **chatbot** is a conversational system that maps a dialogue
   history to a text response
 
-- **Goal**: produce a helpful, coherent reply
+- @Goal@: produce a helpful, coherent reply
   - The conversation _is_ the output: nothing outside the chat window changes as
     a direct result
 
-- **Example**: a customer-support chatbot that answers FAQs by retrieving and
+- @Example@: a customer-support chatbot that answers FAQs by retrieving and
   paraphrasing documentation
   - It can _describe_ how to reset a password
   - It cannot _reset_ the password itself
 
 * Agents: Definition
 
-- **Definition**: an _agent_ is a system that maps a goal and a stream of
+- @Definition@: an **agent** is a system that maps a goal and a stream of
   observations to a sequence of _actions_ that change the state of an
   environment
   - The conversation, if any, is one channel among several (the others being
     tool calls, API responses, sensor readings)
 
-- **Example**: a coding agent that reads an issue, edits files, runs the test
+- @Example@: a coding agent that reads an issue, edits files, runs the test
   suite, and iterates until tests pass
   - The repository's state, not just the chat transcript, is the output
 
@@ -116,14 +116,14 @@
 ::::
 :::
 
-- **Key idea**:
+- @Key idea@:
   - Every agent can act like a chatbot (e.g., explain its plan)
   - A chatbot becomes an agent only once it is given tools and a feedback loop
     back to the environment
 
 * The Spectrum of Autonomy
 
-- **Definition**: _autonomy_ measures how many decisions a system makes
+- @Definition@: **autonomy** measures how many decisions a system makes
   without a human approving each step
   - Low autonomy: human approves every action
   - High autonomy: human only sets the goal and checks the final result
@@ -146,7 +146,7 @@ digraph Autonomy {
 }
 ```
 
-- **Remark**: most production systems sit in the middle of this spectrum, not
+- @Remark@: most production systems sit in the middle of this spectrum, not
   at either extreme
 
 * Autonomy Levels: Worked Examples
@@ -192,19 +192,20 @@ digraph Autonomy {
 
   - _Cons_
     - Errors compound silently across many unsupervised steps
-    - Requires strong verification and safety mechanisms before it can be trusted
+    - Requires strong verification and safety mechanisms before it can be
+      trusted
 
 ## The Perceive-Plan-Act Loop
 
 * The Perceive-Plan-Act Loop: Overview
 
-- **Definition**: the _perceive-plan-act loop_ is the control cycle that
+- @Definition@: the **perceive-plan-act loop** is the control cycle that
   turns a static model into an agent
   - _Perceive_: read the current observation from the environment
   - _Plan_: reason about what to do next, given the goal and history
   - _Act_: execute the chosen action, which changes the environment
 
-- **Key idea**: the loop runs until a termination condition is met, e.g.,
+- @Key idea@: the loop runs until a termination condition is met, e.g.,
   - Goal reached
   - Step budget exhausted
   - The agent decides to stop
@@ -231,72 +232,72 @@ digraph PerceivePlanAct {
 
 * Perceive: Observations and State
 
-- **Definition**: an _observation_ is whatever information the environment
+- @Definition@: an **observation** is whatever information the environment
   returns after an action, or at the start of an episode
   - E.g., a web page's HTML, a file's contents, a tool's JSON response, an
     error message
 
-- **Problem**: raw observations are often too large or noisy to feed directly
+- @Problem@: raw observations are often too large or noisy to feed directly
   into the model's context window, e.g.,
   - A full HTML page can be tens of thousands of tokens
   - A directory listing can contain irrelevant files
 
-- **Solution**: agents typically _filter_ or _summarize_ observations before
+- @Solution@: agents typically _filter_ or _summarize_ observations before
   reasoning over them
   - E.g., extract only clickable elements from a web page
   - E.g., truncate a log to the last error and surrounding lines
 
 * Plan: Reasoning About the Next Action
 
-- **Definition**: _planning_ is the step where the agent decides which action
+- @Definition@: **planning** is the step where the agent decides which action
   to take next, given the goal, the history, and the latest observation
 
-- **(Naive) Solution**: pick the single action that looks best given only the
+- @Naive Solution@: pick the single action that looks best given only the
   current observation
   - Cons: ignores long-term consequences, easily gets stuck in loops
 
-- **Solution**: interleave explicit reasoning with action selection
+- @Solution@: interleave explicit reasoning with action selection
   - Generate a short chain of thought about the state of the task
   - Use that reasoning to choose the next action, not just the next token
 
-- **Example**: before clicking "submit" on a form, the agent reasons _"have
+- @Example@: before clicking "submit" on a form, the agent reasons _"have
   I filled in all required fields? Let me check the last observation"_
 
 * Act: Executing in the Environment
 
-- **Definition**: an _action_ is a discrete operation the agent can invoke
+- @Definition@: an **action** is a discrete operation the agent can invoke
   that changes the environment or queries it for new information
   - E.g., `click(element_id)`, `run_tests()`, `search(query)`,
     `write_file(path, content)`
 
-- **Remark**: actions are typically constrained to a fixed _action space_
+- @Remark@: actions are typically constrained to a fixed _action space_
   - The agent can only invoke the operations exposed to it
   - This constraint is what makes agent behavior auditable and controllable
 
-- **Example**: a coding agent's action space might be limited to
+- @Example@: a coding agent's action space might be limited to
   `read_file`, `edit_file`, `run_command`, and `finish`
 
 * Closing the Loop: Feedback and Iteration
 
-- **Key idea**: the result of `Act` becomes the next `Perceive`, which is what
+- @Key idea@: the result of `Act` becomes the next `Perceive`, which is what
   distinguishes an agent from a one-shot tool call
   - A single tool call answers one question
   - A loop lets the agent _notice_ that an action failed and try something
     else
 
-- **Example**: an agent
+- @Example@: an agent
   - runs a test suite (`Act`)
   - observes a failing test (`Perceive`)
   - reasons about the cause (`Plan`)
   - edits the code (`Act` again)
 
-- **Limitations**:
+- @Limitations@:
   - Loops can run indefinitely without a stopping condition or step budget
   - Errors early in the loop can compound if the agent does not detect them
 
 * Preview: ReAct and the Loop in Practice
 
-- **Key idea**: _ReAct_ (Yao et al., 2022) is the canonical instance of the
+- @Key idea@: _ReAct_ (Yao et al., 2022) is the canonical instance of the
   perceive-plan-act loop expressed as a single text trace
   - Interleaves reasoning traces (`Thought`) with actions (`Action`) and their
     results (`Observation`)
@@ -304,14 +305,14 @@ digraph PerceivePlanAct {
   - The reasoning explains _why_ an action was chosen; the observation grounds
     the next thought in what actually happened
 
-- **Remark**: ReAct is covered in detail in Lesson 16.3 (motivation, trace,
+- @Remark@: ReAct is covered in detail in Lesson 16.3 (motivation, trace,
   worked example, and comparison to reason-only and act-only methods)
 
 ## Tools, Environments, and Observations
 
 * What Is a Tool? Definition
 
-- **Definition**: a _tool_ is a function with a well-defined interface
+- @Definition@: a **tool** is a function with a well-defined interface
   ```
   (name, input schema, output schema)
   ```
@@ -329,12 +330,12 @@ digraph PerceivePlanAct {
 
 * Tool Use: From Function Calls to APIs
 
-- **(Naive) Solution**:
+- @Naive Solution@:
   - Ask the model to output free-form text describing what it wants to do
   - Parse it with regular expressions
-  - _Cons_: brittle, ambiguous, breaks whenever the model's phrasing shifts
+  - Cons: brittle, ambiguous, breaks whenever the model's phrasing shifts
 
-- **Solution**:
+- @Solution@:
   - Expose tools as typed schemas `(name, parameters, types)`
   - Have the agent emit a structured call (e.g., JSON) that matches the schema
   - The runtime
@@ -342,19 +343,20 @@ digraph PerceivePlanAct {
     - Executes the underlying function
     - Returns the result as the next observation
 
-- **Intuition**: same idea as a programming-language function signature, applied
+- @Intuition@: same idea as a programming-language function signature, applied
   to model outputs instead of source code
 
 * Environment: Definition
 
-- **Definition**: an _environment_ is everything external to the agent's
+- @Definition@: an **environment** is everything external to the agent's
   controller that defines the state, the available observations, and the
   effect of each action
   - The environment owns the "ground truth": what is actually true after an
     action is executed
 
-- **Example**:
-  - In a web agent, the environment is the live web page (DOM, network responses)
+- @Example@:
+  - In a web agent, the environment is the live web page (DOM, network
+    responses)
   - In a coding agent, it is the file system plus a shell
 
 * Types of Environments: A Taxonomy
@@ -377,17 +379,17 @@ digraph PerceivePlanAct {
 
 * Observations: What the Agent Sees
 
-- **Definition**: the _observation function_ maps the environment's true
+- @Definition@: the **observation function** maps the environment's true
   state to what the agent is actually shown
   - The agent never sees the full state directly; it sees a (possibly
     partial, possibly noisy) observation of it
 
-- **Problem**: partial observability means the agent must sometimes act under
+- @Problem@: partial observability means the agent must sometimes act under
   uncertainty about the true state
   - E.g., a web agent does not know if a button click triggered a background
     request until the next page load
 
-- **Example**: a coding agent's observation after `run_tests()` is the
+- @Example@: a coding agent's observation after `run_tests()` is the
   captured stdout/stderr, not the full internal state of the interpreter
 
 * Agent, Tools, and Environment: Putting It Together
@@ -412,7 +414,7 @@ digraph AgentSystem {
 }
 ```
 
-- **Intuition**:
+- @Intuition@:
   - Tools are the agent's _hands_
   - The environment is the _world_ those hands act on
   - Observations are the agent's _eyes_ on the result
@@ -421,54 +423,54 @@ digraph AgentSystem {
 
 * The Grounding Problem: Definition
 
-- **Definition**: _grounding_ is the problem of connecting a model's internal
+- @Definition@: **grounding** is the problem of connecting a model's internal
   representation of a task to concrete, executable actions in a real environment
   - Aka "symbol grounding" in the older AI literature
 
-- **Problem**: an LLM's output is just text
+- @Problem@: an LLM's output is just text
   - Saying _"I will click the 'Buy' button"_ does not, by itself, click
     anything
   - Without grounding, language and action are disconnected
 
-- **Question**: how do we turn a token sequence into a verifiable change in
+- @Question@: how do we turn a token sequence into a verifiable change in
   the world?
 
 * From Tokens to Actions: Action Spaces
 
-- **(Naive) Solution**: let the model generate free-form natural-language
+- @Naive Solution@: let the model generate free-form natural-language
   instructions and have a human or a separate program interpret them
   - Cons: ambiguous, slow, does not scale to autonomous operation
 
-- **Solution**: define a finite, typed _action space_ that the model's output
+- @Solution@: define a finite, typed _action space_ that the model's output
   is constrained to, and map each action deterministically to an effect in
   the environment
   - E.g., $a \in \{$`click(id)`, `type(id, text)`, `scroll(direction)`$\}$
   - The mapping from action to effect is owned by the environment, not the
     model
 
-- **Remark**:
+- @Remark@:
   - Constraining the action space is also a safety mechanism
   - The agent literally cannot take an action outside the defined set
 
 * Grounding via Tool Schemas and APIs
 
-- **Definition**: a _tool schema_ grounds language by giving every action a
+- @Definition@: a **tool schema** grounds language by giving every action a
   fixed name, typed arguments, and a documented effect
   - The model's job is reduced to: pick a tool, fill in valid arguments
   - The schema, not the model's prose, determines what actually happens
 
-- **Example**: the schema
+- @Example@: the schema
   `move_file(src: str, dst: str) -> bool`
   grounds the phrase _"move the report to the archive folder"_ into a single,
   unambiguous, executable call
 
-- **Key idea**: good grounding turns "the model intends to act" into "the
-  model selects from a closed, verifiable set of effects"
+- @Key idea@: good grounding turns _"the model intends to act"_ into
+  _"the model selects from a closed, verifiable set of effects"_
 
 * Example: Grounding in WebShop
 
-- **Setup**: `WebShop` (Yao et al., 2022) is a simulated e-commerce site where an
-  agent must purchase a product matching a natural-language instruction
+- **Setup**: `WebShop` (Yao et al., 2022) is a simulated e-commerce site where
+  an agent must purchase a product matching a natural-language instruction
   - Action space: `search(query)`, `click(button_or_link)`, each mapping to a
     deterministic page transition in the simulator
 
@@ -477,14 +479,14 @@ digraph AgentSystem {
   - A faithful, constrained simulation is enough to train and evaluate grounded
     agents
 
-- **Remark**: WebShop's environment, action space, and findings are covered in
+- @Remark@: WebShop's environment, action space, and findings are covered in
   detail in Lesson 16.3
 
 ## A Taxonomy of Agentic Systems
 
 * Dimensions of an Agentic Taxonomy
 
-- **Goal**: classify agentic systems along independent axes so that two
+- @Goal@: classify agentic systems along independent axes so that two
   agents can be compared precisely
 
 - **Four useful dimensions**:

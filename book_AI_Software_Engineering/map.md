@@ -59,9 +59,9 @@
 | --------------------------------------------- | ------------------------------------------------------ | -------- | --------- | -------- | ---- |
 |                                               |                                                        |          |           |          |      |
 | **Foundations of AI-Assisted Coding**         |                                                        |          |           |          |      |
-| 01. LLM-Assisted Code Generation              | Lesson01.01_LLM_Assisted_Code_Generation.txt           | 100%     |           |          |      |
-| 02. AI Pair Programming Workflows             | Lesson02.01_AI_Pair_Programming_Workflows.txt          | 100%     |           |          |      |
-| 03. Prompt Engineering for Code               | Lesson03.01_Prompt_Engineering_for_Code.txt            | 100%     |           |          |      |
+| 01. LLM-Assisted Code Generation              | Lesson01.1_LLM_Assisted_Code_Generation.txt           | 100%     |           |          |      |
+| 02. AI Pair Programming Workflows             | Lesson02.1_AI_Pair_Programming_Workflows.txt          | 100%     |           |          |      |
+| 03. Prompt Engineering for Code               | Lesson03.1_Prompt_Engineering_for_Code.txt            | 100%     |           |          |      |
 | 04. Retrieval-Augmented Generation for Codebases | N/A                                                 |          |           |          |      |
 | **AI Across the Development Lifecycle**       |                                                        |          |           |          |      |
 | 05. AI Code Review                            | N/A                                                    |          |           |          |      |
@@ -75,7 +75,7 @@
 | 12. AI in CI/CD                               | N/A                               | 5%       |           |          |      |
 | **Trust, Collaboration, and Governance**      |                                                        |          |           |          |      |
 | 13. Trust, Verification, and Hallucination Risks | N/A                                                  |          |           |          |      |
-| 14. Human-AI Collaboration Patterns           | Lesson14.01_Human_AI_Collaboration_Patterns.txt        | 100%     |           |          |      |
+| 14. Human-AI Collaboration Patterns           | Lesson14.1_Human_AI_Collaboration_Patterns.txt        | 100%     |           |          |      |
 | 15. Ethics, IP, and Security of AI-Generated Software | N/A                                             |          |           |          |      |
 
 # Detailed TOC
@@ -102,7 +102,7 @@
   - When generation degrades: long files, ambiguous specs
 
 ### Slides
-- `book_AI_Software_Engineering/lectures_source/Lesson01.01_LLM_Assisted_Code_Generation.txt`
+- `book_AI_Software_Engineering/lectures_source/Lesson01.1_LLM_Assisted_Code_Generation.txt`
 
 ### Lesson Materials
 - Not covered
@@ -191,7 +191,7 @@
   - Dispatch, remote control, scheduled tasks, background sessions
 
 ### Slides
-- `book_AI_Software_Engineering/lectures_source/Lesson02.01_AI_Pair_Programming_Workflows.txt`
+- `book_AI_Software_Engineering/lectures_source/Lesson02.1_AI_Pair_Programming_Workflows.txt`
 
 ### Lesson Materials
 - `book_AI_Software_Engineering/lectures_notes/claude_code.md`
@@ -297,7 +297,7 @@
   - Iterative refinement loops with the model
 
 ### Slides
-- `book_AI_Software_Engineering/lectures_source/Lesson03.01_Prompt_Engineering_for_Code.txt`
+- `book_AI_Software_Engineering/lectures_source/Lesson03.1_Prompt_Engineering_for_Code.txt`
 
 ### Lesson Materials
 - Not covered
@@ -684,7 +684,7 @@
   - Shared conventions and context (CLAUDE.md-style instructions)
 
 ### Slides
-- `book_AI_Software_Engineering/lectures_source/Lesson14.01_Human_AI_Collaboration_Patterns.txt`
+- `book_AI_Software_Engineering/lectures_source/Lesson14.1_Human_AI_Collaboration_Patterns.txt`
 
 ### Books
 - 2022, National Academies of Sciences, Engineering, and Medicine,

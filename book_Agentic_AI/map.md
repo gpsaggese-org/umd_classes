@@ -69,17 +69,17 @@
 // From ./generate_all_tocs.sh
 
 - `book_Agentic_AI/all_tocs.md`
-- `book_Agentic_AI/lectures_source/*.txt`
+- `book_Agentic_AI/lectures_source/*.smd`
 
 - `msml610/all_tocs.md`
-- `msml610/lectures_source/*.txt`
+- `msml610/lectures_source/*.smd`
 
 - `data605/all_tocs.md`
-- `data605/lectures_source/*.txt`
+- `data605/lectures_source/*.smd`
 
-- `book_AI_Software_Engineering/lectures_source/*.txt`
+- `book_AI_Software_Engineering/lectures_source/*.smd`
 
-- `book_cs_refreshers/lectures_source/*.txt`
+- `book_cs_refreshers/lectures_source/*.smd`
 
 ## Roadmap
 
@@ -133,7 +133,7 @@
   `TODO(ai_gp)`
 - Write the decks for chapters 12-26, starting with the chapters that already
   have partial coverage from other courses (13, 17, 21, 22, 23, 25)
-- Decide whether `Lesson15.1-Causal_Reasoning_Agents.txt` becomes its own
+- Decide whether `Lesson15.1-Causal_Reasoning_Agents.smd` becomes its own
   chapter or is split between chapters 12 and 25
 - Renumber `book_Agentic_AI/lectures_source/Lesson01.*` so the lesson number
   matches the chapter number (currently all decks sit under Lesson01)
@@ -176,13 +176,13 @@
   - Single-agent vs. multi-agent systems
 
 ### Slides
-- `book_Agentic_AI/lectures_source/Lesson01.1-What_Is_An_Agentic_AI.txt`
+- `book_Agentic_AI/lectures_source/Lesson01.1-What_Is_An_Agentic_AI.smd`
 
 ### Lesson Materials
-- `book_Agentic_AI/lectures_source/Lesson03.1-History_of_LLM_Agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson03.1-History_of_LLM_Agents.smd`
   - [25%]: ReAct thought-action-observation trace as the loop in practice,
     WebShop environment and action space as the grounding example
-- `book_Agentic_AI/lectures_source/Lesson07.1-Tool_use_and_retrieval.txt`
+- `book_Agentic_AI/lectures_source/Lesson07.1-Tool_use_and_retrieval.smd`
   - [15%]: Retrieval as a tool call, which extends the tool definition beyond
     function calls and APIs
 - _Not covered_
@@ -218,17 +218,17 @@
   - Chain-of-thought as serial computation
 
 ### Slides
-- `book_Agentic_AI/lectures_source/Lesson02.1-LLM_Building_Blocks.txt`
+- `book_Agentic_AI/lectures_source/Lesson02.1-LLM_Building_Blocks.smd`
 
 ### Lesson Materials
-- `book_Agentic_AI/lectures_source/Lesson02.1-LLM_Building_Blocks.txt`
+- `book_Agentic_AI/lectures_source/Lesson02.1-LLM_Building_Blocks.smd`
   - [95%]: Chapter's own deck: tokenization, transformer block, attention
     variants and cost, pretraining objectives, scaling laws and emergence,
     decoding strategies, context window and KV cache, expressivity limits
-- `book_Agentic_AI/lectures_source/Lesson04.1-LLM_Reasoning.txt`
+- `book_Agentic_AI/lectures_source/Lesson04.1-LLM_Reasoning.smd`
   - [20%]: Depth limit and chain-of-thought as serial computation, one token
     per gate intuition, trading tokens for depth
-- `msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt`
+- `msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.smd`
   - [10%]: Neural-network background (layers, training objectives) that the
     transformer section assumes
 - _Not covered_
@@ -266,17 +266,17 @@
   - Scaling meets agents
 
 ### Slides
-- `book_Agentic_AI/lectures_source/Lesson03.1-History_of_LLM_Agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson03.1-History_of_LLM_Agents.smd`
 
 ### Lesson Materials
-- `book_Agentic_AI/lectures_source/Lesson03.1-History_of_LLM_Agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson03.1-History_of_LLM_Agents.smd`
   - [95%]: Chapter's own deck: timeline, prompting to acting, ReAct trace and
     ablations, WebShop, the four early failure modes, tool-use standards and
     the road to general-purpose agents
-- `book_Agentic_AI/lectures_source/Lesson01.1-What_Is_An_Agentic_AI.txt`
+- `book_Agentic_AI/lectures_source/Lesson01.1-What_Is_An_Agentic_AI.smd`
   - [25%]: Preview of ReAct and the loop, WebShop grounding example, agents
     vs. chatbots framing that the history builds on
-- `book_AI_Software_Engineering/lectures_source/Lesson02.01_AI_Pair_Programming_Workflows.txt`
+- `book_AI_Software_Engineering/lectures_source/Lesson02.1_AI_Pair_Programming_Workflows.smd`
   - [15%]: MCP as one protocol for many tools, which continues the tool-use
     standards thread into today's products
 - _Not covered_
@@ -313,20 +313,20 @@
   - When self-correction does help
 
 ### Slides
-- `book_Agentic_AI/lectures_source/Lesson04.1-LLM_Reasoning.txt`
+- `book_Agentic_AI/lectures_source/Lesson04.1-LLM_Reasoning.smd`
 
 ### Lesson Materials
-- `book_Agentic_AI/lectures_source/Lesson04.1-LLM_Reasoning.txt`
+- `book_Agentic_AI/lectures_source/Lesson04.1-LLM_Reasoning.smd`
   - [95%]: Chapter's own deck: CoT variants and self-consistency, tree/graph
     of thought, CoT-decoding and the confidence signal, premise order and
     R-GSM, serial computation and depth, limits of self-correction
-- `book_Agentic_AI/lectures_source/Lesson06.1-Inference_time_techniques.txt`
+- `book_Agentic_AI/lectures_source/Lesson06.1-Inference_time_techniques.smd`
   - [30%]: Grounded vs. self-judged feedback, which explains when iterative
     refinement and self-correction help
-- `book_Agentic_AI/lectures_source/Lesson02.1-LLM_Building_Blocks.txt`
+- `book_Agentic_AI/lectures_source/Lesson02.1-LLM_Building_Blocks.smd`
   - [20%]: Expressivity section, decoding strategies (greedy, top-k, top-p)
     that CoT-decoding builds on
-- `book_AI_Software_Engineering/lectures_source/Lesson03.01_Prompt_Engineering_for_Code.txt`
+- `book_AI_Software_Engineering/lectures_source/Lesson03.1_Prompt_Engineering_for_Code.smd`
   - [15%]: Structured chain-of-thought, self-planning, least-to-most
     decomposition, sample-and-vote applied to code
 - _Not covered_
@@ -364,20 +364,20 @@
   - Reasoning, memory, and planning as one loop
 
 ### Slides
-- `book_Agentic_AI/lectures_source/Lesson05.1-Reasoning_Memory_and_Planning.txt`
+- `book_Agentic_AI/lectures_source/Lesson05.1-Reasoning_Memory_and_Planning.smd`
 
 ### Lesson Materials
-- `book_Agentic_AI/lectures_source/Lesson05.1-Reasoning_Memory_and_Planning.txt`
+- `book_Agentic_AI/lectures_source/Lesson05.1-Reasoning_Memory_and_Planning.smd`
   - [95%]: Chapter's own deck: working vs. long-term memory, HippoRAG pipeline
     and results, grokking and implicit reasoning, LLM world models and
     WebDreamer, the full loop
-- `book_Agentic_AI/lectures_source/Lesson07.1-Tool_use_and_retrieval.txt`
+- `book_Agentic_AI/lectures_source/Lesson07.1-Tool_use_and_retrieval.smd`
   - [35%]: RAG loop, embeddings and nearest-neighbor search, single-hop
     retrieval, which HippoRAG is contrasted against
-- `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
+- `msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd`
   - [25%]: Model-based vs. model-free planning, MDP/POMDP belief states, value
     iteration, which formalize "simulate before you act"
-- `msml610/lectures_source/Lesson09.1-Reasoning_over_time.txt`
+- `msml610/lectures_source/Lesson09.1-Reasoning_over_time.smd`
   - [15%]: State, observation, and transition models over time, the formal
     background for a world model
 - _Not covered_
@@ -414,19 +414,19 @@
   - Inference-time vs. training-time compute
 
 ### Slides
-- `book_Agentic_AI/lectures_source/Lesson06.1-Inference_time_techniques.txt`
+- `book_Agentic_AI/lectures_source/Lesson06.1-Inference_time_techniques.smd`
 
 ### Lesson Materials
-- `book_Agentic_AI/lectures_source/Lesson06.1-Inference_time_techniques.txt`
+- `book_Agentic_AI/lectures_source/Lesson06.1-Inference_time_techniques.smd`
   - [95%]: Chapter's own deck: OPRO, self-debug with two feedback channels,
     groundedness spectrum, compute-optimal scaling and adaptive allocation
-- `book_Agentic_AI/lectures_source/Lesson04.1-LLM_Reasoning.txt`
+- `book_Agentic_AI/lectures_source/Lesson04.1-LLM_Reasoning.smd`
   - [30%]: Self-consistency, tree/graph of thought search, and the limits of
     self-correction that motivate grounded verifiers
-- `book_AI_Software_Engineering/lectures_source/Lesson03.01_Prompt_Engineering_for_Code.txt`
+- `book_AI_Software_Engineering/lectures_source/Lesson03.1_Prompt_Engineering_for_Code.smd`
   - [30%]: Self-refine and self-debug, test-first prompting, flow engineering,
     sample and vote, the refinement loop
-- `book_Agentic_AI/lectures_source/Lesson08.1-Learning_to_reason.txt`
+- `book_Agentic_AI/lectures_source/Lesson08.1-Learning_to_reason.smd`
   - [15%]: Chain-of-verification, an inference-time technique reframed as a
     training-time signal
 - _Not covered_
@@ -463,23 +463,23 @@
   - Multiple needles: where recall breaks down
 
 ### Slides
-- `book_Agentic_AI/lectures_source/Lesson07.1-Tool_use_and_retrieval.txt`
+- `book_Agentic_AI/lectures_source/Lesson07.1-Tool_use_and_retrieval.smd`
 
 ### Lesson Materials
-- `book_Agentic_AI/lectures_source/Lesson07.1-Tool_use_and_retrieval.txt`
+- `book_Agentic_AI/lectures_source/Lesson07.1-Tool_use_and_retrieval.smd`
   - [95%]: Chapter's own deck: RAG as tool use, embeddings and ANN indexes,
     hybrid search, enterprise grounding strategies, long-context vs. retrieval
     trade-off, needle-in-a-haystack design and limits
-- `book_Agentic_AI/lectures_source/Lesson05.1-Reasoning_Memory_and_Planning.txt`
+- `book_Agentic_AI/lectures_source/Lesson05.1-Reasoning_Memory_and_Planning.smd`
   - [30%]: Multi-hop retrieval failure of standard RAG, HippoRAG graph
     retrieval, retrieval vs. storage framing
-- `book_Agentic_AI/lectures_source/Lesson02.1-LLM_Building_Blocks.txt`
+- `book_Agentic_AI/lectures_source/Lesson02.1-LLM_Building_Blocks.smd`
   - [20%]: Context window and KV-cache cost, the mechanism behind the
     long-context side of the trade-off
-- `data605/lectures_source/Lesson12.2-Neo4j.txt`
+- `data605/lectures_source/Lesson12.2-Neo4j.smd`
   - [15%]: Graph storage and query engines, the infrastructure under
     graph-structured retrieval
-- `data605/lectures_source/Lesson04.3-Data_Storage.txt`
+- `data605/lectures_source/Lesson04.3-Data_Storage.smd`
   - [10%]: Indexing and storage layouts that vector databases specialize
 - _Not covered_
   - [5%]: Agentic and iterative RAG (query planning, re-ranking cascades) and
@@ -516,20 +516,20 @@
   - Training-time vs. inference-time grounding
 
 ### Slides
-- `book_Agentic_AI/lectures_source/Lesson08.1-Learning_to_reason.txt`
+- `book_Agentic_AI/lectures_source/Lesson08.1-Learning_to_reason.smd`
 
 ### Lesson Materials
-- `book_Agentic_AI/lectures_source/Lesson08.1-Learning_to_reason.txt`
+- `book_Agentic_AI/lectures_source/Lesson08.1-Learning_to_reason.smd`
   - [95%]: Chapter's own deck: preference data and Bradley-Terry, DPO
     derivation and gradient, IRPO with the NLL term, chain-of-verification,
     training- vs. inference-time grounding
-- `book_Agentic_AI/lectures_source/Lesson10.1_Open_training_recipes_for_reasoning.txt`
+- `book_Agentic_AI/lectures_source/Lesson10.1_Open_training_recipes_for_reasoning.smd`
   - [40%]: DPO vs. PPO in practice, when to use each, preference hacking and
     mode collapse, preference-data collection at scale
-- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.smd`
   - [25%]: From DPO to verifiable RL, why preference feedback alone is not
     enough
-- `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
+- `msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd`
   - [15%]: Policy search, reward shaping, and the RL vocabulary that PPO
     assumes
 - _Not covered_
@@ -567,19 +567,19 @@
   - What we measure vs. what we care about
 
 ### Slides
-- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.smd`
 
 ### Lesson Materials
-- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.smd`
   - [95%]: Chapter's own deck: verifiability criteria, SWE-bench Verified
     training and pitfalls, BrowseComp, benchmark comparison, reward hacking
     and the verification gap
-- `book_Agentic_AI/lectures_source/Lesson11.1_Lessons_from_training_agentic_models.txt`
+- `book_Agentic_AI/lectures_source/Lesson11.1_Lessons_from_training_agentic_models.smd`
   - [35%]: Reward hacking as pitfall 1, cost of verification at scale,
     trajectory quality and filtering
-- `book_Agentic_AI/lectures_source/Lesson08.1-Learning_to_reason.txt`
+- `book_Agentic_AI/lectures_source/Lesson08.1-Learning_to_reason.smd`
   - [25%]: Preference-based training that verifiable RL replaces or augments
-- `msml610/lectures_source/Lesson02.5-ML_Techniques_Model_Evaluation.txt`
+- `msml610/lectures_source/Lesson02.5-ML_Techniques_Model_Evaluation.smd`
   - [15%]: Train/validation/test discipline and metric choice, which the
     "training on a benchmark" discussion depends on
 - _Not covered_
@@ -616,20 +616,20 @@
   - Common pitfalls in open release
 
 ### Slides
-- `book_Agentic_AI/lectures_source/Lesson10.1_Open_training_recipes_for_reasoning.txt`
+- `book_Agentic_AI/lectures_source/Lesson10.1_Open_training_recipes_for_reasoning.smd`
 
 ### Lesson Materials
-- `book_Agentic_AI/lectures_source/Lesson10.1_Open_training_recipes_for_reasoning.txt`
+- `book_Agentic_AI/lectures_source/Lesson10.1_Open_training_recipes_for_reasoning.smd`
   - [95%]: Chapter's own deck: DPO vs. PPO decision framework, Tulu 3 data and
     training pipeline with ablations, preference-feedback collection,
     OpenScholar, reproducibility checklist and pitfalls
-- `book_Agentic_AI/lectures_source/Lesson08.1-Learning_to_reason.txt`
+- `book_Agentic_AI/lectures_source/Lesson08.1-Learning_to_reason.smd`
   - [40%]: DPO derivation, reward models, PPO pipeline, iterative preference
     optimization, all of which this chapter turns into a recipe
-- `book_Agentic_AI/lectures_source/Lesson11.1_Lessons_from_training_agentic_models.txt`
+- `book_Agentic_AI/lectures_source/Lesson11.1_Lessons_from_training_agentic_models.smd`
   - [30%]: Data curation, synthetic vs. real data, curriculum learning, stable
     training loops
-- `book_Agentic_AI/lectures_source/Lesson07.1-Tool_use_and_retrieval.txt`
+- `book_Agentic_AI/lectures_source/Lesson07.1-Tool_use_and_retrieval.smd`
   - [15%]: RAG pipeline that OpenScholar extends to scientific synthesis
 - _Not covered_
   - [5%]: License and data-governance questions in open releases, and the
@@ -665,20 +665,20 @@
   - Monitoring and metrics that matter
 
 ### Slides
-- `book_Agentic_AI/lectures_source/Lesson11.1_Lessons_from_training_agentic_models.txt`
+- `book_Agentic_AI/lectures_source/Lesson11.1_Lessons_from_training_agentic_models.smd`
 
 ### Lesson Materials
-- `book_Agentic_AI/lectures_source/Lesson11.1_Lessons_from_training_agentic_models.txt`
+- `book_Agentic_AI/lectures_source/Lesson11.1_Lessons_from_training_agentic_models.smd`
   - [95%]: Chapter's own deck: agentic data curation, KIMI K2 and DeepSeek-V3
     case studies, stability and cost of large-scale RL, pitfalls, monitoring
     and recommendations
-- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.smd`
   - [35%]: Verifiable rewards, reward hacking, cost of verification, which the
     case studies apply at scale
-- `book_Agentic_AI/lectures_source/Lesson10.1_Open_training_recipes_for_reasoning.txt`
+- `book_Agentic_AI/lectures_source/Lesson10.1_Open_training_recipes_for_reasoning.smd`
   - [30%]: Open pipeline anatomy, preference-data practices, reproducibility
     lessons
-- `data605/lectures_source/Lesson08.1-Cluster_Architecture.txt`
+- `data605/lectures_source/Lesson08.1-Cluster_Architecture.smd`
   - [10%]: Cluster and network-bandwidth constraints behind the training-cost
     discussion
 - _Not covered_
@@ -715,25 +715,25 @@
 ### TODO
 - [ ] Write the deck for this chapter
 - [ ] Decide whether the causal-planning material in
-  `Lesson15.1-Causal_Reasoning_Agents.txt` belongs here or in chapter 25
+  `Lesson15.1-Causal_Reasoning_Agents.smd` belongs here or in chapter 25
 
 ### Slides
 - TODO: no deck yet
 
 ### Lesson Materials
-- `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
+- `msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd`
   - [35%]: MDPs, value and policy iteration, dynamic decision networks, the
     search-and-planning formalism that "Beyond A*" learns to imitate
-- `msml610/lectures_source/Lesson03.1-Knowledge_representation.txt`
+- `msml610/lectures_source/Lesson03.1-Knowledge_representation.smd`
   - [30%]: Symbolic vs. sub-symbolic representation, neuro-symbolic conceptual
     spaces, logical agents and knowledge bases
-- `book_Agentic_AI/lectures_source/Lesson15.1-Causal_Reasoning_Agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson15.1-Causal_Reasoning_Agents.smd`
   - [25%]: Connecting LLMs to formal causal models, planning under causal
     uncertainty, causal MDPs, worst-case policy robustness
-- `msml610/lectures_source/Lesson03.2-Propositional_and_first_order_logic.txt`
+- `msml610/lectures_source/Lesson03.2-Propositional_and_first_order_logic.smd`
   - [20%]: Inference in propositional and first-order logic, the symbolic half
     of neural-symbolic systems
-- `book_Agentic_AI/lectures_source/Lesson04.1-LLM_Reasoning.txt`
+- `book_Agentic_AI/lectures_source/Lesson04.1-LLM_Reasoning.smd`
   - [15%]: Tree and graph of thought as search over reasoning, serial-depth
     argument behind fast vs. slow thinking
 - _Not covered_
@@ -776,16 +776,16 @@
 - TODO: no deck yet
 
 ### Lesson Materials
-- `book_cs_refreshers/lectures_source/Lesson95.Refresher_game_theory.txt`
+- `book_cs_refreshers/lectures_source/Lesson95.Refresher_game_theory.smd`
   - [45%]: Normal- and extensive-form games, Nash equilibrium, zero-sum and
     repeated games, mechanism design, auctions, MARL, learning in games
-- `book_Agentic_AI/lectures_source/Lesson01.1-What_Is_An_Agentic_AI.txt`
+- `book_Agentic_AI/lectures_source/Lesson01.1-What_Is_An_Agentic_AI.smd`
   - [20%]: Single-agent vs. multi-agent taxonomy, reactive vs. deliberative
     agents
-- `book_AI_Software_Engineering/lectures_source/Lesson14.01_Human_AI_Collaboration_Patterns.txt`
+- `book_AI_Software_Engineering/lectures_source/Lesson14.1_Human_AI_Collaboration_Patterns.smd`
   - [20%]: Division of labor, shared conventions, multiple engineers with one
     or more agents, escalation paths
-- `book_Agentic_AI/lectures_source/Lesson03.1-History_of_LLM_Agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson03.1-History_of_LLM_Agents.smd`
   - [10%]: Compounding errors and loop failures, which reappear as multi-agent
     failure modes
 - _Not covered_
@@ -825,16 +825,16 @@
 - TODO: no deck yet
 
 ### Lesson Materials
-- `book_AI_Software_Engineering/lectures_source/Lesson02.01_AI_Pair_Programming_Workflows.txt`
+- `book_AI_Software_Engineering/lectures_source/Lesson02.1_AI_Pair_Programming_Workflows.smd`
   - [30%]: MCP as one protocol for many tools, agent surfaces, CI integration,
     background sessions, the framework layer seen from the product side
-- `book_Agentic_AI/lectures_source/Lesson06.1-Inference_time_techniques.txt`
+- `book_Agentic_AI/lectures_source/Lesson06.1-Inference_time_techniques.smd`
   - [25%]: OPRO as prompt optimization without gradients, the mechanism DSPy
     teleprompters generalize
-- `book_AI_Software_Engineering/lectures_source/Lesson03.01_Prompt_Engineering_for_Code.txt`
+- `book_AI_Software_Engineering/lectures_source/Lesson03.1_Prompt_Engineering_for_Code.smd`
   - [25%]: Prompt patterns as reusable templates, prompts as versioned
     artifacts, decomposition into scoped steps
-- `book_Agentic_AI/lectures_source/Lesson01.1-What_Is_An_Agentic_AI.txt`
+- `book_Agentic_AI/lectures_source/Lesson01.1-What_Is_An_Agentic_AI.smd`
   - [15%]: Tool schemas and the agent-tool-environment decomposition that a
     framework materializes
 - _Not covered_
@@ -874,15 +874,15 @@
 - TODO: no deck yet
 
 ### Lesson Materials
-- `book_Agentic_AI/lectures_source/Lesson03.1-History_of_LLM_Agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson03.1-History_of_LLM_Agents.smd`
   - [30%]: WebShop environment and action space, the human-machine gap in web
     agents, brittle parsing and grounding
-- `book_Agentic_AI/lectures_source/Lesson05.1-Reasoning_Memory_and_Planning.txt`
+- `book_Agentic_AI/lectures_source/Lesson05.1-Reasoning_Memory_and_Planning.smd`
   - [30%]: WebDreamer model-based planning for web agents, simulate-before-act,
     efficiency and real-world results
-- `book_Agentic_AI/lectures_source/Lesson01.1-What_Is_An_Agentic_AI.txt`
+- `book_Agentic_AI/lectures_source/Lesson01.1-What_Is_An_Agentic_AI.smd`
   - [20%]: Observation spaces, environment taxonomy, and action grounding
-- `book_Agentic_AI/lectures_source/Lesson06.1-Inference_time_techniques.txt`
+- `book_Agentic_AI/lectures_source/Lesson06.1-Inference_time_techniques.smd`
   - [15%]: Compute-optimal search and best-of-N, the inference-time budget that
     tree search spends
 - _Not covered_
@@ -921,13 +921,13 @@
 - TODO: no deck yet
 
 ### Lesson Materials
-- `book_Agentic_AI/lectures_source/Lesson01.1-What_Is_An_Agentic_AI.txt`
+- `book_Agentic_AI/lectures_source/Lesson01.1-What_Is_An_Agentic_AI.smd`
   - [25%]: Grounding problem, action spaces, environment taxonomy, observation
     definition
-- `book_Agentic_AI/lectures_source/Lesson03.1-History_of_LLM_Agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson03.1-History_of_LLM_Agents.smd`
   - [15%]: Brittle parsing and grounding, compounding errors, which dominate
     GUI agent failures
-- `book_AI_Software_Engineering/lectures_source/Lesson14.01_Human_AI_Collaboration_Patterns.txt`
+- `book_AI_Software_Engineering/lectures_source/Lesson14.1_Human_AI_Collaboration_Patterns.smd`
   - [15%]: Confirmation points for hard-to-reverse actions, three-tier
     oversight, which computer-use agents need
 - _Not covered_
@@ -967,23 +967,23 @@
 - [ ] Add a SWE-bench-style tutorial harness
 
 ### Slides
-- TODO: no deck yet; see `book_AI_Software_Engineering/lectures_source/*.txt`
+- TODO: no deck yet; see `book_AI_Software_Engineering/lectures_source/*.smd`
 
 ### Lesson Materials
-- `book_AI_Software_Engineering/lectures_source/Lesson01.01_LLM_Assisted_Code_Generation.txt`
+- `book_AI_Software_Engineering/lectures_source/Lesson01.1_LLM_Assisted_Code_Generation.smd`
   - [55%]: Code generation mechanics, prompt anatomy, hallucination taxonomy
     and its root causes, context budget and degradation on large codebases
-- `book_AI_Software_Engineering/lectures_source/Lesson02.01_AI_Pair_Programming_Workflows.txt`
+- `book_AI_Software_Engineering/lectures_source/Lesson02.1_AI_Pair_Programming_Workflows.smd`
   - [50%]: Autocomplete vs. chat vs. agentic assistance, Claude Code / Copilot
     / Cursor, CLI and IDE surfaces, MCP, CI integration, automated PR review
-- `book_AI_Software_Engineering/lectures_source/Lesson03.01_Prompt_Engineering_for_Code.txt`
+- `book_AI_Software_Engineering/lectures_source/Lesson03.1_Prompt_Engineering_for_Code.smd`
   - [45%]: Specs and acceptance criteria, few-shot patterns, test-first
     prompting, self-refine and self-debug, decomposition and the refinement
     loop
-- `book_Agentic_AI/lectures_source/Lesson06.1-Inference_time_techniques.txt`
+- `book_Agentic_AI/lectures_source/Lesson06.1-Inference_time_techniques.smd`
   - [30%]: Self-debug with unit-test feedback, grounded verifiers, which are
     the core loop of a coding agent
-- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.smd`
   - [25%]: SWE-bench Verified as both benchmark and training signal, setup
     burden, wrong-test edge cases
 - _Not covered_
@@ -1022,16 +1022,16 @@
 - TODO: no deck yet
 
 ### Lesson Materials
-- `book_AI_Software_Engineering/lectures_source/Lesson14.01_Human_AI_Collaboration_Patterns.txt`
+- `book_AI_Software_Engineering/lectures_source/Lesson14.1_Human_AI_Collaboration_Patterns.smd`
   - [35%]: Three collaboration modes, the handoff problem, task-risk matching,
     three-tier oversight, escalation when the agent is uncertain,
     machine-readable contracts, team-level impact measurement
-- `book_Agentic_AI/lectures_source/Lesson07.1-Tool_use_and_retrieval.txt`
+- `book_Agentic_AI/lectures_source/Lesson07.1-Tool_use_and_retrieval.smd`
   - [30%]: Enterprise grounding strategies, high-fidelity grounding for
     regulated domains, fact-checking grounded answers
-- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.smd`
   - [15%]: Verifiable task design, which enterprise benchmarks copy
-- `data605/lectures_source/Lesson07.1-Airflow.txt`
+- `data605/lectures_source/Lesson07.1-Airflow.smd`
   - [10%]: Workflow orchestration and DAG scheduling, the classical baseline
     that agentic workflows are compared against
 - _Not covered_
@@ -1070,16 +1070,16 @@
 - TODO: no deck yet
 
 ### Lesson Materials
-- `book_Agentic_AI/lectures_source/Lesson10.1_Open_training_recipes_for_reasoning.txt`
+- `book_Agentic_AI/lectures_source/Lesson10.1_Open_training_recipes_for_reasoning.smd`
   - [30%]: OpenScholar motivation, RAG plus reasoning pipeline, training data,
     results, which cover the scientific-synthesis topic
-- `book_Agentic_AI/lectures_source/Lesson07.1-Tool_use_and_retrieval.txt`
+- `book_Agentic_AI/lectures_source/Lesson07.1-Tool_use_and_retrieval.smd`
   - [25%]: Retrieval quality, fact-checking grounded answers, long-context vs.
     retrieval trade-off for literature-scale corpora
-- `msml610/lectures_source/Lesson02.6-ML_Techniques_How_To_Do_Research.txt`
+- `msml610/lectures_source/Lesson02.6-ML_Techniques_How_To_Do_Research.smd`
   - [25%]: How to do research, hypothesis framing, and experiment design, the
     human process agents are asked to imitate
-- `book_Agentic_AI/lectures_source/Lesson08.1-Learning_to_reason.txt`
+- `book_Agentic_AI/lectures_source/Lesson08.1-Learning_to_reason.smd`
   - [15%]: Chain-of-verification for reducing fabricated claims
 - _Not covered_
   - [55%]: The Virtual Lab and Paper2Agent case studies, wet-lab validation
@@ -1117,16 +1117,16 @@
 - TODO: no deck yet
 
 ### Lesson Materials
-- `book_Agentic_AI/lectures_source/Lesson04.1-LLM_Reasoning.txt`
+- `book_Agentic_AI/lectures_source/Lesson04.1-LLM_Reasoning.smd`
   - [30%]: Chain-of-thought and its variants, tree/graph search over reasoning,
     self-consistency, the substrate proof search runs on
-- `msml610/lectures_source/Lesson03.2-Propositional_and_first_order_logic.txt`
+- `msml610/lectures_source/Lesson03.2-Propositional_and_first_order_logic.smd`
   - [25%]: Syntax, semantics, and inference in propositional and first-order
     logic, the formal-proof background
-- `book_Agentic_AI/lectures_source/Lesson06.1-Inference_time_techniques.txt`
+- `book_Agentic_AI/lectures_source/Lesson06.1-Inference_time_techniques.smd`
   - [20%]: Compute-optimal search and best-of-N, the search budget a prover
     spends per goal
-- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.smd`
   - [20%]: Verifiable rewards, which a proof checker supplies exactly
 - _Not covered_
   - [55%]: AlphaProof, LeanDojo, autoformalization, Lean-STaR, ImProver, and
@@ -1164,17 +1164,17 @@
 - TODO: no deck yet
 
 ### Lesson Materials
-- `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
+- `msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd`
   - [45%]: MDPs and POMDPs, utilities over time, Bellman equation, value and
     policy iteration, model-based vs. model-free, active vs. passive RL, safe
     exploration, policy search, generalization in RL
-- `book_Agentic_AI/lectures_source/Lesson05.1-Reasoning_Memory_and_Planning.txt`
+- `book_Agentic_AI/lectures_source/Lesson05.1-Reasoning_Memory_and_Planning.smd`
   - [25%]: World models for planning, simulate-before-act, long-term memory as
     a skill library
-- `book_Agentic_AI/lectures_source/Lesson06.1-Inference_time_techniques.txt`
+- `book_Agentic_AI/lectures_source/Lesson06.1-Inference_time_techniques.smd`
   - [20%]: LLMs as optimizers and self-debug, the mechanism behind LLM-written
     reward functions
-- `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt`
+- `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.smd`
   - [10%]: Exploration-exploitation trade-off underlying curriculum design
 - _Not covered_
   - [55%]: Voyager, Eureka, DrEureka, Gran Turismo, and SLAC themselves, plus
@@ -1214,15 +1214,15 @@
 - TODO: no deck yet
 
 ### Lesson Materials
-- `msml610/lectures_source/Lesson02.5-ML_Techniques_Model_Evaluation.txt`
+- `msml610/lectures_source/Lesson02.5-ML_Techniques_Model_Evaluation.smd`
   - [40%]: Train/validation/test splits, in- vs. out-of-sample error, metric
     choice, precision/recall and AUC, model selection as learning
-- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.smd`
   - [40%]: SWE-bench and BrowseComp structure, benchmark comparison, solving
     rate vs. generalization, reward hacking and the verification gap
-- `msml610/lectures_source/Lesson02.6-ML_Techniques_How_To_Do_Research.txt`
+- `msml610/lectures_source/Lesson02.6-ML_Techniques_How_To_Do_Research.smd`
   - [20%]: Experimental discipline and how to claim progress honestly
-- `book_Agentic_AI/lectures_source/Lesson11.1_Lessons_from_training_agentic_models.txt`
+- `book_Agentic_AI/lectures_source/Lesson11.1_Lessons_from_training_agentic_models.smd`
   - [15%]: Monitoring and metrics that matter, cost of verification at scale
 - _Not covered_
   - [40%]: The agent-evaluation survey taxonomy and the statistical machinery
@@ -1260,19 +1260,19 @@
 - TODO: no deck yet
 
 ### Lesson Materials
-- `book_Agentic_AI/lectures_source/Lesson11.1_Lessons_from_training_agentic_models.txt`
+- `book_Agentic_AI/lectures_source/Lesson11.1_Lessons_from_training_agentic_models.smd`
   - [40%]: KIMI K2 pipeline, cost and efficiency, DeepSeek-V3 mixture-of-
     experts, expert specialization, cost breakdown, cost vs. capability
-- `data605/lectures_source/Lesson11.2-Cloud_Computing_Enablers.txt`
+- `data605/lectures_source/Lesson11.2-Cloud_Computing_Enablers.smd`
   - [30%]: Data-center capex/opex, virtualization, Docker, programming
     frameworks, cloud benefits and limitations
-- `data605/lectures_source/Lesson08.1-Cluster_Architecture.txt`
+- `data605/lectures_source/Lesson08.1-Cluster_Architecture.smd`
   - [25%]: Cluster architecture, network bandwidth, storage infrastructure,
     distributed file systems
-- `book_Agentic_AI/lectures_source/Lesson02.1-LLM_Building_Blocks.txt`
+- `book_Agentic_AI/lectures_source/Lesson02.1-LLM_Building_Blocks.smd`
   - [20%]: Context window, KV cache, attention complexity, the mechanisms that
     set serving cost
-- `data605/lectures_source/Lesson11.1-Cloud_Computing.txt`
+- `data605/lectures_source/Lesson11.1-Cloud_Computing.smd`
   - [15%]: IaaS/PaaS/SaaS layering and deployment models
 - _Not covered_
   - [30%]: Agent-specific serving concerns (tool-call routing, sandbox pools,
@@ -1311,15 +1311,15 @@
 - TODO: no deck yet
 
 ### Lesson Materials
-- `book_AI_Software_Engineering/lectures_source/Lesson14.01_Human_AI_Collaboration_Patterns.txt`
+- `book_AI_Software_Engineering/lectures_source/Lesson14.1_Human_AI_Collaboration_Patterns.smd`
   - [25%]: Confirmation points for hard-to-reverse actions, what to delegate
     vs. what needs a human, three-tier oversight, risk matrix
-- `book_Agentic_AI/lectures_source/Lesson07.1-Tool_use_and_retrieval.txt`
+- `book_Agentic_AI/lectures_source/Lesson07.1-Tool_use_and_retrieval.smd`
   - [20%]: Retrieval stores and grounding pipelines, the assets that poisoning
     attacks target
-- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.smd`
   - [15%]: Reward hacking, the training-time analogue of adversarial gaming
-- `book_Agentic_AI/lectures_source/Lesson01.1-What_Is_An_Agentic_AI.txt`
+- `book_Agentic_AI/lectures_source/Lesson01.1-What_Is_An_Agentic_AI.smd`
   - [10%]: Tool schemas, action spaces, and the autonomy spectrum that sets the
     blast radius
 - _Not covered_
@@ -1354,27 +1354,27 @@
   - What regulators can and cannot measure
 
 ### TODO
-- [ ] Split `Lesson15.1-Causal_Reasoning_Agents.txt` between this chapter and
+- [ ] Split `Lesson15.1-Causal_Reasoning_Agents.smd` between this chapter and
   chapter 12, or promote it to its own chapter
 
 ### Slides
-- `book_Agentic_AI/lectures_source/Lesson15.1-Causal_Reasoning_Agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson15.1-Causal_Reasoning_Agents.smd`
   - Covers the causal-trust portion only; the capability-evaluation and policy
     portions still need a deck
 
 ### Lesson Materials
-- `book_Agentic_AI/lectures_source/Lesson15.1-Causal_Reasoning_Agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson15.1-Causal_Reasoning_Agents.smd`
   - [45%]: Transparency and interpretability, causal explanations for
     decisions, robustness through causal constraints, causal fairness
     definitions, safety constraints on harmful outcomes, causal monitoring
-- `msml610/lectures_source/Lesson13.1-Explainability.txt`
+- `msml610/lectures_source/Lesson13.1-Explainability.smd`
   - [40%]: Accuracy vs. interpretability, taxonomy of explainability methods,
     SHAP and LIME, permutation importance, counterfactual explanations,
     faithfulness and stability of explanations
-- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson09.1_Post_training_and_verifiable_agents.smd`
   - [15%]: Verification gaps and reward hacking, which capability evaluations
     must anticipate
-- `book_AI_Software_Engineering/lectures_source/Lesson14.01_Human_AI_Collaboration_Patterns.txt`
+- `book_AI_Software_Engineering/lectures_source/Lesson14.1_Human_AI_Collaboration_Patterns.smd`
   - [15%]: Calibrating trust vs. reliance, evidence and provenance for team
     trust
 - _Not covered_
@@ -1416,14 +1416,14 @@
 - TODO: no deck yet
 
 ### Lesson Materials
-- `book_Agentic_AI/lectures_source/Lesson10.1_Open_training_recipes_for_reasoning.txt`
+- `book_Agentic_AI/lectures_source/Lesson10.1_Open_training_recipes_for_reasoning.smd`
   - [35%]: Why open training recipes matter, the reproducibility challenge and
     trade-off, pitfalls in open release, open problems and future directions
-- `book_Agentic_AI/lectures_source/Lesson11.1_Lessons_from_training_agentic_models.txt`
+- `book_Agentic_AI/lectures_source/Lesson11.1_Lessons_from_training_agentic_models.smd`
   - [25%]: Emerging patterns, recommendations for practitioners, open problems
-- `book_Agentic_AI/lectures_source/Lesson03.1-History_of_LLM_Agents.txt`
+- `book_Agentic_AI/lectures_source/Lesson03.1-History_of_LLM_Agents.smd`
   - [20%]: Open challenges on the road to general-purpose agents
-- `book_Agentic_AI/lectures_source/Lesson01.1-What_Is_An_Agentic_AI.txt`
+- `book_Agentic_AI/lectures_source/Lesson01.1-What_Is_An_Agentic_AI.smd`
   - [10%]: Summary and open questions on what "agentic" will mean next
 - _Not covered_
   - [50%]: The open-vs-closed policy argument, Cybench results, and the
@@ -1432,19 +1432,19 @@
 # Appendix
 
 ## Refreshers
-- `book_cs_refreshers/lectures_source/Lesson95.Refresher_game_theory.txt`:
+- `book_cs_refreshers/lectures_source/Lesson95.Refresher_game_theory.smd`:
   background for chapter 13
-- `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`: MDP and RL
+- `msml610/lectures_source/Lesson12.1-Reinforcement_learning.smd`: MDP and RL
   background for chapters 08, 09, 12, and 21
-- `msml610/lectures_source/Lesson03.1-Knowledge_representation.txt` and
-  `msml610/lectures_source/Lesson03.2-Propositional_and_first_order_logic.txt`:
+- `msml610/lectures_source/Lesson03.1-Knowledge_representation.smd` and
+  `msml610/lectures_source/Lesson03.2-Propositional_and_first_order_logic.smd`:
   symbolic background for chapters 12 and 20
 
 ## Resources
 - `book_Agentic_AI/lectures_source/L01.08_resources.md`: reading list that backs
   the per-chapter reference lists
-- `book_Agentic_AI/berkeley_classes.txt` and
-  `book_Agentic_AI/berkeley_classes2.txt`: transcripts of the Berkeley LLM
+- `book_Agentic_AI/berkeley_classes.smd` and
+  `book_Agentic_AI/berkeley_classes2.smd`: transcripts of the Berkeley LLM
   agents course, used as a cross-check on chapter coverage
 - `book_Agentic_AI/agentic_ai_toc.md`: the source table of contents, including
   the per-chapter reference URLs

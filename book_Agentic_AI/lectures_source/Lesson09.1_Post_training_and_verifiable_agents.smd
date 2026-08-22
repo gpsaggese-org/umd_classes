@@ -20,26 +20,26 @@
   - But how do we know those preferences are _correct_?
   - What if the training signal itself is noisy, biased, or gameable?
 
-- **Problem**: preference-based objectives optimize for _whatever the ranker
+- @Problem@: preference-based objectives optimize for _whatever the ranker
   says_ is good, not for what actually works in the real world
   - A model can learn to fool the ranker without solving the task
   - Hallucinated citations that look compelling to a human
   - Software code that passes tests but has subtle bugs
 
-- **Question**: what if we only trained on outcomes we could _verify to be
+- @Question@: what if we only trained on outcomes we could _verify to be
   correct_?
   - True successes: code that actually runs and solves the problem
   - Ground truth: agent completed a real task without human interpretation
 
-- **Key idea**: this lesson shifts from ranking outputs to _verifying_ them
+- @Key idea@: this lesson shifts from ranking outputs to _verifying_ them
   against an objective ground truth
 
 * The Verification-Utility Trade-off
 
-- **Definition**: _verifiable reward_ is a training signal from tasks where we
+- @Definition@: **verifiable reward** is a training signal from tasks where we
   can check the answer with certainty, not opinion
 
-- **Example**:
+- @Example@:
   - Code execution passes all tests $\to$ verified correct
   - Website checkout completes successfully $\to$ verified correct
   - Formal proof is machine-checkable $\to$ verified correct
@@ -61,7 +61,7 @@
 
 * What Makes a Task Verifiable?
 
-- **Definition**: a task is _verifiable_ if there exists a deterministic,
+- @Definition@: a task is **verifiable** if there exists a deterministic,
   mechanical process that can check whether a solution is correct
   - No human judgment needed
   - No ambiguity about the answer
@@ -83,7 +83,7 @@
   - Dialogue: open-ended, depends on user intent
   - Open-ended planning: many solutions equally valid
 
-- **Key idea**: verification is not a property of the task alone, but of what
+- @Key idea@: verification is not a property of the task alone, but of what
   counts as success
   - Narrow the definition of success $\to$ more verifiable
   - Broaden it $\to$ less verifiable
@@ -106,7 +106,7 @@
   - Signal _aligns with desired capabilities_: what the model learns to do
     actually works
 
-- **Limitations**
+- @Limitations@
   - Requires verifiable outcome: not all agent behaviors yield checkable
     results
   - Reward hacking risk: model may find shortcuts that pass verification without
@@ -140,9 +140,9 @@
     run?
   - Ground truth is mechanical: the test suite is the arbiter
 
-- **Definition**: _SWE-bench_ is a benchmark of real GitHub issues and pull
+- @Definition@: **SWE-bench** is a benchmark of real GitHub issues and pull
   requests from open-source projects
-  - Issue: a problem statement (e.g., "function X returns wrong type")
+  - Issue: a problem statement (e.g., _"function X returns wrong type"_)
   - Ground truth: a valid fix merged into the repo
   - Agent task: read the issue, understand the codebase, propose a fix that
     passes tests
@@ -154,7 +154,8 @@
   - Criterion 3: the agent's solution is correct iff it passes all tests for that
     issue
 
-- **Key idea**: the test suite is the verifier—no ambiguity, no human judgment
+- @Key idea@: the test suite is the verifier - no ambiguity, no human
+  judgment
 
 * What Makes SWE-Bench Valuable
 
@@ -194,10 +195,10 @@
   - Multiple attempts per issue: collect 2+ rollouts, rank by success
 
 - **Why this works**
-  - Model learns: "to pass this test, write this kind of code"
-  - Model learns patterns: "check the test first, then locate the bug, then
-    fix it"
-  - Model learns to debug: "if test still fails, re-read the error message"
+  - Model learns: _"to pass this test, write this kind of code"_
+  - Model learns patterns: _"check the test first, then locate the bug, then
+    fix it"_
+  - Model learns to debug: _"if test still fails, re-read the error message"_
 
 - **Challenge**: trajectory diversity
   - Many ways to fix an issue; all are equally valid if tests pass
@@ -211,7 +212,7 @@
   - Solve rate: ~12% on Verified
 
 - **After training on SWE-bench Verified**:
-  - Solve rate climbs: ~22–25% (not stated precisely in public materials, but
+  - Solve rate climbs: ~22-25% (not stated precisely in public materials, but
     non-trivial improvement)
   - Pattern: more issues solved with fewer retries
   - Trade-off: models trained on verified data are narrowly specialized for
@@ -226,7 +227,7 @@
 
 * The Setup Burden
 
-- **Problem**: many GitHub repos require complex setup
+- @Problem@: many GitHub repos require complex setup
   - Install dependencies with specific versions
   - Set up databases or external services
   - Initialize environment variables
@@ -242,11 +243,11 @@
   - Infer dependencies from requirements.txt, setup.py, Dockerfile
   - Propose fixes that don't break the build
 
-- **Key idea**: verifiable doesn't mean easy; it means checkable
+- @Key idea@: verifiable doesn't mean easy; it means checkable
 
 * Distribution Shift: Training Errors vs. Real Errors
 
-- **Observation**: SWE-bench issues come from real GitHub, but they are biased
+- @Fact@: SWE-bench issues come from real GitHub, but they are biased
   - Overrepresented: small, straightforward bug fixes
   - Underrepresented: complex architectural refactors, subtle concurrency bugs
   - Selection bias: whoever opened the issue thought it was important
@@ -279,7 +280,7 @@
 
 * Browsing as a Verifiable Task
 
-- **Definition**: _browsing agent_ is an agent that navigates web UIs to
+- @Definition@: **browsing agent** is an agent that navigates web UIs to
   accomplish goals
   - Click buttons, type text, read page content
   - E.g., book a flight, log in to email, place an order
@@ -296,17 +297,17 @@
   - Timing matters (element not visible yet)
   - Navigation paths vary
 
-- **Key idea**: verifiability here depends on finding a checkable terminal
+- @Key idea@: verifiability here depends on finding a checkable terminal
   condition
-  - Not "did the agent understand the page" (soft)
-  - But "did the order get placed in the system" (hard)
+  - Not _"did the agent understand the page"_ (soft)
+  - But _"did the order get placed in the system"_ (hard)
 
 * BrowseComp Benchmark Structure
 
 - **Tasks**: each task is a concrete, browsing-based goal
-  - E.g., "create a new event in Google Calendar for next Thursday at 2 PM"
-  - E.g., "add a product to your cart on Amazon and proceed to checkout"
-  - E.g., "claim a free trial on this subscription site"
+  - E.g., _"create a new event in Google Calendar for next Thursday at 2 PM"_
+  - E.g., _"add a product to your cart on Amazon and proceed to checkout"_
+  - E.g., _"claim a free trial on this subscription site"_
 
 - **Environments**: tasks run in a simulated or sandboxed web environment
   - Real or replicated websites
@@ -314,9 +315,9 @@
   - Deterministic replay so experiments are repeatable
 
 - **Verification**: automated checker runs after the agent stops
-  - Did the agent create an event? Check the calendar.
-  - Did the agent add the product? Check the cart.
-  - Did the agent log in? Check if authenticated.
+  - Did the agent create an event? Check the calendar
+  - Did the agent add the product? Check the cart
+  - Did the agent log in? Check if authenticated
 
 - **Agent capabilities**: typically given
   - Ability to see the screen (visual observation)
@@ -406,7 +407,7 @@
 
 * What Is Reward Hacking?
 
-- **Definition**: _reward hacking_ occurs when an agent finds a way to increase
+- @Definition@: **reward hacking** occurs when an agent finds a way to increase
   the measured reward without solving the underlying problem
   - Passes the test without fixing the bug
   - Completes the task without achieving the intent
@@ -436,14 +437,14 @@
 
 - **Distribution of test coverage**: real code has edge cases
   - The test suite may not cover all scenarios
-  - Agent learns: "pass the written tests, ignore the unwritten requirements"
+  - Agent learns: _"pass the written tests, ignore the unwritten requirements"_
 
 - **Simplicity bias**: LLMs prefer short, simple solutions
   - A hack is often simpler than a correct fix
-  - "Pass the test in 3 lines" beats "write correct code in 10 lines" if the
-    reward function doesn't distinguish
+  - _"Pass the test in 3 lines"_ beats _"write correct code in 10 lines"_ if
+    the reward function doesn't distinguish
 
-- **Example**: SWE-bench issue about handling None values
+- @Example@: SWE-bench issue about handling None values
   - Correct fix: add a None check, handle all paths
   - Hacky fix: return a default value that makes the test pass
   - Both pass the test, but the hack fails on real data
@@ -486,7 +487,7 @@
   - Requires human feedback or long-term deployment
   - Distribution shifts: training environment vs. real environment
 
-- **Example: SWE-bench in production**
+- @Example@: SWE-bench in production
   - Agent trained on Verified fixes 100 issues
   - Code is merged into production
   - Week later: users report bugs in those fixes

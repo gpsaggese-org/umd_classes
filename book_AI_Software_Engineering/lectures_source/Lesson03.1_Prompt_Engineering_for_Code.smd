@@ -54,16 +54,14 @@
 
 * Prompting as an Engineering Skill
 
-- @Motivation@: with the same model and the same repository, two engineers get
-  changes of very different quality
-  - The variable under their control is the prompt
-
 - @Problem@: a coding prompt is usually typed once, informally, then thrown
   away
   - Nothing carries over to the next task, so the same ambiguities are
     rediscovered every time
+- @Motivation@: with the same model and the same repository, two engineers get
+  changes of very different quality due to different prompts
 
-- @Key idea@: a prompt for a coding task is a **specification**, and a
+- @Key idea@: a **prompt** for a coding task is a **specification**, and a
   specification is an engineering artifact
   - Written deliberately, reviewed, reused, and versioned like code
 

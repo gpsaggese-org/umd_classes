@@ -17,28 +17,28 @@
 
 * Why Learning to Reason
 
-- **Motivation**: every reasoning technique so far (e.g., chain-of-thought,
+- @Motivation@: every reasoning technique so far (e.g., chain-of-thought,
   OPRO, Self-Debug, and compute-optimal search) operates entirely at
   _inference time_
   - The weights stay fixed
   - Only how the model samples, searches, or revises at query time changes
 
-- **Question**:
+- @Question@:
   - Could a grounded feedback signal be baked directly into the weights,
     instead of re-derived at every query?
   - What kind of training signal teaches a model to reason _better_, rather
     than just to imitate more text?
 
-- **Key idea**: Move the grounding-and-feedback approach from inference time to
+- @Key idea@: Move the grounding-and-feedback approach from inference time to
   training time
 
 * Two Routes to Better Reasoning, and a Roadmap
 
-- **Definition**: _preference-based training_ updates a model's weights from
+- @Definition@: _preference-based training_ updates a model's weights from
   pairs of outputs ranked better vs. worse, rather than from one "correct"
   target sequence
 
-- Two threads to follow
+- @Components@: Two threads to follow
   - _Thread 1_: turn preference data into a training objective, from reward
     models to Direct Preference Optimization
   - _Thread 2_:
@@ -58,64 +58,64 @@
 
 * What Objective Trains a Better Reasoner?
 
-- **Question**:
+- @Question@:
   - Supervised fine-tuning needs a single "correct" target sequence per prompt
   - What if there is no unique correct way to reason, only better and worse
     attempts?
 
-- **Problem**: for open-ended tasks (summaries, dialogue, multi-step
+- @Problem@: for open-ended tasks (summaries, dialogue, multi-step
   reasoning), it is often easier for a labeler to _compare_ two candidate
   answers than to _write_ the ideal one
 
-- **Key idea**: train from comparisons, not from single labeled targets
+- @Key idea@: train from comparisons, not from single labeled targets
   - This reframes "learning to reason better" as "learning from preference
     data"
 
 * Preference Data: Definition
 
-- **Definition**: a _preference pair_ is a tuple $(x, y_w, y_l)$ where
+- @Definition@: a _preference pair_ is a tuple $(x, y_w, y_l)$ where
   - $x$ is a prompt
   - $y_w$ is a preferred (winning) response
   - $y_l$ is a dispreferred (losing) response
 
-- **Example**:
+- @Example@:
   - $x$ is _"Summarize this article"_
   - $y_w$ is a concise, accurate summary
   - $y_l$ is a verbose or inaccurate one
 
-- Preference pairs are collected by presenting two candidate responses for the
-  same $x$ to a labeler (human or automatic) and asking which is better
+- @Remark@: Preference pairs are collected by presenting two candidate responses
+  for the same $x$ to a labeler (human or automatic) and asking which is better
 
-- **Key idea**: a preference pair says nothing about how good $y_w$ is in
+- @Key idea@: a preference pair says nothing about how good $y_w$ is in
   absolute terms, only that it beats $y_l$ for this particular $x$
 
 * The Bradley-Terry Model of Preferences
 
-- **Definition**: the _Bradley-Terry model_ assumes preferences come from an
+- @Definition@: the _Bradley-Terry model_ assumes preferences come from an
   underlying scalar reward $r(x,y)$, with the probability that $y_w$ beats
   $y_l$ given by
   $$
-  \Pr(y_w \succ y_l \mid x) = \sigma(r(x,y_w) - r(x,y_l))
+  \Pr(y_w \succ y_l | x) = \sigma(r(x,y_w) - r(x,y_l))
   $$
   where $\sigma$ is the logistic function
 
-- **Key idea**: preferences are treated as noisy comparisons of an underlying
+- @Key idea@: preferences are treated as noisy comparisons of an underlying
   reward
   - Larger reward gaps make lopsided preferences more likely
   - Near-zero gaps make close calls more likely
 
-- **Question**: how would a model actually learn this reward $r$?
+- @Question@: how would a model actually learn this reward $r$?
 
 * Classical Pipeline: Reward Model and PPO
 
 ::: columns
 :::: {.column width=75%}
-- **Solution** (classical RLHF)
+- @Solution@ (classical RLHF)
   - Fit a reward model to the Bradley-Terry likelihood on labeled preference
     pairs
   - Then optimize the policy against it
 
-- **Steps**:
+- @Algorithm@:
   1. Collect preference pairs $(x, y_w, y_l)$ from human labelers
   2. Train a reward model $r_\phi(x,y)$ to maximize the Bradley-Terry
      log-likelihood of the observed preferences
@@ -126,7 +126,7 @@
        - \beta \, D_{KL}\big(\pi_\theta \,\|\, \pi_{ref}\big)
      $$
 
-- **Cons**:
+- @Cons@:
   - Two separate training stages, each with its own instability
   - PPO needs on-policy sampling, a value function, and careful reward-scale
     and KL tuning
@@ -152,84 +152,84 @@ digraph RLHF {
 
 * Can We Skip the Reward Model?
 
-- **Question**: the reward model above is itself trained by maximizing the
+- @Question@: the reward model above is itself trained by maximizing the
   Bradley-Terry likelihood from the previous slide; is a separate network
   needed at all?
 
-- **Motivation**: PPO's instability and cost come from optimizing an _RL_
+- @Motivation@: PPO's instability and cost come from optimizing an _RL_
   objective against $r_\phi$, not from the reward model's existence by itself
 
-- **Key idea** (Rafailov et al., 2023):
+- @Key idea@ (Rafailov et al., 2023):
   - The KL-regularized RLHF objective has a closed-form optimal policy
   - So the whole reward-model-then-RL pipeline can be replaced by directly
     fitting that closed form
 
 * The Optimal Policy in Closed Form
 
-- **Fact**: for a fixed reward $r$, the policy maximizing
+- @Fact@: for a fixed reward $r$, the policy maximizing
   $$\EE_{\pi}[r(x,y)] - \beta D_{KL}(\pi \| \pi_{ref})$$
   has a closed-form solution
   $$
-  \pi^*(y \mid x) = \frac{1}{Z(x)} \, \pi_{ref}(y \mid x) \,
+  \pi^*(y | x) = \frac{1}{Z(x)} \, \pi_{ref}(y | x) \,
     \exp \left(\frac{1}{\beta} r(x,y)\right)
   $$
   where $Z(x) = \sum_y \pi_{ref}(y|x) \exp(r(x,y)/\beta)$ normalizes the
   distribution
 
-- **Interpretation**: the optimal policy _reweights_ the reference policy
+- @Interpretation@: the optimal policy _reweights_ the reference policy
   toward higher-reward responses, with $\beta$ controlling how far it may
   drift from $\pi_{ref}$
 
-- **Problem**: $Z(x)$ sums over every possible response, intractable to
+- @Problem@: $Z(x)$ sums over every possible response, intractable to
   compute directly
 
 * Reparameterizing the Reward via the Policy
 
-- **Key idea**: solve the closed form above for $r$ in terms of $\pi^*$
+- @Key idea@: solve the closed form above for $r$ in terms of $\pi^*$
   instead of the other way around
   $$
-  r(x,y) = \beta \log \frac{\pi^*(y\mid x)}{\pi_{ref}(y\mid x)}
+  r(x,y) = \beta \log \frac{\pi^*(y | x)}{\pi_{ref}(y | x)}
     + \beta \log Z(x)
   $$
 
-- **Definition**: call
-  $r_\theta(x,y) \defeq \beta \log \dfrac{\pi_\theta(y\mid x)}{\pi_{ref}(y\mid x)}$
+- @Definition@: call
+  $r_\theta(x,y) \defeq \beta \log \dfrac{\pi_\theta(y | x)}{\pi_{ref}(y | x)}$
   the _implicit reward_ carried by a candidate policy $\pi_\theta$
   - No separate reward network is ever trained
   - The policy's own log-probabilities play the role of the reward
 
 * The DPO Loss
 
-- **Solution**: substitute the implicit reward $r_\theta$ into the
+- @Solution@: substitute the implicit reward $r_\theta$ into the
   Bradley-Terry preference likelihood
   - The intractable partition function $Z(x)$ cancels, since $y_w$ and $y_l$
     share the same prompt $x$
 
-- Maximizing the likelihood of the observed preferences gives the _Direct
-  Preference Optimization_ (DPO) loss
+- @Definition@: Maximizing the likelihood of the observed preferences gives the
+  _Direct Preference Optimization_ (DPO) loss
   $$
   \mathcal{L}_{DPO}(\pi_\theta; \pi_{ref})
     = -\EE_{(x,y_w,y_l) \sim D}
         \left[
           \log \sigma\!\left(
-            \beta \log \frac{\pi_\theta(y_w\mid x)}{\pi_{ref}(y_w\mid x)}
-            - \beta \log \frac{\pi_\theta(y_l\mid x)}{\pi_{ref}(y_l\mid x)}
+            \beta \log \frac{\pi_\theta(y_w | x)}{\pi_{ref}(y_w | x)}
+            - \beta \log \frac{\pi_\theta(y_l | x)}{\pi_{ref}(y_l | x)}
           \right)
         \right]
   $$
 
-- **Key idea**: a plain binary classification loss over pairs, computed
+- @Key idea@: a plain binary classification loss over pairs, computed
   directly on log-probabilities the policy already produces
   - No reward model, no sampling, no RL optimizer
 
 * DPO Algorithm
 
-- **Input**: a preference dataset
+- @Input@: a preference dataset
   $D = \{(x^{(i)}, y_w^{(i)}, y_l^{(i)})\}$, a reference policy $\pi_{ref}$
   (usually the supervised fine-tuned model)
-- **Output**: a policy $\pi_\theta$ aligned with the preferences in $D$
+- @Output@: a policy $\pi_\theta$ aligned with the preferences in $D$
 
-- **Steps**:
+- @Algorithm@:
   1. Initialize $\pi_\theta \leftarrow \pi_{ref}$
   2. For each batch, compute log-probabilities of $y_w$ and $y_l$ under both
      $\pi_\theta$ and the frozen $\pi_{ref}$
@@ -239,14 +239,14 @@ digraph RLHF {
 
 * What the DPO Gradient Rewards
 
-- **Interpretation**: the gradient of $\mathcal{L}_{DPO}$ pushes up
-  $\log \pi_\theta(y_w\mid x)$ and pushes down $\log \pi_\theta(y_l\mid x)$
+- @Interpretation@: the gradient of $\mathcal{L}_{DPO}$ pushes up
+  $\log \pi_\theta(y_w | x)$ and pushes down $\log \pi_\theta(y_l | x)$
   - The push is scaled by how much the current implicit reward still gets
     the ranking _wrong_
   - Pairs already ranked correctly with high confidence contribute almost no
     gradient
 
-- **Key idea**: DPO behaves like a reward-weighted classification loss,
+- @Key idea@: DPO behaves like a reward-weighted classification loss,
   concentrating learning on the pairs the model still gets wrong
 
 * DPO: Results
@@ -259,7 +259,7 @@ digraph RLHF {
   - More stable to tune than PPO, whose reward-hacking and instability
     issues are well documented
 
-- **Key idea**: DPO reframes alignment as a supervised learning problem in
+- @Key idea@: DPO reframes alignment as a supervised learning problem in
   disguise
 
 * DPO vs. RLHF: Comparison
@@ -276,72 +276,72 @@ digraph RLHF {
 )
 ```
 
-- **Key idea**: DPO does not remove the RLHF objective, it removes the RL
+- @Key idea@: DPO does not remove the RLHF objective, it removes the RL
   algorithm needed to reach it
 
 ## Iterative Preference Optimization
 
 * Why DPO Struggles at Multi-Step Reasoning
 
-- **Motivation**: DPO was derived and evaluated mostly on single-turn
+- @Motivation@: DPO was derived and evaluated mostly on single-turn
   preferences over style, safety, or summary quality
 
-- **Problem**: a multi-step reasoning chain can be preferred for the _wrong_
+- @Problem@: a multi-step reasoning chain can be preferred for the _wrong_
   reason
   - A fluent, confident chain reaching the wrong final answer can still read
     better than a correct but clumsy one
   - Static human-labeled preference data rarely contains enough _reasoning_
     pairs to teach step-by-step correctness
 
-- **Question**: where can an agent get preference pairs that track
+- @Question@: where can an agent get preference pairs that track
   correctness of reasoning, not just style?
 
 * From Human Preferences to Correctness-Based Preferences
 
-- **Solution** (Pang et al., 2024): replace human style judgments with an
+- @Solution@ (Pang et al., 2024): replace human style judgments with an
   automatically computable _correctness_ signal
   - Sample several CoT-and-answer completions per training prompt from the
     current model
   - Score each completion by whether its final answer matches the known
     label, or a majority vote across samples
 
-- **Key idea**: the preference label now comes from checking whether the
+- @Key idea@: the preference label now comes from checking whether the
   final answer is correct, not from a human rating how the chain reads
   - This is a _grounded_ signal: an objective check external to the
     generator's own judgment
 
 * Building Preference Pairs from Self-Generated Chains of Thought
 
-- **Definition**: for a prompt $x$ with sampled completions
+- @Definition@: for a prompt $x$ with sampled completions
   $\{y_1, ..., y_K\}$
   - $y_w$: a completion whose final answer is _correct_
   - $y_l$: a completion whose final answer is _incorrect_
 
-- **Algorithm**:
+- @Algorithm@:
   1. Sample $K$ CoT completions per training prompt from the current policy
   2. Partition them into correct and incorrect by matching the final answer
   3. Pair each correct completion with an incorrect one to form
      $(x, y_w, y_l)$
 
-- **Key idea**: the preference pairs are _self-generated_, the model
+- @Key idea@: the preference pairs are _self-generated_, the model
   supplies both its own successes and its own failures as training signal
 
 * The Missing Ingredient: An NLL Term
 
-- **Problem**: plain DPO on these self-generated pairs only pushes
-  $\log \pi_\theta(y_w\mid x)$ up _relative_ to $\log \pi_\theta(y_l\mid x)$
+- @Problem@: plain DPO on these self-generated pairs only pushes
+  $\log \pi_\theta(y_w | x)$ up _relative_ to $\log \pi_\theta(y_l | x)$
   - The absolute probability of the winning chain $y_w$ can still drift
     down, as long as it falls slower than $y_l$'s
 
-- **Solution** (Pang et al., 2024): add a standard negative log-likelihood
+- @Solution@ (Pang et al., 2024): add a standard negative log-likelihood
   term on the winning completion
   $$
-  \mathcal{L}_{IRPO} = \mathcal{L}_{DPO}(y_w, y_l \mid x)
-    + \alpha \, \mathcal{L}_{NLL}(y_w \mid x), \qquad
-  \mathcal{L}_{NLL}(y_w \mid x) = -\log \pi_\theta(y_w \mid x)
+  \mathcal{L}_{IRPO} = \mathcal{L}_{DPO}(y_w, y_l | x)
+    + \alpha \, \mathcal{L}_{NLL}(y_w | x), \qquad
+  \mathcal{L}_{NLL}(y_w | x) = -\log \pi_\theta(y_w | x)
   $$
 
-- **Key idea**: the NLL term anchors the winning chain to a high absolute
+- @Key idea@: the NLL term anchors the winning chain to a high absolute
   likelihood, since DPO alone only guarantees a high _relative_ one
   - The paper reports this term as necessary: without it, reasoning gains
     shrink substantially
@@ -350,14 +350,14 @@ digraph RLHF {
 
 ::: columns
 :::: {.column width=55%}
-- **Algorithm** (_Iterative Reasoning Preference Optimization_, IRPO):
+- @Algorithm@ (_Iterative Reasoning Preference Optimization_, IRPO):
   1. Sample $K$ CoT completions per training prompt from the current policy
   2. Label pairs by final-answer correctness, forming $(x, y_w, y_l)$
   3. Train an updated policy from the current one using $\mathcal{L}_{IRPO}$
   4. Repeat for several iterations, sampling fresh completions from the
      _updated_ policy each round
 
-- **Key idea**: each iteration's training data is generated by the
+- @Key idea@: each iteration's training data is generated by the
   _previous_ iteration's model, so the model bootstraps its own curriculum
 ::::
 :::: {.column width=40%}
@@ -385,7 +385,7 @@ digraph IRPO {
   - Majority-vote accuracy with 32 samples reaches 88.7%
   - Gains also hold on the MATH and ARC-Challenge benchmarks
 
-- **Key idea**: the training signal was entirely self-supervised correctness
+- @Key idea@: the training signal was entirely self-supervised correctness
   checks on the model's own samples, no human-labeled reasoning traces were
   added
 
@@ -393,16 +393,16 @@ digraph IRPO {
 
 * Reasoning Can Be Fluent Yet Wrong
 
-- **Motivation**: DPO and IRPO both improve reasoning chains that end in a
+- @Motivation@: DPO and IRPO both improve reasoning chains that end in a
   _checkable_ final answer, a math result, a multiple-choice letter
 
-- **Problem**: many claims an agent makes have no single checkable final
+- @Problem@: many claims an agent makes have no single checkable final
   answer
   - A list of facts, a biography, an open-ended explanation
   - A fluent, confident sentence can still assert something false, i.e., a
     _hallucination_
 
-- **Question**: without a scalar correctness signal to train on, can a model
+- @Question@: without a scalar correctness signal to train on, can a model
   still reduce its own hallucination rate?
 
 * Why Holistic Self-Review Failed
@@ -413,30 +413,30 @@ digraph IRPO {
   - The same model that produced the mistake is asked to spot it, in the
     same context, seeing the same claim it already committed to
 
-- **Key idea**: an anchoring bias sets in
+- @Key idea@: an anchoring bias sets in
   - Having already written a claim, the model tends to _defend_ it rather
     than re-derive it fresh
 
 * Chain-of-Verification: The Core Idea
 
-- **Question**: what if verification did not re-read the original claim at
+- @Question@: what if verification did not re-read the original claim at
   all?
 
-- **Solution** (Dhuliawala et al., 2023): _Chain-of-Verification_ (CoVe)
+- @Solution@ (Dhuliawala et al., 2023): _Chain-of-Verification_ (CoVe)
   decomposes review into small, independent fact-checks instead of one
   holistic re-read
   - Break the draft into individually checkable claims
   - Answer each check _without_ the original draft in context
   - Only then reconcile the checks against the draft
 
-- **Key idea**: independence from the original draft is exactly what
+- @Key idea@: independence from the original draft is exactly what
   holistic self-review lacked
 
 * CoVe: Algorithm
 
 ::: columns
 :::: {.column width=55%}
-- **Algorithm** (_Chain-of-Verification_):
+- @Algorithm@ (_Chain-of-Verification_):
   1. **Draft**: generate an initial response to the query
   2. **Plan**: generate verification questions that would expose factual
      errors in the draft
@@ -462,17 +462,17 @@ digraph CoVe {
 
 * Why Factored Verification Escapes Anchoring Bias
 
-- **Definition**: the _factored_ variant of CoVe answers each verification
+- @Definition@: the _factored_ variant of CoVe answers each verification
   question in its own, separate context, with neither the draft nor the
   other questions visible
 
-- **Key idea**: this removes the anchoring bias
+- @Key idea@: this removes the anchoring bias
   - A model asked _"was Marie Curie born in 1867?"_ has no memory of having
     asserted that fact moments ago
   - A wrong claim in the draft is no more likely to survive its own
     fact-check than any other question
 
-- **Remark**: a _joint_ variant asks and answers all verification questions
+- @Remark@: a _joint_ variant asks and answers all verification questions
   in one pass, which is cheaper but keeps some of the same context
   contamination
 
@@ -485,17 +485,17 @@ digraph CoVe {
     writing
   - Factored verification consistently outperforms the joint variant
 
-- **Limitations**: extra verification questions and generations cost
+- @Limitations@: extra verification questions and generations cost
   additional inference-time compute per query
 
 ## Aligning Reasoning with Feedback
 
 * Where Does the Training Signal Come From?
 
-- **Question**: DPO, IRPO, and CoVe all improve reasoning; where does each
+- @Question@: DPO, IRPO, and CoVe all improve reasoning; where does each
   one's correction signal actually originate?
 
-- **Comparison**:
+- @Comparison@:
   - DPO: human-labeled preference pairs over style, safety, or general
     quality
   - IRPO: an automatic correctness check on the model's own sampled final
@@ -503,7 +503,7 @@ digraph CoVe {
   - CoVe: independent, decomposed self-fact-checks, with no external oracle
     at all
 
-- **Key idea**: the three methods sit at different points of one spectrum,
+- @Key idea@: the three methods sit at different points of one spectrum,
   from an external, human-grounded signal to purely internal but decomposed
   self-checking
 
@@ -521,7 +521,7 @@ digraph CoVe {
 )
 ```
 
-- **Key idea**: training bakes a lesson learned once into every future
+- @Key idea@: training bakes a lesson learned once into every future
   query, inference-time methods re-derive the correction on every call
 
 * Learning to Reason: The Full Picture
@@ -535,7 +535,7 @@ digraph CoVe {
   - _CoVe_ shows that even without a scalar correctness signal, decomposing
     verification into independent checks reduces hallucination
 
-- **Key idea**: "learning to reason" and "reasoning better at inference
+- @Key idea@: "learning to reason" and "reasoning better at inference
   time" are two ends of the same goal, differing only in _when_ the
   correction is applied
 

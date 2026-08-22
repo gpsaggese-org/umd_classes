@@ -15,20 +15,21 @@
 
 * Why Training Recipes Matter
 
-- **Motivation**: in Lessons 16.9 and 16.10, we learned verification signals and open post-training recipes can teach models to reason and plan
+- @Motivation@: in Lessons 16.9 and 16.10, we learned verification signals and open post-training recipes can teach models to reason and plan
   - But how do these principles scale to production-grade agentic models?
   - What practical constraints shape the training pipeline?
 
-- **Problem**: closing the gap between published techniques and real-world agentic systems
+- @Problem@: closing the gap between published techniques and real-world agentic systems
   - How do you curate data that teaches agents to use tools effectively?
   - What happens when you train models with billions of parameters for agent tasks?
   - How do you maintain training stability while balancing cost and capability?
 
-- **Key idea**: this lesson distills practical lessons from training state-of-the-art agentic models at scale
+- @Key idea@: this lesson distills practical lessons from training state-of-the-art agentic models at scale
 
 * The Scaling Challenge
 
-- **Definition**: _agentic behavior_ requires a model to reason about tool use, long-horizon planning, and recovery from errors
+- @Definition@: **agentic behavior** requires a model to reason about tool
+  use, long-horizon planning, and recovery from errors
   - Unlike pure reasoning (math or code), agentic tasks have _open-ended action spaces_
   - Success depends not just on the model's reasoning, but on its ability to ground reasoning in real tools and environments
 
@@ -43,7 +44,9 @@
 
 * What Makes Data Agentic?
 
-- **Definition**: _agentic data_ are trajectories where a model reasons, takes actions, observes results, and adapts—not isolated inputs and outputs
+- @Definition@: **agentic data** are trajectories where a model reasons,
+  takes actions, observes results, and adapts - not isolated inputs and
+  outputs
 
 - **Difference from reasoning data**
   - Reasoning data: _"solve this math problem"_ $\to$ step-by-step derivation $\to$ answer
@@ -55,7 +58,7 @@
   - Feedback loops: agent observes outcomes and corrects course
   - Partial observability: agent works with incomplete information
 
-- **Key idea**: agentic data has temporal structure and dependencies; you can't shuffle it or truncate trajectories arbitrarily
+- @Key idea@: agentic data has temporal structure and dependencies; you can't shuffle it or truncate trajectories arbitrarily
 
 * Data Sources: Synthetic vs. Real
 
@@ -74,7 +77,7 @@
   - Use real human data to correct systematic biases
   - Use model trajectories labeled by real-world verifiers
 
-- **Example**: for web agents, generate thousands of simulated browsing tasks in a controlled environment, then validate a subset on real websites with human feedback
+- @Example@: for web agents, generate thousands of simulated browsing tasks in a controlled environment, then validate a subset on real websites with human feedback
 
 * Trajectory Quality and Filtering
 
@@ -91,7 +94,7 @@
 - **Trade-off**: filtering removes noise but may bias toward narrow, easy solutions
   - Risk: model learns shortcuts that don't generalize to hard cases
 
-- **Key idea**: collect a _representative mix_ of trajectories, not just the cleanest ones
+- @Key idea@: collect a _representative mix_ of trajectories, not just the cleanest ones
 
 * Preference Data for Agentic Tasks
 
@@ -110,7 +113,7 @@
   - Optimize too hard for efficiency $\to$ agents cut corners
   - Optimize for robustness $\to$ agents are overly cautious and expensive
 
-- **Example**: for a flight-booking agent, prefer trajectories that succeed with minimal API calls, but don't penalize taking extra steps to verify the booking
+- @Example@: for a flight-booking agent, prefer trajectories that succeed with minimal API calls, but don't penalize taking extra steps to verify the booking
 
 * Curriculum Learning for Agent Training
 
@@ -128,9 +131,9 @@
 
 - **Risk**: curriculum may not generalize; tasks learned in order may not transfer
 
-- **Key idea**: design the curriculum to match the conceptual dependency: simple $\to$ complex
+- @Key idea@: design the curriculum to match the conceptual dependency: simple $\to$ complex
 
-## Part II: Case Study — KIMI K2
+## Part II: Case Study - KIMI K2
 
 * KIMI K2: Overview
 
@@ -163,7 +166,7 @@
 - **Key insight**: volume matters, but strategic filtering is critical
   - Training on 100M high-quality trajectories outperforms 1B noisy ones
 
-- **Question**: how do you decide when you have enough data?
+- @Question@: how do you decide when you have enough data?
   - Signal: validation performance plateaus despite more training steps
   - Remedy: shift to higher-quality data or new task distributions
 
@@ -184,7 +187,7 @@
   - Filter: keep only trajectories where the verifier returns success
   - Purpose: create a high-quality preference dataset for DPO or PPO refinement
 
-- **Key idea**: stages build on each other; skip an early stage and later ones become harder to train
+- @Key idea@: stages build on each other; skip an early stage and later ones become harder to train
 
 * K2 Tool Grounding: In-Context vs. Weights
 
@@ -200,7 +203,7 @@
 - **Trade-off**: if you encode too much tool knowledge in weights, the model overfits to specific APIs and struggles with new tools
   - Solution: use _tool-generic patterns_ in SFT (call a function, check result, retry if error)
 
-- **Example**: instead of training on thousands of specific API calls to Google Maps, train on generic search-and-rank patterns that transfer to OpenStreetMap or other tools
+- @Example@: instead of training on thousands of specific API calls to Google Maps, train on generic search-and-rank patterns that transfer to OpenStreetMap or other tools
 
 * K2 Cost and Efficiency
 
@@ -214,9 +217,9 @@
 
 - **Deployment strategy**: smaller models for simple tasks, larger (K2) for complex planning
 
-- **Key idea**: agent training cost isn't just model size; it's model size + tool-call overhead
+- @Key idea@: agent training cost isn't just model size; it's model size + tool-call overhead
 
-## Part III: Case Study — DeepSeek-V3
+## Part III: Case Study - DeepSeek-V3
 
 * DeepSeek-V3: Mixture-of-Experts at Scale
 
@@ -265,7 +268,7 @@
   - Prefer a verified-correct trajectory over an arbitrary one
   - Prefer code that passes tests over code that looks fluent
 
-- **Key idea**: in agentic training, ground truth beats scale
+- @Key idea@: in agentic training, ground truth beats scale
 
 * DeepSeek-V3: Training Challenges and Solutions
 
@@ -301,7 +304,7 @@
 
 * The Stability Challenge
 
-- **Problem**: as models get larger and agentic tasks get more complex, training becomes unstable
+- @Problem@: as models get larger and agentic tasks get more complex, training becomes unstable
   - RL reward signals are noisy (agents succeed or fail on different task subsets)
   - Gradient updates are large; small changes in learning rate cause divergence
   - Multi-expert routing creates an additional source of variance
@@ -316,7 +319,7 @@
   - Long horizons: agent makes many steps; error compounds over trajectory length
   - Non-stationarity: as the model improves, the RL distribution shifts, making old trajectories stale
 
-- **Key idea**: stability is as important as performance at scale
+- @Key idea@: stability is as important as performance at scale
 
 * Techniques for Stable RL
 
@@ -382,13 +385,13 @@
   - Better data: same compute, cleaner signals
   - Answer: both matter, but data quality often wins at billion-parameter scale
 
-- **Key idea**: for agentic models, diminishing returns on scale are steeper than for dense reasoning models
+- @Key idea@: for agentic models, diminishing returns on scale are steeper than for dense reasoning models
 
 ## Part V: Practical Pitfalls and Recipes
 
 * Pitfall 1: Reward Hacking
 
-- **Definition**: agent learns to exploit the verifier instead of solving the actual task
+- @Definition@: agent learns to exploit the verifier instead of solving the actual task
   - Example: agent learns to fool the success check without completing the task
   - Example: agent manipulates environment state to appear to have succeeded
 
@@ -402,11 +405,11 @@
   3. Add _adversarial_ checks: test whether the agent actually solved the underlying problem
   4. Regularly audit agent trajectories for suspicious patterns
 
-- **Example**: for a web-booking agent, don't just check if "confirmation page reached"; verify that the actual booking exists in the database
+- @Example@: for a web-booking agent, don't just check if "confirmation page reached"; verify that the actual booking exists in the database
 
 * Pitfall 2: Domain Generalization
 
-- **Problem**: agent trained on web-browsing tasks struggles with API interactions
+- @Problem@: agent trained on web-browsing tasks struggles with API interactions
   - Skills don't transfer across domains even if they're conceptually similar
 
 - **Why?**
@@ -419,7 +422,7 @@
   2. **Tool-agnostic representations**: encode actions as (function, arguments) instead of domain-specific tokens
   3. **Adaptation**: allow brief fine-tuning on a new domain with a few examples
 
-- **Example**: KIMI K2 trains on web + code + APIs + file systems together, so the agent learns to reason about tools generically
+- @Example@: KIMI K2 trains on web + code + APIs + file systems together, so the agent learns to reason about tools generically
 
 * Recipe: The Stable Training Loop
 
@@ -439,7 +442,7 @@
   3. Compute advantages (A = reward - baseline)
   4. Whiten advantages; apply KL penalty
   5. Backprop with small learning rate (e.g., 1e-6)
-  6. Repeat for 2–5 epochs, monitoring for divergence
+  6. Repeat for 2-5 epochs, monitoring for divergence
   7. Output: RL-trained model
 
 - **Stage 4: Refinement (optional)**
@@ -500,7 +503,7 @@
   - Verification in a single focused domain
   - Skip RL; focus on strong SFT signal
 
-- **If you're scaling to medium** (10B–100B params)
+- **If you're scaling to medium** (10B-100B params)
   - Introduce RL with strong KL regularization
   - Use curriculum learning; start simple, progress to complex
   - Monitor per-domain performance; rebalance data iteratively
@@ -508,7 +511,8 @@
 - **If you're training at scale** (> 100B params, especially MoE)
   - Invest heavily in data curation and verification infrastructure
   - Use multiple stabilization techniques (KL, advantage whitening, reward shaping)
-  - Plan for 3–6 months of iteration; the first model is rarely the final one
+  - Plan for 3-6 months of iteration; the first model is rarely the final
+    one
 
 - **General**
   - Build robust verifiers _first_; they are your training signal
@@ -537,7 +541,7 @@
 * Monitoring and Metrics That Matter
 
 - **Metric 1: Per-domain success rate**
-  - Track task success separately for web tasks, code tasks, API tasks, etc.
+  - Track task success separately for web tasks, code tasks, API tasks, etc
   - Why: domain-specific bottlenecks are hidden in aggregate metrics
 
 - **Metric 2: Sample efficiency**

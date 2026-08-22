@@ -32,13 +32,9 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-# ##############################################################################
 # LLMs and Causal Reasoning
-# ##############################################################################
 
-## ##############################################################################
 ## LLMs: Strengths and Limitations
-## ##############################################################################
 
 * Where LLMs Excel
 
@@ -63,7 +59,7 @@ MSML610: Advanced Machine Learning
   - Cannot reliably predict interventions vs. observational data
   - Confounding variables not explicitly handled
 
-- **Example**:
+- @Example@:
   - Given _"Ice cream sales and drowning deaths both spike in summer"_, 
   - Current LLMs infer a causal link rather than recognizing temperature as a
     confounder
@@ -75,9 +71,7 @@ MSML610: Advanced Machine Learning
   - Causal discovery: Learning causal structure from data
   - Robustness to distribution shift: Generalizing under causal changes
 
-## ##############################################################################
 ## Pattern-Based Reasoning vs. Causal Reasoning
-## ##############################################################################
 
 * Pattern Recognition and Its Limits
 
@@ -99,12 +93,12 @@ MSML610: Advanced Machine Learning
 :::: {.column width=40%}
 **Pattern Matching**
 
-- Pros
+- @Pros@
   - Quality scales with data quantity
   - Captures complex associations
   - Practical for stable settings
 
-- Cons
+- @Cons@
   - Breaks under distribution shift
   - Cannot reason about interventions
   - Vulnerable to confounding
@@ -113,13 +107,13 @@ MSML610: Advanced Machine Learning
 :::: {.column width=40%}
 **Causal Reasoning**
 
-- Pros
+- @Pros@
   - Robust to distribution shift
   - Generalizes to new interventions
   - Interpretable mechanisms
   - Handles confounding
 
-- Cons
+- @Cons@
   - Requires causal model specification
   - Sample complexity for learning
   - Stronger assumptions
@@ -132,7 +126,7 @@ MSML610: Advanced Machine Learning
   - Spurious correlations don't hold in deployment
   - LLMs confidently make wrong predictions due to pattern reliance
 
-- **Example**: Medical diagnosis
+- @Example@: Medical diagnosis
   - Training: `Hospital A` uses test $Y$ for condition $X$
   - Faulty calibration: test $Y$ predicts diagnosis, not disease
   - Model learns: high Y $\to$ condition X
@@ -143,19 +137,15 @@ MSML610: Advanced Machine Learning
   - Reward hacking: optimizing proxy metric, not true objective
   - Policy change: new rules invalidate historical patterns
 
-- **Example**: Content recommendation
+- @Example@: Content recommendation
   - Pattern: users engaging with trending topics get more recommendations
   - Intervention: change algorithm to reduce trending bias
   - Unintended consequence: recommendation patterns shift, breaking past
     associations
 
-# ##############################################################################
 # Enhancing LLM Reasoning with Causality
-# ##############################################################################
 
-## ##############################################################################
 ## Chain-of-Thought Prompting for Causal Reasoning
-## ##############################################################################
 
 * Chain-of-Thought Prompting
 
@@ -169,7 +159,7 @@ MSML610: Advanced Machine Learning
   - Makes assumptions and reasoning transparent
   - Allows verification of causal logic
 
-- **Example**: CoT for causal inference
+- @Example@: CoT for causal inference
   Q: "If we increase advertising budget, will sales increase?"
   CoT: "Let me think about this:
   1. Advertising increases brand awareness (mechanism)
@@ -186,7 +176,7 @@ MSML610: Advanced Machine Learning
 * Causal Prompting Frameworks
 
 - **Structured causal prompts** guide explicit causal reasoning
-- **Example**: Structured causal prompt template
+- @Example@: Structured causal prompt template
   ```
   Problem: [description]
   
@@ -205,9 +195,7 @@ MSML610: Advanced Machine Learning
   Conclusion: [the causal effect is...]
   ```
 
-## ##############################################################################
 ## Integrating Causal and Probabilistic Frameworks
-## ##############################################################################
 
 * Connecting LLMs to Formal Causal Models
 
@@ -222,7 +210,7 @@ MSML610: Advanced Machine Learning
   - Causal model as reasoning engine: formal inference, constraint checking
   - Probabilistic framework as uncertainty quantifier: propagate uncertainty
 
-- **Example**: Causal reasoning for policy evaluation
+- @Example@: Causal reasoning for policy evaluation
   - LLM input: _"Considering a new hiring policy. What are potential causal
     effects?"_
   - LLM output: Proposes causal graph with treatment (policy), outcome (hiring
@@ -238,7 +226,7 @@ MSML610: Advanced Machine Learning
   - Directed edges: causal influences
   - Absence of edge: no direct causal effect
 
-- **Example**: Educational intervention causal DAG
+- @Example@: Educational intervention causal DAG
   ```graphviz
   digraph CausalDAG {
       splines=true;
@@ -288,7 +276,7 @@ MSML610: Advanced Machine Learning
 * Integrating Causal Inference into LLM Workflows (2/2)
 
 // TODO(gp): Convert into a table?
-- **Example**: LLM-guided causal analysis workflow
+- @Example@: LLM-guided causal analysis workflow
   ```
   1. LLM reads domain knowledge and data description
   2. LLM proposes causal DAG
@@ -305,17 +293,13 @@ MSML610: Advanced Machine Learning
   - Tool outputs ground LLM claims in data
   - Failures are diagnostic rather than opaque
 
-# ##############################################################################
 # Causal Agent Architectures
-# ##############################################################################
 
-## ##############################################################################
 ## Agents with Explicit Causal Models
-## ##############################################################################
 
 * Causal Reasoning Agents: Design
 
-- **Goal**: Build agents for causal reasoning and robust action
+- @Goal@: Build agents for causal reasoning and robust action
   - Maintain explicit causal model of the environment
   - Use causal inference for action evaluation
   - Update causal beliefs with new evidence
@@ -378,9 +362,7 @@ digraph CausalAgent {
   - Test causal assumptions (Markov, faithfulness)
   - Detect model misspecification
 
-## ##############################################################################
 ## Integrating Causal Inference into Planning
-## ##############################################################################
 
 * Planning Under Causal Uncertainty
 
@@ -407,7 +389,7 @@ digraph CausalAgent {
   - Rewards depend on achievable states
   - Transition (causal functions): $X_t' := f(X_t, A_t, \varepsilon_t)$
 
-- **Example**: Medical treatment sequential decision
+- @Example@: Medical treatment sequential decision
   - Variables: $(Patient\_Severity, Treatment, Patient\_Outcome)$
   - Action: choose treatment type
   - Outcome: health improvement (depends on severity + treatment)
@@ -444,18 +426,14 @@ digraph CausalAgent {
   - Structural uncertainty: causal graph might be different
   - Identification uncertainty: causal effects may be unidentified
 
-- **Example**: Drug dosage decision under causal uncertainty
+- @Example@: Drug dosage decision under causal uncertainty
   - Low dose vs. high dose: which is safer?
   - Risk: high dose might have nonlinear side effects we haven't modeled
   - Robust policy: start with conservative low dose, observe response, adapt
 
-# ##############################################################################
 # Trustworthy AI Through Causality
-# ##############################################################################
 
-## ##############################################################################
 ## Transparency and Interpretability
-## ##############################################################################
 
 * Making Reasoning Explicit and Interpretable
 
@@ -469,7 +447,7 @@ digraph CausalAgent {
   - Causal effects: quantify impact of each decision
   - Counterfactuals: explain decisions by contrasting what-ifs
 
-- **Example**: Loan approval decision
+- @Example@: Loan approval decision
   - Black-box: Model says _"Loan denied"_
   - Causal: Model says _"Loan denied because credit score has a 15% effect on
     default rate, controlling for income and employment"_
@@ -484,7 +462,7 @@ digraph CausalAgent {
   - Fairness concern: recourse may be impossible if requirements are correlated
     with protected attributes
 
-- **Example**: Hiring decision
+- @Example@: Hiring decision
   - Denial reason (non-causal): _"You have fewer years of experience"_
   - Causal recourse: _"Adding 2 years of experience would likely change decision,
     but experience is correlated with age, raising fairness concerns"_
@@ -493,9 +471,7 @@ digraph CausalAgent {
   - Not correlation (feature co-varies with outcome) $\to$ confounding
   - True causal importance: direct effect on outcome under intervention
 
-## ##############################################################################
 ## Robustness Through Causal Constraints
-## ##############################################################################
 
 * Finding Brittle Decisions Through Causal Analysis
 
@@ -509,7 +485,7 @@ digraph CausalAgent {
   - Identify decisions driven by spurious correlations
   - Test robustness under causal interventions
 
-- **Example**: Recidivism prediction (criminal justice)
+- @Example@: Recidivism prediction (criminal justice)
   - Pattern learned: arrest history strongly predicts re-offense
   - Causal truth: arrest history may be proxy for policing patterns, not criminality
   - Brittleness: model fails if policing patterns change (different neighborhood, different police policy)
@@ -540,9 +516,7 @@ digraph CausalAgent {
   - Confounded perturbations (correlating with true causes) are benign
   - Helps distinguish real threats from spurious ones
 
-## ##############################################################################
 ## Fairness Through Causal Reasoning
-## ##############################################################################
 
 * Causal Approaches to Bias and Discrimination
 
@@ -555,7 +529,7 @@ digraph CausalAgent {
   2. **Indirect discrimination**: protected attribute causes unprotected predictor which causes outcome
   3. **Structural discrimination**: system perpetuates historical inequities
 
-- **Example**: Hiring fairness
+- @Example@: Hiring fairness
   - Protected: gender
   - Potential discriminator: field of study (may be correlated with gender)
   - Question: can we use field of study if it correlates with gender?
@@ -573,7 +547,7 @@ digraph CausalAgent {
   - Allow indirect effects if not caused by discrimination
   - More nuanced: separates correlation from causation
 
-- **Example**: Gender wage gap
+- @Example@: Gender wage gap
   - Total gap: women earn 20% less
   - Causal decomposition:
     - Direct effect: 5% unexplained by occupation/experience (discrimination)
@@ -586,15 +560,13 @@ digraph CausalAgent {
   - Balance confounders: ensure treatment and control groups similar on confounders
   - Remove selection bias: correct for how samples were selected
 
-- **Example**: College admissions fairness
+- @Example@: College admissions fairness
   - Constraint: admission decision should not depend on applicant's gender
   - But gender may have influenced GPA (indirect path)
   - Solution: directly adjust for GPA (mediator) if you believe it's fair predictor
   - Or: use causal effect of gender on success (counterfactual score) instead of observed score
 
-## ##############################################################################
 ## Safety Through Causal Reasoning
-## ##############################################################################
 
 * Causal Constraints on Harmful Outcomes
 
@@ -608,7 +580,7 @@ digraph CausalAgent {
   - Prohibit or mitigate interventions on these paths
   - Monitor for emergence of new causal pathways
 
-- **Example**: Content recommendation safety
+- @Example@: Content recommendation safety
   - Harm: radicalization through information bubbles
   - Causal path: algorithm optimizes for engagement $\to$ recommends extreme content $\to$ radicalizes users
   - Safeguard: constraint that algorithm cannot increase polarization score
@@ -645,7 +617,7 @@ digraph CausalAgent {
   - Diagnosis: Is it random noise, confounding, or violation of causal mechanism?
   - Response: retrain, debug, or alert human
 
-- **Example**: Medical treatment effectiveness monitoring
+- @Example@: Medical treatment effectiveness monitoring
   - Deployed model: drug X increases recovery by 30%
   - Observation: new patient cohort shows only 10% improvement
   - Diagnosis: new cohort is older, has comorbidities

@@ -17,24 +17,24 @@
 
 * Why Open Training Recipes Matter
 
-- **Motivation**: in Lesson 16.8, we learned preference-based training (DPO, PPO)
+- @Motivation@: in Lesson 16.8, we learned preference-based training (DPO, PPO)
   can teach models to reason; in Lesson 16.9, verification provides a trustworthy
   training signal
   - But these techniques were mostly demonstrated on proprietary models with
     inaccessible training details
 
-- **Problem**: practitioners lack reproducible recipes for post-training reasoning
+- @Problem@: practitioners lack reproducible recipes for post-training reasoning
   models at scale
   - What hyperparameters work? How much preference data? What's the data quality
     threshold?
   - Can open models reach proprietary performance on reasoning tasks?
 
-- **Key idea**: this lesson examines _open, reproducible post-training pipelines_
+- @Key idea@: this lesson examines _open, reproducible post-training pipelines_
   that enable the community to build reasoning models from first principles
 
 * The Reproducibility Challenge
 
-- **Definition**: an _open post-training recipe_ is a combination of model,
+- @Definition@: an **open post-training recipe** is a combination of model,
   data, training objective, hyperparameters, and evaluation protocol, all
   disclosed and reproducible
 
@@ -60,7 +60,7 @@
   - DPO: simpler training loop, fewer hyperparameters, more direct optimization
     of preference pairs
 
-- **Question**: which should you choose for a new reasoning task?
+- @Question@: which should you choose for a new reasoning task?
 
 * PPO in Practice: Setup and Challenges
 
@@ -79,7 +79,7 @@
   - Reward model can develop bias, especially if trained on limited preference
     data
 
-- **Key idea**: PPO is powerful but requires careful engineering; suited to
+- @Key idea@: PPO is powerful but requires careful engineering; suited to
   tasks where a rich reward signal is available and the cost per iteration is
   justified
 
@@ -96,9 +96,9 @@
 - **Data requirements**
   - Highly sensitive to preference data quality (more so than PPO, which can
     smooth noise via a learned reward model)
-  - Works well with 10k–100k high-quality pairs; can struggle if data is noisy
+  - Works well with 10k-100k high-quality pairs; can struggle if data is noisy
 
-- **Key idea**: DPO trades flexibility for simplicity; best for well-curated
+- @Key idea@: DPO trades flexibility for simplicity; best for well-curated
   preference datasets and when inference cost is a concern
 
 * When to Use Each: Decision Framework
@@ -138,17 +138,17 @@
   - Model drifts far from reference, losing knowledge gained in pre-training
   - Fix: monitor KL divergence regularly, adjust penalty, use early stopping
 
-- **Key idea**: both methods can fail silently if data quality or hyperparameters
+- @Key idea@: both methods can fail silently if data quality or hyperparameters
   are wrong; validation on held-out reasoning benchmarks is essential
 
 ## Tulu 3: An Open Post-Training Pipeline
 
 * Tulu 3: Overview and Goals
 
-- **Definition**: _Tulu 3_ is an open, reproducible post-training pipeline for
+- @Definition@: **Tulu 3** is an open, reproducible post-training pipeline for
   reasoning models, published by the Allen Institute for AI team
 
-- **Motivation**: show that careful curation and scale of preference data can
+- @Motivation@: show that careful curation and scale of preference data can
   close the gap between open (Llama) and proprietary models (GPT-4) on reasoning
   tasks
 
@@ -158,7 +158,7 @@
   3. Evaluation: benchmarks and comparison to proprietary baselines
   4. Lessons and ablations
 
-- **Key idea**: Tulu 3 demonstrates that reproducible post-training at scale is
+- @Key idea@: Tulu 3 demonstrates that reproducible post-training at scale is
   feasible and can be done openly
 
 * Tulu 3: Data Pipeline
@@ -176,19 +176,19 @@
   - Quality-first: aggressive filtering, multiple annotators, inter-annotator
     agreement thresholds
 
-- **Key idea**: diversity in preference signals teaches generalist reasoning, not
+- @Key idea@: diversity in preference signals teaches generalist reasoning, not
   just task-specific heuristics
 
 * Tulu 3: Training Configuration
 
-- **Base model**: Llama 3.1 (8B–405B scales tested)
+- **Base model**: Llama 3.1 (8B-405B scales tested)
 
 - **Method**: DPO with specific hyperparameters tuned via ablation
   - Learning rate: $2 \times 10^{-5}$ (lower than standard fine-tuning)
   - Beta (KL penalty weight): 0.1 (loose coupling to reference to allow learning)
-  - Training epochs: 1–3 (longer than typical DPO; prevents overfitting on
+  - Training epochs: 1-3 (longer than typical DPO; prevents overfitting on
     preference data)
-  - Batch size: 64–128
+  - Batch size: 64-128
 
 - **Multi-stage training** (key insight)
   - Stage 1: general instruction-following
@@ -197,9 +197,9 @@
   - Separate stages allow controlled scaling of each capability
 
 - **Scaling**: even at 405B, the pipeline remains tractable (distributed training
-  with 128–256 GPUs)
+  with 128-256 GPUs)
 
-- **Key idea**: careful hyperparameter selection and multi-stage training unlock
+- @Key idea@: careful hyperparameter selection and multi-stage training unlock
   scalability
 
 * Tulu 3: Evaluation and Results
@@ -211,7 +211,7 @@
   - Scientific QA: specialized reasoning tasks
 
 - **Main results**
-  - Llama 3.1 8B + Tulu 3 DPO ≈ GPT-3.5 on many reasoning benchmarks
+  - Llama 3.1 8B + Tulu 3 DPO $\approx$ GPT-3.5 on many reasoning benchmarks
   - Llama 3.1 405B + Tulu 3 DPO approaches GPT-4 on several tasks
   - Improvements are consistent across model sizes (scaling trends hold)
 
@@ -220,7 +220,7 @@
   - Llama + standard instruction tuning: moderate gains
   - Llama + Tulu 3 (DPO): large gains on reasoning, preserved on general tasks
 
-- **Key idea**: open models can reach proprietary performance when post-training
+- @Key idea@: open models can reach proprietary performance when post-training
   data and methodology are carefully designed
 
 * Ablations and Lessons from Tulu 3
@@ -238,20 +238,20 @@
   - Beta too high ($> 1.0$): limited learning from preference signal
   - Beta too low ($< 0.05$): excessive drift from reference
 
-- **Key idea**: reproducibility requires not just releasing the model, but also
+- @Key idea@: reproducibility requires not just releasing the model, but also
   disclosing data curation, training configs, and ablations
 
 ## Preference Feedback: Collection and Best Practices
 
 * Preference Feedback at Scale
 
-- **Definition**: _preference feedback_ is a human or automatic comparison of
+- @Definition@: **preference feedback** is a human or automatic comparison of
   two outputs for the same input, labeling one as better
 
-- **Scale challenge**: collecting 50k–200k preference pairs is expensive at
-  typical human annotation rates ($10–50 per pair)
+- **Scale challenge**: collecting 50k-200k preference pairs is expensive at
+  typical human annotation rates ($10-50 per pair)
 
-- **Key idea**: automate as much as possible while maintaining quality
+- @Key idea@: automate as much as possible while maintaining quality
 
 * Preference Feedback: Human Annotation
 
@@ -265,10 +265,10 @@
     high agreement (e.g., $\geq 3$ of 5 annotators agree)
   - Blind annotation: hide model names, generation dates; annotators should not
     know which is "expected" to be better
-  - Example-driven instructions: show annotators 3–5 worked examples before
+  - Example-driven instructions: show annotators 3-5 worked examples before
     they label
 
-- **Cost**: ~\$5–20 per pair, depending on task complexity and annotator
+- **Cost**: ~\$5-20 per pair, depending on task complexity and annotator
   expertise
 
 - **Quality metric**: inter-annotator agreement (Fleiss' kappa). Target $\geq
@@ -297,7 +297,7 @@
   - Open-ended text: LLM-based ranking or classical metrics (noisy, need
     validation)
 
-- **Key idea**: hybrid approaches work best: auto-score a large pool, then
+- @Key idea@: hybrid approaches work best: auto-score a large pool, then
   manually validate or refine a subset
 
 * Mixing Multiple Preference Sources
@@ -338,22 +338,22 @@
   - Option A: label as dispreferred (strong signal)
   - Option B: exclude as out-of-distribution (safer for model stability)
 
-- **Key idea**: be consistent and explicit about exclusion criteria; discard
+- @Key idea@: be consistent and explicit about exclusion criteria; discard
   ambiguous data rather than introduce noise
 
 ## OpenScholar: Applying Reasoning Training to Scientific Synthesis
 
 * OpenScholar: Motivation and Scope
 
-- **Definition**: _OpenScholar_ applies retrieval-augmented generation (RAG) and
+- @Definition@: **OpenScholar** applies retrieval-augmented generation (RAG) and
   preference-based training to scientific literature synthesis
 
-- **Problem**: automated scientific synthesis requires
+- @Problem@: automated scientific synthesis requires
   - Retrieval: finding relevant papers
   - Reasoning: synthesizing across sources into a coherent narrative
   - Verification: ensuring citations are accurate and support claims
 
-- **Key idea**: combine open post-training recipes (DPO/PPO) with retrieval to
+- @Key idea@: combine open post-training recipes (DPO/PPO) with retrieval to
   teach models to write better syntheses
 
 * OpenScholar: The RAG + Reasoning Pipeline
@@ -374,7 +374,7 @@
   - Citation accuracy: are cited papers actually retrieved and relevant?
   - Verifier model scores the synthesis for quality
 
-- **Key idea**: RAG + reasoning + verification together teach models to ground
+- @Key idea@: RAG + reasoning + verification together teach models to ground
   synthetic reasoning in evidence
 
 * OpenScholar: Training Data
@@ -389,10 +389,10 @@
   - Human rating: annotators compare syntheses for quality, coherence, citation
     accuracy
 
-- **Scale**: ~10k–50k preference pairs; limited by domain expertise required
+- **Scale**: ~10k-50k preference pairs; limited by domain expertise required
   (need subject-matter experts to validate syntheses)
 
-- **Key idea**: specialized domains require specialized annotation; scaling to
+- @Key idea@: specialized domains require specialized annotation; scaling to
   multiple scientific fields requires distributed expert effort
 
 * OpenScholar: Results and Implications
@@ -413,7 +413,7 @@
   - Performance drops (domain shift) but stays above baseline + retrieval
   - Suggests reasoning skills transfer across domains
 
-- **Key idea**: combining retrieval with preference training is effective for
+- @Key idea@: combining retrieval with preference training is effective for
   evidence-grounded reasoning; works across domains better than pure retrieval
 
 ## Reproducibility and Open-Source Lessons
@@ -434,7 +434,7 @@
   - Example commands to reproduce from scratch
   - Known limitations and failure modes
 
-- **Key idea**: reproducibility is not binary; aim for "reproducible within
+- @Key idea@: reproducibility is not binary; aim for "reproducible within
   reasonable effort and budget"
 
 * The Reproducibility-Performance Tradeoff
@@ -442,7 +442,7 @@
 - **Trade-off**: fully reproducible pipelines are often slower or less
   optimized than proprietary systems
 
-- **Examples**
+- @Examples@
   - Proprietary training: custom CUDA kernels, proprietary data, opaque tuning
   - Reproducible training: standard frameworks (HuggingFace), public data,
     published hyperparameters
@@ -451,7 +451,7 @@
   data and standard training
   - Implication: reproducibility loss is tolerable for research; not a blocker
 
-- **Key idea**: prioritize reproducibility over marginal performance gains; the
+- @Key idea@: prioritize reproducibility over marginal performance gains; the
   research value is in understanding what works, not in squeezing the last
   percentage point
 
@@ -463,7 +463,7 @@
   - Fix: share the exact filtering scripts and intermediate datasets
 
 - **Pitfall 2: Hyperparameter opacity**
-  - "We used DPO with standard settings" — but standard for whom?
+  - "We used DPO with standard settings" -- but standard for whom?
   - Fix: report all hyperparameters, including those kept at defaults
 
 - **Pitfall 3: Selective reporting**
@@ -477,7 +477,7 @@
   - Fix: provide smaller-scale variants and scaling curves; discuss computational
     barriers
 
-- **Key idea**: transparent failure is better than silent success; disclose
+- @Key idea@: transparent failure is better than silent success; disclose
   limitations
 
 * Lessons for Open-Source Reasoning Models
@@ -496,7 +496,7 @@
   - Which component drives performance? Data, method, or tuning?
   - Publicly ablate to guide the community
 
-- **Key idea**: open post-training is becoming a community practice; each
+- @Key idea@: open post-training is becoming a community practice; each
   disclosure strengthens the ecosystem
 
 * Open Problems and Future Directions
@@ -518,7 +518,7 @@
     analytical reasoning?
   - Can we build proxy verifiers that approximate ground truth?
 
-- **Key idea**: the next generation of open reasoning models will address these
+- @Key idea@: the next generation of open reasoning models will address these
   challenges through community effort
 
 * Scaling Preference Feedback: Current Approaches
@@ -538,7 +538,7 @@
   - Assumption: a strong LLM's preferences correlate with human preferences
   - Validation: periodically compare LLM preferences to human gold standard
 
-- **Key idea**: each scaling strategy trades cost for noise; the right choice
+- @Key idea@: each scaling strategy trades cost for noise; the right choice
   depends on domain and budget
 
 * Beyond Pairs: Future Preference Formats
@@ -558,15 +558,15 @@
 
 - **Challenge**: collection cost scales with annotation richness
 
-- **Key idea**: the future of preference learning may move beyond binary pairs
+- @Key idea@: the future of preference learning may move beyond binary pairs
   to richer, more structured feedback
 
 * Integration with Lesson 16.9: Verification and Preferences
 
-- **Recall**: Lesson 16.9 introduced _verifiable rewards_—signals from tasks with
-  checkable answers (code, math, proofs)
+- **Recall**: Lesson 16.9 introduced _verifiable rewards_ -- signals from
+  tasks with checkable answers (code, math, proofs)
 
-- **Question**: should preference-based training (this lesson) replace or
+- @Question@: should preference-based training (this lesson) replace or
   complement verification-based training?
 
 - **Best practice: Hybrid training**
@@ -581,16 +581,16 @@
     cohesive model
   - Lesson 16.12: how to scale these pipelines to production systems
 
-- **Key idea**: verification and preference training are complementary; combined,
+- @Key idea@: verification and preference training are complementary; combined,
   they produce more robust reasoning models
 
 * Recap: From Closed to Open Reasoning
 
 - **Journey so far**
-  1. Lesson 16.1–4: foundations (what agents are, how LLMs work, agent basics,
+  1. Lesson 16.1-4: foundations (what agents are, how LLMs work, agent basics,
      LLM reasoning)
-  2. Lesson 16.5–7: inference-time reasoning (memory, planning, tool use)
-  3. Lesson 16.8–9: training-time reasoning (preference feedback, verification)
+  2. Lesson 16.5-7: inference-time reasoning (memory, planning, tool use)
+  3. Lesson 16.8-9: training-time reasoning (preference feedback, verification)
   4. Lesson 16.10 (this lesson): open, reproducible training pipelines
 
 - **Key progression**: we've moved from theoretical understanding to practical
@@ -599,5 +599,5 @@
 - **Next steps**: multi-agent systems, embodied agents, applications (Lessons
   16.11+)
 
-- **Key idea**: open training recipes are the bridge between research insights
+- @Key idea@: open training recipes are the bridge between research insights
   and deployed agentic systems

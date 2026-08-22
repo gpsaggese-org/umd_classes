@@ -15,15 +15,15 @@
 
 * Why Study the History of LLM Agents?
 
-- **Motivation**: today's agents did not appear fully formed
+- @Motivation@: today's agents did not appear fully formed
   - Are the result of a decade of small, composable ideas
   - Understanding _why_ each step was taken explains why current agents are
     built the way they are
 
-- **Question**: how did the field get from "predict the next token" to systems
+- @Question@: how did the field get from "predict the next token" to systems
   that browse the web, edit code, and run experiments?
 
-- **Key idea**:
+- @Key idea@:
   - The agentic loop is the _composition_ of these several contributions
     (reasoning, tool use, grounding)
 
@@ -56,13 +56,13 @@ digraph Timeline {
 
 * Prompting: Language Models as Text Predictors
 
-- **Definition**: a _pretrained language model_ is a function trained to
+- @Definition@: a **pretrained language model** is a function trained to
   predict the next token given a context
   $$
-  \Pr(x_t \mid x_1, \dots, x_{t-1})
+  \Pr(x_t | x_1, \dots, x_{t-1})
   $$
 
-- **Goal**: get useful behavior purely by shaping the input text (the _prompt_)
+- @Goal@: get useful behavior purely by shaping the input text (the _prompt_)
   - No fine-tuning, no external tools, no loop
   - E.g., prompting GPT-style models with _"Translate to French: ..."_ to elicit
     translation without task-specific training
@@ -73,40 +73,40 @@ digraph Timeline {
 
 * In-Context Learning
 
-- **Definition**: _in-context learning_ is the ability to learn a task from a
-  few examples placed in the prompt, without updating weights
+- @Definition@: **in-context learning** is the ability to learn a task from
+  a few examples placed in the prompt, without updating weights
   - It is the first emergent capability
 
-- **Example** (few-shot):
+- @Example@ (few-shot):
   - Show 3 input-output pairs, then a 4th input
   // TODO(ai_gp): Add example of prompt
   - The model completes the pattern by analogy
 
-- **Key idea**: the prompt became a _programming interface_
+- @Key idea@: the prompt became a _programming interface_
   - Behavior is specified by demonstrations, not code
   - This made rapid task adaptation possible and set the stage for agent
     scaffolding
 
-- **Remark**: in-context learning is what lets us later describe _tools_ to a
+- @Remark@: in-context learning is what lets us later describe _tools_ to a
   model purely in text
 
 * Chain-of-Thought: Reasoning in Text
 
-- **Problem**: on multi-step problems (e.g., arithmetic, logic), models that
+- @Problem@: on multi-step problems (e.g., arithmetic, logic), models that
   output an answer directly are often wrong
 
-- **Solution**: _chain-of-thought_ (CoT) prompting asks the model to generate
+- @Solution@: _chain-of-thought_ (CoT) prompting asks the model to generate
   intermediate reasoning steps before the final answer
   ```
   prompt> Let's think step by step
   ```
 
-- **Example**:
+- @Example@:
   - Question: a word problem with several quantities
   // TODO(ai_gp): Add example
   - CoT: the model writes out each arithmetic step, then the answer
 
-- **Key idea**: reasoning can be externalized as text, giving the model more
+- @Key idea@: reasoning can be externalized as text, giving the model more
   _serial computation_ before committing to an answer
 
 - **Limitation**: CoT reasons about the world but never _checks_ its claims
@@ -114,20 +114,20 @@ digraph Timeline {
 
 * Acting on the World
 
-- **Problem**: pure text generation, even with reasoning, is a closed loop
+- @Problem@: pure text generation, even with reasoning, is a closed loop
   - The model cannot retrieve a fact it does not know
   - It cannot verify an intermediate result
   - It cannot change anything outside the conversation
 
-- **Example**: asked _"what is the current population of Tokyo?"_, a
+- @Example@: asked _"what is the current population of Tokyo?"_, a
   reasoning-only model can only recall stale training data, not look it up
 
-- **Question**: what if the model could _pause_ its reasoning, take an action
+- @Question@: what if the model could _pause_ its reasoning, take an action
   in the world, and resume with the result?
 
 * From Prompting to Acting
 
-- **Key idea**: the field moved from treating the LLM as an _oracle_ to treating
+- @Key idea@: the field moved from treating the LLM as an _oracle_ to treating
   it as a _controller_
 
 ```{=typst}
@@ -142,7 +142,7 @@ digraph Timeline {
 )
 ```
 
-- **Remark**: 
+- @Remark@:
   - This shift is the conceptual birth of the _LLM agent_
   - The same model (wrapped in a loop with tools) becomes a qualitatively
     different kind of system
@@ -151,22 +151,22 @@ digraph Timeline {
 
 * ReAct: Motivation
 
-- **Problem**: two families of methods each had a critical weakness
+- @Problem@: two families of methods each had a critical weakness
   - _Reasoning-only_ (CoT): rich internal reasoning, but no grounding, so errors
     and hallucinations go unchecked
   - _Action-only_: can call tools, but acts without explaining why, making
     behavior brittle and hard to debug
 
-- **Question**: can reasoning and acting be combined so each fixes the
+- @Question@: can reasoning and acting be combined so each fixes the
   other's weakness?
 
-- **Solution**: _ReAct_ (Reasoning + Acting) (Yao et al., 2022) prompts the model
-  to alternate between:
+- @Solution@: _ReAct_ (Reasoning + Acting) (Yao et al., 2022) prompts the
+  model to alternate between:
   - `Thought`: a reasoning step in natural language
   - `Action`: a tool call chosen based on that thought
   - `Observation`: the environment's response, fed back into context
 
-- **Key idea**:
+- @Key idea@:
   - Reasoning decides _what to do_
   - Acting produces _new evidence_ to reason over next
   - This is exactly the perceive-plan-act loop, expressed as a text trace the
@@ -192,18 +192,18 @@ digraph ReActLoop {
 }
 ```
 
-- **Interpretation**:
+- @Interpretation@:
   - The `Thought` makes the agent's plan explicit and inspectable
   - The `Observation` grounds the next `Thought` in what actually happened
   - The cycle repeats until the agent emits a `Finish` action
 
 * ReAct: Worked Example
 
-- **Problem**: answer _"who wrote the novel that inspired the film that won
+- @Problem@: answer _"who wrote the novel that inspired the film that won
   Best Picture in year Y?"_ using a search tool
 
 // TODO(ai_gp): Convert it into typst table
-- **Solution** (ReAct trace):
+- @Solution@ (ReAct trace):
   - `Thought`: _"First find the Best Picture winner of year Y"_
   - `Action`: `search("Best Picture year Y")`
   - `Observation`: _"Film F won"_
@@ -212,7 +212,7 @@ digraph ReActLoop {
   - `Observation`: _"Novel N by author A"_
   - `Thought`: _"The answer is A"_ $\to$ `Finish(A)`
 
-- **Key idea**:
+- @Key idea@:
   - No single step needs to know the full chain
   - Each step is grounded by the previous observation
 
@@ -229,43 +229,43 @@ digraph ReActLoop {
 )
 ```
 
-- **Key idea**: ReAct dominates on knowledge-intensive tasks because _grounding_
+- @Key idea@: ReAct dominates on knowledge-intensive tasks because _grounding_
   suppresses hallucination while _reasoning_ guides the search
 
-- **Remark**:
+- @Remark@:
   - ReAct is not the most token-efficient method
   - But it is far more _reliable_ on tasks requiring external facts
 
 * Why ReAct Worked
 
-- **Intuition**: interleaving creates a _virtuous cycle_
+- @Intuition@: interleaving creates a _virtuous cycle_
   - Reasoning reduces wasted actions by planning the next step
   - Observations reduce hallucination by injecting real evidence
 
-- **Pros**:
+- @Pros@:
   - Traces are human-readable and debuggable
   - Recovers from errors: a bad observation triggers a corrective thought
   - Requires no fine-tuning, only prompting
 
-- **Cons**:
+- @Cons@:
   - Depends on a reliable tool interface and parseable action format
   - Long traces consume context window quickly
 
-- **Key idea**: ReAct is the template most modern agent frameworks still follow
+- @Key idea@: ReAct is the template most modern agent frameworks still follow
 
 ## Grounded Web Agents
 
 * Grounding Language in Web Environments
 
-- **Motivation**: the web is the richest, most general environment for testing
+- @Motivation@: the web is the richest, most general environment for testing
   agents
   - Enormous action space (e.g., links, web forms, buttons)
   - Real, noisy, partially observable pages
 
-- **Problem**: how to turn a prompt like _"buy a cheap red t-shirt"_ into
+- @Problem@: how to turn a prompt like _"buy a cheap red t-shirt"_ into
   concrete clicks and form entries?
 
-- **Question**: can we build a benchmark that isolates web grounding without
+- @Question@: can we build a benchmark that isolates web grounding without
   the cost and risk of the live internet?
 
 * WebShop: Motivation
@@ -275,16 +275,16 @@ digraph ReActLoop {
   - Over one million real product listings
   - Natural-language shopping instructions
 
-- **Goal**: given an instruction, the agent must navigate the site and
+- @Goal@: given an instruction, the agent must navigate the site and
   purchase the correct product
   - E.g., _"I want a red cotton t-shirt, size M, under \$20"_
 
-- **Key idea**: a faithful simulation gives a reproducible, safe, resettable
+- @Key idea@: a faithful simulation gives a reproducible, safe, resettable
   environment for training and evaluation
 
 * WebShop: Environment and Action Space
 
-- **Observation**: a simplified text rendering of the current page
+- @Fact@: a simplified text rendering of the current page
   - Search results, a product listing, or a product detail page
 
 - **Action space**:
@@ -294,7 +294,7 @@ digraph ReActLoop {
 - **Reward**: based on how well the purchased product matches the instruction's
   attributes (type, color, size, price)
 
-- **Remark**: the constrained action space makes behavior auditable while
+- @Remark@: the constrained action space makes behavior auditable while
   keeping the task realistic
 
 * WebShop: What It Revealed
@@ -313,20 +313,20 @@ digraph ReActLoop {
 )
 ```
 
-- **Key idea**: language understanding was _not_ the bottleneck; robust
+- @Key idea@: language understanding was _not_ the bottleneck; robust
   multi-step navigation and search reformulation were
 
 * The Human-Machine Gap in Web Agents
 
-- **Problem**: humans naturally do things early agents did poorly
+- @Problem@: humans naturally do things early agents did poorly
   - Reformulate a failed search instead of repeating it
   - Backtrack after clicking the wrong link
   - Compare several options before committing
 
-- **Interpretation**: these are all _loop-level_ skills, not single-step
+- @Interpretation@: these are all _loop-level_ skills, not single-step
   language skills
 
-- **Key idea**: closing the gap needed better planning and memory over the
+- @Key idea@: closing the gap needed better planning and memory over the
   loop, motivating the capabilities studied in later lessons
 
 ## Early Failures and Lessons
@@ -352,7 +352,7 @@ digraph ReActLoop {
 
 * Failure: Compounding Errors
 
-- **Problem**: in a multi-step task, a small early mistake propagates
+- @Problem@: in a multi-step task, a small early mistake propagates
   - E.g., if the agent misreads the goal, every later step builds on the error
   - With per-step success probability $p$ and $n$ independent steps, end-to-end
     success scales like $p^{\,n}$
@@ -363,12 +363,12 @@ digraph ReActLoop {
 
 * Failure: Hallucinated Tool Calls
 
-- **Problem**: the agent invents a tool that does not exist or supplies
+- @Problem@: the agent invents a tool that does not exist or supplies
   arguments in the wrong format
   - E.g., calling `book_flight()` when only `search_flight()` is available
   - E.g., passing a date as prose instead of ISO format
 
-- **Cons**:
+- @Cons@:
   - The environment rejects the call, wasting a step
   - Worse, a loosely validated runtime may execute an unintended action
 
@@ -377,10 +377,10 @@ digraph ReActLoop {
 
 * Failure: Getting Stuck in Loops
 
-- **Problem**: without memory of what it already tried, an agent repeats the
+- @Problem@: without memory of what it already tried, an agent repeats the
   same failing action
 
-- **Example**: a web agent that
+- @Example@: a web agent that
   - Keeps searching the exact same query, observing the same empty result, and
     searching again
   - Clicks the same broken link again and again
@@ -390,10 +390,10 @@ digraph ReActLoop {
 
 * Failure: Brittle Parsing and Grounding
 
-- **Problem**: early agents emitted actions as free-form text, parsed with
+- @Problem@: early agents emitted actions as free-form text, parsed with
   regular expressions, which breaks whenever the model rephrases its output
 
-- **Solution**: structured output (e.g., JSON matching a schema) plus a fixed,
+- @Solution@: structured output (e.g., JSON matching a schema) plus a fixed,
   finite action space
   - The environment, not the model's prose, determines the effect
 
@@ -404,11 +404,11 @@ digraph ReActLoop {
 
 * From Narrow to General-Purpose Agents
 
-- **Definition**: a _general-purpose agent_ can operate across many task types
-  and environments with the same core architecture
+- @Definition@: a **general-purpose agent** can operate across many task
+  types and environments with the same core architecture
   - Contrast with a _narrow agent_ built for one benchmark (e.g., WebShop only)
 
-- **Key idea**: the perceive-plan-act loop is _environment-agnostic_
+- @Key idea@: the perceive-plan-act loop is _environment-agnostic_
   - Swap the tools and observation format, keep the controller
   - The same ReAct-style loop drives web, coding, and OS agents
 
@@ -441,39 +441,39 @@ digraph GeneralAgent {
 * The Rise of Tool-Use Standards
 
 // TODO(ai_gp): Is this MCP?
-- **Problem**: every early agent invented its own ad-hoc action format,
+- @Problem@: every early agent invented its own ad-hoc action format,
   preventing reuse across projects
 
-- **Solution**: standardized _function calling_ / tool schemas described once as
+- @Solution@: standardized _function calling_ / tool schemas described once as
   `(name, typed parameters, description)`
   - The model emits a structured call the runtime validates and executes
 
-- **Key idea**: standardizing the tool interface decoupled the _agent logic_
+- @Key idea@: standardizing the tool interface decoupled the _agent logic_
   from the _specific tools_
   - New capabilities are added by registering new tools, not rewriting the
     agent
 
 * Scaling Meets Agents
 
-- **Observation**: as base models scaled, agentic behavior improved
+- @Fact@: as base models scaled, agentic behavior improved
   - Better instruction following $\to$ fewer malformed actions
   - Longer context windows $\to$ longer, more coherent traces
   - Stronger reasoning $\to$ better planning within the loop
 
-- **Remark**: many early failures were partly
+- @Remark@: many early failures were partly
   - _capability_ failures that scaling alleviated (better models); and
   - _design_ failures that scaffolding fixed (better loops)
   - Progress came from both fronts at once
 
 * Open Challenges on the Road Ahead
 
-- **Limitations** still open after this early history:
+- @Limitations@ still open after this early history:
   - Reliability over very long horizons (compounding errors persist)
   - Verifying agent actions before they take effect
   - Memory that persists across sessions, not just within a loop
   - Safety when the action space touches the real world
 
-- **Key idea**:
+- @Key idea@:
   - _How to act_ is solved
   - The frontier is _how to act reliably and safely_
 
