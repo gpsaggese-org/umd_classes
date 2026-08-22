@@ -1,6 +1,6 @@
 ---
 title: "Vim Shortcuts"
-draft: False
+draft: false
 authors:
   - gpsaggese
 date: 2026-08-20

@@ -1,6 +1,6 @@
 ---
 title: "Mixed Keyboard Shortcuts"
-draft: True
+draft: false
 authors:
   - gpsaggese
 date: 2026-08-20

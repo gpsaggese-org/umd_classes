@@ -8,6 +8,8 @@
 
 * A College Course in the Age of AI
 
+::: columns
+:::: {.column width=60%}
 - AI can:
   - _Answer any question_ with depth and proficiency
   - _Write a book / class_ on any topic you are interested in tailored to the level you
@@ -17,6 +19,15 @@
 
 - Readers face constant pressure toward _shortcuts_ and clickbait
     - E.g., "a little-known secret", "the 1-hour trick billionaires use"
+
+::::
+:::: {.column width=40%}
+
+![](msml610/lectures_source/figures/L00.1.Rick_Rubin1.jpg)[ width=60% ]
+![](msml610/lectures_source/figures/L00.1.Rick_Rubin2.jpg)[ width=60% ]
+
+::::
+:::
 
 - @Why are we doing here?@
 

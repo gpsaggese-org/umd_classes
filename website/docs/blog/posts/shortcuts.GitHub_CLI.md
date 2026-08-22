@@ -1,6 +1,6 @@
 ---
 title: "GitHub CLI Shortcuts"
-draft: true
+draft: false
 authors:
   - gpsaggese
 date: 2026-07-15
