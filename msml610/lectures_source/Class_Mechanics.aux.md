@@ -1,16 +1,45 @@
+* Yours Truly
+- @Bio@
+  - PhD / Postdoc, University of Illinois at Urbana-Champaign (2001-2006)
+
+- @Current Role@: Adj Professor at Univ of Maryland
+  - DATA605: Big Data Systems (2023-)
+  - MSML610: Advanced Machine Learning (2025-)
+
+- @Industry@
+  - Research scientist: NVIDIA, Synopsys, Teza, Engineers' Gate
+  - 3x startup founder: ZeroSoft, June, Causify AI
+
+::: columns
+:::: {.column width=70%}
+
+- @Academic@
+  - 20+ papers, 2 US patents
+  - [LinkedIn](https://www.linkedin.com/in/gpsaggese/)
+  - [Research website](https://gpsaggese.github.io/)
+  - [Blog](https://gpsaggese.github.io/blog/)
+  - [Publications](https://gpsaggese.github.io/05_publications/)
+  - [Research](https://gpsaggese.github.io/06_research/)
+::::
+:::: {.column width=30%}
+
+![](msml610/lectures_source/figures/GP_in_coding_state.png)
+
+(GP in his normal coding state)
+::::
+:::
+
 * A College Course in the Age of AI (1/2)
 
 ::: columns
 :::: {.column width=60%}
-- @AI can@
-  - _Answer any question_ with depth and proficiency
-  - _Write a book / class_ on any topic you are interested in tailored to the level you
+- @AI can@:
+  - **Answer any question** with depth and proficiency
+  - **Write a book / class** on any topic you are interested in tailored to the level you
     are at (from ELI5 to PhD)
-  - _Be a tutor_ that can patiently answer questions and explain concepts
-  - All of this _instantaneously_ and (almost) for free
+  - **Be a tutor** that can patiently answer questions and explain concepts
 
-- Readers face constant pressure toward @shortcuts and clickbait@
-    - E.g., "a little-known secret", "the 1-hour trick billionaires use"
+- All of this @instantaneously@ and @for free@ (almost)
 
 - @Why are we doing here?@
 
@@ -29,10 +58,10 @@
 
 - AI optimizes for @consensus and average@, since it is trained to predict the most
   likely next token
-  - It underrepresents _edge cases_ and non-linear paths to success
-  - A human can add _hard-won lessons_ from the field that AI cannot reconstruct
+  - It underrepresents **edge cases** and **non-linear paths** to success
+  - A human can add **hard-won lessons** from the field that AI cannot reconstruct
     on its own
-  - A human can provide _taste_
+  - A human can provide **taste**
 
 - What is worth teaching is @judgment@ (and taste), not syntax
     - When to apply a technique
@@ -48,19 +77,15 @@
 ::::
 :::
 
-* AI Policy
-
-- From https://gpsaggese.github.io/blog/my-ai-policy
-// TODO(ai_gp): Add a set of bullet points from the policy above
-
 * Invariants of a Class Lecture
 
-- @Invariants@
-  - Focus on **intuition over math**, unless math is necessary
+- @Invariants@: We will
+  - Focus on **intuition over math**, but enjoy the math
   - Emphasize **realistic assumptions and numerical methods**
     - Analytical solutions are so 1800s
-  - **Interactive Jupyter notebook** tutorials for hands-on approach
-    - Tutorials are mainly done at home
+  - Use **interactive Jupyter notebook** tutorials for hands-on approach
+    - Some tutorials are done in class
+    - Other tutorials are done at home
     - Videos of each tutorial will be added over time
 
 - @Class flow@
@@ -69,66 +94,121 @@
     - 50 mins of discussion and 10 mins break
 
 - @Labs@
-  - Review complete class project examples
-  - Collaborate on class project
+  - Review class project examples
+  - Work together on class project
+
+- No attendance taken (you are adults)
+  - Lessons are recorded
+  - Still attend class, when possible
 
 * Class Links
 
-- @Course Management@:
-  [ELMS](https://umd.instructure.com/courses/1391619/pages/homepage)
+- @Course Management@
+  - [ELMS](https://umd.instructure.com/)
 
-- @Syllabus@: [Google Doc](TBD)
-  - Schedule, GitHub project, Class FAQs
+- @Schedule@
+  - [DATA605 Schedule](https://docs.google.com/document/d/1LYd7QqGOU2_JR5QOWaAxWCwBB2cy16n57dSaVV6A3tc)
+  - [MSML6108 Schedule](https://docs.google.com/document/d/1YXCrqh6KGg3xm4-Lr4QGdBnjeWEfkqz67FHNHB_rdAk)
+  - [Official Calendar](https://provost.umd.edu/calendar)
+
+- @GitHub@
+  - [Class GitHub](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/README.md)
+  - [DATA605 GitHub](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/data605/README.md)
+  - [MSML610 GitHub](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/msml610/README.md)
+  - For each class: PDF slides, Slide commentary, Tutorials
+
+- @Feedback@
+  - [Class FAQs](https://docs.google.com/document/d/1updvJmP5wl4cRGf4ncF51NTaCMsvio4SEqbswLm0NIk)
+  - [Class Feedback](https://docs.google.com/spreadsheets/d/1uHPjukH_b4Dg_AM1ms4yGtrjkzlN8DRFYYwC6-eT-30)
 
 * Grading
 
 - @Quizzes@ (40%)
-  - Multi-choice quizzes on previous 2 lessons
   - 4-5 quizzes to make you study during the semester and don't cram
+  - Every 2 classes, multi-choice quiz about the material presented in the previous
+    two classes
+    - Goal: give students pace to study the materials
   - 20 questions in 20 minutes
 
 - @Final Project@ (60%)
   - A comprehensive application of course concepts
-  - Python project selected from a list of topics
-  - Small AI / ML research topics
-    - Blog, tutorial, and (maybe) publication
+  - You can choose a:
+    - Small AI / ML / BigData research project
+    - Implemennt a tutorial and a small application _"Build X with Y"_
+  - High quality projects typically yield blog, tutorial, and (maybe) publication
+  - Individual or group ($n < 4$)
+  - Varying levels of difficulty
 
 * Class Project: Tutorials
 
-- @Project@ is _"Build $X$ with $Y$"_, where
-  - $X$ is a "use case"
-  - $Y$ is a "technology"
+- @Project@ is _"Build $X$ with $Y$"_, where $X$ is a "use case", $Y$ is a "technology"
+
+- @Activities@
+  - Choose $X$ and $Y$ from a list
+  - Study and describe technology $Y$
+  - Implement use case $X$ using technology $Y$
+  - Create Jupyter notebooks to demo your project
+  - Commit code to GitHub and contribute to open-source repo
+  - Write a blog entry for you project
+  - Present your project in a video
+
+- @Links@
+  - [Project template](https://github.com/gpsaggese.github.io/umd_classes/tree/master/class_project/project_template)
+  - [Project template README](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/project_template/README.md)
+  - [Project instructions](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/README.md)
+  - [Project descriptions](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/project_descriptions/README.md)
+  - [DATA605 Project descriptions](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/class_project/project_descriptions/DATA605)
+  - [MSML610 Project descriptions](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/class_project/project_descriptions/MSML610)
+  - [DATA605 Past projects](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/class_project/data605)
+  - [MSML610 Past projects](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/class_project/msml610)
+
+* Class Project: Small Research
 
 - @Activities@
   - Study and describe technology $Y$
   - Implement use case $X$ using technology $Y$
   - Create Jupyter notebooks to demo your project
   - Commit code to GitHub and contribute to open-source repo
-  - Write a blog entry
+  - Write a blog entry for you project
   - Present your project in a video
 
-- @Each project@:
-  - Individual or group ($n < 4$)
-  - Varying levels of difficulty
+- @Links@
+  - [Research page](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research)
+  - [Research ideas](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas)
+  - [Research summary](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/research/ideas/README.md)
 
-- @You choose from list@ of $X$ and $Y$, e.g.,
-  - Data engineering
-  - Emerging technologies (e.g., large language models)
-  - ...
+* AI Policy
 
-// TODO(ai_gp): Add links to the repo
+- From [AI Policy](https://gpsaggese.github.io/blog/my-ai-policy)
 
-* Class Project: Small Research
+  - @Treat AI like a team member@
+    - Use LLMs the same way you work with humans on a team
 
-// TODO(ai_gp): Add links to the repo
-  - In-class labs + reviews
+  - @Review rigorously@
+    - Read AI-generated code / output multiple times, like reviewing a capable
+      but unproven junior developer
+    - You must be able to explain every line, comment, and design choice
+      of your code
 
+  - @Raise the bar, don't lower it@
+    - AI output should be _better_ than the non-AI alternative
+    - Make sure you can still work without AI
 
-- @Project Specifications@: 
+  - @Verify, don't blindly trust@
+    - Use AI for ideation, but check accuracy, challenge outputs, and watch
+      for hallucinations
+    - Reject "AI slop": content that reads as obviously machine-generated
+
+  - @Be accountable@
+    - Be ready to justify and defend every AI-assisted decision
+    - Hold yourself (and expect others) to the same standard
 
 * Soft Skills to Succeed in the Workplace
-- @Goal@: model class project for workplace preparation
+
+- Model class project for workplace preparation
   - Work in a team
+  - Collaborate using GitHub and Git
+  - Use Docker
   - Design software architecture (OOP, Agile, Design Patterns)
   - Comment your code
   - Write external documentation (tutorials, manuals, how-tos)
@@ -137,59 +217,19 @@
   - Follow code conventions (PEP8, Google Code)
   - Communicate clearly (emails, Slack)
   - File a bug report
-  - Reproduce a bug
-  - Intuition of CS constants
-  - Basic understanding of OS (virtual memory, processes)
-
-* Yours Truly
-::: columns
-:::: {.column width=60%}
-
-- @Bio@
-  - PhD / Postdoc, University of Illinois at Urbana-Champaign (2001-2006)
-
-- @Current Role@
-  - Lecturer, UMD DATA605: Big Data Systems (2023-)
-  - Lecturer, UMD MSML610: Advanced Machine Learning (2025-)
-
-- @Industry@
-  - Research scientist: NVIDIA, Synopsys, Teza, Engineers' Gate
-  - 3x startup founder: ZeroSoft, June, Causify AI
-
-- @Academic@
-  - 20+ papers, 2 US patents
-  - [LinkedIn](https://www.linkedin.com/in/gpsaggese/)
-  - [Email](gsaggese@umd.edu)
-  - [Research website](https://gpsaggese.github.io/)
-  - [Blog](https://gpsaggese.github.io/blog/)
-  - [Publications](https://gpsaggese.github.io/05_publications/)
-  - [Research](https://gpsaggese.github.io/06_research/)
-::::
-:::: {.column width=40%}
-![](msml610/lectures_source/figures/GP_in_coding_state.png)
-::::
-:::
-
-- How to Join GP's team
-  - how_to_join_the_research_team.md
-  - policies/FAQ.md
-  - Publications https://gpsaggese.github.io/05_publications/
 
 * Todos
-// TODO(ai_gp): Update
-- Study slides and materials
-- DATA605 - ELMS/Canvas site
+- [ ] Study slides and materials (they are available ahead of time)
+- Go on ELMS/Canvas site
   - Enable notifications
-  - Contact info for me and TAs
-    - Always keep the TAs in cc
-- Check [DATA605 Schedule](https://docs.google.com/document/d/1LYd7QqGOU2_JR5QOWaAxWCwBB2cy16n57dSaVV6A3tc)
-- Check [DATA605 GitHub repo](https://github.com/gpsaggese-org/umd_classes/tree/master/data605)
-- Get these [slides](https://github.com/gpsaggese-org/umd_classes/tree/master/data605/lectures)
-- Check [DATA605 FAQs](https://docs.google.com/document/d/1updvJmP5wl4cRGf4ncF51NTaCMsvio4SEqbswLm0NIk)
+  - Check the contact info for me and TAs
+  - When emailing always keep the TAs in cc
+- Check the Syllabus for schedule, GitHub project, and FAQs
+- Visit the links to get oriented
+- Check the code repo
 - Setup computing environment
   - Install Linux/VMware
   - Install Docker on laptop
   - Instructions in class repo
 - Bring laptop to class
-- Lessons recorded
-  - Still attend class, when possible
+- [ ] Connect with me on LinkedIn

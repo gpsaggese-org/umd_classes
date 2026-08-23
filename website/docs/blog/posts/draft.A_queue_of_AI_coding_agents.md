@@ -9,39 +9,47 @@ categories:
   - Developer Tools
 ---
 
-TL;DR: A flow to run a queue of AI agents that fix issues asynchronously.
+TL;DR: My workflow to run a queue of AI agents that fix issues asynchronously.
 
 <!-- more -->
 
-This is my flow to have a queue of AI agents fixing asynchrnously issues
+- This blog is a short description of my workflow to organize and run a queue of AI
+  agents fixing issues asynchrously
 
 - My coding set up is:
-  - GitHub (GH)
+  - GitHub (GH) / Git
   - Claude Code (CC)
   - `ai_helpers` repo
 
+- None of this assumptions is strictly needed, but you can generalize to other code
+  hosting / control systems, code harness, and models
+
 # Overview
 
-- Create a list of issues with specs that can be executed asynchronously
-- Create automatically GH issues
-- Assign the GH issues to CC to generate a PR
+- The core components are:
+  - **Queue**: A set of GitHub Issues that should be executed asynchrously
+    (identified by a specific label or assigned to a specific user, e.g., `claude`)
+  - **Trigger**: a GitHub Action that runs when an issue is labeled assigned marking
+    it as part of the Queue
+  - **Agent**: Claude Code, running in the GH Actions, which reads the issue, writes
+    the code (running regressions, linting, etc) and then opens a PR for human review
 
-# Getting Tasks in the Queue
+- The actions are:
+  - Create a list of issues with specs that can be executed asynchronously
+  - Create programmatically GH issues from this list
+  - Assign the GH issues to CC to generate a PR
 
-- The core pattern is
-  - Queue: GitHub Issues (with a specific label or assigned to a specific user)
-  - Trigger: a GitHub Actions that triggers when an issue is labeled assigned
-    marking it as part of the Queue
-  - Agent: Claude Code, running in the GH Actions, read the issue, write the
-    code and open a PR for human review
+## Getting Tasks in the Queue
 
-- I maintain a markdown file called `ai_task_queue.md` with everything that I
-  would like to be done
+- I maintain a markdown file called `.claude/ai_task_queue.md` with everything that I
+  would like to be done over time
 
-// TODO(gp): Check ./helpers_root/dev_scripts_helpers/ai/todo_janitor.template.md
+- The format of the queue is simply a markdown file:
+  - With several sections (`Ready`, `Backlog`, `Done`)
+  - For each section a checklist of issues described in terms of title and specs
 
-- The format of the queue is like:
-  ```
+- E.g.,
+  ```markdown
   # Ready
 
   ## [ ] Use System_to_one_line() in Hgit.py
@@ -59,72 +67,91 @@ This is my flow to have a queue of AI agents fixing asynchrnously issues
   ...
   ```
 
-- E.g., potential targets are:
-  - Todos in the codebase marked with `TODO(ai_gp)` 
-  - Ensuring that file have 100% code coverage by unit test
-  - Make sure all files follow the style rules of the repo (e.g., 
-  - Make sure all files pass the linter stage (e.g., `pyright` warnings)
+- E.g., potential targets for asynchronous bugs are:
+  - Todos in the codebase (e.g., marked with `TODO(ai_gp)`)
+  - Ensure that file have 100% code coverage by unit tests
+  - Make sure all files follow the style rules of the repo
+  - Make sure all files pass the linter stage (e.g., have no `pyright` warnings /
+    errors)
   - Triage and propose a solution for unit tests that are disabled
-  - Explore a research idea
-  - One-off refactoring and code clean ups
-  - Prototyping / "Tracer bullet" where I one-shot something to see what is
-    its impact
+  - One-off refactoring and other code clean ups
+  - Prototyping / "Tracer bullet" to one-shot something to see what is its impact
+  - Explore research ideas
 
-- I tend to run certain classes of tasks 
-  - Maintaining the documentation in sync with code
-  - Making sure code coverage for the entire repo is high enough
-  are more on a once-a-week or on a schedule, while the `ai_task_queue.md` are
-  one-offs
-
-- My approach is to add tasks in `ai_task_queue.md` as they come up, re-organize
-  them, triage their importance over time, add specs and then mark them as ready for
-  execution at a certain point
+- Certain classes of tasks are run more as on a schedule (rather than as
+  `ai_task_queue.md`, which are mainly one-offs)
+  - E.g.,
+    - Maintaining the documentation in sync with code
+    - Making sure code coverage for the entire repo is high enough
 
 ## The Unit of Work
 
-- The unit of work is
-  - A GitHub issue
-  - A Git branch
-  - A GitHub PR
+- In my workflow, the unit of work is a something that corresponds to a GitHub issue
 
-- In general one GitHub issue can correspond to multiple Git branches / GitHub PR
-  - E.g., the same refactoring can be done in "chunks" with follow up PRs (for both
-    safety and ease of review)
+- Often it's implemented as a single Git branch + a GitHub PR
+- Sometimes one GitHub issue can correspond to multiple Git branches / GitHub PR
+  - E.g., the same refactoring can be done in "chunks" with several follow up PRs
+    (for both safety and ease of review)
 
-### Feeding issues
+- In my workflow, a GitHub Issue is named after the title using a fixed convention 
+  - E.g., For GitHub Issue `<num>` with title "Do this and that", the the Git branch
+    and the PRs are named as `<Repo>_<Issue Number>_Do_this_and_that`, decorated with
+    an `<id>` when there are multiple branches / PRs associated  (e.g.,
+    `<Repo>_<Issue Number>_Do_this_and_that_<id>`
 
-- E.g., create a list of tasks from TODOs
-  ```
+## Adding Tasks to the Queue
+
+- My approach is to:
+  - Add tasks to `Backlog` in `ai_task_queue.md` as they come up,
+  - Re-organize them
+  - Triage their importance over time
+  - Add specs
+  - Then mark them as ready for execution at a certain point
+
+- Once in a while I grep the code base looking for TODOs that are suitable to be
+  executed asynchronously, e.g., with my code
+  ```bash
   > rigtodo
   > rigtodo . py --todo ai_gp | tee cfile
+  > vim -c "cfile cfile"
+  ...
   ```
-
 - Note that not all TODOs might be ready to go, so I manually review the list of
-  potential tasks and move them to `Ready` vs `Backlog`
-  ```
-  > vic
-  ```
-- Split and do `open cfile`
-- Review the issues one by one
-- Make sure that `cfile` is the desired one
+  potential tasks and move them manually to `Backlog` (and then `Ready`)
 
-### Add Specs
+## Add Specs
 
-- Improve
+- Besides prioritizing, I also want to make sure that the model has enough
+  information to implement the code in the proper way, so I write enough specs
+  to direct the model to do something in a way that would not surprise me
+
+- I have several skills to help with managing the specs
+  - `/auto_task.create_specs`: specs for a list of TODOs
+  - `/auto_task.criticize`: to review and improve specs of tasks that will be
+    executed asynchrously
+
+## Feed Auto Tasks to Claude Code
+
+- Each task conceptually has:
+  - A problem
+  - A solution
+  - A complexity
+  - An importance
+
+- I keep improving `ai_task_queue.md` (review and edit the specs, ranking issues by
+  "simplicity" and "importance")
+
+- Once I see tasks that are in the `Ready` state, I pass it to the workers by
   ```
-  # Create instr.md with the instructions
-  claude> /auto_task.criticize instr.md
+  > git_create_issue_and_branch.py --gh_issue_title 'Implement TODOs' --gh_issue_body_file instr.md
   ```
 
-- Create the list of CC tasks from the cfile
-  ```
-  claude> /coding.create_auto_todo cfile
-  ```
-- Review and edit `ai_task_queue.md`
+./helpers_root/dev_scripts_helpers/ai/todo_janitor.template.md
+./helpers_root/todo_janitor.prompt.update_plan.md
+
+
 - This is the master list of what needs to be done
 
-- Ranks them by "simplicity" and "importance"
-- Create a `ai_task_queue` with problem, solution, complexity, importance
 - User reviews them and add a [ ] ready
 
 - There is overlap with GitHub `gh` to manage issues but personally I prefer to batch
@@ -148,8 +175,6 @@ This is my flow to have a queue of AI agents fixing asynchrnously issues
   time in quality, at least for PR that pure implementation and not design)
 
 - Other tasks can be executed on **GitHub**
-
-  > git_create_issue_and_branch.py --gh_issue_title 'Implement TODOs' --gh_issue_body_file instr.md
 
   Attach the Git branch and the PR to the issue using a gh comment
 

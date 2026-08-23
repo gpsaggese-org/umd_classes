@@ -423,7 +423,6 @@ TL;DR: A cheat sheet of Vim commands and concepts.
 ## Go to prev / next quickfix
 - Prev: `:cp` or `<F9>`
 - Next: `:cn` or `<F10>`
-
 - Show current error: `:cc`
 
 # Marks
