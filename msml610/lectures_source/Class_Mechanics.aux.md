@@ -154,7 +154,7 @@
 
 - @Links@
   - [Project template](https://github.com/gpsaggese.github.io/umd_classes/tree/master/class_project/project_template)
-  - [Project template README](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/project_template/README.md)
+  - [Project template README](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/project_template/docker_scripts.README.md)
   - [Project instructions](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/README.md)
   - [Project descriptions](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/project_descriptions/README.md)
   - [DATA605 Project descriptions](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/class_project/project_descriptions/DATA605)

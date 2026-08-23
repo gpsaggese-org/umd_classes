@@ -1,21 +1,20 @@
-In ./helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py add
-a transform that converts links between ! into text that resembles a link
-(blue with underlying) using 
+Extend create_project.py with
 
-From
-[ELMS](https://umd.instructure.com/courses/1391619/pages/homepage)
+- Add --src_dir which by default is $GIT_ROOT/class_project_project_template
+  Make sure src_dir always exists
 
-to
+--action copy_docker_files
+  add an option that copies all and only the Docker files from src_dir to dst_dir
 
+--action create_links
+  for all the files in dst_dir that are the same of the corresponding files in
+  src_dir, create a link from dst_dir to src_dir
 
-[\textcolor{blue}{\underline{ELMS}}](https://umd.instructure.com/courses/1391619/pages/homepage)
+--action compare_docker_files
+  report a table with all the files in src_dir and dst_dir and show which ones are
+  the same, which one are links, ...
 
-From
+--dry_run to show what would be done without doing it
 
-- From https://gpsaggese.github.io/blog/my-ai-policy/
-
-to
-
-- From [\textcolor{blue}{\underline{https://gpsaggese.github.io/blog/my-ai-policy/}}](https://www.linkedin.com/in/gpsaggese/)
-
-Use msml610/lectures_source/Lesson00-Class.smd to find examples
+- Create a create_project.README.md to explain how the script works following the
+  proper rules in .claude/rules.md

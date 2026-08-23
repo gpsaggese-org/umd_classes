@@ -39,7 +39,7 @@ your needs, and maintain it over time.
   - Sudoers configuration file granting passwordless sudo access for postgres
     user
 
-- `README.md`
+- `docker_scripts.README.md`
   - Documentation file describing directory contents, files, and executable
     scripts
 
@@ -344,30 +344,27 @@ your needs, and maintain it over time.
 ```
 
 ### Step 2: Choose a Base Image
-The template includes three Dockerfile options. Choose the one that best fits
-your project:
+The template's `Dockerfile` contains three base-image styles as separate
+sections. The first (Python 3.12 slim) is active by default; the other two
+are commented out for reference. Choose the one that best fits your project:
 
-| Option                     | File                     | Best For                                                         |
-| -------------------------- | ------------------------ | ---------------------------------------------------------------- |
-| **Standard**               | `Dockerfile.ubuntu`      | Full Ubuntu environment with system tools                        |
-| **Lightweight**            | `Dockerfile.python_slim` | Minimal Python environment; reduced image size                   |
-| **Modern Package Manager** | `Dockerfile.uv`          | Fast dependency resolution with [uv](https://docs.astral.sh/uv/) |
+| Option | Section | Best For |
+| --- | --- | --- |
+| **Lightweight** (default) | Python 3.12 slim | Minimal Python environment; reduced image size |
+| **Standard** | Ubuntu 24.04 + pip | Full Ubuntu environment with system tools |
+| **Modern Package Manager** | Ubuntu 24.04 + uv | Fast dependency resolution with [uv](https://docs.astral.sh/uv/) |
 
 **How to choose:**
 
-- **Use Standard** if you need system-level tools (git, curl, graphviz, etc.)
-- **Use Python Slim** to minimize image size and build time
-- **Use uv** if you want faster, more reliable dependency management
+- **Keep Python Slim** (default) to minimize image size and build time
+- **Use Ubuntu + pip** if you need system-level tools (git, curl, graphviz, etc.)
+- **Use Ubuntu + uv** if you want faster, more reliable dependency management
 
 ### Step 3: Set Up Your Dockerfile
-- Delete unused reference files
+- Uncomment the section you want to use in `Dockerfile`, and comment out (or
+  delete) the other two sections
   ```bash
-  > rm Dockerfile.ubuntu Dockerfile.python_slim Dockerfile.uv
-  ```
-
-- Create your working Dockerfile
-  ```bash
-  > cp Dockerfile.ubuntu Dockerfile
+  > vim Dockerfile
   ```
 
 - Add your dependencies
@@ -704,16 +701,16 @@ Docker build context:
   > cd my-new-project
   ```
 
-- Keep all reference Dockerfiles
+- Review the base-image sections in the single `Dockerfile`
   ```verbatim
-  Dockerfile.ubuntu_24_04
-  Dockerfile.python_slim
-  Dockerfile.uv
+  Python 3.12 slim (default, active)
+  Ubuntu 24.04 + pip (commented out)
+  Ubuntu 24.04 + uv (commented out)
   ```
 
-- Create your working Dockerfile
+- Uncomment the section you want to use
   ```bash
-  > cp Dockerfile.ubuntu_24_04 Dockerfile
+  > vim Dockerfile
   ```
 
 - Add your dependencies
@@ -796,7 +793,7 @@ Example improvements:
   > docker history my-project:latest
   ```
 
-- Remove unnecessary packages or use `python_slim` base image
+- Remove unnecessary packages, or keep the Python 3.12 slim section active in `Dockerfile`
 
 ### Package Not Found Error
 - Verify package name in PyPI (packages are case-sensitive)
