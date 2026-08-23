@@ -16,26 +16,27 @@
 
 * Deciding by Simulating
 
-- @Motivation@: many decisions are **sequential**, so the choice made now
-  changes which choices exist later
-  - The set of possible futures grows multiplicatively with the horizon
-  - Only the _end_ of a future can be scored reliably
+- @Motivation@: Sequential decisions are complex
+  - Many decisions are **sequential**, so the choice made now changes which choices
+    exist later
+  - The set of possible futures grows **multiplicatively** with the horizon
+  - Only the **end** of a future can be scored reliably
 
-- @Problem@: enumerating every future is impossible beyond a few steps, and
-  scoring an unfinished future needs domain knowledge that often does not
-  exist
+- @Problem@:
+  - Enumerating every future is impossible beyond a few steps
+  - Scoring an unfinished future needs domain knowledge that often does not exist
 
-- @Question@: can an agent decide well by _sampling_ a few complete futures
-  instead of enumerating all of them?
+- @Question@: can an agent decide well by _sampling_ a few complete futures instead
+  of enumerating all of them?
 
-- @Key idea@: run simulations to the end, and let the results of past
-  simulations decide where the next simulation should go
+- @Key idea@: run simulations to the end, and let the results of past simulations
+  decide where the next simulation should go
 
 * Why Search Trees Explode
 
-- @Definition@: in a search tree the **branching factor** $b$ is the number of
-  legal actions per state, and the **depth** $d$ is the number of steps to a
-  terminal state
+- @Definition@: in a search tree
+  - The **branching factor** $b$ is the number of legal actions per state
+  - The **depth** $d$ is the number of steps to a terminal state
   - Nodes within depth $d$ grow as $O(b^d)$
 
 ```{=typst}
@@ -52,35 +53,43 @@
 )
 ```
 
-- @Remark@: the growth is in the _exponent_, so faster hardware buys almost
-  nothing
-  - 1000x more compute buys about two extra plies of chess lookahead
+- @Fact@: There are around $10^80$ atoms in the visible universe
+
+- @Remark@: the growth is in the _exponent_, so faster hardware (even 1000x more
+  compute) buys almost nothing
 
 * Minimax and Alpha-Beta
 
-- @Definition@: **minimax** computes the value of a state by assuming both
-  players act optimally, backing terminal values up the tree
-  - Returns the optimal action when the whole tree is searched
+- @Definition@: in two players adversarial game **minimax** computes the value of a
+  state by backing terminal values up the tree
+  - Returns the optimal action when:
+    - The whole tree is searched
+    - Both players play optimally
 
-- @Problem@: a full minimax search costs $O(b^d)$, which is infeasible
+- @Problem@: a full minimax search costs $O(b^d)$ since it requires the entire search
+  tree to be built, which is infeasible
 
-- @Solution@: **alpha-beta pruning** skips branches that cannot change the
-  root value
-  - With good move ordering the cost drops to $O(b^{d/2})$, which doubles the
-    reachable depth
+- @Solution@:
+  - **Alpha-beta pruning** skips branches that are proven worse than a move already
+    found, stop exploring it
+  - The cost can drop to $O(b^{d/2})$, which doubles the reachable depth
 
 - @Cons@
   - The cost is still exponential in $d$
-  - The search must be cut at a fixed depth
-  - Every cut node must be scored by a hand-built **evaluation function**
+
+- @Definition@: **Depth-limited search**
+  - Cuts the search at a fixed depth
+  - Replaces the true value of a not-terminal state with a heuristic estimated
+  - Every cut node must be scored by a hand-built _evaluation function_
 
 * The Evaluation Function Bottleneck
 
-- @Problem@: depth-limited search replaces the true value of a nonterminal
-  state with a heuristic estimate, so the result inherits that estimate's bias
+- @Problem@: **evaluation function** of a state is a heuristic estimate of the
+  "quality" of a state
+  - Cons: the result inherits that estimate's bias
 
-- @Example@: a chess evaluation combines material, mobility, pawn structure,
-  and king safety
+- @Example@
+  - A chess evaluation combines material, mobility, pawn structure, and king safety
   - These features are local, cheap, and strongly correlated with the outcome
 
 - @Counterexample@: Go has no comparable features
@@ -88,44 +97,60 @@
     hundreds of moves later
   - Local patterns do not aggregate into a reliable score
 
-- @Consequence@: before 2006 the strongest Go programs played at weak amateur
-  level, while chess programs already beat world champions
+- @Fact@: Before 2006:
+  - Chess programs already beat world champions
+  - The strongest Go programs played at weak amateur level
+
+- @Example@: an A* path-planning heuristic uses Euclidean distance to the goal
+  - Local, cheap, and strongly correlated with the true remaining cost
+
+- @Counterexample@: protein's folding stability depends on a global 3D configuration
+  that only resolves once folding completes
+  - Local sequence patterns do not aggregate into a reliable score
 
 * Flat Monte Carlo
 
-- @Naive Solution@: **flat Monte Carlo** scores each legal action by
-  simulation instead of by heuristic
-  - For each action $a$ at the current state $s_0$, run $N$ random playouts to
-    a terminal state
-  - Estimate $\hat{Q}(s_0, a)$ as the mean terminal outcome
-  - Play $\argmax_a \hat{Q}(s_0, a)$
+- @Definition@: **flat Monte Carlo** scores each legal action by _simulation_ instead
+  of by _heuristic_
+  - For each action $a$ at the current state $s_0$
+    - Run $N$ random playouts to a terminal state
+    - Estimate $\hat{Q}(s_0, a)$ as the mean terminal outcome
+    - Play $\argmax_a \hat{Q}(s_0, a)$
 
 - @Pros@
   - Needs only the rules and a random simulator, not an evaluation function
-  - The terminal outcome is exact, so bias enters only through the playout
-    policy
+  - The terminal outcome is exact, so bias enters only through the playout policy
   - Trivially parallel
 
-- @Intuition@: an unfinished position is scored by _how often_ it ends well,
-  not by what it looks like
+- @Intuition@: an unfinished position is scored by _how often_ it ends well, not by
+  what it looks like
 
 * Why Flat Monte Carlo Is Not Enough
 
 - @Cons@
-  - The budget is spread uniformly, so most playouts are spent on actions
+  - The simulation budget is _spread uniformly_, so most playouts are spent on actions
     already known to be bad
-  - Nothing observed _inside_ a playout is stored, so the same mistakes are
-    simulated again
-  - After the first move both sides play randomly, so forced replies stay
+  - Nothing observed _inside_ a playout is stored, so the same mistakes are simulated
+    again
+  - After the first move both sides play randomly, so forced replies (i.e. the move a
+    rational opponent is forced to play because every other move loses) stay
     invisible
+
+- @Example@
+  - You are evaluating a candidate move $a$, and you need to know how the opponent
+    would respond
+  - If a position $a$ has 20 legal replies and only 1 of them punishes $a$, a
+    uniform random policy picks that punishing reply about $1/20$ of the time
+  - The other $19/20$ of playouts pick a harmless reply and $a$ looks like a
+    winning move
 
 - @Example@: a move that wins against random continuations but loses to the
   single best reply keeps a high sample mean forever
-  - Averaging over random play hides the refutation
+  - Averaging over random play hides the best game-theoretic move, which cares about
+    the min over replies
 
-- @Key idea@: the estimate must be **deepened where it matters**, not only
-  averaged
-  - Spend the next playout on the action that is most worth resolving
+- @Key idea@: no amount of additional simulation will solve this problem
+  - You need to "simulate smarter" not "simulate more"
 
 * Monte Carlo Tree Search
 
@@ -142,121 +167,7 @@
 - @Key idea@: simulation results are not only averaged, they reshape the tree
   - The tree deepens along promising lines and stays shallow elsewhere
 
-# Where MCTS Fits Among Search Paradigms
-
-* A Map of Search Paradigms
-
-```mermaid
-mindmap
-  root((**Deciding by search**))
-    (**Exhaustive**)
-      Minimax
-      Alpha-beta
-      A-star
-    (**Sampling, no tree**)
-      Flat Monte Carlo
-      Random shooting
-    (**Sampling with a tree**)
-      MCTS
-      UCT
-      PUCT
-    (**Model-based DP**)
-      Value iteration
-      Policy iteration
-```
-
-- @Comparison@: three axes separate these families
-  - _Complete vs sampled_: does the method touch every successor?
-  - _Flat vs structured_: are the samples organized into a tree?
-  - _Local vs global_: is a value produced for the current state only, or for
-    all states?
-
-* MCTS vs Exhaustive Search
-
-```{=typst}
-#styled-table(
-  headers: ([Aspect], [Alpha-beta], [MCTS]),
-  rows: (
-    ([Node coverage], [Uniform to a fixed depth],
-     [Asymmetric, deeper on promising lines]),
-    ([Nonterminal value], [Hand-built evaluation function],
-     [Mean of simulated outcomes]),
-    ([Backup rule], [Min and max], [Average, or max in variants]),
-    ([Stopping], [Depth-limited, all or nothing], [Anytime, any budget]),
-    ([Domain knowledge], [Required], [Optional]),
-    ([Guarantee], [Exact on a fully searched tree],
-     [Optimal in the limit of infinite playouts]),
-  ),
-  col-widths: (1fr, 1.3fr, 1.3fr),
-  bold-first-col: true
-)
-```
-
-- @Key idea@: alpha-beta spends knowledge to avoid search, MCTS spends search
-  to avoid knowledge
-
-* MCTS vs Pure Monte Carlo Simulation
-
-- @Comparison@: both draw random playouts, but they differ in what they keep
-  - _Flat Monte Carlo_: one statistic per root action, playouts independent
-  - _MCTS_: one statistic per visited node, playouts steered by earlier ones
-
-- @Properties@: what the tree buys
-  - _Adaptive allocation_: sampling concentrates on the near-optimal actions
-  - _Opponent modeling_: inside the tree both sides pick strong replies, so
-    refutations surface
-  - _Reuse_: the subtree under the played action seeds the next search
-
-- @Remark@: flat Monte Carlo is exactly MCTS with a tree of depth one
-  - MCTS is a strict generalization, not a different family
-
-* MCTS vs Dynamic Programming
-
-- @Comparison@
-  - _Value iteration_: sweeps the whole state space, needs the transition
-    model in closed form, returns a policy for _every_ state
-  - _MCTS_: samples trajectories from the current state, needs only a
-    simulator, returns an action for _one_ state
-
-- @Definition@: MCTS is **decision-time planning**, so the computation happens
-  when the action is needed and is discarded afterwards
-
-- @Pros@: the cost is independent of the size of the state space
-  - It scales with the _budget_, not with $|\mathcal{S}|$
-
-- @Cons@: nothing generalizes across states unless the statistics are stored
-  in a learned function
-
-* Every Node Is a Bandit Problem
-
-- @Intuition@: at a node $s$, picking which child to descend into is a choice
-  among arms
-  - Arm = action $a$, reward = outcome of the playout that follows
-
-- @Comparison@: a tree node differs from a standalone bandit
-  - _Nonstationary_: a child's mean drifts as its own subtree is refined
-  - _Recursive_: each arm hides another bandit problem below it
-  - _Shared budget_: playouts spent deep in one subtree are unavailable
-    elsewhere
-
-- @Key idea@: run an optimism-based bandit rule at every node, and the tree
-  allocates its budget by itself
-
-* What MCTS Requires
-
-- @Assumptions@
-  1. A **generative model** $s' \sim G(s, a)$ that can be sampled forward
-     - Closed-form transition probabilities are not needed
-  2. Legal actions that can be enumerated at each visited state
-  3. Episodes that terminate, or a horizon where a value can be assigned
-  4. Bounded rewards, usually normalized to $[0, 1]$ or $\{-1, 0, +1\}$
-
-- @Remark@: MCTS needs no evaluation function, no admissible heuristic, no
-  differentiability, and no reward at every step
-
-- @Cons@: simulation cost dominates everything
-  - The budget is measured in simulator calls, so a slow simulator caps the
-    achievable quality
+// TODO(ai_gp): Example (maybe tic-tac-toe)
 
 # The Four Phases of MCTS
 
@@ -282,16 +193,16 @@ digraph MCTSLoop {
     edge [color="#9AA5B1", penwidth=1.1, arrowsize=0.75,
           fontname="Helvetica", fontsize=10, fontcolor="#7B8794"];
 
-    Select   [label="1. SELECTION\nTree policy (UCT)", fillcolor="#F4A6A6"];
-    Expand   [label="2. EXPANSION\nAdd one node",      fillcolor="#B2E2B2"];
-    Simulate [label="3. SIMULATION\nRollout to end",   fillcolor="#FFD1A6"];
-    Backup   [label="4. BACKPROPAGATION\nUpdate N and Q",
+    Select   [label="1. Selection\nTree policy (UCT)", fillcolor="#F4A6A6"];
+    Expand   [label="2. Expansion\nAdd one node",      fillcolor="#B2E2B2"];
+    Simulate [label="3. Simulation\nRollout to end",   fillcolor="#FFD1A6"];
+    Backup   [label="4. Backpropagation\nUpdate N and Q",
               fillcolor="#A6C8F4"];
 
-    Select   -> Expand   [label="  leaf reached"];
-    Expand   -> Simulate [label="  new child"];
-    Simulate -> Backup   [label="  outcome z"];
-    Backup   -> Select   [label="  budget left", constraint=false,
+    Select   -> Expand   [label="  Leaf reached"];
+    Expand   -> Simulate [label="  New child"];
+    Simulate -> Backup   [label="  Outcome z"];
+    Backup   -> Select   [label="  Budget left", constraint=false,
                           style=dashed];
 }
 ```
@@ -630,6 +541,162 @@ digraph MCTSAsym {
 
 - @Cons@: outside games the terminal score is usually the hard part
   - A wrong scoring function is optimized against with full efficiency
+
+# Where MCTS Fits Among Search Paradigms
+
+* A Map of Search Paradigms
+
+::: columns
+:::: {.column width=40%}
+- @Comparison@: three axes separate these families of search algorithms
+  - **Complete vs sampled**: does the method touch every successor?
+  - **Flat vs structured**: are the samples organized into a tree?
+  - **Local vs global**: is a value produced for the current state only, or for
+    all states?
+::::
+:::: {.column width=60%}
+
+```graphviz
+digraph deciding_by_search {
+  graph [rankdir=LR, splines=curved, bgcolor="white",
+         ranksep="1.1 equally", nodesep=0.26, pad=0.4, fontname="Helvetica"];
+  node  [shape=box, style="filled,rounded", fontname="Helvetica", fontsize=15,
+         fontcolor="#26215C", color="#D8D6EE", penwidth=1.2,
+         height=0.52, margin="0.24,0.10"];
+  edge  [arrowhead=none, penwidth=1.6, color="#B9B6D6"];
+
+  root [label="Deciding by search", shape=box, style="filled,rounded",
+        fillcolor="#26215C", fontcolor="white", fontsize=20, penwidth=0,
+        margin="0.34,0.20"];
+
+  // ── Exhaustive · violet ────────────────────────────────────────────────
+  exhaustive [label="Exhaustive", fillcolor="white", color="#7C74D6", penwidth=1.8, fontsize=17];
+  minimax    [label="Minimax",              fillcolor="#EFEDFC", color="#CBC7F0"];
+  alphabeta  [label="Alpha–beta pruning",   fillcolor="#EFEDFC", color="#CBC7F0"];
+  astar      [label="A* search",            fillcolor="#EFEDFC", color="#CBC7F0"];
+
+  // ── Sampling, no tree · blue ───────────────────────────────────────────
+  flat       [label="Sampling, no tree", fillcolor="white", color="#3E86C8", penwidth=1.8, fontsize=17];
+  flatmc     [label="Flat Monte Carlo",  fillcolor="#E8F1FB", color="#BFD8F1"];
+  shooting   [label="Random shooting",   fillcolor="#E8F1FB", color="#BFD8F1"];
+
+  // ── Sampling with a tree · green ───────────────────────────────────────
+  tree       [label="Sampling with a tree", fillcolor="white", color="#2F9678", penwidth=1.8, fontsize=17];
+  mcts       [label="MCTS", fillcolor="#E5F4EE", color="#BCE0D2"];
+  uct        [label="UCT",  fillcolor="#E5F4EE", color="#BCE0D2"];
+  puct       [label="PUCT", fillcolor="#E5F4EE", color="#BCE0D2"];
+
+  // ── Model-based DP · amber ─────────────────────────────────────────────
+  dp         [label="Model-based DP",  fillcolor="white", color="#C07A45", penwidth=1.8, fontsize=17];
+  valueit    [label="Value iteration",  fillcolor="#FBEEE2", color="#EBD3B9"];
+  policyit   [label="Policy iteration", fillcolor="#FBEEE2", color="#EBD3B9"];
+
+  root -> exhaustive [color="#7C74D6", penwidth=2.4];
+  root -> flat       [color="#3E86C8", penwidth=2.4];
+  root -> tree       [color="#2F9678", penwidth=2.4];
+  root -> dp         [color="#C07A45", penwidth=2.4];
+
+  exhaustive -> {minimax alphabeta astar}  [color="#A9A3E6"];
+  flat       -> {flatmc shooting}          [color="#8FB6DE"];
+  tree       -> {mcts uct puct}            [color="#89C0AC"];
+  dp         -> {valueit policyit}         [color="#DCAE86"];
+
+  { rank=same; minimax; alphabeta; astar; flatmc; shooting; mcts; uct; puct; valueit; policyit; }
+}
+```
+
+::::
+:::
+
+* MCTS vs Exhaustive Search
+
+```{=typst}
+#styled-table(
+  headers: ([Aspect], [Alpha-beta], [MCTS]),
+  rows: (
+    ([Node coverage], [Uniform to a fixed depth],
+     [Asymmetric, deeper on promising lines]),
+    ([Nonterminal value], [Hand-built evaluation function],
+     [Mean of simulated outcomes]),
+    ([Backup rule], [Min and max], [Average, or max in variants]),
+    ([Stopping], [Depth-limited, all or nothing], [Anytime, any budget]),
+    ([Domain knowledge], [Required], [Optional]),
+    ([Guarantee], [Exact on a fully searched tree],
+     [Optimal in the limit of infinite playouts]),
+  ),
+  col-widths: (1fr, 1.3fr, 1.3fr),
+  bold-first-col: true
+)
+```
+
+- @Key idea@:
+  - Alpha-beta spends knowledge to avoid search
+  - MCTS spends search to avoid knowledge
+
+* MCTS vs Pure Monte Carlo Simulation
+
+- @Comparison@: both draw random playouts, but they differ in what they keep
+  - _Flat Monte Carlo_: one statistic per root action, playouts independent
+  - _MCTS_: one statistic per visited node, playouts steered by earlier ones
+
+- @Properties@: what the tree buys
+  - _Adaptive allocation_: sampling concentrates on the near-optimal actions
+  - _Opponent modeling_: inside the tree both sides pick strong replies, so
+    refutations surface
+  - _Reuse_: the subtree under the played action seeds the next search
+
+- @Remark@:
+  - _Flat Monte Carlo_ is exactly MCTS with a tree of depth one
+  - _MCTS_ is a strict generalization, not a different family
+
+* MCTS vs Dynamic Programming
+
+- @Comparison@
+  - _Value iteration_: sweeps the whole state space, needs the transition
+    model in closed form, returns a policy for _every_ state
+  - _MCTS_: samples trajectories from the current state, needs only a
+    simulator, returns an action for _one_ state
+
+- @Definition@: MCTS is **decision-time planning**, so the computation happens
+  when the action is needed and is discarded afterwards
+
+- @Pros@: the cost is independent of the size of the state space
+  - It scales with the _budget_, not with $|\mathcal{S}|$
+
+- @Cons@: nothing generalizes across states unless the statistics are stored
+  in a learned function
+
+* Every Node Is a Bandit Problem
+
+- @Intuition@: at a node $s$, picking which child to descend into is a choice
+  among arms
+  - Arm = action $a$
+  - Reward = outcome of the playout that follows
+
+- @Comparison@: a tree node differs from a standalone bandit
+  - _Nonstationary_: a child's mean drifts as its own subtree is refined
+  - _Recursive_: each arm hides another bandit problem below it
+  - _Shared budget_: playouts spent deep in one subtree are unavailable
+    elsewhere
+
+- @Key idea@: run an optimism-based bandit rule at every node, and the tree
+  allocates its budget by itself
+
+* What MCTS Requires
+
+- @Assumptions@
+  1. A **generative model** $s' \sim G(s, a)$ that can be sampled forward
+     - Closed-form transition probabilities are not needed
+  2. Legal actions that can be enumerated at each visited state
+  3. Episodes that terminate, or a horizon where a value can be assigned
+  4. Bounded rewards, usually normalized to $[0, 1]$ or $\{-1, 0, +1\}$
+
+- @Remark@: MCTS needs no evaluation function, no admissible heuristic, no
+  differentiability, and no reward at every step
+
+- @Cons@: simulation cost dominates everything
+  - The budget is measured in simulator calls, so a slow simulator caps the
+    achievable quality
 
 # Limitations and Open Problems
 
