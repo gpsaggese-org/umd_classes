@@ -1,6 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env -S uv run
 
-"""
+# /// script
+# dependencies = ["pandas"]
+# ///
+
+r"""
 Create a project / tutorial to a specified destination directory and manage
 its Docker infrastructure files relative to `class_project/project_template`.
 
@@ -20,7 +24,8 @@ its Docker infrastructure files relative to `class_project/project_template`.
 > create_project.py --dst_dir /path/to/destination --action create_links
 
 - Report which Docker files in a project directory are in sync with, linked
-  to, or diverged from the template:
+  to, or diverged from the template, and generate a script to `vimdiff` the
+  files that are different or missing:
 > create_project.py --dst_dir /path/to/destination \
     --action compare_docker_files
 
@@ -39,6 +44,7 @@ import argparse
 import filecmp
 import logging
 import os
+from typing import Optional
 
 import pandas as pd
 
@@ -85,20 +91,11 @@ _DOCKER_FILES = [
 # created (e.g., `template_utils.py` -> `my_project_utils.py`).
 _TEMPLATE_FILES = [
     "template_utils.py",
-    "template.example.ipynb",
     "template.API.ipynb",
-    "template.example.py",
     "template.API.py",
+    "template.example.ipynb",
+    "template.example.py",
 ]
-
-_VALID_ACTIONS = [
-    "create_project",
-    "copy_docker_files",
-    "create_links",
-    "compare_docker_files",
-]
-_DEFAULT_ACTIONS = ["create_project"]
-
 
 # #############################################################################
 # Helper functions
@@ -404,7 +401,67 @@ def _compare_docker_files(src_dir: str, dst_dir: str) -> pd.DataFrame:
     return df
 
 
+def _create_vimdiff_script(
+    df: pd.DataFrame,
+    src_dir: str,
+    dst_dir: str,
+    *,
+    dry_run: bool = False,
+) -> Optional[str]:
+    """
+    Create a script that runs `vimdiff` on the Docker files that are different
+    or missing.
+
+    :param df: comparison report, as returned by `_compare_docker_files()`
+    :param src_dir: source template directory
+    :param dst_dir: destination project directory
+    :param dry_run: if True, log the plan without creating the script
+    :return: path of the generated script, or `None` if there is nothing to
+        diff
+    """
+    # Select the files that are different or missing on either side: files
+    # that are `same` or `link` don't need to be diffed.
+    mask = df["status"].isin(["different", "missing_in_src", "missing_in_dst"])
+    rows = df[mask]
+    if rows.empty:
+        _LOG.info("No different or missing Docker files to diff")
+        return None
+    # Build one `vimdiff` command per file, preceded by a comment reporting
+    # its status (e.g., `different`, `missing_in_dst`).
+    lines = ["#!/bin/bash"]
+    for _, row in rows.iterrows():
+        filename = str(row["file"])
+        src_path = os.path.join(src_dir, filename)
+        dst_path = os.path.join(dst_dir, filename)
+        lines.append(f"# {filename}: {row['status']}")
+        lines.append(f"vimdiff {src_path} {dst_path}")
+    script_txt = "\n".join(lines) + "\n"
+    script_name = "tmp.create_project.vimdiff.sh"
+    if dry_run:
+        _LOG.info(
+            "[dry_run] Would create '%s' to vimdiff %d file(s)",
+            script_name,
+            len(rows),
+        )
+        return None
+    hio.create_executable_script(
+        script_name, script_txt, msg="Diff the Docker files with"
+    )
+    return script_name
+
+
 # #############################################################################
+# CLI
+# #############################################################################
+
+
+_VALID_ACTIONS = [
+    "create_project",
+    "copy_docker_files",
+    "create_links",
+    "compare_docker_files",
+]
+_DEFAULT_ACTIONS = ["create_project"]
 
 
 def _parse() -> argparse.ArgumentParser:
@@ -449,10 +506,11 @@ def _main(parser: argparse.ArgumentParser) -> None:
     src_dir = args.src_dir or _get_default_src_dir()
     hdbg.dassert_dir_exists(src_dir, "Source directory does not exist:", src_dir)
     # Select which actions to execute.
+    default_actions = [] if args.action else _DEFAULT_ACTIONS
     actions = hselacti.select_actions(
         args,
         valid_actions=_VALID_ACTIONS,
-        default_actions=_DEFAULT_ACTIONS,
+        default_actions=default_actions,
     )
     _LOG.info(
         hselacti.actions_to_string(actions, _VALID_ACTIONS, add_frame=True)
@@ -476,6 +534,9 @@ def _main(parser: argparse.ArgumentParser) -> None:
         elif action == "compare_docker_files":
             df = _compare_docker_files(src_dir, args.dst_dir)
             print(df.to_string(index=False))
+            _create_vimdiff_script(
+                df, src_dir, args.dst_dir, dry_run=args.dry_run
+            )
         else:
             raise ValueError(f"Invalid action='{action}'")
     hdbg.dassert_eq(

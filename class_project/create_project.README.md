@@ -5,8 +5,10 @@
   existing projects
 - Main inputs: `--src_dir` (template directory) and `--dst_dir` (project
   directory)
-- Main outputs: a new project directory, copied/linked Docker files, or a
-  comparison report, depending on `--action`
+- Main outputs, depending on `--action`:
+  - A new project directory
+  - Copied/linked Docker files
+  - A comparison report
 
 ## Examples
 
@@ -47,6 +49,7 @@
 
 ### Command-line Arguments
 
+// TODO(ai_gp): Remove type column
 | Argument | Type | Default | Description |
 | :------- | :--- | :------ | :---------- |
 | `--src_dir` | str | `$GIT_ROOT/class_project/project_template` | Source template directory |
@@ -63,15 +66,13 @@
 
 ### Actions
 
+// TODO(ai_gp): Make description shorter
 | Action | Description |
 | :----- | :----------- |
 | `create_project` | Copy `--src_dir` to `--dst_dir`, rename the template files to the project name, and customize `docker_name.sh` |
 | `copy_docker_files` | Copy all and only the Docker files (see below) from `--src_dir` to `--dst_dir` |
 | `create_links` | Replace Docker files in `--dst_dir` with soft links to `--src_dir`, for files whose content is unmodified |
-| `compare_docker_files` | Print a table showing, for each Docker file, whether `--dst_dir` has the same content, a link, or diverged content |
-
-- `--action` and `--skip_action` can be repeated and combined, e.g.
-  `--action copy_docker_files --action compare_docker_files` runs both
+| `compare_docker_files` | Print a table showing, for each Docker file, whether `--dst_dir` has the same content, a link, or diverged content, and generate a `vimdiff` script for the files that are different or missing |
 
 ### Docker Files
 
@@ -93,32 +94,28 @@
   - Creates `--dst_dir` as a full copy of `--src_dir`
   - Renames `template*` files to `<project_name>*`
   - Rewrites `IMAGE_NAME` in `docker_name.sh` to `umd_project_<project_name>`
-- `copy_docker_files`: creates `--dst_dir` if missing, and copies the Docker
-  files into it
-- `create_links`: removes and replaces unmodified Docker files in `--dst_dir`
-  with soft links into `--src_dir`; customized files are left untouched
-- `compare_docker_files`: read-only, prints a report table to stdout
-
-### Exit Codes
-
-- Aborts with a non-zero exit code if:
-  - `--src_dir` doesn't exist
-  - `--dst_dir` already exists and `--overwrite` isn't passed (`create_project`)
-  - A Docker file is missing from `--src_dir` (the template is broken)
-
-### Logging
-
-- Writes to stdout (INFO level by default, DEBUG with `-v DEBUG`)
-- `--dry_run` logs every action that would be taken, prefixed with
-  `[dry_run]`, without touching the filesystem
+- `copy_docker_files`:
+  - Creates `--dst_dir` if missing
+  - Copies the Docker files into it
+- `create_links`:
+  - Removes and replaces unmodified Docker files in `--dst_dir` with soft links into
+    `--src_dir`
+  - Customized files are left untouched
+- `compare_docker_files`
+  - Prints a report table to stdout, showing what Docker file is `different`,
+    `missing_in_src`, or `missing_in_dst`
+  - Creates `tmp.create_project.vimdiff.sh` in the current dir, an executable
+    script that runs `vimdiff` on each such file (`--dry_run` logs the plan
+    instead of creating the script)
 
 ## Software Architecture
 
 ### Data Flow
 
-1. **Parse**: read `--src_dir` (defaults to
-   `$GIT_ROOT/class_project/project_template`), `--dst_dir`, and the list of
-   `--action`s to run
+1. **Parse**:
+   - Read `--src_dir` (defaults to `$GIT_ROOT/class_project/project_template`)
+   - Read `--dst_dir`
+   - Read and parse the list of `--action`s to run
 2. **Dispatch**: for each selected action, call the matching handler function
 3. **Execute**: each handler either mutates the filesystem (copy, rename,
    symlink) or produces a read-only report
@@ -140,10 +137,10 @@
 
 ### Design Patterns
 
-- **Action idiom**: actions are selected via `helpers.hselect_action`
-  (`--action`, `--skip_action`, `--all_actions`, `--clear_actions`), so
-  multiple actions can run in one invocation
-- **Dry-run**: every mutating action accepts a `dry_run` flag and logs the
-  intended change instead of performing it
-- **Fixed file whitelist**: `_DOCKER_FILES` is the single source of truth for
-  what counts as a "Docker file", shared by all three Docker-file actions
+- **Action idiom**: actions are selected via `helpers.hselect_action` (`--action`,
+  `--skip_action`, `--all_actions`, `--clear_actions`), so multiple actions can run
+  in one invocation
+- **Dry-run**: every mutating action accepts a `dry_run` flag and logs the intended
+  change instead of performing it
+- **Fixed file whitelist**: `_DOCKER_FILES` is the single source of truth for what
+  counts as a "Docker file", shared by all three Docker-file actions
