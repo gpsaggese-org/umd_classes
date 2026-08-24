@@ -338,7 +338,7 @@ def _create_links(src_dir: str, dst_dir: str, *, dry_run: bool = False) -> None:
             num_linked += 1
             continue
         os.remove(dst_path)
-        hio.create_soft_link(src_path, dst_path)
+        hio.create_soft_link(src_path, dst_path, use_relative_path=True)
         _LOG.info("Replaced '%s' with a link to '%s'", dst_path, src_path)
         num_linked += 1
     _LOG.info("Created %d link(s) in '%s'", num_linked, dst_dir)
