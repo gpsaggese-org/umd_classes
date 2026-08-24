@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.5
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -23,7 +23,8 @@
 # - `play_game()` / `evaluate_win_rate()`: compose player functions into games
 #   and games into statistics
 #
-# The concrete game used throughout is `TicTacToe` from `game_examples.py`;
+# The concrete game used throughout is `TicTacToe` from `game_examples.py`
+#
 # Part 7 swaps in `ConnectFour` to show that the engine itself never changes.
 
 # %% [markdown]
@@ -55,7 +56,7 @@ import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.mcts_utils as ri
 #
 # - Pick a good move in a two-player game without a hand-written evaluation
 #   function, by running many random-rollout simulations from each candidate
-#   move and trusting the law of large numbers
+#   move and leveraging the law of large numbers
 # - Balance trying new moves (exploration) against refining promising ones
 #   (exploitation) via the UCT formula
 # - Stay game-agnostic: the search code only calls the 6 `Game` methods, so a
@@ -75,67 +76,58 @@ import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.mcts_utils as ri
 # | `play_game(game, p1, p2)` | Play one game | alternates two player functions to a terminal state |
 # | `evaluate_win_rate(...)` | Play many games | returns win/draw/loss rates |
 # | `plot_win_rate_results(...)` | Visualize `evaluate_win_rate()` | bar chart |
-#
-# ## How the pieces fit together
-# ```
-# TicTacToe (Game)  --get_legal_moves/apply_move/is_terminal/get_winner-->
-#   run_mcts(game, state)  -- loops select/expand/simulate/backpropagate over
-#   a tree of MCTSNode --> best Move
-#
-# random_player, make_mcts_player(...) --> player functions (game, state) -> Move
-#   --> play_game(game, player1, player2) --> (winner, history)
-#   --> evaluate_win_rate(...) --> {win_rate, loss_rate, draw_rate}
-#   --> plot_win_rate_results(...) --> bar chart
-# ```
 
 # %% [markdown]
-# # Part 2: Primitive 1: `Game`
+# # Part 2: `Game`
 #
 # **Mental model**: `Game` is the contract between a game's rules and the
-# search code; anything implementing its 6 methods can be searched by
-# `run_mcts()`. `TicTacToe` (from `game_examples.py`) is the concrete example
-# used below.
-#
-# ## Cell 2.1: Construct a `TicTacToe` game and its initial state
-
-# %%
-game = rimtsaazge.TicTacToe()
-state = game.get_initial_state()
-print(f"Type: {type(game)}")
-print(f"State: {state}")
-print(game.render(state))
-
-# %% [markdown]
-# ## Cell 2.2: The 6 `Game` methods
-
-# %%
-legal_moves = game.get_legal_moves(state)
-print("Legal moves from the empty board:", legal_moves)
-
-state = game.apply_move(state, 4)
-print("\nAfter X plays the center cell:")
-print(game.render(state))
-
-print("\nis_terminal:", game.is_terminal(state))
-print("current player to move:", game.get_current_player(state))
-
-# %% [markdown]
-# ## Cell 2.3: Inspect `Game` and `TicTacToe` on GitHub
+# search code
+# - anything implementing its 6 methods can be searched by `run_mcts()`
+# - `TicTacToe` (from `game_examples.py`) is the concrete example used below.
 
 # %%
 # Link to the interface definition and list its abstract methods.
 hintros.print_obj_info(rimtsaazmu.Game)
 
+# %% [markdown]
+# ## Cell 2.1: Construct a `TicTacToe` game and its initial state
+
 # %%
 # Link to the concrete implementation.
 hintros.print_obj_info(rimtsaazge.TicTacToe)
 
+# %%
+game = rimtsaazge.TicTacToe()
+state = game.get_initial_state()
+print(f"Type: {type(game)}")
+# Print the internal state.
+print(f"State: {state}")
+# Visualize the game.
+print(game.render(state))
+
 # %% [markdown]
-# # Part 3: Primitive 2: `MCTSNode`
+# ## Cell 2.2: The `Game` methods
+
+# %%
+legal_moves = game.get_legal_moves(state)
+print("Legal moves from the empty board:", legal_moves)
+
+# %%
+state = game.apply_move(state, 4)
+print("\nAfter X plays the center cell:")
+print(game.render(state))
+
+# %%
+print("is_terminal:", game.is_terminal(state))
+print("current player to move:", game.get_current_player(state))
+
+# %% [markdown]
+# # Part 3: `MCTSNode`
 #
-# **Mental model**: each `MCTSNode` wraps one `State` plus the running
-# statistics (`visit_count`, `value_sum`) the UCT formula needs; `run_mcts()`
-# grows a tree of these nodes rooted at the state being searched.
+# **Mental model**:
+# - each `MCTSNode` wraps one `State` plus the running statistics (`visit_count`,
+#   `value_sum`) the UCT formula needs
+# - `run_mcts()` grows a tree of these nodes rooted at the state being searched.
 #
 # ## Cell 3.1: Construct a node directly
 
@@ -151,8 +143,8 @@ print("mean_value (no visits yet):", root.mean_value)
 # %% [markdown]
 # ## Cell 3.2: A node's stats update as simulations backpropagate through it
 #
-# `run_mcts()` mutates a tree of nodes like `root` in place; a node visited
-# once with a win backpropagated has `visit_count == 1` and `mean_value == 1.0`.
+# - `run_mcts()` mutates a tree of nodes like `root` in place
+# - a node visited once with a win backpropagated has `visit_count == 1` and `mean_value == 1.0`.
 
 # %%
 root.visit_count += 1
@@ -164,11 +156,12 @@ print("mean_value:", root.mean_value)
 hintros.print_obj_info(rimtsaazmu.MCTSNode)
 
 # %% [markdown]
-# # Part 4: Primitive 3: `run_mcts()` — the search entry point
+# # Part 4: `run_mcts()`
 #
-# **Mental model**: `run_mcts()` runs `num_simulations` rounds of
-# select/expand/rollout/backpropagate from `state`, then returns the root
-# child with the highest visit count.
+# **Mental model**:
+# - `run_mcts()` runs `num_simulations` rounds of
+#   select/expand/rollout/backpropagate from `state`
+# - then returns the root child with the highest visit count.
 #
 # ## Cell 4.1: Find an immediate winning move
 #
@@ -178,8 +171,9 @@ hintros.print_obj_info(rimtsaazmu.MCTSNode)
 demo_state = (1, 1, 0, -1, -1, 0, 0, 0, 0)
 print(game.render(demo_state))
 
+# %%
 move = rimtsaazmu.run_mcts(game, demo_state, num_simulations=200)
-print("\nMCTS move:", move)
+print("MCTS move:", move)
 
 # %% [markdown]
 # ## Cell 4.2: The exploration/simulation-count knobs
