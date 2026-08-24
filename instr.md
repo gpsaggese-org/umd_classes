@@ -1,20 +1,12 @@
-Extend create_project.py with
+1) Rename alphazero_utils.py -> mcts_utils.py and update the callers
 
-- Add --src_dir which by default is $GIT_ROOT/class_project_project_template
-  Make sure src_dir always exists
+2) Move tic-tac-toe code into game_examples.py
 
---action copy_docker_files
-  add an option that copies all and only the Docker files from src_dir to dst_dir
+3) Add a Game for Connect 4 in the same way as tic_tac toe in game_examples.py
 
---action create_links
-  for all the files in dst_dir that are the same of the corresponding files in
-  src_dir, create a link from dst_dir to src_dir
+4) Create a notebook mcts.API.ipynb to show the APIs of mcts_utils.py using
+   tic_tac_toe as an example .claude/skills/notebook.create_api_intro/SKILL.md
 
---action compare_docker_files
-  report a table with all the files in src_dir and dst_dir and show which ones are
-  the same, which one are links, ...
+5) Rename the notebook main.ipynb to mcts.example.ipynb
 
---dry_run to show what would be done without doing it
-
-- Create a create_project.README.md to explain how the script works following the
-  proper rules in .claude/rules.md
+For all these action items change the callers
