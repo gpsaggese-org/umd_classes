@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.5
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -18,8 +18,10 @@
 #
 # Milestone 1 of the [MCTS and AlphaZero project](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/research/ideas/draft.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.md): pure MCTS on tic-tac-toe, no neural network involved yet.
 #
-# - All game rules and search logic live in `alphazero_utils.py`
-# - This notebook only imports from it, runs a few games, and reports the results
+# - The game-agnostic MCTS engine lives in `mcts_utils.py`
+# - Concrete games (`TicTacToe`, `ConnectFour`) live in `game_examples.py`
+# - This notebook only imports from them, runs a few games, and reports the
+#   results
 
 # %% [markdown]
 # ## Imports
@@ -42,7 +44,8 @@ hnotebook.config_notebook()
 # !/bin/bash -c "(source /venv/bin/activate; pip install --quiet tqdm)"
 
 # %%
-import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.alphazero_utils as rimtsaazau
+import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.mcts_utils as rimtsaazmu
+import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.game_examples as rimtsaazge
 
 
 # %% [markdown]
@@ -51,13 +54,14 @@ import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.alphazero_utils 
 # `TicTacToe` exposes a small, game-agnostic interface: legal moves, applying a
 # move, checking for a winner, reporting whose turn it is, and rendering the
 # board. Any other two-player game (Connect Four, say) can implement the same
-# six methods and reuse the search code below unchanged.
+# six methods and reuse the search code below unchanged; `game_examples.py`
+# already includes both.
 #
 # ## Cell 2.1: An empty board
 
 
 # %%
-game = rimtsaazau.TicTacToe()
+game = rimtsaazge.TicTacToe()
 state = game.get_initial_state()
 print(game.render(state))
 
@@ -76,7 +80,7 @@ print(game.render(state))
 demo_state = (1, 1, 0, -1, -1, 0, 0, 0, 0)
 print(game.render(demo_state))
 
-move = rimtsaazau.run_mcts(game, demo_state, num_simulations=200)
+move = rimtsaazmu.run_mcts(game, demo_state, num_simulations=200)
 print("MCTS move:", move)
 
 # %% [markdown]
@@ -89,9 +93,9 @@ print("MCTS move:", move)
 # ## Cell 4.1: MCTS vs random
 
 # %%
-mcts_player = rimtsaazau.make_mcts_player(num_simulations=200)
+mcts_player = rimtsaazmu.make_mcts_player(num_simulations=200)
 
-winner, _ = rimtsaazau.play_game(game, mcts_player, rimtsaazau.random_player, verbose=True)
+winner, _ = rimtsaazmu.play_game(game, mcts_player, rimtsaazmu.random_player, verbose=True)
 print("\nwinner:", winner)
 
 # %% [markdown]
@@ -100,7 +104,7 @@ print("\nwinner:", winner)
 # No randomness on either side this time.
 
 # %%
-winner, _ = rimtsaazau.play_game(game, mcts_player, mcts_player, verbose=True)
+winner, _ = rimtsaazmu.play_game(game, mcts_player, mcts_player, verbose=True)
 print("\nwinner:", winner)
 
 # %% [markdown]
@@ -120,11 +124,11 @@ print("\nwinner:", winner)
 # the outcome rate gives a more reliable picture.
 
 # %%
-results = rimtsaazau.evaluate_win_rate(
-    game, mcts_player, rimtsaazau.random_player, num_games=300
+results = rimtsaazmu.evaluate_win_rate(
+    game, mcts_player, rimtsaazmu.random_player, num_games=300
 )
 print(results)
-rimtsaazau.plot_win_rate_results(results)
+rimtsaazmu.plot_win_rate_results(results)
 
 # %% [markdown]
 # **Key observations**:

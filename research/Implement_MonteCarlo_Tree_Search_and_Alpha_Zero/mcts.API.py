@@ -1,0 +1,283 @@
+# ---
+# jupyter:
+#   jupytext:
+#     formats: ipynb,py:percent
+#     text_representation:
+#       extension: .py
+#       format_name: percent
+#       format_version: '1.3'
+#       jupytext_version: 1.19.0
+#   kernelspec:
+#     display_name: Python 3 (ipykernel)
+#     language: python
+#     name: python3
+# ---
+
+# %% [markdown]
+# # Monte Carlo Tree Search (MCTS) Engine API
+#
+# A guided tour of the game-agnostic MCTS engine in `mcts_utils.py`:
+# - `Game`: the 6-method interface any two-player, zero-sum game implements
+# - `MCTSNode`: one node of the search tree (visit count, value, children)
+# - `run_mcts()`: selection -> expansion -> rollout -> backpropagation, repeated
+# - `play_game()` / `evaluate_win_rate()`: compose player functions into games
+#   and games into statistics
+#
+# The concrete game used throughout is `TicTacToe` from `game_examples.py`;
+# Part 7 swaps in `ConnectFour` to show that the engine itself never changes.
+
+# %% [markdown]
+# ## Imports
+
+# %%
+# %load_ext autoreload
+# %autoreload 2
+
+import logging
+
+import helpers.hdbg as hdbg
+import helpers.hnotebook as hnotebook
+
+_LOG = logging.getLogger(__name__)
+
+hdbg.init_logger(verbosity=logging.INFO)
+hnotebook.config_notebook()
+
+# %%
+import helpers.hintrospection as hintros
+import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.game_examples as rimtsaazge
+import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.mcts_utils as rimtsaazmu
+
+# %% [markdown]
+# # Part 1: Library Overview
+#
+# ## What problem does `mcts_utils.py` solve?
+#
+# - Pick a good move in a two-player game without a hand-written evaluation
+#   function, by running many random-rollout simulations from each candidate
+#   move and trusting the law of large numbers
+# - Balance trying new moves (exploration) against refining promising ones
+#   (exploitation) via the UCT formula
+# - Stay game-agnostic: the search code only calls the 6 `Game` methods, so a
+#   new game plugs in without touching `mcts_utils.py`
+#
+# ## Mental model
+#
+# | Object | Description | Type / Comments |
+# |--------|-------------|------------------|
+# | `Game` | Game-rules interface | ABC with 6 abstract methods |
+# | `State` | A board position | `Tuple[int, ...]`, game-specific layout |
+# | `Move` | An action | `int` (cell index, column, ...) |
+# | `MCTSNode` | One tree node | tracks `state`, `children`, `visit_count`, `value_sum` |
+# | `run_mcts(game, state)` | Search entry point | returns the most-visited `Move` at the root |
+# | `random_player(game, state)` | Uniform-random player | matches the player-function signature |
+# | `make_mcts_player(...)` | MCTS player factory | returns a player function backed by `run_mcts()` |
+# | `play_game(game, p1, p2)` | Play one game | alternates two player functions to a terminal state |
+# | `evaluate_win_rate(...)` | Play many games | returns win/draw/loss rates |
+# | `plot_win_rate_results(...)` | Visualize `evaluate_win_rate()` | bar chart |
+#
+# ## How the pieces fit together
+# ```
+# TicTacToe (Game)  --get_legal_moves/apply_move/is_terminal/get_winner-->
+#   run_mcts(game, state)  -- loops select/expand/simulate/backpropagate over
+#   a tree of MCTSNode --> best Move
+#
+# random_player, make_mcts_player(...) --> player functions (game, state) -> Move
+#   --> play_game(game, player1, player2) --> (winner, history)
+#   --> evaluate_win_rate(...) --> {win_rate, loss_rate, draw_rate}
+#   --> plot_win_rate_results(...) --> bar chart
+# ```
+
+# %% [markdown]
+# # Part 2: Primitive 1: `Game`
+#
+# **Mental model**: `Game` is the contract between a game's rules and the
+# search code; anything implementing its 6 methods can be searched by
+# `run_mcts()`. `TicTacToe` (from `game_examples.py`) is the concrete example
+# used below.
+#
+# ## Cell 2.1: Construct a `TicTacToe` game and its initial state
+
+# %%
+game = rimtsaazge.TicTacToe()
+state = game.get_initial_state()
+print(f"Type: {type(game)}")
+print(f"State: {state}")
+print(game.render(state))
+
+# %% [markdown]
+# ## Cell 2.2: The 6 `Game` methods
+
+# %%
+legal_moves = game.get_legal_moves(state)
+print("Legal moves from the empty board:", legal_moves)
+
+state = game.apply_move(state, 4)
+print("\nAfter X plays the center cell:")
+print(game.render(state))
+
+print("\nis_terminal:", game.is_terminal(state))
+print("current player to move:", game.get_current_player(state))
+
+# %% [markdown]
+# ## Cell 2.3: Inspect `Game` and `TicTacToe` on GitHub
+
+# %%
+# Link to the interface definition and list its abstract methods.
+hintros.print_obj_info(rimtsaazmu.Game)
+
+# %%
+# Link to the concrete implementation.
+hintros.print_obj_info(rimtsaazge.TicTacToe)
+
+# %% [markdown]
+# # Part 3: Primitive 2: `MCTSNode`
+#
+# **Mental model**: each `MCTSNode` wraps one `State` plus the running
+# statistics (`visit_count`, `value_sum`) the UCT formula needs; `run_mcts()`
+# grows a tree of these nodes rooted at the state being searched.
+#
+# ## Cell 3.1: Construct a node directly
+
+# %%
+root = rimtsaazmu.MCTSNode(
+    game.get_initial_state(), untried_moves=game.get_legal_moves(state)
+)
+print(f"Type: {type(root)}")
+print("visit_count:", root.visit_count)
+print("is_fully_expanded:", root.is_fully_expanded)
+print("mean_value (no visits yet):", root.mean_value)
+
+# %% [markdown]
+# ## Cell 3.2: A node's stats update as simulations backpropagate through it
+#
+# `run_mcts()` mutates a tree of nodes like `root` in place; a node visited
+# once with a win backpropagated has `visit_count == 1` and `mean_value == 1.0`.
+
+# %%
+root.visit_count += 1
+root.value_sum += 1.0
+print("visit_count:", root.visit_count)
+print("mean_value:", root.mean_value)
+
+# %%
+hintros.print_obj_info(rimtsaazmu.MCTSNode)
+
+# %% [markdown]
+# # Part 4: Primitive 3: `run_mcts()` — the search entry point
+#
+# **Mental model**: `run_mcts()` runs `num_simulations` rounds of
+# select/expand/rollout/backpropagate from `state`, then returns the root
+# child with the highest visit count.
+#
+# ## Cell 4.1: Find an immediate winning move
+#
+# X already has two in a row; playing the third cell wins immediately.
+
+# %%
+demo_state = (1, 1, 0, -1, -1, 0, 0, 0, 0)
+print(game.render(demo_state))
+
+move = rimtsaazmu.run_mcts(game, demo_state, num_simulations=200)
+print("\nMCTS move:", move)
+
+# %% [markdown]
+# ## Cell 4.2: The exploration/simulation-count knobs
+
+# %%
+print("EXPLORATION_CONSTANT (the `C` in UCT):", rimtsaazmu.EXPLORATION_CONSTANT)
+print("DEFAULT_NUM_SIMULATIONS:", rimtsaazmu.DEFAULT_NUM_SIMULATIONS)
+
+# %%
+hintros.print_obj_info(rimtsaazmu.run_mcts)
+
+# %% [markdown]
+# # Part 5: Composing players and games
+#
+# **Mental model**: a "player" is any `(game, state) -> Move` function;
+# `play_game()` alternates two of them until the board is terminal, so a
+# uniformly-random player and an MCTS-backed player are interchangeable.
+#
+# ## Cell 5.1: `random_player` and `make_mcts_player()`
+
+# %%
+mcts_player = rimtsaazmu.make_mcts_player(num_simulations=100)
+print("random_player move:", rimtsaazmu.random_player(game, state))
+print("mcts_player move:", mcts_player(game, state))
+
+# %% [markdown]
+# ## Cell 5.2: `play_game()` runs one full game
+
+# %%
+winner, history = rimtsaazmu.play_game(
+    game, mcts_player, rimtsaazmu.random_player
+)
+print("winner:", winner)
+print("number of states visited:", len(history))
+print(game.render(history[-1]))
+
+# %%
+hintros.print_obj_info(rimtsaazmu.play_game)
+
+# %% [markdown]
+# # Part 6: Evaluation API
+#
+# **Mental model**: `evaluate_win_rate()` calls `play_game()` many times and
+# reports outcome rates; `plot_win_rate_results()` turns that dict into a bar
+# chart.
+#
+# ## Cell 6.1: Win rate over 100 games
+
+# %%
+results = rimtsaazmu.evaluate_win_rate(
+    game, mcts_player, rimtsaazmu.random_player, num_games=100
+)
+print(results)
+
+# %% [markdown]
+# ## Cell 6.2: Plot the results
+
+# %%
+rimtsaazmu.plot_win_rate_results(results)
+
+# %% [markdown]
+# # Part 7: Swapping in a different `Game`
+#
+# **Mental model**: none of Parts 3-6 mentioned `TicTacToe` by name; the same
+# `run_mcts()` / `play_game()` code works unchanged against `ConnectFour`,
+# because both only go through the `Game` interface.
+#
+# ## Cell 7.1: The same engine, a different game
+
+# %%
+connect_four = rimtsaazge.ConnectFour()
+cf_state = connect_four.get_initial_state()
+cf_mcts_player = rimtsaazmu.make_mcts_player(num_simulations=100)
+
+move = rimtsaazmu.run_mcts(connect_four, cf_state, num_simulations=100)
+print("MCTS move on an empty Connect Four board (column):", move)
+
+winner, history = rimtsaazmu.play_game(
+    connect_four, cf_mcts_player, rimtsaazmu.random_player
+)
+print("\nwinner:", winner)
+print(connect_four.render(history[-1]))
+
+# %% [markdown]
+# # Part 8: Summary
+#
+# ## Summary: The Mental Model
+#
+# - **`Game`**: the 6-method contract (`get_initial_state`, `get_legal_moves`,
+#   `apply_move`, `is_terminal`, `get_winner`, `get_current_player`, `render`)
+#   that decouples game rules from search
+# - **`MCTSNode`**: one search-tree node; tracks `state`, `children`,
+#   `visit_count`, `value_sum`
+# - **`run_mcts(game, state)`**: the search loop; returns the most-visited
+#   root move after `num_simulations` rounds of select/expand/rollout/backprop
+# - **`random_player` / `make_mcts_player(...)`**: player functions with the
+#   `(game, state) -> Move` signature `play_game()` expects
+# - **`play_game(...)` / `evaluate_win_rate(...)`**: compose player functions
+#   into single games, then into aggregate statistics
+# - Swapping `TicTacToe` for `ConnectFour` (Part 7) needed zero changes to
+#   `mcts_utils.py`: that is the payoff of the `Game` interface

@@ -1,13 +1,16 @@
 """
-Game logic and Monte Carlo Tree Search (MCTS) for Milestone 1: tic-tac-toe
-with pure MCTS (no neural network).
+Monte Carlo Tree Search (MCTS): a game-agnostic tree search engine.
 
-See `research/ideas/draft.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.md`
-for the full project spec.
+Defines the `Game` interface and the MCTS algorithm (selection, expansion,
+rollout, backpropagation) used to play any two-player, zero-sum,
+perfect-information game against it. See `game_examples.py` for concrete
+`Game` implementations (tic-tac-toe, Connect Four) and
+`research/ideas/draft.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.md` for
+the full project spec.
 
 Import as:
 
-import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.alphazero_utils as rimtsaazau
+import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.mcts_utils as rimtsaazmu
 """
 
 import abc
@@ -24,9 +27,9 @@ import helpers.hdbg as hdbg
 
 _LOG = logging.getLogger(__name__)
 
-# A game state is a flat tuple of cell values and a move is the index of the
-# cell to play; this covers tic-tac-toe today and board games like Connect
-# Four later without changing the search code.
+# A game state is a flat tuple of cell values and a move is an integer
+# identifying the action (e.g., a cell index or a column); see
+# `game_examples.py` for concrete `Game` implementations.
 State = Tuple[int, ...]
 Move = int
 
@@ -122,146 +125,6 @@ class Game(abc.ABC):
         :param state: game state to render
         :return: printable board representation
         """
-
-
-# #############################################################################
-# TicTacToe
-# #############################################################################
-
-
-# Board cell values: `0` empty, `1` player X (moves first), `-1` player O.
-_EMPTY = 0
-_PLAYER_X = 1
-_PLAYER_O = -1
-
-# The 8 index triples that constitute a win: 3 rows, 3 columns, 2 diagonals.
-_WIN_LINES = [
-    (0, 1, 2),
-    (3, 4, 5),
-    (6, 7, 8),
-    (0, 3, 6),
-    (1, 4, 7),
-    (2, 5, 8),
-    (0, 4, 8),
-    (2, 4, 6),
-]
-
-_CELL_SYMBOLS = {_EMPTY: ".", _PLAYER_X: "X", _PLAYER_O: "O"}
-
-
-class TicTacToe(Game):
-    """
-    3x3 tic-tac-toe.
-
-    A state is a length-9 tuple of cell values (`0` empty, `1` X, `-1` O)
-    indexed row-major from the top-left corner. Player `1` (X) moves first.
-    """
-
-    def get_initial_state(self) -> State:
-        """
-        Build an empty 3x3 board.
-
-        :return: length-9 tuple of `0`s
-        """
-        state = (_EMPTY,) * 9
-        return state
-
-    def get_legal_moves(self, state: State) -> List[Move]:
-        """
-        List the empty cells, if any.
-
-        :param state: game state to query
-        :return: indices of empty cells, empty if `state` is terminal
-        """
-        if self.is_terminal(state):
-            moves: List[Move] = []
-        else:
-            moves = [i for i, cell in enumerate(state) if cell == _EMPTY]
-        return moves
-
-    def apply_move(self, state: State, move: Move) -> State:
-        """
-        Place the current player's mark at `move`.
-
-        :param state: game state before the move
-        :param move: index of the empty cell to play
-        :return: new state with the current player's mark at `move`
-        """
-        hdbg.dassert_eq(
-            state[move], _EMPTY, "Move %s targets an occupied cell", move
-        )
-        player = self.get_current_player(state)
-        new_state = state[:move] + (player,) + state[move + 1 :]
-        return new_state
-
-    def is_terminal(self, state: State) -> bool:
-        """
-        Check whether the board has a winner or is full.
-
-        :param state: game state to query
-        :return: True if the board is a win for either player or a draw
-        """
-        is_over = self._get_line_winner(state) != _EMPTY or _EMPTY not in state
-        return is_over
-
-    def get_winner(self, state: State) -> int:
-        """
-        Determine the outcome of a finished board.
-
-        :param state: terminal game state
-        :return: `1` or `-1` for three-in-a-row, `0` for a full board with
-            no winner
-        """
-        hdbg.dassert(
-            self.is_terminal(state), "get_winner() requires a terminal state"
-        )
-        winner = self._get_line_winner(state)
-        return winner
-
-    def get_current_player(self, state: State) -> int:
-        """
-        Infer whose turn it is from how many cells are filled.
-
-        :param state: game state to query
-        :return: `1` (X) if an even number of moves have been played, `-1`
-            (O) otherwise
-        """
-        num_moves_played = sum(1 for cell in state if cell != _EMPTY)
-        current_player = _PLAYER_X if num_moves_played % 2 == 0 else _PLAYER_O
-        return current_player
-
-    def render(self, state: State) -> str:
-        """
-        Render the board as 3 rows of space-separated symbols.
-
-        :param state: game state to render
-        :return: 3-line string, e.g.:
-            ```
-            X . O
-            . X .
-            O . X
-            ```
-        """
-        rows = [
-            " ".join(_CELL_SYMBOLS[cell] for cell in state[row : row + 3])
-            for row in range(0, 9, 3)
-        ]
-        board_str = "\n".join(rows)
-        return board_str
-
-    def _get_line_winner(self, state: State) -> int:
-        """
-        Check the 8 win lines for three-in-a-row.
-
-        :param state: game state to check
-        :return: `1` or `-1` if that player has three in a row, else `0`
-        """
-        winner = _EMPTY
-        for a, b, c in _WIN_LINES:
-            if state[a] != _EMPTY and state[a] == state[b] == state[c]:
-                winner = state[a]
-                break
-        return winner
 
 
 # #############################################################################
