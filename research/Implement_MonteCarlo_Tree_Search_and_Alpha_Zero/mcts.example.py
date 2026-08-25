@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.5
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -135,12 +135,3 @@ rimtsaazmu.plot_win_rate_results(results)
 # - MCTS wins the large majority of games and essentially never loses
 # - The rare non-wins are draws: the worst outcome a random opponent can force
 #   against correct play, never a loss
-
-# %% [markdown]
-# # Part 6: Next steps
-#
-# Milestone 2 replaces the random rollout with a small policy/value network: a
-# policy head to bias which moves MCTS expands first, and a value head to
-# replace the rollout with a direct position estimate instead of playing it
-# out. Self-play training comes after that, once search is guided by the
-# network rather than by uniform random play.

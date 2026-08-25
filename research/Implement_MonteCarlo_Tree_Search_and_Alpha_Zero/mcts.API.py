@@ -45,8 +45,21 @@ hdbg.init_logger(verbosity=logging.INFO)
 hnotebook.config_notebook()
 
 # %%
+# The base image runs `apt-get update && ... && rm -rf /var/lib/apt/lists/*`
+# at build time, which deletes the package-list cache; without a fresh
+# `apt-get update` here, `apt-get install` below fails to find `graphviz`
+# (silently, from the notebook's point of view) and only the Python bindings
+# get installed, leaving the `dot` binary missing.
+# !apt-get update --quiet
+# !apt-get install --quiet --yes --no-install-recommends graphviz
+# !/bin/bash -c "(source /venv/bin/activate; pip install --quiet graphviz)"
+
+# %%
+import random
+
 import helpers.hintrospection as hintros
 import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.game_examples as rimtsaazge
+import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.mcts_API_utils as rimtsaazmau
 import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.mcts_utils as rimtsaazmu
 
 # %% [markdown]
@@ -70,6 +83,7 @@ import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.mcts_utils as ri
 # | `State` | A board position | `Tuple[int, ...]`, game-specific layout |
 # | `Move` | An action | `int` (cell index, column, ...) |
 # | `MCTSNode` | One tree node | tracks `state`, `children`, `visit_count`, `value_sum` |
+# | `build_mcts_tree(game, state)` | Search primitive | returns the built root `MCTSNode` for inspection |
 # | `run_mcts(game, state)` | Search entry point | returns the most-visited `Move` at the root |
 # | `random_player(game, state)` | Uniform-random player | matches the player-function signature |
 # | `make_mcts_player(...)` | MCTS player factory | returns a player function backed by `run_mcts()` |
@@ -114,12 +128,48 @@ print("Legal moves from the empty board:", legal_moves)
 
 # %%
 state = game.apply_move(state, 4)
-print("\nAfter X plays the center cell:")
+print("After X plays the center cell:")
 print(game.render(state))
 
 # %%
 print("is_terminal:", game.is_terminal(state))
 print("current player to move:", game.get_current_player(state))
+
+# %% [markdown]
+# ## Cell 2.3: A full game without MCTS
+#
+# **Goal**:
+# - Play a full tic-tac-toe game using only the `Game` methods
+# - See `X` and `O` alternate turns via `get_current_player()`, with no
+#   search involved yet: each move is picked uniformly at random
+
+# %%
+random.seed(0)
+demo_game_state = game.get_initial_state()
+first_player = game.get_current_player(demo_game_state)
+print(f"The first player is: {first_player}")
+cnt = 0
+while not game.is_terminal(demo_game_state):
+    cnt += 1
+    # Find the legal moves.
+    legal_moves = game.get_legal_moves(demo_game_state)
+    current_player = game.get_current_player(demo_game_state)
+    # Pick a move at random.
+    move = random.choice(legal_moves)
+    demo_game_state = game.apply_move(demo_game_state, move)
+    print(f"\nAfter move #{cnt}: {move} by {current_player}, state:\n{game.render(demo_game_state)}")
+winner = game.get_winner(demo_game_state)
+print("\nwinner:", winner)
+
+# %% [markdown]
+# ## Cell 2.4: Play tic-tac-toe yourself
+#
+# **Goal**:
+# - Play both `X` and `O` by clicking cells, using the same `Game` methods
+#   as Cell 2.3, this time driven by mouse clicks instead of `random.choice()`
+
+# %%
+rimtsaazmau.cell2_4_build_play_widget(game)
 
 # %% [markdown]
 # # Part 3: `MCTSNode`
@@ -130,6 +180,9 @@ print("current player to move:", game.get_current_player(state))
 # - `run_mcts()` grows a tree of these nodes rooted at the state being searched.
 #
 # ## Cell 3.1: Construct a node directly
+
+# %%
+hintros.print_obj_info(rimtsaazmu.MCTSNode)
 
 # %%
 root = rimtsaazmu.MCTSNode(
@@ -153,7 +206,7 @@ print("visit_count:", root.visit_count)
 print("mean_value:", root.mean_value)
 
 # %%
-hintros.print_obj_info(rimtsaazmu.MCTSNode)
+print(root)
 
 # %% [markdown]
 # # Part 4: `run_mcts()`
@@ -175,8 +228,31 @@ print(game.render(demo_state))
 move = rimtsaazmu.run_mcts(game, demo_state, num_simulations=200)
 print("MCTS move:", move)
 
+# %%
+# TODO(ai_gp): Print state
+
 # %% [markdown]
-# ## Cell 4.2: The exploration/simulation-count knobs
+# ## Cell 4.2: Visualizing the search tree
+#
+# **Goal**:
+# - See the actual search tree `run_mcts()` builds from `demo_state`: the
+#   root and its immediate children, annotated with visit count `N` and mean
+#   value `Q`
+# - Control the two knobs from the UCT formula
+#   ($Q/N + C \sqrt{\ln N(s) / N(s, a)}$) and watch how the visit counts
+#   respond:
+#   - `num_simulations`: the search budget
+#   - `C`: the exploration constant (theory suggests $C = \sqrt{2}$ for
+#     rewards in $[0, 1]$)
+# - Increasing `num_simulations` is literally "how MCTS nodes are updated":
+#   each simulation runs one more selection/expansion/rollout/backpropagation
+#   pass and adds to the `visit_count` / `value_sum` of every node it touches
+
+# %%
+rimtsaazmau.cell4_2_build_tree_widget(game, demo_state)
+
+# %% [markdown]
+# ## Cell 4.3: The exploration/simulation-count knobs
 
 # %%
 print("EXPLORATION_CONSTANT (the `C` in UCT):", rimtsaazmu.EXPLORATION_CONSTANT)
@@ -256,22 +332,3 @@ winner, history = rimtsaazmu.play_game(
 )
 print("\nwinner:", winner)
 print(connect_four.render(history[-1]))
-
-# %% [markdown]
-# # Part 8: Summary
-#
-# ## Summary: The Mental Model
-#
-# - **`Game`**: the 6-method contract (`get_initial_state`, `get_legal_moves`,
-#   `apply_move`, `is_terminal`, `get_winner`, `get_current_player`, `render`)
-#   that decouples game rules from search
-# - **`MCTSNode`**: one search-tree node; tracks `state`, `children`,
-#   `visit_count`, `value_sum`
-# - **`run_mcts(game, state)`**: the search loop; returns the most-visited
-#   root move after `num_simulations` rounds of select/expand/rollout/backprop
-# - **`random_player` / `make_mcts_player(...)`**: player functions with the
-#   `(game, state) -> Move` signature `play_game()` expects
-# - **`play_game(...)` / `evaluate_win_rate(...)`**: compose player functions
-#   into single games, then into aggregate statistics
-# - Swapping `TicTacToe` for `ConnectFour` (Part 7) needed zero changes to
-#   `mcts_utils.py`: that is the payoff of the `Game` interface

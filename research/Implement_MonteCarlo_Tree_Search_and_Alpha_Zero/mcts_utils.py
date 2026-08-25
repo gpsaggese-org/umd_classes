@@ -183,13 +183,39 @@ class MCTSNode:
         mean = self.value_sum / self.visit_count if self.visit_count else 0.0
         return mean
 
+    def __str__(self) -> str:
+        """
+        Return a human-readable summary of the node for debugging/logging.
+
+        :return: node summary, e.g.,
+            "MCTSNode(move=3, visits=12, mean_value=0.42, children=2,
+            untried=1)"
+        """
+        txt = (
+            "MCTSNode(move=%s, visits=%d, mean_value=%.2f, children=%d,"
+            " untried=%d)"
+            % (
+                self.move,
+                self.visit_count,
+                self.mean_value,
+                len(self.children),
+                len(self.untried_moves),
+            )
+        )
+        return txt
+
 
 # #############################################################################
 # MCTS phases
 # #############################################################################
 
 
-def _uct_score(child: MCTSNode, parent_visit_count: int) -> float:
+def _uct_score(
+    child: MCTSNode,
+    parent_visit_count: int,
+    *,
+    exploration_constant: float = EXPLORATION_CONSTANT,
+) -> float:
     """
     Score a child node using the UCT formula:
     `Q/N + C * sqrt(ln(N_parent) / N)`.
@@ -199,32 +225,45 @@ def _uct_score(child: MCTSNode, parent_visit_count: int) -> float:
 
     :param child: candidate child node
     :param parent_visit_count: visit count of the parent node
+    :param exploration_constant: the `C` in the UCT formula, trades off
+        exploration (higher) against exploitation (lower)
+        - Default: `EXPLORATION_CONSTANT`
     :return: UCT score, higher is more promising to explore
     """
     if child.visit_count == 0:
         score = math.inf
     else:
         exploitation = child.mean_value
-        exploration = EXPLORATION_CONSTANT * math.sqrt(
+        exploration = exploration_constant * math.sqrt(
             math.log(parent_visit_count) / child.visit_count
         )
         score = exploitation + exploration
     return score
 
 
-def _select(node: MCTSNode, game: Game) -> MCTSNode:
+def _select(
+    node: MCTSNode,
+    game: Game,
+    *,
+    exploration_constant: float = EXPLORATION_CONSTANT,
+) -> MCTSNode:
     """
     Descend the tree from `node`, following the highest-UCT child at each
     step, until reaching a node that still has untried moves or is terminal.
 
     :param node: node to start the descent from (typically the root)
     :param game: game rules, used to check terminality
+    :param exploration_constant: the `C` in the UCT formula, forwarded to
+        `_uct_score()`
+        - Default: `EXPLORATION_CONSTANT`
     :return: node ready for expansion (or simulation, if terminal)
     """
     while not game.is_terminal(node.state) and node.is_fully_expanded:
         node = max(
             node.children.values(),
-            key=lambda child: _uct_score(child, node.visit_count),
+            key=lambda child: _uct_score(
+                child, node.visit_count, exploration_constant=exploration_constant
+            ),
         )
     return node
 
@@ -291,29 +330,38 @@ def _backpropagate(node: MCTSNode, value: float) -> None:
 # #############################################################################
 
 
-def run_mcts(
-    game: Game, state: State, *, num_simulations: int = DEFAULT_NUM_SIMULATIONS
-) -> Move:
+def build_mcts_tree(
+    game: Game,
+    state: State,
+    *,
+    num_simulations: int = DEFAULT_NUM_SIMULATIONS,
+    exploration_constant: float = EXPLORATION_CONSTANT,
+) -> MCTSNode:
     """
-    Run MCTS from `state` and return the most-visited move at the root.
+    Run MCTS from `state` and return the fully-built search tree.
 
     Runs `num_simulations` iterations of selection, expansion, random-rollout
-    simulation, and backpropagation, then returns the root child with the
-    highest visit count (the standard, low-variance choice, as opposed to
-    the child with the highest mean value).
+    simulation, and backpropagation from a fresh root, then returns that
+    root node itself, rather than only the best move: `run_mcts()` picks the
+    best move from it, and a notebook can instead inspect the tree (e.g., to
+    visualize visit counts and mean values per child).
 
     :param game: game-agnostic rules implementation
     :param state: state to search from, must not be terminal
     :param num_simulations: number of MCTS iterations to run
         - Default: `DEFAULT_NUM_SIMULATIONS`
-    :return: move with the highest visit count at the root
+    :param exploration_constant: the `C` in the UCT formula, forwarded to
+        `_select()`
+        - Default: `EXPLORATION_CONSTANT`
+    :return: root node of the search tree, with `num_simulations` simulations
+        backpropagated through it
     """
     hdbg.dassert(
         not game.is_terminal(state), "Cannot run MCTS from a terminal state"
     )
     root = MCTSNode(state, untried_moves=game.get_legal_moves(state))
     for _ in range(num_simulations):
-        leaf = _select(root, game)
+        leaf = _select(root, game, exploration_constant=exploration_constant)
         if not game.is_terminal(leaf.state):
             leaf = _expand(leaf, game)
         winner = _simulate(game, leaf.state)
@@ -327,6 +375,38 @@ def run_mcts(
         else:
             value = -1.0
         _backpropagate(leaf, value)
+    return root
+
+
+def run_mcts(
+    game: Game,
+    state: State,
+    *,
+    num_simulations: int = DEFAULT_NUM_SIMULATIONS,
+    exploration_constant: float = EXPLORATION_CONSTANT,
+) -> Move:
+    """
+    Run MCTS from `state` and return the most-visited move at the root.
+
+    Builds the search tree via `build_mcts_tree()`, then returns the root
+    child with the highest visit count (the standard, low-variance choice,
+    as opposed to the child with the highest mean value).
+
+    :param game: game-agnostic rules implementation
+    :param state: state to search from, must not be terminal
+    :param num_simulations: number of MCTS iterations to run
+        - Default: `DEFAULT_NUM_SIMULATIONS`
+    :param exploration_constant: the `C` in the UCT formula, trades off
+        exploration (higher) against exploitation (lower)
+        - Default: `EXPLORATION_CONSTANT`
+    :return: move with the highest visit count at the root
+    """
+    root = build_mcts_tree(
+        game,
+        state,
+        num_simulations=num_simulations,
+        exploration_constant=exploration_constant,
+    )
     best_move = max(root.children.items(), key=lambda item: item[1].visit_count)[
         0
     ]
