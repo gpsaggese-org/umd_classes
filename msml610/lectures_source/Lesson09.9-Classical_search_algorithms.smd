@@ -11,98 +11,147 @@
 // - 1985, Korf, "Depth-First Iterative-Deepening: An Optimal Admissible Tree
 //   Search"
 // - 1988, Allis, "A Knowledge-Based Approach of Connect-Four"
-// - 1992, Russell & Wefald, "Do the Right Thing: Studies in Limited
-//   Rationality"
-
-// TODO(ai_gp): When possible use the content from ./notes/IN_PROGRESS.math.Artificial_intelligence.Russell.4e.2020.txt
 
 # Formulating Search Problems
 
 * Acting by Searching
 
-- @Motivation@: an agent that knows its goal still has to find the **sequence
-  of actions** that reaches it
+- @Motivation@: an agent that knows _its goal_ still has to find the **sequence of
+  actions** that reaches it
   - A single action rarely achieves a goal
   - The environment supplies the rules, not the plan
 
-- @Definition@: **search** is the process of exploring hypothetical action
-  sequences inside a model of the world, before committing to any action in
-  the world
-  - The agent simulates, evaluates, and only then acts
+- @Comparison@: two ways of choosing an action
+  - **Reflex agent**: maps the current state directly to an action, ignoring the
+    history and the future consequences
+    - The state-to-action table is too large to store or to learn
+    - No long-term planning, and no memory of past actions
+  - **Goal-based agent**: considers future actions and how desirable their outcomes
+    are
+    - The agent simulates inside a model of the world, then acts
 
-- @Assumptions@: the classical setting
-  - _Deterministic_: an action taken in a state always leads to the same state
-  - _Fully observable_: the agent knows which state it is in
-  - _Discrete_: finitely many actions are available per state
-  - _Known model_: the agent can predict the result of any action
+- @Definition@: **search** is the process of looking for a _sequence of actions_
+  that reaches _a goal_
+  - E.g., given only the rules of tic-tac-toe, how does an agent find a move that
+    never loses?
 
-- @Question@: given only the rules of tic-tac-toe, how does an agent find a
-  move that never loses?
+* Problem-Solving Agents
+
+- @Definition@:
+  - A **problem-solving agent** is a goal-based agent using an _atomic_ state
+    representation (i.e., a black box with no internal structure)
+  - A **planning agent** instead uses a _factored_ or _structured_ representation
+
+- @Algorithm@: formulate, search, execute
+  1. _Goal formulation_: choose the desirable states of the world to reach
+  2. _Problem formulation_: decide which actions and states to consider
+  3. _Search_: compute a sequence of actions reaching the goal
+  4. _Execute_: carry out that sequence
+
+- @Remark@: the solution is an **open-loop** plan
+  - Execution runs "with eyes closed", because percepts are ignored once the
+    plan is fixed
+
+- @Assumptions@: the environment where the open-loop plan works
+  - _Observable_: the agent knows the state it is in
+  - _Discrete_: finitely many actions per state
+  - _Known_: the states reachable by each action are known
+  - _Deterministic_: each action has a single outcome
 
 * Anatomy of a Search Problem
 
-- @Definition@: a **search problem** is the tuple
-  $(\mathcal{S}, s_0, \mathcal{A}, T, G, c)$
+- @Definition@: a **search problem** is defined by five elements:
+  - _Initial state_ $s_0$: where the agent starts
+  - _Actions_: the legal actions $Actions(s)$ available in state $s$
+  - _Transition model_: the state reached $Result(s, a)$ by doing $a$ in $s$
+  - _Goal test_: $IsGoal(s)$ which is true when $s$ is an acceptable end state
+  - _Path cost_ : the cost of one step $Cost(s, a, s')$
 
-- @Components@
-  - _State space_ $\mathcal{S}$: every configuration the world can be in
-  - _Initial state_ $s_0 \in \mathcal{S}$: where the agent starts
-  - _Actions_ $\mathcal{A}(s)$: the legal actions in state $s$
-  - _Transition model_ $T(s, a)$: the state reached by doing $a$ in $s$
-  - _Goal test_ $G(s)$: true when $s$ is an acceptable end state
-  - _Path cost_ $c(s, a, s')$: the non-negative cost of one step
+- @Definition@:
+  - The **state space** is the directed graph these elements induce
+    - Vertices are states, edges are actions
+  - A **path** is a sequence of states joined by a sequence of actions
+  - A **solution** is a path from $s_0$ to a state satisfying $IsGoal$
+    - Solution quality is measured by path cost
+  - An **optimal solution** has the lowest path cost of all solutions
 
-- @Definition@: a **solution** is an action sequence leading from $s_0$ to a
-  state satisfying $G$
-  - An **optimal solution** is a solution of minimum total path cost
-
-- @Key idea@: these six components are the entire interface between a domain
-  and a search algorithm
-  - Every algorithm in this lesson consumes only this tuple, so one
-    implementation serves routing, puzzles, and games
+- @Key idea@:
+  - These five elements are the entire interface between a domain and a search
+    algorithm
+  - One implementation then serves routing, puzzles, and games
 
 * Tic-Tac-Toe as a Search Problem
 
 ```{=typst}
 #styled-table(
-  headers: ([Component], [Tic-tac-toe instantiation]),
+  headers: ([Element], [Tic-tac-toe instantiation]),
   rows: (
-    ([State $s$], [Board contents plus the player to move]),
-    ([Initial state $s_0$], [Empty $3 times 3$ board, X to move]),
-    ([Actions $cal(A)(s)$], [Place the mark of the player to move on any
-      empty cell]),
-    ([Transition $T(s, a)$], [Board with the mark added and the turn flipped]),
-    ([Goal test $G(s)$], [Three in a row, or no empty cell left]),
-    ([Path cost $c$], [$1$ per move, so cost equals number of moves]),
+    ([$"Initial state" s_0$], [Empty $3 times 3$ board, X to move]),
+    ([$"Actions"(s)$], [Place the mark of the player to move on any empty
+      cell]),
+    ([$"Result"(s, a)$], [Board with the mark added and the turn flipped]),
+    ([$"IsGoal"(s)$], [Three in a row, or no empty cell left]),
+    ([$"Cost"(s, a, s')$], [$1$ per move, so cost equals number of moves]),
   ),
-  col-widths: (1fr, 2fr),
+  col-widths: (1fr, 2.5fr),
   bold-first-col: true
 )
 ```
 
-- @Remark@: a state is the **board**, not the move history
+- @Remark@:
+  - A state is the _board state plus the player to move_, not the move history
   - Two different move orders reaching the same board are the same state
+  - "State space" vs "Search Tree"
 
-- @Example@: **Connect 4** instantiates the same tuple on a $7 \times 6$ grid
+// TODO(ai_gp): Add pics from notebook
+
+* Connect-N as a Search Problem
+
+// TODO(ai_gp): Same as tic-tac-toe for Connect-4 and then explain the extension to 
+// N.
+
+- @Example@: **Connect 4** instantiates the same five elements on a
+  $7 \times 6$ grid
   - An action names a column, and the disc falls to the lowest empty cell
   - The goal test looks for four in a row in any direction
+
+// TODO(ai_gp): Add pics from notebook
+
+* Abstraction
+
+- @Definition@: **abstraction** is the removal of detail from a representation
+  of states and actions
+  - The five elements of a "search problem" describe a whole family of problems /
+    worlds, not one world
+
+- @Example@: an agent driving between cities abstracts away:
+  - The current radio program, the scenery, the weather
+  - The condition of the road, the distance to the next rest stop
+
+- @Definition@: the two properties a **good abstraction** must keep:
+  - _Valid_: every abstract solution can be expanded into a solution of the
+    more detailed world
+  - _Useful_: the abstract problem is easier to search than the original one
+
+- @Key idea@: a good abstraction removes as much detail as possible while staying
+  valid and useful
+  - Choosing the abstraction is problem formulation, and it affects how hard the
+    search will be
 
 * State Space vs Search Tree
 
 ::: columns
-:::: {.column width=48%}
+:::: {.column width=60%}
 - @Definition@: the **state space** is a graph
   - Nodes are states, edges are actions
   - Each state appears exactly once
 
-- @Definition@: the **search tree** is what an algorithm actually builds
-  - Nodes are _paths_ starting at $s_0$, not states
+- @Definition@: the **search tree** is what an algorithm builds and searches
+  - Nodes are _paths_ starting at $s_0$ (not states)
   - The same state reappears once per path that reaches it
-
-- @Key idea@: the state space is a property of the problem, the search tree is
-  a property of the search
+  - A **leaf node** is a node with no children yet
 ::::
-:::: {.column width=48%}
+:::: {.column width=40%}
 
 ```graphviz
 digraph state_space_vs_tree {
@@ -165,46 +214,64 @@ digraph state_space_vs_tree {
 ::::
 :::
 
+- @Key idea@:
+  - The _state space_ is a property of the problem
+  - The _search tree_ is a property of the search
+
 - @Example@: tic-tac-toe has $5478$ reachable states, but its full game tree
   holds $549946$ nodes
 
 * Redundant Paths and Graph Search
 
-- @Problem@: the same state is reached by many paths, so a naive search
-  re-expands it once per path
-  - Reaching the opposite corner of a $d \times d$ grid takes
-    $\frac{(2d)!}{(d!)^2}$ distinct paths over only $(d + 1)^2$ states
+// TODO(ai_gp): Add graphviz plots showing these cases and add examples (e.g., tic-tac-toe)
 
-- @Naive Solution@: keep the search tree and accept the repetition
-  - Cons: work grows with the number of _paths_, which is exponential even
-    when the state space is tiny
+- @Definition@: three kinds of "wasted work" while searching a search tree
+  - **Loopy path**: a path containing a cycle, never better than the same path with
+    the loop removed
+  - **Repeated path**: reached by reversible actions, e.g. driving from A to B and
+    back
+  - **Redundant path**: any case where several paths join the same two states
 
-- @Solution@: **graph search** keeps a `reached` table of visited states
-  - Expand a state the first time it is seen, or again only when a cheaper
-    path to it is found
-  - Cons: memory now grows with the number of _states_ reached
+- @Problem@:
+  - Without bookkeeping the search re-expands a state every time a path reaches it
+  - Reaching the opposite corner of a $d \times d$ grid takes $\frac{(2d)!}{(d!)^2}$
+    distinct paths over only $(d + 1)^2$ states
 
-- @Variants@: how much redundancy to remove
-  - _Tree-like search_: no table, cheapest memory, worst repetition
-  - _Cycle cutting_: compare a node only against its own ancestors
-  - _Graph search_: full `reached` table, no repetition at all
+* Redundant Paths and Graph Search
 
-- @Remark@: **expanding** a node means generating all its successors
-  - Cost is counted in node expansions, not in wall-clock time, so the
-    analysis is machine independent
+- @Solution@: graph search keeps an **explored set** of expanded states
+  - Aka "closed list"
+  - Expand a state the first time it is seen, or again only when a cheaper path to it
+    appears
+  - _Cons_: memory now grows with the number of _states_ reached
+
+- @Remark@: the frontier splits the state space into an explored and an
+  unexplored region
+  - Invariant: every path from $s_0$ to an unexplored state passes through some
+    frontier state
+
+- @Definition@: **expanding** a node means generating all its successors
+  - Cost is counted in node expansions, so the analysis is machine independent
 
 * Measuring a Search Algorithm
 // From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:32 '* Why Search Trees Explode'
 
 - @Definition@: four criteria evaluate any search algorithm
-  - _Completeness_: does it find a solution whenever one exists?
-  - _Optimality_: is the returned solution of minimum cost?
-  - _Time complexity_: how many nodes are generated?
-  - _Space complexity_: how many nodes are held in memory at once?
+  - _Completeness_: is the algorithm guaranteed to find a solution, if one
+    exists?
+  - _Optimality_: if it finds a solution, is that solution optimal?
+  - _Time complexity_: how long does it take to find a solution?
+  - _Space complexity_: how much memory does it need?
+
+- @Problem@: time and space cannot be measured as $|V| + |E|$ of the state
+  space
+  - The graph is given implicitly by $s_0$, $Actions$, and $Result$
+  - It is often infinite
 
 - @Components@: the parameters the complexities are written in
-  - $b$ = branching factor, the number of successors per node
-  - $d$ = depth of the shallowest goal
+  - $b$ = branching factor, the maximum or average number of successors of a
+    node
+  - $d$ = depth of the shallowest goal node
   - $m$ = maximum depth of any path, possibly infinite
 
 - @Example@: Connect 4 has $b \approx 7$ and $m = 42$, so $b^m \approx 10^{35}$
@@ -220,22 +287,26 @@ digraph state_space_vs_tree {
 
 ::: columns
 :::: {.column width=52%}
+- @Definition@: **uninformed search** has only the definition of the problem,
+  and no other problem-specific knowledge
+  - Aka "blind search"
+  - Algorithms differ only in the strategy used to pick the next node
+
 - @Key idea@: every algorithm in this lesson is **best-first search** run with
   a different evaluation function $f(n)$
   - Pop the frontier node minimizing $f$, expand it, repeat
 
-- @Definition@: the **frontier** is the set of generated but not yet expanded
-  nodes
-  - Aka "open list"
-  - It separates the explored region from the unexplored one
-
 - @Algorithm@: best-first search
-  1. Put $s_0$ on the frontier, a priority queue ordered by $f$
-  2. Pop the node $n$ of lowest $f(n)$
-  3. Return the path to $n$ if $G(n)$ holds
-  4. Otherwise expand $n$, adding each successor that is new or reached more
-     cheaply than before
+  1. Initialize the frontier with $s_0$, and the explored set to empty
+  2. Pop the node $n$ of lowest $f(n)$ from the frontier
+  3. Return the path to $n$ if $IsGoal(n)$ holds
+  4. Otherwise move $n$ to the explored set and expand it, adding each
+     successor that is new or reached more cheaply than before
   5. Repeat until the frontier is empty
+
+- @Components@: the frontier data structure selects the strategy
+  - FIFO queue gives breadth-first, LIFO stack gives depth-first, priority
+    queue gives best-first
 ::::
 :::: {.column width=44%}
 
@@ -274,26 +345,27 @@ digraph best_first_family {
 
 * Breadth-First and Uniform-Cost Search
 
-- @Definition@: **breadth-first search (BFS)** expands the shallowest node
-  first, so $f(n) = depth(n)$
+- @Definition@: **breadth-first search (BFS)** expands every node at a given
+  depth before moving to the next level, so $f(n) = depth(n)$
   - A FIFO queue replaces the priority queue, since depth grows by one per
     expansion
   - The goal test fires when a node is _generated_, so the search stops early
 
-- @Properties@: BFS
+- @Properties@: BFS finds the shallowest goal node
   - _Complete_ whenever $b$ is finite
-  - _Optimal_ only when every step carries the same cost
+  - _Optimal_ only when every edge carries the same cost
   - _Time_ and _space_ are both $O(b^d)$, since the whole frontier is stored
 
 - @Problem@: with unequal step costs the shallowest goal is not the cheapest
   - E.g., a direct road of cost $100$ is returned before a three-hop route of
     total cost $10$
 
-- @Solution@: **uniform-cost search (UCS)** expands the cheapest node first,
-  so $f(n) = g(n)$
+- @Solution@: **uniform-cost search (UCS)** orders nodes by the lowest path
+  cost $g(n)$, so $f(n) = g(n)$
   - Aka "Dijkstra's algorithm"
-  - The goal test fires on _expansion_, not on generation, so a cheaper path
-    can still overtake a goal sitting on the frontier
+  - It is breadth-first search using path cost instead of number of edges
+  - The goal test fires on _expansion_, so a cheaper path can still overtake a
+    goal sitting on the frontier
 
 - @Properties@: UCS is complete and optimal for non-negative step costs
   - _Time_ and _space_ are $O(b^{1 + C^* / c_{min}})$, with $C^*$ the optimal
@@ -301,13 +373,21 @@ digraph best_first_family {
 
 * Depth-First, Depth-Limited, and Iterative Deepening
 
-- @Definition@: **depth-first search (DFS)** expands the deepest node first
+- @Definition@: **depth-first search (DFS)** always expands the deepest node in
+  the frontier
+  - It descends until a node has no successors, then backs up to the next
+    deepest node with unexplored successors
   - A LIFO stack replaces the priority queue, or plain recursion does
   - _Space_ is only $O(bm)$, since one path plus its siblings is stored
 
 - @Cons@: DFS is neither complete nor optimal
   - A single infinite branch traps it forever
   - The first goal found is rarely the shallowest
+
+- @Variants@: **backtracking search** uses even less memory than DFS
+  - Generate one successor at a time, remembering only which successor comes
+    next
+  - _Space_ drops to $O(m)$
 
 - @Naive Solution@: **depth-limited search (DLS)** runs DFS but refuses to
   expand past a fixed depth $\ell$
@@ -318,12 +398,11 @@ digraph best_first_family {
 - @Solution@: **iterative deepening search (IDS)** runs DLS for
   $\ell = 0, 1, 2, \ldots$ until a goal appears
   - Keeps the $O(bd)$ memory of DFS and the optimality of BFS
-  - Re-expanding the shallow levels costs only a constant factor
+  - Re-expanding the shallow levels costs only a constant factor, since the
+    deepest level already holds a fraction $(b - 1)/b$ of all nodes
     $$
     \sum_{i=0}^{d} (d - i + 1) \, b^i = O(b^d)
     $$
-  - The deepest level holds a fraction $(b - 1)/b$ of all nodes, so everything
-    above it is cheap by comparison
 
 * Uninformed Search: Comparison
 
@@ -345,52 +424,66 @@ digraph best_first_family {
 - @Key idea@: iterative deepening is the default uninformed method
   - It matches BFS on solution quality at DFS memory cost
 
-- @Problem@: every entry is exponential in the solution depth
+- @Variants@: **bidirectional search** runs two searches at once
+  - One forward from $s_0$, one backward from the goal, hoping they meet in
+    the middle
+  - $b^{d/2} + b^{d/2}$ is far smaller than $b^d$
+  - Cons: it needs a way to search backwards, and the two frontiers must be
+    compared at every step
+
+- @Problem@: every entry is still exponential in the solution depth
   - No ordering of _blind_ expansions escapes $b^d$, because a goal can hide
     below any node not yet expanded
 
-- @Solution@: inject domain knowledge as a **heuristic**, so the search stops
-  treating all frontier nodes as equally promising
+- @Solution@: inject problem-specific knowledge as a **heuristic**, so the
+  search stops treating all frontier nodes as equally promising
 
 # Informed Search
 
 * Heuristics
 
-- @Definition@: a **heuristic function** $h(n)$ estimates the cheapest cost
-  from the state at node $n$ to any goal
-  - $h(n) = 0$ at every goal node
-  - $h$ is domain knowledge, supplied from outside the search algorithm
+- @Definition@: **informed search** uses problem-specific knowledge to find a
+  solution more efficiently than an uninformed strategy
+  - Aka "heuristic search"
+  - The knowledge enters through the ranking of "more promising" nodes
 
-- @Components@: the three cost functions used from here on
-  - $g(n)$ = cost of the path from $s_0$ to $n$, known exactly
-  - $h(n)$ = estimated cost from $n$ to a goal, computed cheaply
-  - $h^*(n)$ = true cheapest cost from $n$ to a goal, unknown
+- @Definition@: a **heuristic function** $h(n)$ estimates the cheapest cost
+  from the state at node $n$ to a goal state
+  - $h(n) \geq 0$ at every node
+  - $h(n) = 0$ when $n$ is a goal state
+  - $h$ is problem specific, and uses information absent from the problem
+    definition
+
+- @Components@: the three functions used from here on
+  - $f(n)$ = the order in which nodes are expanded
+  - $g(n)$ = the path cost of $n$ from the initial state, known exactly
+  - $h(n)$ = the estimated cost from $n$ to a goal, computed cheaply
 
 - @Example@: route finding on a road map
   - $h(n)$ = straight-line distance from city $n$ to the destination
-  - It never overestimates, because no road is shorter than the straight line
-
-- @Example@: the 8-puzzle
-  - $h_1(n)$ = number of tiles sitting in the wrong cell
-  - $h_2(n)$ = sum over tiles of the Manhattan distance to the goal cell
+  - The heuristic is that straight-line and road distance are related, and no
+    road is shorter than the straight line
 
 - @Key idea@: informed search buys speed with knowledge
   - The quality of $h$, not the choice of algorithm, decides how much is saved
 
 * Greedy Best-First Search
 
-- @Definition@: **greedy best-first search** expands the node that _looks_
-  closest to a goal, so $f(n) = h(n)$
+- @Definition@: **greedy best-first search** expands the node with the lowest
+  estimated distance to the goal
+  $$
+  f(n) = h(n)
+  $$
   - The cost already paid, $g(n)$, is discarded
 
-- @Pros@: it often reaches a goal after very few expansions
+- @Pros@: expanding the node that looks closest drives the search at the goal
   - E.g., with straight-line $h$ on a road map, it follows the corridor
     pointing at the destination
 
 - @Cons@: ignoring $g$ costs both optimality and completeness
   - A route that starts in the right direction and then detours beats a
     shorter route that starts sideways
-  - Without a `reached` table it can oscillate forever between two states that
+  - Without an explored set it can oscillate forever between two states that
     both look promising
 
 - @Counterexample@: two routes to the same goal
@@ -403,22 +496,21 @@ digraph best_first_family {
 
 * A* Search
 
-- @Definition@: **A\* search** expands the node with the lowest estimated cost
-  of a _complete_ solution passing through it
+- @Definition@: **A\* search** is best-first search ordered by the estimated
+  cost of a _complete_ solution passing through $n$
   $$
   f(n) = g(n) + h(n)
   $$
-  - $g(n)$ = cost already paid to reach $n$
-  - $h(n)$ = estimated cost still to be paid from $n$
+  - $g(n)$ = cost of the cheapest path reaching $n$ from the initial state
+  - $h(n)$ = estimated cost of the cheapest path from $n$ to a goal
 
-- @Intuition@: $f(n)$ is the best available guess of the cheapest solution
-  constrained to pass through $n$
-  - Greedy search minimizes the future, uniform-cost minimizes the past, and
-    A* minimizes their sum
+- @Intuition@: greedy search minimizes the future, uniform-cost search
+  minimizes the past, and A* minimizes their sum
+  - A* has the same formulation as uniform-cost search, replacing
+    $f(n) = g(n)$ with $f(n) = g(n) + h(n)$
 
-- @Algorithm@: A* is best-first search with $f = g + h$
-  - The goal test fires on _expansion_, so a frontier node with lower $f$ can
-    still overtake a goal already generated
+- @Remark@: the goal test fires on _expansion_
+  - A frontier node with lower $f$ can still overtake a goal already generated
 
 - @Remark@: A* degenerates into the algorithms it generalizes
   - $h \equiv 0$ recovers uniform-cost search
@@ -426,40 +518,43 @@ digraph best_first_family {
 
 * Admissibility and Consistency
 
-- @Definition@: $h$ is **admissible** if it never overestimates the true
-  remaining cost, at every node $n$
+- @Definition@: $h$ is **admissible** if it never overestimates the cost to
+  reach the goal, at every node $n$
   $$
   0 \leq h(n) \leq h^*(n)
   $$
-  - An admissible $h$ is optimistic, so no promising path is dismissed early
+  - $h^*(n)$ is the true cheapest cost from $n$ to a goal, and is unknown
+  - An admissible $h$ is optimistic, so $f(n)$ never overestimates the true
+    cost of a solution through $n$
 
-- @Definition@: $h$ is **consistent** if it satisfies the triangle inequality
-  along every edge from $n$ to $n'$ under action $a$
+- @Definition@: $h$ is **consistent** if, for every node $n$ and every
+  successor $n' = Result(n, a)$
   $$
-  h(n) \leq c(n, a, n') + h(n')
+  h(n) \leq Cost(n, a, n') + h(n')
   $$
   - Aka "monotone"
 
+- @Intuition@: consistency is the triangle inequality on $n$, $n'$, and the
+  goal
+  - No side of a triangle is longer than the sum of the other two
+
 - @Proposition@: consistency implies admissibility, but not the reverse
-  - Consistency also makes $f$ non-decreasing along any path, since
-    $f(n') = g(n) + c(n, a, n') + h(n') \geq g(n) + h(n) = f(n)$
+  - If a route from $n$ to the goal through $n'$ were cheaper than $h(n)$, then
+    $h(n)$ would not be a lower bound
+  - Consistency also makes $f$ non-decreasing along any path
 
-- @Example@: straight-line distance is consistent
-  - Travelling from $n$ to $n'$ cannot shorten the straight line by more than
-    the distance covered
-
-- @Remark@: nearly every admissible heuristic used in practice is also
-  consistent
+- @Example@: straight-line distance is consistent, and nearly every admissible
+  heuristic used in practice is
   - Constructing an admissible but inconsistent heuristic takes deliberate
     effort
 
 * Optimality of A*
 
-- @Theorem@: A* returns an optimal solution
-  - Tree-like A* needs only an admissible $h$
-  - Graph-search A* needs a consistent $h$
+- @Theorem@: A* is complete and optimal
+  - The tree-search version is optimal when $h$ is **admissible**
+  - The graph-search version is optimal when $h$ is **consistent**
 
-- @Proof@: by contradiction, in the tree-like case
+- @Proof@: by contradiction, in the tree-search case
   1. Let $G_{opt}$ be an optimal goal of cost $C^*$, and suppose A* is about to
      expand a suboptimal goal $G_2$ with $g(G_2) > C^*$
   2. Since $h(G_2) = 0$, we have $f(G_2) = g(G_2) > C^*$
@@ -486,7 +581,8 @@ digraph best_first_family {
     tie-breaking
 
 - @Comparison@: the shape of the contours
-  - $h \equiv 0$ gives circular bands centered on $s_0$
+  - $h \equiv 0$ gives circular bands centered on $s_0$, recovering
+    uniform-cost search
   - A sharper $h$ stretches the bands into a narrow corridor aimed at the goal
 ::::
 :::: {.column width=45%}
@@ -564,19 +660,21 @@ digraph astar_contours {
   - Any node with $f(n) < C^*$ must be expanded by any optimal algorithm,
     because a cheaper goal could hide below it
 
-- @Definition@: the **effective branching factor** $b^*$ measures heuristic
-  quality
-  - If A* generates $N$ nodes before finding a solution at depth $d$, then
-    $b^*$ solves
+- @Definition@: the **effective branching factor** $b^*$ characterizes the
+  quality of a heuristic
+  - Assume the search generates $N$ nodes, the solution sits at depth $d$, and
+    the tree is balanced
+  - Then $b^*$ is the branching factor of a uniform tree of the same size
     $$
-    N + 1 = 1 + b^* + (b^*)^2 + \cdots + (b^*)^d
+    1 + b^* + (b^*)^2 + \cdots + (b^*)^d = N
     $$
-  - A well-designed $h$ drives $b^*$ toward $1$
+  - A well-designed $h$ drives $b^*$ toward $1$, and $b^*$ is measured
+    experimentally
 
 - @Problem@: A* stores every node it generates
   - _Time_ is $O(b^{\epsilon d})$, with $\epsilon = (h^* - h)/h^*$ the relative
     heuristic error
-  - _Space_ is the real limit, since the `reached` table grows with every
+  - _Space_ is the real limit, since the explored set grows with every
     expansion
 
 - @Key idea@: A* runs out of memory long before it runs out of time
@@ -604,76 +702,111 @@ digraph astar_contours {
 
 * Where Heuristics Come From
 
-- @Question@: given a new problem, how is an admissible $h$ derived rather than
-  guessed?
+- @Question@: how does one come up with a heuristic, ideally automatically?
 
-- @Techniques@: systematic sources of heuristics
-  - _Relaxed problem_: drop a constraint from the action rules, then solve the
-    easier problem exactly
-  - _Pattern database_: solve subproblems over a subset of the state and store
-    the exact costs in a lookup table
-  - _Landmarks_: precompute exact distances to a few hub states and combine
-    them with the triangle inequality
-  - _Learning_: fit $h$ from features of solved instances
+- @Definition@: a **relaxed problem** is the original problem with some rules
+  removed
+  - Its state space is a _supergraph_ of the original one, because removing
+    restrictions adds edges
+  - Every solution of the original problem is also a solution of the relaxed
+    problem
 
-- @Proposition@: the exact cost of a relaxed problem is admissible for the
-  original problem
-  - Every original solution is also a relaxed solution, so the relaxed optimum
-    is a lower bound
+- @Proposition@: the cost of an optimal solution to a relaxed problem is an
+  admissible heuristic for the original problem
+  - It is an _exact_ cost in the relaxed problem, so it obeys the triangle
+    inequality, hence it is also consistent
 
-- @Example@: the two 8-puzzle heuristics come from two relaxations
-  - Let a tile teleport to any cell: $h_1$ = misplaced tiles
-  - Let a tile move to any adjacent cell, occupied or not: $h_2$ = Manhattan
-    distance
+- @Example@: the **8-puzzle**, where the average random instance takes about
+  $22$ steps and $b \approx 3$
+  - Let a tile move anywhere: $h_1$ = number of misplaced tiles
+  - Let a tile move to any adjacent cell, occupied or not: $h_2$ = sum of
+    Manhattan distances
+  - At depth $12$, $b^*$ falls from about $2.8$ for iterative deepening to
+    $1.5$ with $h_1$ and $1.3$ with $h_2$
 
-- @Definition@: $h_2$ **dominates** $h_1$ when $h_2(n) \geq h_1(n)$ at every
-  node and both stay admissible
+- @Techniques@: other systematic sources
+  - _Pattern database_: store exact costs of subproblems over part of the state
+  - _Inductive learning_: solve many random instances and fit $h(n)$ from
+    features of the state
+  - _Meta-level search_: learn during the current search, or from past
+    searches, which subtrees are unpromising
+
+- @Definition@: $h_2$ **dominates** $h_1$ when $h_2(n) \geq h_1(n)$ everywhere
+  and both stay admissible
   - A dominating heuristic never expands more nodes, so always take
     $h(n) = \max(h_1(n), h_2(n))$
-  - E.g., at depth $12$ the effective branching factor falls from about $2.8$
-    for iterative deepening to $1.5$ with $h_1$ and $1.3$ with $h_2$
 
 # Adversarial Search
 
+* Why Games Are Studied in AI
+
+- @Definition@: a **competitive environment** holds two or more agents with
+  conflicting goals
+  - An increase in utility for one agent implies a decrease for the others
+  - This is what makes the situation adversarial
+
+- @Motivation@: games are a convenient model of that situation
+  - The state is easy to represent, and the number of actions is small
+  - The outcome of an action follows precise rules
+  - The search space is very large, so time has to be spent wisely, exactly as
+    in real-world problems
+
+- @Comparison@: three ways to model competitive multi-agent environments
+  - _Economy_: aggregate a very large number of agents, e.g. predict that
+    rising demand lifts prices without modeling any individual
+  - _Part of the environment_: treat adversaries as non-determinism, which
+    misses that they actively try to defeat us
+  - _Adversarial game-tree search_: model the opponent as an optimizer, which
+    is what minimax does
+
+- @Limitations@: physical games, e.g. ice hockey, have complicated descriptions
+  and imprecise rules about which actions are legal
+
 * Games as Search Problems
 
-- @Problem@: in a game the agent no longer controls every action
-  - An opponent chooses at alternate levels, and chooses adversarially
-  - A fixed action sequence is useless, because the opponent deviates from it
+- @Assumptions@: the class of games studied here
+  - _Two players_, moving in turn
+  - _Deterministic_, with _perfect information_, so the environment is fully
+    observable
+  - _Zero-sum_, so the utility values are always equal and opposite
 
-- @Definition@: a **two-player zero-sum game** replaces the goal test and the
-  path cost of a search problem
-  - $ToMove(s)$: the player whose turn it is in $s$
-  - $Terminal(s)$: true when the game is over
-  - $Utility(s, p)$: the payoff to player $p$ at a terminal state $s$
+- @Definition@: a game replaces the goal test and the path cost of a search
+  problem
+  - $Player(s)$: which player has the move in $s$, either $Max$ moving first or
+    $Min$ moving second
+  - $TerminalTest(s)$: true when the game is over
+  - $Utility(s, p)$: the payoff of the terminal state $s$ to player $p$
+  - Aka objective function, or payoff function
 
-- @Definition@: **zero-sum** means the payoffs always cancel
+- @Definition@: a **zero-sum game** has the same total payoff for every
+  instance of the game
   $$
-  Utility(s, MAX) + Utility(s, MIN) = 0
+  Utility(s, Max) + Utility(s, Min) = 0
   $$
-  - One player's gain is exactly the other's loss, so one number per terminal
-    state suffices
+  - "Constant-sum" would have been a better name, e.g. win $= 1$, loss $= 0$,
+    draw $= 1/2$ for each player
+
+- @Definition@: a **terminal state** is the game-theory name for a goal state
 
 - @Example@: tic-tac-toe and Connect 4 use $\{+1, 0, -1\}$ for win, draw, and
-  loss, always from the point of view of the player called MAX
-
-- @Assumptions@: perfect information
-  - Both players see the full state, and no chance element intervenes
+  loss, always from the point of view of $Max$
 
 * Game Trees
 
 ::: columns
 :::: {.column width=46%}
-- @Definition@: a **game tree** alternates layers
-  - _MAX layers_: the agent chooses, and prefers the largest value
-  - _MIN layers_: the opponent chooses, and prefers the smallest value
-  - _Leaves_: terminal states, labeled by $Utility$
+- @Definition@: a **game tree** has game states as nodes and moves as edges,
+  running down to the terminal states
+  - It is defined by $s_0$, $Actions$, and $Result$
+  - It is far too large to build explicitly, so it is only ever considered
+    implicitly
 
 - @Definition@: a **ply** is one layer, so one move by one player
+  - $Max$ layers prefer the largest value, $Min$ layers the smallest
   - A "move" in everyday speech is two plies
 
-- @Key idea@: a solution is not a path but a **strategy**
-  - It prescribes a reply to every choice the opponent can make
+- @Key idea@: a solution is not a path but a **contingent strategy**
+  - It prescribes a reply to every move the opponent can make
 ::::
 :::: {.column width=48%}
 
@@ -717,15 +850,21 @@ digraph game_tree {
 ::::
 :::
 
+- @Remark@: adversarial search is an `AND-OR` search tree, with $Max$ playing
+  the `OR` nodes and $Min$ the `AND` nodes
+
 * The Tic-Tac-Toe Game Tree
 
 - @Example@: the complete tic-tac-toe tree
-  - Depth $m = 9$ plies, with $b$ falling from $9$ down to $1$
+  - $Max$ has $9$ ways to place an `X`, then the players alternate
+  - The game ends when a player has three in a row, or all squares are filled
   - $255168$ complete games, and $549946$ nodes in total
-  - Small enough to search exhaustively on any laptop
+
+- @Remark@: each leaf carries the utility of that terminal state from the point
+  of view of $Max$
 
 - @Fact@: the game-theoretic value of tic-tac-toe is a **draw**
-  - Perfect play by both sides always ends $0$
+  - The tree is small enough to search exhaustively on any laptop
 
 - @Comparison@: the same tree for Connect 4
   - Depth $m = 42$ and $b \approx 7$, so about $10^{35}$ move sequences
@@ -738,25 +877,26 @@ digraph game_tree {
 
 * Minimax
 
-- @Definition@: the **minimax value** $V(s)$ is the utility of the terminal
-  state reached when both sides play optimally from $s$
-  - $V(s) = Utility(s, MAX)$ when $s$ is terminal
-  - $V(s) = \max_{a \in \mathcal{A}(s)} V(T(s, a))$ when MAX is to move
-  - $V(s) = \min_{a \in \mathcal{A}(s)} V(T(s, a))$ when MIN is to move
+- @Definition@: the **minimax value** of a node is defined recursively
+  - $Minimax(s) = Utility(s, Max)$ when $TerminalTest(s)$ holds
+  - $Minimax(s) = \max_{a \in Actions(s)} Minimax(Result(s, a))$ when $Player(s)
+    = Max$
+  - $Minimax(s) = \min_{a \in Actions(s)} Minimax(Result(s, a))$ when $Player(s)
+    = Min$
 
-- @Definition@: the **minimax decision** at the root is
-  $$
-  a^* = \argmax_{a \in \mathcal{A}(s_0)} V(T(s_0, a))
-  $$
+- @Intuition@: $Minimax(s)$ is the utility for $Max$ assuming both players play
+  optimally from $s$ to the end of the game
+  - $Max$ MAXimizes the minimax value, $Min$ MINimizes it
 
-- @Algorithm@: compute $V$ by depth-first recursion
-  1. Recurse down to the leaves
-  2. Back the utilities up, taking $\max$ at MAX nodes and $\min$ at MIN nodes
+- @Algorithm@: compute $Minimax$ by a complete depth-first visit
+  1. Recurse down to the terminal states
+  2. Propagate the values back up as the recursion unwinds
   3. Return the root action whose child carries the root value
 
-- @Intuition@: MAX assumes the worst-case reply at every MIN node
-  - The value is a guarantee, not a prediction
-  - Against a suboptimal opponent MAX scores at least $V(s_0)$, never less
+- @Key idea@: the minimax decision maximizes the worst case for $Max$
+  - No other strategy does better against an optimal $Min$
+  - Against a suboptimal $Min$, $Max$ scores at least $Minimax(s_0)$, and some
+    other strategy might score more
 
 * Minimax on a Tic-Tac-Toe Endgame
 
@@ -790,11 +930,11 @@ digraph ttt_endgame {
           height=0.34];
     edge [color="#A3B1C0", penwidth=1.2, arrowhead=none];
 
-    r [label="MAX: X to move\nV = 0", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
+    r [label="MAX: X to move\nMinimax = 0", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
 
-    a [label="X plays 6\nV = 0",  fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
-    b [label="X plays 7\nV = -1", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
-    c [label="X plays 9\nV = -1", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    a [label="X plays 6\nMin = 0",  fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    b [label="X plays 7\nMin = -1", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    c [label="X plays 9\nMin = -1", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
 
     a1 [label="O:7, X:9\n+1", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
     a2 [label="O:9, X:7\n0",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
@@ -824,20 +964,19 @@ digraph ttt_endgame {
 * Minimax: Properties and Cost
 // From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:58 '* Minimax and Alpha-Beta'
 
-- @Properties@: minimax on a finite game tree
+- @Properties@: minimax is a complete depth-first visit of the game tree
   - _Complete_ whenever the tree is finite
   - _Optimal_ against an optimal opponent, and no worse against any other
-    opponent
-  - _Time_ $O(b^m)$, since every leaf is examined
+  - _Time_ $O(b^m)$, since every terminal state is examined
   - _Space_ $O(bm)$, from the depth-first recursion
 
-- @Problem@: the time bound is the entire difficulty
-  - Connect 4 needs about $10^{35}$ leaf evaluations, which no hardware
+- @Problem@: the time bound makes minimax impractical
+  - Connect 4 needs about $10^{35}$ terminal evaluations, which no hardware
     delivers
   - The growth sits in the _exponent_, so faster machines buy almost nothing
 
-- @Question@: can the exact minimax value be computed without looking at every
-  leaf?
+- @Question@: can the exact minimax value be computed without examining the
+  entire tree?
 
 - @Key idea@: yes, because a branch can be _proven_ irrelevant before it is
   fully searched
@@ -847,26 +986,49 @@ digraph ttt_endgame {
 * Alpha-Beta Pruning
 // From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:58 '* Minimax and Alpha-Beta'
 
-- @Key idea@: a branch that cannot change the root value need not be searched
-  - Whatever value the pruned branch holds, the root is unaffected
+- @Definition@: **pruning** ignores portions of the search tree that make no
+  difference to the final choice
+  - Alpha-beta pruning returns exactly the minimax value, so it is a smaller
+    search and not an approximation
 
-- @Definition@: two bounds are carried down the recursion
-  - $\alpha$ = value of the best choice found so far for MAX, anywhere on the
-    path back to the root
-  - $\beta$ = value of the best choice found so far for MIN
-  - The invariant $\alpha \leq V(s) \leq \beta$ holds while $s$ is searched
+- @Intuition@: consider a node $n$ that player $p$ could move to
+  - If $p$ has a better choice $m$ anywhere further up the tree, then $n$ is
+    never reached in actual play
+  - As soon as that is known, $n$ can be pruned
 
-- @Definition@: the **cut-off rules**
-  - At a MIN node, stop as soon as its running value is $\leq \alpha$
-  - At a MAX node, stop as soon as its running value is $\geq \beta$
+- @Example@: let $Max$ choose among $B$, $C$, $D$, with the children of $C$
+  holding unknown values $x$ and $y$
+  \begin{align*}
+  & Minimax(A) \\
+  & = \max(\min(3, 12, 8), \min(2, x, y), \min(14, 5, 2)) \\
+  & = \max(3, \min(2, x, y), 2) \\
+  & = 3
+  \end{align*}
+  - $\min(2, x, y) \leq 2$ whatever $x$ and $y$ are, so both subtrees are
+    pruned
 
-- @Intuition@: MAX already holds a move worth $\alpha$
-  - If MIN can force a value $\leq \alpha$ inside the branch being searched,
-    MAX will never enter that branch
-  - What MIN could do beyond that point is irrelevant
+- @Key idea@: the value of the root is independent of the pruned subtrees
 
-- @Fact@: alpha-beta returns exactly the minimax value
-  - It is not an approximation, only a smaller search
+* Alpha and Beta
+
+- @Definition@: the algorithm carries two bounds down the recursion
+  - $\alpha$ = the highest-value choice found so far along the path for $Max$
+  - $\beta$ = the lowest-value choice found so far along the path for $Min$
+  - The invariant $\alpha \leq Minimax(s) \leq \beta$ holds while $s$ is being
+    searched
+
+- @Definition@: the **cut-off rules** stop the recursive call as soon as the
+  current node is known to be worse than $\alpha$ or $\beta$
+  - At a $Min$ node, stop as soon as its running value is $\leq \alpha$
+  - At a $Max$ node, stop as soon as its running value is $\geq \beta$
+
+- @Intuition@: $Max$ already holds a move worth $\alpha$
+  - If $Min$ can force a value $\leq \alpha$ inside the branch being searched,
+    $Max$ will never enter that branch
+  - What $Min$ could do beyond that point is irrelevant
+
+- @Remark@: repeated states are handled by a **transposition table** caching
+  the value of each state already evaluated
 
 * Alpha-Beta: The Recursion
 
@@ -874,11 +1036,11 @@ digraph ttt_endgame {
 
 - @Output@: the minimax value of $s$, or a bound proving $s$ is irrelevant
 
-- @Algorithm@: `max_value(s, alpha, beta)` at a MAX node
-  1. Return $Utility(s, MAX)$ if $s$ is terminal
+- @Algorithm@: `max_value(s, alpha, beta)` at a $Max$ node
+  1. Return $Utility(s, Max)$ if $TerminalTest(s)$ holds
   2. Set $v = -\infty$
-  3. For each action $a$ in $\mathcal{A}(s)$
-     - Recurse into `min_value` on $T(s, a)$ with the current $\alpha$ and
+  3. For each action $a$ in $Actions(s)$
+     - Recurse into `min_value` on $Result(s, a)$ with the current $\alpha$ and
        $\beta$, and set $v$ to the larger of $v$ and the returned value
      - Return $v$ immediately if $v \geq \beta$
      - Set $\alpha = \max(\alpha, v)$
@@ -895,14 +1057,15 @@ digraph ttt_endgame {
 
 ::: columns
 :::: {.column width=44%}
-- Leaves are read left to right, and the root is a MAX node
+- $Max$ chooses $a_1$, $a_2$, $a_3$ leading to $B$, $C$, $D$, and the leaves
+  are read left to right
 
 - @Example@: the trace
-  - $B$: leaves $3, 12, 8$ give $V(B) = 3$, so $\alpha = 3$ at the root
-  - $C$: the first leaf is $2$, hence $V(C) \leq 2 \leq \alpha$, and the
-    remaining leaves $4$ and $6$ are never generated
-  - $D$: leaves $14$ and $5$ leave $V(D) > 3$ possible, and the leaf $2$
-    settles $V(D) = 2$
+  - $B$: leaves $3, 12, 8$ give $Minimax(B) = 3$, so $\alpha = 3$ at the root
+  - $C$: the first leaf is $2$, hence $Minimax(C) \leq 2 \leq \alpha$, and the
+    remaining leaves are never generated
+  - $D$: leaves $14$ and $5$ leave $Minimax(D) > 3$ possible, and the leaf $2$
+    settles $Minimax(D) = 2$
 
 - @Remark@: $2$ of $9$ leaves are skipped and the answer is unchanged
 ::::
@@ -920,7 +1083,7 @@ digraph alpha_beta {
           height=0.32];
     edge [color="#A3B1C0", penwidth=1.2, arrowhead=none];
 
-    r [label="MAX = 3", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
+    r [label="A: MAX = 3", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
 
     B [label="B = 3",    fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
     C [label="C <= 2",   fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
@@ -930,15 +1093,15 @@ digraph alpha_beta {
     b2 [label="12", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
     b3 [label="8",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
     c1 [label="2",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-    c2 [label="4",  fillcolor="#F2F2F2", color="#C7D0DA", fontcolor="#9AA9B8", style="rounded,filled,dashed"];
-    c3 [label="6",  fillcolor="#F2F2F2", color="#C7D0DA", fontcolor="#9AA9B8", style="rounded,filled,dashed"];
+    c2 [label="x",  fillcolor="#F2F2F2", color="#C7D0DA", fontcolor="#9AA9B8", style="rounded,filled,dashed"];
+    c3 [label="y",  fillcolor="#F2F2F2", color="#C7D0DA", fontcolor="#9AA9B8", style="rounded,filled,dashed"];
     d1 [label="14", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
     d2 [label="5",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
     d3 [label="2",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
 
-    r -> B;
-    r -> C;
-    r -> D;
+    r -> B [label="a1"];
+    r -> C [label="a2"];
+    r -> D [label="a3"];
     B -> b1;
     B -> b2;
     B -> b3;
@@ -959,8 +1122,8 @@ digraph alpha_beta {
 
 * Move Ordering
 
-- @Problem@: how much gets pruned depends entirely on the order children are
-  visited
+- @Problem@: the effectiveness of alpha-beta depends entirely on the order in
+  which the states are examined
   - The worst possible order prunes nothing at all
 
 - @Theorem@: the cost of alpha-beta under different orderings
@@ -974,15 +1137,17 @@ digraph alpha_beta {
   - The cost stays exponential in $m$, only the base shrinks
 
 - @Techniques@: ordering heuristics used in practice
-  - _Killer moves_: try first the move that caused a cut-off at the same depth
+  - Try first the moves that were found best in the past
+  - _Killer moves_: try the move that caused a cut-off at the same depth
     elsewhere
-  - _Transposition table_: hash visited states, and reuse the stored value and
-    best move
   - _Iterative deepening_: search to depth $\ell$, then order depth $\ell + 1$
     by the depth-$\ell$ results
 
-- @Remark@: perfect ordering would mean already knowing the best move, so
-  every ordering heuristic is an approximation of the answer being sought
+- @Comparison@: two ways to spend a fixed budget
+  - _Type A_: consider all moves to a fixed depth, exploring a wide but shallow
+    portion of the tree
+  - _Type B_: ignore moves that look bad and follow promising lines as far as
+    possible, exploring a deep but narrow portion
 
 * Depth-Limited Game Search
 // From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:58 '* Minimax and Alpha-Beta'
@@ -992,11 +1157,11 @@ digraph alpha_beta {
 
 - @Solution@: cut the search at depth $\ell$ and score the missing subtree with
   a heuristic
-  - Replace $Terminal(s)$ by $Cutoff(s, \ell)$
-  - Replace $Utility(s, MAX)$ by $Eval(s)$
+  - Replace $TerminalTest(s)$ by $Cutoff(s, \ell)$
+  - Replace $Utility(s, Max)$ by $Eval(s)$
 
-- @Definition@: an **evaluation function** $Eval(s)$ estimates the minimax
-  value of a non-terminal state
+- @Definition@: a **heuristic evaluation function** $Eval(s)$ approximates the
+  true utility of a state without doing a complete search
   - It must agree with $Utility$ on terminal states
   - It must be cheap, since it is called at every leaf of the truncated tree
   - It must correlate with the probability of winning from $s$
@@ -1068,25 +1233,28 @@ digraph alpha_beta {
   - More than two players, so one scalar value no longer describes a state
   - Chance elements, so an action leads to a distribution over successors
 
-- @Solution@: **multiplayer minimax** backs up a _vector_ of utilities, one
-  entry per player
-  - Each node maximizes its own entry of the vector
-  - Cons: the game stops being zero-sum, and informal alliances emerge
+- @Solution@: **multiplayer minimax** backs up a _vector_ of utilities
+  - With three players $A$, $B$, $C$, each node carries $(v_A, v_B, v_C)$
+  - The node value is the vector with the highest entry for $Player(n)$
+  - A two-player zero-sum game collapses the vector to one number, because the
+    entries are always opposite
 
-- @Solution@: **expectiminimax** inserts chance nodes between the MAX and MIN
-  layers
+- @Remark@: **alliances** emerge as a natural consequence of optimal strategies
+  - E.g., if $A$ and $B$ are weak and $C$ is strong, it is optimal for $A$ and
+    $B$ to attack $C$ rather than each other
+  - The alliance loses its value as soon as $C$ weakens, so it is selfish and
+    unstable
+
+- @Solution@: **expectiminimax** inserts chance nodes between the $Max$ and
+  $Min$ layers
   $$
-  V(s) = \sum_{r} \Pr(r) \, V(T(s, r))
+  Minimax(s) = \sum_{r} \Pr(r) \, Minimax(Result(s, r))
   $$
   - $r$ ranges over the chance outcomes, e.g. a dice roll or a dealt card
   - Cons: with $n$ outcomes per chance node the cost grows to $O((b n)^m)$
 
-- @Limitations@: alpha-beta weakens sharply under chance
-  - Bounding an average requires a bound on _every_ outcome, so cut-offs
-    become rare
-
-- @Remark@: imperfect information, e.g. hidden cards, forces reasoning over
-  belief states instead of states
+- @Limitations@: alpha-beta weakens sharply under chance, because bounding an
+  average requires a bound on _every_ outcome
 
 * Summary
 
@@ -1108,5 +1276,5 @@ digraph alpha_beta {
 - @Limitations@: all of them need a model, a discrete action set, and either a
   reachable terminal state or a trustworthy $Eval$
 
-- @Remark@: replacing $Eval$ by simulated playouts is covered in detail in
-  Lesson 09.8
+- @Remark@: replacing $Eval$ by the average utility of simulated playouts is
+  covered in detail in Lesson 09.8
