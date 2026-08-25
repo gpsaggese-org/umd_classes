@@ -173,20 +173,17 @@
 
 * The MCTS Loop
 
-- @Algorithm@: repeat until the budget (number of simulations, or time) is
-  spent
+- @Algorithm@: repeat until the budget (number of simulations, or time) is spent
   1. **Selection**: from the root, follow the tree policy down to a leaf
-     - Leaf = a node with an untried action, not yet fully expanded
-     - Tree policy trades off _exploit_ (best $Q$) vs _explore_ (uncertain
-       $Q$)
+     - Leaf = a node with an untried action (i.e., not yet fully expanded)
+     - Tree policy trades off _exploit_ (best $Q$) vs _explore_ (uncertain $Q$)
   2. **Expansion**: add one child of that leaf to the tree
      - Exactly one new node per iteration, so the tree grows incrementally
   3. **Simulation**: play out to a terminal state with the default policy
      - Default policy is cheap (e.g., random moves), unlike the tree policy
      - Produces one outcome $z$; the rollout itself is discarded after use
   4. **Backpropagation**: update $N$ and $Q$ along the path just traversed
-     - Increment $N(s, a)$ and update the mean $Q(s, a)$ at every edge on
-       the path
+     - Increment $N(s, a)$ and update the mean $Q(s, a)$ at every edge on the path
      - Outcome $z$ flows from the leaf back up to the root
 
 ```graphviz
