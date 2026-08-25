@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.5
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -22,6 +22,7 @@
 # - Concrete games (`TicTacToe`, `ConnectFour`) live in `game_examples.py`
 # - This notebook only imports from them, runs a few games, and reports the
 #   results
+# - See `README.md` for a description of every file in this directory
 
 # %% [markdown]
 # ## Imports
@@ -95,7 +96,9 @@ print("MCTS move:", move)
 # %%
 mcts_player = rimtsaazmu.make_mcts_player(num_simulations=200)
 
-winner, _ = rimtsaazmu.play_game(game, mcts_player, rimtsaazmu.random_player, verbose=True)
+winner, _ = rimtsaazmu.play_game(
+    game, mcts_player, rimtsaazmu.random_player, verbose=True
+)
 print("\nwinner:", winner)
 
 # %% [markdown]

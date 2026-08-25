@@ -4,9 +4,8 @@ Monte Carlo Tree Search (MCTS): a game-agnostic tree search engine.
 Defines the `Game` interface and the MCTS algorithm (selection, expansion,
 rollout, backpropagation) used to play any two-player, zero-sum,
 perfect-information game against it. See `game_examples.py` for concrete
-`Game` implementations (tic-tac-toe, Connect Four) and
-`research/ideas/draft.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.md` for
-the full project spec.
+`Game` implementations (tic-tac-toe, Connect Four) and `README.md` for a
+description of every file in this directory.
 
 Import as:
 
@@ -262,7 +261,9 @@ def _select(
         node = max(
             node.children.values(),
             key=lambda child: _uct_score(
-                child, node.visit_count, exploration_constant=exploration_constant
+                child,
+                node.visit_count,
+                exploration_constant=exploration_constant,
             ),
         )
     return node

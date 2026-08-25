@@ -1,8 +1,9 @@
 """
 Notebook utilities for `mcts.API.ipynb`.
 
-See `mcts_utils.py` for the game-agnostic MCTS engine and `game_examples.py`
-for the concrete `Game` implementations these widgets operate on.
+See `mcts_utils.py` for the game-agnostic MCTS engine, `game_examples.py`
+for the concrete `Game` implementations these widgets operate on, and
+`README.md` for a description of every file in this directory.
 
 Import as:
 
@@ -11,10 +12,11 @@ import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.mcts_API_utils a
 
 import logging
 import random
-from typing import TYPE_CHECKING, Callable, Dict
+from typing import TYPE_CHECKING, Callable, Dict, Optional, Tuple
 
 import ipywidgets
 import matplotlib.axes
+import matplotlib.patches
 import matplotlib.pyplot as plt
 from IPython.display import clear_output, display
 
@@ -77,7 +79,9 @@ def cell2_4_build_play_widget(game: rimtsaazmu.Game) -> "ipywidgets.VBox":
             if winner == _empty:
                 status.value = "<b>Game over: draw</b>"
             else:
-                status.value = f"<b>Game over: {_player_symbols[winner]} wins</b>"
+                status.value = (
+                    f"<b>Game over: {_player_symbols[winner]} wins</b>"
+                )
         else:
             player = game.get_current_player(state)
             status.value = f"Current turn: <b>{_player_symbols[player]}</b>"
@@ -182,25 +186,39 @@ def _plot_child_visits(
     ax.set_title("Visit count per root child")
 
 
-def cell4_2_build_tree_widget(
-    game: rimtsaazmu.Game, state: rimtsaazmu.State
+def _build_tree_widget(
+    game: rimtsaazmu.Game,
+    state: rimtsaazmu.State,
+    *,
+    board_picture_fn: Optional[Callable[..., None]] = None,
 ) -> "ipywidgets.VBox":
     """
     Interactive widget: run MCTS from `state` and visualize the resulting
     search tree.
 
-    Lets the user tune the two knobs from the UCT formula used by
-    `run_mcts()` / `build_mcts_tree()`:
+    Shared by `cell4_2_build_tree_widget()` (tic-tac-toe, text-only) and
+    `cell7_5_build_connect_four_tree_widget()` (Connect Four, with a board
+    picture): both let the user tune the two knobs from the UCT formula
+    used by `run_mcts()` / `build_mcts_tree()`, Q(s, a) + C * sqrt(ln N(s) /
+    N(s, a)) (Lesson09.8):
     - `num_simulations`: the search budget (Lesson09.8: "repeat until the
       budget - number of simulations, or time - is exhausted")
-    - `exploration_constant`: the `C` in `Q/N + C * sqrt(ln(N_parent) / N)`
-    and see how the visit count and mean value of each root child respond.
+    - `exploration_constant`: the `C` in the formula above
+    and see how the visit count N(s, a) and mean value Q(s, a) of each root
+    child respond.
 
     :param game: game-agnostic rules implementation
     :param state: state to search from, must not be terminal
+    :param board_picture_fn: if given, a `(state, *, ax) -> None` function
+        (e.g., `plot_connect_four_board()`) that draws `state` into an extra
+        leftmost panel next to the visit-count bar chart, tying each
+        child's move back to the board being searched
+        - Default: `None` (bar chart + comments panel only, as used for
+          tic-tac-toe, where the Graphviz tree diagram already shows enough
+          of the board via move indices)
     :return: widget container to `display()` in a notebook cell
     """
-    _LOG.debug(hprint.to_str("game state"))
+    _LOG.debug(hprint.to_str("game state board_picture_fn"))
     hdbg.dassert(
         not game.is_terminal(state), "Cannot build a tree from a terminal state"
     )
@@ -255,9 +273,19 @@ def cell4_2_build_tree_widget(
             best_move = max(
                 root.children.items(), key=lambda item: item[1].visit_count
             )[0]
-            # Tree diagram (Graphviz), then a bar chart + comments panel.
+            # Tree diagram (Graphviz), then optionally a board picture, a
+            # bar chart, and a comments panel.
             display(_build_tree_graph(root, best_move))
-            _, (ax_bar, ax_comment) = plt.subplots(1, 2, figsize=(11, 4))
+            num_panels = 3 if board_picture_fn is not None else 2
+            _, axes = plt.subplots(
+                1, num_panels, figsize=(5.5 * num_panels, 4.5)
+            )
+            if board_picture_fn is not None:
+                ax_board, ax_bar, ax_comment = axes
+                board_picture_fn(state, ax=ax_board)
+                ax_board.set_title("Board being searched")
+            else:
+                ax_bar, ax_comment = axes
             _plot_child_visits(ax_bar, root, best_move)
             best_child = root.children[best_move]
             comment_text = (
@@ -267,10 +295,10 @@ def cell4_2_build_tree_widget(
                 f"  C: {exploration_constant:.2f}\n"
                 "\n"
                 "Root stats:\n"
-                f"  root visit_count: {root.visit_count}\n"
-                f"  best move: {best_move}\n"
-                f"  best move visit_count: {best_child.visit_count}\n"
-                f"  best move mean_value: {best_child.mean_value:.2f}"
+                f"  root visit_count N(s): {root.visit_count}\n"
+                f"  robust child (highest N): {best_move}\n"
+                f"  N(s, a) of robust child: {best_child.visit_count}\n"
+                f"  Q(s, a) of robust child: {best_child.mean_value:.2f}"
             )
             ax_comment.axis("off")
             ax_comment.set_title(
@@ -287,4 +315,206 @@ def cell4_2_build_tree_widget(
     # Initial render.
     update_plot()
     widget = ipywidgets.VBox([seed_box, num_sim_box, c_box, output])
+    return widget
+
+
+def cell4_2_build_tree_widget(
+    game: rimtsaazmu.Game, state: rimtsaazmu.State
+) -> "ipywidgets.VBox":
+    """
+    Interactive widget: run MCTS from `state` and visualize the resulting
+    search tree as a Graphviz diagram plus a visit-count bar chart.
+
+    See `_build_tree_widget()` for the shared implementation.
+
+    :param game: game-agnostic rules implementation
+    :param state: state to search from, must not be terminal
+    :return: widget container to `display()` in a notebook cell
+    """
+    widget = _build_tree_widget(game, state)
+    return widget
+
+
+# #############################################################################
+# Part 7: Connect Four
+# #############################################################################
+
+
+# Board geometry mirrors `game_examples.ConnectFour`'s hardcoded 6x7 layout;
+# kept as separate constants here since this module only deals with
+# presentation, not game rules.
+_CONNECT_FOUR_NUM_ROWS = 6
+_CONNECT_FOUR_NUM_COLS = 7
+
+# Disc colors follow the physical game (red vs. yellow discs on a blue
+# board), not the muted palette used for charts elsewhere in this module:
+# a literal, recognizable board is the whole point of a board picture.
+_CONNECT_FOUR_DISC_COLORS = {0: "#F5F5F5", 1: "#D6402C", -1: "#F4C542"}
+_CONNECT_FOUR_BOARD_COLOR = "#2F6FBB"
+_CONNECT_FOUR_PLAYER_NAMES = {1: "red", -1: "yellow"}
+
+
+def plot_connect_four_board(
+    state: rimtsaazmu.State,
+    *,
+    ax: Optional[matplotlib.axes.Axes] = None,
+    figsize: Optional[Tuple[int, int]] = None,
+) -> None:
+    """
+    Draw `state` as a Connect Four board: colored discs on a blue grid.
+
+    A picture reads a Connect Four position far faster than the text grid
+    `ConnectFour.render()` produces, which is why every Connect Four cell in
+    this notebook shows the board this way.
+
+    :param state: length-42 Connect Four state (see
+        `game_examples.ConnectFour`), row-major with row `0` at the top
+    :param ax: axes to draw into
+        - Default: `None` (create a standalone figure and `plt.show()` it;
+          pass an `ax` instead to embed the board in a larger figure, e.g.,
+          a multi-panel widget)
+    :param figsize: figure size, only used when `ax` is `None`
+        - Default: `None` (uses `plt.rcParams["figure.figsize"]`)
+    """
+    standalone = ax is None
+    if standalone:
+        if figsize is None:
+            figsize = plt.rcParams["figure.figsize"]
+        _, ax = plt.subplots(figsize=figsize)
+    ax.set_facecolor(_CONNECT_FOUR_BOARD_COLOR)
+    for row in range(_CONNECT_FOUR_NUM_ROWS):
+        for col in range(_CONNECT_FOUR_NUM_COLS):
+            cell = state[row * _CONNECT_FOUR_NUM_COLS + col]
+            # Flip the row so row 0 (top of the board) is drawn at the top
+            # of the axes instead of matplotlib's default bottom-up y-axis.
+            y = _CONNECT_FOUR_NUM_ROWS - 1 - row
+            disc = matplotlib.patches.Circle(
+                (col, y),
+                0.42,
+                facecolor=_CONNECT_FOUR_DISC_COLORS[cell],
+                edgecolor="#1B4A80",
+                linewidth=1.0,
+                zorder=2,
+            )
+            ax.add_patch(disc)
+    ax.set_xlim(-0.6, _CONNECT_FOUR_NUM_COLS - 0.4)
+    ax.set_ylim(-0.6, _CONNECT_FOUR_NUM_ROWS - 0.4)
+    ax.set_aspect("equal")
+    ax.set_xticks(range(_CONNECT_FOUR_NUM_COLS))
+    ax.set_xlabel("column")
+    ax.set_yticks([])
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    if standalone:
+        plt.show()
+
+
+# #############################################################################
+# Cell 7.3: Interactive Connect Four board
+# #############################################################################
+
+
+def cell7_3_build_connect_four_play_widget(
+    game: rimtsaazmu.Game,
+) -> "ipywidgets.VBox":
+    """
+    Build a clickable Connect Four board where the user plays both colors.
+
+    One button per column drops the current player's disc via
+    `Game.apply_move()`, gravity included; the board picture
+    (`plot_connect_four_board()`) and status line refresh after every move;
+    a "New game" button resets to the initial state.
+
+    :param game: game-agnostic rules implementation for Connect Four
+        (`ConnectFour`)
+    :return: widget container to `display()` in a notebook cell
+    """
+    _LOG.debug(hprint.to_str("game"))
+    game_state: Dict[str, rimtsaazmu.State] = {"state": game.get_initial_state()}
+    status = ipywidgets.HTML()
+    output = ipywidgets.Output()
+
+    def _update_view() -> None:
+        """
+        Redraw the board picture and refresh the status line from
+        `game_state`.
+        """
+        state = game_state["state"]
+        with output:
+            clear_output(wait=True)
+            plot_connect_four_board(state, figsize=(6, 5))
+        if game.is_terminal(state):
+            winner = game.get_winner(state)
+            if winner == 0:
+                status.value = "<b>Game over: draw</b>"
+            else:
+                status.value = f"<b>Game over: {_CONNECT_FOUR_PLAYER_NAMES[winner]} wins</b>"
+        else:
+            player = game.get_current_player(state)
+            status.value = (
+                f"Current turn: <b>{_CONNECT_FOUR_PLAYER_NAMES[player]}</b>"
+            )
+
+    def _make_on_click(col: int) -> Callable[["ipywidgets.Button"], None]:
+        """
+        Build the click handler that drops a disc into column `col`.
+        """
+
+        def _on_click(_button: "ipywidgets.Button") -> None:
+            state = game_state["state"]
+            if game.is_terminal(state) or col not in game.get_legal_moves(state):
+                # Ignore clicks on a finished game or a full column.
+                return
+            game_state["state"] = game.apply_move(state, col)
+            _update_view()
+
+        return _on_click
+
+    # Wire up one click handler per column.
+    column_buttons = [
+        ipywidgets.Button(
+            description=f"drop {col}",
+            layout=ipywidgets.Layout(width="70px"),
+        )
+        for col in range(_CONNECT_FOUR_NUM_COLS)
+    ]
+    for col, button in enumerate(column_buttons):
+        button.on_click(_make_on_click(col))
+
+    def _on_reset_click(_button: "ipywidgets.Button") -> None:
+        game_state["state"] = game.get_initial_state()
+        _update_view()
+
+    reset_button = ipywidgets.Button(description="New game")
+    reset_button.on_click(_on_reset_click)
+    buttons_row = ipywidgets.HBox(column_buttons)
+    _update_view()
+    widget = ipywidgets.VBox([status, buttons_row, output, reset_button])
+    return widget
+
+
+# #############################################################################
+# Cell 7.5: Connect Four search-tree visualization
+# #############################################################################
+
+
+def cell7_5_build_connect_four_tree_widget(
+    game: rimtsaazmu.Game, state: rimtsaazmu.State
+) -> "ipywidgets.VBox":
+    """
+    Interactive widget: run MCTS from a Connect Four `state` and visualize
+    the resulting search tree next to a picture of the board being
+    searched.
+
+    Same knobs and Graphviz/bar-chart layout as `cell4_2_build_tree_widget()`;
+    the extra `plot_connect_four_board()` panel ties each child's move (a
+    column) back to where the disc would land.
+
+    :param game: game-agnostic rules implementation, `ConnectFour`
+    :param state: state to search from, must not be terminal
+    :return: widget container to `display()` in a notebook cell
+    """
+    widget = _build_tree_widget(
+        game, state, board_picture_fn=plot_connect_four_board
+    )
     return widget

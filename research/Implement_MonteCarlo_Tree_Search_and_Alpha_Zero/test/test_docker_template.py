@@ -1,6 +1,7 @@
 """
 Run the notebooks in research/Implement_MonteCarlo_Tree_Search_and_Alpha_Zero/
-inside Docker using docker_cmd.sh.
+inside Docker using docker_cmd.sh. See `../README.md` for a description of
+every file in that directory.
 
 Import as:
 

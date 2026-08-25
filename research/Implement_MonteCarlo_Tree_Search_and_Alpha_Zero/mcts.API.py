@@ -16,16 +16,26 @@
 # %% [markdown]
 # # Monte Carlo Tree Search (MCTS) Engine API
 #
-# A guided tour of the game-agnostic MCTS engine in `mcts_utils.py`:
+# A guided tour of the game-agnostic MCTS engine in `mcts_utils.py`, using
+# the notation and phases of Lesson09.8 (Selection, Expansion, Simulation,
+# Backpropagation; $N(s)$, $N(s, a)$, $Q(s, a)$):
 # - `Game`: the 6-method interface any two-player, zero-sum game implements
 # - `MCTSNode`: one node of the search tree (visit count, value, children)
 # - `run_mcts()`: selection -> expansion -> rollout -> backpropagation, repeated
 # - `play_game()` / `evaluate_win_rate()`: compose player functions into games
 #   and games into statistics
 #
-# The concrete game used throughout is `TicTacToe` from `game_examples.py`
+# Parts 2-6 use `TicTacToe` from `game_examples.py`, kept small so the tree
+# diagrams stay readable.
 #
-# Part 7 swaps in `ConnectFour` to show that the engine itself never changes.
+# Part 7 swaps in `ConnectFour` to show that the engine itself never
+# changes: same `Game` interface, same `run_mcts()`, only a bigger board and
+# a gravity rule. Since a 6x7 board is too big to read as text, Part 7 adds
+# board pictures (`plot_connect_four_board()`) everywhere `TicTacToe` used
+# plain text, plus the same two widgets Parts 2 and 4 built for
+# `TicTacToe`: a playable board and a search-tree visualizer.
+#
+# See `README.md` for a description of every file in this directory.
 
 # %% [markdown]
 # ## Imports
@@ -157,7 +167,9 @@ while not game.is_terminal(demo_game_state):
     # Pick a move at random.
     move = random.choice(legal_moves)
     demo_game_state = game.apply_move(demo_game_state, move)
-    print(f"\nAfter move #{cnt}: {move} by {current_player}, state:\n{game.render(demo_game_state)}")
+    print(
+        f"\nAfter move #{cnt}: {move} by {current_player}, state:\n{game.render(demo_game_state)}"
+    )
 winner = game.get_winner(demo_game_state)
 print("\nwinner:", winner)
 
@@ -311,24 +323,154 @@ print(results)
 rimtsaazmu.plot_win_rate_results(results)
 
 # %% [markdown]
-# # Part 7: Swapping in a different `Game`
+# # Part 7: Connect Four
 #
-# **Mental model**: none of Parts 3-6 mentioned `TicTacToe` by name; the same
-# `run_mcts()` / `play_game()` code works unchanged against `ConnectFour`,
-# because both only go through the `Game` interface.
+# **Mental model**: none of Parts 2-6 mentioned `TicTacToe` by name; the
+# same `Game` interface, `run_mcts()`, and `play_game()` work unchanged
+# against `ConnectFour`. What changes is only the board: 42 cells instead
+# of 9, and a move is a column (the disc drops to the lowest empty row:
+# gravity), not a free choice of cell.
 #
-# ## Cell 7.1: The same engine, a different game
+# ## Cell 7.1: Construct a `ConnectFour` game and picture its initial board
+
+# %%
+# Link to the concrete implementation.
+hintros.print_obj_info(rimtsaazge.ConnectFour)
 
 # %%
 connect_four = rimtsaazge.ConnectFour()
 cf_state = connect_four.get_initial_state()
-cf_mcts_player = rimtsaazmu.make_mcts_player(num_simulations=100)
+print(f"Type: {type(connect_four)}")
+print(f"State length: {len(cf_state)}")
+# A picture reads a Connect Four position far faster than the text grid
+# `render()` produces below it.
+print(connect_four.render(cf_state))
+rimtsaazmau.plot_connect_four_board(cf_state)
 
-move = rimtsaazmu.run_mcts(connect_four, cf_state, num_simulations=100)
-print("MCTS move on an empty Connect Four board (column):", move)
+# %% [markdown]
+# ## Cell 7.2: The `Game` methods on Connect Four
+#
+# Same six methods as `TicTacToe` in Part 2, this time a move is a column
+# and gravity decides which cell it actually fills.
 
-winner, history = rimtsaazmu.play_game(
-    connect_four, cf_mcts_player, rimtsaazmu.random_player
+# %%
+legal_moves = connect_four.get_legal_moves(cf_state)
+print("Legal moves from the empty board (columns):", legal_moves)
+
+# %%
+cf_state = connect_four.apply_move(cf_state, 3)
+cf_state = connect_four.apply_move(cf_state, 3)
+print("After red then yellow both drop into column 3 (gravity stacks them):")
+rimtsaazmau.plot_connect_four_board(cf_state)
+
+# %%
+print("is_terminal:", connect_four.is_terminal(cf_state))
+print("current player to move:", connect_four.get_current_player(cf_state))
+
+# %% [markdown]
+# ## Cell 7.3: Play Connect Four yourself
+#
+# **Goal**:
+# - Play both red and yellow by clicking a column, using the same `Game`
+#   methods as Cell 7.2, this time driven by mouse clicks instead of
+#   `apply_move()` calls in code
+#
+# _Board_: updates after every click; a column stops accepting drops once
+# it is full, matching `get_legal_moves()`
+
+# %%
+rimtsaazmau.cell7_3_build_connect_four_play_widget(connect_four)
+
+# %% [markdown]
+# **Key observations**:
+# - A click on a full column is silently ignored, exactly like
+#   `get_legal_moves()` excludes it
+# - The disc always lands on top of the stack in its column: `apply_move()`
+#   never lets you choose the row directly, unlike tic-tac-toe
+
+# %% [markdown]
+# ## Cell 7.4: A tactical position to search from
+#
+# **Goal**:
+# - Build intuition for how MCTS handles a position with a concrete threat,
+#   for Connect Four 
+#
+# - Red already has three discs in a row on the bottom row, anchored against
+#   the left edge (columns 0-2)
+# - Yellow's 3 discs are stacked out of the way in column 6
+# - It is red's turn next 
+# - Column 3 is the only cell that completes a four-in-a-row, and it wins immediately for red
+
+# %%
+_cf_empty_row = (0, 0, 0, 0, 0, 0, 0)
+_cf_row3 = (0, 0, 0, 0, 0, 0, -1)
+_cf_row4 = (0, 0, 0, 0, 0, 0, -1)
+_cf_row5 = (1, 1, 1, 0, 0, 0, -1)
+cf_demo_state = _cf_empty_row * 3 + _cf_row3 + _cf_row4 + _cf_row5
+print(connect_four.render(cf_demo_state))
+rimtsaazmau.plot_connect_four_board(cf_demo_state)
+
+# %% [markdown]
+# ## Cell 7.5: Visualizing the search tree on Connect Four
+#
+# **Goal**:
+# - See the search tree `build_mcts_tree()` grows from `cf_demo_state`: the
+#   board picture ties each child's move (a column) back to where the disc
+#   would land, exactly like Cell 4.2 did for tic-tac-toe with text alone
+# - With the exploration constant $C$ from the UCT formula
+#   ($Q(s, a) + C \sqrt{\ln N(s) / N(s, a)}$) and the search budget
+#   `num_simulations` set high enough, the robust child (highest $N(s, a)$)
+#   should be column 3, the immediate win
+# - Watch how few simulations it takes before column 3 pulls ahead of the
+#   other 6 columns
+
+# %%
+rimtsaazmau.cell7_5_build_connect_four_tree_widget(connect_four, cf_demo_state)
+
+# %% [markdown]
+# **Key observations**:
+# - Column 3 (the winning move) accumulates far more visits $N(s, a)$ than
+#   the other 6 columns once the search budget is large enough
+# - A small `num_simulations` can still miss it: with only 7 legal moves at
+#   the root, every column is tried once before any is revisited (the
+#   $N(s, a) = 0$ case in the UCT formula), so a tiny budget barely gets
+#   past that first sweep
+# - Raising `C` spreads visits more evenly across all 7 columns; lowering
+#   it concentrates them on whichever column looked best early, right or
+#   wrong
+
+# %% [markdown]
+# ## Cell 7.6: Evaluating MCTS on Connect Four
+#
+# **Goal**:
+# - Reuse Part 6's `evaluate_win_rate()` / `plot_win_rate_results()`
+#   unchanged, this time against `ConnectFour`, to see the same engine
+#   generalize its evaluation, not just its search, to a bigger game
+
+# %%
+cf_mcts_player = rimtsaazmu.make_mcts_player(num_simulations=150)
+cf_results = rimtsaazmu.evaluate_win_rate(
+    connect_four, cf_mcts_player, rimtsaazmu.random_player, num_games=50
 )
-print("\nwinner:", winner)
-print(connect_four.render(history[-1]))
+print(cf_results)
+
+# %%
+rimtsaazmu.plot_win_rate_results(cf_results)
+
+# %% [markdown]
+# ## Summary: The Mental Model
+#
+# - `Game` is the only contract `mcts_utils.py` depends on: any class
+#   implementing its 6 methods can be searched by `run_mcts()`, as shown by
+#   `TicTacToe` (Parts 2-6) and `ConnectFour` (Part 7) sharing every line of
+#   search code
+# - MCTS repeats 4 phases per simulation: Selection (descend by UCT),
+#   Expansion (add one child), Simulation (random rollout to a terminal
+#   state), Backpropagation (push the outcome back up, flipping sign each
+#   ply)
+# - The UCT formula $Q(s, a) + C \sqrt{\ln N(s) / N(s, a)}$ balances
+#   exploiting the best-known child against exploring an under-visited one;
+#   an unvisited child ($N(s, a) = 0$) is always tried first
+# - The visit distribution at the root, not just its arg max, is the real
+#   output of the search: `run_mcts()` returns the robust child, the one
+#   with the highest $N(s, a)$, not the one with the highest $Q(s, a)$

@@ -2,9 +2,8 @@
 Concrete `Game` implementations for MCTS: tic-tac-toe and Connect Four.
 
 Both games plug into the game-agnostic MCTS engine in `mcts_utils.py` by
-implementing its `Game` interface. See
-`research/ideas/draft.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.md` for
-the full project spec.
+implementing its `Game` interface. See `README.md` for a description of every
+file in this directory.
 
 Import as:
 
@@ -33,6 +32,8 @@ _PLAYER_O = -1
 _CELL_SYMBOLS = {_EMPTY: ".", _PLAYER_X: "X", _PLAYER_O: "O"}
 
 
+# TODO(gp): This is inefficient since we could keep this info in the state,
+# instead of recomputing it all the times.
 def _infer_current_player(state: rimtsaazmu.State) -> int:
     """
     Infer whose turn it is from how many cells are filled.
@@ -103,6 +104,11 @@ _TICTACTOE_WIN_LINES = [
     (0, 4, 8),
     (2, 4, 6),
 ]
+
+
+# #############################################################################
+# TicTacToe
+# #############################################################################
 
 
 class TicTacToe(rimtsaazmu.Game):
@@ -246,13 +252,16 @@ def _build_connect_four_win_lines() -> List[Tuple[int, ...]]:
             # Diagonal window, top-left to bottom-right.
             lines.append(tuple(idx(row + k, col + k) for k in range(n)))
             # Diagonal window, top-right to bottom-left.
-            lines.append(
-                tuple(idx(row + k, col + n - 1 - k) for k in range(n))
-            )
+            lines.append(tuple(idx(row + k, col + n - 1 - k) for k in range(n)))
     return lines
 
 
 _CONNECT_FOUR_WIN_LINES = _build_connect_four_win_lines()
+
+
+# #############################################################################
+# ConnectFour
+# #############################################################################
 
 
 class ConnectFour(rimtsaazmu.Game):
@@ -293,6 +302,22 @@ class ConnectFour(rimtsaazmu.Game):
                 if state[col] == _EMPTY
             ]
         return moves
+
+    def _get_landing_row(self, state: rimtsaazmu.State, col: int) -> int:
+        """
+        Find the lowest empty row in `col` (gravity drop target).
+
+        :param state: game state before the move
+        :param col: column to drop into, must have room
+        :return: row index the mark will land on
+        """
+        landing_row: Optional[int] = None
+        for row in range(_CONNECT_FOUR_NUM_ROWS - 1, -1, -1):
+            if state[row * _CONNECT_FOUR_NUM_COLS + col] == _EMPTY:
+                landing_row = row
+                break
+        hdbg.dassert_is_not(landing_row, None, "Column %s is full", col)
+        return cast(int, landing_row)
 
     def apply_move(
         self, state: rimtsaazmu.State, move: rimtsaazmu.Move
@@ -358,19 +383,3 @@ class ConnectFour(rimtsaazmu.Game):
         """
         board_str = _render_board(state, _CONNECT_FOUR_NUM_COLS)
         return board_str
-
-    def _get_landing_row(self, state: rimtsaazmu.State, col: int) -> int:
-        """
-        Find the lowest empty row in `col` (gravity drop target).
-
-        :param state: game state before the move
-        :param col: column to drop into, must have room
-        :return: row index the mark will land on
-        """
-        landing_row: Optional[int] = None
-        for row in range(_CONNECT_FOUR_NUM_ROWS - 1, -1, -1):
-            if state[row * _CONNECT_FOUR_NUM_COLS + col] == _EMPTY:
-                landing_row = row
-                break
-        hdbg.dassert_is_not(landing_row, None, "Column %s is full", col)
-        return cast(int, landing_row)

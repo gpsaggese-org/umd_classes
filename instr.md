@@ -1,13 +1,10 @@
-- In mcts.API.ipynb after Cell 2.2 add examples of full tic-tac-toe games (without
-  MCTS) where we show two players alternating
+1) Update ./research/Implement_MonteCarlo_Tree_Search_and_Alpha_Zero/README.md
+  with a description of each file and add pointer to that in the docstring of
+  each file
 
-- Create a ipywidget where the user can play both players and show the rendered
-  board
-  
-- After cell 4.1, we want to have a way to show the search tree and how MCTS nodes
-  are updated
-- We want to have control over the parameters of the game aligned with
-  /Users/saggese/src/umd_classes1/msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd
+2) Create Implement_MonteCarlo_Tree_Search_and_Alpha_Zero/mcts.API.ipynb for connect4
 
-- Refer to .claude/skills/notebook.implement_outline and other skills for the
-  notebook
+- use widgets and pictures to build intuition about how the MCTS tree is built
+  and evaluated
+
+Use notation and concepts aligned with /Users/saggese/src/umd_classes1/msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd
