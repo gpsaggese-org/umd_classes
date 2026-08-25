@@ -171,89 +171,82 @@
 //```
 
 * The Beginning (1943-1956)
-- **Artificial neuron**
-  - Model (McCullock-Pitts 1943) based on:
+- @Artificial neuron@
+  - Model _(McCullock-Pitts, 1943)_ based on:
     - Brain physiology
     - Propositional logic
   - Compute any function with connected neurons
     - Neuron on/off based on stimulation from neighboring neurons
     - Implement logical AND, OR, NOT with simple neuron networks
 
-- **Alan Turing, 1947**
+- @Alan Turing, 1947@
   - Turing test, machine learning, reinforcement learning
-  - Create human-level AI
-    - Develop learning algorithms
-    - Teach machine like a child
+  - Create human-level AI by
+    - Developing learning algorithms
+    - Teaching machine like a child
 
-- **Birth of AI**
+- @Birth of AI@
   - McCarthy organized first AI workshop (1956)
-  - The Logic Theorist (Newell and Simon, 1956)
+  - The Logic Theorist _(Newell and Simon, 1956)_
     - Programs to "think non-numerically" and prove theorems
 
 * Enthusiasm and Great Expectations (1952-1969)
-- **Early years of AI were full of successes**
-  - Before computers could only do arithmetics
+- @Early years of AI were full of successes@
+  - At the beginning, computers could only do arithmetics
   - _"A machine can never do X (e.g., games, puzzles, IQ tests, ...)"_
     - AI researchers showed machines could do one $X$ after another
+  - **General Problem Solver**
+    - Imitate human problem-solving
+    - Consider sub-goals and possible actions
 
-- **General Problem Solver**
-  - Imitate human problem-solving
-  - Consider sub-goals and possible actions
+  - **Program learned to play checkers**
+    - Use reinforcement learning from victories and mistakes
 
-- **Program learned to play checkers**
-  - Use reinforcement learning from victories and mistakes
+  - **Lisp (1958)**
+    - High-level language used for 30 years in AI
 
-- **Lisp (1958)**
-  - High-level language used for 30 years in AI
-
-- **First neural network**
+- @First neural network@ _(Minsky, 1959)_
   - 3000 vacuum tubes for 40 neurons
-  - Minsky (1959)
 
-- **MIT and Stanford**
-  - Minsky at MIT
-    - Focus on neural network
-  - McCarthy at Stanford
-    - Focus on representation, logic
+- @MIT and Stanford@
+  - Minsky at MIT: focus on neural network
+  - McCarthy at Stanford: focus on representation, logic
 
 * First AI winter (1975-1980)
-- **Early successes** of AI set high expectations
+- @Fact@: Early successes of AI set high expectations
+  - In 1965-1975 AI didn't succeed on **real problems** due to:
+    - Solutions were based on _human problem-solving methods_
+    - Difficulty handling _combinatorial explosion_
+      - Theorem proving handles small problems with brute force, but doesn't scale
+    - Neural networks couldn't be used since they needed:
+      - Algorithms (e.g., backpropagation)
+      - Compute power
+      - Data
 
-- In 1965-1975 AI didn't succeed on **real problems** due to:
-  - Solutions were based on human problem-solving methods
-  - Difficulty handling "combinatorial explosion"
-    - Theorem proving handles small problems with brute force, but doesn't scale
-  - Neural networks needed:
-    - Algorithms (e.g., backpropagation)
-    - Compute power
-    - Data
-
-- **First AI winter**
+- @Consequence@: **First AI winter**
   - Research funding and enthusiasm dropped significantly
   - Slow AI progress through late 1970s
 
 * Expert Systems (1980-1990)
-- **Expert systems**
-  - Aka "knowledge-based systems"
-  - Combine weak methods with extensive domain knowledge as rules
+- @Definition@: **Expert systems** (aka "knowledge-based systems")
+  - Combine _weak methods_ with _extensive domain knowledge_ as rules
   - Use inference engines to apply rules to facts
   - E.g., rule-based systems, logic programming (e.g., Prolog)
 
-- **Weak AI**
-  - Aka narrow AI
+- @DefinitioN@: **Weak AI** (aka "narrow AI")
+  - Uses "weak methods" (search, logic) that struggle to scale
   - Performs specific tasks, not general reasoning
   - Operates in a limited, well-defined domain
-  - Uses "weak methods" (search, logic) that struggle to scale
 
-- **Commercial adoption and industry growth**
+- @Commercial adoption and industry growth@
   - AI shifted to practical applications
   - Major US corporations deployed expert systems
   - AI emerged as a commercial industry
 
 * Second AI Winter (late 1980-early 1990)
-- **Hype in expert systems** didn't deliver
+- @Fact@: lots of hype / expert systems didn't deliver
 
-- **Reasons**
+- @Reasons@
   - Building/maintaining expert systems is difficult
   - Reasoning methods ignore uncertainty
   - Systems can't learn from experience
@@ -262,64 +255,60 @@
   - E.g., early AI chess systems couldn't adapt to new strategies without manual
     updates
 
-- **Second AI winter** in late 1980-early 1990
+- @Consequence@: **Second AI winter** in late 1980-early 1990
 
 * Return of Neural Networks (1986-)
-- Back-propagation algorithm is (re)discovered (mid-1980s)
+- @Fact@: Back-propagation algorithm is (re)discovered in mid-1980s
   - Developed in early 1960s
 
-- **Two approaches to AI are back**
-  - Connectionist paradigm
-    - Neural networks
+- @Two approaches to AI are back@
+  - _Connectionist paradigm_ (aka neural networks)
     - E.g., recognizing handwritten digits
-  - Symbolic paradigm
+  - _Symbolic paradigm_
     - E.g., solving logical puzzles with rules
 
-- **Why connectionist approach?**
+- @Why connectionist approach?@
   - Concepts not well-defined using symbolic axioms
-    - Forms fluid internal concepts
-    - Represents real-world complexity better
-  - Neural networks can learn from examples, e.g.,
-    - Image recognition: identify objects by learning from labeled images
+    - Form fluid internal concepts
+    - Represent real-world complexity better
+  - Neural networks can learn from examples
+    - E.g., in image recognition identify objects by learning from labeled images
 
 * Probabilistic Reasoning and ML (1987-)
-- **AI and scientific method**
+- @AI and scientific method@
   - Rigorous methods to test performance
-  - E.g., speech recognition, handwritten character recognition
+    - E.g., speech recognition, handwritten character recognition
   - Benchmarks for progress, e.g.,
     - MNIST: handwritten digit recognition
     - ImageNet: image object recognition
     - SAT Competitions: boolean satisfiability solvers
 
-- **AI shifts ...**
-  - From Boolean logic to probability
-  - From hand-coded rules to machine learning
-  - From a-priori reasoning to experimental results
+- @Fact@: AI shifts from:
+  - Boolean logic to probability
+  - Hand-coded rules to machine learning
+  - A-priori reasoning to experimental results
 
-* Progress in Speech Recognition
-- **1970s: ad-hoc approaches**
-  - Various architectures and approaches were attempted
-  - Rule-based systems with limited robustness
+* Example: Speech Recognition
+- In 1970s @ad-hoc approaches@
+  - Several approaches to Rule-based systems with limited robustness
   - Cons
     - Ad-hoc, fragile
-  - _"Every time I fire a linguist, the performance of the speech recognizer
-    goes
-    up" (Jelinek, 1988)
+  - _"Every time I fire a linguist, the performance of the speech recognizer goes up"
+    (Jelinek, 1988)_
 
-- **1980s: hidden Markov Models**
-  - HMMs became dominant
-  - Effective learning techniques
+- In 1980s @hidden Markov Models@
   - Trained on large speech corpora
   - Pros
+    - Effective learning techniques
     - Strong theoretical foundation
+  - HMMs became dominant
 
-- The bitter lesson (Sutton, 2019)
-  - General methods + lots of data beat handcrafted systems
+- @The bitter lesson@ _(Sutton, 2019)_
+  - _"General methods + lots of data beat handcrafted systems"_
 
 * Bayesian Networks
-- **Bayesian networks**
-  - Pearl, 1988
-  - AI is linked with:
+- @Bayesian networks@ (Pearl, 1988)
+  - AI is linked with:- 
     - Probability
     - Decision theory
     - Control theory
