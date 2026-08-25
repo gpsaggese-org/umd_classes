@@ -1,0 +1,1112 @@
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L09.9: Classical Search Algorithms
+// slides_engine=typst
+// references=
+// - AIMA Chap 3: Solving problems by searching
+// - AIMA Chap 5: Adversarial search and games
+// - 1968, Hart, Nilsson & Raphael, "A Formal Basis for the Heuristic
+//   Determination of Minimum Cost Paths"
+// - 1975, Knuth & Moore, "An Analysis of Alpha-Beta Pruning"
+// - 1985, Korf, "Depth-First Iterative-Deepening: An Optimal Admissible Tree
+//   Search"
+// - 1988, Allis, "A Knowledge-Based Approach of Connect-Four"
+// - 1992, Russell & Wefald, "Do the Right Thing: Studies in Limited
+//   Rationality"
+
+// TODO(ai_gp): When possible use the content from ./notes/IN_PROGRESS.math.Artificial_intelligence.Russell.4e.2020.txt
+
+# Formulating Search Problems
+
+* Acting by Searching
+
+- @Motivation@: an agent that knows its goal still has to find the **sequence
+  of actions** that reaches it
+  - A single action rarely achieves a goal
+  - The environment supplies the rules, not the plan
+
+- @Definition@: **search** is the process of exploring hypothetical action
+  sequences inside a model of the world, before committing to any action in
+  the world
+  - The agent simulates, evaluates, and only then acts
+
+- @Assumptions@: the classical setting
+  - _Deterministic_: an action taken in a state always leads to the same state
+  - _Fully observable_: the agent knows which state it is in
+  - _Discrete_: finitely many actions are available per state
+  - _Known model_: the agent can predict the result of any action
+
+- @Question@: given only the rules of tic-tac-toe, how does an agent find a
+  move that never loses?
+
+* Anatomy of a Search Problem
+
+- @Definition@: a **search problem** is the tuple
+  $(\mathcal{S}, s_0, \mathcal{A}, T, G, c)$
+
+- @Components@
+  - _State space_ $\mathcal{S}$: every configuration the world can be in
+  - _Initial state_ $s_0 \in \mathcal{S}$: where the agent starts
+  - _Actions_ $\mathcal{A}(s)$: the legal actions in state $s$
+  - _Transition model_ $T(s, a)$: the state reached by doing $a$ in $s$
+  - _Goal test_ $G(s)$: true when $s$ is an acceptable end state
+  - _Path cost_ $c(s, a, s')$: the non-negative cost of one step
+
+- @Definition@: a **solution** is an action sequence leading from $s_0$ to a
+  state satisfying $G$
+  - An **optimal solution** is a solution of minimum total path cost
+
+- @Key idea@: these six components are the entire interface between a domain
+  and a search algorithm
+  - Every algorithm in this lesson consumes only this tuple, so one
+    implementation serves routing, puzzles, and games
+
+* Tic-Tac-Toe as a Search Problem
+
+```{=typst}
+#styled-table(
+  headers: ([Component], [Tic-tac-toe instantiation]),
+  rows: (
+    ([State $s$], [Board contents plus the player to move]),
+    ([Initial state $s_0$], [Empty $3 times 3$ board, X to move]),
+    ([Actions $cal(A)(s)$], [Place the mark of the player to move on any
+      empty cell]),
+    ([Transition $T(s, a)$], [Board with the mark added and the turn flipped]),
+    ([Goal test $G(s)$], [Three in a row, or no empty cell left]),
+    ([Path cost $c$], [$1$ per move, so cost equals number of moves]),
+  ),
+  col-widths: (1fr, 2fr),
+  bold-first-col: true
+)
+```
+
+- @Remark@: a state is the **board**, not the move history
+  - Two different move orders reaching the same board are the same state
+
+- @Example@: **Connect 4** instantiates the same tuple on a $7 \times 6$ grid
+  - An action names a column, and the disc falls to the lowest empty cell
+  - The goal test looks for four in a row in any direction
+
+* State Space vs Search Tree
+
+::: columns
+:::: {.column width=48%}
+- @Definition@: the **state space** is a graph
+  - Nodes are states, edges are actions
+  - Each state appears exactly once
+
+- @Definition@: the **search tree** is what an algorithm actually builds
+  - Nodes are _paths_ starting at $s_0$, not states
+  - The same state reappears once per path that reaches it
+
+- @Key idea@: the state space is a property of the problem, the search tree is
+  a property of the search
+::::
+:::: {.column width=48%}
+
+```graphviz
+digraph state_space_vs_tree {
+    bgcolor="transparent";
+    pad="0.15";
+    splines=spline;
+    nodesep=0.30;
+    ranksep=0.40;
+    rankdir=TB;
+
+    node [shape=circle, style="filled", penwidth=1.8,
+          fontname="Helvetica", fontsize=12, width=0.42, fixedsize=true];
+    edge [color="#A3B1C0", penwidth=1.3, arrowhead=vee, arrowsize=0.7];
+
+    subgraph cluster_space {
+        label     = "State space";
+        labelloc  = "t";
+        fontname  = "Helvetica-Bold";
+        fontsize  = 12;
+        fontcolor = "#3A4A5C";
+        style     = "rounded";
+        color     = "#C7D0DA";
+        margin    = 14;
+
+        A1 [label="A", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
+        B1 [label="B", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+        C1 [label="C", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+        D1 [label="D", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+
+        A1 -> B1;
+        A1 -> C1;
+        B1 -> D1;
+        C1 -> D1;
+    }
+
+    subgraph cluster_tree {
+        label     = "Search tree";
+        labelloc  = "t";
+        fontname  = "Helvetica-Bold";
+        fontsize  = 12;
+        fontcolor = "#3A4A5C";
+        style     = "rounded";
+        color     = "#C7D0DA";
+        margin    = 14;
+
+        A2 [label="A", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
+        B2 [label="B", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+        C2 [label="C", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+        D2 [label="D", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+        D3 [label="D", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+
+        A2 -> B2;
+        A2 -> C2;
+        B2 -> D2;
+        C2 -> D3;
+    }
+}
+```
+
+::::
+:::
+
+- @Example@: tic-tac-toe has $5478$ reachable states, but its full game tree
+  holds $549946$ nodes
+
+* Redundant Paths and Graph Search
+
+- @Problem@: the same state is reached by many paths, so a naive search
+  re-expands it once per path
+  - Reaching the opposite corner of a $d \times d$ grid takes
+    $\frac{(2d)!}{(d!)^2}$ distinct paths over only $(d + 1)^2$ states
+
+- @Naive Solution@: keep the search tree and accept the repetition
+  - Cons: work grows with the number of _paths_, which is exponential even
+    when the state space is tiny
+
+- @Solution@: **graph search** keeps a `reached` table of visited states
+  - Expand a state the first time it is seen, or again only when a cheaper
+    path to it is found
+  - Cons: memory now grows with the number of _states_ reached
+
+- @Variants@: how much redundancy to remove
+  - _Tree-like search_: no table, cheapest memory, worst repetition
+  - _Cycle cutting_: compare a node only against its own ancestors
+  - _Graph search_: full `reached` table, no repetition at all
+
+- @Remark@: **expanding** a node means generating all its successors
+  - Cost is counted in node expansions, not in wall-clock time, so the
+    analysis is machine independent
+
+* Measuring a Search Algorithm
+// From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:32 '* Why Search Trees Explode'
+
+- @Definition@: four criteria evaluate any search algorithm
+  - _Completeness_: does it find a solution whenever one exists?
+  - _Optimality_: is the returned solution of minimum cost?
+  - _Time complexity_: how many nodes are generated?
+  - _Space complexity_: how many nodes are held in memory at once?
+
+- @Components@: the parameters the complexities are written in
+  - $b$ = branching factor, the number of successors per node
+  - $d$ = depth of the shallowest goal
+  - $m$ = maximum depth of any path, possibly infinite
+
+- @Example@: Connect 4 has $b \approx 7$ and $m = 42$, so $b^m \approx 10^{35}$
+  - Only $4.5 \cdot 10^{12}$ of those sequences reach distinct legal positions
+  - Even that reduced count was first enumerated in 1988
+
+- @Remark@: memory, not time, is the binding constraint in practice
+  - A machine generating $10^6$ nodes/s fills $100$ GB of RAM in minutes
+
+# Uninformed Search
+
+* Best-First Search: One Template
+
+::: columns
+:::: {.column width=52%}
+- @Key idea@: every algorithm in this lesson is **best-first search** run with
+  a different evaluation function $f(n)$
+  - Pop the frontier node minimizing $f$, expand it, repeat
+
+- @Definition@: the **frontier** is the set of generated but not yet expanded
+  nodes
+  - Aka "open list"
+  - It separates the explored region from the unexplored one
+
+- @Algorithm@: best-first search
+  1. Put $s_0$ on the frontier, a priority queue ordered by $f$
+  2. Pop the node $n$ of lowest $f(n)$
+  3. Return the path to $n$ if $G(n)$ holds
+  4. Otherwise expand $n$, adding each successor that is new or reached more
+     cheaply than before
+  5. Repeat until the frontier is empty
+::::
+:::: {.column width=44%}
+
+```graphviz
+digraph best_first_family {
+    bgcolor="transparent";
+    pad="0.15";
+    rankdir=LR;
+    nodesep=0.22;
+    ranksep=0.55;
+
+    node [shape=box, style="rounded,filled", penwidth=1.6,
+          fontname="Helvetica", fontsize=12, margin="0.18,0.09",
+          height=0.40];
+    edge [color="#A3B1C0", penwidth=1.3, arrowhead=vee, arrowsize=0.7];
+
+    f0 [label="f = depth(n)", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    f1 [label="f = g(n)", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    f2 [label="f = h(n)", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
+    f3 [label="f = g(n) + h(n)", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
+
+    a0 [label="Breadth-first", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    a1 [label="Uniform-cost", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    a2 [label="Greedy best-first", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    a3 [label="A* search", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+
+    f0 -> a0;
+    f1 -> a1;
+    f2 -> a2;
+    f3 -> a3;
+}
+```
+
+::::
+:::
+
+* Breadth-First and Uniform-Cost Search
+
+- @Definition@: **breadth-first search (BFS)** expands the shallowest node
+  first, so $f(n) = depth(n)$
+  - A FIFO queue replaces the priority queue, since depth grows by one per
+    expansion
+  - The goal test fires when a node is _generated_, so the search stops early
+
+- @Properties@: BFS
+  - _Complete_ whenever $b$ is finite
+  - _Optimal_ only when every step carries the same cost
+  - _Time_ and _space_ are both $O(b^d)$, since the whole frontier is stored
+
+- @Problem@: with unequal step costs the shallowest goal is not the cheapest
+  - E.g., a direct road of cost $100$ is returned before a three-hop route of
+    total cost $10$
+
+- @Solution@: **uniform-cost search (UCS)** expands the cheapest node first,
+  so $f(n) = g(n)$
+  - Aka "Dijkstra's algorithm"
+  - The goal test fires on _expansion_, not on generation, so a cheaper path
+    can still overtake a goal sitting on the frontier
+
+- @Properties@: UCS is complete and optimal for non-negative step costs
+  - _Time_ and _space_ are $O(b^{1 + C^* / c_{min}})$, with $C^*$ the optimal
+    cost and $c_{min}$ the smallest step cost
+
+* Depth-First, Depth-Limited, and Iterative Deepening
+
+- @Definition@: **depth-first search (DFS)** expands the deepest node first
+  - A LIFO stack replaces the priority queue, or plain recursion does
+  - _Space_ is only $O(bm)$, since one path plus its siblings is stored
+
+- @Cons@: DFS is neither complete nor optimal
+  - A single infinite branch traps it forever
+  - The first goal found is rarely the shallowest
+
+- @Naive Solution@: **depth-limited search (DLS)** runs DFS but refuses to
+  expand past a fixed depth $\ell$
+  - _Time_ $O(b^\ell)$ and _space_ $O(b\ell)$
+  - Cons: complete only if $\ell \geq d$, and a good $\ell$ requires knowing
+    $d$ in advance
+
+- @Solution@: **iterative deepening search (IDS)** runs DLS for
+  $\ell = 0, 1, 2, \ldots$ until a goal appears
+  - Keeps the $O(bd)$ memory of DFS and the optimality of BFS
+  - Re-expanding the shallow levels costs only a constant factor
+    $$
+    \sum_{i=0}^{d} (d - i + 1) \, b^i = O(b^d)
+    $$
+  - The deepest level holds a fraction $(b - 1)/b$ of all nodes, so everything
+    above it is cheap by comparison
+
+* Uninformed Search: Comparison
+
+```{=typst}
+#styled-table(
+  headers: ([Algorithm], [Complete], [Optimal], [Time], [Space]),
+  rows: (
+    ([Breadth-first], [Yes], [Equal costs only], [$O(b^d)$], [$O(b^d)$]),
+    ([Uniform-cost], [Yes], [Yes], [$O(b^(1 + C^* \/ c_"min"))$], [Same as time]),
+    ([Depth-first], [No], [No], [$O(b^m)$], [$O(b m)$]),
+    ([Depth-limited], [If $ell >= d$], [No], [$O(b^ell)$], [$O(b ell)$]),
+    ([Iterative deepening], [Yes], [Equal costs only], [$O(b^d)$], [$O(b d)$]),
+  ),
+  col-widths: (1.5fr, 1fr, 1.3fr, 1.3fr, 1fr),
+  bold-first-col: true
+)
+```
+
+- @Key idea@: iterative deepening is the default uninformed method
+  - It matches BFS on solution quality at DFS memory cost
+
+- @Problem@: every entry is exponential in the solution depth
+  - No ordering of _blind_ expansions escapes $b^d$, because a goal can hide
+    below any node not yet expanded
+
+- @Solution@: inject domain knowledge as a **heuristic**, so the search stops
+  treating all frontier nodes as equally promising
+
+# Informed Search
+
+* Heuristics
+
+- @Definition@: a **heuristic function** $h(n)$ estimates the cheapest cost
+  from the state at node $n$ to any goal
+  - $h(n) = 0$ at every goal node
+  - $h$ is domain knowledge, supplied from outside the search algorithm
+
+- @Components@: the three cost functions used from here on
+  - $g(n)$ = cost of the path from $s_0$ to $n$, known exactly
+  - $h(n)$ = estimated cost from $n$ to a goal, computed cheaply
+  - $h^*(n)$ = true cheapest cost from $n$ to a goal, unknown
+
+- @Example@: route finding on a road map
+  - $h(n)$ = straight-line distance from city $n$ to the destination
+  - It never overestimates, because no road is shorter than the straight line
+
+- @Example@: the 8-puzzle
+  - $h_1(n)$ = number of tiles sitting in the wrong cell
+  - $h_2(n)$ = sum over tiles of the Manhattan distance to the goal cell
+
+- @Key idea@: informed search buys speed with knowledge
+  - The quality of $h$, not the choice of algorithm, decides how much is saved
+
+* Greedy Best-First Search
+
+- @Definition@: **greedy best-first search** expands the node that _looks_
+  closest to a goal, so $f(n) = h(n)$
+  - The cost already paid, $g(n)$, is discarded
+
+- @Pros@: it often reaches a goal after very few expansions
+  - E.g., with straight-line $h$ on a road map, it follows the corridor
+    pointing at the destination
+
+- @Cons@: ignoring $g$ costs both optimality and completeness
+  - A route that starts in the right direction and then detours beats a
+    shorter route that starts sideways
+  - Without a `reached` table it can oscillate forever between two states that
+    both look promising
+
+- @Counterexample@: two routes to the same goal
+  - Route A heads straight at the goal, then follows a long detour
+  - Route B starts away from the goal, then runs straight to it
+  - Greedy commits to A, because $h$ is smaller after the first step
+
+- @Problem@: an evaluation function built only from $h$ throws away information
+  the search already holds for free
+
+* A* Search
+
+- @Definition@: **A\* search** expands the node with the lowest estimated cost
+  of a _complete_ solution passing through it
+  $$
+  f(n) = g(n) + h(n)
+  $$
+  - $g(n)$ = cost already paid to reach $n$
+  - $h(n)$ = estimated cost still to be paid from $n$
+
+- @Intuition@: $f(n)$ is the best available guess of the cheapest solution
+  constrained to pass through $n$
+  - Greedy search minimizes the future, uniform-cost minimizes the past, and
+    A* minimizes their sum
+
+- @Algorithm@: A* is best-first search with $f = g + h$
+  - The goal test fires on _expansion_, so a frontier node with lower $f$ can
+    still overtake a goal already generated
+
+- @Remark@: A* degenerates into the algorithms it generalizes
+  - $h \equiv 0$ recovers uniform-cost search
+  - $g \equiv 0$ recovers greedy best-first search
+
+* Admissibility and Consistency
+
+- @Definition@: $h$ is **admissible** if it never overestimates the true
+  remaining cost, at every node $n$
+  $$
+  0 \leq h(n) \leq h^*(n)
+  $$
+  - An admissible $h$ is optimistic, so no promising path is dismissed early
+
+- @Definition@: $h$ is **consistent** if it satisfies the triangle inequality
+  along every edge from $n$ to $n'$ under action $a$
+  $$
+  h(n) \leq c(n, a, n') + h(n')
+  $$
+  - Aka "monotone"
+
+- @Proposition@: consistency implies admissibility, but not the reverse
+  - Consistency also makes $f$ non-decreasing along any path, since
+    $f(n') = g(n) + c(n, a, n') + h(n') \geq g(n) + h(n) = f(n)$
+
+- @Example@: straight-line distance is consistent
+  - Travelling from $n$ to $n'$ cannot shorten the straight line by more than
+    the distance covered
+
+- @Remark@: nearly every admissible heuristic used in practice is also
+  consistent
+  - Constructing an admissible but inconsistent heuristic takes deliberate
+    effort
+
+* Optimality of A*
+
+- @Theorem@: A* returns an optimal solution
+  - Tree-like A* needs only an admissible $h$
+  - Graph-search A* needs a consistent $h$
+
+- @Proof@: by contradiction, in the tree-like case
+  1. Let $G_{opt}$ be an optimal goal of cost $C^*$, and suppose A* is about to
+     expand a suboptimal goal $G_2$ with $g(G_2) > C^*$
+  2. Since $h(G_2) = 0$, we have $f(G_2) = g(G_2) > C^*$
+  3. Some node $n$ on the optimal path to $G_{opt}$ sits on the frontier,
+     because the path starts at $s_0$ and $G_{opt}$ is not yet expanded
+  4. Admissibility gives
+     $f(n) = g(n) + h(n) \leq g(n) + h^*(n) = C^*$
+  5. Hence $f(n) \leq C^* < f(G_2)$, so A* would have popped $n$, not $G_2$
+  6. Contradiction, so no suboptimal goal is ever selected for expansion
+
+- @Remark@: the proof uses only the "never overestimates" property
+  - A heuristic that overestimates by at most $\delta$ returns a solution
+    costing at most $C^* + \delta$
+
+* A* Explores in Contours
+
+::: columns
+:::: {.column width=50%}
+- @Intuition@: A* pops nodes in non-decreasing order of $f$, so it sweeps out
+  **contours** of equal $f$ value
+  - Every node with $f(n) < C^*$ is expanded
+  - No node with $f(n) > C^*$ is ever expanded
+  - Nodes with $f(n) = C^*$ may or may not be expanded, depending on
+    tie-breaking
+
+- @Comparison@: the shape of the contours
+  - $h \equiv 0$ gives circular bands centered on $s_0$
+  - A sharper $h$ stretches the bands into a narrow corridor aimed at the goal
+::::
+:::: {.column width=45%}
+
+```graphviz
+digraph astar_contours {
+    bgcolor="transparent";
+    pad="0.20";
+    rankdir=LR;
+    nodesep=0.30;
+    ranksep=0.40;
+
+    node [shape=circle, style="filled", penwidth=1.6,
+          fontname="Helvetica", fontsize=11, width=0.40, fixedsize=true];
+    edge [color="#A3B1C0", penwidth=1.3, arrowhead=vee, arrowsize=0.7];
+
+    subgraph cluster_c3 {
+        label     = "f <= 420";
+        labelloc  = "b";
+        fontname  = "Helvetica";
+        fontsize  = 11;
+        fontcolor = "#6B4517";
+        style     = "rounded";
+        color     = "#D98E2B";
+        margin    = 16;
+
+        subgraph cluster_c2 {
+            label     = "f <= 400";
+            labelloc  = "b";
+            fontname  = "Helvetica";
+            fontsize  = 11;
+            fontcolor = "#1F4E56";
+            style     = "rounded";
+            color     = "#7CC6D0";
+            margin    = 14;
+
+            subgraph cluster_c1 {
+                label     = "f <= 380";
+                labelloc  = "b";
+                fontname  = "Helvetica";
+                fontsize  = 11;
+                fontcolor = "#1F4E2E";
+                style     = "rounded";
+                color     = "#4F9A5C";
+                margin    = 12;
+
+                S [label="s0", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
+            }
+
+            n1 [label="", fillcolor="#C7ECF0", color="#7CC6D0"];
+        }
+
+        n2 [label="", fillcolor="#FFC98A", color="#D98E2B"];
+    }
+
+    G [label="G", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+
+    S -> n1;
+    n1 -> n2;
+    n2 -> G;
+}
+```
+
+::::
+:::
+
+- @Key idea@: the work A* does equals the number of nodes inside the $C^*$
+  contour, and only a sharper $h$ shrinks that region
+
+* The Cost of A*
+
+- @Theorem@: A* is **optimally efficient**
+  - Given the same $h$, no optimal algorithm expands fewer nodes than A\*, up
+    to tie-breaking on the $f = C^*$ contour
+  - Any node with $f(n) < C^*$ must be expanded by any optimal algorithm,
+    because a cheaper goal could hide below it
+
+- @Definition@: the **effective branching factor** $b^*$ measures heuristic
+  quality
+  - If A* generates $N$ nodes before finding a solution at depth $d$, then
+    $b^*$ solves
+    $$
+    N + 1 = 1 + b^* + (b^*)^2 + \cdots + (b^*)^d
+    $$
+  - A well-designed $h$ drives $b^*$ toward $1$
+
+- @Problem@: A* stores every node it generates
+  - _Time_ is $O(b^{\epsilon d})$, with $\epsilon = (h^* - h)/h^*$ the relative
+    heuristic error
+  - _Space_ is the real limit, since the `reached` table grows with every
+    expansion
+
+- @Key idea@: A* runs out of memory long before it runs out of time
+
+* Memory-Bounded Variants of A*
+
+- @Problem@: A* exhausts memory on problems it could otherwise solve within
+  the available time
+
+- @Variants@: trade memory for repeated work
+  - _Iterative-deepening A\*_ (IDA\*): depth-first passes bounded by an $f$
+    cutoff, raised each round to the smallest $f$ that exceeded it
+  - _Recursive best-first search_ (RBFS): depth-first in $O(bd)$ memory,
+    backing up the best $f$ of each forgotten subtree
+  - _Simplified memory-bounded A\*_ (SMA\*): runs like A* until memory fills,
+    then drops the worst leaf after backing its value up to its parent
+
+- @Variants@: trade optimality for speed
+  - _Weighted A\*_ uses $f(n) = g(n) + w \cdot h(n)$ with $w > 1$
+  - The returned solution costs at most $w \cdot C^*$
+  - E.g., $w = 2$ often cuts expansions by orders of magnitude while adding a
+    few percent to solution cost
+
+- @Remark@: all of these keep $h$ untouched and change only the bookkeeping
+
+* Where Heuristics Come From
+
+- @Question@: given a new problem, how is an admissible $h$ derived rather than
+  guessed?
+
+- @Techniques@: systematic sources of heuristics
+  - _Relaxed problem_: drop a constraint from the action rules, then solve the
+    easier problem exactly
+  - _Pattern database_: solve subproblems over a subset of the state and store
+    the exact costs in a lookup table
+  - _Landmarks_: precompute exact distances to a few hub states and combine
+    them with the triangle inequality
+  - _Learning_: fit $h$ from features of solved instances
+
+- @Proposition@: the exact cost of a relaxed problem is admissible for the
+  original problem
+  - Every original solution is also a relaxed solution, so the relaxed optimum
+    is a lower bound
+
+- @Example@: the two 8-puzzle heuristics come from two relaxations
+  - Let a tile teleport to any cell: $h_1$ = misplaced tiles
+  - Let a tile move to any adjacent cell, occupied or not: $h_2$ = Manhattan
+    distance
+
+- @Definition@: $h_2$ **dominates** $h_1$ when $h_2(n) \geq h_1(n)$ at every
+  node and both stay admissible
+  - A dominating heuristic never expands more nodes, so always take
+    $h(n) = \max(h_1(n), h_2(n))$
+  - E.g., at depth $12$ the effective branching factor falls from about $2.8$
+    for iterative deepening to $1.5$ with $h_1$ and $1.3$ with $h_2$
+
+# Adversarial Search
+
+* Games as Search Problems
+
+- @Problem@: in a game the agent no longer controls every action
+  - An opponent chooses at alternate levels, and chooses adversarially
+  - A fixed action sequence is useless, because the opponent deviates from it
+
+- @Definition@: a **two-player zero-sum game** replaces the goal test and the
+  path cost of a search problem
+  - $ToMove(s)$: the player whose turn it is in $s$
+  - $Terminal(s)$: true when the game is over
+  - $Utility(s, p)$: the payoff to player $p$ at a terminal state $s$
+
+- @Definition@: **zero-sum** means the payoffs always cancel
+  $$
+  Utility(s, MAX) + Utility(s, MIN) = 0
+  $$
+  - One player's gain is exactly the other's loss, so one number per terminal
+    state suffices
+
+- @Example@: tic-tac-toe and Connect 4 use $\{+1, 0, -1\}$ for win, draw, and
+  loss, always from the point of view of the player called MAX
+
+- @Assumptions@: perfect information
+  - Both players see the full state, and no chance element intervenes
+
+* Game Trees
+
+::: columns
+:::: {.column width=46%}
+- @Definition@: a **game tree** alternates layers
+  - _MAX layers_: the agent chooses, and prefers the largest value
+  - _MIN layers_: the opponent chooses, and prefers the smallest value
+  - _Leaves_: terminal states, labeled by $Utility$
+
+- @Definition@: a **ply** is one layer, so one move by one player
+  - A "move" in everyday speech is two plies
+
+- @Key idea@: a solution is not a path but a **strategy**
+  - It prescribes a reply to every choice the opponent can make
+::::
+:::: {.column width=48%}
+
+```graphviz
+digraph game_tree {
+    bgcolor="transparent";
+    pad="0.15";
+    ranksep=0.40;
+    nodesep=0.18;
+
+    node [shape=box, style="rounded,filled", penwidth=1.6,
+          fontname="Helvetica", fontsize=11, margin="0.13,0.07",
+          height=0.34];
+    edge [color="#A3B1C0", penwidth=1.2, arrowhead=none];
+
+    root [label="MAX", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
+
+    m1 [label="MIN", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    m2 [label="MIN", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    m3 [label="MIN", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+
+    l1 [label="+1", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    l2 [label="0",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    l3 [label="-1", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    l4 [label="0",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    l5 [label="+1", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    l6 [label="-1", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+
+    root -> m1;
+    root -> m2;
+    root -> m3;
+    m1 -> l1;
+    m1 -> l2;
+    m2 -> l3;
+    m2 -> l4;
+    m3 -> l5;
+    m3 -> l6;
+}
+```
+
+::::
+:::
+
+* The Tic-Tac-Toe Game Tree
+
+- @Example@: the complete tic-tac-toe tree
+  - Depth $m = 9$ plies, with $b$ falling from $9$ down to $1$
+  - $255168$ complete games, and $549946$ nodes in total
+  - Small enough to search exhaustively on any laptop
+
+- @Fact@: the game-theoretic value of tic-tac-toe is a **draw**
+  - Perfect play by both sides always ends $0$
+
+- @Comparison@: the same tree for Connect 4
+  - Depth $m = 42$ and $b \approx 7$, so about $10^{35}$ move sequences
+  - $4.5 \cdot 10^{12}$ distinct legal positions
+  - The value is a **win for the first player**, who must open in the center
+    column
+
+- @Key idea@: the whole rest of this lesson exists to close the gap between
+  these two numbers
+
+* Minimax
+
+- @Definition@: the **minimax value** $V(s)$ is the utility of the terminal
+  state reached when both sides play optimally from $s$
+  - $V(s) = Utility(s, MAX)$ when $s$ is terminal
+  - $V(s) = \max_{a \in \mathcal{A}(s)} V(T(s, a))$ when MAX is to move
+  - $V(s) = \min_{a \in \mathcal{A}(s)} V(T(s, a))$ when MIN is to move
+
+- @Definition@: the **minimax decision** at the root is
+  $$
+  a^* = \argmax_{a \in \mathcal{A}(s_0)} V(T(s_0, a))
+  $$
+
+- @Algorithm@: compute $V$ by depth-first recursion
+  1. Recurse down to the leaves
+  2. Back the utilities up, taking $\max$ at MAX nodes and $\min$ at MIN nodes
+  3. Return the root action whose child carries the root value
+
+- @Intuition@: MAX assumes the worst-case reply at every MIN node
+  - The value is a guarantee, not a prediction
+  - Against a suboptimal opponent MAX scores at least $V(s_0)$, never less
+
+* Minimax on a Tic-Tac-Toe Endgame
+
+::: columns
+:::: {.column width=32%}
+- Cells are numbered $1$ to $9$, left to right and top to bottom
+
+```text
+ X | O | X
+---+---+---
+ O | O | .
+---+---+---
+ . | X | .
+```
+
+- X is to move, and cells $6$, $7$, $9$ are empty
+
+- O threatens to complete $4$-$5$-$6$
+::::
+:::: {.column width=64%}
+
+```graphviz
+digraph ttt_endgame {
+    bgcolor="transparent";
+    pad="0.15";
+    ranksep=0.38;
+    nodesep=0.16;
+
+    node [shape=box, style="rounded,filled", penwidth=1.6,
+          fontname="Helvetica", fontsize=10, margin="0.13,0.07",
+          height=0.34];
+    edge [color="#A3B1C0", penwidth=1.2, arrowhead=none];
+
+    r [label="MAX: X to move\nV = 0", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
+
+    a [label="X plays 6\nV = 0",  fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    b [label="X plays 7\nV = -1", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    c [label="X plays 9\nV = -1", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+
+    a1 [label="O:7, X:9\n+1", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    a2 [label="O:9, X:7\n0",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    b1 [label="O:6 wins\n-1",  fillcolor="#F6C6C6", color="#D98C8C", fontcolor="#6B2A2A"];
+    b2 [label="O:9, X:6\n0",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    c1 [label="O:6 wins\n-1",  fillcolor="#F6C6C6", color="#D98C8C", fontcolor="#6B2A2A"];
+    c2 [label="O:7, X:6\n+1", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+
+    r -> a;
+    r -> b;
+    r -> c;
+    a -> a1;
+    a -> a2;
+    b -> b1;
+    b -> b2;
+    c -> c1;
+    c -> c2;
+}
+```
+
+::::
+:::
+
+- @Example@: only cell $6$ blocks O and keeps the column $3$-$6$-$9$ alive, so
+  the root value is $0$ and X must play $6$
+
+* Minimax: Properties and Cost
+// From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:58 '* Minimax and Alpha-Beta'
+
+- @Properties@: minimax on a finite game tree
+  - _Complete_ whenever the tree is finite
+  - _Optimal_ against an optimal opponent, and no worse against any other
+    opponent
+  - _Time_ $O(b^m)$, since every leaf is examined
+  - _Space_ $O(bm)$, from the depth-first recursion
+
+- @Problem@: the time bound is the entire difficulty
+  - Connect 4 needs about $10^{35}$ leaf evaluations, which no hardware
+    delivers
+  - The growth sits in the _exponent_, so faster machines buy almost nothing
+
+- @Question@: can the exact minimax value be computed without looking at every
+  leaf?
+
+- @Key idea@: yes, because a branch can be _proven_ irrelevant before it is
+  fully searched
+  - The root value cannot depend on a move that one of the players has already
+    rejected
+
+* Alpha-Beta Pruning
+// From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:58 '* Minimax and Alpha-Beta'
+
+- @Key idea@: a branch that cannot change the root value need not be searched
+  - Whatever value the pruned branch holds, the root is unaffected
+
+- @Definition@: two bounds are carried down the recursion
+  - $\alpha$ = value of the best choice found so far for MAX, anywhere on the
+    path back to the root
+  - $\beta$ = value of the best choice found so far for MIN
+  - The invariant $\alpha \leq V(s) \leq \beta$ holds while $s$ is searched
+
+- @Definition@: the **cut-off rules**
+  - At a MIN node, stop as soon as its running value is $\leq \alpha$
+  - At a MAX node, stop as soon as its running value is $\geq \beta$
+
+- @Intuition@: MAX already holds a move worth $\alpha$
+  - If MIN can force a value $\leq \alpha$ inside the branch being searched,
+    MAX will never enter that branch
+  - What MIN could do beyond that point is irrelevant
+
+- @Fact@: alpha-beta returns exactly the minimax value
+  - It is not an approximation, only a smaller search
+
+* Alpha-Beta: The Recursion
+
+- @Input@: a state $s$ and the current bounds $\alpha$ and $\beta$
+
+- @Output@: the minimax value of $s$, or a bound proving $s$ is irrelevant
+
+- @Algorithm@: `max_value(s, alpha, beta)` at a MAX node
+  1. Return $Utility(s, MAX)$ if $s$ is terminal
+  2. Set $v = -\infty$
+  3. For each action $a$ in $\mathcal{A}(s)$
+     - Recurse into `min_value` on $T(s, a)$ with the current $\alpha$ and
+       $\beta$, and set $v$ to the larger of $v$ and the returned value
+     - Return $v$ immediately if $v \geq \beta$
+     - Set $\alpha = \max(\alpha, v)$
+  4. Return $v$ once the actions are exhausted
+
+- @Algorithm@: `min_value(s, alpha, beta)` is the mirror image
+  - Start from $v = +\infty$, take $\min$, return early when $v \leq \alpha$,
+    and tighten $\beta$ instead of $\alpha$
+
+- @Remark@: the root call is `max_value(s_0, -inf, +inf)`
+  - The bounds start maximally loose and narrow as siblings are resolved
+
+* Alpha-Beta: Worked Example
+
+::: columns
+:::: {.column width=44%}
+- Leaves are read left to right, and the root is a MAX node
+
+- @Example@: the trace
+  - $B$: leaves $3, 12, 8$ give $V(B) = 3$, so $\alpha = 3$ at the root
+  - $C$: the first leaf is $2$, hence $V(C) \leq 2 \leq \alpha$, and the
+    remaining leaves $4$ and $6$ are never generated
+  - $D$: leaves $14$ and $5$ leave $V(D) > 3$ possible, and the leaf $2$
+    settles $V(D) = 2$
+
+- @Remark@: $2$ of $9$ leaves are skipped and the answer is unchanged
+::::
+:::: {.column width=50%}
+
+```graphviz
+digraph alpha_beta {
+    bgcolor="transparent";
+    pad="0.15";
+    ranksep=0.38;
+    nodesep=0.14;
+
+    node [shape=box, style="rounded,filled", penwidth=1.6,
+          fontname="Helvetica", fontsize=10, margin="0.12,0.06",
+          height=0.32];
+    edge [color="#A3B1C0", penwidth=1.2, arrowhead=none];
+
+    r [label="MAX = 3", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
+
+    B [label="B = 3",    fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    C [label="C <= 2",   fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    D [label="D = 2",    fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+
+    b1 [label="3",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    b2 [label="12", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    b3 [label="8",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    c1 [label="2",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    c2 [label="4",  fillcolor="#F2F2F2", color="#C7D0DA", fontcolor="#9AA9B8", style="rounded,filled,dashed"];
+    c3 [label="6",  fillcolor="#F2F2F2", color="#C7D0DA", fontcolor="#9AA9B8", style="rounded,filled,dashed"];
+    d1 [label="14", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    d2 [label="5",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    d3 [label="2",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+
+    r -> B;
+    r -> C;
+    r -> D;
+    B -> b1;
+    B -> b2;
+    B -> b3;
+    C -> c1;
+    C -> c2 [style=dashed, color="#C7D0DA"];
+    C -> c3 [style=dashed, color="#C7D0DA"];
+    D -> d1;
+    D -> d2;
+    D -> d3;
+}
+```
+
+::::
+:::
+
+- @Key idea@: pruning is driven by the best value already guaranteed, so
+  finding a strong move early prunes far more
+
+* Move Ordering
+
+- @Problem@: how much gets pruned depends entirely on the order children are
+  visited
+  - The worst possible order prunes nothing at all
+
+- @Theorem@: the cost of alpha-beta under different orderings
+  - _Perfect ordering_, best move first: $O(b^{m/2})$
+  - _Random ordering_: $O(b^{3m/4})$
+  - _Worst ordering_: $O(b^m)$, identical to plain minimax
+
+- @Intuition@: perfect ordering shrinks the effective branching factor from
+  $b$ to $\sqrt{b}$, which doubles the reachable depth for the same budget
+  - E.g., Connect 4 drops from $b = 7$ to about $2.6$
+  - The cost stays exponential in $m$, only the base shrinks
+
+- @Techniques@: ordering heuristics used in practice
+  - _Killer moves_: try first the move that caused a cut-off at the same depth
+    elsewhere
+  - _Transposition table_: hash visited states, and reuse the stored value and
+    best move
+  - _Iterative deepening_: search to depth $\ell$, then order depth $\ell + 1$
+    by the depth-$\ell$ results
+
+- @Remark@: perfect ordering would mean already knowing the best move, so
+  every ordering heuristic is an approximation of the answer being sought
+
+* Depth-Limited Game Search
+// From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:58 '* Minimax and Alpha-Beta'
+
+- @Problem@: even $O(b^{m/2})$ is unreachable when $m = 42$
+  - Alpha-beta still has to descend all the way to terminal states
+
+- @Solution@: cut the search at depth $\ell$ and score the missing subtree with
+  a heuristic
+  - Replace $Terminal(s)$ by $Cutoff(s, \ell)$
+  - Replace $Utility(s, MAX)$ by $Eval(s)$
+
+- @Definition@: an **evaluation function** $Eval(s)$ estimates the minimax
+  value of a non-terminal state
+  - It must agree with $Utility$ on terminal states
+  - It must be cheap, since it is called at every leaf of the truncated tree
+  - It must correlate with the probability of winning from $s$
+
+- @Techniques@: iterative deepening turns this into an **anytime** algorithm
+  - Search depth $1, 2, 3, \ldots$ and keep the last completed result
+  - Return the best move found when the clock runs out
+
+- @Key idea@: the search now returns an _estimate_, not a guarantee
+  - Correctness has been traded for a controllable time bound
+
+* Evaluation Functions for Connect 4
+// From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:80 '* The Evaluation Function Bottleneck'
+
+- @Definition@: a **weighted linear evaluation** sums cheap board features
+  $$
+  Eval(s) = \sum_{i=1}^{k} w_i \, f_i(s)
+  $$
+  - $f_i(s)$ = a board feature, computed in one pass over the grid
+  - $w_i$ = a weight, hand-tuned or learned
+
+- @Example@: features that work for Connect 4
+  - _Threat count_: lines of $4$ holding three own discs and one empty cell
+  - _Center control_: discs in the central column, which lies on the most
+    lines
+  - _Odd-even threats_: whether a threat sits on a row the opponent is forced
+    to fill first
+
+- @Remark@: the weights encode a strategy
+  - E.g., a large weight on center control reproduces the known winning
+    opening for the first player
+
+- @Limitations@: a linear $Eval$ treats the features as independent
+  - E.g., two disjoint threats win outright, because only one of them can be
+    blocked, yet a linear score merely adds them
+
+- @Techniques@: learned evaluation
+  - Fit $Eval$ by regression on labeled positions, or by self-play
+  - The features themselves can be learned, replacing the linear form by a
+    network
+
+* The Horizon Effect
+
+- @Problem@: a fixed cut-off depth creates a **horizon**, and the search sees
+  nothing past it
+  - An unavoidable loss can be pushed beyond the horizon by delaying moves, so
+    a losing position scores well
+
+- @Example@: in Connect 4 a forced losing threat is postponed by playing
+  columns that force a reply
+  - The search reports a healthy score, and the loss arrives two plies later
+
+- @Problem@: $Eval$ is least reliable exactly where the position is unsettled
+  - A leaf sitting in the middle of a forced exchange is scored as if the
+    exchange had stopped there
+
+- @Solution@: **quiescence search** extends the cut-off until the position is
+  quiet
+  - Keep searching forcing moves only, e.g. immediate threats
+  - Apply $Eval$ solely to quiet positions
+
+- @Solution@: **singular extensions** search one ply deeper when a single move
+  is clearly better than every alternative
+  - Cheap, because the deepening follows one line only
+
+* Beyond Two Deterministic Players
+
+- @Problem@: real games break the two assumptions minimax relies on
+  - More than two players, so one scalar value no longer describes a state
+  - Chance elements, so an action leads to a distribution over successors
+
+- @Solution@: **multiplayer minimax** backs up a _vector_ of utilities, one
+  entry per player
+  - Each node maximizes its own entry of the vector
+  - Cons: the game stops being zero-sum, and informal alliances emerge
+
+- @Solution@: **expectiminimax** inserts chance nodes between the MAX and MIN
+  layers
+  $$
+  V(s) = \sum_{r} \Pr(r) \, V(T(s, r))
+  $$
+  - $r$ ranges over the chance outcomes, e.g. a dice roll or a dealt card
+  - Cons: with $n$ outcomes per chance node the cost grows to $O((b n)^m)$
+
+- @Limitations@: alpha-beta weakens sharply under chance
+  - Bounding an average requires a bound on _every_ outcome, so cut-offs
+    become rare
+
+- @Remark@: imperfect information, e.g. hidden cards, forces reasoning over
+  belief states instead of states
+
+* Summary
+
+- @Recap@: the argument in one line
+  - Formulate the task as a search problem, search blindly while that is
+    affordable, add a heuristic when it is not, and switch to minimax as soon
+    as a second agent is choosing
+
+- @Components@: the four families covered
+  - _Uninformed_: BFS, UCS, DFS, DLS, and IDS, ordered by depth or by cost
+  - _Informed_: greedy best-first and A\*, ordered by $g + h$
+  - _Adversarial_: minimax and alpha-beta, ordered by whose turn it is
+  - _Approximate_: depth-limited search with $Eval$, when exactness is
+    unaffordable
+
+- @Key idea@: every method here is best-first search under a different $f$
+  - The algorithm stays fixed, and all the knowledge lives in $f$
+
+- @Limitations@: all of them need a model, a discrete action set, and either a
+  reachable terminal state or a trustworthy $Eval$
+
+- @Remark@: replacing $Eval$ by simulated playouts is covered in detail in
+  Lesson 09.8

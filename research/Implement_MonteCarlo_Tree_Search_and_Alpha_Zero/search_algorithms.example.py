@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.5
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -16,19 +16,16 @@
 # %% [markdown]
 # # Classical search algorithms for tic-tac-toe
 #
-# Milestone 0.5 of the [MCTS and AlphaZero project](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/research/ideas/draft.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.md): the search algorithms MCTS grew out of (Lesson09.8), run on the same `Game` interface as `mcts.example.ipynb`.
-#
-# - Minimax and alpha-beta pruning: exact, exhaustive search
-# - Depth-limited search: exact search cut at a fixed depth, scored by a
+# - **Minimax** and **alpha-beta pruning**: exact, exhaustive search
+# - **Depth-limited search**: exact search cut at a fixed depth, scored by a
 #   hand-built evaluation function
-# - Flat Monte Carlo: no evaluation function, each action scored by
+# - **Flat Monte Carlo**: no evaluation function, each action scored by
 #   averaging random playouts instead
-# - Each section shows the search tree the algorithm actually builds, since
-#   (Lesson09.8) "the shape of the tree is the allocation of the budget"
-# - `search_algorithms_utils.py` implements all four against
-#   `mcts_utils.Game`; `game_examples.py` supplies `TicTacToe` and the
-#   evaluation function; see `README.md` for a description of every file in
-#   this directory
+#   
+# - Each section shows the search tree the algorithm actually builds
+#   - `search_algorithms_utils.py` implements all four against
+#     `mcts_utils.Game`
+#   - `game_examples.py` supplies `TicTacToe` and the evaluation function
 
 # %% [markdown]
 # ## Imports
