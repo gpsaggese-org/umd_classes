@@ -228,8 +228,7 @@
 
 ![](msml610/lectures_source/figures/L01.3.Marvin_Minsky.png)
 
-// TODO(ai_gp): Add year
-\footnotesize _Marvin Minsky_
+\footnotesize _Marvin Minsky (2008)_
 ::::
 :::
 
@@ -257,9 +256,9 @@
   - E.g., rule-based systems, logic programming (e.g., Prolog)
 
 - @DefinitioN@: **Weak AI** (aka "narrow AI")
-  - Uses "weak methods" (search, logic) that struggle to scale
-  - Performs specific tasks, not general reasoning
-  - Operates in a limited, well-defined domain
+  - Uses _"weak methods"_ (search, logic) that struggle to scale
+  - _"Narrow AI"_ Performs specific tasks (not general reasoning) and operates in a
+    limited, well-defined domain
 
 - @Commercial adoption and industry growth@
   - AI shifted to practical applications
@@ -388,7 +387,7 @@ digraph ExpertSystem {
 
 * Bayesian Networks
 ::: columns
-:::: {.column width=65%}
+:::: {.column width=70%}
 - @Bayesian networks@ _(Pearl, 1988)_
   - AI is linked with:
     - Probability
@@ -402,12 +401,12 @@ digraph ExpertSystem {
   - Predictive text input in smartphones
   - Fraud detection in banking
 ::::
-:::: {.column width=30%}
+:::: {.column width=20%}
 
 ![](msml610/lectures_source/figures/L01.3.Judea_Pearl.png)
 
-// TODO(ai_gp): Better picture and add year
-\footnotesize _Judea Pearl_
+// TODO(ai_gp): Update with https://preposterousuniverse.com/podcast/2022/05/09/196-judea-pearl-on-cause-and-effect/
+\footnotesize _Judea Pearl (2013)_
 ::::
 :::
 
@@ -429,24 +428,22 @@ digraph ExpertSystem {
 
 ![](msml610/lectures_source/figures/L01.3.Richard_Sutton.png)
 
-// TODO(ai_gp): Add year
-\footnotesize _Richard Sutton_
+\footnotesize _Richard Sutton (2025)_
 ::::
 :::
 
 * Reunification (1990s-2000s)
 
-// TODO(ai_gp): Improve this picture to make it more professinal using the
-// rules in .claude
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#EEEDFE', 'primaryBorderColor': '#7F77DD', 'primaryTextColor': '#26215C', 'lineColor': '#888888', 'fontFamily': 'Helvetica'}}}%%
 mindmap
-  root((Reunification))
-    Contributing fields
+  root((**Reunification**))
+    (**Contributing fields**)
       Data engineering
       Statistical modeling
       Optimization
       Machine learning
-    Reunified subfields
+    (**Reunified subfields**)
       Computer vision
       Robotics
       Speech recognition
@@ -456,7 +453,7 @@ mindmap
 
 * Big Data (2001-Present)
 ::: columns
-:::: {.column width=70%}
+:::: {.column width=50%}
 - @Focus shifted from algorithms to data@
   - For 60 years, AI focused on algorithms and models
   - For many problems, data availability matters more than algorithms
@@ -465,7 +462,7 @@ mindmap
 
 - In 2011, IBM's Watson beat human _Jeopardy!_ champions
 ::::
-:::: {.column width=30%}
+:::: {.column width=50%}
 
 \begingroup \scriptsize
 ```{=typst}
@@ -494,7 +491,6 @@ mindmap
 ::::
 :::: {.column width=40%}
 
-// TODO(ai_gp): Use DeepLearning and Traditional ML as "container" of the graph
 ```graphviz
 digraph DLPipeline {
     bgcolor="transparent";
@@ -517,26 +513,35 @@ digraph DLPipeline {
           arrowhead=vee,
           arrowsize=0.7];
 
-    LabelT [label="Traditional ML", shape=plaintext, fontname="Helvetica-Bold", fontcolor="#3A4A5C"];
-    RawT [label="Raw input", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
-    Hand [label="Handcrafted\nfeatures", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
-    ClfT [label="Classifier", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    subgraph cluster_traditional {
+        label="Traditional ML";
+        style="rounded,filled";
+        fillcolor="#F7F9FB";
+        color="#C7D0DA";
+        fontcolor="#3A4A5C";
+        margin=16;
 
-    LabelD [label="Deep Learning", shape=plaintext, fontname="Helvetica-Bold", fontcolor="#3A4A5C"];
-    RawD [label="Raw input", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
-    Layers [label="Learned\nlayers", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
-    ClfD [label="Output", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+        RawT [label="Raw input", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
+        Hand [label="Handcrafted\nfeatures", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
+        ClfT [label="Classifier", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
 
-    LabelT -> RawT [style=invis];
-    RawT -> Hand -> ClfT;
+        RawT -> Hand -> ClfT;
+    }
 
-    LabelD -> RawD [style=invis];
-    RawD -> Layers -> ClfD;
+    subgraph cluster_deep {
+        label="Deep Learning";
+        style="rounded,filled";
+        fillcolor="#F7F9FB";
+        color="#C7D0DA";
+        fontcolor="#3A4A5C";
+        margin=16;
 
-    { rank=same; LabelT; RawT; }
-    { rank=same; LabelD; RawD; }
-    { rank=same; Hand; Layers; }
-    { rank=same; ClfT; ClfD; }
+        RawD [label="Raw input", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
+        Layers [label="Learned\nlayers", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
+        ClfD [label="Output", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+
+        RawD -> Layers -> ClfD;
+    }
 }
 ```
 ::::
@@ -547,46 +552,33 @@ digraph DLPipeline {
   - Previous systems used handcrafted features
   - Surge of interest in AI among researchers, companies, and investors
 
-- @Pros@
-  - DL exceeds human performance in several vision and speech recognition tasks
+- @Pros@: Exceeds human performance in many recognition tasks
+- @Cons@: Needs specialized hardware (e.g., GPU, TPU, FGPA)
 
-- @Cons@
-  - DL needs specialized hardware (e.g., GPU, TPU, FGPA) for parallel tensor
-    operations
-
-- Today towards **general artificial intelligence**
+- True step today towards **general artificial intelligence**
   - Universal algorithm for learning and acting, not just specialized tasks
   - E.g., driving, playing chess, recognizing speech
 
 * Progress in AI Research
-// TODO(gp): Use old slide without table
-::: columns
-:::: {.column width=45%}
-- Huge interest in deep learning
+- @Huge interest in deep learning@
 
-- **Compute**
-  - Training times dropped 100x in 2 years
-  - AI computing power doubles every 3 months
-::::
-:::: {.column width=50%}
-
-// TODO(ai_gp): Extend this to 2026?
-
-\begingroup \scriptsize
 ```{=typst}
 #styled-table(
-  headers: ("Metric", "2010", "2019", "Growth"),
+  headers: ("Metric", "2010", "2019", "2026", "Growth"),
+  col-widths: (2fr, 1fr, 1fr, 1fr, 1fr),
+  width: 100%,
   rows: (
-    ("AI papers", "1,000", "20,000", "20x"),
-    ("Student enrollment", "10,000", "50,000", "5x"),
-    ("NeurIPS attendance", "1,000", "8,000", "8x"),
-    ("AI startups", "100", "2,000", "20x"),
+    ("AI papers", "1,000", "20,000", "60,000", "60x"),
+    ("Enrollment", "10,000", "50,000", "120,000", "12x"),
+    ("NeurIPS", "1,000", "8,000", "17,000", "17x"),
+    ("AI startups", "100", "2,000", "6,000", "60x"),
   ),
 )
-```
-\endgroup
-::::
-:::
+
+- @Compute@
+  - Training times dropped 100x in 2 years
+  - AI computing power doubles every 3 months
+  - 2026 figures in the table are estimates
 
 * What Can AI Do Today? (1/2)
 
@@ -625,10 +617,11 @@ digraph DLPipeline {
 :::
 
 * What Can AI Do Today? (2/2)
-// TODO(ai_gp): Use old slide without table
-::: columns
-:::: {.column width=55%}
 - @Game playing@
+  - 1997: Deep Blue defeated Kasparov
+  - 2011: Watson beat Jeopardy! champion
+  - 2017: AlphaGo beat Go champion
+  - 2018: AlphaZero super-human in Go and chess with only rules + self-play
   - AI beats humans in videogames: Dota2, StarCraft, Quake
 
 - @Image understanding@
@@ -640,24 +633,6 @@ digraph DLPipeline {
   - AI equivalent to health care professionals
 
 - @Question@: When will we reach AGI (Artificial General Intelligence)?
-::::
-:::: {.column width=40%}
-
-\begingroup \scriptsize
-```{=typst}
-#styled-table(
-  headers: ("Year", "System", "Achievement"),
-  rows: (
-    ("1997", "Deep Blue", "Defeated Kasparov (chess)"),
-    ("2011", "Watson", "Beat Jeopardy! champion"),
-    ("2017", "AlphaGo", "Beat Go champion"),
-    ("2018", "AlphaZero", "Super-human in Go and chess, rules + self-play only"),
-  ),
-)
-```
-\endgroup
-::::
-:::
 
 ## Risks and Benefits of AI
 
@@ -788,8 +763,7 @@ digraph DLPipeline {
 
 ![](msml610/lectures_source/figures/L01.3.P_doom.png)
 
-// TODO(ai_gp): Add year
-_Mountainhead_
+_Mountainhead, 2025_
 ::::
 :::
 
