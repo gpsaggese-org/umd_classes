@@ -49,3 +49,14 @@ class Test_docker(hdoctest.DockerTestCase):
         notebook_name = "mcts.API.ipynb"
         # Run test.
         self.helper(notebook_name)
+
+    @pytest.mark.slow
+    def test3(self) -> None:
+        """
+        Test that search_algorithms.example.ipynb runs without error inside
+        Docker.
+        """
+        # Prepare inputs.
+        notebook_name = "search_algorithms.example.ipynb"
+        # Run test.
+        self.helper(notebook_name)

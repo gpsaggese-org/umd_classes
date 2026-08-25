@@ -10,9 +10,9 @@ Zero algorithm for game playing
   - Tic-tac-toe
   - Connect Four
 
-- Two paired notebooks cover, respectively, the engine's API and an end-to-end
-  tic-tac-toe demo
-[(Plan)](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/research/ideas/draft.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.md)
+- `search_algorithms_utils.py`
+  - Classical searches: minimax, alpha-beta pruning, depth-limited search,
+    and flat Monte Carlo 
 
 ## Structure of the Dir
 
@@ -22,7 +22,7 @@ Zero algorithm for game playing
 
 ## Description of Files
 
-// TODO(ai_gp): Shorter
+// TODO(ai_gp): Make the description shorter
 
 | File                 | Description                                                                                                              | Cluster            |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------ |
@@ -33,6 +33,9 @@ Zero algorithm for game playing
 | `mcts.API.py`        | Jupytext-paired plain-text mirror of `mcts.API.ipynb`, edited in an IDE and synced back to the notebook                  | Notebooks          |
 | `mcts.example.ipynb` | Milestone 1 end-to-end demo: MCTS vs. a random player on tic-tac-toe, no neural network involved                         | Notebooks          |
 | `mcts.example.py`    | Jupytext-paired plain-text mirror of `mcts.example.ipynb`, edited in an IDE and synced back to the notebook              | Notebooks          |
+| `search_algorithms_utils.py` | Game-agnostic minimax, alpha-beta pruning, depth-limited search, and flat Monte Carlo, plus the Graphviz search-tree renderer backing `search_algorithms.example.ipynb` | Core Engine |
+| `search_algorithms.example.ipynb` | Minimax / alpha-beta / depth-limited search / flat Monte Carlo on tic-tac-toe, each next to the search tree it built, compared against each other and against MCTS | Notebooks |
+| `search_algorithms.example.py` | Jupytext-paired plain-text mirror of `search_algorithms.example.ipynb`, edited in an IDE and synced back to the notebook | Notebooks |
 
 ## Running the Notebooks
 
@@ -52,6 +55,10 @@ Zero algorithm for game playing
   1. `mcts.API.ipynb`: the engine's API, with interactive widgets for both
      `TicTacToe` and `ConnectFour`
   2. `mcts.example.ipynb`: a full MCTS-vs-random run on tic-tac-toe
+  3. `search_algorithms.example.ipynb`: minimax, alpha-beta pruning,
+     depth-limited search, and flat Monte Carlo on the same tic-tac-toe
+     positions, each with its search tree, compared against each other and
+     against MCTS
 
 - For more information on the Docker build system refer to
   [Project template readme](https://github.com/gpsaggese/umd_classes/blob/master/class_project/project_template/docker_scripts.README.md)

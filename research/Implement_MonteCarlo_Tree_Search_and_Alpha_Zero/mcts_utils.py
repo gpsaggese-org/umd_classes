@@ -290,9 +290,14 @@ def _expand(node: MCTSNode, game: Game) -> MCTSNode:
     return child
 
 
-def _simulate(game: Game, state: State) -> int:
+def random_rollout(game: Game, state: State) -> int:
     """
     Play out `state` to a terminal state using uniformly random moves.
+
+    This is MCTS's default policy (used below by the simulation phase); it
+    is also flat Monte Carlo's only policy, since flat MC is MCTS with a
+    tree of depth one, so `search_algorithms_utils.py` reuses this same
+    function instead of duplicating it.
 
     :param game: game rules, used to generate and apply moves
     :param state: state to roll out from
@@ -365,7 +370,7 @@ def build_mcts_tree(
         leaf = _select(root, game, exploration_constant=exploration_constant)
         if not game.is_terminal(leaf.state):
             leaf = _expand(leaf, game)
-        winner = _simulate(game, leaf.state)
+        winner = random_rollout(game, leaf.state)
         # `value` must be from the perspective of the player who moved into
         # `leaf`, i.e., the opponent of the player to move at `leaf.state`.
         mover_into_leaf = -game.get_current_player(leaf.state)

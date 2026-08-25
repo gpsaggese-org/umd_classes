@@ -26,18 +26,15 @@
   - Enumerating every future is impossible beyond a few steps
   - Scoring an unfinished future needs domain knowledge that often does not exist
 
-- @Question@: can an agent decide well by _sampling_ a few complete futures instead
-  of enumerating all of them?
-
-- @Key idea@: run simulations to the end, and let the results of past simulations
-  decide where the next simulation should go
+- @Question@: can an agent make good decisions by **sampling** a few complete futures
+  **instead of enumerating** all of them?
 
 * Why Search Trees Explode
 
 - @Definition@: in a search tree
   - The **branching factor** $b$ is the number of legal actions per state
   - The **depth** $d$ is the number of steps to a terminal state
-  - Nodes within depth $d$ grow as $O(b^d)$
+  - The terminal nodes grow as $O(b^d)$
 
 ```{=typst}
 #styled-table(
@@ -48,33 +45,31 @@
     ([Go, 19x19 board], [$approx 250$], [$approx 150$], [$10^360$]),
     ([Robot task planning], [$10^2 - 10^4$], [$10 - 100$], [intractable]),
   ),
-  col-widths: (1.3fr, 1fr, 1fr, 1fr),
+  col-widths: (1.8fr, 1fr, 1fr, 1fr),
   bold-first-col: true
 )
 ```
 
-- @Fact@: There are around $10^80$ atoms in the visible universe
-
-- @Remark@: the growth is in the _exponent_, so faster hardware (even 1000x more
-  compute) buys almost nothing
+- @Remark@:
+  - The growth is in the _exponent_, so faster hardware (even 1000x more compute)
+    buys almost nothing
+  - There are around $10^80$ atoms in the visible universe
 
 * Minimax and Alpha-Beta
 
-- @Definition@: in two players adversarial game **minimax** computes the value of a
+- @Definition@: in two players adversarial game, **minimax** computes the value of a
   state by backing terminal values up the tree
-  - Returns the optimal action when:
+  - Returns the **optimal action** when:
     - The whole tree is searched
     - Both players play optimally
 
-- @Problem@: a full minimax search costs $O(b^d)$ since it requires the entire search
-  tree to be built, which is infeasible
+- @Problem@: a full minimax search requires search tree and costs $O(b^d)$ 
+  $\to$ infeasible
 
-- @Solution@:
-  - **Alpha-beta pruning** skips branches that are proven worse than a move already
-    found, stop exploring it
+- @(Naive) Solution@:
+  - **Alpha-beta pruning** skip exploring branches that are proven worse than a move
+    already found
   - The cost can drop to $O(b^{d/2})$, which doubles the reachable depth
-
-- @Cons@
   - The cost is still exponential in $d$
 
 - @Definition@: **Depth-limited search**
@@ -86,7 +81,6 @@
 
 - @Problem@: **evaluation function** of a state is a heuristic estimate of the
   "quality" of a state
-  - Cons: the result inherits that estimate's bias
 
 - @Example@
   - A chess evaluation combines material, mobility, pawn structure, and king safety
@@ -220,6 +214,55 @@ digraph MCTSLoop {
 
 - @Remark@: only phases 1 and 4 touch the stored tree
   - Phase 3 is throw-away work, which is why it must be cheap
+
+* One Iteration on a Concrete Tree
+
+- @Example@: one pass of the loop on a tree that already has some visits
+
+```graphviz
+digraph MCTSIterationExample {
+    bgcolor  = "transparent";
+    pad      = "0.15";
+    rankdir  = TB;
+    splines  = spline;
+    nodesep  = 0.45;
+    ranksep  = 0.55;
+    node [shape=box, style="rounded,filled", penwidth=1.6,
+          fontname="Helvetica", fontsize=11, margin="0.16,0.10",
+          height=0.42, fillcolor="#FFFFFF", color="#9AA9B8",
+          fontcolor="#243B53"];
+    edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.7,
+          fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
+
+    // red = selection path (also updated by backprop), green = new node
+    // (expansion), orange = rollout (simulation, discarded after use)
+    Root [label="root\nN: 40 -> 41"];
+    A    [label="A\nN=25"];
+    B    [label="B\nN: 12 -> 13", color="#B23A48", penwidth=2.2];
+    C    [label="C\nN=3"];
+    B1   [label="B1\nN=7"];
+    B2   [label="B2\nN: 5 -> 6", color="#B23A48", penwidth=2.2];
+    New  [label="new child\nN: 0 -> 1", fillcolor="#A9DDB0", color="#4F9A5C",
+          fontcolor="#1F4E2E"];
+    Rollout [label="rollout to terminal\n(discarded)", shape=note,
+             fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
+
+    Root -> A;
+    Root -> B [color="#B23A48", penwidth=2.2, label="  1. Select  ",
+               fontcolor="#B23A48"];
+    Root -> C;
+    B -> B1;
+    B -> B2 [color="#B23A48", penwidth=2.2];
+    B2 -> New [color="#4F9A5C", penwidth=1.8, label="  2. Expand  ",
+               fontcolor="#1F4E2E"];
+    New -> Rollout [color="#D98E2B", penwidth=1.3, style=dotted,
+                    label="  3. Simulate  ", fontcolor="#6B4517"];
+}
+```
+
+- @Remark@: backpropagation (phase 4) increments $N$ at every red node on the
+  path, root, B, and B2, and updates $Q$ the same way
+  - Phase 3 (the rollout) never touches the stored tree, only the path does
 
 * Phase 1: Selection
 
@@ -369,6 +412,8 @@ digraph MCTSLoop {
 
 * UCT: Worked Example
 
+::: columns
+:::: {.column width=50%}
 - @Example@: at the root $N(s) = 10$, $\ln N(s) = 2.30$, and $c = 1.4$
 
 ```{=typst}
@@ -391,6 +436,37 @@ digraph MCTSLoop {
 
 - @Remark@: after a few more visits to C the bonus shrinks and B takes over,
   unless C's playouts justify the attention
+:::: {.column width=45%}
+
+```graphviz
+digraph UCTChoice {
+    bgcolor  = "transparent";
+    rankdir  = TB;
+    splines  = spline;
+    nodesep  = 0.5;
+    ranksep  = 0.5;
+    pad      = 0.2;
+    node [shape=box, style="rounded,filled", fontname="Helvetica",
+          fontsize=11, penwidth=1.6, margin="0.16,0.10", height=0.42,
+          fillcolor="#FFFFFF", color="#9AA9B8", fontcolor="#243B53"];
+    edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.7,
+          fontname="Helvetica", fontsize=10, fontcolor="#7B8794"];
+
+    Root [label="root\nN=10"];
+    A    [label="A\nUCT=1.55"];
+    B    [label="B\nUCT=1.90"];
+    C    [label="C\nUCT=2.00", fillcolor="#FFD4D4", color="#B23A48",
+          fontcolor="#6B1F1F", penwidth=2.4];
+
+    Root -> A;
+    Root -> B;
+    Root -> C [color="#B23A48", penwidth=2.4, label="  Selected  ",
+               fontcolor="#B23A48"];
+    { rank=same; A; B; C; }
+}
+```
+::::
+:::
 
 * The Tree Grows Asymmetrically
 

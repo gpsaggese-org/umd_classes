@@ -212,6 +212,40 @@ class TicTacToe(rimtsaazmu.Game):
         return board_str
 
 
+def evaluate_tic_tac_toe(state: rimtsaazmu.State) -> float:
+    """
+    Heuristic evaluation of a (possibly non-terminal) tic-tac-toe state.
+
+    Used by `search_algorithms_utils.build_depth_limited_tree()` to score a
+    cut node once the search depth limit is reached before a terminal state.
+
+    The heuristic is a local, cheap feature:
+    - counts, over the 8 win lines, how many are still "open" (contain no mark
+      from the opponent) for each player
+    - returns the normalized difference
+    It is also an imperfect one since it scores each line independently, so it
+    cannot see a fork (two lines that share an empty cell and cannot both be
+    blocked), and can therefore rank a winning position no higher than a merely
+    promising one.
+
+    :param state: game state to evaluate, need not be terminal
+    :return: heuristic score in `[-1, 1]` from X's perspective, on the same
+        scale as the exact `{-1, 0, 1}` values `get_winner()` returns
+    """
+    x_open = sum(
+        1
+        for line in _TICTACTOE_WIN_LINES
+        if all(state[i] != _PLAYER_O for i in line)
+    )
+    o_open = sum(
+        1
+        for line in _TICTACTOE_WIN_LINES
+        if all(state[i] != _PLAYER_X for i in line)
+    )
+    score = (x_open - o_open) / len(_TICTACTOE_WIN_LINES)
+    return score
+
+
 # #############################################################################
 # ConnectFour
 # #############################################################################
