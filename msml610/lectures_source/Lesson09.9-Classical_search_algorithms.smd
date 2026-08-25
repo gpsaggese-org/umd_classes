@@ -64,21 +64,22 @@
   - _Initial state_ $s_0$: where the agent starts
   - _Actions_: the legal actions $Actions(s)$ available in state $s$
   - _Transition model_: the state reached $Result(s, a)$ by doing $a$ in $s$
-  - _Goal test_: $IsGoal(s)$ which is true when $s$ is an acceptable end state
+  - _Goal test_: $IsGoal(s)$ which is true when $s$ is an acceptable end (terminal)
+    state
   - _Path cost_ : the cost of one step $Cost(s, a, s')$
 
 - @Definition@:
   - The **state space** is the directed graph these elements induce
-    - Vertices are states, edges are actions
+    - _Nodes_ are states, _edges_ are actions
   - A **path** is a sequence of states joined by a sequence of actions
   - A **solution** is a path from $s_0$ to a state satisfying $IsGoal$
-    - Solution quality is measured by path cost
+    - _Solution quality_ is measured by path cost
   - An **optimal solution** has the lowest path cost of all solutions
 
 - @Key idea@:
   - These five elements are the entire interface between a domain and a search
-    algorithm
-  - One implementation then serves routing, puzzles, and games
+    algorithm ($\to$ abstraction)
+  - One search implementation serves puzzles, games, etc
 
 * Tic-Tac-Toe as a Search Problem
 
@@ -86,70 +87,22 @@
 #styled-table(
   headers: ([Element], [Tic-tac-toe instantiation]),
   rows: (
-    ([$"Initial state" s_0$], [Empty $3 times 3$ board, X to move]),
+    ([$"Initial state" s_0$], [Empty 3 x 3 board, X to move]),
     ([$"Actions"(s)$], [Place the mark of the player to move on any empty
       cell]),
     ([$"Result"(s, a)$], [Board with the mark added and the turn flipped]),
-    ([$"IsGoal"(s)$], [Three in a row, or no empty cell left]),
+    ([$"IsGoal"(s)$], [Win (three in a row) or draw (no empty cell left)]),
     ([$"Cost"(s, a, s')$], [$1$ per move, so cost equals number of moves]),
   ),
-  col-widths: (1fr, 2.5fr),
+  col-widths: (1fr, 3fr),
   bold-first-col: true
 )
 ```
 
 - @Remark@:
-  - A state is the _board state plus the player to move_, not the move history $\to$
-    "State space" vs "Search Tree"
-  - Two different move orders reaching the same board are the same state
-
-* Tic-Tac-Toe: Expanding the Root
-
-- @Example@: expanding $s_0$ generates $9$ successors, one per empty cell
-  - Only $3$ of them are distinct once the symmetries of the square are
-    removed: a corner, an edge, and the center
-  - Each successor is a full state, i.e., the board plus the turn flipped to O
-
-// TODO(ai_gp): Show the root expansion with the 9 possible moves and then
-// for the first 2 of nodes, 2 or more levels
-
-- @Remark@: the branching factor shrinks by one at every ply
-  - $9$ actions at the root, $8$ one level down, and so on
-
-* Tic-Tac-Toe: Optimizing the Search Tree
-
-```graphviz[width=50%]
-digraph TicTacToeFirstPly {
-    bgcolor="transparent";
-    pad="0.15";
-    rankdir=TB;
-    splines=spline;
-    nodesep=0.45;
-    ranksep=0.55;
-
-    node [shape=box, style="rounded,filled", penwidth=1.6,
-          fontname="Courier", fontsize=13, margin="0.18,0.12"];
-    edge [color="#A3B1C0", penwidth=1.3, arrowhead=vee, arrowsize=0.75,
-          fontname="Helvetica", fontsize=11, fontcolor="#7B8794"];
-
-    // green = initial state | blue = state reached after one action
-
-    S0 [label=". . .\n. . .\n. . .",
-        fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
-
-    Corner [label="X . .\n. . .\n. . .",
-            fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-    Side   [label=". X .\n. . .\n. . .",
-            fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-    Center [label=". . .\n. X .\n. . .",
-            fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-
-    S0 -> Corner [label="  Corner  "];
-    S0 -> Side   [label="  Edge  "];
-    S0 -> Center [label="  Center  "];
-}
-```
-
+  - A state is the _board state plus the player to move_, not the move history
+    - "State space" vs "Search Tree"
+  - Two different move orders reaching the same board correspond to the same state
 
 * Connect-N as a Search Problem
 
@@ -157,30 +110,32 @@ digraph TicTacToeFirstPly {
 #styled-table(
   headers: ([Element], [Connect 4 instantiation]),
   rows: (
-    ([$"Initial state" s_0$], [Empty $7 times 6$ grid, X to move]),
+    ([$"Initial state" s_0$], [Empty 7 x 6 grid, X to move]),
     ([$"Actions"(s)$], [Pick any column that is not full]),
     ([$"Result"(s, a)$], [Disc drops to the lowest empty cell of that
       column, and the turn flips]),
-    ([$"IsGoal"(s)$], [Four in a row in any direction, or no empty cell
-      left]),
+    ([$"IsGoal"(s)$], [Win (four in a row in any direction) or draw (no empty cell
+      left)]),
     ([$"Cost"(s, a, s')$], [$1$ per move, so cost equals number of moves]),
   ),
-  col-widths: (1fr, 2.5fr),
+  col-widths: (1fr, 3fr),
   bold-first-col: true
 )
 ```
 
 - @Remark@: only the five elements change, the search algorithm does not
-  - An action names a **column**, not a cell, so the branching factor is at
-    most $7$ instead of $9$
+  - An action names a _column_, not a cell, so the branching factor is at most $7$
   - Not every empty cell can be filled in one move, since gravity picks the row
 
 * Connect 4: Gravity Picks the Row
 
-- @Example@: the legal actions are the $7$ columns, and playing column $3$
-  lands the disc on the lowest empty cell of that column
+- @Example@: the legal actions are the $7$ columns, and playing column $3$ lands the
+  disc on the lowest empty cell of that column
 
-```graphviz
+- @Remark@: the agent picks the column, the transition model picks the row
+  - The row is detail the agent does not control, so it is abstracted away
+
+```graphviz[width=70%]
 digraph ConnectFourDrop {
     bgcolor="transparent";
     pad="0.15";
@@ -215,9 +170,6 @@ digraph ConnectFourDrop {
 }
 ```
 
-- @Remark@: the agent picks the column, the transition model picks the row
-  - The row is detail the agent does not control, so it is abstracted away
-
 * From Connect 4 to Connect-N
 
 - @Definition@: **Connect-N** plays on a $w \times h$ grid and asks for $N$
@@ -232,19 +184,20 @@ digraph ConnectFourDrop {
   - One implementation of the search then serves the whole family
 
 - @Remark@: the parameters decide how hard the search is
+  - Tic-tac-toe has $5478$ fits in memory
   - Connect 4 has about $4.5 \times 10^{12}$ reachable positions, so a full
-    search is out of reach, while tic-tac-toe fits in memory
+    search is out of reach
 
 * Abstraction
 
-- @Definition@: **abstraction** is the removal of detail from a representation
-  of states and actions
+- @Definition@: **abstraction** is the removal of detail from a representation of
+  states and actions
   - The five elements of a "search problem" describe a whole family of problems /
     worlds, not one world
 
 - @Example@: an agent driving between cities abstracts away:
   - The current radio program, the scenery, the weather
-  - The condition of the road, the distance to the next rest stop
+  - (Maybe) The condition of the road, the distance to the next rest stop
 
 - @Definition@: the two properties a **good abstraction** must keep:
   - _Valid_: every abstract solution can be expanded into a solution of the
@@ -260,17 +213,19 @@ digraph ConnectFourDrop {
 
 ::: columns
 :::: {.column width=60%}
-- @Definition@: the **state space** is a graph
-  - Nodes are states, edges are actions
-  - Each state appears exactly once
+- @Definition@: the **state space** is a _graph_ where _nodes_ are states, _edges_
+  are actions
+  - Property: each state appears exactly once
 
 - @Definition@: the **search tree** is what an algorithm builds and searches
-  - Nodes are _paths_ starting at $s_0$ (not states)
+  - _Nodes_ are paths on the state space starting at $s_0$ (not states!)
   - The same state reappears once per path that reaches it
-  - A **leaf node** is a node with no children yet
+  - _Intuition_: represents the "sequence of moves" (i.e., how we reached the state)
 ::::
 :::: {.column width=40%}
 
+// TODO(ai_gp): It's confusing that B, C, is present in both graphs. They are not
+// the same concepts, maybe A -> B, A -> C, A -> B -> D, A -> C -> D
 ```graphviz
 digraph state_space_vs_tree {
     bgcolor="transparent";
@@ -335,25 +290,156 @@ digraph state_space_vs_tree {
 - @Key idea@:
   - The _state space_ is a property of the problem
   - The _search tree_ is a property of the search
+  - E.g., tic-tac-toe has $5478$ reachable states, but its full game tree holds
+    $549946$ nodes
 
-- @Example@: tic-tac-toe has $5478$ reachable states, but its full game tree
-  holds $549946$ nodes
+* Tic-Tac-Toe: Expanding the Root
+
+- @Example@: expanding $s_0$ generates $9$ successors, one per cell that `X` can move
+  - The _edge label_ is the cell the player to move marks
+  - Each successor in the tree is a full state, i.e., the board plus the turn to `O`
+
+```graphviz[width=70%]
+digraph TicTacToeRootExpansion {
+    bgcolor="transparent";
+    pad="0.15";
+    rankdir=TB;
+    splines=line;
+    nodesep=0.10;
+    ranksep=0.45;
+
+    // green = initial state | blue = state reached by search
+    node [shape=box, style="rounded,filled", penwidth=1.2,
+          fontname="Courier", fontsize=9, margin="0.05,0.04",
+          width=0.10, height=0.10, fillcolor="#9CC4F2",
+          color="#3C6FB0", fontcolor="#1F4E79"];
+    edge [color="#A3B1C0", penwidth=1.0, arrowhead=vee,
+          arrowsize=0.5, fontname="Helvetica", fontsize=8,
+          fontcolor="#7B8794"];
+
+    S0 [label=". . .\n. . .\n. . .", fillcolor="#A9DDB0",
+        color="#4F9A5C", fontcolor="#1F4E2E"];
+
+    // The 9 successors of the empty board
+    C0 [label="X . .\n. . .\n. . ."];
+    C1 [label=". X .\n. . .\n. . ."];
+    C2 [label=". . X\n. . .\n. . ."];
+    C3 [label=". . .\nX . .\n. . ."];
+    C4 [label=". . .\n. X .\n. . ."];
+    C5 [label=". . .\n. . X\n. . ."];
+    C6 [label=". . .\n. . .\nX . ."];
+    C7 [label=". . .\n. . .\n. X ."];
+    C8 [label=". . .\n. . .\n. . X"];
+
+    S0 -> C0 [label="0"];
+    S0 -> C1 [label="1"];
+    S0 -> C2 [label="2"];
+    S0 -> C3 [label="3"];
+    S0 -> C4 [label="4"];
+    S0 -> C5 [label="5"];
+    S0 -> C6 [label="6"];
+    S0 -> C7 [label="7"];
+    S0 -> C8 [label="8"];
+}
+```
+
+- @Remark@: the branching factor shrinks by one at every ply
+  - $9$ actions at the root, $8$ one level down, and so on
+  - Drawing the whole second ply already needs $72$ boards
+
+* Tic-Tac-Toe: Two Plies Deep
+
+- @Example@: expanding the first two successors adds $8$ boards each, since
+  $8$ empty cells are left for `O`
+
+```graphviz
+digraph TicTacToeTwoPlies {
+    bgcolor="transparent";
+    pad="0.15";
+    rankdir=TB;
+    splines=line;
+    nodesep=0.10;
+    ranksep=0.45;
+
+    // green = initial state | blue = state reached by search
+    node [shape=box, style="rounded,filled", penwidth=1.2,
+          fontname="Courier", fontsize=9, margin="0.05,0.04",
+          width=0.10, height=0.10, fillcolor="#9CC4F2",
+          color="#3C6FB0", fontcolor="#1F4E79"];
+    edge [color="#A3B1C0", penwidth=1.0, arrowhead=vee,
+          arrowsize=0.5, fontname="Helvetica", fontsize=8,
+          fontcolor="#7B8794"];
+
+    S0 [label=". . .\n. . .\n. . .", fillcolor="#A9DDB0",
+        color="#4F9A5C", fontcolor="#1F4E2E"];
+
+    C0 [label="X . .\n. . .\n. . ."];
+    C1 [label=". X .\n. . .\n. . ."];
+    More [label="7 more", shape=box,
+          style="rounded,dashed,filled", fillcolor="#F7F9FB",
+          color="#C7D0DA", fontcolor="#3A4A5C",
+          fontname="Helvetica"];
+
+    S0 -> C0 [label="0"];
+    S0 -> C1 [label="1"];
+    S0 -> More [style=dashed, weight=0];
+
+    // The 8 successors of C0
+    G0_1 [label="X O .\n. . .\n. . ."];
+    G0_2 [label="X . O\n. . .\n. . ."];
+    G0_3 [label="X . .\nO . .\n. . ."];
+    G0_4 [label="X . .\n. O .\n. . ."];
+    G0_5 [label="X . .\n. . O\n. . ."];
+    G0_6 [label="X . .\n. . .\nO . ."];
+    G0_7 [label="X . .\n. . .\n. O ."];
+    G0_8 [label="X . .\n. . .\n. . O"];
+
+    C0 -> G0_1;
+    C0 -> G0_2;
+    C0 -> G0_3;
+    C0 -> G0_4;
+    C0 -> G0_5;
+    C0 -> G0_6;
+    C0 -> G0_7;
+    C0 -> G0_8;
+
+    // The 8 successors of C1
+    G1_0 [label="O X .\n. . .\n. . ."];
+    G1_2 [label=". X O\n. . .\n. . ."];
+    G1_3 [label=". X .\nO . .\n. . ."];
+    G1_4 [label=". X .\n. O .\n. . ."];
+    G1_5 [label=". X .\n. . O\n. . ."];
+    G1_6 [label=". X .\n. . .\nO . ."];
+    G1_7 [label=". X .\n. . .\n. O ."];
+    G1_8 [label=". X .\n. . .\n. . O"];
+
+    C1 -> G1_0;
+    C1 -> G1_2;
+    C1 -> G1_3;
+    C1 -> G1_4;
+    C1 -> G1_5;
+    C1 -> G1_6;
+    C1 -> G1_7;
+    C1 -> G1_8;
+}
+```
+
+- @Remark@: the dashed node stands for the $7$ successors not drawn
+
 
 * Redundant Paths and Graph Search
 
 ::: columns
 :::: {.column width=55%}
 - @Definition@: three kinds of "wasted work" while searching a search tree
-  - **Loopy path**: a path containing a cycle, never better than the same path with
-    the loop removed
-  - **Repeated path**: reached by reversible actions, e.g. driving from A to B and
-    back
+  - **Loopy path**: a path containing a cycle
+    - Never better than the same path with the loop removed
+  - **Repeated path**: reached by reversible actions
+    - E.g. driving from A to B and back
   - **Redundant path**: any case where several paths join the same two states
 
-- @Example@: tic-tac-toe suffers only from the third kind
-  - No mark is ever removed, so no path can loop or repeat
-  - Playing cell $0$ then cell $4$ reaches the same board as cell $4$ then
-    cell $0$
+// TODO(gp): Why are loopy and repeated the same?
+
 ::::
 :::: {.column width=45%}
 
@@ -438,15 +524,24 @@ digraph WastedWork {
 ::::
 :::
 
+- @Example@: tic-tac-toe suffers only from redundant paths
+  - No mark is ever removed, so no path can loop or repeat
+  - `X` plays 0, then `O` plays 1, then `X` 4 reaches the same board as 4 $\to$ 1
+    $\to$ 0
+// TODO(ai_gp): Add a plot to show the tic-tac-toe
+
 * Redundant Paths and Graph Search
 
-- @Problem@:
+- @Problem@
   - Without bookkeeping the search re-expands a state every time a path reaches it
   - Reaching the opposite corner of a $d \times d$ grid takes $\frac{(2d)!}{(d!)^2}$
     distinct paths over only $(d + 1)^2$ states
 
+// TODO(ai_gp): Add example of the above
+
 - @Solution@: graph search keeps an **explored set** of expanded states
   - Aka "closed list"
+  - A leaf node is a node with no children yet (not expanded yet)
   - Expand a state the first time it is seen, or again only when a cheaper path to it
     appears
   - _Cons_: memory now grows with the number of _states_ reached
@@ -458,6 +553,48 @@ digraph WastedWork {
 
 - @Definition@: **expanding** a node means generating all its successors
   - Cost is counted in node expansions, so the analysis is machine independent
+
+* Tic-Tac-Toe: Optimizing the Search Tree
+
+- @Key idea@: only $3$ of the $9$ successors are distinct once the symmetries
+  of the square are removed
+  - Rotations and reflections map a corner to a corner and an edge to an edge
+  - Searching a corner, an edge, and the center covers the whole first ply
+
+```graphviz[width=50%]
+digraph TicTacToeFirstPly {
+    bgcolor="transparent";
+    pad="0.15";
+    rankdir=TB;
+    splines=spline;
+    nodesep=0.45;
+    ranksep=0.55;
+
+    node [shape=box, style="rounded,filled", penwidth=1.6,
+          fontname="Courier", fontsize=13, margin="0.18,0.12"];
+    edge [color="#A3B1C0", penwidth=1.3, arrowhead=vee, arrowsize=0.75,
+          fontname="Helvetica", fontsize=11, fontcolor="#7B8794"];
+
+    // green = initial state | blue = state reached after one action
+
+    S0 [label=". . .\n. . .\n. . .",
+        fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
+
+    Corner [label="X . .\n. . .\n. . .",
+            fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    Side   [label=". X .\n. . .\n. . .",
+            fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    Center [label=". . .\n. X .\n. . .",
+            fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+
+    S0 -> Corner [label="  Corner  "];
+    S0 -> Side   [label="  Edge  "];
+    S0 -> Center [label="  Center  "];
+}
+```
+
+- @Remark@: the same reduction applies deeper in the tree, but fewer
+  symmetries survive as the board fills up
 
 * Measuring a Search Algorithm
 // From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:32 '* Why Search Trees Explode'
