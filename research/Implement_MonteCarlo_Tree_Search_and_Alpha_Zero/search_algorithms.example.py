@@ -59,10 +59,10 @@ import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.search_algorithm
 # %% [markdown]
 # # Part 2: The game
 #
-# Same `TicTacToe` as `mcts.example.ipynb`: legal moves, applying a move,
-# checking for a winner, whose turn it is, and rendering the board. All four
-# algorithms below only call these six methods, so any other `Game` (Connect
-# Four, say) would plug in unchanged.
+# - Same `TicTacToe` as `mcts.example.ipynb`: legal moves, applying a move,
+# checking for a winner, whose turn it is, and rendering the board
+# - All four algorithms below only call these six methods, so any other `Game`
+# (Connect Four, say) would plug in unchanged.
 #
 # ## Cell 2.1: An empty board
 
@@ -93,12 +93,14 @@ print(game.render(fork_state))
 #
 # ## Cell 3.1: Minimax finds the winning move
 #
-# Lesson09.8: "minimax computes the value of a state by backing terminal
+# - Minimax computes the value of a state by backing terminal
 # values up the tree ... returns the optimal action when the whole tree is
-# searched and both players play optimally." `build_minimax_tree()` visits
-# every node reachable from `demo_state`; the diagram below renders the
-# root plus 2 levels, colored by what each node turned out to be (blue:
-# explored internal node; green: explored terminal node).
+# searched and both players play optimally.
+#
+# - `build_minimax_tree()` visits every node reachable from `demo_state`
+#
+# - the diagram below renders the root plus 2 levels, colored by what each node turned out to be (blue:
+# explored internal node; green: explored terminal node
 
 # %%
 minimax_root = rimtsaazsau.build_minimax_tree(game, demo_state)

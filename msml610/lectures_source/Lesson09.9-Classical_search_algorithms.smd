@@ -60,11 +60,11 @@
 
 * Anatomy of a Search Problem
 
-- @Definition@: a **search problem** is defined by five elements:
+- @Definition@: a **search problem** is defined by five components:
   - _Initial state_ $s_0$: where the agent starts
   - _Actions_: the legal actions $Actions(s)$ available in state $s$
   - _Transition model_: the state reached $Result(s, a)$ by doing $a$ in $s$
-  - _Goal test_: $IsGoal(s)$ which is true when $s$ is an acceptable end (terminal)
+  - _Goal test_: $IsGoal(s) = true$ when $s$ is an acceptable end (terminal)
     state
   - _Path cost_ : the cost of one step $Cost(s, a, s')$
 
@@ -810,6 +810,13 @@ digraph best_first_family {
   - $h$ is problem specific, and uses information absent from the problem
     definition
 
+- @Key idea@: informed search buys speed with knowledge
+  - The quality of $h$, not the choice of algorithm, decides how much is saved
+
+* Heuristics
+
+// TODO(ai_gp): Add a picture of this
+
 - @Components@: the three functions used from here on
   - $f(n)$ = the order in which nodes are expanded
   - $g(n)$ = the path cost of $n$ from the initial state, known exactly
@@ -819,9 +826,6 @@ digraph best_first_family {
   - $h(n)$ = straight-line distance from city $n$ to the destination
   - The heuristic is that straight-line and road distance are related, and no
     road is shorter than the straight line
-
-- @Key idea@: informed search buys speed with knowledge
-  - The quality of $h$, not the choice of algorithm, decides how much is saved
 
 * Greedy Best-First Search
 
@@ -836,9 +840,7 @@ digraph best_first_family {
   - E.g., with straight-line $h$ on a road map, it follows the corridor
     pointing at the destination
 
-- @Cons@: ignoring $g$ costs both optimality and completeness
-  - A route that starts in the right direction and then detours beats a
-    shorter route that starts sideways
+- @Cons@: ignoring $g$ costs both _optimality_ and _completeness_
   - Without an explored set it can oscillate forever between two states that
     both look promising
 
@@ -860,6 +862,8 @@ digraph best_first_family {
   - $g(n)$ = cost of the cheapest path reaching $n$ from the initial state
   - $h(n)$ = estimated cost of the cheapest path from $n$ to a goal
 
+// TODO(ai_gp): Add picture
+
 - @Intuition@: greedy search minimizes the future, uniform-cost search
   minimizes the past, and A* minimizes their sum
   - A* has the same formulation as uniform-cost search, replacing
@@ -868,64 +872,41 @@ digraph best_first_family {
 - @Remark@: the goal test fires on _expansion_
   - A frontier node with lower $f$ can still overtake a goal already generated
 
-- @Remark@: A* degenerates into the algorithms it generalizes
+- @Remark@: A* generalizes other algorithms
   - $h \equiv 0$ recovers uniform-cost search
   - $g \equiv 0$ recovers greedy best-first search
 
 * Admissibility and Consistency
 
 - @Definition@: $h$ is **admissible** if it never overestimates the cost to
-  reach the goal, at every node $n$
+  reach the goal at every node $n$
   $$
   0 \leq h(n) \leq h^*(n)
   $$
-  - $h^*(n)$ is the true cheapest cost from $n$ to a goal, and is unknown
-  - An admissible $h$ is optimistic, so $f(n)$ never overestimates the true
-    cost of a solution through $n$
+  - $h^*(n)$ is the true cheapest cost from $n$ to a goal (unknown)
+  - _Intuition_: an admissible $h$ is _optimistic_ since $f(n)$ never overestimates the
+    true cost of a solution through $n$
 
-- @Definition@: $h$ is **consistent** if, for every node $n$ and every
-  successor $n' = Result(n, a)$
+- @Definition@: $h$ is **consistent** if, for every node $n$ and every successor
+  $n' = Result(n, a)$
   $$
   h(n) \leq Cost(n, a, n') + h(n')
   $$
   - Aka "monotone"
-
-- @Intuition@: consistency is the triangle inequality on $n$, $n'$, and the
-  goal
-  - No side of a triangle is longer than the sum of the other two
+  - _Intuition_: consistency is the triangle inequality on $n$, $n'$, and the goal:
+    no side of a triangle is longer than the sum of the other two
 
 - @Proposition@: consistency implies admissibility, but not the reverse
   - If a route from $n$ to the goal through $n'$ were cheaper than $h(n)$, then
     $h(n)$ would not be a lower bound
-  - Consistency also makes $f$ non-decreasing along any path
-
-- @Example@: straight-line distance is consistent, and nearly every admissible
-  heuristic used in practice is
-  - Constructing an admissible but inconsistent heuristic takes deliberate
-    effort
+  - E.g., straight-line distance is consistent, and nearly every admissible heuristic
+    used in practice is
 
 * Optimality of A*
 
 - @Theorem@: A* is complete and optimal
   - The tree-search version is optimal when $h$ is **admissible**
   - The graph-search version is optimal when $h$ is **consistent**
-
-- @Proof@: by contradiction, in the tree-search case
-  1. Let $G_{opt}$ be an optimal goal of cost $C^*$, and suppose A* is about to
-     expand a suboptimal goal $G_2$ with $g(G_2) > C^*$
-  2. Since $h(G_2) = 0$, we have $f(G_2) = g(G_2) > C^*$
-  3. Some node $n$ on the optimal path to $G_{opt}$ sits on the frontier,
-     because the path starts at $s_0$ and $G_{opt}$ is not yet expanded
-  4. Admissibility gives
-     $f(n) = g(n) + h(n) \leq g(n) + h^*(n) = C^*$
-  5. Hence $f(n) \leq C^* < f(G_2)$, so A* would have popped $n$, not $G_2$
-  6. Contradiction, so no suboptimal goal is ever selected for expansion
-
-- @Remark@: the proof uses only the "never overestimates" property
-  - A heuristic that overestimates by at most $\delta$ returns a solution
-    costing at most $C^* + \delta$
-
-* A* Explores in Contours
 
 ::: columns
 :::: {.column width=50%}
@@ -935,11 +916,6 @@ digraph best_first_family {
   - No node with $f(n) > C^*$ is ever expanded
   - Nodes with $f(n) = C^*$ may or may not be expanded, depending on
     tie-breaking
-
-- @Comparison@: the shape of the contours
-  - $h \equiv 0$ gives circular bands centered on $s_0$, recovering
-    uniform-cost search
-  - A sharper $h$ stretches the bands into a narrow corridor aimed at the goal
 ::::
 :::: {.column width=45%}
 
@@ -1005,60 +981,19 @@ digraph astar_contours {
 ::::
 :::
 
-- @Key idea@: the work A* does equals the number of nodes inside the $C^*$
-  contour, and only a sharper $h$ shrinks that region
-
-* The Cost of A*
-
-- @Theorem@: A* is **optimally efficient**
-  - Given the same $h$, no optimal algorithm expands fewer nodes than A\*, up
-    to tie-breaking on the $f = C^*$ contour
-  - Any node with $f(n) < C^*$ must be expanded by any optimal algorithm,
-    because a cheaper goal could hide below it
-
-- @Definition@: the **effective branching factor** $b^*$ characterizes the
-  quality of a heuristic
-  - Assume the search generates $N$ nodes, the solution sits at depth $d$, and
-    the tree is balanced
-  - Then $b^*$ is the branching factor of a uniform tree of the same size
-    $$
-    1 + b^* + (b^*)^2 + \cdots + (b^*)^d = N
-    $$
-  - A well-designed $h$ drives $b^*$ toward $1$, and $b^*$ is measured
-    experimentally
-
-- @Problem@: A* stores every node it generates
-  - _Time_ is $O(b^{\epsilon d})$, with $\epsilon = (h^* - h)/h^*$ the relative
-    heuristic error
-  - _Space_ is the real limit, since the explored set grows with every
-    expansion
-
-- @Key idea@: A* runs out of memory long before it runs out of time
-
-* Memory-Bounded Variants of A*
-
-- @Problem@: A* exhausts memory on problems it could otherwise solve within
-  the available time
-
-- @Variants@: trade memory for repeated work
-  - _Iterative-deepening A\*_ (IDA\*): depth-first passes bounded by an $f$
-    cutoff, raised each round to the smallest $f$ that exceeded it
-  - _Recursive best-first search_ (RBFS): depth-first in $O(bd)$ memory,
-    backing up the best $f$ of each forgotten subtree
-  - _Simplified memory-bounded A\*_ (SMA\*): runs like A* until memory fills,
-    then drops the worst leaf after backing its value up to its parent
-
-- @Variants@: trade optimality for speed
-  - _Weighted A\*_ uses $f(n) = g(n) + w \cdot h(n)$ with $w > 1$
-  - The returned solution costs at most $w \cdot C^*$
-  - E.g., $w = 2$ often cuts expansions by orders of magnitude while adding a
-    few percent to solution cost
-
-- @Remark@: all of these keep $h$ untouched and change only the bookkeeping
-
 * Where Heuristics Come From
 
 - @Question@: how does one come up with a heuristic, ideally automatically?
+
+- @Answer@: kind-of-ad-hoc
+  - _Relaxes problem_: approach
+  - _Pattern database_: store exact costs of subproblems over part of the state
+  - _Inductive learning_: solve many random instances and fit $h(n)$ from features of
+    the state
+  - _Meta-level search_: learn during the current search, or from past searches,
+    which subtrees are unpromising
+
+* Relaxes Problem
 
 - @Definition@: a **relaxed problem** is the original problem with some rules
   removed
@@ -1072,6 +1007,7 @@ digraph astar_contours {
   - It is an _exact_ cost in the relaxed problem, so it obeys the triangle
     inequality, hence it is also consistent
 
+// TODO(ai_gp): Can we use tic-tac-toe or connect 4
 - @Example@: the **8-puzzle**, where the average random instance takes about
   $22$ steps and $b \approx 3$
   - Let a tile move anywhere: $h_1$ = number of misplaced tiles
@@ -1080,13 +1016,7 @@ digraph astar_contours {
   - At depth $12$, $b^*$ falls from about $2.8$ for iterative deepening to
     $1.5$ with $h_1$ and $1.3$ with $h_2$
 
-- @Techniques@: other systematic sources
-  - _Pattern database_: store exact costs of subproblems over part of the state
-  - _Inductive learning_: solve many random instances and fit $h(n)$ from
-    features of the state
-  - _Meta-level search_: learn during the current search, or from past
-    searches, which subtrees are unpromising
-
+// TODO(gp): Don't understand what is this
 - @Definition@: $h_2$ **dominates** $h_1$ when $h_2(n) \geq h_1(n)$ everywhere
   and both stay admissible
   - A dominating heuristic never expands more nodes, so always take
@@ -1096,76 +1026,112 @@ digraph astar_contours {
 
 * Why Games Are Studied in AI
 
-- @Definition@: a **competitive environment** holds two or more agents with
+- @Definition@: a **competitive environment** involves two or more agents with
   conflicting goals
   - An increase in utility for one agent implies a decrease for the others
-  - This is what makes the situation adversarial
+  - This is what makes the situation _adversarial_
 
-- @Motivation@: games are a convenient model of that situation
-  - The state is easy to represent, and the number of actions is small
-  - The outcome of an action follows precise rules
-  - The search space is very large, so time has to be spent wisely, exactly as
-    in real-world problems
+- @Motivation@: **games** are good models of competitive real-world problems
+  - The _state_ is easy to represent
+  - The number of _actions_ is small
+  - The outcome of an action follows precise _rules_
+  - The search space is _very large_ 
 
-- @Comparison@: three ways to model competitive multi-agent environments
-  - _Economy_: aggregate a very large number of agents, e.g. predict that
-    rising demand lifts prices without modeling any individual
-  - _Part of the environment_: treat adversaries as non-determinism, which
-    misses that they actively try to defeat us
-  - _Adversarial game-tree search_: model the opponent as an optimizer, which
-    is what minimax does
+- @Limitations@: some physical games (e.g. American football) have complicated
+  descriptions and imprecise rules about which actions are legal
 
-- @Limitations@: physical games, e.g. ice hockey, have complicated descriptions
-  and imprecise rules about which actions are legal
+* Modeling Multi-agent Environments
+
+// TODO(ai_gp): Add examples / clarify
+
+- @Comparison@: several ways to **model competitive multi-agent environments**
+  - _Economy_: aggregate a very large number of agents
+    - E.g. predict that rising demand lifts prices without modeling any individual
+  - _Part of the environment_: treat adversaries as non-determinism
+    - Misses that they actively try to defeat us
+  - _Adversarial game-tree search_: model the opponent as an "optimizer" (which is
+    what minimax does)
 
 * Games as Search Problems
 
-- @Assumptions@: the class of games studied here
-  - _Two players_, moving in turn
-  - _Deterministic_, with _perfect information_, so the environment is fully
+- @Assumptions@: consider the following class of games
+  - _Two players_ moving in turn
+  - _Deterministic_ with _perfect information_, so the environment is fully
     observable
   - _Zero-sum_, so the utility values are always equal and opposite
 
-- @Definition@: a game replaces the goal test and the path cost of a search
+- @Definition@: a **game**  is defined by the following components:
+  - _Initial state_ $s_0$: where the game starts
+  - _Actions_: the legal actions $Actions(s)$ available in state $s$
+  - _Transition model_: the state reached $Result(s, a)$ by doing $a$ in $s$
+  - _Turn_: $Player(s)$ is the player who has the move in $s$
+    - $Max$ moving first or $Min$ moving second
+  - _Goal test_: $TerminalTest(s) = true$ when the game is over
+  - _Cost_: $Utility(s, p)$ is the payoff of the terminal state $s$ to player $p$
+    - Aka "objective function", or "payoff function"
+
+- In practice, a game replaces the _goal test_ and the _path cost_ of a search
   problem
-  - $Player(s)$: which player has the move in $s$, either $Max$ moving first or
-    $Min$ moving second
-  - $TerminalTest(s)$: true when the game is over
-  - $Utility(s, p)$: the payoff of the terminal state $s$ to player $p$
-  - Aka objective function, or payoff function
 
-- @Definition@: a **zero-sum game** has the same total payoff for every
-  instance of the game
+// TODO(ai_gp): -> TerminalTest -> IsTerminal
+
+* Games as Search Problems
+- @Definition@: a **terminal state** is the game-theory name for a goal state, i.e.,
+  when the game is over with one of the player winning or a draw
+
+- @Definition@: a **zero-sum game** has the same total payoff for every instance of
+  the game equal to 0:
   $$
-  Utility(s, Max) + Utility(s, Min) = 0
+  Utility(s, Max) + Utility(s, Min) = 0 \; \forall s: TerminalTest(s)
   $$
-  - "Constant-sum" would have been a better name, e.g. win $= 1$, loss $= 0$,
-    draw $= 1/2$ for each player
+  - "Constant-sum" would have been a better name
+    - E.g. win $= 1$, loss $= 0$, draw $= 1/2$ for each player
 
-- @Definition@: a **terminal state** is the game-theory name for a goal state
+- @Example@: tic-tac-toe and Connect 4 are both _games_ according to the definition
+  - Use $\{+1, 0, -1\}$ for win, draw, and loss
+  - The game is always from the point of view of $Max$
 
-- @Example@: tic-tac-toe and Connect 4 use $\{+1, 0, -1\}$ for win, draw, and
-  loss, always from the point of view of $Max$
+* AND-OR tree
+
+- @Definition@: an **AND-OR tree** generalizes a search tree with two kinds of
+  branching, needed when the outcome of a choice is not fully under the agent's
+  control
+  - **OR node**: the agent picks one action, so one successful child suffices
+  - **AND node**: another party (opponent) picks the outcome, so every child must
+    lead to success
+
+- @Intuition@:
+  - At an `OR` node, _"I choose"_
+  - At an `AND` node, _"someone else chooses"_, so the agent must be ready
+    for any of their choices
+
+- @Comparison@: a search tree has only `OR` nodes, since the agent alone picks every
+  move
+
+- @Key idea@: a solution of an AND-OR tree is a **subtree**, not a path
+  - Keep one branch at each `OR` node
+  - Keep every branch at each `AND` node
+  - Every leaf of the subtree is a goal (terminal) state
+
+- @Example@: adversarial game trees are `AND-OR` trees where $Max$'s turns
+  are `OR` nodes and $Min$'s turns are `AND` nodes, since $Min$ picks the
+  reply that $Max$ must survive
+
+// TODO(ai_gp): Add picture of an AND-OR tree in graphviz
 
 * Game Trees
 
 ::: columns
 :::: {.column width=46%}
-- @Definition@: a **game tree** has game states as nodes and moves as edges,
-  running down to the terminal states
+- @Definition@: a **game tree** has game states as nodes and moves as edges, running
+  down to the terminal states (same as a _search tree_)
   - It is defined by $s_0$, $Actions$, and $Result$
-  - It is far too large to build explicitly, so it is only ever considered
+  - It is often too large to build explicitly, so it is only ever considered
     implicitly
-
-- @Definition@: a **ply** is one layer, so one move by one player
-  - $Max$ layers prefer the largest value, $Min$ layers the smallest
-  - A "move" in everyday speech is two plies
-
-- @Key idea@: a solution is not a path but a **contingent strategy**
-  - It prescribes a reply to every move the opponent can make
 ::::
 :::: {.column width=48%}
 
+// TODO(ai_gp): Find a better diagram
 ```graphviz
 digraph game_tree {
     bgcolor="transparent";
@@ -1206,42 +1172,48 @@ digraph game_tree {
 ::::
 :::
 
-- @Remark@: adversarial search is an `AND-OR` search tree, with $Max$ playing
-  the `OR` nodes and $Min$ the `AND` nodes
+- @Definition@: a **ply** is one layer, so one "move" by one player
+  - $Max$ layers prefer the largest value, $Min$ layers the smallest
+
+- @Key idea@: a solution to a game is not a path but a **contingent strategy**
+  - It prescribes a reply to every move the opponent can make
 
 * The Tic-Tac-Toe Game Tree
 
-- @Example@: the complete tic-tac-toe tree
-  - $Max$ has $9$ ways to place an `X`, then the players alternate
+- @Example@: Tic-Tac-Toe
+  - $Max$ has 9 ways to place an `X`, then the players alternate
   - The game ends when a player has three in a row, or all squares are filled
-  - $255168$ complete games, and $549946$ nodes in total
+  - 255,168 complete games, and 549,946 nodes in total
+  - Playing optimaly the result is a draw
+
+// TODO(ai_gp): Are the numbers above in line with tic-tac-toe as search?
+// TODO(ai_gp): what is the difference of search vs tree (maybe considering
+// the best move alone vs the best move given what the adversial would do?)
 
 - @Remark@: each leaf carries the utility of that terminal state from the point
   of view of $Max$
 
-- @Fact@: the game-theoretic value of tic-tac-toe is a **draw**
-  - The tree is small enough to search exhaustively on any laptop
-
-- @Comparison@: the same tree for Connect 4
+- @Example@: Connect 4 is the same AND-OR tree as Tic-Tac-Toe
   - Depth $m = 42$ and $b \approx 7$, so about $10^{35}$ move sequences
   - $4.5 \cdot 10^{12}$ distinct legal positions
-  - The value is a **win for the first player**, who must open in the center
-    column
+  - Playing optimally the result is a win for the first player (who must open in the
+    center column)
 
-- @Key idea@: the whole rest of this lesson exists to close the gap between
-  these two numbers
+// TODO(ai_gp): Create an AND-OR tree for Tic-tac-toe
 
 * Minimax
 
 - @Definition@: the **minimax value** of a node is defined recursively
+// TODO(ai_gp): Use a case formula for typst
   - $Minimax(s) = Utility(s, Max)$ when $TerminalTest(s)$ holds
   - $Minimax(s) = \max_{a \in Actions(s)} Minimax(Result(s, a))$ when $Player(s)
     = Max$
   - $Minimax(s) = \min_{a \in Actions(s)} Minimax(Result(s, a))$ when $Player(s)
     = Min$
 
-- @Intuition@: $Minimax(s)$ is the utility for $Max$ assuming both players play
-  optimally from $s$ to the end of the game
+- @Intuition@:
+  - $Minimax(s)$ is the utility for $Max$ assuming both players play optimally from
+    $s$ to the end of the game
   - $Max$ MAXimizes the minimax value, $Min$ MINimizes it
 
 - @Algorithm@: compute $Minimax$ by a complete depth-first visit
@@ -1251,8 +1223,8 @@ digraph game_tree {
 
 - @Key idea@: the minimax decision maximizes the worst case for $Max$
   - No other strategy does better against an optimal $Min$
-  - Against a suboptimal $Min$, $Max$ scores at least $Minimax(s_0)$, and some
-    other strategy might score more
+  - Against a suboptimal $Min$, $Max$ scores at least $Minimax(s_0)$, and some other
+    strategy might score more
 
 * Minimax on a Tic-Tac-Toe Endgame
 
@@ -1260,6 +1232,10 @@ digraph game_tree {
 :::: {.column width=32%}
 - Cells are numbered $1$ to $9$, left to right and top to bottom
 
+// TODO(ai_gp): Check if the cells start from 0 and so, change the value to be
+// consistent with starting from 0
+
+// TODO(ai_gp): Do a better plot with tikz (also adding the numbers of the cells)
 ```text
  X | O | X
 ---+---+---
