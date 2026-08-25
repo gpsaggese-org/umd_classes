@@ -6,22 +6,23 @@ All four algorithms plug into the same game-agnostic `Game` interface that
 `mcts_utils.py`'s MCTS engine uses (see `mcts_utils.Game` and
 `game_examples.py` for concrete games).
 
-Value convention: unlike `MCTSNode.value_sum` (which is stored from the
-perspective of the player who moved into that node, flipping sign at every
-level during backpropagation), `SearchNode.value` below is always the
-classical minimax convention: the exact or estimated outcome from player
-`1` (X)'s perspective, in `{-1, 0, 1}` (or, at a depth-limited cut, a
-heuristic estimate in `[-1, 1]`). A node alternates between taking the `max`
-(player `1` to move) and the `min` (player `-1` to move) of its children's
-values, which is equivalent to sign-flipping but needs no extra bookkeeping
-since `Game.get_current_player()` already reports whose turn it is.
-
 See `README.md` for a description of every file in this directory.
 
 Import as:
 
 import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.search_algorithms_utils as rimtsaazsau
 """
+
+# Value convention: unlike `MCTSNode.value_sum` (which is stored from the
+# perspective of the player who moved into that node, flipping sign at every
+# level during backpropagation), `SearchNode.value` below is always the
+# classical minimax convention: the exact or estimated outcome from player
+# `1` (X)'s perspective, in `{-1, 0, 1}` (or, at a depth-limited cut, a
+# heuristic estimate in `[-1, 1]`). A node alternates between taking the `max`
+# (player `1` to move) and the `min` (player `-1` to move) of its children's
+# values, which is equivalent to sign-flipping but needs no extra bookkeeping
+# since `Game.get_current_player()` already reports whose turn it is.
+
 
 import logging
 import math

@@ -18,10 +18,11 @@ import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.mcts_utils as ri
 
 _LOG = logging.getLogger(__name__)
 
+# TODO(gp): Consider is_terminal -> is_goal to align to the slides
+
 # #############################################################################
 # Shared board helpers
 # #############################################################################
-
 
 # Cell values shared by every game in this module: `0` empty, `1` player X
 # (moves first), `-1` player O.
@@ -91,8 +92,10 @@ def _get_line_winner(
 # #############################################################################
 
 
+# TODO(ai_gp): Inline
 _TICTACTOE_NUM_COLS = 3
 
+# TODO(ai_gp): Move inside the class.
 # The 8 index triples that constitute a win: 3 rows, 3 columns, 2 diagonals.
 _TICTACTOE_WIN_LINES = [
     (0, 1, 2),
@@ -251,11 +254,13 @@ def evaluate_tic_tac_toe(state: rimtsaazmu.State) -> float:
 # #############################################################################
 
 
+# TODO(ai_gp): Inline or move inside the class.
 _CONNECT_FOUR_NUM_ROWS = 6
 _CONNECT_FOUR_NUM_COLS = 7
 _CONNECT_FOUR_LINE_LENGTH = 4
 
 
+# TODO(ai_gp): Make it static inside ConnectFour
 def _build_connect_four_win_lines() -> List[Tuple[int, ...]]:
     """
     Enumerate every 4-in-a-row window on the Connect Four board.

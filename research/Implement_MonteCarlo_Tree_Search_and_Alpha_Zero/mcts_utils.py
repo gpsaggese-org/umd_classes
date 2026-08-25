@@ -490,6 +490,9 @@ def play_game(
     return winner, history
 
 
+# #############################################################################
+
+
 def evaluate_win_rate(
     game: Game,
     player_under_test: Callable[[Game, State], Move],

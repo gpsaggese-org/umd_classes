@@ -99,23 +99,141 @@
 ```
 
 - @Remark@:
-  - A state is the _board state plus the player to move_, not the move history
+  - A state is the _board state plus the player to move_, not the move history $\to$
+    "State space" vs "Search Tree"
   - Two different move orders reaching the same board are the same state
-  - "State space" vs "Search Tree"
 
-// TODO(ai_gp): Add pics from notebook
+* Tic-Tac-Toe: Expanding the Root
+
+- @Example@: expanding $s_0$ generates $9$ successors, one per empty cell
+  - Only $3$ of them are distinct once the symmetries of the square are
+    removed: a corner, an edge, and the center
+  - Each successor is a full state, i.e., the board plus the turn flipped to O
+
+// TODO(ai_gp): Show the root expansion with the 9 possible moves and then
+// for the first 2 of nodes, 2 or more levels
+
+- @Remark@: the branching factor shrinks by one at every ply
+  - $9$ actions at the root, $8$ one level down, and so on
+
+* Tic-Tac-Toe: Optimizing the Search Tree
+
+```graphviz[width=50%]
+digraph TicTacToeFirstPly {
+    bgcolor="transparent";
+    pad="0.15";
+    rankdir=TB;
+    splines=spline;
+    nodesep=0.45;
+    ranksep=0.55;
+
+    node [shape=box, style="rounded,filled", penwidth=1.6,
+          fontname="Courier", fontsize=13, margin="0.18,0.12"];
+    edge [color="#A3B1C0", penwidth=1.3, arrowhead=vee, arrowsize=0.75,
+          fontname="Helvetica", fontsize=11, fontcolor="#7B8794"];
+
+    // green = initial state | blue = state reached after one action
+
+    S0 [label=". . .\n. . .\n. . .",
+        fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
+
+    Corner [label="X . .\n. . .\n. . .",
+            fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    Side   [label=". X .\n. . .\n. . .",
+            fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    Center [label=". . .\n. X .\n. . .",
+            fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+
+    S0 -> Corner [label="  Corner  "];
+    S0 -> Side   [label="  Edge  "];
+    S0 -> Center [label="  Center  "];
+}
+```
+
 
 * Connect-N as a Search Problem
 
-// TODO(ai_gp): Same as tic-tac-toe for Connect-4 and then explain the extension to 
-// N.
+```{=typst}
+#styled-table(
+  headers: ([Element], [Connect 4 instantiation]),
+  rows: (
+    ([$"Initial state" s_0$], [Empty $7 times 6$ grid, X to move]),
+    ([$"Actions"(s)$], [Pick any column that is not full]),
+    ([$"Result"(s, a)$], [Disc drops to the lowest empty cell of that
+      column, and the turn flips]),
+    ([$"IsGoal"(s)$], [Four in a row in any direction, or no empty cell
+      left]),
+    ([$"Cost"(s, a, s')$], [$1$ per move, so cost equals number of moves]),
+  ),
+  col-widths: (1fr, 2.5fr),
+  bold-first-col: true
+)
+```
 
-- @Example@: **Connect 4** instantiates the same five elements on a
-  $7 \times 6$ grid
-  - An action names a column, and the disc falls to the lowest empty cell
-  - The goal test looks for four in a row in any direction
+- @Remark@: only the five elements change, the search algorithm does not
+  - An action names a **column**, not a cell, so the branching factor is at
+    most $7$ instead of $9$
+  - Not every empty cell can be filled in one move, since gravity picks the row
 
-// TODO(ai_gp): Add pics from notebook
+* Connect 4: Gravity Picks the Row
+
+- @Example@: the legal actions are the $7$ columns, and playing column $3$
+  lands the disc on the lowest empty cell of that column
+
+```graphviz
+digraph ConnectFourDrop {
+    bgcolor="transparent";
+    pad="0.15";
+    rankdir=LR;
+    splines=spline;
+    nodesep=0.45;
+    ranksep=0.70;
+
+    node [shape=box, style="rounded,filled", penwidth=1.6,
+          fontname="Courier", fontsize=12, margin="0.18,0.12"];
+    edge [color="#C0455B", penwidth=1.6, arrowhead=vee, arrowsize=0.8,
+          fontname="Helvetica", fontsize=11, fontcolor="#C0455B"];
+
+    // green = state before the action | blue = state after the action
+
+    Before [label=". . . . . . .\n" +
+                  ". . . . . . .\n" +
+                  ". . . . . . .\n" +
+                  ". . . . . . .\n" +
+                  ". . . O . . .\n" +
+                  ". . X O X . .",
+            fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
+    After  [label=". . . . . . .\n" +
+                  ". . . . . . .\n" +
+                  ". . . . . . .\n" +
+                  ". . . X . . .\n" +
+                  ". . . O . . .\n" +
+                  ". . X O X . .",
+            fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+
+    Before -> After [label="  a = column 3  "];
+}
+```
+
+- @Remark@: the agent picks the column, the transition model picks the row
+  - The row is detail the agent does not control, so it is abstracted away
+
+* From Connect 4 to Connect-N
+
+- @Definition@: **Connect-N** plays on a $w \times h$ grid and asks for $N$
+  marks in a row, horizontally, vertically, or diagonally
+  - Connect 4 is $w = 7$, $h = 6$, $N = 4$, with gravity on
+  - Tic-tac-toe is $w = h = 3$, $N = 3$, with gravity off
+
+- @Key idea@: the five elements keep the same shape, only their parameters move
+  - $Actions(s)$ lists the columns that still have room, so the branching
+    factor is at most $w$
+  - $IsGoal(s)$ scans every line of $N$ consecutive cells
+  - One implementation of the search then serves the whole family
+
+- @Remark@: the parameters decide how hard the search is
+  - Connect 4 has about $4.5 \times 10^{12}$ reachable positions, so a full
+    search is out of reach, while tic-tac-toe fits in memory
 
 * Abstraction
 
@@ -223,8 +341,8 @@ digraph state_space_vs_tree {
 
 * Redundant Paths and Graph Search
 
-// TODO(ai_gp): Add graphviz plots showing these cases and add examples (e.g., tic-tac-toe)
-
+::: columns
+:::: {.column width=55%}
 - @Definition@: three kinds of "wasted work" while searching a search tree
   - **Loopy path**: a path containing a cycle, never better than the same path with
     the loop removed
@@ -232,12 +350,100 @@ digraph state_space_vs_tree {
     back
   - **Redundant path**: any case where several paths join the same two states
 
+- @Example@: tic-tac-toe suffers only from the third kind
+  - No mark is ever removed, so no path can loop or repeat
+  - Playing cell $0$ then cell $4$ reaches the same board as cell $4$ then
+    cell $0$
+::::
+:::: {.column width=45%}
+
+```graphviz
+digraph WastedWork {
+    bgcolor="transparent";
+    pad="0.15";
+    splines=spline;
+    nodesep=0.25;
+    ranksep=0.35;
+    rankdir=TB;
+
+    node [shape=circle, style="filled", penwidth=1.8,
+          fontname="Helvetica", fontsize=11, width=0.38, fixedsize=true,
+          fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    edge [color="#A3B1C0", penwidth=1.3, arrowhead=vee, arrowsize=0.7];
+
+    // green = start state | cyan = other state | red edge = the wasted work
+
+    subgraph cluster_loopy {
+        label     = "Loopy";
+        labelloc  = "t";
+        fontname  = "Helvetica-Bold";
+        fontsize  = 11;
+        fontcolor = "#3A4A5C";
+        style     = "rounded";
+        color     = "#C7D0DA";
+        margin    = 12;
+
+        LA [label="A", fillcolor="#A9DDB0", color="#4F9A5C",
+            fontcolor="#1F4E2E"];
+        LB [label="B"];
+        LC [label="C"];
+
+        LA -> LB;
+        LB -> LC;
+        LC -> LA [color="#C0455B", penwidth=1.6, constraint=false];
+    }
+
+    subgraph cluster_repeated {
+        label     = "Repeated";
+        labelloc  = "t";
+        fontname  = "Helvetica-Bold";
+        fontsize  = 11;
+        fontcolor = "#3A4A5C";
+        style     = "rounded";
+        color     = "#C7D0DA";
+        margin    = 12;
+
+        RA [label="A", fillcolor="#A9DDB0", color="#4F9A5C",
+            fontcolor="#1F4E2E"];
+        RB [label="B"];
+
+        RA -> RB;
+        RB -> RA [color="#C0455B", penwidth=1.6, constraint=false];
+    }
+
+    subgraph cluster_redundant {
+        label     = "Redundant";
+        labelloc  = "t";
+        fontname  = "Helvetica-Bold";
+        fontsize  = 11;
+        fontcolor = "#3A4A5C";
+        style     = "rounded";
+        color     = "#C7D0DA";
+        margin    = 12;
+
+        DA [label="A", fillcolor="#A9DDB0", color="#4F9A5C",
+            fontcolor="#1F4E2E"];
+        DB [label="B"];
+        DC [label="C"];
+        DD [label="D"];
+
+        DA -> DB;
+        DA -> DC;
+        DB -> DD [color="#C0455B", penwidth=1.6];
+        DC -> DD [color="#C0455B", penwidth=1.6];
+    }
+}
+```
+
+::::
+:::
+
+* Redundant Paths and Graph Search
+
 - @Problem@:
   - Without bookkeeping the search re-expands a state every time a path reaches it
   - Reaching the opposite corner of a $d \times d$ grid takes $\frac{(2d)!}{(d!)^2}$
     distinct paths over only $(d + 1)^2$ states
-
-* Redundant Paths and Graph Search
 
 - @Solution@: graph search keeps an **explored set** of expanded states
   - Aka "closed list"
