@@ -124,7 +124,7 @@
 ```
 
 - @Remark@: only the five elements change, the search algorithm does not
-  - An action names a _column_, not a cell, so the branching factor is at most $7$
+  - An action names a _column_, not a cell, so the branching factor is at most 7
   - Not every empty cell can be filled in one move, since gravity picks the row
 
 * Connect 4: Gravity Picks the Row
@@ -344,13 +344,13 @@ digraph TicTacToeRootExpansion {
 ```
 
 - @Remark@: the branching factor shrinks by one at every ply
-  - $9$ actions at the root, $8$ one level down, and so on
-  - Drawing the whole second ply already needs $72$ boards
+  - 9 actions at the root, 8 one level down, and so on
+  - Drawing the whole second ply already needs 72 boards
 
 * Tic-Tac-Toe: Two Plies Deep
 
-- @Example@: expanding the first two successors adds $8$ boards each, since
-  $8$ empty cells are left for `O`
+- @Example@: expanding the first two successors adds 8 boards each, since 8 empty
+  cells are left for `O`
 
 ```graphviz
 digraph TicTacToeTwoPlies {
@@ -541,27 +541,31 @@ digraph WastedWork {
 
 - @Solution@: graph search keeps an **explored set** of expanded states
   - Aka "closed list"
-  - A leaf node is a node with no children yet (not expanded yet)
   - Expand a state the first time it is seen, or again only when a cheaper path to it
     appears
   - _Cons_: memory now grows with the number of _states_ reached
 
-- @Remark@: the frontier splits the state space into an explored and an
-  unexplored region
-  - Invariant: every path from $s_0$ to an unexplored state passes through some
+- @Remark@: the frontier splits the state space into an explored and an unexplored
+  region
+  - _Invariant_: every path from $s_0$ to an unexplored state passes through some
     frontier state
 
 - @Definition@: **expanding** a node means generating all its successors
   - Cost is counted in node expansions, so the analysis is machine independent
+  - A **leaf node** is a node with no children yet (not expanded yet)
 
 * Tic-Tac-Toe: Optimizing the Search Tree
 
-- @Key idea@: only $3$ of the $9$ successors are distinct once the symmetries
-  of the square are removed
+::: columns
+:::: {.column width=60%}
+- @Key idea@: only 3 of the 9 successors are distinct once the symmetries of the
+  square are removed
   - Rotations and reflections map a corner to a corner and an edge to an edge
   - Searching a corner, an edge, and the center covers the whole first ply
+::::
+:::: {.column width=40%}
 
-```graphviz[width=50%]
+```graphviz
 digraph TicTacToeFirstPly {
     bgcolor="transparent";
     pad="0.15";
@@ -592,24 +596,26 @@ digraph TicTacToeFirstPly {
     S0 -> Center [label="  Center  "];
 }
 ```
+::::
+:::
 
-- @Remark@: the same reduction applies deeper in the tree, but fewer
-  symmetries survive as the board fills up
+- @Remark@: the same reduction applies deeper in the tree
+  - Fewer symmetries survive as the board fills up
+  - There is a symmetry between `X` and `O` swapping the roles
 
 * Measuring a Search Algorithm
 // From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:32 '* Why Search Trees Explode'
 
-- @Definition@: four criteria evaluate any search algorithm
+- @Definition@: four **criteria evaluate a search algorithm**
   - _Completeness_: is the algorithm guaranteed to find a solution, if one
     exists?
   - _Optimality_: if it finds a solution, is that solution optimal?
   - _Time complexity_: how long does it take to find a solution?
   - _Space complexity_: how much memory does it need?
 
-- @Problem@: time and space cannot be measured as $|V| + |E|$ of the state
-  space
-  - The graph is given implicitly by $s_0$, $Actions$, and $Result$
-  - It is often infinite
+- @Problem@:
+  - The _search graph_ is given implicitly by $s_0$, $Actions$, and $Result$
+    - It is often infinite (even if state space $|V|, |E|$ is finite)
 
 - @Components@: the parameters the complexities are written in
   - $b$ = branching factor, the maximum or average number of successors of a
@@ -617,12 +623,13 @@ digraph TicTacToeFirstPly {
   - $d$ = depth of the shallowest goal node
   - $m$ = maximum depth of any path, possibly infinite
 
+// TODO(ai_gp): Copy / move some content from 9.8 here
+
 - @Example@: Connect 4 has $b \approx 7$ and $m = 42$, so $b^m \approx 10^{35}$
   - Only $4.5 \cdot 10^{12}$ of those sequences reach distinct legal positions
-  - Even that reduced count was first enumerated in 1988
 
-- @Remark@: memory, not time, is the binding constraint in practice
-  - A machine generating $10^6$ nodes/s fills $100$ GB of RAM in minutes
+- @Problem@: memory, not time, is often the binding constraint in practice
+  - E.g., a machine generating $10^6$ nodes/s fills $100$ GB of RAM in minutes
 
 # Uninformed Search
 
@@ -633,26 +640,17 @@ digraph TicTacToeFirstPly {
 - @Definition@: **uninformed search** has only the definition of the problem,
   and no other problem-specific knowledge
   - Aka "blind search"
-  - Algorithms differ only in the strategy used to pick the next node
 
-- @Key idea@: every algorithm in this lesson is **best-first search** run with
-  a different evaluation function $f(n)$
-  - Pop the frontier node minimizing $f$, expand it, repeat
+- @Key idea@: 
+  - Uninformed search algorithms differ only in the strategy to pick the next
+    node
+  - Every algorithm in this lesson is **best-first search** run with a different
+    evaluation function $f(n)$
 
-- @Algorithm@: best-first search
-  1. Initialize the frontier with $s_0$, and the explored set to empty
-  2. Pop the node $n$ of lowest $f(n)$ from the frontier
-  3. Return the path to $n$ if $IsGoal(n)$ holds
-  4. Otherwise move $n$ to the explored set and expand it, adding each
-     successor that is new or reached more cheaply than before
-  5. Repeat until the frontier is empty
-
-- @Components@: the frontier data structure selects the strategy
-  - FIFO queue gives breadth-first, LIFO stack gives depth-first, priority
-    queue gives best-first
 ::::
 :::: {.column width=44%}
 
+// TODO(ai_gp): Convert it into a table
 ```graphviz
 digraph best_first_family {
     bgcolor="transparent";
@@ -686,12 +684,26 @@ digraph best_first_family {
 ::::
 :::
 
+- @Algorithm@: best-first search
+  1. Initialize the frontier with $s_0$, and the explored set to empty
+  2. Pop the node $n$ of lowest $f(n)$ from the frontier
+  3. Return the path to $n$ if $IsGoal(n)$ holds
+  4. Otherwise move $n$ to the explored set and expand it, adding each successor that
+     is new or reached more cheaply than before
+  5. Repeat until the frontier is empty
+
+// TODO(ai_gp): Add some graph
+
+- @Components@: the frontier data structure selects the strategy
+  - FIFO queue gives breadth-first
+  - LIFO stack gives depth-first
+  - Priority queue gives best-first
+
 * Breadth-First and Uniform-Cost Search
 
-- @Definition@: **breadth-first search (BFS)** expands every node at a given
+- @Definition@: **Breadth-first search (BFS)** expands every node at a given
   depth before moving to the next level, so $f(n) = depth(n)$
-  - A FIFO queue replaces the priority queue, since depth grows by one per
-    expansion
+  - A FIFO queue replaces the priority queue, since depth grows by one per expansion
   - The goal test fires when a node is _generated_, so the search stops early
 
 - @Properties@: BFS finds the shallowest goal node
@@ -699,53 +711,61 @@ digraph best_first_family {
   - _Optimal_ only when every edge carries the same cost
   - _Time_ and _space_ are both $O(b^d)$, since the whole frontier is stored
 
-- @Problem@: with unequal step costs the shallowest goal is not the cheapest
-  - E.g., a direct road of cost $100$ is returned before a three-hop route of
-    total cost $10$
+// TODO(ai_gp): Add picture of search tree
 
-- @Solution@: **uniform-cost search (UCS)** orders nodes by the lowest path
+- @Problem@: with unequal step costs the shallowest goal is not the cheapest
+  - E.g., a direct road of cost 100 is returned before a three-hop route of
+    total cost 10 (i.e., total cost = 30)
+
+// TODO(ai_gp): Add picture
+
+* Uniform-Cost Search
+
+- @Definition@: **Uniform-cost search (UCS)** orders nodes by the lowest path
   cost $g(n)$, so $f(n) = g(n)$
   - Aka "Dijkstra's algorithm"
   - It is breadth-first search using path cost instead of number of edges
   - The goal test fires on _expansion_, so a cheaper path can still overtake a
     goal sitting on the frontier
 
-- @Properties@: UCS is complete and optimal for non-negative step costs
-  - _Time_ and _space_ are $O(b^{1 + C^* / c_{min}})$, with $C^*$ the optimal
-    cost and $c_{min}$ the smallest step cost
+- @Properties@:
+  - UCS is _complete_ and _optimal_ for non-negative step costs
+  - _Time_ and _space_ are $O(b^{1 + C^* / c_{min}})$, with $C^*$ the optimal cost
+    and $c_{min}$ the smallest step cost
 
-* Depth-First, Depth-Limited, and Iterative Deepening
+* Depth-First Search
 
-- @Definition@: **depth-first search (DFS)** always expands the deepest node in
-  the frontier
+- @Definition@: **Depth-first search (DFS)** always expands the deepest node in the
+  frontier
   - It descends until a node has no successors, then backs up to the next
     deepest node with unexplored successors
-  - A LIFO stack replaces the priority queue, or plain recursion does
+  - A LIFO stack replaces the priority queue (or plain recursion does)
   - _Space_ is only $O(bm)$, since one path plus its siblings is stored
 
-- @Cons@: DFS is neither complete nor optimal
+- @Cons@: DFS is _neither complete nor optimal_
   - A single infinite branch traps it forever
   - The first goal found is rarely the shallowest
 
-- @Variants@: **backtracking search** uses even less memory than DFS
-  - Generate one successor at a time, remembering only which successor comes
-    next
-  - _Space_ drops to $O(m)$
+* More Variants
 
-- @Naive Solution@: **depth-limited search (DLS)** runs DFS but refuses to
+- @Definition@: **depth-limited search (DLS)** runs DFS but refuses to
   expand past a fixed depth $\ell$
   - _Time_ $O(b^\ell)$ and _space_ $O(b\ell)$
-  - Cons: complete only if $\ell \geq d$, and a good $\ell$ requires knowing
+  - _Cons_: complete only if $\ell \geq d$, and a good $\ell$ requires knowing
     $d$ in advance
 
-- @Solution@: **iterative deepening search (IDS)** runs DLS for
+// TODO(gp): Unclear
+
+- @Definition@: **iterative deepening search (IDS)** runs DLS for
   $\ell = 0, 1, 2, \ldots$ until a goal appears
   - Keeps the $O(bd)$ memory of DFS and the optimality of BFS
-  - Re-expanding the shallow levels costs only a constant factor, since the
-    deepest level already holds a fraction $(b - 1)/b$ of all nodes
-    $$
-    \sum_{i=0}^{d} (d - i + 1) \, b^i = O(b^d)
-    $$
+
+- @Definition@: **bidirectional search** runs two searches at once
+  - One forward from $s_0$, one backward from the goal, hoping they meet in
+    the middle
+  - $b^{d/2} + b^{d/2}$ is far smaller than $b^d$
+  - Cons: it needs a way to search backwards, and the two frontiers must be compared
+    at every step
 
 * Uninformed Search: Comparison
 
@@ -759,20 +779,13 @@ digraph best_first_family {
     ([Depth-limited], [If $ell >= d$], [No], [$O(b^ell)$], [$O(b ell)$]),
     ([Iterative deepening], [Yes], [Equal costs only], [$O(b^d)$], [$O(b d)$]),
   ),
-  col-widths: (1.5fr, 1fr, 1.3fr, 1.3fr, 1fr),
+  col-widths: (2fr, 1fr, 1.7fr, 1.3fr, 1.7fr),
   bold-first-col: true
 )
 ```
 
 - @Key idea@: iterative deepening is the default uninformed method
   - It matches BFS on solution quality at DFS memory cost
-
-- @Variants@: **bidirectional search** runs two searches at once
-  - One forward from $s_0$, one backward from the goal, hoping they meet in
-    the middle
-  - $b^{d/2} + b^{d/2}$ is far smaller than $b^d$
-  - Cons: it needs a way to search backwards, and the two frontiers must be
-    compared at every step
 
 - @Problem@: every entry is still exponential in the solution depth
   - No ordering of _blind_ expansions escapes $b^d$, because a goal can hide
