@@ -1,9 +1,9 @@
 """
 Concrete `Game` implementations: tic-tac-toe and Connect Four.
 
-Both games plug into any search algorithm in this project (MCTS, minimax,
-alpha-beta pruning, depth-limited search, flat Monte Carlo) by implementing
-the `Game` interface from `game.py`.
+Both games plug into any search algorithm in this project (minimax, alpha-beta
+pruning, depth-limited search, flat Monte Carlo, MCTS) by implementing the
+`Game` interface from `game.py`.
 
 See `README.md` for a description of every file in this directory.
 
@@ -120,8 +120,9 @@ class TicTacToe(rimtsaazg.Game):
     """
     3x3 tic-tac-toe.
 
-    A state is a length-9 tuple of cell values (`0` empty, `1` X, `-1` O)
-    indexed row-major from the top-left corner. Player `1` (X) moves first.
+    - A state is a length-9 tuple of cell values (`0` empty, `1` X, `-1` O)
+      indexed row-major from the top-left corner
+    - Player `1` (X) moves first
     """
 
     def get_initial_state(self) -> rimtsaazg.State:
@@ -228,10 +229,10 @@ def evaluate_tic_tac_toe(state: rimtsaazg.State) -> float:
     - counts, over the 8 win lines, how many are still "open" (contain no mark
       from the opponent) for each player
     - returns the normalized difference
-    It is also an imperfect one since it scores each line independently, so it
-    cannot see a fork (two lines that share an empty cell and cannot both be
-    blocked), and can therefore rank a winning position no higher than a merely
-    promising one.
+    It is also an imperfect heuristic since it scores each line independently,
+    so it cannot see a fork (two lines that share an empty cell and cannot both
+    be blocked), and can therefore rank a winning position no higher than a
+    merely promising one.
 
     :param state: game state to evaluate, need not be terminal
     :return: heuristic score in `[-1, 1]` from X's perspective, on the same
@@ -309,11 +310,12 @@ class ConnectFour(rimtsaazg.Game):
     """
     Standard 7-column x 6-row Connect Four.
 
-    A state is a length-42 tuple of cell values (`0` empty, `1` X, `-1` O)
-    indexed row-major from the top-left corner; row `0` is the top row. A
-    move is a column index `0`-`6`; the mark drops to the lowest empty cell
-    in that column (gravity), so unlike tic-tac-toe not every empty cell is a
-    legal move. Player `1` (X) moves first.
+    - A state is a length-42 tuple of cell values (`0` empty, `1` X, `-1` O)
+      indexed row-major from the top-left corner; row `0` is the top row
+    - A move is a column index `0`-`6`; the mark drops to the lowest empty cell
+      in that column (gravity), so unlike tic-tac-toe not every empty cell is a
+      legal move
+    - Player `1` (X) moves first
     """
 
     def get_initial_state(self) -> rimtsaazg.State:

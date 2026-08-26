@@ -260,7 +260,12 @@ print("IsTerminal(Result(s0, 4)) =", game.is_terminal(result))
 # A near-finished board makes Utility concrete: X already has two in a row,
 # so playing cell 2 reaches a terminal state with a definite payoff.
 demo_state = (1, 1, 0, -1, -1, 0, 0, 0, 0)
+print(game.render(demo_state))
+print("IsTerminal(s) =", game.is_terminal(demo_state))
+
+# %%
 terminal_state = game.apply_move(demo_state, 2)
+print(game.render(terminal_state))
 print("IsTerminal(s) =", game.is_terminal(terminal_state))
 print("Utility(s, Max) =", game.get_winner(terminal_state))
 
@@ -283,13 +288,16 @@ print("Utility(s, Max) =", game.get_winner(terminal_state))
 #   since the agent cannot control which one the opponent picks
 #
 # For an adversarial game the two players give the two node kinds their
-# names: $Max$'s turns are `OR` nodes (`Player(s) == Max` picks freely
-# between $Actions(s)$), $Min$'s turns are `AND` nodes (whatever $Min$
-# picks, $Max$ must have an answer ready for it).
+# names:
+# - $Max$'s turns are `OR` nodes (`Player(s) == Max` picks freely between
+# $Actions(s)$)
+# - $Min$'s turns are `AND` nodes (whatever $Min$ picks, $Max$ must have an answer
+# ready for it).
 
 # %%
 print("Player(s0) =", game.get_current_player(s0), "-> Max's turn, an OR node")
 after_x = game.apply_move(s0, 4)
+print(game.render(after_x))
 print(
     "Player(Result(s0, 4)) =",
     game.get_current_player(after_x),
@@ -298,27 +306,12 @@ print(
 
 # %% [markdown]
 # **Key observations**:
-# - `get_current_player()` alone tells `OR` nodes from `AND` nodes: `Max`
-#   layers alternate with `Min` layers at every ply, for both `TicTacToe`
-#   and `ConnectFour`
-# - A solution to an AND-OR tree is a **subtree**, not a single path: one
-#   kept branch at every `OR` node, every branch kept at every `AND` node,
-#   since $Max$ must survive any reply $Min$ chooses
+# - `get_current_player()` alone tells `OR` nodes from `AND` nodes
+#     - `Max` layers alternate with `Min` layers at every ply, for both
+#     `TicTacToe` and `ConnectFour`
+# - A solution to an AND-OR tree is a **subtree**, not a single path:
+#     - one kept branch at every `OR` node
+#     - every branch kept at every `AND` node, since $Max$ must survive any reply $Min$ chooses
 # - This is exactly the shape the next notebook's search algorithms
 #   (starting with Minimax) compute over: `Actions`, `Result`, `IsTerminal`,
 #   and `Utility` are unchanged, only the algorithm walking the tree differs
-
-# %% [markdown]
-# ## Summary: The Mental Model
-#
-# - `Game` is the only contract any search algorithm in this project depends
-#   on: any class implementing its 6 methods can be searched, as shown by
-#   `TicTacToe` (Part 2) and `ConnectFour` (Part 3) sharing every line of
-#   game-rules code
-# - The 5 formal components of a game ($s_0$, $Actions$, $Result$,
-#   $IsTerminal$, $Utility$) map one-to-one onto `Game`'s methods: no search
-#   algorithm needs anything beyond this interface
-# - The reachable-state tree is an AND-OR tree: $Max$'s turns are `OR`
-#   nodes (the agent chooses), $Min$'s turns are `AND` nodes (every reply
-#   must be survived), and `get_current_player()` is what tells the two
-#   apart at every ply

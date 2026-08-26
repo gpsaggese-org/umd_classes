@@ -3,11 +3,10 @@
 project.
 
 Any two-player, zero-sum, perfect-information game that implements this
-6-method contract can be searched by:
+6-method contract can be searched (without touching search implementation) by:
 - `search_algorithms_utils.py` (minimax, alpha-beta pruning, depth-limited
   search)
 - `mcts_utils.py` (flat Monte Carlo, MCTS) 
-without touching search implementation
 
 Import as:
 
@@ -34,10 +33,11 @@ class Game(abc.ABC):
     Game-agnostic interface for a two-player, zero-sum, perfect-information
     game usable by any search algorithm in this project.
 
-    A concrete game (e.g., `TicTacToe`, `ConnectFour`) implements these six
-    methods; the search code only depends on this interface, so a new game
-    can be plugged in without touching the search logic. Players are
-    represented as `1` and `-1`; a draw is `0`.
+    - A concrete game (e.g., `TicTacToe`, `ConnectFour`) implements these six
+      methods
+        - The search code only depends on this interface, so a new game can be
+          plugged in without touching the search logic
+    - Players are represented as `1` and `-1`; a draw is `0`
     """
 
     @abc.abstractmethod
