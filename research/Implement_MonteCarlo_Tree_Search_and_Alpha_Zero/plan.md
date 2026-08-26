@@ -43,6 +43,19 @@ the functions
   `search_algorithms_API_utils.py`); added `ConnectThree` to
   `game_examples.py` for the connect-3 example
 
+## [ ] Step 3
+
+- In build_tree_graph is it possible to show also the state of the board calling
+  render?
+
+- In cell4_2_build_minimax_step_widget remove the histogram and put the Comments
+  on the side of the graph
+
+- In part 3 of search_algorithms.02.API.ipynb build_tree_graph there should be
+  only what is needed to explain minimax (only blue and green nodes)
+  - Then there is a part explaining alpha-beta search (gray nodes)
+  - Then there is a part explaining a depth limited (amber nodes)
+
 ## 
 
 The search algorithms should not refer to mcts since mcts comes later,

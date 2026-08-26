@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.5
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -31,8 +31,8 @@
 #
 # Parts 2-4 use `TicTacToe`, kept small so the tree diagrams stay readable.
 #
-# Part 5 swaps in `ConnectThree` -- `ConnectFour`'s gravity-drop rule on a
-# 3x3, 3-in-a-row board -- to show the same widget generalizes to a second
+# Part 5 swaps in `ConnectThree` (i.e., `ConnectFour`'s gravity-drop rule on a
+# 3x3, 3-in-a-row board) to show the same widget generalizes to a second
 # game without a bigger tree than `TicTacToe` already has.
 #
 # See `README.md` for a description of every file in this directory.
@@ -70,17 +70,12 @@ except ImportError:
 #
 # ## What problem does `search_algorithms_utils.py` solve?
 #
-# - Search an AND-OR game tree (see `game.01.API.ipynb` Part 4) exactly
-#   (minimax, alpha-beta pruning) or approximately (depth-limited search),
-#   and materialize the tree each algorithm actually visits so it can be
-#   inspected and drawn, not just the single move it returns
-# - Stay game-agnostic: every algorithm only calls the `Game` methods (see
-#   `game.01.API.ipynb`), so a new game plugs in without touching
-#   `search_algorithms_utils.py`
-# - Give `mcts_utils.py`'s flat Monte Carlo (a depth-one tree) and MCTS's
-#   `search_algorithms.02.example.ipynb` comparison a common node type
-#   (`SearchNode`) and a common renderer (`build_tree_graph()`) to share,
-#   rather than each algorithm inventing its own
+# - Search an AND-OR game tree exactly (minimax, alpha-beta pruning) or
+# approximately (depth-limited search), and materialize the tree each algorithm
+# actually visits so it can be inspected and drawn, not just the single move it
+# returns
+# - Stay game-agnostic: every algorithm only calls the `Game` methods, so a new
+# game plugs in without touching `search_algorithms_utils.py`
 #
 # ## Mental model
 #
@@ -95,19 +90,16 @@ except ImportError:
 # | `build_tree_graph(root)` | Visualize a tree | Graphviz diagram, `DEFAULT_RENDER_DEPTH` levels by default |
 #
 # ## Cell 1.1: Construct the game to search
-#
-# See `game.01.API.ipynb` Part 2 for the full `Game` API tour; here we only
-# need a `TicTacToe` instance and the two fixed positions
-# `search_algorithms.02.example.ipynb` also uses, so both notebooks talk
-# about the exact same trees.
 
 # %%
 game = rimtsaazge.TicTacToe()
 demo_state = (1, 1, 0, -1, -1, 0, 0, 0, 0)
-fork_state = (1, -1, 0, 0, 0, 0, 0, 0, 0)
 print("demo_state:")
 print(game.render(demo_state))
-print("\nfork_state:")
+
+# %%
+fork_state = (1, -1, 0, 0, 0, 0, 0, 0, 0)
+print("fork_state:")
 print(game.render(fork_state))
 
 # %% [markdown]
@@ -132,17 +124,27 @@ print(f"Type: {type(root)}")
 print("state:", root.state)
 print("value (nothing computed yet):", root.value)
 print("children:", root.children)
-print("pruned:", root.pruned, " is_heuristic:", root.is_heuristic)
+print("pruned:", root.pruned)
+print(" is_heuristic:", root.is_heuristic)
 
 # %% [markdown]
 # ## Cell 2.2: Growing a tree by hand with `add_child()`
 #
-# A real search algorithm calls `add_child()` once per legal move, then
-# assigns `.value` once that child's own subtree is done; here we do the
-# same thing by hand, for the single move "play cell 2 and win".
+# A real search algorithm
+# - calls `add_child()` once per legal move
+# - then assigns `.value` once that child's own subtree is done
+#
+# Here we do the same thing by hand, for the single move "play cell 2 and win".
+
+# %%
+print("demo_state:")
+print(game.render(demo_state))
 
 # %%
 winning_state = game.apply_move(demo_state, 2)
+print("winning_state:")
+print(game.render(winning_state))
+
 child = root.add_child(move=2, state=winning_state)
 child.value = float(game.get_winner(winning_state))
 root.value = child.value
@@ -152,9 +154,9 @@ print(child)
 # %% [markdown]
 # ## Cell 2.3: `node_count` and `num_explored_nodes`
 #
-# Both properties recurse over `.children`; they only disagree once some
-# node is `.pruned` (alpha-beta), which excludes it -- and everything
-# under it -- from `num_explored_nodes` but not from `node_count`.
+# - Both properties recurse over `.children`
+# - They only disagree once some node is `.pruned` (alpha-beta), which excludes it
+#   (and everything under it) from `num_explored_nodes` but not from `node_count`.
 
 # %%
 print("node_count (root + 1 child):", root.node_count)
@@ -171,11 +173,10 @@ print(
 
 # %% [markdown]
 # **Key observations**:
-# - `SearchNode` itself never runs a search: `build_minimax_tree()`,
-#   `build_alpha_beta_tree()`, and `build_depth_limited_tree()` (Parts 3-5
-#   of `search_algorithms.02.example.ipynb`) are the functions that call
-#   `add_child()` / set `.value` on our behalf, in the order Part 4 below
-#   replays
+# - `SearchNode` itself never runs a search
+#     - `build_minimax_tree()`, `build_alpha_beta_tree()`, and
+#     `build_depth_limited_tree()` are the functions that call `add_child()` / set
+#     `.value` on our behalf
 # - `pruned` and `is_heuristic` are the two flags that distinguish an
 #   *exact* backed-up value from a value that is missing (pruned) or only
 #   approximate (a depth-limited cut)
@@ -183,16 +184,20 @@ print(
 # %% [markdown]
 # # Part 3: `build_tree_graph()`: coloring a search tree
 #
-# **Mental model**: `build_tree_graph()` reads only 5 fields off each node
-# (`.value`, `.move`, `.pruned`, `.is_heuristic`, `.children`) and turns
-# them into one of 4 colors -- it never re-runs a search, so any tree
-# assembled by hand, like the one below, renders exactly like a real one.
+# **Mental model**: `build_tree_graph()`
+# - Reads only 5 fields off each node (`.value`, `.move`, `.pruned`, `.is_heuristic`, `.children`)
+# - Turns them into one of 4 colors
+# - Never re-runs a search, so any tree assembled by hand, like the one below,
+# renders exactly like a real one.
 #
 # ## Cell 3.1: A hand-built tree covering every color
 #
 # One root with 3 children, each one demonstrating a different way a node
-# can end up: an ordinary internal node, an exact terminal leaf, a
-# depth-limited cut, and a node alpha-beta pruned before ever exploring it.
+# can end up:
+# - An ordinary internal node
+# - An exact terminal leaf
+# - A depth-limited cut
+# - A node alpha-beta pruned before ever exploring it.
 
 # %%
 fake_root = rimtsaazsau.SearchNode(demo_state)
@@ -228,17 +233,19 @@ display(rimtsaazsau.build_tree_graph(fake_root, max_depth=2))
 
 # %% [markdown]
 # **Key observations**:
-# - blue (`internal_child`): has children and an exact `.value` -- an
-#   ordinary explored internal node
-# - green (`terminal_grandchild`): an exact `.value` and no children --
-#   a terminal state, `get_winner()`'s outcome
-# - amber (`heuristic_child`): `.is_heuristic = True` -- a depth-limited
-#   cut, `.value` is a heuristic estimate, not an exact outcome
-# - grey, dashed (`pruned_leaf`): `.pruned = True` -- alpha-beta recorded
-#   the move but never explored it, so it has no `.value` and no children
+#
+# - Nodes
+#     - blue (`internal_child`): has children and an exact `.value` -- an
+#       ordinary explored internal node
+#     - green (`terminal_grandchild`): an exact `.value` and no children --
+#       a terminal state, `get_winner()`'s outcome
+#     - amber (`heuristic_child`): `.is_heuristic = True` -- a depth-limited
+#       cut, `.value` is a heuristic estimate, not an exact outcome
+#     - grey, dashed (`pruned_leaf`): `.pruned = True` -- alpha-beta recorded
+#       the move but never explored it, so it has no `.value` and no children
 # - `build_tree_graph()` checks `.pruned` first, then `.is_heuristic`,
-#   then whether `.children` is empty -- see the order in
-#   `search_algorithms_utils._node_style()`
+#   then whether `.children` is empty (see the order in
+#   `search_algorithms_utils._node_style()`)
 # - `max_depth` (here `2`) caps how many levels below the root render
 #   before an "... N more" placeholder takes over; `DEFAULT_RENDER_DEPTH`
 #   is the value used when a caller does not override it
@@ -247,19 +254,21 @@ display(rimtsaazsau.build_tree_graph(fake_root, max_depth=2))
 # # Part 4: Building the minimax tree step by step
 #
 # **Mental model**: `build_minimax_tree()` calls a private recursive
-# `_minimax()` that (1) creates a child via `add_child()`, (2) recurses
-# into it, and only after its entire subtree is done (3) backs up its
-# `.value` -- then moves to the next sibling. The widget below replays
-# that exact order, one event at a time, on the *real* tree
-# `build_minimax_tree()` builds, instead of running a separate copy of the
+# `_minimax()` that
+# - (1) creates a child via `add_child()`
+# - (2) recurses into it, and only after its entire subtree is done
+# - (3) backs up its `.value`, then moves to the next sibling.
+#
+# - The widget below replays that exact order, one event at a time, on the *real*
+# tree `build_minimax_tree()` builds, instead of running a separate copy of the
 # algorithm.
 #
 # ## Cell 4.1: `demo_state` and `fork_state`, side by side
 #
-# Both positions are already familiar from `search_algorithms.02.example.ipynb`
-# Part 3: `demo_state` has an immediate winning move, `fork_state` needs
-# looking 3 plies ahead to see the forced win. Switching between them below
-# switches which tree is being grown.
+# - `demo_state` has an immediate winning move
+# - `fork_state` needs looking 3 plies ahead to see the forced win
+#
+# Switching between them below switches which tree is being grown.
 
 # %%
 print("demo_state:")
@@ -327,30 +336,3 @@ print("legal moves:", connect_three.get_legal_moves(ct_demo_state))
 
 # %%
 rimtsaazsaau.cell5_1_build_connect_three_step_widget(connect_three, ct_demo_state)
-
-# %% [markdown]
-# **Key observations**:
-# - The widget code did not change at all between Parts 4 and 5 -- only
-#   the `Game` and the state passed in did -- exactly `game.01.API.ipynb`
-#   Part 4's point about the `Game` interface, one level up
-# - Column 0 (the winning move) is where the root's best-valued child ends
-#   up once the final event backs up the root's value
-
-# %% [markdown]
-# ## Summary: The Mental Model
-#
-# - `SearchNode` is a plain, game-agnostic tree node: `state`, `children`,
-#   a backed-up `value`, and two flags (`pruned`, `is_heuristic`) that
-#   record *how* that value came to be, rather than a fresh node type per
-#   algorithm
-# - `build_tree_graph()` is a pure function of those 5 fields: it colors
-#   blue/green/amber/grey-dashed from `.pruned`, `.is_heuristic`, and
-#   whether `.children` is empty, never by re-running a search
-# - A search algorithm like `_minimax()` is exactly (create child, recurse,
-#   back up value) repeated once per node, in a single depth-first pass --
-#   the step-by-step widget does not reimplement that, it replays the real
-#   tree's own construction order one event at a time
-# - The same `SearchNode` / `build_tree_graph()` machinery this notebook
-#   covers is what lets `mcts_utils.build_flat_mc_tree()` (Part 6 of
-#   `search_algorithms.02.example.ipynb`) reuse a search-tree renderer
-#   instead of building its own

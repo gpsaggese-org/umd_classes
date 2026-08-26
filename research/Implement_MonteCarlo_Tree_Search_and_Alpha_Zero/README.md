@@ -65,10 +65,15 @@ and a leading digit is not a legal module name.
 ### 01: Frame the game
 
 1. `game.py`
-   // TODO(ai_gp): Comment
+   - `Game`: the abstract interface every game implements (`get_initial_state()`,
+     `get_legal_moves()`, `apply_move()`, `is_terminal()`, `get_winner()`,
+     `get_current_player()`, `render()`)
+   - Players are `1` and `-1`; a draw is `0`
 
 2. `game_examples.py`
-   // TODO(ai_gp): Comment
+   - `TicTacToe`, `ConnectFour`, `ConnectThree`: concrete `Game` implementations
+   - `ConnectThree` is `ConnectFour`'s gravity-drop rule on a 3x3 board,
+     small enough to search exhaustively
 
 3. `game.01.API.ipynb`: explore the `Game` interface
    - Backed by `game_API_utils.py`
@@ -81,7 +86,10 @@ and a leading digit is not a legal module name.
 ### 02: Search it exactly and approximately
 
 1. `search_algorithms_utils.py`
-   // TODO(ai_gp): Comment
+   - Classical searches: minimax, alpha-beta pruning, and depth-limited search
+   - `SearchNode` and `build_tree_graph()`: the search-tree node type and
+     Graphviz renderer that flat Monte Carlo and MCTS reuse rather than
+     duplicate
 
 2. `search_algorithms.02.API.ipynb`: the `SearchNode` / `build_tree_graph()`
    API, and how a search actually builds a tree
@@ -104,7 +112,10 @@ and a leading digit is not a legal module name.
 ### 03: Search it by sampling
 
 1. `mcts_utils.py`
-   // TODO(ai_gp): Comment
+   - Game-agnostic MCTS engine: `MCTSNode`, `run_mcts()` (selection,
+     expansion, rollout, backpropagation)
+   - Flat Monte Carlo (`build_flat_mc_tree()`): MCTS with a tree of depth
+     one, sharing `random_rollout()` with MCTS
 
 2. `mcts.03.API.ipynb`: the MCTS engine
    - Part 1: Library overview and mental model
