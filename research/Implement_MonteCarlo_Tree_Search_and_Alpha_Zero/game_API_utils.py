@@ -1,5 +1,5 @@
 """
-Notebook utilities for `game.API.ipynb`.
+Notebook utilities for `game.01.API.ipynb`.
 
 See `game.py` for the `Game` interface, `game_examples.py` for the concrete
 `TicTacToe` and `ConnectFour` implementations these widgets operate on, and
@@ -144,7 +144,7 @@ def plot_connect_four_board(
 
     A picture reads a Connect Four position far faster than the text grid
     `ConnectFour.render()` produces, which is why every Connect Four cell in
-    `game.API.ipynb` and `mcts.API.ipynb` shows the board this way.
+    `game.01.API.ipynb` and `mcts.03.API.ipynb` shows the board this way.
 
     :param state: length-42 Connect Four state (see
         `game_examples.ConnectFour`), row-major with row `0` at the top

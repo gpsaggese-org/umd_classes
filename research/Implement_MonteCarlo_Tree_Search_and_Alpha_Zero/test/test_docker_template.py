@@ -33,40 +33,51 @@ class Test_docker(hdoctest.DockerTestCase):
     @pytest.mark.slow
     def test1(self) -> None:
         """
-        Test that mcts.example.ipynb runs without error inside Docker.
+        Test that mcts.03.example.ipynb runs without error inside Docker.
         """
         # Prepare inputs.
-        notebook_name = "mcts.example.ipynb"
+        notebook_name = "mcts.03.example.ipynb"
         # Run test.
         self.helper(notebook_name)
 
     @pytest.mark.slow
     def test2(self) -> None:
         """
-        Test that mcts.API.ipynb runs without error inside Docker.
+        Test that mcts.03.API.ipynb runs without error inside Docker.
         """
         # Prepare inputs.
-        notebook_name = "mcts.API.ipynb"
+        notebook_name = "mcts.03.API.ipynb"
         # Run test.
         self.helper(notebook_name)
 
     @pytest.mark.slow
     def test3(self) -> None:
         """
-        Test that search_algorithms.example.ipynb runs without error inside
-        Docker.
+        Test that search_algorithms.02.example.ipynb runs without error
+        inside Docker.
         """
         # Prepare inputs.
-        notebook_name = "search_algorithms.example.ipynb"
+        notebook_name = "search_algorithms.02.example.ipynb"
         # Run test.
         self.helper(notebook_name)
 
     @pytest.mark.slow
     def test4(self) -> None:
         """
-        Test that game.API.ipynb runs without error inside Docker.
+        Test that game.01.API.ipynb runs without error inside Docker.
         """
         # Prepare inputs.
-        notebook_name = "game.API.ipynb"
+        notebook_name = "game.01.API.ipynb"
+        # Run test.
+        self.helper(notebook_name)
+
+    @pytest.mark.slow
+    def test5(self) -> None:
+        """
+        Test that search_algorithms.02.API.ipynb runs without error inside
+        Docker.
+        """
+        # Prepare inputs.
+        notebook_name = "search_algorithms.02.API.ipynb"
         # Run test.
         self.helper(notebook_name)

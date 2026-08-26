@@ -1,10 +1,12 @@
 """
-Classical adversarial search: minimax, alpha-beta pruning, depth-limited
-search, and flat Monte Carlo.
+Classical adversarial search: minimax, alpha-beta pruning, and depth-limited
+search.
 
-All four algorithms plug into the same game-agnostic `Game` interface that
-`mcts_utils.py`'s MCTS engine uses (see `game.Game` and `game_examples.py`
-for concrete games).
+All three algorithms plug into the same game-agnostic `Game` interface (see
+`game.py` and `game_examples.py` for concrete games). MCTS and flat Monte
+Carlo (`mcts_utils.py`) build on top of this module -- reusing `SearchNode`
+and `build_tree_graph()` -- rather than the other way around, since this
+module is the one taught first.
 
 See `README.md` for a description of every file in this directory.
 
@@ -13,16 +15,14 @@ Import as:
 import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.search_algorithms_utils as rimtsaazsau
 """
 
-# Value convention: unlike `MCTSNode.value_sum` (which is stored from the
-# perspective of the player who moved into that node, flipping sign at every
-# level during backpropagation), `SearchNode.value` below is always the
-# classical minimax convention: the exact or estimated outcome from player
-# `1` (X)'s perspective, in `{-1, 0, 1}` (or, at a depth-limited cut, a
-# heuristic estimate in `[-1, 1]`). A node alternates between taking the `max`
-# (player `1` to move) and the `min` (player `-1` to move) of its children's
-# values, which is equivalent to sign-flipping but needs no extra bookkeeping
-# since `Game.get_current_player()` already reports whose turn it is.
-
+# Value convention:
+# - `SearchNode.value` below is always the classical minimax convention: the
+#   exact or estimated outcome from player `1` (X)'s perspective, in `{-1, 0,
+#   1}` (or, at a depth-limited cut, a heuristic estimate). A node alternates
+#   between taking the `max` (player `1` to move) and the `min` (player `-1` to
+#   move) of its children's values, which is equivalent to sign-flipping but
+#   needs no extra bookkeeping since `Game.get_current_player()` already
+#   reports whose turn it is.
 
 import logging
 import math
@@ -33,9 +33,42 @@ if TYPE_CHECKING:
 
 import helpers.hdbg as hdbg
 import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.game as rimtsaazg
-import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.mcts_utils as rimtsaazmu
 
 _LOG = logging.getLogger(__name__)
+
+
+# #############################################################################
+# Shared helpers
+# #############################################################################
+
+
+def pick_best_move(game: rimtsaazg.Game, root: "SearchNode") -> rimtsaazg.Move:
+    """
+    Pick the move of the root child with the best value for the player to
+    move at `root.state`.
+
+    Public (unlike the rest of this section's `build_*_tree()` internals)
+    since it is also how a caller reads a move back off a tree it built
+    directly, e.g., to label a `build_tree_graph()` diagram without paying
+    for the search twice by also calling the matching `run_*()`.
+
+    Pruned children (alpha-beta) are excluded: they were proven worse than
+    an already-explored sibling, so they were never assigned a `.value`.
+
+    :param game: game-agnostic rules implementation
+    :param root: root node with at least one explored child
+    :return: `.move` of the best child
+    """
+    children = [child for child in root.children if not child.pruned]
+    hdbg.dassert(children, "No explored child to pick a move from")
+    current_player = game.get_current_player(root.state)
+    if current_player == 1:
+        best_child = max(children, key=lambda child: cast(float, child.value))
+    else:
+        best_child = min(children, key=lambda child: cast(float, child.value))
+    return cast(rimtsaazg.Move, best_child.move)
+
+
 
 # #############################################################################
 # Constants
@@ -46,10 +79,6 @@ _LOG = logging.getLogger(__name__)
 # Expansion" / "Depth-limited search" use a small cut so the evaluation
 # function, not exhaustive search, does most of the work).
 DEFAULT_MAX_DEPTH = 2
-
-# Default number of random playouts per root action for flat Monte Carlo
-# (Lesson09.8: "For each action a at s0: Run N random playouts").
-DEFAULT_NUM_ROLLOUTS = 200
 
 # Default number of tree levels rendered by `build_tree_graph()`.
 DEFAULT_RENDER_DEPTH = 2
@@ -64,11 +93,9 @@ class SearchNode:
     """
     A node of a fully-materialized search tree.
 
-    Unlike `mcts_utils.MCTSNode` (which grows one node per simulation),
-    minimax, alpha-beta, and depth-limited search each visit (or, for a
-    pruned branch, at least record) every node of the tree they build in a
-    single recursive pass, so this node stores the backed-up `value`
-    directly rather than a running `visit_count` / `value_sum`.
+    minimax, alpha-beta, and depth-limited search each visit (or, for a pruned
+    branch, at least record) every node of the tree they build in a single
+    recursive pass, so this node stores the backed-up `value` directly.
     """
 
     def __init__(
@@ -93,8 +120,9 @@ class SearchNode:
         self.children: List["SearchNode"] = []
         # Backed-up value: exact in `{-1, 0, 1}` for minimax/alpha-beta, a
         # heuristic estimate in `[-1, 1]` at a depth-limited cut, or
-        # `Q_hat(state, move)` for a flat Monte Carlo child. `None` until
-        # computed, and stays `None` for a pruned node (see below).
+        # `Q_hat(state, move)` for a flat Monte Carlo child.
+        # `None` until computed, and stays `None` for a pruned node (see
+        # below).
         self.value: Optional[float] = None
         # True once alpha-beta proves this branch cannot affect the result;
         # a pruned node is recorded (so the diagram can show what was
@@ -121,11 +149,10 @@ class SearchNode:
         """
         Count this node and every descendant actually evaluated.
 
-        Excludes pruned nodes (and, transitively, everything under them,
-        which is empty anyway since a pruned node is never expanded). For
-        minimax and depth-limited search, where nothing is ever pruned,
-        this equals `node_count`; for alpha-beta the gap between the two is
-        the whole point (Lesson09.8: alpha-beta "can drop to `O(b^{d/2})`").
+        Excludes pruned nodes (and, transitively, everything under them).
+        - For minimax and depth-limited search, where nothing is ever pruned,
+          this equals `node_count`
+        - For alpha-beta the gap between the two is exactly the optimization.
         """
         if self.pruned:
             count = 0
@@ -153,8 +180,10 @@ class SearchNode:
         """
         Return a human-readable summary of the node for debugging/logging.
 
-        :return: node summary, e.g., "SearchNode(move=3, value=1.00,
-            children=2, pruned=False)"
+        :return: node summary, e.g.,
+            ```
+            SearchNode(move=3, value=1.00, children=2, pruned=False)
+            ```
         """
         txt = "SearchNode(move=%s, value=%s, children=%d, pruned=%s)" % (
             self.move,
@@ -174,14 +203,13 @@ def _minimax(node: SearchNode, game: rimtsaazg.Game) -> float:
     """
     Recursively back up the exact minimax value of `node.state`.
 
-    Lesson09.8: "minimax computes the value of a state by backing terminal
-    values up the tree"; every legal move is explored, so the cost is
-    `O(b^d)`.
+    Implements the minimax equation.
 
     :param node: node to expand and score, `.children` populated in place
     :param game: game-agnostic rules implementation
     :return: minimax value of `node.state` from X's perspective
     """
+    # TODO(ai_gp): Add comments
     state = node.state
     if game.is_terminal(state):
         value = float(game.get_winner(state))
@@ -233,7 +261,8 @@ def make_minimax_player() -> Callable[[rimtsaazg.Game, rimtsaazg.State], rimtsaa
     """
     Build a `(game, state) -> move` player function backed by minimax.
 
-    :return: player function suitable for `mcts_utils.play_game()`
+    :return: `(game, state) -> move` player function usable in a two-player
+        game loop
     """
 
     def player(game: rimtsaazg.Game, state: rimtsaazg.State) -> rimtsaazg.Move:
@@ -255,11 +284,11 @@ def _alpha_beta(
     Recursively back up the minimax value of `node.state`, skipping any
     remaining sibling once its value can no longer change the result.
 
-    Lesson09.8: `alpha` is the best value the maximizing player can already
-    guarantee, `beta` the best value the minimizing player can already
-    guarantee; once `alpha >= beta`, the rest of the current node's
-    children are "proven worse than a move already found" and are recorded
-    as pruned rather than explored.
+    - `alpha` is the best value the maximizing player can already guarantee
+    - `beta` the best value the minimizing player can already guarantee
+    - once `alpha >= beta`, the rest of the current node's children are "proven
+      worse than a move already found" and are recorded as pruned rather than
+      explored.
 
     :param node: node to expand and score, `.children` populated in place
     :param game: game-agnostic rules implementation
@@ -269,6 +298,7 @@ def _alpha_beta(
         the path to `node`
     :return: minimax value of `node.state` from X's perspective
     """
+    # TODO(ai_gp): Add comments.
     state = node.state
     if game.is_terminal(state):
         value = float(game.get_winner(state))
@@ -345,7 +375,8 @@ def make_alpha_beta_player() -> Callable[[rimtsaazg.Game, rimtsaazg.State], rimt
     Build a `(game, state) -> move` player function backed by alpha-beta
     pruning.
 
-    :return: player function suitable for `mcts_utils.play_game()`
+    :return: `(game, state) -> move` player function usable in a two-player
+        game loop
     """
 
     def player(game: rimtsaazg.Game, state: rimtsaazg.State) -> rimtsaazg.Move:
@@ -380,6 +411,7 @@ def _depth_limited(
         non-terminal state at the cut depth
     :return: exact or heuristic value of `node.state` from X's perspective
     """
+    # TODO(ai_gp): Add comments.
     state = node.state
     if game.is_terminal(state):
         value = float(game.get_winner(state))
@@ -467,7 +499,8 @@ def make_depth_limited_player(
     :param evaluate_fn: `state -> heuristic score` used at the cut depth
     :param max_depth: number of plies to search before cutting
         - Default: `DEFAULT_MAX_DEPTH`
-    :return: player function suitable for `mcts_utils.play_game()`
+    :return: `(game, state) -> move` player function usable in a two-player
+        game loop
     """
 
     def player(game: rimtsaazg.Game, state: rimtsaazg.State) -> rimtsaazg.Move:
@@ -475,153 +508,6 @@ def make_depth_limited_player(
         return move
 
     return player
-
-
-# #############################################################################
-# Flat Monte Carlo
-# #############################################################################
-
-
-def _estimate_action_value(
-    game: rimtsaazg.Game,
-    state: rimtsaazg.State,
-    move: rimtsaazg.Move,
-    *,
-    num_rollouts: int,
-) -> float:
-    """
-    Estimate `Q_hat(state, move)` as the mean outcome, from the mover's
-    perspective, over `num_rollouts` random playouts through `move`.
-
-    Lesson09.8: "For each action a at s0: Run N random playouts to a
-    terminal state, estimate Q_hat(s0, a) as the mean terminal outcome."
-    Reuses `mcts_utils.random_rollout()`, MCTS's own default policy.
-
-    :param game: game-agnostic rules implementation
-    :param state: state the action is taken from
-    :param move: action to evaluate
-    :param num_rollouts: number of random playouts to average over
-    :return: mean outcome in `[-1, 1]` from the mover's perspective
-    """
-    mover = game.get_current_player(state)
-    total = 0.0
-    for _ in range(num_rollouts):
-        rollout_state = game.apply_move(state, move)
-        winner = rimtsaazmu.random_rollout(game, rollout_state)
-        if winner == mover:
-            total += 1.0
-        elif winner != 0:
-            total -= 1.0
-    q_hat = total / num_rollouts
-    return q_hat
-
-
-def build_flat_mc_tree(
-    game: rimtsaazg.Game,
-    state: rimtsaazg.State,
-    *,
-    num_rollouts: int = DEFAULT_NUM_ROLLOUTS,
-) -> SearchNode:
-    """
-    Score every legal move at `state` by flat Monte Carlo and return the
-    resulting depth-one search tree.
-
-    Lesson09.8: "Flat Monte Carlo is exactly MCTS with a tree of depth
-    one": one child per root action, no further expansion.
-
-    :param game: game-agnostic rules implementation
-    :param state: state to search from, must not be terminal
-    :param num_rollouts: number of random playouts averaged per action
-        - Default: `DEFAULT_NUM_ROLLOUTS`
-    :return: root node with one scored child per legal move
-    """
-    hdbg.dassert(
-        not game.is_terminal(state), "Cannot search from a terminal state"
-    )
-    root = SearchNode(state)
-    child_values = []
-    for move in game.get_legal_moves(state):
-        child_state = game.apply_move(state, move)
-        child = root.add_child(move, child_state)
-        value = _estimate_action_value(
-            game, state, move, num_rollouts=num_rollouts
-        )
-        child.value = value
-        child_values.append(value)
-    current_player = game.get_current_player(state)
-    root.value = max(child_values) if current_player == 1 else min(child_values)
-    return root
-
-
-def run_flat_mc(
-    game: rimtsaazg.Game,
-    state: rimtsaazg.State,
-    *,
-    num_rollouts: int = DEFAULT_NUM_ROLLOUTS,
-) -> rimtsaazg.Move:
-    """
-    Run flat Monte Carlo from `state` and return `argmax_a Q_hat(s0, a)`.
-
-    :param game: game-agnostic rules implementation
-    :param state: state to search from, must not be terminal
-    :param num_rollouts: number of random playouts averaged per action
-        - Default: `DEFAULT_NUM_ROLLOUTS`
-    :return: best-estimated move for the player to move at `state`
-    """
-    root = build_flat_mc_tree(game, state, num_rollouts=num_rollouts)
-    best_move = pick_best_move(game, root)
-    return best_move
-
-
-def make_flat_mc_player(
-    *, num_rollouts: int = DEFAULT_NUM_ROLLOUTS
-) -> Callable[[rimtsaazg.Game, rimtsaazg.State], rimtsaazg.Move]:
-    """
-    Build a `(game, state) -> move` player function backed by flat Monte
-    Carlo.
-
-    :param num_rollouts: number of random playouts averaged per action
-        - Default: `DEFAULT_NUM_ROLLOUTS`
-    :return: player function suitable for `mcts_utils.play_game()`
-    """
-
-    def player(game: rimtsaazg.Game, state: rimtsaazg.State) -> rimtsaazg.Move:
-        move = run_flat_mc(game, state, num_rollouts=num_rollouts)
-        return move
-
-    return player
-
-
-# #############################################################################
-# Shared helpers
-# #############################################################################
-
-
-def pick_best_move(game: rimtsaazg.Game, root: SearchNode) -> rimtsaazg.Move:
-    """
-    Pick the move of the root child with the best value for the player to
-    move at `root.state`.
-
-    Public (unlike the rest of this section's `build_*_tree()` internals)
-    since it is also how a caller reads a move back off a tree it built
-    directly, e.g., to label a `build_tree_graph()` diagram without paying
-    for the search twice by also calling the matching `run_*()`.
-
-    Pruned children (alpha-beta) are excluded: they were proven worse than
-    an already-explored sibling, so they were never assigned a `.value`.
-
-    :param game: game-agnostic rules implementation
-    :param root: root node with at least one explored child
-    :return: `.move` of the best child
-    """
-    children = [child for child in root.children if not child.pruned]
-    hdbg.dassert(children, "No explored child to pick a move from")
-    current_player = game.get_current_player(root.state)
-    if current_player == 1:
-        best_child = max(children, key=lambda child: cast(float, child.value))
-    else:
-        best_child = min(children, key=lambda child: cast(float, child.value))
-    return cast(rimtsaazg.Move, best_child.move)
 
 
 # #############################################################################
@@ -727,9 +613,7 @@ def build_tree_graph(
     Shared by minimax, alpha-beta, and depth-limited search (flat Monte
     Carlo's tree is depth one, so `max_depth=1` shows all of it). A search
     tree can have thousands of nodes, so rendering stops at `max_depth` and
-    shows a "... N more" placeholder instead (Lesson09.8: "the shape of the
-    tree is the allocation of the budget" -- the shape is what matters,
-    not every node).
+    shows a "... N more" placeholder instead
 
     Node color/style encodes what happened to it:
     - blue: an explored internal node, labeled with its backed-up value

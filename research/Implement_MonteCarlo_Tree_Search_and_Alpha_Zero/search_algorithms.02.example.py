@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.5
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -21,11 +21,16 @@
 #   hand-built evaluation function
 # - **Flat Monte Carlo**: no evaluation function, each action scored by
 #   averaging random playouts instead
-#   
+#
 # - Each section shows the search tree the algorithm actually builds
-#   - `search_algorithms_utils.py` implements all four against
-#     `mcts_utils.Game`
+#   - `search_algorithms_utils.py` implements minimax, alpha-beta pruning,
+#     and depth-limited search against the `Game` interface (`game.py`)
+#   - flat Monte Carlo (Part 6) reuses `mcts_utils.build_flat_mc_tree()`,
+#     since it is MCTS with a tree of depth one
 #   - `game_examples.py` supplies `TicTacToe` and the evaluation function
+#   - see `search_algorithms.02.API.ipynb` for a guided tour of `SearchNode`
+#     and `build_tree_graph()` themselves before diving into the searches
+#     below
 
 # %% [markdown]
 # ## Imports
@@ -55,14 +60,13 @@ import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.game_examples as
 import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.mcts_utils as rimtsaazmu
 import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.search_algorithms_utils as rimtsaazsau
 
-
 # %% [markdown]
 # # Part 2: The game
 #
-# - Same `TicTacToe` as `mcts.example.ipynb`: legal moves, applying a move,
-# checking for a winner, whose turn it is, and rendering the board
+# - Same `TicTacToe`: legal moves, applying a move, checking for a winner, whose
+# turn it is, and rendering the board
 # - All four algorithms below only call these six methods, so any other `Game`
-# (Connect Four, say) would plug in unchanged.
+# (e.g., Connect Four) would plug in unchanged.
 #
 # ## Cell 2.1: An empty board
 
@@ -73,18 +77,20 @@ print(game.render(game.get_initial_state()))
 # %% [markdown]
 # We reuse two fixed positions throughout this notebook so every algorithm
 # is compared on the same ground:
-# - `demo_state`: the same position as `mcts.example.ipynb` Cell 3.1 -- X
-#   already has two in a row, playing cell 2 wins immediately
-# - `fork_state`: X opens in a corner, O blunders to an edge -- X now has a
-#   forced win by forking two lines at once, but only if the search looks
+# - `demo_state`: X already has two in a row, playing cell 2 wins immediately
+# - `fork_state`:
+#     - X opens in a corner
+#     - O blunders to an edge
+#     - X now has a forced win by forking two lines at once, but only if the search looks
 #   far enough ahead to see it (used in Part 5)
 
 # %%
 demo_state = (1, 1, 0, -1, -1, 0, 0, 0, 0)
-fork_state = (1, -1, 0, 0, 0, 0, 0, 0, 0)
 print("demo_state:")
 print(game.render(demo_state))
-print()
+
+# %%
+fork_state = (1, -1, 0, 0, 0, 0, 0, 0, 0)
 print("fork_state:")
 print(game.render(fork_state))
 
@@ -93,21 +99,22 @@ print(game.render(fork_state))
 #
 # ## Cell 3.1: Minimax finds the winning move
 #
-# - Minimax computes the value of a state by backing terminal
-# values up the tree ... returns the optimal action when the whole tree is
-# searched and both players play optimally.
+# - Minimax
+#     - computes the value of a state by backing terminal values up the tree
+#     - returns the optimal action when the whole tree is searched and both
+#       players play optimally.
 #
 # - `build_minimax_tree()` visits every node reachable from `demo_state`
 #
-# - the diagram below renders the root plus 2 levels, colored by what each node turned out to be (blue:
-# explored internal node; green: explored terminal node
+# - the diagram below renders the root plus 2 levels, colored by what each node
+# turned out to be (blue: explored internal node; green: explored terminal node
+#
+# - see `search_algorithms.02.API.ipynb` Part 4 for a widget that grows this
+#   same tree one node at a time instead of all at once
 
 # %%
 minimax_root = rimtsaazsau.build_minimax_tree(game, demo_state)
 minimax_move = rimtsaazsau.pick_best_move(game, minimax_root)
-print("minimax move:", minimax_move)
-print("minimax root value Q(s0):", minimax_root.value)
-print("nodes explored:", minimax_root.node_count)
 
 display(
     rimtsaazsau.build_tree_graph(
@@ -115,10 +122,15 @@ display(
     )
 )
 
+# %%
+print("minimax move:", minimax_move)
+print("minimax root value Q(s0):", minimax_root.value)
+print("nodes explored:", minimax_root.node_count)
+
 # %% [markdown]
 # **Key observations**:
 # - Minimax finds the same winning move (cell 2) that MCTS found in
-#   `mcts.example.ipynb` Cell 3.1 -- unsurprising, both are searching the
+#   `mcts.03.example.ipynb` Cell 3.1 -- unsurprising, both are searching the
 #   same exact game, MCTS just estimates the same values by sampling
 # - Every one of the `node_count` nodes above was actually visited: Lesson09.8's
 #   "a full minimax search costs `O(b^d)` since it requires the entire
@@ -302,7 +314,7 @@ for max_depth in range(1, 6):
 import random
 
 random.seed(0)
-flat_mc_root = rimtsaazsau.build_flat_mc_tree(game, demo_state, num_rollouts=300)
+flat_mc_root = rimtsaazmu.build_flat_mc_tree(game, demo_state, num_rollouts=300)
 flat_mc_move = rimtsaazsau.pick_best_move(game, flat_mc_root)
 print("flat Monte Carlo move:", flat_mc_move)
 for child in sorted(
@@ -331,7 +343,7 @@ display(
 #
 # ## Cell 7.1: Same position, four families of search
 #
-# One more run of MCTS on `demo_state` (as in `mcts.example.ipynb` Cell
+# One more run of MCTS on `demo_state` (as in `mcts.03.example.ipynb` Cell
 # 3.1) closes the loop: every method below answers the same question --
 # which move is best from `demo_state` -- with a different budget and a
 # different source of information.
@@ -416,7 +428,7 @@ display(comparison)
 # A quick end-to-end check that `make_alpha_beta_player()`,
 # `make_depth_limited_player()`, and `make_flat_mc_player()` are usable
 # with `mcts_utils.play_game()` exactly like `make_mcts_player()` in
-# `mcts.example.ipynb`. Raw minimax is skipped here: unlike alpha-beta, it
+# `mcts.03.example.ipynb`. Raw minimax is skipped here: unlike alpha-beta, it
 # has to fully search the ~550,000-node game tree from the *empty* board on
 # its very first move (Part 4.2), and it would pay that cost again on every
 # later move too -- Lesson09.8's "the cost is still exponential in `d`"
@@ -427,7 +439,7 @@ alpha_beta_player = rimtsaazsau.make_alpha_beta_player()
 depth_limited_player = rimtsaazsau.make_depth_limited_player(
     rimtsaazge.evaluate_tic_tac_toe, max_depth=2
 )
-flat_mc_player = rimtsaazsau.make_flat_mc_player(num_rollouts=100)
+flat_mc_player = rimtsaazmu.make_flat_mc_player(num_rollouts=100)
 
 for name, player in [
     ("alpha-beta", alpha_beta_player),
@@ -441,7 +453,7 @@ for name, player in [
 # **Key observations**:
 # - Every player finishes a legal game and (with correct play against a
 #   uniformly random opponent) never loses, same as MCTS in
-#   `mcts.example.ipynb` Part 4
+#   `mcts.03.example.ipynb` Part 4
 # - Getting a player from any of these algorithms is a one-line
 #   `make_*_player()` call, since all four -- and MCTS -- share the same
 #   `(game, state) -> move` signature `play_game()` expects

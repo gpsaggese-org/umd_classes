@@ -26,7 +26,7 @@
 #
 # The `Game` interface itself (`game.py`) and the two games this notebook
 # searches, `TicTacToe` and `ConnectFour` (`game_examples.py`), are covered
-# in full in `game.API.ipynb`; see that notebook first for the API these
+# in full in `game.01.API.ipynb`; see that notebook first for the API these
 # demos build on.
 #
 # Parts 2-5 use `TicTacToe`, kept small so the tree diagrams stay readable.
@@ -84,14 +84,14 @@ import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.mcts_utils as ri
 # - Balance trying new moves (exploration) against refining promising ones
 #   (exploitation) via the UCT formula
 # - Stay game-agnostic: the search code only calls the `Game` methods (see
-#   `game.API.ipynb`), so a new game plugs in without touching
+#   `game.01.API.ipynb`), so a new game plugs in without touching
 #   `mcts_utils.py`
 #
 # ## Mental model
 #
 # | Object | Description | Type / Comments |
 # |--------|-------------|------------------|
-# | `Game` | Game-rules interface | see `game.API.ipynb` |
+# | `Game` | Game-rules interface | see `game.01.API.ipynb` |
 # | `MCTSNode` | One tree node | tracks `state`, `children`, `visit_count`, `value_sum` |
 # | `build_mcts_tree(game, state)` | Search primitive | returns the built root `MCTSNode` for inspection |
 # | `run_mcts(game, state)` | Search entry point | returns the most-visited `Move` at the root |
@@ -103,7 +103,7 @@ import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.mcts_utils as ri
 #
 # ## Cell 1.1: Construct the game to search
 #
-# See `game.API.ipynb` Part 2 for the full `Game` API tour; here we only
+# See `game.01.API.ipynb` Part 2 for the full `Game` API tour; here we only
 # need a `TicTacToe` instance and its initial state to search from below.
 
 # %%
@@ -258,7 +258,7 @@ rimtsaazmu.plot_win_rate_results(results)
 # same `Game` interface, `run_mcts()`, and `play_game()` work unchanged
 # against `ConnectFour`. What changes is only the board: 42 cells instead
 # of 9, and a move is a column (the disc drops to the lowest empty row:
-# gravity), not a free choice of cell. See `game.API.ipynb` Part 3 for the
+# gravity), not a free choice of cell. See `game.01.API.ipynb` Part 3 for the
 # full `ConnectFour` API tour, including an interactive board.
 #
 # ## Cell 6.1: A tactical position to search from
@@ -334,7 +334,7 @@ rimtsaazmu.plot_win_rate_results(cf_results)
 # ## Summary: The Mental Model
 #
 # - `Game` is the only contract `mcts_utils.py` depends on (see
-#   `game.API.ipynb`): any class implementing its 6 methods can be searched
+#   `game.01.API.ipynb`): any class implementing its 6 methods can be searched
 #   by `run_mcts()`, as shown by `TicTacToe` (Parts 2-5) and `ConnectFour`
 #   (Part 6) sharing every line of search code
 # - MCTS repeats 4 phases per simulation: Selection (descend by UCT),

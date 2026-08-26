@@ -1,5 +1,5 @@
 """
-Notebook utilities for `mcts.API.ipynb`.
+Notebook utilities for `mcts.03.API.ipynb`.
 
 See `mcts_utils.py` for the game-agnostic MCTS engine, `game.py` for the
 `Game` interface, `game_examples.py` for the concrete implementations these

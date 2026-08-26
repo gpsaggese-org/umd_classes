@@ -6,16 +6,21 @@ Zero algorithm for game playing
 - A game-agnostic `Game` interface (`game.py`) is the contract every search
   algorithm below is built against
 
-- Two concrete games (`game_examples.py`) plug into that interface:
+- Three concrete games (`game_examples.py`) plug into that interface:
   - Tic-tac-toe
+  - Connect Three (`ConnectFour`'s gravity-drop rule on a 3x3, 3-in-a-row
+    board, small enough to search exhaustively)
   - Connect Four
 
 - `search_algorithms_utils.py`
-  - Classical searches: minimax, alpha-beta pruning, depth-limited search,
-    and flat Monte Carlo
+  - Classical searches: minimax, alpha-beta pruning, and depth-limited search
+  - `SearchNode` and `build_tree_graph()`: the search-tree node type and Graphviz
+    renderer flat Monte Carlo and MCTS reuse rather than duplicating
 
 - `mcts_utils.py`
   - Game-agnostic MCTS engine: selection, expansion, rollout, backpropagation
+  - Flat Monte Carlo (`build_flat_mc_tree()`): MCTS with a tree of depth one,
+    kept alongside MCTS since both reuse `random_rollout()`
 
 ## Structure of the Dir
 
@@ -25,36 +30,69 @@ Zero algorithm for game playing
 
 ## Description of Files
 
-| File                 | Description                                                | Cluster            |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------ |
-| `game.py`            | `Game` interface (`State`, `Move`, 6 abstract methods)      | Core Engine        |
-| `game_examples.py`   | `TicTacToe` and `ConnectFour` implementations                | Game Rules         |
-| `game_API_utils.py`  | Widget helpers for `game.API.ipynb`                          | Notebook Utilities |
-| `game.API.ipynb`     | API tour of `game.py`; frames both games as an AND-OR tree   | Notebooks |
-| `mcts_API_utils.py`  | Widget and search-tree plotting helpers for `mcts.API.ipynb` | Notebook Utilities |
-| `mcts_utils.py`      | Game-agnostic MCTS engine: `MCTSNode`, `run_mcts()`           | Core Engine        |
-| `mcts.API.ipynb`     | API tour of `mcts_utils.py`                                   | Notebooks          |
-| `mcts.example.ipynb` | Milestone 1: MCTS vs. a random player on tic-tac-toe          | Notebooks          |
-| `search_algorithms_utils.py` | Minimax, alpha-beta, depth-limited search, flat Monte Carlo, and the search-tree renderer | Core Engine |
-| `search_algorithms.example.ipynb` | Classical searches on tic-tac-toe, each with its search tree, compared against MCTS | Notebooks |
+| File                                    | Description                                                                                          | Cluster            |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------ |
+| `game.py`                                | `Game` interface (`State`, `Move`, 6 abstract methods)                                                 | Core Engine        |
+| `game_examples.py`                       | `TicTacToe`, `ConnectFour`, and `ConnectThree` implementations                                         | Game Rules         |
+| `game_API_utils.py`                      | Widget helpers for `game.01.API.ipynb`                                                                 | Notebook Utilities |
+| `game.01.API.ipynb`                      | API tour of `game.py`; frames both games as an AND-OR tree                                             | Notebooks          |
+| `search_algorithms_utils.py`             | Minimax, alpha-beta, depth-limited search, and the search-tree node/renderer (`SearchNode`, `build_tree_graph()`) | Core Engine |
+| `search_algorithms_API_utils.py`         | Widget helpers for `search_algorithms.02.API.ipynb`                                                    | Notebook Utilities |
+| `search_algorithms.02.API.ipynb`         | API tour of `search_algorithms_utils.py`: `SearchNode`, `build_tree_graph()`, and a widget that grows a minimax tree step by step | Notebooks |
+| `search_algorithms.02.example.ipynb`     | Classical searches on tic-tac-toe, each with its search tree, compared against MCTS                    | Notebooks          |
+| `mcts_API_utils.py`                      | Widget and search-tree plotting helpers for `mcts.03.API.ipynb`                                        | Notebook Utilities |
+| `mcts_utils.py`                          | Game-agnostic MCTS engine (`MCTSNode`, `run_mcts()`) and flat Monte Carlo (`build_flat_mc_tree()`)     | Core Engine        |
+| `mcts.03.API.ipynb`                      | API tour of `mcts_utils.py`                                                                            | Notebooks          |
+| `mcts.03.example.ipynb`                  | Milestone 1: MCTS vs. a random player on tic-tac-toe                                                   | Notebooks          |
 
-## Flow of the Notebooks
+## Flow of the Code / Notebooks
 
-The four notebooks run as two back-to-back arcs on the same `Game` interface:
-- **Search exactly and approximately** (`search_algorithms.example`): solve
-  the same game with minimax / alpha-beta / depth-limited search / flat Monte
-  Carlo, then compare all of them against MCTS
-- **Frame + sample** (`game.API` $\to$ `mcts.API` $\to$ `mcts.example`): define
-  a game as a search problem, then solve it by sampling (MCTS)
+Files are grouped into 3 numbered arcs, all built on the same `Game`
+interface; the number prefixing each notebook (`01`/`02`/`03`) is the group
+it belongs to. The `*_utils.py` core/widget modules are not numbered, since
+they are imported as Python modules (`import ...search_algorithms_utils`),
+and a leading digit is not a legal module name.
 
-1. `game.API.ipynb`: the `Game` interface
+- **01, frame the game** (`game.py`, `game_examples.py`, `game.01.API.ipynb`):
+  define a game as a search problem
+- **02, search it exactly and approximately**
+  (`search_algorithms_utils.py`, `search_algorithms.02.API.ipynb`,
+  `search_algorithms.02.example.ipynb`): solve it with minimax / alpha-beta /
+  depth-limited search, then compare against flat Monte Carlo and MCTS
+- **03, search it by sampling** (`mcts_utils.py`, `mcts.03.API.ipynb`,
+  `mcts.03.example.ipynb`): solve it by sampling (MCTS)
+
+### 01: Frame the game
+
+1. `game.py`
+   // TODO(ai_gp): Comment
+
+2. `game_examples.py`
+   // TODO(ai_gp): Comment
+
+3. `game.01.API.ipynb`: explore the `Game` interface
+   - Backed by `game_API_utils.py`
    - Part 1: Library overview and mental model
    - Part 2: `Game` and `TicTacToe`
    - Part 3: Connect Four (same interface, bigger board)
    - Part 4: Framing the game as a search problem ($s_0$, $Actions$,
      $Result$, $IsTerminal$, $Utility$), naming the tree an AND-OR tree
 
-2. `search_algorithms.example.ipynb`: classical and adversarial search
+### 02: Search it exactly and approximately
+
+1. `search_algorithms_utils.py`
+   // TODO(ai_gp): Comment
+
+2. `search_algorithms.02.API.ipynb`: the `SearchNode` / `build_tree_graph()`
+   API, and how a search actually builds a tree
+   - Backed by `search_algorithms_API_utils.py`
+   - Part 1: Library overview and mental model
+   - Part 2: `SearchNode`
+   - Part 3: `build_tree_graph()`: coloring a search tree
+   - Part 4: Building the minimax tree step by step (tic-tac-toe)
+   - Part 5: A second game: Connect Three
+
+3. `search_algorithms.02.example.ipynb`: classical and adversarial search
    - Part 2: The game
    - Part 3: Minimax
    - Part 4: Alpha-beta pruning
@@ -63,7 +101,12 @@ The four notebooks run as two back-to-back arcs on the same `Game` interface:
    - Part 7: Comparing all four (plus MCTS)
    - Part 8: Full-game sanity check
 
-3. `mcts.API.ipynb`: the MCTS engine
+### 03: Search it by sampling
+
+1. `mcts_utils.py`
+   // TODO(ai_gp): Comment
+
+2. `mcts.03.API.ipynb`: the MCTS engine
    - Part 1: Library overview and mental model
    - Part 2: `MCTSNode`
    - Part 3: `run_mcts()`
@@ -71,7 +114,7 @@ The four notebooks run as two back-to-back arcs on the same `Game` interface:
    - Part 5: Evaluation API (win rate over games)
    - Part 6: Connect Four (same engine, bigger board)
 
-4. `mcts.example.ipynb`: MCTS end to end
+3. `mcts.03.example.ipynb`: MCTS end to end
    - Part 2: The game
    - Part 3: MCTS on a single position
    - Part 4: Full games (MCTS vs. random, MCTS vs. MCTS)
@@ -91,8 +134,10 @@ The four notebooks run as two back-to-back arcs on the same `Game` interface:
   > ./docker_jupyter.sh
   ```
 
-- From the Jupyter file browser, open the 4 notebooks in the order listed in
-  "Flow of the Notebooks" above
+- From the Jupyter file browser, open the 5 notebooks in the order listed in
+  "Flow of the Code / Notebooks" above (`game.01.API.ipynb` ->
+  `search_algorithms.02.API.ipynb` -> `search_algorithms.02.example.ipynb`
+  -> `mcts.03.API.ipynb` -> `mcts.03.example.ipynb`)
 
 - For more information on the Docker build system refer to
   [Project template readme](https://github.com/gpsaggese/umd_classes/blob/master/class_project/project_template/docker_scripts.README.md)

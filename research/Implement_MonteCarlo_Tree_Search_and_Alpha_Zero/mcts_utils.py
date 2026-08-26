@@ -23,6 +23,7 @@ import tqdm
 
 import helpers.hdbg as hdbg
 import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.game as rimtsaazg
+import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.search_algorithms_utils as rimtsaazsau
 
 _LOG = logging.getLogger(__name__)
 
@@ -39,6 +40,10 @@ EXPLORATION_CONSTANT = math.sqrt(2)
 # override it.
 DEFAULT_NUM_SIMULATIONS = 500
 
+# Default number of random playouts per root action for flat Monte Carlo
+# (Lesson09.8: "For each action a at s0: Run N random playouts").
+DEFAULT_NUM_ROLLOUTS = 200
+
 
 # #############################################################################
 # MCTSNode
@@ -50,7 +55,11 @@ class MCTSNode:
     A single node in the MCTS search tree.
 
     Tracks the game state it represents, its position in the tree, and the
-    running visit count / value total used by the UCT formula.
+    running visit count / value total used by the UCT formula. This is a
+    different shape than `search_algorithms_utils.SearchNode`: MCTS grows one
+    node per simulation and stores a running `visit_count` / `value_sum`,
+    rather than visiting every node once and backing up a final `value` in a
+    single recursive pass.
     """
 
     def __init__(
@@ -209,8 +218,8 @@ def random_rollout(game: rimtsaazg.Game, state: rimtsaazg.State) -> int:
     Play out `state` to a terminal state using uniformly random moves.
 
     This is MCTS's default policy (used below by the simulation phase); it
-    is also flat Monte Carlo's only policy, since flat MC is MCTS with a
-    tree of depth one, so `search_algorithms_utils.py` reuses this same
+    is also flat Monte Carlo's only policy (see "Flat Monte Carlo" below),
+    since flat MC is MCTS with a tree of depth one and reuses this same
     function instead of duplicating it.
 
     :param game: game rules, used to generate and apply moves
@@ -473,3 +482,121 @@ def plot_win_rate_results(
             ha="center",
         )
     plt.show()
+
+
+# #############################################################################
+# Flat Monte Carlo
+# #############################################################################
+
+
+def _estimate_action_value(
+    game: rimtsaazg.Game,
+    state: rimtsaazg.State,
+    move: rimtsaazg.Move,
+    *,
+    num_rollouts: int,
+) -> float:
+    """
+    Estimate `Q_hat(state, move)` as the mean outcome, from the mover's
+    perspective, over `num_rollouts` random playouts through `move`.
+
+    Lesson09.8: "For each action a at s0: Run N random playouts to a
+    terminal state, estimate Q_hat(s0, a) as the mean terminal outcome."
+    Reuses `random_rollout()` above, MCTS's own default policy.
+
+    :param game: game-agnostic rules implementation
+    :param state: state the action is taken from
+    :param move: action to evaluate
+    :param num_rollouts: number of random playouts to average over
+    :return: mean outcome in `[-1, 1]` from the mover's perspective
+    """
+    mover = game.get_current_player(state)
+    total = 0.0
+    for _ in range(num_rollouts):
+        rollout_state = game.apply_move(state, move)
+        winner = random_rollout(game, rollout_state)
+        if winner == mover:
+            total += 1.0
+        elif winner != 0:
+            total -= 1.0
+    q_hat = total / num_rollouts
+    return q_hat
+
+
+def build_flat_mc_tree(
+    game: rimtsaazg.Game,
+    state: rimtsaazg.State,
+    *,
+    num_rollouts: int = DEFAULT_NUM_ROLLOUTS,
+) -> rimtsaazsau.SearchNode:
+    """
+    Score every legal move at `state` by flat Monte Carlo and return the
+    resulting depth-one search tree.
+
+    Lesson09.8: "Flat Monte Carlo is exactly MCTS with a tree of depth
+    one": one child per root action, no further expansion. Reuses
+    `search_algorithms_utils.SearchNode` (rather than `MCTSNode` above) so
+    the tree renders with the same `build_tree_graph()` used for minimax,
+    alpha-beta, and depth-limited search.
+
+    :param game: game-agnostic rules implementation
+    :param state: state to search from, must not be terminal
+    :param num_rollouts: number of random playouts averaged per action
+        - Default: `DEFAULT_NUM_ROLLOUTS`
+    :return: root node with one scored child per legal move
+    """
+    hdbg.dassert(
+        not game.is_terminal(state), "Cannot search from a terminal state"
+    )
+    root = rimtsaazsau.SearchNode(state)
+    child_values = []
+    for move in game.get_legal_moves(state):
+        child_state = game.apply_move(state, move)
+        child = root.add_child(move, child_state)
+        value = _estimate_action_value(
+            game, state, move, num_rollouts=num_rollouts
+        )
+        child.value = value
+        child_values.append(value)
+    current_player = game.get_current_player(state)
+    root.value = max(child_values) if current_player == 1 else min(child_values)
+    return root
+
+
+def run_flat_mc(
+    game: rimtsaazg.Game,
+    state: rimtsaazg.State,
+    *,
+    num_rollouts: int = DEFAULT_NUM_ROLLOUTS,
+) -> rimtsaazg.Move:
+    """
+    Run flat Monte Carlo from `state` and return `argmax_a Q_hat(s0, a)`.
+
+    :param game: game-agnostic rules implementation
+    :param state: state to search from, must not be terminal
+    :param num_rollouts: number of random playouts averaged per action
+        - Default: `DEFAULT_NUM_ROLLOUTS`
+    :return: best-estimated move for the player to move at `state`
+    """
+    root = build_flat_mc_tree(game, state, num_rollouts=num_rollouts)
+    best_move = rimtsaazsau.pick_best_move(game, root)
+    return best_move
+
+
+def make_flat_mc_player(
+    *, num_rollouts: int = DEFAULT_NUM_ROLLOUTS
+) -> Callable[[rimtsaazg.Game, rimtsaazg.State], rimtsaazg.Move]:
+    """
+    Build a `(game, state) -> move` player function backed by flat Monte
+    Carlo.
+
+    :param num_rollouts: number of random playouts averaged per action
+        - Default: `DEFAULT_NUM_ROLLOUTS`
+    :return: player function suitable for `play_game()`
+    """
+
+    def player(game: rimtsaazg.Game, state: rimtsaazg.State) -> rimtsaazg.Move:
+        move = run_flat_mc(game, state, num_rollouts=num_rollouts)
+        return move
+
+    return player
