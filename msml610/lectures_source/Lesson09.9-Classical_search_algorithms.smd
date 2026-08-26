@@ -224,8 +224,8 @@ digraph ConnectFourDrop {
 ::::
 :::: {.column width=40%}
 
-// TODO(ai_gp): It's confusing that B, C, is present in both graphs. They are not
-// the same concepts, maybe A -> B, A -> C, A -> B -> D, A -> C -> D
+// TODO(ai_gp): Make the nodes all the same size across the different figures by
+// reducing the size of the font inside
 ```graphviz
 digraph state_space_vs_tree {
     bgcolor="transparent";
@@ -271,10 +271,10 @@ digraph state_space_vs_tree {
         margin    = 14;
 
         A2 [label="A", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
-        B2 [label="B", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
-        C2 [label="C", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
-        D2 [label="D", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-        D3 [label="D", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+        B2 [label="A,B", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56", width=0.55];
+        C2 [label="A,C", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56", width=0.55];
+        D2 [label="A,B,D", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79", width=0.65];
+        D3 [label="A,C,D", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79", width=0.65];
 
         A2 -> B2;
         A2 -> C2;
@@ -426,7 +426,6 @@ digraph TicTacToeTwoPlies {
 
 - @Remark@: the dashed node stands for the $7$ successors not drawn
 
-
 * Redundant Paths and Graph Search
 
 ::: columns
@@ -524,20 +523,69 @@ digraph WastedWork {
 ::::
 :::
 
-- @Example@: tic-tac-toe suffers only from redundant paths
+* Redundant Paths and Graph Search: Example
+
+::: columns
+:::: {.column width=55%}
+- Graph search for tic-tac-toe suffers only from _redundant paths_
   - No mark is ever removed, so no path can loop or repeat
-  - `X` plays 0, then `O` plays 1, then `X` 4 reaches the same board as 4 $\to$ 1
-    $\to$ 0
-// TODO(ai_gp): Add a plot to show the tic-tac-toe
+- E.g., `X` plays 0, then `O` plays 1, then `X` 4 reaches the same board as 4
+  $\to$ 1 $\to$ 0
+::::
+:::: {.column width=45%}
+
+```graphviz
+digraph ttt_redundant_paths {
+    bgcolor="transparent";
+    pad="0.15";
+    rankdir=TB;
+    splines=spline;
+    nodesep=0.35;
+    ranksep=0.40;
+
+    node [shape=box, style="rounded,filled", penwidth=1.2,
+          fontname="Courier", fontsize=9, margin="0.06,0.05"];
+    edge [color="#A3B1C0", penwidth=1.0, arrowhead=vee, arrowsize=0.6,
+          fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
+
+    // green = initial state | cyan = intermediate state | blue = shared final state
+
+    S0 [label=". . .\n. . .\n. . .", fillcolor="#A9DDB0",
+        color="#4F9A5C", fontcolor="#1F4E2E"];
+
+    L1 [label="X . .\n. . .\n. . .", fillcolor="#C7ECF0",
+        color="#7CC6D0", fontcolor="#1F4E56"];
+    L2 [label="X O .\n. . .\n. . .", fillcolor="#C7ECF0",
+        color="#7CC6D0", fontcolor="#1F4E56"];
+
+    R1 [label=". . .\n. X .\n. . .", fillcolor="#C7ECF0",
+        color="#7CC6D0", fontcolor="#1F4E56"];
+    R2 [label=". O .\n. X .\n. . .", fillcolor="#C7ECF0",
+        color="#7CC6D0", fontcolor="#1F4E56"];
+
+    Final [label="X O .\n. X .\n. . .", fillcolor="#9CC4F2",
+           color="#3C6FB0", fontcolor="#1F4E79"];
+
+    S0 -> L1 [label="  X:0  "];
+    L1 -> L2 [label="  O:1  "];
+    L2 -> Final [label="  X:4  ", color="#C0455B", penwidth=1.6];
+
+    S0 -> R1 [label="  X:4  "];
+    R1 -> R2 [label="  O:1  "];
+    R2 -> Final [label="  X:0  ", color="#C0455B", penwidth=1.6];
+}
+```
+::::
+:::
 
 * Redundant Paths and Graph Search
 
 - @Problem@
   - Without bookkeeping the search re-expands a state every time a path reaches it
-  - Reaching the opposite corner of a $d \times d$ grid takes $\frac{(2d)!}{(d!)^2}$
-    distinct paths over only $(d + 1)^2$ states
+  - E.g., reaching the opposite corner of a $d \times d$ grid takes
+    $\frac{(2d)!}{(d!)^2}$ distinct paths over only $(d + 1)^2$ states
 
-// TODO(ai_gp): Add example of the above
+// TODO(ai_gp): Add an explanation or a visual of the example above
 
 - @Solution@: graph search keeps an **explored set** of expanded states
   - Aka "closed list"
@@ -605,6 +653,7 @@ digraph TicTacToeFirstPly {
 
 * Measuring a Search Algorithm
 // From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:32 '* Why Search Trees Explode'
+// TODO(gp): Copy / move / merge some content from 9.8 here
 
 - @Definition@: four **criteria evaluate a search algorithm**
   - _Completeness_: is the algorithm guaranteed to find a solution, if one
@@ -623,7 +672,23 @@ digraph TicTacToeFirstPly {
   - $d$ = depth of the shallowest goal node
   - $m$ = maximum depth of any path, possibly infinite
 
-// TODO(ai_gp): Copy / move some content from 9.8 here
+```{=typst}
+#styled-table(
+  headers: ([Domain], [Branching $b$], [Depth], [Tree size]),
+  rows: (
+    ([Tic-tac-toe], [$approx 5$], [$9$], [$10^5$]),
+    ([Chess], [$approx 35$], [$approx 80$], [$10^123$]),
+    ([Go, 19x19 board], [$approx 250$], [$approx 150$], [$10^360$]),
+    ([Robot task planning], [$10^2 - 10^4$], [$10 - 100$], [intractable]),
+  ),
+  col-widths: (1.8fr, 1fr, 1fr, 1fr),
+  bold-first-col: true
+)
+```
+
+- @Remark@: the growth is in the _exponent_, so faster hardware (even $1000$x
+  more compute) buys almost nothing
+  - There are around $10^{80}$ atoms in the visible universe
 
 - @Example@: Connect 4 has $b \approx 7$ and $m = 42$, so $b^m \approx 10^{35}$
   - Only $4.5 \cdot 10^{12}$ of those sequences reach distinct legal positions
@@ -633,13 +698,14 @@ digraph TicTacToeFirstPly {
 
 # Uninformed Search
 
-* Best-First Search: One Template
+* Uninformed Search
 
-::: columns
-:::: {.column width=52%}
 - @Definition@: **uninformed search** has only the definition of the problem,
   and no other problem-specific knowledge
   - Aka "blind search"
+
+::: columns
+:::: {.column width=52%}
 
 - @Key idea@: 
   - Uninformed search algorithms differ only in the strategy to pick the next
@@ -650,39 +716,24 @@ digraph TicTacToeFirstPly {
 ::::
 :::: {.column width=44%}
 
-// TODO(ai_gp): Convert it into a table
-```graphviz
-digraph best_first_family {
-    bgcolor="transparent";
-    pad="0.15";
-    rankdir=LR;
-    nodesep=0.22;
-    ranksep=0.55;
-
-    node [shape=box, style="rounded,filled", penwidth=1.6,
-          fontname="Helvetica", fontsize=12, margin="0.18,0.09",
-          height=0.40];
-    edge [color="#A3B1C0", penwidth=1.3, arrowhead=vee, arrowsize=0.7];
-
-    f0 [label="f = depth(n)", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
-    f1 [label="f = g(n)", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
-    f2 [label="f = h(n)", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
-    f3 [label="f = g(n) + h(n)", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
-
-    a0 [label="Breadth-first", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-    a1 [label="Uniform-cost", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-    a2 [label="Greedy best-first", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-    a3 [label="A* search", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-
-    f0 -> a0;
-    f1 -> a1;
-    f2 -> a2;
-    f3 -> a3;
-}
+```{=typst}
+#styled-table(
+  headers: ([Evaluation $f(n)$], [Algorithm]),
+  rows: (
+    ([$"depth"(n)$], [Breadth-first]),
+    ([$g(n)$], [Uniform-cost]),
+    ([$h(n)$], [Greedy best-first]),
+    ([$g(n) + h(n)$], [A\* search]),
+  ),
+  col-widths: (1.5fr, 1.3fr),
+  bold-first-col: true
+)
 ```
 
 ::::
 :::
+
+* Best-First Search: Algorithm
 
 - @Algorithm@: best-first search
   1. Initialize the frontier with $s_0$, and the explored set to empty
@@ -692,32 +743,139 @@ digraph best_first_family {
      is new or reached more cheaply than before
   5. Repeat until the frontier is empty
 
-// TODO(ai_gp): Add some graph
+```graphviz[width=75%]
+digraph best_first_loop {
+    bgcolor="transparent";
+    pad="0.15";
+    rankdir=LR;
+    nodesep=0.35;
+    ranksep=0.55;
 
+    node [shape=box, style="rounded,filled", penwidth=1.4,
+          fontname="Helvetica", fontsize=11, margin="0.14,0.09"];
+    edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.7,
+          fontname="Helvetica", fontsize=10, fontcolor="#7B8794"];
+
+    // green = init | cyan = pop/test | orange = expand | blue = terminal outcome
+
+    Init [label="Initialize\nfrontier", fillcolor="#A9DDB0",
+          color="#4F9A5C", fontcolor="#1F4E2E"];
+    Pop  [label="Pop lowest\nf(n) node n", fillcolor="#C7ECF0",
+          color="#7CC6D0", fontcolor="#1F4E56"];
+    Test [label="IsGoal(n)?", shape=diamond, fillcolor="#C7ECF0",
+          color="#7CC6D0", fontcolor="#1F4E56"];
+    Expand [label="Expand n,\nadd successors", fillcolor="#FFC98A",
+            color="#D98E2B", fontcolor="#6B4517"];
+    Return [label="Return path to n", fillcolor="#9CC4F2",
+            color="#3C6FB0", fontcolor="#1F4E79"];
+
+    Init -> Pop;
+    Pop -> Test;
+    Test -> Return [label="  yes  "];
+    Test -> Expand [label="  no  "];
+    Expand -> Pop [label="  repeat  ", constraint=false];
+}
+```
+
+// TODO(gp): Maybe convert it into a table on the side
 - @Components@: the frontier data structure selects the strategy
   - FIFO queue gives breadth-first
   - LIFO stack gives depth-first
   - Priority queue gives best-first
 
-* Breadth-First and Uniform-Cost Search
+* Breadth-First
 
+::: columns
+:::: {.column width=70%}
 - @Definition@: **Breadth-first search (BFS)** expands every node at a given
   depth before moving to the next level, so $f(n) = depth(n)$
-  - A FIFO queue replaces the priority queue, since depth grows by one per expansion
+  - A FIFO queue replaces the priority queue, since depth grows by one per
+    expansion
   - The goal test fires when a node is _generated_, so the search stops early
+::::
+:::: {.column width=30%}
+
+```graphviz
+digraph bfs_tree {
+    bgcolor="transparent";
+    pad="0.15";
+    rankdir=TB;
+    splines=line;
+    nodesep=0.30;
+    ranksep=0.40;
+
+    node [shape=circle, style="filled", penwidth=1.4,
+          fontname="Helvetica", fontsize=10, width=0.55, fixedsize=true];
+    edge [color="#A3B1C0", penwidth=1.1, arrowhead=vee, arrowsize=0.6];
+
+    // green = expanded | cyan = expanded | blue = generated | red border = goal
+
+    S0 [label="S0\n#1", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
+    A  [label="A\n#2",  fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    B  [label="B\n#3",  fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    C  [label="C\n#4",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    D  [label="D\n#5",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    E  [label="E\n#6",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    G  [label="G\n#7",  fillcolor="#9CC4F2", color="#C0455B", penwidth=2.2,
+        fontcolor="#1F4E79"];
+
+    S0 -> A;
+    S0 -> B;
+    A -> C;
+    A -> D;
+    B -> E;
+    B -> G;
+}
+```
+::::
+:::
 
 - @Properties@: BFS finds the shallowest goal node
   - _Complete_ whenever $b$ is finite
   - _Optimal_ only when every edge carries the same cost
   - _Time_ and _space_ are both $O(b^d)$, since the whole frontier is stored
 
-// TODO(ai_gp): Add picture of search tree
-
+::: columns
+:::: {.column width=70%}
 - @Problem@: with unequal step costs the shallowest goal is not the cheapest
-  - E.g., a direct road of cost 100 is returned before a three-hop route of
-    total cost 10 (i.e., total cost = 30)
+  - E.g., a direct road of cost $100$ is returned before a three-hop route of
+    three edges costing $10$ each (total cost $30$)
+::::
+:::: {.column width=30%}
 
-// TODO(ai_gp): Add picture
+// TODO(ai_gp): Rotate and make it similar to the previous plot
+```graphviz
+digraph bfs_unequal_cost {
+    bgcolor="transparent";
+    pad="0.15";
+    rankdir=LR;
+    nodesep=0.35;
+    ranksep=0.55;
+
+    node [shape=circle, style="filled", penwidth=1.4,
+          fontname="Helvetica", fontsize=10, width=0.50, fixedsize=true];
+    edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.7,
+          fontname="Helvetica", fontsize=10, fontcolor="#7B8794"];
+
+    // G appears twice: same goal state, reached via two different search-tree paths
+
+    S0 [label="S0", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
+    M1 [label="M1", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    M2 [label="M2", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    G1 [label="G\n(returned)", shape=box, fillcolor="#9CC4F2",
+        color="#C0455B", penwidth=2.0, fontcolor="#1F4E79"];
+    G2 [label="G\n(cheaper)", shape=box, fillcolor="#9CC4F2",
+        color="#3C6FB0", fontcolor="#1F4E79"];
+
+    S0 -> G1 [label="  cost 100  ", color="#C0455B", penwidth=1.6,
+              fontcolor="#C0455B"];
+    S0 -> M1 [label="  cost 10  "];
+    M1 -> M2 [label="  cost 10  "];
+    M2 -> G2 [label="  cost 10  "];
+}
+```
+::::
+:::
 
 * Uniform-Cost Search
 
@@ -815,12 +973,37 @@ digraph best_first_family {
 
 * Heuristics
 
-// TODO(ai_gp): Add a picture of this
-
 - @Components@: the three functions used from here on
   - $f(n)$ = the order in which nodes are expanded
   - $g(n)$ = the path cost of $n$ from the initial state, known exactly
   - $h(n)$ = the estimated cost from $n$ to a goal, computed cheaply
+
+// TODO(ai_gp): Adapt to the example above, e.g., f(n) = g(n) + h(n) and h^*(n)
+```graphviz[width=65%]
+digraph route_heuristic {
+    bgcolor="transparent";
+    pad="0.15";
+    rankdir=LR;
+    nodesep=0.40;
+    ranksep=0.55;
+
+    node [shape=circle, style="filled", penwidth=1.4,
+          fontname="Helvetica", fontsize=11, width=0.55, fixedsize=true];
+    edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.7,
+          fontname="Helvetica", fontsize=10, fontcolor="#7B8794"];
+
+    Start [label="Start", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
+    N     [label="n",     fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    Mid   [label="",      fillcolor="#F7F9FB", color="#C7D0DA", width=0.15];
+    Goal  [label="Goal",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+
+    Start -> N [label="  g(n): road so far  "];
+    N -> Mid [label="  road  "];
+    Mid -> Goal;
+    N -> Goal [label="  h(n): straight line  ", style=dashed,
+               color="#C0455B", fontcolor="#C0455B", constraint=false];
+}
+```
 
 - @Example@: route finding on a road map
   - $h(n)$ = straight-line distance from city $n$ to the destination
@@ -862,7 +1045,33 @@ digraph best_first_family {
   - $g(n)$ = cost of the cheapest path reaching $n$ from the initial state
   - $h(n)$ = estimated cost of the cheapest path from $n$ to a goal
 
-// TODO(ai_gp): Add picture
+```graphviz[width=65%]
+digraph astar_fn {
+    bgcolor="transparent";
+    pad="0.15";
+    rankdir=LR;
+    nodesep=0.40;
+    ranksep=0.55;
+
+    node [shape=circle, style="filled", penwidth=1.4,
+          fontname="Helvetica", fontsize=11, width=0.50, fixedsize=true];
+    edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.7,
+          fontname="Helvetica", fontsize=10, fontcolor="#7B8794"];
+
+    S0   [label="s0",   fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
+    N    [label="n",    fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    Goal [label="Goal", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+
+    S0 -> N [label="  g(n): known exactly  "];
+    N -> Goal [label="  h(n): estimated  ", style=dashed,
+               color="#C0455B", fontcolor="#C0455B"];
+
+    label="f(n) = g(n) + h(n): cost of a complete solution through n";
+    fontname="Helvetica";
+    fontsize=10;
+    fontcolor="#7B8794";
+}
+```
 
 - @Intuition@: greedy search minimizes the future, uniform-cost search
   minimizes the past, and A* minimizes their sum
@@ -1007,7 +1216,6 @@ digraph astar_contours {
   - It is an _exact_ cost in the relaxed problem, so it obeys the triangle
     inequality, hence it is also consistent
 
-// TODO(ai_gp): Can we use tic-tac-toe or connect 4
 - @Example@: the **8-puzzle**, where the average random instance takes about
   $22$ steps and $b \approx 3$
   - Let a tile move anywhere: $h_1$ = number of misplaced tiles
@@ -1015,6 +1223,12 @@ digraph astar_contours {
     Manhattan distances
   - At depth $12$, $b^*$ falls from about $2.8$ for iterative deepening to
     $1.5$ with $h_1$ and $1.3$ with $h_2$
+
+- @Remark@: tic-tac-toe and Connect 4 do not fit this pattern
+  - They are adversarial games, with no single path cost to a goal for one
+    agent to minimize
+  - The analogous idea returns as the heuristic evaluation function $Eval(s)$
+    used to cut off adversarial search
 
 // TODO(gp): Don't understand what is this
 - @Definition@: $h_2$ **dominates** $h_1$ when $h_2(n) \geq h_1(n)$ everywhere
@@ -1042,15 +1256,17 @@ digraph astar_contours {
 
 * Modeling Multi-agent Environments
 
-// TODO(ai_gp): Add examples / clarify
-
 - @Comparison@: several ways to **model competitive multi-agent environments**
   - _Economy_: aggregate a very large number of agents
     - E.g. predict that rising demand lifts prices without modeling any individual
   - _Part of the environment_: treat adversaries as non-determinism
     - Misses that they actively try to defeat us
+    - E.g. treating a Connect 4 opponent's move as a random column pick, so a
+      forced block is missed as often as a random one
   - _Adversarial game-tree search_: model the opponent as an "optimizer" (which is
     what minimax does)
+    - E.g. minimax assumes the opponent always plays the reply that minimizes
+      $Max$'s payoff
 
 * Games as Search Problems
 
@@ -1060,20 +1276,19 @@ digraph astar_contours {
     observable
   - _Zero-sum_, so the utility values are always equal and opposite
 
+// TODO(gp): Maybe convert it into a table
 - @Definition@: a **game**  is defined by the following components:
   - _Initial state_ $s_0$: where the game starts
   - _Actions_: the legal actions $Actions(s)$ available in state $s$
   - _Transition model_: the state reached $Result(s, a)$ by doing $a$ in $s$
   - _Turn_: $Player(s)$ is the player who has the move in $s$
     - $Max$ moving first or $Min$ moving second
-  - _Goal test_: $TerminalTest(s) = true$ when the game is over
+  - _Goal test_: $IsTerminal(s) = true$ when the game is over
   - _Cost_: $Utility(s, p)$ is the payoff of the terminal state $s$ to player $p$
     - Aka "objective function", or "payoff function"
 
 - In practice, a game replaces the _goal test_ and the _path cost_ of a search
   problem
-
-// TODO(ai_gp): -> TerminalTest -> IsTerminal
 
 * Games as Search Problems
 - @Definition@: a **terminal state** is the game-theory name for a goal state, i.e.,
@@ -1082,7 +1297,7 @@ digraph astar_contours {
 - @Definition@: a **zero-sum game** has the same total payoff for every instance of
   the game equal to 0:
   $$
-  Utility(s, Max) + Utility(s, Min) = 0 \; \forall s: TerminalTest(s)
+  Utility(s, Max) + Utility(s, Min) = 0 \; \forall s: IsTerminal(s)
   $$
   - "Constant-sum" would have been a better name
     - E.g. win $= 1$, loss $= 0$, draw $= 1/2$ for each player
@@ -1093,17 +1308,58 @@ digraph astar_contours {
 
 * AND-OR tree
 
+::: columns
+:::: {.column width=60%}
 - @Definition@: an **AND-OR tree** generalizes a search tree with two kinds of
   branching, needed when the outcome of a choice is not fully under the agent's
   control
   - **OR node**: the agent picks one action, so one successful child suffices
-  - **AND node**: another party (opponent) picks the outcome, so every child must
-    lead to success
+  - **AND node**: another party (opponent) picks the outcome, so every child
+    must lead to success
 
 - @Intuition@:
   - At an `OR` node, _"I choose"_
-  - At an `AND` node, _"someone else chooses"_, so the agent must be ready
-    for any of their choices
+  - At an `AND` node, _"someone else chooses"_, so the agent must be ready for
+    any of their choices
+
+::::
+:::: {.column width=40%}
+```graphviz
+digraph and_or_tree {
+    bgcolor="transparent";
+    pad="0.15";
+    rankdir=TB;
+    splines=line;
+    nodesep=0.35;
+    ranksep=0.45;
+
+    node [shape=box, style="rounded,filled", penwidth=1.3,
+          fontname="Helvetica", fontsize=10, margin="0.10,0.07"];
+    edge [color="#A3B1C0", penwidth=1.1, arrowhead=vee, arrowsize=0.6,
+          fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
+
+    // green = OR node ("I choose") | coral = AND node ("someone else chooses")
+    // solid red = kept in the solution subtree | dashed = not part of it
+
+    Root [label="OR", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
+    A1   [label="action 1", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    A2   [label="action 2", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    M1   [label="AND", fillcolor="#F6C6C6", color="#D98C8C", fontcolor="#6B2A2A"];
+    L1   [label="goal", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    L2   [label="goal", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    L3   [label="goal", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+
+    Root -> A1 [color="#C0455B", penwidth=1.6];
+    Root -> A2 [style=dashed];
+    A1 -> M1 [color="#C0455B", penwidth=1.6];
+    M1 -> L1 [color="#C0455B", penwidth=1.6];
+    M1 -> L2 [color="#C0455B", penwidth=1.6];
+    M1 -> L3 [color="#C0455B", penwidth=1.6];
+}
+```
+
+::::
+:::
 
 - @Comparison@: a search tree has only `OR` nodes, since the agent alone picks every
   move
@@ -1113,25 +1369,28 @@ digraph astar_contours {
   - Keep every branch at each `AND` node
   - Every leaf of the subtree is a goal (terminal) state
 
-- @Example@: adversarial game trees are `AND-OR` trees where $Max$'s turns
-  are `OR` nodes and $Min$'s turns are `AND` nodes, since $Min$ picks the
-  reply that $Max$ must survive
-
-// TODO(ai_gp): Add picture of an AND-OR tree in graphviz
-
 * Game Trees
 
+// TODO(ai_gp): Explain this in terms of AND-OR tree and make the flow better
+
 ::: columns
-:::: {.column width=46%}
+:::: {.column width=50%}
 - @Definition@: a **game tree** has game states as nodes and moves as edges, running
   down to the terminal states (same as a _search tree_)
   - It is defined by $s_0$, $Actions$, and $Result$
   - It is often too large to build explicitly, so it is only ever considered
     implicitly
-::::
-:::: {.column width=48%}
 
-// TODO(ai_gp): Find a better diagram
+
+- @Example@: adversarial game trees are `AND-OR` trees where $Max$'s turns
+  are `OR` nodes and $Min$'s turns are `AND` nodes, since $Min$ picks the
+  reply that $Max$ must survive
+
+::::
+:::: {.column width=50%}
+
+// TODO(gp): This needs to be improved
+
 ```graphviz
 digraph game_tree {
     bgcolor="transparent";
@@ -1144,11 +1403,14 @@ digraph game_tree {
           height=0.34];
     edge [color="#A3B1C0", penwidth=1.2, arrowhead=none];
 
-    root [label="MAX", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
+    // orange = MAX node | cyan = MIN node | blue = leaf value
+    // red = path actually played under optimal play
 
-    m1 [label="MIN", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
-    m2 [label="MIN", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
-    m3 [label="MIN", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    root [label="MAX = 0", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
+
+    m1 [label="MIN = 0",  fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    m2 [label="MIN = -1", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    m3 [label="MIN = -1", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
 
     l1 [label="+1", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
     l2 [label="0",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
@@ -1157,11 +1419,11 @@ digraph game_tree {
     l5 [label="+1", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
     l6 [label="-1", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
 
-    root -> m1;
+    root -> m1 [color="#C0455B", penwidth=1.8];
     root -> m2;
     root -> m3;
     m1 -> l1;
-    m1 -> l2;
+    m1 -> l2 [color="#C0455B", penwidth=1.8];
     m2 -> l3;
     m2 -> l4;
     m3 -> l5;
@@ -1175,41 +1437,96 @@ digraph game_tree {
 - @Definition@: a **ply** is one layer, so one "move" by one player
   - $Max$ layers prefer the largest value, $Min$ layers the smallest
 
+- @Remark@: the propagated value at each $MIN$ node is the smallest of its
+  leaves, and the value at the root is the largest of the $MIN$ values
+  - The red path shows the line actually played under optimal play
+
 - @Key idea@: a solution to a game is not a path but a **contingent strategy**
   - It prescribes a reply to every move the opponent can make
-
-* The Tic-Tac-Toe Game Tree
-
-- @Example@: Tic-Tac-Toe
-  - $Max$ has 9 ways to place an `X`, then the players alternate
-  - The game ends when a player has three in a row, or all squares are filled
-  - 255,168 complete games, and 549,946 nodes in total
-  - Playing optimaly the result is a draw
-
-// TODO(ai_gp): Are the numbers above in line with tic-tac-toe as search?
-// TODO(ai_gp): what is the difference of search vs tree (maybe considering
-// the best move alone vs the best move given what the adversial would do?)
 
 - @Remark@: each leaf carries the utility of that terminal state from the point
   of view of $Max$
 
+- @Remark@:
+  - A _search in the game tree_ (e.g., minimax) is the process of picking a
+    value-optimal path through that structure, accounting for what the opponent
+    plays at every ply, not just the best move for one side alone
+// TODO(gp): Explain the different btw search tree and search in game tree
+
+* The Tic-Tac-Toe Game Tree
+
+::: columns
+:::: {.column width=60%}
+- @Example@: Tic-Tac-Toe
+  - $Max$ has 9 ways to place an `X`, then the players alternate
+  - The game ends when a player has three in a row, or all squares are filled
+  - $255,168$ complete games, and $549,946$ nodes in total
+  - Playing optimally the result is a draw
+
 - @Example@: Connect 4 is the same AND-OR tree as Tic-Tac-Toe
   - Depth $m = 42$ and $b \approx 7$, so about $10^{35}$ move sequences
   - $4.5 \cdot 10^{12}$ distinct legal positions
-  - Playing optimally the result is a win for the first player (who must open in the
-    center column)
+  - Playing optimally the result is a win for the first player (who must open in
+    the center column)
+::::
+:::: {.column width=40%}
 
-// TODO(ai_gp): Create an AND-OR tree for Tic-tac-toe
+// TODO(ai_gp): Use the style used in `* Tic-Tac-Toe: Optimizing the Search Tree`
+// to represent the state, with a matrix of dots and X
+
+```graphviz
+digraph ttt_and_or_tree {
+    bgcolor="transparent";
+    pad="0.15";
+    rankdir=TB;
+    splines=line;
+    nodesep=0.35;
+    ranksep=0.45;
+
+    node [shape=box, style="rounded,filled", penwidth=1.3,
+          fontname="Helvetica", fontsize=10, margin="0.10,0.07"];
+    edge [color="#A3B1C0", penwidth=1.1, arrowhead=vee, arrowsize=0.6,
+          fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
+
+    // green = OR node (X to move) | coral = AND node (O to move)
+    // red = kept in the solution subtree | dashed = not explored
+
+    S0 [label=<<b>OR: X to move</b>>, fillcolor="#A9DDB0",
+        color="#4F9A5C", fontcolor="#1F4E2E"];
+
+    A1 [label="X plays corner", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    A2 [label="X plays center", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+
+    M1 [label=<<b>AND: O to move</b>>, fillcolor="#F6C6C6",
+        color="#D98C8C", fontcolor="#6B2A2A"];
+
+    L1 [label="O replies A", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    L2 [label="O replies B", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    L3 [label="O replies C", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+
+    S0 -> A1 [color="#C0455B", penwidth=1.6];
+    S0 -> A2 [style=dashed];
+    A1 -> M1 [color="#C0455B", penwidth=1.6];
+    M1 -> L1 [color="#C0455B", penwidth=1.6];
+    M1 -> L2 [color="#C0455B", penwidth=1.6];
+    M1 -> L3 [color="#C0455B", penwidth=1.6];
+}
+```
+::::
+:::
 
 * Minimax
 
 - @Definition@: the **minimax value** of a node is defined recursively
-// TODO(ai_gp): Use a case formula for typst
-  - $Minimax(s) = Utility(s, Max)$ when $TerminalTest(s)$ holds
-  - $Minimax(s) = \max_{a \in Actions(s)} Minimax(Result(s, a))$ when $Player(s)
-    = Max$
-  - $Minimax(s) = \min_{a \in Actions(s)} Minimax(Result(s, a))$ when $Player(s)
-    = Min$
+// TODO(ai_gp): Make it smaller
+  $$
+  Minimax(s) =
+  \begin{cases}
+  Utility(s, Max) & IsTerminal(s) \\
+  \max_{a \in Actions(s)} Minimax(Result(s, a)) & Player(s) = Max \\
+  \min_{a \in Actions(s)} Minimax(Result(s, a)) & Player(s) = Min \\
+  \end{cases}
+  $$
 
 - @Intuition@:
   - $Minimax(s)$ is the utility for $Max$ assuming both players play optimally from
@@ -1230,25 +1547,43 @@ digraph game_tree {
 
 ::: columns
 :::: {.column width=32%}
-- Cells are numbered $1$ to $9$, left to right and top to bottom
+- Cells are numbered $0$ to $8$, left to right and top to bottom
 
-// TODO(ai_gp): Check if the cells start from 0 and so, change the value to be
-// consistent with starting from 0
+```tikz
+% Tic-tac-toe endgame board, cells numbered 0-8 (row-major, left to
+% right, top to bottom); red bold = the 3 empty cells X can play
+\draw[thick] (0,0) rectangle (3,3);
+\draw[thick] (1,0) -- (1,3);
+\draw[thick] (2,0) -- (2,3);
+\draw[thick] (0,1) -- (3,1);
+\draw[thick] (0,2) -- (3,2);
 
-// TODO(ai_gp): Do a better plot with tikz (also adding the numbers of the cells)
-```text
- X | O | X
----+---+---
- O | O | .
----+---+---
- . | X | .
+\node[gray, font=\small] at (0.22,2.78) {0};
+\node[gray, font=\small] at (1.22,2.78) {1};
+\node[gray, font=\small] at (2.22,2.78) {2};
+\node[gray, font=\small] at (0.22,1.78) {3};
+\node[gray, font=\small] at (1.22,1.78) {4};
+\node[red, font=\small\bfseries] at (2.22,1.78) {5};
+\node[red, font=\small\bfseries] at (0.22,0.78) {6};
+\node[gray, font=\small] at (1.22,0.78) {7};
+\node[red, font=\small\bfseries] at (2.22,0.78) {8};
+
+\node[font=\Large\bfseries] at (0.5,2.5) {X};
+\node[font=\Large\bfseries] at (1.5,2.5) {O};
+\node[font=\Large\bfseries] at (2.5,2.5) {X};
+\node[font=\Large\bfseries] at (0.5,1.5) {O};
+\node[font=\Large\bfseries] at (1.5,1.5) {O};
+\node[font=\Large\bfseries] at (0.5,0.5) {X};
 ```
 
-- X is to move, and cells $6$, $7$, $9$ are empty
+- X is to move, and cells $5$, $6$, $8$ are empty
 
-- O threatens to complete $4$-$5$-$6$
+- O threatens to complete $3$-$4$-$5$
 ::::
 :::: {.column width=64%}
+
+// TODO(ai_gp): Use the style used in `* Tic-Tac-Toe: Optimizing the Search Tree`
+// to represent the state, with a matrix of dots and X
 
 ```graphviz
 digraph ttt_endgame {
@@ -1264,16 +1599,16 @@ digraph ttt_endgame {
 
     r [label="MAX: X to move\nMinimax = 0", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
 
-    a [label="X plays 6\nMin = 0",  fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
-    b [label="X plays 7\nMin = -1", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
-    c [label="X plays 9\nMin = -1", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    a [label="X plays 5\nMin = 0",  fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    b [label="X plays 6\nMin = -1", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    c [label="X plays 8\nMin = -1", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
 
-    a1 [label="O:7, X:9\n+1", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-    a2 [label="O:9, X:7\n0",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-    b1 [label="O:6 wins\n-1",  fillcolor="#F6C6C6", color="#D98C8C", fontcolor="#6B2A2A"];
-    b2 [label="O:9, X:6\n0",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-    c1 [label="O:6 wins\n-1",  fillcolor="#F6C6C6", color="#D98C8C", fontcolor="#6B2A2A"];
-    c2 [label="O:7, X:6\n+1", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    a1 [label="O:6, X:8\n+1", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    a2 [label="O:8, X:6\n0",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    b1 [label="O:5 wins\n-1",  fillcolor="#F6C6C6", color="#D98C8C", fontcolor="#6B2A2A"];
+    b2 [label="O:8, X:5\n0",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    c1 [label="O:5 wins\n-1",  fillcolor="#F6C6C6", color="#D98C8C", fontcolor="#6B2A2A"];
+    c2 [label="O:6, X:5\n+1", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
 
     r -> a;
     r -> b;
@@ -1290,8 +1625,53 @@ digraph ttt_endgame {
 ::::
 :::
 
-- @Example@: only cell $6$ blocks O and keeps the column $3$-$6$-$9$ alive, so
-  the root value is $0$ and X must play $6$
+- @Example@: only cell $5$ blocks O and keeps the column $2$-$5$-$8$ alive, so
+  the root value is $0$ and X must play $5$
+
+* Terms in Combinatorial Game Theory
+
+- @Forcing move@: a move that collapses your opponent's option space to one or few
+  reasonable replies
+  - _Business_: an ultimatum in a negotiation ("accept this term sheet by Friday or
+    the offer is off the table")
+  - _War_: threaten a critical supply line so the enemy must respond there
+
+- @Killer move@: a move from which the outcome is determined regardless of what the
+  opponent does next
+  - _Business_: a product launch or acquisition that locks up the market before
+    rivals can react
+  - _War_: a decisive strike that ends the campaign in one blow
+
+- @Fork@: create two threats at once where the opponent can only counter one
+  - _Business_: launch two competing initiatives at once, forcing a rival to split
+    resources
+  - _War_: attack on two fronts simultaneously, splitting enemy forces
+
+- @Taking initiative / gaining tempo@: force your opponent to react rather than
+  execute their own plan
+  - _Business_: rapid, continuous feature releases that keep competitors perpetually
+    responding to you instead of shipping their own roadmap
+  - _War_: a fast moving offensive that keeps the enemy constantly repositioning
+
+* Terms in Combinatorial Game Theory
+
+- @Commitment device@: an action that removes your own future options, making a
+  threat or promise credible
+  - _Business_: a "money back guarantee" that removes the option to quietly
+    underdeliver
+  - _War_: "burning the boats" so retreat was impossible
+
+- @Signaling@: conveying information about your intentions or capabilities
+  - _Business_: a company announces a large R&D budget increase to signal it intends
+    to compete aggressively in a new market
+  - _War_: a show of force military exercise near a border to signal resolve without
+    direct engagement
+
+- @Brinkmanship@: deliberately escalating risk to force an opponent to back down
+  - _Business_: a union credibly threatens a full strike during peak season to force
+    concessions at the bargaining table
+  - _War_: Cold War nuclear posturing, where each side escalated risk to force the
+    other to concede first
 
 * Minimax: Properties and Cost
 // From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:58 '* Minimax and Alpha-Beta'
@@ -1303,8 +1683,7 @@ digraph ttt_endgame {
   - _Space_ $O(bm)$, from the depth-first recursion
 
 - @Problem@: the time bound makes minimax impractical
-  - Connect 4 needs about $10^{35}$ terminal evaluations, which no hardware
-    delivers
+  - Connect 4 needs about $10^{35}$ terminal evaluations
   - The growth sits in the _exponent_, so faster machines buy almost nothing
 
 - @Question@: can the exact minimax value be computed without examining the
@@ -1312,21 +1691,27 @@ digraph ttt_endgame {
 
 - @Key idea@: yes, because a branch can be _proven_ irrelevant before it is
   fully searched
+// TODO(ai_gp): Explain
   - The root value cannot depend on a move that one of the players has already
     rejected
 
 * Alpha-Beta Pruning
 // From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:58 '* Minimax and Alpha-Beta'
+// TODO(ai_gp): This should only be explained here and not in MTCS
 
 - @Definition@: **pruning** ignores portions of the search tree that make no
   difference to the final choice
   - Alpha-beta pruning returns exactly the minimax value, so it is a smaller
     search and not an approximation
 
+// TODO(gp): Explain better with an example and a plot
+
 - @Intuition@: consider a node $n$ that player $p$ could move to
   - If $p$ has a better choice $m$ anywhere further up the tree, then $n$ is
     never reached in actual play
   - As soon as that is known, $n$ can be pruned
+
+// TODO(gp): Not clear
 
 - @Example@: let $Max$ choose among $B$, $C$, $D$, with the children of $C$
   holding unknown values $x$ and $y$
@@ -1340,50 +1725,6 @@ digraph ttt_endgame {
     pruned
 
 - @Key idea@: the value of the root is independent of the pruned subtrees
-
-* Alpha and Beta
-
-- @Definition@: the algorithm carries two bounds down the recursion
-  - $\alpha$ = the highest-value choice found so far along the path for $Max$
-  - $\beta$ = the lowest-value choice found so far along the path for $Min$
-  - The invariant $\alpha \leq Minimax(s) \leq \beta$ holds while $s$ is being
-    searched
-
-- @Definition@: the **cut-off rules** stop the recursive call as soon as the
-  current node is known to be worse than $\alpha$ or $\beta$
-  - At a $Min$ node, stop as soon as its running value is $\leq \alpha$
-  - At a $Max$ node, stop as soon as its running value is $\geq \beta$
-
-- @Intuition@: $Max$ already holds a move worth $\alpha$
-  - If $Min$ can force a value $\leq \alpha$ inside the branch being searched,
-    $Max$ will never enter that branch
-  - What $Min$ could do beyond that point is irrelevant
-
-- @Remark@: repeated states are handled by a **transposition table** caching
-  the value of each state already evaluated
-
-* Alpha-Beta: The Recursion
-
-- @Input@: a state $s$ and the current bounds $\alpha$ and $\beta$
-
-- @Output@: the minimax value of $s$, or a bound proving $s$ is irrelevant
-
-- @Algorithm@: `max_value(s, alpha, beta)` at a $Max$ node
-  1. Return $Utility(s, Max)$ if $TerminalTest(s)$ holds
-  2. Set $v = -\infty$
-  3. For each action $a$ in $Actions(s)$
-     - Recurse into `min_value` on $Result(s, a)$ with the current $\alpha$ and
-       $\beta$, and set $v$ to the larger of $v$ and the returned value
-     - Return $v$ immediately if $v \geq \beta$
-     - Set $\alpha = \max(\alpha, v)$
-  4. Return $v$ once the actions are exhausted
-
-- @Algorithm@: `min_value(s, alpha, beta)` is the mirror image
-  - Start from $v = +\infty$, take $\min$, return early when $v \leq \alpha$,
-    and tighten $\beta$ instead of $\alpha$
-
-- @Remark@: the root call is `max_value(s_0, -inf, +inf)`
-  - The bounds start maximally loose and narrow as siblings are resolved
 
 * Alpha-Beta: Worked Example
 
@@ -1452,6 +1793,120 @@ digraph alpha_beta {
 - @Key idea@: pruning is driven by the best value already guaranteed, so
   finding a strong move early prunes far more
 
+* Alpha-Beta: Worked Example
+
+::: columns
+:::: {.column width=44%}
+- $Max$ chooses $a_1$, $a_2$, $a_3$ leading to $B$, $C$, $D$, and the leaves
+  are read left to right
+
+- @Example@: the trace
+  - $B$: leaves $3, 12, 8$ give $Minimax(B) = 3$, so $\alpha = 3$ at the root
+  - $C$: the first leaf is $2$, hence $Minimax(C) \leq 2 \leq \alpha$, and the
+    remaining leaves are never generated
+  - $D$: leaves $14$ and $5$ leave $Minimax(D) > 3$ possible, and the leaf $2$
+    settles $Minimax(D) = 2$
+
+- @Remark@: $2$ of $9$ leaves are skipped and the answer is unchanged
+::::
+:::: {.column width=50%}
+
+```graphviz
+digraph alpha_beta {
+    bgcolor="transparent";
+    pad="0.15";
+    ranksep=0.38;
+    nodesep=0.14;
+
+    node [shape=box, style="rounded,filled", penwidth=1.6,
+          fontname="Helvetica", fontsize=10, margin="0.12,0.06",
+          height=0.32];
+    edge [color="#A3B1C0", penwidth=1.2, arrowhead=none];
+
+    r [label="A: MAX = 3", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
+
+    B [label="B = 3",    fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    C [label="C <= 2",   fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    D [label="D = 2",    fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+
+    b1 [label="3",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    b2 [label="12", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    b3 [label="8",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    c1 [label="2",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    c2 [label="x",  fillcolor="#F2F2F2", color="#C7D0DA", fontcolor="#9AA9B8", style="rounded,filled,dashed"];
+    c3 [label="y",  fillcolor="#F2F2F2", color="#C7D0DA", fontcolor="#9AA9B8", style="rounded,filled,dashed"];
+    d1 [label="14", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    d2 [label="5",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    d3 [label="2",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+
+    r -> B [label="a1"];
+    r -> C [label="a2"];
+    r -> D [label="a3"];
+    B -> b1;
+    B -> b2;
+    B -> b3;
+    C -> c1;
+    C -> c2 [style=dashed, color="#C7D0DA"];
+    C -> c3 [style=dashed, color="#C7D0DA"];
+    D -> d1;
+    D -> d2;
+    D -> d3;
+}
+```
+
+::::
+:::
+
+- @Key idea@: pruning is driven by the best value already guaranteed, so
+  finding a strong move early prunes far more
+
+
+* Alpha and Beta
+
+// TODO(gp): Not clear
+
+- @Definition@: the algorithm carries two bounds down the recursion
+  - $\alpha$ = the highest-value choice found so far along the path for $Max$
+  - $\beta$ = the lowest-value choice found so far along the path for $Min$
+  - The invariant $\alpha \leq Minimax(s) \leq \beta$ holds while $s$ is being
+    searched
+
+- @Definition@: the **cut-off rules** stop the recursive call as soon as the
+  current node is known to be worse than $\alpha$ or $\beta$
+  - At a $Min$ node, stop as soon as its running value is $\leq \alpha$
+  - At a $Max$ node, stop as soon as its running value is $\geq \beta$
+
+- @Intuition@: $Max$ already holds a move worth $\alpha$
+  - If $Min$ can force a value $\leq \alpha$ inside the branch being searched,
+    $Max$ will never enter that branch
+  - What $Min$ could do beyond that point is irrelevant
+
+- @Remark@: _repeated states_ are handled by a **transposition table** caching
+  the value of each state already evaluated
+
+* Alpha-Beta: The Recursion
+
+- @Input@: a state $s$ and the current bounds $\alpha$ and $\beta$
+
+- @Output@: the minimax value of $s$, or a bound proving $s$ is irrelevant
+
+- @Algorithm@: `max_value(s, alpha, beta)` at a $Max$ node
+  1. Return $Utility(s, Max)$ if $IsTerminal(s)$ holds
+  2. Set $v = -\infty$
+  3. For each action $a$ in $Actions(s)$
+     - Recurse into `min_value` on $Result(s, a)$ with the current $\alpha$ and
+       $\beta$, and set $v$ to the larger of $v$ and the returned value
+     - Return $v$ immediately if $v \geq \beta$
+     - Set $\alpha = \max(\alpha, v)$
+  4. Return $v$ once the actions are exhausted
+
+- @Algorithm@: `min_value(s, alpha, beta)` is the mirror image
+  - Start from $v = +\infty$, take $\min$, return early when $v \leq \alpha$,
+    and tighten $\beta$ instead of $\alpha$
+
+- @Remark@: the root call is `max_value(s_0, -inf, +inf)`
+  - The bounds start maximally loose and narrow as siblings are resolved
+
 * Move Ordering
 
 - @Problem@: the effectiveness of alpha-beta depends entirely on the order in
@@ -1489,7 +1944,7 @@ digraph alpha_beta {
 
 - @Solution@: cut the search at depth $\ell$ and score the missing subtree with
   a heuristic
-  - Replace $TerminalTest(s)$ by $Cutoff(s, \ell)$
+  - Replace $IsTerminal(s)$ by $Cutoff(s, \ell)$
   - Replace $Utility(s, Max)$ by $Eval(s)$
 
 - @Definition@: a **heuristic evaluation function** $Eval(s)$ approximates the
