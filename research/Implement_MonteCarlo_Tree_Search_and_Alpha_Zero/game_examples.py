@@ -1,9 +1,11 @@
 """
-Concrete `Game` implementations for MCTS: tic-tac-toe and Connect Four.
+Concrete `Game` implementations: tic-tac-toe and Connect Four.
 
-Both games plug into the game-agnostic MCTS engine in `mcts_utils.py` by
-implementing its `Game` interface. See `README.md` for a description of every
-file in this directory.
+Both games plug into any search algorithm in this project (MCTS, minimax,
+alpha-beta pruning, depth-limited search, flat Monte Carlo) by implementing
+the `Game` interface from `game.py`.
+
+See `README.md` for a description of every file in this directory.
 
 Import as:
 
@@ -14,7 +16,7 @@ import logging
 from typing import List, Optional, Tuple, cast
 
 import helpers.hdbg as hdbg
-import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.mcts_utils as rimtsaazmu
+import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.game as rimtsaazg
 
 _LOG = logging.getLogger(__name__)
 
@@ -35,7 +37,7 @@ _CELL_SYMBOLS = {_EMPTY: ".", _PLAYER_X: "X", _PLAYER_O: "O"}
 
 # TODO(gp): This is inefficient since we could keep this info in the state,
 # instead of recomputing it all the times.
-def _infer_current_player(state: rimtsaazmu.State) -> int:
+def _infer_current_player(state: rimtsaazg.State) -> int:
     """
     Infer whose turn it is from how many cells are filled.
 
@@ -51,7 +53,7 @@ def _infer_current_player(state: rimtsaazmu.State) -> int:
     return current_player
 
 
-def _render_board(state: rimtsaazmu.State, num_cols: int) -> str:
+def _render_board(state: rimtsaazg.State, num_cols: int) -> str:
     """
     Render `state` as rows of space-separated symbols.
 
@@ -68,7 +70,7 @@ def _render_board(state: rimtsaazmu.State, num_cols: int) -> str:
 
 
 def _get_line_winner(
-    state: rimtsaazmu.State, win_lines: List[Tuple[int, ...]]
+    state: rimtsaazg.State, win_lines: List[Tuple[int, ...]]
 ) -> int:
     """
     Check `win_lines` for a completed line of same-player marks.
@@ -114,7 +116,7 @@ _TICTACTOE_WIN_LINES = [
 # #############################################################################
 
 
-class TicTacToe(rimtsaazmu.Game):
+class TicTacToe(rimtsaazg.Game):
     """
     3x3 tic-tac-toe.
 
@@ -122,7 +124,7 @@ class TicTacToe(rimtsaazmu.Game):
     indexed row-major from the top-left corner. Player `1` (X) moves first.
     """
 
-    def get_initial_state(self) -> rimtsaazmu.State:
+    def get_initial_state(self) -> rimtsaazg.State:
         """
         Build an empty 3x3 board.
 
@@ -131,7 +133,7 @@ class TicTacToe(rimtsaazmu.Game):
         state = (_EMPTY,) * 9
         return state
 
-    def get_legal_moves(self, state: rimtsaazmu.State) -> List[rimtsaazmu.Move]:
+    def get_legal_moves(self, state: rimtsaazg.State) -> List[rimtsaazg.Move]:
         """
         List the empty cells, if any.
 
@@ -139,14 +141,14 @@ class TicTacToe(rimtsaazmu.Game):
         :return: indices of empty cells, empty if `state` is terminal
         """
         if self.is_terminal(state):
-            moves: List[rimtsaazmu.Move] = []
+            moves: List[rimtsaazg.Move] = []
         else:
             moves = [i for i, cell in enumerate(state) if cell == _EMPTY]
         return moves
 
     def apply_move(
-        self, state: rimtsaazmu.State, move: rimtsaazmu.Move
-    ) -> rimtsaazmu.State:
+        self, state: rimtsaazg.State, move: rimtsaazg.Move
+    ) -> rimtsaazg.State:
         """
         Place the current player's mark at `move`.
 
@@ -161,7 +163,7 @@ class TicTacToe(rimtsaazmu.Game):
         new_state = state[:move] + (player,) + state[move + 1 :]
         return new_state
 
-    def is_terminal(self, state: rimtsaazmu.State) -> bool:
+    def is_terminal(self, state: rimtsaazg.State) -> bool:
         """
         Check whether the board has a winner or is full.
 
@@ -174,7 +176,7 @@ class TicTacToe(rimtsaazmu.Game):
         )
         return is_over
 
-    def get_winner(self, state: rimtsaazmu.State) -> int:
+    def get_winner(self, state: rimtsaazg.State) -> int:
         """
         Determine the outcome of a finished board.
 
@@ -188,7 +190,7 @@ class TicTacToe(rimtsaazmu.Game):
         winner = _get_line_winner(state, _TICTACTOE_WIN_LINES)
         return winner
 
-    def get_current_player(self, state: rimtsaazmu.State) -> int:
+    def get_current_player(self, state: rimtsaazg.State) -> int:
         """
         Infer whose turn it is from how many cells are filled.
 
@@ -199,7 +201,7 @@ class TicTacToe(rimtsaazmu.Game):
         current_player = _infer_current_player(state)
         return current_player
 
-    def render(self, state: rimtsaazmu.State) -> str:
+    def render(self, state: rimtsaazg.State) -> str:
         """
         Render the board as 3 rows of space-separated symbols.
 
@@ -215,7 +217,7 @@ class TicTacToe(rimtsaazmu.Game):
         return board_str
 
 
-def evaluate_tic_tac_toe(state: rimtsaazmu.State) -> float:
+def evaluate_tic_tac_toe(state: rimtsaazg.State) -> float:
     """
     Heuristic evaluation of a (possibly non-terminal) tic-tac-toe state.
 
@@ -303,7 +305,7 @@ _CONNECT_FOUR_WIN_LINES = _build_connect_four_win_lines()
 # #############################################################################
 
 
-class ConnectFour(rimtsaazmu.Game):
+class ConnectFour(rimtsaazg.Game):
     """
     Standard 7-column x 6-row Connect Four.
 
@@ -314,7 +316,7 @@ class ConnectFour(rimtsaazmu.Game):
     legal move. Player `1` (X) moves first.
     """
 
-    def get_initial_state(self) -> rimtsaazmu.State:
+    def get_initial_state(self) -> rimtsaazg.State:
         """
         Build an empty 6x7 board.
 
@@ -323,7 +325,7 @@ class ConnectFour(rimtsaazmu.Game):
         state = (_EMPTY,) * (_CONNECT_FOUR_NUM_ROWS * _CONNECT_FOUR_NUM_COLS)
         return state
 
-    def get_legal_moves(self, state: rimtsaazmu.State) -> List[rimtsaazmu.Move]:
+    def get_legal_moves(self, state: rimtsaazg.State) -> List[rimtsaazg.Move]:
         """
         List the columns that still have room, if any.
 
@@ -333,7 +335,7 @@ class ConnectFour(rimtsaazmu.Game):
         :return: column indices with room, empty if `state` is terminal
         """
         if self.is_terminal(state):
-            moves: List[rimtsaazmu.Move] = []
+            moves: List[rimtsaazg.Move] = []
         else:
             moves = [
                 col
@@ -342,7 +344,7 @@ class ConnectFour(rimtsaazmu.Game):
             ]
         return moves
 
-    def _get_landing_row(self, state: rimtsaazmu.State, col: int) -> int:
+    def _get_landing_row(self, state: rimtsaazg.State, col: int) -> int:
         """
         Find the lowest empty row in `col` (gravity drop target).
 
@@ -359,8 +361,8 @@ class ConnectFour(rimtsaazmu.Game):
         return cast(int, landing_row)
 
     def apply_move(
-        self, state: rimtsaazmu.State, move: rimtsaazmu.Move
-    ) -> rimtsaazmu.State:
+        self, state: rimtsaazg.State, move: rimtsaazg.Move
+    ) -> rimtsaazg.State:
         """
         Drop the current player's mark into column `move`.
 
@@ -375,7 +377,7 @@ class ConnectFour(rimtsaazmu.Game):
         new_state = state[:cell_idx] + (player,) + state[cell_idx + 1 :]
         return new_state
 
-    def is_terminal(self, state: rimtsaazmu.State) -> bool:
+    def is_terminal(self, state: rimtsaazg.State) -> bool:
         """
         Check whether the board has a 4-in-a-row winner or is full.
 
@@ -388,7 +390,7 @@ class ConnectFour(rimtsaazmu.Game):
         )
         return is_over
 
-    def get_winner(self, state: rimtsaazmu.State) -> int:
+    def get_winner(self, state: rimtsaazg.State) -> int:
         """
         Determine the outcome of a finished board.
 
@@ -402,7 +404,7 @@ class ConnectFour(rimtsaazmu.Game):
         winner = _get_line_winner(state, _CONNECT_FOUR_WIN_LINES)
         return winner
 
-    def get_current_player(self, state: rimtsaazmu.State) -> int:
+    def get_current_player(self, state: rimtsaazg.State) -> int:
         """
         Infer whose turn it is from how many cells are filled.
 
@@ -413,7 +415,7 @@ class ConnectFour(rimtsaazmu.Game):
         current_player = _infer_current_player(state)
         return current_player
 
-    def render(self, state: rimtsaazmu.State) -> str:
+    def render(self, state: rimtsaazg.State) -> str:
         """
         Render the board as 6 rows of space-separated symbols.
 

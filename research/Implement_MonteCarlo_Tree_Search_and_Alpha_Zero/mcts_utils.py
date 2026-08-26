@@ -1,18 +1,17 @@
 """
 Monte Carlo Tree Search (MCTS): a game-agnostic tree search engine.
 
-Defines the `Game` interface and the MCTS algorithm (selection, expansion,
-rollout, backpropagation) used to play any two-player, zero-sum,
-perfect-information game against it. See `game_examples.py` for concrete
-`Game` implementations (tic-tac-toe, Connect Four) and `README.md` for a
-description of every file in this directory.
+Implements the MCTS algorithm (selection, expansion, rollout,
+backpropagation) against the `Game` interface defined in `game.py`, used to
+play any two-player, zero-sum, perfect-information game.
+
+See `README.md` for a description of every file in this directory.
 
 Import as:
 
 import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.mcts_utils as rimtsaazmu
 """
 
-import abc
 import logging
 import math
 import random
@@ -23,14 +22,9 @@ import numpy as np
 import tqdm
 
 import helpers.hdbg as hdbg
+import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.game as rimtsaazg
 
 _LOG = logging.getLogger(__name__)
-
-# A game state is a flat tuple of cell values and a move is an integer
-# identifying the action (e.g., a cell index or a column); see
-# `game_examples.py` for concrete `Game` implementations.
-State = Tuple[int, ...]
-Move = int
 
 # #############################################################################
 # Constants
@@ -44,86 +38,6 @@ EXPLORATION_CONSTANT = math.sqrt(2)
 # Default number of MCTS simulations run per move when the caller does not
 # override it.
 DEFAULT_NUM_SIMULATIONS = 500
-
-
-# #############################################################################
-# Game
-# #############################################################################
-
-
-class Game(abc.ABC):
-    """
-    Game-agnostic interface for a two-player, zero-sum, perfect-information
-    game usable by MCTS.
-
-    A concrete game (e.g., `TicTacToe`, later Connect Four) implements these
-    six methods; `run_mcts()` and the rest of the search code only depend on
-    this interface, so a new game can be plugged in without touching the
-    search logic. Players are represented as `1` and `-1`; a draw is `0`.
-    """
-
-    @abc.abstractmethod
-    def get_initial_state(self) -> State:
-        """
-        Build the starting state of a new game.
-
-        :return: initial game state
-        """
-
-    @abc.abstractmethod
-    def get_legal_moves(self, state: State) -> List[Move]:
-        """
-        List the moves available from `state`.
-
-        :param state: game state to query
-        :return: legal moves, empty if `state` is terminal
-        """
-
-    @abc.abstractmethod
-    def apply_move(self, state: State, move: Move) -> State:
-        """
-        Apply `move` to `state` and return the resulting state.
-
-        :param state: game state before the move
-        :param move: move to apply, must be legal in `state`
-        :return: new game state after the move
-        """
-
-    @abc.abstractmethod
-    def is_terminal(self, state: State) -> bool:
-        """
-        Check whether `state` ends the game.
-
-        :param state: game state to query
-        :return: True if no more moves can be made from `state`
-        """
-
-    @abc.abstractmethod
-    def get_winner(self, state: State) -> int:
-        """
-        Determine the outcome of a terminal state.
-
-        :param state: terminal game state
-        :return: `1` or `-1` for the winning player, `0` for a draw
-        """
-
-    @abc.abstractmethod
-    def get_current_player(self, state: State) -> int:
-        """
-        Report whose turn it is to move in `state`.
-
-        :param state: game state to query
-        :return: `1` or `-1`
-        """
-
-    @abc.abstractmethod
-    def render(self, state: State) -> str:
-        """
-        Render `state` as a human-readable board.
-
-        :param state: game state to render
-        :return: printable board representation
-        """
 
 
 # #############################################################################
@@ -141,11 +55,11 @@ class MCTSNode:
 
     def __init__(
         self,
-        state: State,
+        state: rimtsaazg.State,
         *,
         parent: Optional["MCTSNode"] = None,
-        move: Optional[Move] = None,
-        untried_moves: Optional[List[Move]] = None,
+        move: Optional[rimtsaazg.Move] = None,
+        untried_moves: Optional[List[rimtsaazg.Move]] = None,
     ) -> None:
         """
         Initialize a node for `state`.
@@ -161,10 +75,10 @@ class MCTSNode:
         self.state = state
         self.parent = parent
         self.move = move
-        self.children: Dict[Move, "MCTSNode"] = {}
+        self.children: Dict[rimtsaazg.Move, "MCTSNode"] = {}
         self.visit_count = 0
         self.value_sum = 0.0
-        self.untried_moves: List[Move] = list(untried_moves or [])
+        self.untried_moves: List[rimtsaazg.Move] = list(untried_moves or [])
 
     @property
     def is_fully_expanded(self) -> bool:
@@ -242,7 +156,7 @@ def _uct_score(
 
 def _select(
     node: MCTSNode,
-    game: Game,
+    game: rimtsaazg.Game,
     *,
     exploration_constant: float = EXPLORATION_CONSTANT,
 ) -> MCTSNode:
@@ -269,7 +183,7 @@ def _select(
     return node
 
 
-def _expand(node: MCTSNode, game: Game) -> MCTSNode:
+def _expand(node: MCTSNode, game: rimtsaazg.Game) -> MCTSNode:
     """
     Add one new child to `node` for a randomly chosen untried move.
 
@@ -290,7 +204,7 @@ def _expand(node: MCTSNode, game: Game) -> MCTSNode:
     return child
 
 
-def random_rollout(game: Game, state: State) -> int:
+def random_rollout(game: rimtsaazg.Game, state: rimtsaazg.State) -> int:
     """
     Play out `state` to a terminal state using uniformly random moves.
 
@@ -337,8 +251,8 @@ def _backpropagate(node: MCTSNode, value: float) -> None:
 
 
 def build_mcts_tree(
-    game: Game,
-    state: State,
+    game: rimtsaazg.Game,
+    state: rimtsaazg.State,
     *,
     num_simulations: int = DEFAULT_NUM_SIMULATIONS,
     exploration_constant: float = EXPLORATION_CONSTANT,
@@ -385,12 +299,12 @@ def build_mcts_tree(
 
 
 def run_mcts(
-    game: Game,
-    state: State,
+    game: rimtsaazg.Game,
+    state: rimtsaazg.State,
     *,
     num_simulations: int = DEFAULT_NUM_SIMULATIONS,
     exploration_constant: float = EXPLORATION_CONSTANT,
-) -> Move:
+) -> rimtsaazg.Move:
     """
     Run MCTS from `state` and return the most-visited move at the root.
 
@@ -419,7 +333,7 @@ def run_mcts(
     return best_move
 
 
-def random_player(game: Game, state: State) -> Move:
+def random_player(game: rimtsaazg.Game, state: rimtsaazg.State) -> rimtsaazg.Move:
     """
     Select a uniformly random legal move.
 
@@ -437,7 +351,7 @@ def random_player(game: Game, state: State) -> Move:
 
 def make_mcts_player(
     *, num_simulations: int = DEFAULT_NUM_SIMULATIONS
-) -> Callable[[Game, State], Move]:
+) -> Callable[[rimtsaazg.Game, rimtsaazg.State], rimtsaazg.Move]:
     """
     Build a `(game, state) -> move` player function backed by MCTS.
 
@@ -446,7 +360,7 @@ def make_mcts_player(
     :return: player function suitable for `play_game()`
     """
 
-    def player(game: Game, state: State) -> Move:
+    def player(game: rimtsaazg.Game, state: rimtsaazg.State) -> rimtsaazg.Move:
         move = run_mcts(game, state, num_simulations=num_simulations)
         return move
 
@@ -454,12 +368,12 @@ def make_mcts_player(
 
 
 def play_game(
-    game: Game,
-    player1: Callable[[Game, State], Move],
-    player2: Callable[[Game, State], Move],
+    game: rimtsaazg.Game,
+    player1: Callable[[rimtsaazg.Game, rimtsaazg.State], rimtsaazg.Move],
+    player2: Callable[[rimtsaazg.Game, rimtsaazg.State], rimtsaazg.Move],
     *,
     verbose: bool = False,
-) -> Tuple[int, List[State]]:
+) -> Tuple[int, List[rimtsaazg.State]]:
     """
     Play one full game between two players, alternating moves.
 
@@ -494,9 +408,9 @@ def play_game(
 
 
 def evaluate_win_rate(
-    game: Game,
-    player_under_test: Callable[[Game, State], Move],
-    opponent: Callable[[Game, State], Move],
+    game: rimtsaazg.Game,
+    player_under_test: Callable[[rimtsaazg.Game, rimtsaazg.State], rimtsaazg.Move],
+    opponent: Callable[[rimtsaazg.Game, rimtsaazg.State], rimtsaazg.Move],
     *,
     num_games: int = 200,
     show_progress: bool = True,

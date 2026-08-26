@@ -1,6 +1,6 @@
 // type=UMD_slides
 // course_title=MSML610: Advanced Machine Learning
-// lesson_title=L09.8: Monte Carlo Tree Search
+// lesson_title=L09.9: Monte Carlo Tree Search
 // slides_engine=typst
 // references=
 // - 2006, Coulom, "Efficient Selectivity and Backup Operators in Monte-Carlo
@@ -56,28 +56,18 @@
   - There are around $10^80$ atoms in the visible universe
 
 * Minimax and Alpha-Beta
+// TODO(ai_gp): Turn this into a recap of game-tree search + problem of evaluation
+// function
 
-- @Definition@: in two players adversarial game, **minimax** computes the value of a
-  state by backing terminal values up the tree
-  - Returns the **optimal action** when:
-    - The whole tree is searched
-    - Both players play optimally
-
-- @Problem@: a full minimax search requires search tree and costs $O(b^d)$ 
-  $\to$ infeasible
-
-- @(Naive) Solution@:
-  - **Alpha-beta pruning** skip exploring branches that are proven worse than a move
-    already found
-  - The cost can drop to $O(b^{d/2})$, which doubles the reachable depth
-  - The cost is still exponential in $d$
-
-- @Definition@: **Depth-limited search**
-  - Cuts the search at a fixed depth
-  - Replaces the true value of a not-terminal state with a heuristic estimated
-  - Every cut node must be scored by a hand-built _evaluation function_
+- @Remark@: exhaustive game-tree search (**minimax**, **alpha-beta pruning**,
+  and depth-limited search with a heuristic evaluation) is covered in detail
+  in Lesson 09.8
+  - Even alpha-beta's best case, $O(b^{d/2})$, stays exponential in $d$
+  - Depth-limiting past that point still needs a hand-built evaluation
+    function at every cut node
 
 * The Evaluation Function Bottleneck
+// TODO(ai_gp): Move to Lesson09.8
 
 - @Problem@: **evaluation function** of a state is a heuristic estimate of the
   "quality" of a state

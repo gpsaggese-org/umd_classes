@@ -3,8 +3,8 @@ Classical adversarial search: minimax, alpha-beta pruning, depth-limited
 search, and flat Monte Carlo.
 
 All four algorithms plug into the same game-agnostic `Game` interface that
-`mcts_utils.py`'s MCTS engine uses (see `mcts_utils.Game` and
-`game_examples.py` for concrete games).
+`mcts_utils.py`'s MCTS engine uses (see `game.Game` and `game_examples.py`
+for concrete games).
 
 See `README.md` for a description of every file in this directory.
 
@@ -32,6 +32,7 @@ if TYPE_CHECKING:
     import graphviz
 
 import helpers.hdbg as hdbg
+import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.game as rimtsaazg
 import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.mcts_utils as rimtsaazmu
 
 _LOG = logging.getLogger(__name__)
@@ -72,10 +73,10 @@ class SearchNode:
 
     def __init__(
         self,
-        state: rimtsaazmu.State,
+        state: rimtsaazg.State,
         *,
         parent: Optional["SearchNode"] = None,
-        move: Optional[rimtsaazmu.Move] = None,
+        move: Optional[rimtsaazg.Move] = None,
     ) -> None:
         """
         Initialize a node for `state`.
@@ -135,7 +136,7 @@ class SearchNode:
         return count
 
     def add_child(
-        self, move: rimtsaazmu.Move, state: rimtsaazmu.State
+        self, move: rimtsaazg.Move, state: rimtsaazg.State
     ) -> "SearchNode":
         """
         Append and return a new child of `move` -> `state`.
@@ -169,7 +170,7 @@ class SearchNode:
 # #############################################################################
 
 
-def _minimax(node: SearchNode, game: rimtsaazmu.Game) -> float:
+def _minimax(node: SearchNode, game: rimtsaazg.Game) -> float:
     """
     Recursively back up the exact minimax value of `node.state`.
 
@@ -197,7 +198,7 @@ def _minimax(node: SearchNode, game: rimtsaazmu.Game) -> float:
 
 
 def build_minimax_tree(
-    game: rimtsaazmu.Game, state: rimtsaazmu.State
+    game: rimtsaazg.Game, state: rimtsaazg.State
 ) -> SearchNode:
     """
     Run exact minimax from `state` and return the fully-built search tree.
@@ -214,7 +215,7 @@ def build_minimax_tree(
     return root
 
 
-def run_minimax(game: rimtsaazmu.Game, state: rimtsaazmu.State) -> rimtsaazmu.Move:
+def run_minimax(game: rimtsaazg.Game, state: rimtsaazg.State) -> rimtsaazg.Move:
     """
     Run exact minimax from `state` and return the best move at the root.
 
@@ -228,14 +229,14 @@ def run_minimax(game: rimtsaazmu.Game, state: rimtsaazmu.State) -> rimtsaazmu.Mo
     return best_move
 
 
-def make_minimax_player() -> Callable[[rimtsaazmu.Game, rimtsaazmu.State], rimtsaazmu.Move]:
+def make_minimax_player() -> Callable[[rimtsaazg.Game, rimtsaazg.State], rimtsaazg.Move]:
     """
     Build a `(game, state) -> move` player function backed by minimax.
 
     :return: player function suitable for `mcts_utils.play_game()`
     """
 
-    def player(game: rimtsaazmu.Game, state: rimtsaazmu.State) -> rimtsaazmu.Move:
+    def player(game: rimtsaazg.Game, state: rimtsaazg.State) -> rimtsaazg.Move:
         move = run_minimax(game, state)
         return move
 
@@ -248,7 +249,7 @@ def make_minimax_player() -> Callable[[rimtsaazmu.Game, rimtsaazmu.State], rimts
 
 
 def _alpha_beta(
-    node: SearchNode, game: rimtsaazmu.Game, alpha: float, beta: float
+    node: SearchNode, game: rimtsaazg.Game, alpha: float, beta: float
 ) -> float:
     """
     Recursively back up the minimax value of `node.state`, skipping any
@@ -299,7 +300,7 @@ def _alpha_beta(
 
 
 def build_alpha_beta_tree(
-    game: rimtsaazmu.Game, state: rimtsaazmu.State
+    game: rimtsaazg.Game, state: rimtsaazg.State
 ) -> SearchNode:
     """
     Run alpha-beta pruning from `state` and return the search tree.
@@ -319,8 +320,8 @@ def build_alpha_beta_tree(
 
 
 def run_alpha_beta(
-    game: rimtsaazmu.Game, state: rimtsaazmu.State
-) -> rimtsaazmu.Move:
+    game: rimtsaazg.Game, state: rimtsaazg.State
+) -> rimtsaazg.Move:
     """
     Run alpha-beta pruning from `state` and return the best move at the
     root.
@@ -339,7 +340,7 @@ def run_alpha_beta(
     return best_move
 
 
-def make_alpha_beta_player() -> Callable[[rimtsaazmu.Game, rimtsaazmu.State], rimtsaazmu.Move]:
+def make_alpha_beta_player() -> Callable[[rimtsaazg.Game, rimtsaazg.State], rimtsaazg.Move]:
     """
     Build a `(game, state) -> move` player function backed by alpha-beta
     pruning.
@@ -347,7 +348,7 @@ def make_alpha_beta_player() -> Callable[[rimtsaazmu.Game, rimtsaazmu.State], ri
     :return: player function suitable for `mcts_utils.play_game()`
     """
 
-    def player(game: rimtsaazmu.Game, state: rimtsaazmu.State) -> rimtsaazmu.Move:
+    def player(game: rimtsaazg.Game, state: rimtsaazg.State) -> rimtsaazg.Move:
         move = run_alpha_beta(game, state)
         return move
 
@@ -361,10 +362,10 @@ def make_alpha_beta_player() -> Callable[[rimtsaazmu.Game, rimtsaazmu.State], ri
 
 def _depth_limited(
     node: SearchNode,
-    game: rimtsaazmu.Game,
+    game: rimtsaazg.Game,
     depth: int,
     max_depth: int,
-    evaluate_fn: Callable[[rimtsaazmu.State], float],
+    evaluate_fn: Callable[[rimtsaazg.State], float],
 ) -> float:
     """
     Recursively back up the value of `node.state`, cutting at `max_depth`
@@ -400,9 +401,9 @@ def _depth_limited(
 
 
 def build_depth_limited_tree(
-    game: rimtsaazmu.Game,
-    state: rimtsaazmu.State,
-    evaluate_fn: Callable[[rimtsaazmu.State], float],
+    game: rimtsaazg.Game,
+    state: rimtsaazg.State,
+    evaluate_fn: Callable[[rimtsaazg.State], float],
     *,
     max_depth: int = DEFAULT_MAX_DEPTH,
 ) -> SearchNode:
@@ -430,12 +431,12 @@ def build_depth_limited_tree(
 
 
 def run_depth_limited(
-    game: rimtsaazmu.Game,
-    state: rimtsaazmu.State,
-    evaluate_fn: Callable[[rimtsaazmu.State], float],
+    game: rimtsaazg.Game,
+    state: rimtsaazg.State,
+    evaluate_fn: Callable[[rimtsaazg.State], float],
     *,
     max_depth: int = DEFAULT_MAX_DEPTH,
-) -> rimtsaazmu.Move:
+) -> rimtsaazg.Move:
     """
     Run depth-limited minimax from `state` and return the best move.
 
@@ -455,10 +456,10 @@ def run_depth_limited(
 
 
 def make_depth_limited_player(
-    evaluate_fn: Callable[[rimtsaazmu.State], float],
+    evaluate_fn: Callable[[rimtsaazg.State], float],
     *,
     max_depth: int = DEFAULT_MAX_DEPTH,
-) -> Callable[[rimtsaazmu.Game, rimtsaazmu.State], rimtsaazmu.Move]:
+) -> Callable[[rimtsaazg.Game, rimtsaazg.State], rimtsaazg.Move]:
     """
     Build a `(game, state) -> move` player function backed by depth-limited
     search.
@@ -469,7 +470,7 @@ def make_depth_limited_player(
     :return: player function suitable for `mcts_utils.play_game()`
     """
 
-    def player(game: rimtsaazmu.Game, state: rimtsaazmu.State) -> rimtsaazmu.Move:
+    def player(game: rimtsaazg.Game, state: rimtsaazg.State) -> rimtsaazg.Move:
         move = run_depth_limited(game, state, evaluate_fn, max_depth=max_depth)
         return move
 
@@ -482,9 +483,9 @@ def make_depth_limited_player(
 
 
 def _estimate_action_value(
-    game: rimtsaazmu.Game,
-    state: rimtsaazmu.State,
-    move: rimtsaazmu.Move,
+    game: rimtsaazg.Game,
+    state: rimtsaazg.State,
+    move: rimtsaazg.Move,
     *,
     num_rollouts: int,
 ) -> float:
@@ -516,8 +517,8 @@ def _estimate_action_value(
 
 
 def build_flat_mc_tree(
-    game: rimtsaazmu.Game,
-    state: rimtsaazmu.State,
+    game: rimtsaazg.Game,
+    state: rimtsaazg.State,
     *,
     num_rollouts: int = DEFAULT_NUM_ROLLOUTS,
 ) -> SearchNode:
@@ -553,11 +554,11 @@ def build_flat_mc_tree(
 
 
 def run_flat_mc(
-    game: rimtsaazmu.Game,
-    state: rimtsaazmu.State,
+    game: rimtsaazg.Game,
+    state: rimtsaazg.State,
     *,
     num_rollouts: int = DEFAULT_NUM_ROLLOUTS,
-) -> rimtsaazmu.Move:
+) -> rimtsaazg.Move:
     """
     Run flat Monte Carlo from `state` and return `argmax_a Q_hat(s0, a)`.
 
@@ -574,7 +575,7 @@ def run_flat_mc(
 
 def make_flat_mc_player(
     *, num_rollouts: int = DEFAULT_NUM_ROLLOUTS
-) -> Callable[[rimtsaazmu.Game, rimtsaazmu.State], rimtsaazmu.Move]:
+) -> Callable[[rimtsaazg.Game, rimtsaazg.State], rimtsaazg.Move]:
     """
     Build a `(game, state) -> move` player function backed by flat Monte
     Carlo.
@@ -584,7 +585,7 @@ def make_flat_mc_player(
     :return: player function suitable for `mcts_utils.play_game()`
     """
 
-    def player(game: rimtsaazmu.Game, state: rimtsaazmu.State) -> rimtsaazmu.Move:
+    def player(game: rimtsaazg.Game, state: rimtsaazg.State) -> rimtsaazg.Move:
         move = run_flat_mc(game, state, num_rollouts=num_rollouts)
         return move
 
@@ -596,7 +597,7 @@ def make_flat_mc_player(
 # #############################################################################
 
 
-def pick_best_move(game: rimtsaazmu.Game, root: SearchNode) -> rimtsaazmu.Move:
+def pick_best_move(game: rimtsaazg.Game, root: SearchNode) -> rimtsaazg.Move:
     """
     Pick the move of the root child with the best value for the player to
     move at `root.state`.
@@ -620,7 +621,7 @@ def pick_best_move(game: rimtsaazmu.Game, root: SearchNode) -> rimtsaazmu.Move:
         best_child = max(children, key=lambda child: cast(float, child.value))
     else:
         best_child = min(children, key=lambda child: cast(float, child.value))
-    return cast(rimtsaazmu.Move, best_child.move)
+    return cast(rimtsaazg.Move, best_child.move)
 
 
 # #############################################################################
@@ -672,7 +673,7 @@ def _add_node_to_graph(
     node_id: str,
     depth: int,
     max_depth: int,
-    best_move: Optional[rimtsaazmu.Move],
+    best_move: Optional[rimtsaazg.Move],
 ) -> None:
     """
     Recursively add `node` and its descendants (up to `max_depth`) to `dot`.
@@ -716,7 +717,7 @@ def _add_node_to_graph(
 def build_tree_graph(
     root: SearchNode,
     *,
-    best_move: Optional[rimtsaazmu.Move] = None,
+    best_move: Optional[rimtsaazg.Move] = None,
     max_depth: int = DEFAULT_RENDER_DEPTH,
 ) -> "graphviz.Digraph":
     """

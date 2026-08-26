@@ -1,6 +1,6 @@
 // type=UMD_slides
 // course_title=MSML610: Advanced Machine Learning
-// lesson_title=L09.9: Classical Search Algorithms
+// lesson_title=L09.8: Classical Search Algorithms
 // slides_engine=typst
 // references=
 // - AIMA Chap 3: Solving problems by searching
@@ -37,12 +37,12 @@
 
 * Problem-Solving Agents
 
-- @Definition@:
+- @Definition@
   - A **problem-solving agent** is a goal-based agent using an _atomic_ state
     representation (i.e., a black box with no internal structure)
   - A **planning agent** instead uses a _factored_ or _structured_ representation
 
-- @Algorithm@: formulate, search, execute
+- @Algorithm@: (Goal-based agent)
   1. _Goal formulation_: choose the desirable states of the world to reach
   2. _Problem formulation_: decide which actions and states to consider
   3. _Search_: compute a sequence of actions reaching the goal
@@ -61,19 +61,30 @@
 * Anatomy of a Search Problem
 
 - @Definition@: a **search problem** is defined by five components:
-  - _Initial state_ $s_0$: where the agent starts
-  - _Actions_: the legal actions $Actions(s)$ available in state $s$
-  - _Transition model_: the state reached $Result(s, a)$ by doing $a$ in $s$
-  - _Goal test_: $IsGoal(s) = true$ when $s$ is an acceptable end (terminal)
-    state
-  - _Path cost_ : the cost of one step $Cost(s, a, s')$
+
+```{=typst}
+#styled-table(
+  headers: ([Element], [Symbol], [Explanation]),
+  rows: (
+    ([Initial state], [$s_0$], [Where the agent starts]),
+    ([Actions], [$op("Actions")(s)$], [Legal actions available in state $s$]),
+    ([Transition model], [$op("Result")(s, a)$],
+     [State reached by doing $a$ in $s$]),
+    ([Goal test], [$op("IsGoal")(s)$],
+     [True when $s$ is an acceptable end (terminal) state]),
+    ([Path cost], [$op("Cost")(s, a, s')$], [Cost of one step]),
+  ),
+  col-widths: (1.5fr, 1.3fr, 2.2fr),
+  bold-first-col: true
+)
+```
 
 - @Definition@:
-  - The **state space** is the directed graph these elements induce
-    - _Nodes_ are states, _edges_ are actions
+  - The **state space** is the directed graph induced by a serch problem,
+    where _nodes_ are states and _edges_ are actions
   - A **path** is a sequence of states joined by a sequence of actions
   - A **solution** is a path from $s_0$ to a state satisfying $IsGoal$
-    - _Solution quality_ is measured by path cost
+    - _Solution quality_ is measured by its path cost
   - An **optimal solution** has the lowest path cost of all solutions
 
 - @Key idea@:
@@ -101,8 +112,8 @@
 
 - @Remark@:
   - A state is the _board state plus the player to move_, not the move history
-    - "State space" vs "Search Tree"
-  - Two different move orders reaching the same board correspond to the same state
+    - See "state space" vs "search Tree"
+  - Two different move orders that reach the same board correspond to the same state
 
 * Connect-N as a Search Problem
 
@@ -224,8 +235,6 @@ digraph ConnectFourDrop {
 ::::
 :::: {.column width=40%}
 
-// TODO(ai_gp): Make the nodes all the same size across the different figures by
-// reducing the size of the font inside
 ```graphviz
 digraph state_space_vs_tree {
     bgcolor="transparent";
@@ -236,7 +245,7 @@ digraph state_space_vs_tree {
     rankdir=TB;
 
     node [shape=circle, style="filled", penwidth=1.8,
-          fontname="Helvetica", fontsize=12, width=0.42, fixedsize=true];
+          fontname="Helvetica", fontsize=8, width=0.42, fixedsize=true];
     edge [color="#A3B1C0", penwidth=1.3, arrowhead=vee, arrowsize=0.7];
 
     subgraph cluster_space {
@@ -351,6 +360,7 @@ digraph TicTacToeRootExpansion {
 
 - @Example@: expanding the first two successors adds 8 boards each, since 8 empty
   cells are left for `O`
+  - The dashed node stands for the 7 successors not drawn
 
 ```graphviz
 digraph TicTacToeTwoPlies {
@@ -424,20 +434,20 @@ digraph TicTacToeTwoPlies {
 }
 ```
 
-- @Remark@: the dashed node stands for the $7$ successors not drawn
-
 * Redundant Paths and Graph Search
 
 ::: columns
 :::: {.column width=55%}
 - @Definition@: three kinds of "wasted work" while searching a search tree
-  - **Loopy path**: a path containing a cycle
+  - **Loopy path**: a path revisiting a state already on that same path
     - Never better than the same path with the loop removed
-  - **Repeated path**: reached by reversible actions
-    - E.g. driving from A to B and back
+  - **Repeated path**: a loopy path of length two, from undoing the last
+    reversible action
+    - E.g. driving from A to B and immediately back to A
+    - Special case of a loopy path, not a different phenomenon
   - **Redundant path**: any case where several paths join the same two states
-
-// TODO(gp): Why are loopy and repeated the same?
+    - Most general notion: a loopy path is redundant with itself, so
+      repeated $\subseteq$ loopy $\subseteq$ redundant
 
 ::::
 :::: {.column width=45%}
@@ -584,8 +594,9 @@ digraph ttt_redundant_paths {
   - Without bookkeeping the search re-expands a state every time a path reaches it
   - E.g., reaching the opposite corner of a $d \times d$ grid takes
     $\frac{(2d)!}{(d!)^2}$ distinct paths over only $(d + 1)^2$ states
-
-// TODO(ai_gp): Add an explanation or a visual of the example above
+    - E.g., $d = 2$ gives $6$ distinct paths over just $9$ states, since every
+      path takes $2d = 4$ steps and only differs in which $d$ of them go right
+      instead of down
 
 - @Solution@: graph search keeps an **explored set** of expanded states
   - Aka "closed list"
@@ -652,7 +663,7 @@ digraph TicTacToeFirstPly {
   - There is a symmetry between `X` and `O` swapping the roles
 
 * Measuring a Search Algorithm
-// From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:32 '* Why Search Trees Explode'
+// From: msml610/lectures_source/Lesson09.9-MonteCarlo_Tree_Search.smd:32 '* Why Search Trees Explode'
 // TODO(gp): Copy / move / merge some content from 9.8 here
 
 - @Definition@: four **criteria evaluate a search algorithm**
@@ -843,29 +854,29 @@ digraph bfs_tree {
 ::::
 :::: {.column width=30%}
 
-// TODO(ai_gp): Rotate and make it similar to the previous plot
 ```graphviz
 digraph bfs_unequal_cost {
     bgcolor="transparent";
     pad="0.15";
-    rankdir=LR;
-    nodesep=0.35;
-    ranksep=0.55;
+    rankdir=TB;
+    splines=line;
+    nodesep=0.30;
+    ranksep=0.40;
 
     node [shape=circle, style="filled", penwidth=1.4,
-          fontname="Helvetica", fontsize=10, width=0.50, fixedsize=true];
-    edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.7,
-          fontname="Helvetica", fontsize=10, fontcolor="#7B8794"];
+          fontname="Helvetica", fontsize=10, width=0.55, fixedsize=true];
+    edge [color="#A3B1C0", penwidth=1.1, arrowhead=vee, arrowsize=0.6,
+          fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
 
     // G appears twice: same goal state, reached via two different search-tree paths
 
     S0 [label="S0", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
     M1 [label="M1", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
     M2 [label="M2", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
-    G1 [label="G\n(returned)", shape=box, fillcolor="#9CC4F2",
-        color="#C0455B", penwidth=2.0, fontcolor="#1F4E79"];
-    G2 [label="G\n(cheaper)", shape=box, fillcolor="#9CC4F2",
-        color="#3C6FB0", fontcolor="#1F4E79"];
+    G1 [label="G\n(returned)", fillcolor="#9CC4F2",
+        color="#C0455B", penwidth=2.2, fontcolor="#1F4E79", fixedsize=false];
+    G2 [label="G\n(cheaper)", fillcolor="#9CC4F2",
+        color="#3C6FB0", fontcolor="#1F4E79", fixedsize=false];
 
     S0 -> G1 [label="  cost 100  ", color="#C0455B", penwidth=1.6,
               fontcolor="#C0455B"];
@@ -978,7 +989,6 @@ digraph bfs_unequal_cost {
   - $g(n)$ = the path cost of $n$ from the initial state, known exactly
   - $h(n)$ = the estimated cost from $n$ to a goal, computed cheaply
 
-// TODO(ai_gp): Adapt to the example above, e.g., f(n) = g(n) + h(n) and h^*(n)
 ```graphviz[width=65%]
 digraph route_heuristic {
     bgcolor="transparent";
@@ -1000,8 +1010,13 @@ digraph route_heuristic {
     Start -> N [label="  g(n): road so far  "];
     N -> Mid [label="  road  "];
     Mid -> Goal;
-    N -> Goal [label="  h(n): straight line  ", style=dashed,
+    N -> Goal [label="  h(n): estimate of h*(n)  ", style=dashed,
                color="#C0455B", fontcolor="#C0455B", constraint=false];
+
+    label="f(n) = g(n) + h(n): estimated cost of a solution through n";
+    fontname="Helvetica";
+    fontsize=10;
+    fontcolor="#7B8794";
 }
 ```
 
@@ -1086,6 +1101,8 @@ digraph astar_fn {
   - $g \equiv 0$ recovers greedy best-first search
 
 * Admissibility and Consistency
+
+// TODO(gp): explain and add intuition
 
 - @Definition@: $h$ is **admissible** if it never overestimates the cost to
   reach the goal at every node $n$
@@ -1371,8 +1388,6 @@ digraph and_or_tree {
 
 * Game Trees
 
-// TODO(ai_gp): Explain this in terms of AND-OR tree and make the flow better
-
 ::: columns
 :::: {.column width=50%}
 - @Definition@: a **game tree** has game states as nodes and moves as edges, running
@@ -1381,10 +1396,12 @@ digraph and_or_tree {
   - It is often too large to build explicitly, so it is only ever considered
     implicitly
 
-
-- @Example@: adversarial game trees are `AND-OR` trees where $Max$'s turns
-  are `OR` nodes and $Min$'s turns are `AND` nodes, since $Min$ picks the
-  reply that $Max$ must survive
+- @Intuition@: a game tree is the `AND-OR` tree of the game
+  - $Max$'s turns are `OR` nodes: $Max$ _chooses_ one action
+  - $Min$'s turns are `AND` nodes: $Max$ must survive _every_ reply $Min$
+    could pick
+  - A solution is therefore not a path but a **contingent strategy**: a reply
+    to every move the opponent can make
 
 ::::
 :::: {.column width=50%}
@@ -1436,16 +1453,12 @@ digraph game_tree {
 
 - @Definition@: a **ply** is one layer, so one "move" by one player
   - $Max$ layers prefer the largest value, $Min$ layers the smallest
-
-- @Remark@: the propagated value at each $MIN$ node is the smallest of its
-  leaves, and the value at the root is the largest of the $MIN$ values
-  - The red path shows the line actually played under optimal play
-
-- @Key idea@: a solution to a game is not a path but a **contingent strategy**
-  - It prescribes a reply to every move the opponent can make
-
-- @Remark@: each leaf carries the utility of that terminal state from the point
-  of view of $Max$
+  - The value at each $MIN$ node is the smallest of its leaves, and the root
+    value is the largest of the $MIN$ values
+    - The red path in the figure shows the line actually played under optimal
+      play
+  - Each leaf carries the utility of that terminal state from $Max$'s point of
+    view
 
 - @Remark@:
   - A _search in the game tree_ (e.g., minimax) is the process of picking a
@@ -1471,38 +1484,36 @@ digraph game_tree {
 ::::
 :::: {.column width=40%}
 
-// TODO(ai_gp): Use the style used in `* Tic-Tac-Toe: Optimizing the Search Tree`
-// to represent the state, with a matrix of dots and X
-
 ```graphviz
 digraph ttt_and_or_tree {
     bgcolor="transparent";
     pad="0.15";
     rankdir=TB;
     splines=line;
-    nodesep=0.35;
-    ranksep=0.45;
+    nodesep=0.25;
+    ranksep=0.40;
 
     node [shape=box, style="rounded,filled", penwidth=1.3,
-          fontname="Helvetica", fontsize=10, margin="0.10,0.07"];
+          fontname="Courier", fontsize=9, margin="0.08,0.06"];
     edge [color="#A3B1C0", penwidth=1.1, arrowhead=vee, arrowsize=0.6,
           fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
 
     // green = OR node (X to move) | coral = AND node (O to move)
-    // red = kept in the solution subtree | dashed = not explored
+    // blue = board after a move | red = kept in the solution subtree
+    // dashed = not explored
 
-    S0 [label=<<b>OR: X to move</b>>, fillcolor="#A9DDB0",
+    S0 [label="X to move (OR)\n. . .\n. . .\n. . .", fillcolor="#A9DDB0",
         color="#4F9A5C", fontcolor="#1F4E2E"];
 
-    A1 [label="X plays corner", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-    A2 [label="X plays center", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    A1 [label="X . .\n. . .\n. . .", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    A2 [label=". . .\n. X .\n. . .", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
 
-    M1 [label=<<b>AND: O to move</b>>, fillcolor="#F6C6C6",
+    M1 [label="O to move (AND)\nX . .\n. . .\n. . .", fillcolor="#F6C6C6",
         color="#D98C8C", fontcolor="#6B2A2A"];
 
-    L1 [label="O replies A", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
-    L2 [label="O replies B", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
-    L3 [label="O replies C", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    L1 [label="X . .\nO . .\n. . .", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    L2 [label="X . .\n. O .\n. . .", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    L3 [label="X . .\n. . .\nO . .", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
 
     S0 -> A1 [color="#C0455B", penwidth=1.6];
     S0 -> A2 [style=dashed];
@@ -1518,7 +1529,7 @@ digraph ttt_and_or_tree {
 * Minimax
 
 - @Definition@: the **minimax value** of a node is defined recursively
-// TODO(ai_gp): Make it smaller
+  \begingroup \small
   $$
   Minimax(s) =
   \begin{cases}
@@ -1527,6 +1538,7 @@ digraph ttt_and_or_tree {
   \min_{a \in Actions(s)} Minimax(Result(s, a)) & Player(s) = Min \\
   \end{cases}
   $$
+  \endgroup
 
 - @Intuition@:
   - $Minimax(s)$ is the utility for $Max$ assuming both players play optimally from
@@ -1582,33 +1594,42 @@ digraph ttt_and_or_tree {
 ::::
 :::: {.column width=64%}
 
-// TODO(ai_gp): Use the style used in `* Tic-Tac-Toe: Optimizing the Search Tree`
-// to represent the state, with a matrix of dots and X
-
 ```graphviz
 digraph ttt_endgame {
     bgcolor="transparent";
     pad="0.15";
-    ranksep=0.38;
-    nodesep=0.16;
+    ranksep=0.45;
+    nodesep=0.20;
 
     node [shape=box, style="rounded,filled", penwidth=1.6,
-          fontname="Helvetica", fontsize=10, margin="0.13,0.07",
-          height=0.34];
+          fontname="Courier", fontsize=8, margin="0.08,0.06"];
     edge [color="#A3B1C0", penwidth=1.2, arrowhead=none];
 
-    r [label="MAX: X to move\nMinimax = 0", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
+    // orange = MAX (X to move) | cyan = MIN (O to move)
+    // blue = ordinary leaf | coral = leaf where O wins
 
-    a [label="X plays 5\nMin = 0",  fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
-    b [label="X plays 6\nMin = -1", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
-    c [label="X plays 8\nMin = -1", fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    r [label="X O X\nO O .\n. X .\nMAX: Minimax = 0",
+       fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
 
-    a1 [label="O:6, X:8\n+1", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-    a2 [label="O:8, X:6\n0",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-    b1 [label="O:5 wins\n-1",  fillcolor="#F6C6C6", color="#D98C8C", fontcolor="#6B2A2A"];
-    b2 [label="O:8, X:5\n0",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-    c1 [label="O:5 wins\n-1",  fillcolor="#F6C6C6", color="#D98C8C", fontcolor="#6B2A2A"];
-    c2 [label="O:6, X:5\n+1", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    a [label="X O X\nO O X\n. X .\nMIN: Min = 0",
+       fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    b [label="X O X\nO O .\nX X .\nMIN: Min = -1",
+       fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    c [label="X O X\nO O .\n. X X\nMIN: Min = -1",
+       fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+
+    a1 [label="X O X\nO O X\nO X X\n+1",
+        fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    a2 [label="X O X\nO O X\nX X O\n0",
+        fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    b1 [label="X O X\nO O O\nX X .\n-1",
+        fillcolor="#F6C6C6", color="#D98C8C", fontcolor="#6B2A2A"];
+    b2 [label="X O X\nO O X\nX X O\n0",
+        fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    c1 [label="X O X\nO O O\n. X X\n-1",
+        fillcolor="#F6C6C6", color="#D98C8C", fontcolor="#6B2A2A"];
+    c2 [label="X O X\nO O X\nO X X\n+1",
+        fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
 
     r -> a;
     r -> b;
@@ -1674,7 +1695,7 @@ digraph ttt_endgame {
     other to concede first
 
 * Minimax: Properties and Cost
-// From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:58 '* Minimax and Alpha-Beta'
+// From: msml610/lectures_source/Lesson09.9-MonteCarlo_Tree_Search.smd:58 '* Minimax and Alpha-Beta'
 
 - @Properties@: minimax is a complete depth-first visit of the game tree
   - _Complete_ whenever the tree is finite
@@ -1691,13 +1712,14 @@ digraph ttt_endgame {
 
 - @Key idea@: yes, because a branch can be _proven_ irrelevant before it is
   fully searched
-// TODO(ai_gp): Explain
   - The root value cannot depend on a move that one of the players has already
     rejected
+    - E.g., if $Max$ already has a move worth $10$, and the first reply
+      $Min$ finds in a sibling branch is worth $5$, that branch is worth at
+      most $5$ regardless of its remaining children, so $Max$ never enters it
 
 * Alpha-Beta Pruning
-// From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:58 '* Minimax and Alpha-Beta'
-// TODO(ai_gp): This should only be explained here and not in MTCS
+// From: msml610/lectures_source/Lesson09.9-MonteCarlo_Tree_Search.smd:58 '* Minimax and Alpha-Beta'
 
 - @Definition@: **pruning** ignores portions of the search tree that make no
   difference to the final choice
@@ -1937,7 +1959,7 @@ digraph alpha_beta {
     possible, exploring a deep but narrow portion
 
 * Depth-Limited Game Search
-// From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:58 '* Minimax and Alpha-Beta'
+// From: msml610/lectures_source/Lesson09.9-MonteCarlo_Tree_Search.smd:58 '* Minimax and Alpha-Beta'
 
 - @Problem@: even $O(b^{m/2})$ is unreachable when $m = 42$
   - Alpha-beta still has to descend all the way to terminal states
@@ -1961,7 +1983,7 @@ digraph alpha_beta {
   - Correctness has been traded for a controllable time bound
 
 * Evaluation Functions for Connect 4
-// From: msml610/lectures_source/Lesson09.8-MonteCarlo_Tree_Search.smd:80 '* The Evaluation Function Bottleneck'
+// From: msml610/lectures_source/Lesson09.9-MonteCarlo_Tree_Search.smd:80 '* The Evaluation Function Bottleneck'
 
 - @Definition@: a **weighted linear evaluation** sums cheap board features
   $$
@@ -2064,4 +2086,4 @@ digraph alpha_beta {
   reachable terminal state or a trustworthy $Eval$
 
 - @Remark@: replacing $Eval$ by the average utility of simulated playouts is
-  covered in detail in Lesson 09.8
+  covered in detail in Lesson 09.9
