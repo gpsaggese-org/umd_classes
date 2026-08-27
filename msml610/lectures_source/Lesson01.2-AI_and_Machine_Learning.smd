@@ -18,17 +18,17 @@
     _large-language models_, _predictive analytics_, and other related fields
 
 - @What is artificial intelligence?@
-  - Before we should understand what is intelligence and human intelligence
+  - Before we should understand what is **human intelligence**
 
 - @What is human intelligence?@
   - We call ourselves _"homo sapiens"_ because intelligence sets us apart from
     animals
   - For thousands of years, we tried to understand how we think
-  - One of the biggest mysteries
+  - One of the _biggest mysteries_
     - Brain is a small mass of matter but can understand nature secrets
-      - E.g., theory of relativity, quantum mechanics, black holes in the universe
-    - How can brain understand, predict, and manipulate a world more complicated than
-      itself?
+      - E.g., theory of relativity, quantum mechanics, black holes
+    - How can the brain understand, predict, and manipulate a world more complicated
+      than itself?
 
 * Artificial Intelligence
 
@@ -126,7 +126,7 @@
     answers to questions came from a person or a computer"_
 
 ::: columns
-:::: {.column width=65%}
+:::: {.column width=75%}
 - @Requirements@: Passing the (embodied) Turing test requires
   1. Natural language processing to communicate
   2. Knowledge representation to store information
@@ -136,7 +136,7 @@
      understand speech
   6. Robotics to manipulate objects and move
 ::::
-:::: {.column width=30%}
+:::: {.column width=25%}
 ![](msml610/lectures_source/figures/L01.1.Ex_machina.jpg)
 ::::
 :::

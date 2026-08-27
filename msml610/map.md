@@ -115,7 +115,6 @@ the `for_loop_lessons.py` orchestration script.
   > open book_springer/lecture_commentary/Lesson04.1_Knowledge_Representation.book_chapter.html
   ```
 
-
 ### Publish the lecture commentary on the website
 
 website/update_class_links.sh
