@@ -1,11 +1,10 @@
 # Classes
 
-DATA605 - https://umd.instructure.com/courses/1399772
-
-- [DATA605 Online Master](https://umd.instructure.com/courses/1415600)
+- DATA605 - https://umd.instructure.com/courses/1399772
 - [DATA605-PWS1: Big Data Systems-Fall 2026 gsaggese](https://umd.instructure.com/courses/1412400)
 - [MSML610-PCS1: Advanced Machine Learning-Fall 2026 gsaggese](https://umd.instructure.com/courses/1412470)
-  - ~63 students
+
+- [DATA605 Online Master](https://umd.instructure.com/courses/1415600)
 - [MSML610 Master](https://umd.instructure.com/courses/1415445)
 - Old MSML610 https://umd.instructure.com/courses/1391619
 
@@ -17,14 +16,13 @@ DATA605 - https://umd.instructure.com/courses/1399772
 - Organize slides
 - Tape lessons
 
-- TA
-  Chaitanya Bagul <cbagul07@umd.edu>
+- TAs
+  Ameer Shaik  sohail08@umd.edu 121958426
 
+- Schedule
   DATA605 is on Tuesdays from 6-8:45 PM, so your first day of class for this section would be September 1st
   MSML610 is on Wednesdays from 5:00-7:45 PM, so your first day of class for this section would be September 2nd
 
-  Ameer Shaik  sohail08@umd.edu 121958426
-  Atharv Tembhurnikar attem@umd.edu 122243347
 
 ## Customize Courses
 

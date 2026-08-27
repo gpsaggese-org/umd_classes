@@ -6,12 +6,12 @@
   - DATA605: Big Data Systems (2023-)
   - MSML610: Advanced Machine Learning (2025-)
 
+::: columns
+:::: {.column width=70%}
+
 - @Industry@
   - Research scientist: NVIDIA, Synopsys, Teza, Engineers' Gate
   - 3x startup founder: ZeroSoft, June, Causify AI
-
-::: columns
-:::: {.column width=70%}
 
 - @Academic@
   - 20+ papers, 2 US patents
@@ -25,11 +25,30 @@
 
 ![](msml610/lectures_source/figures/GP_in_coding_state.png)
 
-(GP in his normal coding state)
 ::::
 :::
 
-* A College Course in the Age of AI (1/2)
+* Class Links
+
+- @Course Management@
+  - [ELMS](https://umd.instructure.com/)
+
+- @Schedule@
+  - [DATA605 Schedule](https://docs.google.com/document/d/1LYd7QqGOU2_JR5QOWaAxWCwBB2cy16n57dSaVV6A3tc)
+  - [MSML610 Schedule](https://docs.google.com/document/d/1YXCrqh6KGg3xm4-Lr4QGdBnjeWEfkqz67FHNHB_rdAk)
+  - [Official Calendar](https://provost.umd.edu/calendar)
+
+- @GitHub@
+  - [Class GitHub](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/README.md)
+  - [DATA605 GitHub](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/data605/README.md)
+  - [MSML610 GitHub](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/msml610/README.md)
+  - For each class: PDF slides, Slide commentary, Tutorials
+
+- @Feedback@
+  - [Class FAQs](https://docs.google.com/document/d/1updvJmP5wl4cRGf4ncF51NTaCMsvio4SEqbswLm0NIk)
+  - [Class Feedback](https://docs.google.com/spreadsheets/d/1uHPjukH_b4Dg_AM1ms4yGtrjkzlN8DRFYYwC6-eT-30)
+
+* College in the Age of AI (1/2)
 
 ::: columns
 :::: {.column width=60%}
@@ -51,7 +70,7 @@
 ::::
 :::
 
-* A College Course in the Age of AI (2/2)
+* College in the Age of AI (2/2)
 
 ::: columns
 :::: {.column width=60%}
@@ -101,40 +120,22 @@
   - Lessons are recorded
   - Still attend class, when possible
 
-* Class Links
-
-- @Course Management@
-  - [ELMS](https://umd.instructure.com/)
-
-- @Schedule@
-  - [DATA605 Schedule](https://docs.google.com/document/d/1LYd7QqGOU2_JR5QOWaAxWCwBB2cy16n57dSaVV6A3tc)
-  - [MSML6108 Schedule](https://docs.google.com/document/d/1YXCrqh6KGg3xm4-Lr4QGdBnjeWEfkqz67FHNHB_rdAk)
-  - [Official Calendar](https://provost.umd.edu/calendar)
-
-- @GitHub@
-  - [Class GitHub](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/README.md)
-  - [DATA605 GitHub](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/data605/README.md)
-  - [MSML610 GitHub](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/msml610/README.md)
-  - For each class: PDF slides, Slide commentary, Tutorials
-
-- @Feedback@
-  - [Class FAQs](https://docs.google.com/document/d/1updvJmP5wl4cRGf4ncF51NTaCMsvio4SEqbswLm0NIk)
-  - [Class Feedback](https://docs.google.com/spreadsheets/d/1uHPjukH_b4Dg_AM1ms4yGtrjkzlN8DRFYYwC6-eT-30)
-
 * Grading
 
-- @Quizzes@ (40%)
-  - 4-5 quizzes to make you study during the semester and don't cram
-  - Every 2 classes, multi-choice quiz about the material presented in the previous
-    two classes
-    - Goal: give students pace to study the materials
-  - 20 questions in 20 minutes
+- @Videos and knowledge check assignments@ (20%)
+  - Questions and discussions on ELMS
 
-- @Final Project@ (60%)
+- @Quizzes@ (30%)
+  - 4-5 quizzes to make you study during the semester and don't cram
+    - Every 2 classes, quiz about the material presented in the previous two classes
+    - Goal: give students pace to study the materials
+  - 20 multi-choice questions in 20 minutes
+
+- @Final Project@ (50%)
   - A comprehensive application of course concepts
-  - You can choose a:
-    - Small AI / ML / BigData research project
-    - Implemennt a tutorial and a small application _"Build X with Y"_
+  - You can choose either:
+    - Small AI / ML / BigData research project; or
+    - Implement a tutorial and a small application _"Build X with Y"_
   - High quality projects typically yield blog, tutorial, and (maybe) publication
   - Individual or group ($n < 4$)
   - Varying levels of difficulty
@@ -142,35 +143,33 @@
 * Class Project: Tutorials
 
 - @Project@ is _"Build $X$ with $Y$"_, where $X$ is a "use case", $Y$ is a "technology"
-
-- @Activities@
   - Choose $X$ and $Y$ from a list
   - Study and describe technology $Y$
   - Implement use case $X$ using technology $Y$
-  - Create Jupyter notebooks to demo your project
   - Commit code to GitHub and contribute to open-source repo
   - Write a blog entry for you project
   - Present your project in a video
 
 - @Links@
-  - [Project template](https://github.com/gpsaggese.github.io/umd_classes/tree/master/class_project/project_template)
-  - [Project template README](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/project_template/docker_scripts.README.md)
   - [Project instructions](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/README.md)
   - [Project descriptions](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/project_descriptions/README.md)
-  - [DATA605 Project descriptions](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/class_project/project_descriptions/DATA605)
-  - [MSML610 Project descriptions](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/class_project/project_descriptions/MSML610)
-  - [DATA605 Past projects](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/class_project/data605)
-  - [MSML610 Past projects](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/class_project/msml610)
+    - [Summary](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/project_descriptions/README.md)
+    - [DATA605](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/class_project/project_descriptions/DATA605),
+      [MSML610](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/class_project/project_descriptions/MSML610)
+  - [Project template](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/class_project/project_template)
+    - [README](https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/project_template/README.md)
+  - Past tutorials
+    - [DATA605](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/class_project/data605),
+      [MSML610](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/class_project/msml610)
 
 * Class Project: Small Research
 
-- @Activities@
-  - Study and describe technology $Y$
-  - Implement use case $X$ using technology $Y$
+- @Project@ is _"Research a question"_
+  - Implement a research project based on instructions
   - Create Jupyter notebooks to demo your project
   - Commit code to GitHub and contribute to open-source repo
-  - Write a blog entry for you project
-  - Present your project in a video
+  - Write a blog entry / paper for you project
+  - Present your research project in a video
 
 - @Links@
   - [Research page](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research)
@@ -191,7 +190,7 @@
       of your code
 
   - @Raise the bar, don't lower it@
-    - AI output should be _better_ than the non-AI alternative
+    - $You + AI > \max{You, AI}$: You + AI should be _better_ than both just you and AI
     - Make sure you can still work without AI
 
   - @Verify, don't blindly trust@
@@ -213,23 +212,25 @@
   - Comment your code
   - Write external documentation (tutorials, manuals, how-tos)
   - Write understandable code (including for future-you)
-  - Read others' code
+  - Read other people's code
   - Follow code conventions (PEP8, Google Code)
   - Communicate clearly (emails, Slack)
   - File a bug report
 
 * Todos
 - [ ] Study slides and materials (they are available ahead of time)
-- Go on ELMS/Canvas site
+- [ ] On ELMS/Canvas site
   - Enable notifications
   - Check the contact info for me and TAs
   - When emailing always keep the TAs in cc
-- Check the Syllabus for schedule, GitHub project, and FAQs
-- Visit the links to get oriented
-- Check the code repo
-- Setup computing environment
-  - Install Linux/VMware
-  - Install Docker on laptop
+- [ ] Check the Syllabus for schedule, GitHub project, and FAQs
+- [ ] Visit the links to get oriented
+- [ ] Check the code repo
+- [ ] Setup computing environment
   - Instructions in class repo
-- Bring laptop to class
+- [ ] Bring laptop to class
 - [ ] Connect with me on LinkedIn
+- [ ] Star, fork class repos
+  - [umd_classes](https://github.com/gpsaggese/gpsaggese.github.io/tree/master)
+  - [helpers](https://github.com/causify-ai/helpers/tree/master)
+- [ ] Check out our [research blog](https://gpsaggese.github.io/blog/)

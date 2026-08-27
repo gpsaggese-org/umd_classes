@@ -4,6 +4,9 @@
 Generate lecture slides PDF.
 
 This script generates a PDF from lecture source files using notes_to_pdf.py.
+The PDF is built in the staging dir `{DIR}/lectures_pdf.tmp/`. Use the
+`release` action to copy the built PDF from `{DIR}/lectures_pdf.tmp/` to the
+published dir `{DIR}/lectures_pdf/`.
 
 # Usage Example
 
@@ -20,6 +23,10 @@ This script generates a PDF from lecture source files using notes_to_pdf.py.
 - Generate the slides PDF by specifying the lecture source file path
   directly:
 > gen_slides.py msml610/lectures_source/Lesson10.2-Causal_Discovery.smd
+
+- Release the slides PDF already built for msml610 lesson 08.1, i.e., copy
+  it from `msml610/lectures_pdf.tmp/` to `msml610/lectures_pdf/`:
+> gen_slides.py msml610/08.1 --action release
 """
 
 import argparse
@@ -27,6 +34,7 @@ import logging
 import os
 import re
 import shlex
+import shutil
 from typing import Tuple
 
 import class_scripts.common_utils as csccouti
@@ -118,6 +126,15 @@ def _parse() -> argparse.ArgumentParser:
         help="Watch input file for changes and regenerate PDF on change",
     )
     parser.add_argument(
+        "--action",
+        action="store",
+        default="generate",
+        choices=["generate", "release"],
+        help="'generate' builds the slides PDF in the staging dir "
+        "lectures_pdf.tmp (default); 'release' copies the built PDF from "
+        "lectures_pdf.tmp to lectures_pdf",
+    )
+    parser.add_argument(
         "--slides_engine",
         action="store",
         default=None,
@@ -131,6 +148,23 @@ def _parse() -> argparse.ArgumentParser:
     )
     hparser.add_verbosity_arg(parser)
     return parser
+
+
+def _release(dir_arg: str, dst_name: str) -> None:
+    """
+    Copy a built slides PDF from the staging dir to the published dir.
+
+    :param dir_arg: course directory, e.g. "msml610"
+    :param dst_name: PDF file name, e.g. "Lesson08.1-Causal_AI_intro.pdf"
+    """
+    src_file = f"{dir_arg}/lectures_pdf.tmp/{dst_name}"
+    hdbg.dassert_file_exists(src_file)
+    dst_dir = f"{dir_arg}/lectures_pdf"
+    csccouti.ensure_dir_exists(dst_dir)
+    dst_file = f"{dst_dir}/{dst_name}"
+    shutil.copy2(src_file, dst_file)
+    msg = f"Released: {src_file} -> {dst_file}"
+    _LOG.info("%s", hprint.color_highlight(msg, "green"))
 
 
 def _main(parser: argparse.ArgumentParser) -> None:
@@ -150,11 +184,14 @@ def _main(parser: argparse.ArgumentParser) -> None:
     # Get source and destination names.
     src_name = csccouti.get_source_name(dir_arg, lesson_arg)
     dst_name = csccouti.get_output_name(src_name, ".pdf")
+    if args.action == "release":
+        _release(dir_arg, dst_name)
+        return
     # Build paths.
     input_file = f"{dir_arg}/lectures_source/{src_name}"
-    output_file = f"{dir_arg}/lectures/{dst_name}"
+    output_file = f"{dir_arg}/lectures_pdf.tmp/{dst_name}"
     # Ensure output directory exists.
-    csccouti.ensure_dir_exists(f"{dir_arg}/lectures")
+    csccouti.ensure_dir_exists(f"{dir_arg}/lectures_pdf.tmp")
     # Build the command with debug options.
     cmd_parts = [
         "notes_to_pdf.py",

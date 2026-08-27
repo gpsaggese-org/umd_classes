@@ -1,61 +1,16 @@
 // type=UMD_slides
-// course_title=UMD DATA605: Big Data Systems
+// course_title=DATA605: Big Data Systems
 // lesson_title=L01.1: Introduction
 // slides_engine=typst
 // references=
 
-## Class Introduction
-
-* A College Course in the Age of AI (1/2)
-
-// include:msml610/lectures_source/Class_Mechanics.aux.md "A College Course in the Age of AI (1/2)"
-
-* A College Course in the Age of AI (2/2)
-
-// include:msml610/lectures_source/Class_Mechanics.aux.md "A College Course in the Age of AI (2/2)"
-
-* AI Policy
-
-// include:msml610/lectures_source/Class_Mechanics.aux.md "AI Policy"
-
-* Invariants of a Class Lecture
-
-// include:msml610/lectures_source/Class_Mechanics.aux.md "Invariants of a Class Lecture"
-
-* Class Project Intro
-
-* Grading
-// include:msml610/lectures_source/Class_Mechanics.aux.md "Grading"
-
-* Class Projects: Tutorials
-
-// include:msml610/lectures_source/Class_Mechanics.aux.md "Class Project: Tutorials"
-
-* Class Projects: Small Research
-
-// include:msml610/lectures_source/Class_Mechanics.aux.md "Class Project: Small Research"
+# Who
 
 * Yours Truly
 
 // include:msml610/lectures_source/Class_Mechanics.aux.md "Yours Truly"
 
-* Books of the Class
-::: columns
-:::: {.column width=50%}
-- @Slides@
-  - Are extracted from books, technical articles, Internet
-  - Aim to be self-sufficient
-
-::::
-:::: {.column width=45%}
-
-![](data605/lectures_source/images/Silberschatz_book.png){width=40%}
-![](data605/lectures_source/images/lecture_2/lec_2_slide_37_image_1.png){width=40%}
-![](data605/lectures_source/images/lecture_3/lec_3_slide_3_image_1.png){width=40%}
-![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_4_image_1.png){width=40%}
-
-::::
-:::
+# What
 
 * Learning Outcomes
 ::: columns
@@ -89,6 +44,27 @@
 ::::
 :::
 
+* Syllabus
+
+- [Syllabus](https://docs.google.com/document/d/1LYd7QqGOU2_JR5QOWaAxWCwBB2cy16n57dSaVV6A3tc)
+  - Big Data, Data Models
+  - ETL and basic dev tools
+    - Git / GitHub, Docker / Docker Compose
+    - Data pipelines and ETL flavors
+  - Relational DBs
+  - NoSQL
+    - E.g., HBase MongoDB
+  - Data wrangling
+    - E.g., Pandas, Parquet, Airflow
+  - Computing frameworks
+    - MapReduce, Spark, Dask
+  - Parallel DBs
+  - Cloud computing and AWS ecosystem
+  - Graph DBs
+    - E.g., Neo4j, Graph data processing
+  - Streaming analytics
+    - E.g., Apache Storm, Spark Streaming
+
 * Tools We Will Learn To Use
 - @Programming languages@
   - Python
@@ -111,24 +87,64 @@
 
 - @Tutorials@ for tools used in the class projects
 
+* Soft Skills to Succeeed in the Workplace
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Soft Skills to Succeed in the Workplace"
+
+* Class Links
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Class Links"
+
+# How
+
+* College in the Age of AI (1/2)
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "College in the Age of AI (1/2)"
+
+* College in the Age of AI (2/2)
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "College in the Age of AI (2/2)"
+
+* Invariants of a Class Lecture
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Invariants of a Class Lecture"
+
+* Class Project Intro
+
+* Grading
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Grading"
+
+* Class Projects: Tutorials
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Class Project: Tutorials"
+
+* Class Projects: Small Research
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Class Project: Small Research"
+
+* AI Policy
+
+// include:msml610/lectures_source/Class_Mechanics.aux.md "AI Policy"
+
+* Books of the Class
+::: columns
+:::: {.column width=50%}
+- @Goal@: slides are self-sufficient
+  - PDF lectures, commentary, book
+
+- @Books to go deepear@
+::::
+:::: {.column width=45%}
+
+![](data605/lectures_source/images/Silberschatz_book.png){width=40%}
+![](data605/lectures_source/images/lecture_2/lec_2_slide_37_image_1.png){width=40%}
+![](data605/lectures_source/images/lecture_3/lec_3_slide_3_image_1.png){width=40%}
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_4_image_1.png){width=40%}
+
+::::
+:::
+
 * Todos
-- Study slides and materials
-- DATA605 - ELMS/Canvas site
-  - Enable notifications
-  - Contact info for me and TAs
-    - Always keep the TAs in cc
-- Check [DATA605 Schedule](https://docs.google.com/document/d/1LYd7QqGOU2_JR5QOWaAxWCwBB2cy16n57dSaVV6A3tc)
-- Check [DATA605 GitHub repo](https://github.com/gpsaggese-org/umd_classes/tree/master/data605)
-- Get these [slides](https://github.com/gpsaggese-org/umd_classes/tree/master/data605/lectures)
-- Check [DATA605 FAQs](https://docs.google.com/document/d/1updvJmP5wl4cRGf4ncF51NTaCMsvio4SEqbswLm0NIk)
-- Setup computing environment
-  - Install Linux/VMware
-  - Install Docker on laptop
-  - Instructions in class repo
-- Bring laptop to class
-- Lessons recorded
-  - Still attend class, when possible
 
-* Yours Truly
-
-// include:msml610/lectures_source/Class_Mechanics.aux.md "Yours Truly"
+// include:msml610/lectures_source/Class_Mechanics.aux.md "Todos"
