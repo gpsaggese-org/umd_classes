@@ -599,7 +599,7 @@ class Test_generate_lecture_commentary(hunitest.TestCase):
         # Check outputs.
         self.assertEqual(len(sys_calls), 1)
         cmd_str = sys_calls[0]["args"][0]
-        self.assertEqual(cmd_str, "gen_lecture_commentary.py data605 01.1")
+        self.assertEqual(cmd_str, "gen_lecture_commentary.py data605/01.1")
 
     def test2(self) -> None:
         """
@@ -621,7 +621,7 @@ class Test_generate_lecture_commentary(hunitest.TestCase):
         cmd_str = sys_calls[0]["args"][0]
         self.assertEqual(
             cmd_str,
-            "gen_lecture_commentary.py data605 01.1 --no_incremental --open_pdf",
+            "gen_lecture_commentary.py data605/01.1 --no_incremental --open_pdf",
         )
 
 

@@ -9,8 +9,9 @@ import class_scripts.common_utils as csccouti
 import glob
 import logging
 import os
+import re
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Tuple
 
 import helpers.hdbg as hdbg
 import helpers.hio as hio
@@ -37,6 +38,77 @@ def validate_dir_lesson_args(dir_arg: str, lesson_arg: str) -> None:
     hdbg.dassert_ne(lesson_arg, "", "LESSON argument cannot be empty")
     # Log the validated arguments.
     _LOG.debug("Validated DIR='%s', LESSON='%s'", dir_arg, lesson_arg)
+
+
+def extract_lesson_from_file(file_path_str: str) -> Tuple[str, str]:
+    """
+    Extract lesson number and course directory from a lecture source path.
+
+    Parses filenames like "Lesson10.2-Causal_Discovery.smd" to extract
+    "10.2". Also extracts the course directory (e.g., "data605", "msml610")
+    from the path.
+
+    :param file_path_str: file path like
+        "msml610/lectures_source/Lesson10.2-Name.smd"
+    :return: tuple of (dir, lesson), e.g. ("msml610", "10.2")
+    """
+    filename = os.path.basename(file_path_str)
+    match = re.match(r"Lesson(\d+(?:\.\d+)?)", filename)
+    hdbg.dassert_is_not(
+        match,
+        None,
+        "Could not extract lesson number from filename: %s",
+        filename,
+    )
+    lesson = match.group(1)  # type: ignore[union-attr]
+    # The course dir is everything before `.../lectures_source/...`, so this
+    # works for both course-relative paths (e.g., "msml610/lectures_source/
+    # ...") and absolute paths (e.g., test scratch dirs).
+    if "lectures_source" in file_path_str:
+        dir_name = file_path_str.split("lectures_source")[0].rstrip(os.sep)
+    else:
+        dir_name = file_path_str.split(os.sep)[0]
+    hdbg.dassert_dir_exists(dir_name)
+    _LOG.debug(
+        "Extracted lesson='%s', dir='%s' from path='%s'",
+        lesson,
+        dir_name,
+        file_path_str,
+    )
+    return dir_name, lesson
+
+
+def parse_lesson_spec(arg: str) -> Tuple[str, str]:
+    """
+    Parse a lecture specification into (dir, lesson).
+
+    Handles:
+    - "data605/08.1" or "msml610/08.1" -> ("data605", "08.1")
+    - "data605/lectures_source/Lesson10.2-Name.smd" -> extracted via
+      `extract_lesson_from_file()`
+
+    This is the standard input format for all `class_scripts` CLIs that
+    operate on a single lesson.
+
+    :param arg: lecture specification, e.g. "data605/08.1" or a file path
+    :return: tuple of (directory, lesson)
+    """
+    if "lectures_source" in arg or arg.endswith(".smd"):
+        return extract_lesson_from_file(arg)
+    hdbg.dassert_in(
+        "/", arg,
+        f"Invalid input '{arg}'. Use 'data605/08.1' or "
+        "'data605/lectures_source/Lesson08.1-Name.smd'",
+    )
+    parts = arg.split("/")
+    hdbg.dassert_eq(
+        len(parts),
+        2,
+        f"Expected dir/lesson format, got '{arg}'. Use 'data605/08.1'",
+    )
+    dir_input, lesson = parts
+    hdbg.dassert_dir_exists(dir_input)
+    return dir_input, lesson
 
 
 def find_lecture_file(dir_path: str, lesson: str) -> Path:

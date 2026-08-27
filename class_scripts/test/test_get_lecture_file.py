@@ -29,19 +29,17 @@ class Test_parse(hunitest.TestCase):
 
     def test1(self) -> None:
         """
-        Test parser accepts the positional `dir` and `lesson` arguments.
+        Test parser accepts the positional `input` argument.
         """
         # Prepare inputs.
-        arg_list = ["msml610", "01.1"]
+        arg_list = ["msml610/01.1"]
         # Prepare outputs.
-        expected_dir = "msml610"
-        expected_lesson = "01.1"
+        expected_input = "msml610/01.1"
         # Run test.
         parser = clgelifi._parse()
         args = parser.parse_args(arg_list)
         # Check outputs.
-        self.assert_equal(args.dir, expected_dir)
-        self.assert_equal(args.lesson, expected_lesson)
+        self.assert_equal(args.input, expected_input)
 
 
 # #############################################################################
@@ -66,9 +64,9 @@ class Test_main(hunitest.TestCase):
         hio.to_file(
             os.path.join(source_dir, "Lesson01-Introduction.smd"), "content"
         )
-        arg_list = [scratch_dir, "01"]
-        # Prepare outputs.
         lecture_file = os.path.join(source_dir, "Lesson01-Introduction.smd")
+        arg_list = [lecture_file]
+        # Prepare outputs.
         expected_log = f"Lecture file: {lecture_file}"
         # Run test.
         with self.assertLogs(

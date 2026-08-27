@@ -435,7 +435,7 @@ def _generate_lecture_commentary(
     _LOG.info(
         "Generating book chapter for %s (lesson %s)", source_name, lesson_number
     )
-    cmd_str = f"gen_lecture_commentary.py {class_dir} {lesson_number}"
+    cmd_str = f"gen_lecture_commentary.py {class_dir}/{lesson_number}"
     if cmd_opts:
         cmd_str += f" {cmd_opts}"
     _LOG.info("Executing: %s", cmd_str)
@@ -473,7 +473,7 @@ def _generate_class_quizzes(
     _LOG.info(
         "Generating class quizzes for %s (lesson %s)", source_name, lesson_number
     )
-    cmd_str = f"gen_quizzes.py --for_class_quizzes {class_dir} {lesson_number}"
+    cmd_str = f"gen_quizzes.py --for_class_quizzes {class_dir}/{lesson_number}"
     if cmd_opts:
         cmd_str += f" {cmd_opts}"
     _LOG.info("Executing: %s", cmd_str)
@@ -513,7 +513,7 @@ def _generate_class_recap(
     _LOG.info(
         "Generating class recap for %s (lesson %s)", source_name, lesson_number
     )
-    cmd_str = f"gen_quizzes.py --for_class_recap {class_dir} {lesson_number}"
+    cmd_str = f"gen_quizzes.py --for_class_recap {class_dir}/{lesson_number}"
     if cmd_opts:
         cmd_str += f" {cmd_opts}"
     _LOG.info("Executing: %s", cmd_str)

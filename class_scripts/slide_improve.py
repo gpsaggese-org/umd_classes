@@ -9,10 +9,10 @@ slide_improve action.
 # Usage Example
 
 - Improve DATA605 lesson 01.1 slides using LLM:
-> slide_improve.py data605 01.1
+> slide_improve.py data605/01.1
 
 - Improve MSML610 lesson 02.3 slides using LLM:
-> slide_improve.py msml610 02.3
+> slide_improve.py msml610/02.3
 
 Import as:
 
@@ -39,14 +39,15 @@ def _parse() -> argparse.ArgumentParser:
         formatter_class=hparser.CustomHelpFormatter,
     )
     parser.add_argument(
-        "dir",
+        "input",
         type=str,
-        help="Course directory (e.g., data605, msml610)",
+        help="Lecture specification: 'data605/08.1', 'msml610/08.1', "
+        "or file path 'msml610/lectures_source/Lesson10.2-Name.smd'",
     )
     parser.add_argument(
-        "lesson",
-        type=str,
-        help="Lesson number (e.g., 01.1, 02.3)",
+        "--dry_run",
+        action="store_true",
+        help="Print the command that would be executed without running it",
     )
     parser.add_argument(
         "extra_opts",
@@ -60,10 +61,11 @@ def _parse() -> argparse.ArgumentParser:
 def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
-    # Validate arguments.
-    csccouti.validate_dir_lesson_args(args.dir, args.lesson)
+    # Parse and validate arguments.
+    dir_arg, lesson_arg = csccouti.parse_lesson_spec(args.input)
+    csccouti.validate_dir_lesson_args(dir_arg, lesson_arg)
     # Find the lecture file.
-    lecture_file = csccouti.find_lecture_file(args.dir, args.lesson)
+    lecture_file = csccouti.find_lecture_file(dir_arg, lesson_arg)
     src_name = str(lecture_file)
     dst_name = src_name
     # Build the command.
@@ -74,6 +76,8 @@ def _main(parser: argparse.ArgumentParser) -> None:
         f"--out_file {dst_name}",
         "--use_llm_transform",
     ]
+    if args.dry_run:
+        cmd_parts.append("--dry_run")
     # Add extra options if provided.
     if args.extra_opts:
         cmd_parts.extend(args.extra_opts)

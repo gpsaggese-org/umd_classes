@@ -13,10 +13,10 @@ This script performs multiple steps:
 # Usage Example
 
 - Generate the lecture video script for DATA605 lesson 01.1:
-> gen_lecture_video_script.py data605 01.1
+> gen_lecture_video_script.py data605/01.1
 
 - Generate the lecture video script for MSML610 lesson 02.3:
-> gen_lecture_video_script.py msml610 02.3
+> gen_lecture_video_script.py msml610/02.3
 
 Import as:
 
@@ -61,14 +61,10 @@ def _parse() -> argparse.ArgumentParser:
         formatter_class=hparser.CustomHelpFormatter,
     )
     parser.add_argument(
-        "dir",
+        "input",
         type=str,
-        help="Course directory (e.g., data605, msml610)",
-    )
-    parser.add_argument(
-        "lesson",
-        type=str,
-        help="Lesson number (e.g., 01.1, 02.3)",
+        help="Lecture specification: 'data605/08.1', 'msml610/08.1', "
+        "or file path 'msml610/lectures_source/Lesson10.2-Name.smd'",
     )
     parser.add_argument(
         "extra_opts",
@@ -82,14 +78,15 @@ def _parse() -> argparse.ArgumentParser:
 def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
-    # Validate arguments.
-    csccouti.validate_dir_lesson_args(args.dir, args.lesson)
+    # Parse and validate arguments.
+    dir_arg, lesson_arg = csccouti.parse_lesson_spec(args.input)
+    csccouti.validate_dir_lesson_args(dir_arg, lesson_arg)
     # Get source and destination names.
-    src_name = csccouti.get_source_name(args.dir, args.lesson)
+    src_name = csccouti.get_source_name(dir_arg, lesson_arg)
     dst_name = csccouti.get_output_name(src_name, ".script.txt")
     # Build paths.
-    input_file = f"{args.dir}/lectures_source/{src_name}"
-    output_dir = f"{args.dir}/lectures_video_script"
+    input_file = f"{dir_arg}/lectures_source/{src_name}"
+    output_dir = f"{dir_arg}/lectures_video_script"
     output_file = f"{output_dir}/{dst_name}"
     # Ensure output directory exists.
     csccouti.ensure_dir_exists(output_dir)

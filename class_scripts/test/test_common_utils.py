@@ -73,6 +73,239 @@ class Test_validate_dir_lesson_args(hunitest.TestCase):
 
 
 # #############################################################################
+# Test_extract_lesson_from_file
+# #############################################################################
+
+
+class Test_extract_lesson_from_file(hunitest.TestCase):
+    """
+    Test `extract_lesson_from_file()` function.
+    """
+
+    def _assert_extract_lesson(
+        self, file_path: str, expected_dir: str, expected_lesson: str
+    ) -> None:
+        """
+        Test helper for `extract_lesson_from_file()`.
+
+        :param file_path: file path to test
+        :param expected_dir: expected directory from extraction
+        :param expected_lesson: expected lesson number from extraction
+        """
+        actual_dir, actual_lesson = csccouti.extract_lesson_from_file(file_path)
+        self.assertEqual(actual_dir, expected_dir)
+        self.assertEqual(actual_lesson, expected_lesson)
+
+    def _assert_extract_lesson_raises(
+        self, file_path: str, expected_error_msg: str
+    ) -> None:
+        """
+        Test helper for `extract_lesson_from_file()` error cases.
+
+        :param file_path: file path to test
+        :param expected_error_msg: expected substring in error message
+        """
+        with self.assertRaises(AssertionError) as cm:
+            csccouti.extract_lesson_from_file(file_path)
+        self.assertIn(expected_error_msg, str(cm.exception))
+
+    def test1(self) -> None:
+        """
+        Test extraction from valid file path with single digit lesson.
+        """
+        # Prepare inputs.
+        file_path = "msml610/lectures_source/Lesson10-Introduction.md"
+        # Prepare outputs.
+        expected_dir = "msml610"
+        expected_lesson = "10"
+        # Run test.
+        self._assert_extract_lesson(file_path, expected_dir, expected_lesson)
+
+    def test2(self) -> None:
+        """
+        Test extraction from valid file path with dotted lesson number.
+        """
+        # Prepare inputs.
+        file_path = "data605/lectures_source/Lesson02.3-MapReduce.txt"
+        # Prepare outputs.
+        expected_dir = "data605"
+        expected_lesson = "02.3"
+        # Run test.
+        self._assert_extract_lesson(file_path, expected_dir, expected_lesson)
+
+    def test3(self) -> None:
+        """
+        Test extraction with lesson number containing multiple dots.
+        """
+        # Prepare inputs.
+        file_path = "msml610/lectures_source/Lesson10.2.1-Complex.md"
+        # Prepare outputs.
+        expected_dir = "msml610"
+        expected_lesson = "10.2"
+        # Run test.
+        self._assert_extract_lesson(file_path, expected_dir, expected_lesson)
+
+    def test4(self) -> None:
+        """
+        Test that invalid filename without Lesson prefix raises
+        AssertionError.
+        """
+        # Prepare inputs.
+        file_path = "msml610/lectures_source/InvalidName.md"
+        # Prepare outputs.
+        expected_error_msg = "Could not extract lesson number"
+        # Run test.
+        self._assert_extract_lesson_raises(file_path, expected_error_msg)
+
+    def test5(self) -> None:
+        """
+        Test that invalid directory in path raises AssertionError.
+        """
+        # Prepare inputs.
+        file_path = "invalid_dir/lectures_source/Lesson01-Name.md"
+        # Prepare outputs.
+        expected_error_msg = "invalid"
+        # Run test.
+        self._assert_extract_lesson_raises(file_path, expected_error_msg)
+
+    def test6(self) -> None:
+        """
+        Test extraction from an absolute path (e.g., a test scratch dir).
+        """
+        # Prepare inputs.
+        scratch_dir = self.get_scratch_space()
+        source_dir = os.path.join(scratch_dir, "lectures_source")
+        os.makedirs(source_dir, exist_ok=True)
+        file_path = os.path.join(source_dir, "Lesson01.1-Intro.smd")
+        hio.to_file(file_path, "content")
+        # Prepare outputs.
+        expected_dir = scratch_dir
+        expected_lesson = "01.1"
+        # Run test.
+        self._assert_extract_lesson(file_path, expected_dir, expected_lesson)
+
+
+# #############################################################################
+# Test_parse_lesson_spec
+# #############################################################################
+
+
+class Test_parse_lesson_spec(hunitest.TestCase):
+    """
+    Test `parse_lesson_spec()` function.
+    """
+
+    def _assert_parse_lesson_spec(
+        self, arg: str, expected_dir: str, expected_lesson: str
+    ) -> None:
+        """
+        Test helper for `parse_lesson_spec()`.
+
+        :param arg: input argument to parse
+        :param expected_dir: expected directory
+        :param expected_lesson: expected lesson
+        """
+        actual_dir, actual_lesson = csccouti.parse_lesson_spec(arg)
+        self.assertEqual(actual_dir, expected_dir)
+        self.assertEqual(actual_lesson, expected_lesson)
+
+    def _assert_parse_lesson_spec_raises(
+        self, arg: str, expected_error_msg: str
+    ) -> None:
+        """
+        Test helper for `parse_lesson_spec()` error cases.
+
+        :param arg: input argument to parse
+        :param expected_error_msg: expected substring in error message
+        """
+        with self.assertRaises(AssertionError) as cm:
+            csccouti.parse_lesson_spec(arg)
+        self.assertIn(expected_error_msg, str(cm.exception))
+
+    def test1(self) -> None:
+        """
+        Test parsing dir/lesson format with msml610.
+        """
+        # Prepare inputs.
+        arg = "msml610/08.1"
+        # Prepare outputs.
+        expected_dir = "msml610"
+        expected_lesson = "08.1"
+        # Run test.
+        self._assert_parse_lesson_spec(arg, expected_dir, expected_lesson)
+
+    def test2(self) -> None:
+        """
+        Test parsing dir/lesson format with data605.
+        """
+        # Prepare inputs.
+        arg = "data605/01.1"
+        # Prepare outputs.
+        expected_dir = "data605"
+        expected_lesson = "01.1"
+        # Run test.
+        self._assert_parse_lesson_spec(arg, expected_dir, expected_lesson)
+
+    def test3(self) -> None:
+        """
+        Test parsing file path with lectures_source.
+        """
+        # Prepare inputs.
+        arg = "msml610/lectures_source/Lesson10-Introduction.md"
+        # Prepare outputs.
+        expected_dir = "msml610"
+        expected_lesson = "10"
+        # Run test.
+        self._assert_parse_lesson_spec(arg, expected_dir, expected_lesson)
+
+    def test4(self) -> None:
+        """
+        Test parsing file path with .txt extension.
+        """
+        # Prepare inputs.
+        arg = "data605/lectures_source/Lesson02.3-MapReduce.txt"
+        # Prepare outputs.
+        expected_dir = "data605"
+        expected_lesson = "02.3"
+        # Run test.
+        self._assert_parse_lesson_spec(arg, expected_dir, expected_lesson)
+
+    def test5(self) -> None:
+        """
+        Test that invalid directory in dir/lesson format raises
+        AssertionError.
+        """
+        # Prepare inputs.
+        arg = "invalid/08.1"
+        # Prepare outputs.
+        expected_error_msg = "doesn't exist"
+        # Run test.
+        self._assert_parse_lesson_spec_raises(arg, expected_error_msg)
+
+    def test6(self) -> None:
+        """
+        Test that invalid format without / raises AssertionError.
+        """
+        # Prepare inputs.
+        arg = "msml610"
+        # Prepare outputs.
+        expected_error_msg = "Invalid input"
+        # Run test.
+        self._assert_parse_lesson_spec_raises(arg, expected_error_msg)
+
+    def test7(self) -> None:
+        """
+        Test that too many slashes raises AssertionError.
+        """
+        # Prepare inputs.
+        arg = "msml610/extra/08.1"
+        # Prepare outputs.
+        expected_error_msg = "Expected dir/lesson format"
+        # Run test.
+        self._assert_parse_lesson_spec_raises(arg, expected_error_msg)
+
+
+# #############################################################################
 # Test_find_lecture_file
 # #############################################################################
 

@@ -99,25 +99,26 @@ the `for_loop_lessons.py` orchestration script.
 ## Slides Commentary
 
 ### Generate for One Lecture
-```
-> gen_lecture_commentary.py msml610/01.1 --image_type jpg
-```
+- Generate one lecture
+  ```
+  > gen_lecture_commentary.py msml610/01.1 --image_type jpg
+  ```
 
 ### Generate for All Lectures
 
-```
-> for_loop_lessons.py --class data605 --action generate_lecture_commentary --lectures "01.1-02"
+- Generate all the lectures
+  ```
+  > for_loop_lessons.py --class data605 --action generate_lecture_commentary --lectures "01.1-02"
 
-> publish_class_links.py --dir msml610 --out_file ./links.html --do_not_fail_on_warnings --use_master
-
-> open book_springer/lecture_commentary/Lesson04.1_Knowledge_Representation.book_chapter.html
-```
+  # Check out.
+  > publish_class_links.py --dir msml610 --out_file ./links.html --do_not_fail_on_warnings --use_master
+  > open book_springer/lecture_commentary/Lesson04.1_Knowledge_Representation.book_chapter.html
+  ```
 
 
 ### Publish the lecture commentary on the website
 
 website/update_class_links.sh
-
 
 ## Course Syllabus
 

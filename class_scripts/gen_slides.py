@@ -31,11 +31,8 @@ published dir `{DIR}/lectures_pdf/`.
 
 import argparse
 import logging
-import os
-import re
 import shlex
 import shutil
-from typing import Tuple
 
 import class_scripts.common_utils as csccouti
 import helpers.hdbg as hdbg
@@ -46,67 +43,6 @@ import helpers.hsystem as hsystem
 _LOG = logging.getLogger(__name__)
 
 # #############################################################################
-
-
-def _extract_lesson_from_file(file_path_str: str) -> Tuple[str, str]:
-    """
-    Extract lesson number and directory from a file path.
-
-    Parses filenames like "Lesson10.2-Causal_Discovery.smd" to extract "10.2".
-    Also extracts the course directory (data605 or msml610) from the path.
-
-    :param file_path_str: File path like "msml610/lectures_source/Lesson10.2-Name.smd"
-    :return: Tuple of (dir, lesson) e.g., ("msml610", "10.2")
-    """
-    filename = os.path.basename(file_path_str)
-    match = re.match(r"Lesson(\d+(?:\.\d+)?)", filename)
-    hdbg.dassert_is_not(
-        match,
-        None,
-        "Could not extract lesson number from filename: %s",
-        filename,
-    )
-    lesson = match.group(1)  # type: ignore[union-attr]
-    dir_name = file_path_str.split(os.sep)[0]
-    hdbg.dassert_dir_exists(
-        dir_name,
-    )
-    _LOG.debug(
-        "Extracted lesson='%s', dir='%s' from path='%s'",
-        lesson,
-        dir_name,
-        file_path_str,
-    )
-    return dir_name, lesson
-
-
-def _parse_first_arg(arg: str) -> Tuple[str, str]:
-    """
-    Parse the first argument to extract directory and lesson.
-
-    Handles:
-    - "data605/08.1" or "msml610/08.1" -> ("data605", "08.1")
-    - "data605/lectures_source/Lesson10.2-Name.smd" -> extracted via file parsing
-
-    :param arg: first argument from command line
-    :return: tuple of (directory, lesson)
-    """
-    if "lectures_source" in arg or arg.endswith(".smd"):
-        return _extract_lesson_from_file(arg)
-    hdbg.dassert(
-        "/" in arg,
-        f"Invalid input '{arg}'. Use 'data605/08.1' or "
-        "'data605/lectures_source/Lesson08.1-Name.smd'",
-    )
-    parts = arg.split("/")
-    hdbg.dassert_eq(
-        len(parts),
-        2,
-        f"Expected dir/lesson format, got '{arg}'. Use 'data605/08.1'",
-    )
-    dir_input, lesson = parts
-    hdbg.dassert_dir_exists(dir_input)
-    return dir_input, lesson
 
 
 def _parse() -> argparse.ArgumentParser:
@@ -140,6 +76,11 @@ def _parse() -> argparse.ArgumentParser:
         default=None,
         choices=["beamer", "typst"],
         help="Engine used to render slides: 'beamer' (default) or 'typst'",
+    )
+    parser.add_argument(
+        "--dry_run",
+        action="store_true",
+        help="Print the commands that would be executed without running them",
     )
     parser.add_argument(
         "extra_opts",
@@ -179,12 +120,23 @@ def _main(parser: argparse.ArgumentParser) -> None:
             else:
                 filtered.append(opt)
         args.extra_opts = filtered
-    dir_arg, lesson_arg = _parse_first_arg(args.input)
+    dir_arg, lesson_arg = csccouti.parse_lesson_spec(args.input)
     csccouti.validate_dir_lesson_args(dir_arg, lesson_arg)
     # Get source and destination names.
     src_name = csccouti.get_source_name(dir_arg, lesson_arg)
     dst_name = csccouti.get_output_name(src_name, ".pdf")
     if args.action == "release":
+        if args.dry_run:
+            src_file = f"{dir_arg}/lectures_pdf.tmp/{dst_name}"
+            dst_file = f"{dir_arg}/lectures_pdf/{dst_name}"
+            _LOG.info(
+                "%s",
+                hprint.color_highlight(
+                    f"[dry run] Would release: {src_file} -> {dst_file}",
+                    "green",
+                ),
+            )
+            return
         _release(dir_arg, dst_name)
         return
     # Build paths.
@@ -216,6 +168,13 @@ def _main(parser: argparse.ArgumentParser) -> None:
     # Prepare command by quoting all arguments to preserve special characters.
     quoted_parts = [shlex.quote(part) for part in cmd_parts]
     cmd = " ".join(quoted_parts)
+    if args.dry_run:
+        preview_cmd = cmd + (" --daemon" if args.daemon else "")
+        _LOG.info(
+            "%s",
+            hprint.color_highlight(f"[dry run] > {preview_cmd}", "green"),
+        )
+        return
     if args.daemon:
         # `notes_to_pdf.py`'s default actions don't include "open_pdf", so
         # build once upfront and open the PDF; then hand off to its own
