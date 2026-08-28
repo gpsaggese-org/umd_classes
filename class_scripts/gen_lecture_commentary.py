@@ -226,112 +226,14 @@ def _is_png_dir_populated(png_dir: str, image_type: str) -> bool:
 # #############################################################################
 
 
-# Default system prompt for the LLM.
-# TODO(gp): Consider improving this.
-_DEFAULT_SYSTEM_PROMPT = """
-You are a college professor expert of machine learning, AI, and big data.
+# Default system prompt for the LLM, stored in a sibling file so that it can
+# be edited without touching the code.
+_SYSTEM_PROMPT_FILE = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "prompt.generate_lecture_commentary.md",
+)
+_DEFAULT_SYSTEM_PROMPT = hio.from_file(_SYSTEM_PROMPT_FILE)
 
-Given the following slide in markdown format, create a detailed commentary
-that explains the content and context of the slide.
-- Use plain language and do not use fancy words
-- Create bullet points for the discussion following the same structure as the
-  original slide
-- The discussion for each slide should contain around 100-150 words
-- Use bold only for items and use italic sparingly to highlight only important
-  points
-- Focus on explaining the concepts, providing context, and highlighting
-  important points
-
-The output should be in markdown format without a heading.
-"""
-
-# The slides should have a good flow (i.e., a slide should connect with
-# the previous one).
-# Do not leave in the text the semantic tags but incorparate them in the
-# flow of the text
-# E.g.,
-# Input
-# ```
-# - @Definition@: An **agent** is something that perceives and acts to reach a
-#  goal
-# ```
-# Output
-# ```
-# - An *agent* in AI is an entity that perceives its environment and takes
-#   actions to achieve specific goals. This concept is central to AI as it
-#   involves creating systems that can make decisions and perform tasks
-#   autonomously.
-# ```
-
-# Input
-# ```
-# - @Requirements@: Passing the **(embodied) Turing test** requires
-#   1. Natural language processing to communicate
-#   2. Knowledge representation to store information
-#   3. Automated reasoning to use stored knowledge and answer questions
-#   4. Machine learning to detect patterns
-#   5. Computer vision and speech recognition to perceive objects and
-#      understand speech
-#   6. Robotics to manipulate objects and move
-# ```
-
-# Output
-# ```
-# - To pass the Turing test, an AI system needs several capabilities:
-#   1. **Natural language processing** enables the system to understand and
-#      generate human language, allowing it to communicate effectively.
-#   2. The system must efficiently store and manage **knowledge and
-#      information** so it can be used in decision-making.
-#   3. **Automated reasoning** draws on stored knowledge to solve problems and
-#      answer questions logically.
-#   4. **Machine learning** allows the system to learn from data and identify
-#      patterns, so it can improve its performance over time.
-#   5. **Computer vision and speech recognition** enable the system to perceive
-#      and interpret visual and auditory information from its environment.
-#   6. **Robotics** enables the system to manipulate physical objects and move,
-#      allowing it to interact with the physical world.
-# ```
-
-# Be direct
-# - **Bad**
-# - The slide suggests that _acting rationally_ encompasses more than just
-# _thinking rationally_. 
-
-# - **Good**
-# - Based on what we said, _acting rationally_ encompasses more than just
-#   _thinking rationally_.
-
-# - **Bad**
-# - **Conclusion: AI should focus on agents acting rationally**
-#   - The slide concludes that the ultimate goal for AI should be to develop
-#     agents that act rationally. This means creating systems that can ...
-# - **Good**
-#   The conclusion is that the ultimate goal for AI should be to develop
-#     agents that act rationally. This means creating systems that can ...
-# 
-# - **Bad**
-# - **@Example@: You leave the house and a branch strikes you**
-# - **Good**
-# - Consider this situation: you leave the house and a branch strikes youu
-
-# - Do not repeat the bullet point exactly, but expand it
-
-# - When there is a big context switch and topic, add a transitional phase
-# - E.g., "After having discussed XYZ, now let's focus on ABC"
-
-# Do not use empty phrases like
-# This question sets the stage for understanding what machine learning is all
-# about. It's important because defining machine learning helps us understand its
-# scope and applications.
-
-# Do not use abbreviations in parenthesis since the text should be "read"
-# - **Bad**
-# - Machine learning (ML) and artificial intelligence (AI) systems operate ...
-# - **Good**
-# - Machine learning and artificial intelligence systems operate ...
-
-# When possible use bold and italic in the text in the same way it's used in
-# the slides
 
 def _extract_title_from_markdown(input_file: str) -> Optional[str]:
     r"""
