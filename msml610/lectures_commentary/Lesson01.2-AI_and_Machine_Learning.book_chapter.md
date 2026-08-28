@@ -2,7 +2,7 @@
 title: "L01.2: AI and Machine Learning"
 ---
 
-<!-- git_hash=083e7694c-l9l timestamp=20260827_123953 -->
+<!-- git_hash=2ed4dde-yd7 timestamp=20260828_134220 -->
 
 <center>
 ![](msml610/lectures_commentary/Lesson01.2-AI_and_Machine_Learning.jpg/slides001.jpg){width=80%}
@@ -25,9 +25,9 @@ title: "L01.2: AI and Machine Learning"
     improve over time without being explicitly programmed
 
 - **What is artificial intelligence?**
-  - To grasp AI, we first need to understand what intelligence itself means,
-    especially human intelligence. AI aims to mimic or replicate aspects of human
-    intelligence, so understanding the original concept is crucial
+  - To grasp AI, we first need to understand what **human intelligence** means. AI
+    aims to mimic or replicate aspects of human intelligence, so understanding the
+    original concept is crucial
 
 - **What is human intelligence?**
   - Humans are known as _"homo sapiens"_, which means "wise man," highlighting our
@@ -75,9 +75,10 @@ title: "L01.2: AI and Machine Learning"
   - AI technologies are already a significant economic force, driving growth and
     efficiency in various industries and contributing substantially to the global
     economy for trillions of dollars annually in revenue
-  - AI is still an evolving field with many challenges to overcome. For example,
-    while AI can assist in scientific research, it has yet to fully solve complex
-    problems or establish new fundamental concepts in areas like physics
+  - AI still presents **many unresolved problems**. This sets it apart from
+    disciplines like physics and math, where the major foundational concepts have
+    already been established. In AI, we are still discovering the basic principles,
+    which makes it an unusually open and fast-moving field
 <center>
 
 # 4 / 18: AI Formal Definition
@@ -210,9 +211,9 @@ rationally
 - Rational thinking is just one aspect of intelligence. For an agent to be truly
   intelligent, it must interact with the world, learn from experiences, and adapt to
   new situations. This involves more than just logical reasoning; it requires
-  understanding the environment and having a "body" to interact with it. This point
-  emphasizes that intelligence is a multifaceted concept that goes beyond mere
-  rationality
+  understanding the environment and having a physical presence, or *embodiment*, to
+  interact with it. This point emphasizes that intelligence is a multifaceted concept
+  that goes beyond mere rationality
 <center>
 
 # 8 / 18: 3. AI as Acting Humanly
@@ -399,10 +400,13 @@ rationally
   the results are not guaranteed and involve some level of uncertainty
 
 - **What does "best" mean?**
-  - The definition of "best" is subjective and depends on the objective function
+  - The classical answer is that "best" is determined by the _objective function_
     being used. This could be a cost function, which the agent tries to minimize, or
     a reward function, which the agent tries to maximize. Other examples include loss
     functions in machine learning or utility functions in economics
+  - This classical answer is a simplification, though. In practice, deciding what the
+    "right" objective function should be, and optimizing it, is itself a hard and
+    often ambiguous problem
 
 - **Omniscience vs no-regrets**
   - A rational agent makes decisions based on the information available to it at the
@@ -418,8 +422,13 @@ rationally
 - **Even with perfect information, rationality may not be feasible**
   - Having all the information doesn't always lead to rational decisions. The cost of
     acquiring complete data can be prohibitive, such as in fields like medicine where
-    gathering all possible data is expensive. Additionally, the computational power
-    required to process all this information can be beyond current capabilities
+    gathering all possible data is expensive
+  - The computational power required can also be beyond current capabilities. For
+    example, some problems require exploring a search tree with $10^{80}$ nodes,
+    which is far more than any computer could ever traverse
+  - There are also **real-time demands**. In high-frequency trading, for instance, a
+    decision may need to be made within a single microsecond, leaving no room for
+    lengthy computation
 
 - A solution is "satisficing"
   - Instead of striving for the perfect solution, which may be unattainable due to
@@ -428,11 +437,89 @@ rationally
     the computational and informational constraints
 <center>
 
-# 14 / 18: Machine Learning: Definitions
+# 14 / 18: Limits of AI Compared to Human Intelligence
 
 </center>
 <center>
 ![](msml610/lectures_commentary/Lesson01.2-AI_and_Machine_Learning.jpg/slides014.jpg){width=80%}
+</center>
+
+- **AI and ML differ from human intelligence**
+  - Machine learning and artificial intelligence systems operate differently from
+    human brains. For example, large language models process information in a way
+    that doesn't mimic human learning. Humans learn through experiences and context,
+    while machines rely on data patterns and algorithms, and each approach has its
+    own limitations
+  - Whether the brain uses *gradient descent*, the optimization method behind most ML
+    training, is still an open and unclear question
+  - Whether the brain uses *reinforcement learning* is more likely, at least in some
+    sense, since humans clearly learn from rewards and consequences over time
+
+- **Fragility to input variations**: ML models can be very sensitive to small changes
+  in input data. For instance, adversarial attacks can trick a model into making
+  errors by changing just one pixel in an image. Similarly, a model trained to play a
+  video game might fail if the screen orientation changes slightly, whereas humans
+  can adapt to such changes easily
+
+- **Lack of transfer learning**: Unlike humans, ML systems struggle to apply what
+  they've learned in one area to a different context without being retrained. Humans
+  can often transfer skills and knowledge across different domains seamlessly
+
+- **Massive data and compute requirements**: ML models need vast amounts of data and
+  computational power to learn effectively. For example, while a teenager can learn
+  to drive in a few hours, developing a self-driving car system requires billions of
+  compute hours and extensive datasets
+
+- **Poor common sense and reasoning**: ML models lack the innate world knowledge and
+  intuitive logic that humans possess. They don't have built-in common sense or the
+  ability to reason through problems in the way humans do
+<center>
+
+# 15 / 18: Limits of AI Compared to Human Intelligence
+
+</center>
+<center>
+![](msml610/lectures_commentary/Lesson01.2-AI_and_Machine_Learning.jpg/slides015.jpg){width=80%}
+</center>
+
+- **Opaque decision-making**: Machine learning models, especially complex ones like
+  deep neural networks, often operate as "black boxes." This means that while they
+  can make accurate predictions or decisions, the way they arrive at these
+  conclusions is not easily understood by humans. This lack of transparency can be
+  problematic, especially in critical areas like healthcare or finance, where
+  understanding the reasoning behind a decision is crucial for trust and
+  accountability. Without clear insight into how decisions are made, it becomes
+  challenging to interpret results or hold systems accountable for errors
+
+- **Dependence on narrow objectives**: Machine learning systems are designed to
+  perform specific tasks very well, but they struggle when faced with broader, more
+  ambiguous goals. For example, an algorithm designed to maximize user engagement on
+  a social media platform might inadvertently promote sensational or harmful content
+  because it is narrowly focused on increasing clicks or views, without understanding
+  the broader implications of its actions. This highlights the importance of
+  carefully defining objectives and considering potential unintended consequences
+
+- **Susceptibility to bias and data quality**: Machine learning models learn from the
+  data they are trained on. If this data contains biases, the models will likely
+  replicate and even amplify these biases. This can lead to unfair or discriminatory
+  outcomes, particularly if the data reflects historical inequalities or prejudices
+  Ensuring high-quality, unbiased data is crucial for developing fair and accurate
+  models
+
+- **Lack of embodiment and physical interaction**: Unlike humans, machine learning
+  systems do not (always) have a physical presence or sensory experiences. Human
+  intelligence is deeply connected to our physical interactions with the world, which
+  help us understand context and develop intuition. This lack of embodiment in ML
+  systems means they may struggle with tasks that require a deep understanding of the
+  physical world or human experiences, limiting their ability to fully replicate
+  human-like intelligence
+<center>
+
+# 16 / 18: Machine Learning: Definitions
+
+</center>
+<center>
+![](msml610/lectures_commentary/Lesson01.2-AI_and_Machine_Learning.jpg/slides016.jpg){width=80%}
 </center>
 
 - After having talked about AI, let's focus on machine learning
@@ -471,96 +558,26 @@ rationally
     powering applications like chatbots and translation services
 <center>
 
-# 15 / 18: Limits of ML Compared to Human Intelligence
-
-</center>
-<center>
-![](msml610/lectures_commentary/Lesson01.2-AI_and_Machine_Learning.jpg/slides015.jpg){width=80%}
-</center>
-
-- **AI and ML differs from human intelligence**
-  - Machine learning and artificial intelligence systems operate differently from
-    human brains. For example, large language models (LLMs) process information in a
-    way that doesn't mimic human learning. Humans learn through experiences and
-    context, while machines rely on data patterns and algorithms
-
-- **Fragility to input variations**: ML models can be very sensitive to small changes
-  in input data. For instance, adversarial attacks can trick a model into making
-  errors by changing just one pixel in an image. Similarly, a model trained to play a
-  video game might fail if the screen orientation changes slightly, whereas humans
-  can adapt to such changes easily
-
-- **Lack of transfer learning**: Unlike humans, ML systems struggle to apply what
-  they've learned in one area to a different context without being retrained. Humans
-  can often transfer skills and knowledge across different domains seamlessly
-
-- **Massive data and compute requirements**: ML models need vast amounts of data and
-  computational power to learn effectively. For example, while a teenager can learn
-  to drive in a few hours, developing a self-driving car system requires billions of
-  compute hours and extensive datasets
-
-- **Poor common sense and reasoning**: ML models lack the innate world knowledge and
-  intuitive logic that humans possess. They don't have built-in common sense or the
-  ability to reason through problems in the way humans do
-<center>
-
-# 16 / 18: Limits of ML Compared to Human Intelligence (cont.)
-
-</center>
-<center>
-![](msml610/lectures_commentary/Lesson01.2-AI_and_Machine_Learning.jpg/slides016.jpg){width=80%}
-</center>
-
-- **Opaque decision-making**: Machine learning models, especially complex ones like
-  deep neural networks, often operate as "black boxes." This means that while they
-  can make accurate predictions or decisions, the way they arrive at these
-  conclusions is not easily understood by humans. This lack of transparency can be
-  problematic, especially in critical areas like healthcare or finance, where
-  understanding the reasoning behind a decision is crucial for trust and
-  accountability. Without clear insight into how decisions are made, it becomes
-  challenging to interpret results or hold systems accountable for errors
-
-- **Dependence on narrow objectives**: Machine learning systems are designed to
-  perform specific tasks very well, but they struggle when faced with broader, more
-  ambiguous goals. For example, an algorithm designed to maximize user engagement on
-  a social media platform might inadvertently promote sensational or harmful content
-  because it is narrowly focused on increasing clicks or views, without understanding
-  the broader implications of its actions. This highlights the importance of
-  carefully defining objectives and considering potential unintended consequences
-
-- **Susceptibility to bias and data quality**: Machine learning models learn from the
-  data they are trained on. If this data contains biases, the models will likely
-  replicate and even amplify these biases. This can lead to unfair or discriminatory
-  outcomes, particularly if the data reflects historical inequalities or prejudices
-  Ensuring high-quality, unbiased data is crucial for developing fair and accurate
-  models
-
-- **Lack of embodiment and physical interaction**: Unlike humans, machine learning
-  systems do not (always) have a physical presence or sensory experiences. Human
-  intelligence is deeply connected to our physical interactions with the world, which
-  help us understand context and develop intuition. This lack of embodiment in ML
-  systems means they may struggle with tasks that require a deep understanding of the
-  physical world or human experiences, limiting their ability to fully replicate
-  human-like intelligence
-<center>
-
-# 17 / 18: the 3 Machine Learning Assumptions
+# 17 / 18: The 3 Machine Learning Assumptions
 
 </center>
 <center>
 ![](msml610/lectures_commentary/Lesson01.2-AI_and_Machine_Learning.jpg/slides017.jpg){width=80%}
 </center>
 
-- In machine learning, this process starts with _gathering a dataset_, which means
-  collecting relevant data that represents the problem you want to solve
+- Solving a practical machine learning problem involves several steps:
+  - **Gathering a dataset** that represents the problem you want to solve
+  - **Building a statistical model** from the dataset algorithmically, using
+    algorithms that learn from the data to make predictions or decisions without
+    being explicitly programmed for the task
+  - **Evaluating the model** to check how well it performs
+  - **Deploying and monitoring the model** once it's in use
+  - And other steps, depending on the project
 
-- Next, you _build a statistical model_ using this data. This model is created
-  through algorithms that learn from the data to make predictions or decisions
-  without being explicitly programmed for the task
-
-- Most of the phases are "engineering", you know what needs to be done and it's about
-  building properly. The modeling phase requires "research" and there are some
-  hypothesis that need to be verified
+- According to Abu-Mostafa (2012), most of these phases are "engineering": you know
+  what needs to be done, and it's about doing it properly. Building the model,
+  however, is the "research" part, since there are hypotheses that need to be
+  verified before the model can be trusted
 
 - The **three core assumptions** of machine learning are crucial for its success:
   - _A pattern exists_: This means there is some regularity or structure in the data
@@ -568,15 +585,15 @@ rationally
   - _Pattern cannot be precisely defined mathematically_: Often, the relationships in
     data are too complex and noisy to be captured by simple mathematical formulas,
     which is why machine learning is used
-  - _Data is available_: you need access to sufficient and relevant data predictions
+  - _Data is available_: you need access to sufficient and relevant data
 
 - Which of the assumptions is **essential**?
   - _A pattern exists_: If this hypothesis is not true, machine learning will not
-    find anything (hopefully) and the conclusion is that there is nothing to learn
-    from the data, which is "fine", so this assumption is not strictly necessary
-  - _Pattern cannot be precisely defined_: While this is often true, even problems
-    with direct solutions can benefit from machine learning for efficiency or
-    scalability. This assumption is not strictly necessary
+    find anything, and the conclusion is that there is nothing to learn from the
+    data, which is "fine". So this assumption is not strictly necessary
+  - _Pattern cannot be precisely defined_: Even when a pattern can be devised with
+    math, we may still choose to use machine learning, for example for efficiency or
+    scalability. This assumption is not strictly necessary either
   - _Data is available_: Without data, the model cannot be trained, and no learning
     or progress can occur. Data is the foundation of any machine learning project
     This is the most critical assumption
@@ -609,7 +626,8 @@ rationally
 - An example of AI system that doesn't use machine learning is a rule-based systems
   using rules handcrafted by domain experts. These systems, like IBM's Deep Blue,
   which played chess, rely on a set of predefined rules and logic to make decisions,
-  rather than learning from data
+  rather than learning from data. This shows that AI systems can exist without using
+  machine learning at all
 
 - Deep Learning is a specialized area within machine learning that uses neural
   networks with many layers (hence "deep"). Deep learning is particularly powerful
@@ -620,3 +638,8 @@ rationally
   understand and generate human language. They are trained on vast amounts of text
   data and often use reinforcement learning from human feedback to improve their
   performance. LLMs are used in applications like chatbots and language translation
+
+- Just as AI systems can exist without machine learning, deep learning systems can
+  exist without being large language models. For example, a *convolutional neural
+  network* used for computer vision or speech is a deep learning system, but it is
+  not an LLM, since it is not trained on text and does not generate language

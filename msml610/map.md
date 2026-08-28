@@ -95,6 +95,12 @@ Lesson13.1-Explainability.smd
 
 - The file is generated in `lectures_pdf.tmp`
 
+## Check Slides
+
+```
+claude> /slides.criticize msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd
+```
+
 ## Slides Commentary
 
 ### Generate for One Lecture
@@ -117,6 +123,12 @@ Lesson13.1-Explainability.smd
 ### Publish the lecture commentary on the website
 
 website/update_class_links.sh
+
+## Update Slides Commentary
+
+```
+claude> Execute class_scripts/prompt.update_lecture_commentary.md on msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd
+```
 
 ## Course Syllabus
 

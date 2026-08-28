@@ -31,6 +31,5 @@ model: opus
 , and modify `<TARGET>` to incorporate those changes
 
 - Follow the same style as `<TARGET>`
-  - Follow `class_scripts/prompt.generate_lecture_commentary.md` to 
-  - E.g., read the corresponding `.claude/skills/*.rules.md` if it exists
-
+  - Follow `class_scripts/prompt.generate_lecture_commentary.md` to understand the
+    style of the content
