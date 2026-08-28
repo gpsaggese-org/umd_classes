@@ -44,7 +44,8 @@
   - Its impact is greater than any previous historical event
   - Currently generates trillions of dollars annually in revenue
   - Presents many unresolved problems
-    - E.g., major concepts in physics might be established
+    - This is different than many other disciplines (e.g., physics, math) where major
+      concepts already established
 
 * AI Formal Definition
 
@@ -87,12 +88,13 @@
   - Programs solve problems in logical notation
   - Run indefinitely if no solution exists (related to the halting problem)
 
-* Thinking Rationally: Cons
+* Thinking Rationally: Challenges
 
 1. **Formalizing informal knowledge is difficult**
-   - @Example@: _"A handshake occurs when two people extend, grip, shake
-     hands, then release."_
+   - _Example_: _"A handshake occurs when two people extend, grip, shake hands, then
+     release."_
    - Formal logic representation:
+ // TODO(ai_gp): Change this so that it is structured on multiple lines on the page
      $$
      \exists x, y \, (
        \text{Person}(x) \land \text{Person}(y) \land x \neq y \land
@@ -104,15 +106,15 @@
      $$
 
 2. **Probabilistic nature of knowledge**
-   - @Example@: In medicine, _"Fever, cough, and fatigue could indicate
-     flu, COVID-19, or another illness."_
+   - _Example_: In medicine, _"Fever, cough, and fatigue could indicate flu,
+     COVID-19, or another illness."_
 
 3. **Scalability challenges**
    - Large problems may need heuristics for practical solutions
 
 4. **Intelligence requires more than rational thinking**
    - Importance of agent interaction with the world
-   - Problem of the "body"
+   - Problem of the "embodiment of AI"
 
 * 3. AI as Acting Humanly
 
@@ -127,7 +129,7 @@
 
 ::: columns
 :::: {.column width=75%}
-- @Requirements@: Passing the (embodied) Turing test requires
+- @Requirements@: Passing the **(embodied) Turing test** requires
   1. Natural language processing to communicate
   2. Knowledge representation to store information
   3. Automated reasoning to use stored knowledge and answer questions
@@ -154,14 +156,14 @@
     - Multiple forms of non-human intelligence exist
   - Intelligence by Turing test means **fooling humans** into thinking it is
     human
-  - @Example@: Aeronautical engineering is about
+  - _Example: Aeronautical engineering is about
     - Correct: Focus on wind tunnels and aerodynamics
     - Incorrect: Designing machines that imitate birds
 
 * 4. AI as Acting Rationally
 
-- @Definition@: **Rational agents** are agents that do the "right thing"
-  given what they know
+- @Definition@: **Rational agents** are agents that do the _"right thing"_ given what
+  they know
 
 - @Characteristics@: Agents that **act rationally** should
   1. Operate autonomously
@@ -188,147 +190,146 @@
 * Rationally is Not Absolute
 
 - @Problem@: AI aims to build agents that **do the right thing**, but what
-  is the right thing?
+  is the _right thing_?
 
 - @Example@: You leave the house and a branch strikes you
-  - Did you act rationally?
+  - _"Did you act rationally?"_
   - Probably
 
 - @Example@: You cross the street and a car knocks you over
-  - Did you act rationally?
-  - It depends, but probably not
+  - _"Did you act rationally?"_
+  - It depends (but probably not)
 
 - @Challenge@: Moral issues with self-driving cars
-  - Should a car swerve and hit a pedestrian to avoid a frontal crash that
-    would kill two people?
+  - _"Should a car swerve and hit a pedestrian to avoid a frontal crash that would
+    kill two people?"_
 
 * Problems of a Rational Agent
 
 - @Challenge@: **Probabilistic environment**
-  - A rational agent aims for
+  - A rational agent aims for:
     - The best outcome in a deterministic setup
     - The best expected outcome under uncertainty
 
-- @Problem@: What does **"best"** mean? It is determined by the objective
-  function
-  - E.g., cost function, sum of rewards, loss function, utility
+- @Problem@: What does **"best"** mean?
+  - The classical answer is that _"best"_ is determined by the _objective function_
+    - E.g., cost function, sum of rewards, loss function, utility
+  - But things are more complex
 
-- @Consideration@: **Omniscience vs no-regrets**
-  - Best is based on available information, not perfect knowledge
+- @Consideration@:
+  - **Omniscience vs no-regrets**
+    - Best is based on available information, not perfect knowledge
+  - Sometimes **no provably correct action** exists, yet, an action must be taken
+  - Even **with perfect information** rationality may not be feasible due to:
+    - Cost of acquiring all data (e.g., in medicine)
+    - Computational demands (e.g., traversing a $10^{80}$ search tree)
+    - Real-time demands (e.g., need to decide within 1 micro-sec in HFT)
 
-- @Constraint@: Sometimes **no provably correct action** exists
-  - Yet, an action must be taken
+- @Solution@: **"Satisficing"**: achieve _good enough_ instead of _perfect_
+  - Acting appropriately given constraints
 
-- @Limitation@: Even **with perfect information** rationality may not be
-  feasible due to
-  - Cost of acquiring all data (e.g., in medicine)
-  - Computational demands
+* Limits of AI Compared to Human Intelligence
 
-- @Solution@: **"Satisficing" (perfect good enough vs perfect)**
-  - Acting appropriately given computational constraints
+- @Problem@: **AI and ML differ from human intelligence**
+  - Machines do not learn like humans (e.g., LLMs) and have different limitations
+  - Does the brain uses gradient descend? Unclear
+  - Does the brain uses reinformcement learning? Probably (in a certain sense)
+
+- @Limitation@
+  - **Fragility to input variations**
+    - ML models fail with slight input distortions
+    - Adversarial attacks cause misclassification by altering one pixel
+    - A model trained on a video game fails if the screen rotates slightly; humans
+      continue effortlessly
+  - **Lack of transfer learning**
+    - ML systems cannot apply knowledge across domains without retraining
+  - **Massive data and compute requirements**
+    - ML requires enormous datasets and computational resources
+    - E.g., A teenager learns to drive in hours, but self-driving systems need
+      billions of compute hours and extensive data
+  - **Poor common sense and reasoning**
+    - ML lacks built-in world knowledge and intuitive logic
+
+* Limits of AI Compared to Human Intelligence
+
+- @Limitation@:
+  - **Opaque decision-making**
+    - Many ML models offer little transparency into decision processes
+    - Limits trust, interpretability, and accountability in critical applications
+  - **Dependence on narrow objectives**
+    - ML systems excel at optimizing narrow tasks but fail with ambiguous goals
+    - E.g., an algorithm maximizing user engagement may promote harmful content
+  - **Susceptibility to bias and data quality**
+    - Models inherit and amplify biases in training data
+  - **Lack of embodiment and physical interaction**
+    - Human cognition is grounded in physical and sensory experience
 
 ## What is Machine Learning?
 
 * Machine Learning: Definitions
 
-- @Question@: How should we define machine learning?
+- @Question@: How should we **define machine learning**?
 
-- @Definition@: _"Machine learning is the field of study that gives
-  computers the ability to learn without being explicitly programmed"_
-  (Samuel, 1959)
+- @Definition@:
+  - _"Machine learning is the field of study that gives computers the ability to
+    learn without being explicitly programmed"_ (Samuel, 1959)
+  - Machine learning builds machines to do _useful things_ without being
+    _explicitly programmed_
+    - E.g., a computer learns to play checkers by playing against itself,
+      memorizing positions that lead to winning
+  - More formally: _"A computer program is said to learn from experience $E$ with
+    respect to some task $T$ and some performance measure $P$, if $P(T)$ improves
+    with experience $E$"_ (Mitchell, 1998)
 
-- @Alternative@: **Machine learning** builds machines to do **useful things**
-  without being **explicitly programmed**
-  - @Example@: A computer learns to play checkers by playing against itself,
-    memorizing positions that lead to winning
-
-- @Formal@: _"A computer program is said to learn from experience $E$ with
-  respect to some task $T$ and some performance measure $P$, if $P(T)$
-  improves with experience $E$"_ (Mitchell, 1998)
-
-- @Applications@: Common examples include
+- @Applications@: Common examples of machine learning include
   - Computer vision
   - Speech recognition
   - Natural language processing
 
-* Limits of ML Compared to Human Intelligence
-
-- @Problem@: **AI differs from human intelligence**
-  - Machines do not learn like humans (e.g., LLMs)
-
-- @Limitation@: **Fragility to input variations**
-  - ML models fail with slight input distortions
-    - Adversarial attacks cause misclassification by altering one pixel
-    - A model trained on a video game fails if the screen rotates slightly;
-      humans continue effortlessly
-
-- @Limitation@: **Lack of transfer learning**
-  - ML systems cannot apply knowledge across domains without retraining
-
-- @Challenge@: **Massive data and compute requirements**
-  - ML requires enormous datasets and computational resources
-    - A teenager learns to drive in hours
-    - Self-driving systems need billions of compute hours and extensive
-      data
-
-- @Limitation@: **Poor common sense and reasoning**
-  - ML lacks built-in world knowledge and intuitive logic
-
-* Limits of ML Compared to Human Intelligence (cont.)
-
-- @Limitation@: **Opaque decision-making**
-  - Many ML models offer little transparency into decision processes
-    - Limits trust, interpretability, and accountability in critical
-      applications
-
-- @Limitation@: **Dependence on narrow objectives**
-  - ML systems excel at optimizing narrow tasks but fail with ambiguous
-    goals
-    - @Example@: An algorithm maximizing user engagement may promote harmful
-      content
-
-- @Limitation@: **Susceptibility to bias and data quality**
-  - Models inherit and amplify biases in training data
-
-- @Limitation@: **Lack of embodiment and physical interaction**
-  - Human cognition is grounded in physical and sensory experience
-
 * The 3 Machine Learning Assumptions
 
-- @Context@: In practice, ML involves solving a practical problem by
+- @Fact@: ML involves solving a practical problem of:
   - Gathering a dataset
-  - Building a statistical model from the dataset algorithmically
+  - _Building a statistical model from the dataset algorithmically_
+  - Evaluating the model
+  - Deploying and monitoring the model
+  - ...
 
-- @Definition@: The **three core assumptions** of machine learning
-  - A **pattern exists**
-  - Pattern cannot be **precisely defined mathematically**
-  - **Data is available**
+- @Problem@ (Abu-Mostafa, 2012)
+  - Most of the phases are "engineering", but _building the model_ is the
+    "research" part
+  - The **three core assumptions** of machine learning are:
+    1. A _pattern exists_
+    2. Pattern cannot be _precisely defined mathematically_
+    3. _Data is available_
 
 - @Question@: Which assumption is **essential**?
-  - A pattern exists: If no pattern exists, learning fails
-  - Pattern cannot be precisely defined: Even direct solutions can use ML
-  - Data is available: **Without data, no progress is possible**
-    - Data is the most crucial assumption
+    1. If no pattern exists, learning fails, so that's not a problem
+    2. It is ok if a pattern can be devised with math but we use machine learning
+    3. _Without data, no progress is possible_: data is the most crucial assumption
 
 * AI vs ML vs Deep-Learning
 
 ::: columns
 :::: {.column width=65%}
-- @Definition@: **AI (Artificial Intelligence)**
-  - Machines programmed to reason, learn, and act in a rational way
+- @Definition@:
+  - **AI (Artificial Intelligence)**: machines programmed to reason, learn, and act
+    in a rational way
+  - **ML (Machine Learning)**: machines capable of performing tasks without being
+    explicitly programmed
 
-- @Definition@: **ML (Machine Learning)**
-  - Machines capable of performing tasks without being explicitly programmed
+  - _AI models that are not ML_ is possible
+    - E.g., in handcrafted rule-based systems (e.g., IBM Deep Blue playing chess)
+      there is no learning from data, but there is still an AI system
 
-- @Example@: **AI without ML**
-  - Rule-based systems (e.g., IBM Deep Blue playing chess)
-
-- @Definition@: **DL (Deep Learning)**
-  - ML using neural networks with many layers
-
-- @Definition@: **LLM (Large Language Models)**
-  - Neural networks trained on massive text datasets and reinforcement
-    learning from human feedback
+- @Definition@:
+  - **DL (Deep Learning)**: ML using a partical type of models, i.e., neural network
+    with many layers
+  - **LLM (Large Language Models)**: neural networks trained on massive _text_ datasets
+    and reinforcement learning from human feedback (RLHF)
+  - _DL models that are not LLMs_ are possible
+    - E.g., a convolutional neural network for vision or speech is deep learning
+      system but not an LLM
 
 ::::
 :::: {.column width=30%}

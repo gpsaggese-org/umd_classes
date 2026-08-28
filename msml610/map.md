@@ -2,86 +2,85 @@
 
 - Each lesson should be around 30 slides and correspond to a chapter of a book
 ```
-> grep "^* " msml610/lectures_source/Lesson01.1-AI_and_Machine_Learning.txt | wc -l
+> grep "^* " msml610/lectures_source/*.smd | wc -l
 ```
 
-Lesson00-Class.txt
+Lesson | Num slides | Check for error | Add visuals | Slides posted | Generate commentary | Review commentary | Duration | Comm Posted | Tutorial | Video |
+Lesson01.1-Class.smd   | 14 | 90% | Yes | Yes | n/a | n/a | n/a | n/a | n/a | n/a |
+Lesson01.2-AI_and_Machine_Learning.smd | 14 
+Lesson01.3-The_Foundations_of_AI.smd (13)
+Lesson01.4-Brief_History_of_AI.smd (26)
 
 // Shrink?
-Lesson01.1-AI_and_Machine_Learning.txt (18)
-Lesson01.2-The_Foundations_of_AI.txt (13)
-Lesson01.3-Brief_History_of_AI.txt (26)
-
-// Shrink?
-Lesson02.1-A_Map_of_Machine_Learning.txt
-Lesson02.2-ML_Paradigms.txt
+Lesson02.1-A_Map_of_Machine_Learning.smd
+Lesson02.2-ML_Paradigms.smd
 
 // Keep
-Lesson02.3-ML_Techniques_Input_Processing.txt
-Lesson02.4-ML_Techniques_Model_Learning.txt
-Lesson02.5-ML_Techniques_Model_Evaluation.txt
-Lesson02.6-ML_Techniques_How_To_Do_Research.txt
+Lesson02.3-ML_Techniques_Input_Processing.smd
+Lesson02.4-ML_Techniques_Model_Learning.smd
+Lesson02.5-ML_Techniques_Model_Evaluation.smd
+Lesson02.6-ML_Techniques_How_To_Do_Research.smd
 
-Lesson03.1-Knowledge_representation.txt
+Lesson03.1-Knowledge_representation.smd
 
 // Move
-Lesson04.1-Models.txt
-Lesson04.2-Models.txt
-Lesson04.3-Models.txt
+Lesson04.1-Models.smd
+Lesson04.2-Models.smd
+Lesson04.3-Models.smd
 
 ## Learning Theory
-Lesson05.1-Learning_Theory.txt
-Lesson05.2-Overfitting.txt
-Lesson05.3-Learn_Validation.txt
+Lesson05.1-Learning_Theory.smd
+Lesson05.2-Overfitting.smd
+Lesson05.3-Learn_Validation.smd
 
 ## Probabilistic ML
-Lesson06.1-Bayesian_Networks.txt
-Lesson06.2-Using_Bayesian_Networks.txt
-Lesson07.1-Intro_to_Probabilistic_Programming.txt
-Lesson07.2-Posterior_Based_Decisions.txt
-Lesson07.3-Hierarchical_Models.txt
-Lesson07.4-Generalized_Linear_Models.txt
-Lesson07.5-Bayesian_Model_Comparison.txt
+Lesson06.1-Bayesian_Networks.smd
+Lesson06.2-Using_Bayesian_Networks.smd
+Lesson07.1-Intro_to_Probabilistic_Programming.smd
+Lesson07.2-Posterior_Based_Decisions.smd
+Lesson07.3-Hierarchical_Models.smd
+Lesson07.4-Generalized_Linear_Models.smd
+Lesson07.5-Bayesian_Model_Comparison.smd
 
 ## Causal ML
-Lesson08.1-Causal_AI_intro.txt
-Lesson08.2-Causal_Networks.txt
-Lesson08.3-Do_Calculus.txt
+Lesson08.1-Causal_AI_intro.smd
+Lesson08.2-Causal_Networks.smd
+Lesson08.3-Do_Calculus.smd
 
-Lesson08.4.txt
-Lesson08.5-Experimentation.txt
+Lesson08.4.smd
+Lesson08.5-Experimentation.smd
 
 ## Forecasting and Decision Making
-Lesson09.1-Reasoning_over_time.txt
-Lesson09.2-Hidden_Markov_Models.txt
-Lesson09.3-Multi_Armed_Bandits.txt
-Lesson09.7-Advanced_Bandits.txt
-Lesson09.4-gh_Filter.txt
-Lesson09.5-Kalman_Filter.txt
-Lesson09.6-Dynamic_Bayesian_Networks.txt
+Lesson09.1-Reasoning_over_time.smd
+Lesson09.2-Hidden_Markov_Models.smd
+Lesson09.3-Multi_Armed_Bandits.smd
+Lesson09.7-Advanced_Bandits.smd
+Lesson09.4-gh_Filter.smd
+Lesson09.5-Kalman_Filter.smd
+Lesson09.6-Dynamic_Bayesian_Networks.smd
 
-Lesson10.1-Timeseries_forecasting.txt
-Lesson10.2-Causal_Inference_for_Time_Series.txt
-Lesson11.1-Decision_Making_with_Causal_Models.txt
-
-// Move
-Lesson11.2-Probabilistic_deep_learning.txt
+Lesson10.1-Timeseries_forecasting.smd
+Lesson10.2-Causal_Inference_for_Time_Series.smd
+Lesson11.1-Decision_Making_with_Causal_Models.smd
 
 // Move
-Lesson12.1-Reinforcement_learning.txt
+Lesson11.2-Probabilistic_deep_learning.smd
 
 // Move
-Lesson12.2-Causal_Discovery.txt
+Lesson12.1-Reinforcement_learning.smd
+
+// Move
+Lesson12.2-Causal_Discovery.smd
 
 // ?
-Lesson13.1-Explainability.txt
+Lesson13.1-Explainability.smd
 
 # Workflows
 
 ## Overview
 
-Extract headers and create a comprehensive syllabus from all lecture materials using
-the `for_loop_lessons.py` orchestration script.
+- Extract headers and create a comprehensive syllabus from all lecture materials
+  using the `for_loop_lessons.py` orchestration script
 
 ## Slides
 
@@ -153,14 +152,14 @@ This generates:
 
 - The syllabus markdown file contains structured headers with proper indentation:
   ```markdown
-  # Lesson01.1-Intro.txt
+  # Lesson01.1-Intro.smd
 
   ## Main Topic
   ### Subtopic 1
   #### Sub-subtopic
   ### Subtopic 2
 
-  # Lesson01.2-Topic.txt
+  # Lesson01.2-Topic.smd
 
   ## Another Main Topic
   ...
