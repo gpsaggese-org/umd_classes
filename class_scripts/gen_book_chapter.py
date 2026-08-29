@@ -6,8 +6,7 @@ Generate a book chapter from lecture slides using an LLM.
 Converts a lecture source file in `.smd` format into a book chapter, in one
 of three formats selected via `--mode`:
 - `springer_latex`: a Springer LaTeX chapter (`.tex`)
-# TODO(ai_gp): -> typst_aima
-- `typst`: a Typst/AIMA-style chapter (`.typ`)
+- `typst_aima`: a Typst/AIMA-style chapter (`.typ`)
 - `md`: a plain Markdown chapter (`.md`)
 
 The style guide for all three modes is split across:
@@ -34,7 +33,7 @@ This script performs the following steps:
 > gen_book_chapter.py --mode springer_latex msml610/08.1
 
 - Generate a Typst chapter for MSML610 lesson 10.2 and preview the PDF:
-> gen_book_chapter.py --mode typst msml610/10.2 --open_pdf
+> gen_book_chapter.py --mode typst_aima msml610/10.2 --open_pdf
 
 - Generate a Markdown chapter for DATA605 lesson 01.1:
 > gen_book_chapter.py --mode md data605/01.1
@@ -59,6 +58,7 @@ import helpers.hdbg as hdbg
 import helpers.hgit as hgit
 import helpers.hio as hio
 import helpers.hparser as hparser
+import helpers.hprint as hprint
 import helpers.hsystem as hsystem
 
 _LOG = logging.getLogger(__name__)
@@ -70,11 +70,20 @@ _LOG = logging.getLogger(__name__)
 # Map `--mode` to the output file extension.
 _MODE_TO_EXTENSION = {
     "springer_latex": "tex",
-    "typst": "typ",
+    "typst_aima": "typ",
     "md": "md",
 }
 
-# TODO(ai_gp): Move close to the use.
+# Backends supported by `_call_llm()`.
+# - "hllm": `helpers.hllm.get_completion()`
+# - "hllm_cli": `helpers.hllm_cli.apply_llm()`, text-only
+_LLM_BACKENDS = csccouti.LLM_BACKENDS
+
+
+# #############################################################################
+# Prompt building
+# #############################################################################
+
 # Map `--mode` to the mode-specific prompt file, sitting next to this script.
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 _COMMON_PROMPT_FILE = os.path.join(
@@ -84,30 +93,11 @@ _MODE_TO_PROMPT_FILE = {
     "springer_latex": os.path.join(
         _SCRIPT_DIR, "prompt.generate_latex_book_chapter.md"
     ),
-    "typst": os.path.join(
+    "typst_aima": os.path.join(
         _SCRIPT_DIR, "prompt.generate_typst_book_chapter.md"
     ),
     "md": os.path.join(_SCRIPT_DIR, "prompt.generate_md_book_chapter.md"),
 }
-
-# Map `--mode` to the comment marker used for the provenance tag (`md` uses
-# an HTML comment, handled separately since it needs a closing marker too).
-# TODO(ai_gp): Is there any general function for this? If not let's factor out
-# from multiple places.
-_MODE_TO_COMMENT_PREFIX = {
-    "springer_latex": "%",
-    "typst": "//",
-}
-
-# Backends supported by `_call_llm()`.
-# - "hllm": `helpers.hllm.get_completion()`
-# - "hllm_cli": `helpers.hllm_cli.apply_llm()`, text-only
-_LLM_BACKENDS = ("hllm", "hllm_cli")
-
-
-# #############################################################################
-# Prompt building
-# #############################################################################
 
 
 def _get_system_prompt(mode: str) -> str:
@@ -190,7 +180,7 @@ def _build_user_prompt(
         f"Chapter title: {chapter_title}",
         f"Course title: {course_title}",
     ]
-    if mode == "typst":
+    if mode == "typst_aima":
         # The chapter number is the integer part of the lesson number
         # (e.g., "10.2" -> "10").
         chapter_num = lesson.split(".")[0]
@@ -213,7 +203,7 @@ def _build_user_prompt(
 # #############################################################################
 
 
-# TODO(ai_gp): Factor it out and use it everywhere is needed.
+# TODO(ai_gp): add the cache to csccouti.call_llm and call that directly.
 @hcacsimp.simple_cache(cache_type="json")
 def _call_llm(user_prompt: str, system_prompt: str, llm_backend: str) -> str:
     """
@@ -225,26 +215,7 @@ def _call_llm(user_prompt: str, system_prompt: str, llm_backend: str) -> str:
     :return: generated chapter text
     """
     hdbg.dassert_in(llm_backend, _LLM_BACKENDS)
-    if llm_backend == "hllm":
-        import helpers.hllm as hllm
-
-        response = hllm.get_completion(
-            user_prompt=user_prompt,
-            system_prompt=system_prompt,
-            model="",
-            cache_mode="NORMAL",
-            temperature=0.1,
-        )
-    else:
-        import helpers.hllm_cli as hllmcli
-
-        response, _ = hllmcli.apply_llm(
-            user_prompt,
-            system_prompt=system_prompt,
-            model="",
-            backend="library",
-        )
-    return str(response)
+    return csccouti.call_llm(user_prompt, system_prompt, "", llm_backend)
 
 
 # #############################################################################
@@ -292,7 +263,7 @@ def _insert_provenance_tag(text: str, mode: str) -> str:
             split_at = yaml_end + len("\n---\n")
             result = f"{text[:split_at]}{comment}\n\n{text[split_at:]}"
     else:
-        prefix = _MODE_TO_COMMENT_PREFIX[mode]
+        prefix = csccouti.get_comment_prefix(_MODE_TO_EXTENSION[mode])
         result = f"{prefix} {tag}\n{text}"
     return result
 
@@ -350,6 +321,18 @@ def _lint_typst_file(typst_file: str, *, dry_run: bool) -> None:
     hsystem.system(cmd, print_command=True, dry_run=dry_run)
 
 
+def _lint_with_lint_text(output_file: str, *, dry_run: bool) -> None:
+    """
+    Lint a Markdown or LaTeX file in place with `lint_text.py`.
+
+    :param output_file: path to the file to lint (its type is inferred
+        from its extension)
+    :param dry_run: print the command without executing it
+    """
+    cmd = f"lint_text.py -i {output_file} -o {output_file}"
+    hsystem.system(cmd, print_command=True, dry_run=dry_run)
+
+
 def _compile_and_open_pdf(
     output_file: str,
     out_dir: str,
@@ -371,7 +354,7 @@ def _compile_and_open_pdf(
     :param dry_run: print the commands without executing them
     """
     pdf_file = os.path.join(out_dir, f"{basename}.pdf")
-    if mode == "typst":
+    if mode == "typst_aima":
         if dry_run:
             _LOG.warning(
                 "As per user request, not compiling '%s' to PDF", output_file
@@ -387,9 +370,8 @@ def _compile_and_open_pdf(
         )
     else:
         _LOG.warning(
-            "PDF preview is not supported for --mode springer_latex. You need to compile the book",
-            out_dir,
-            out_dir,
+            "PDF preview is not supported for --mode springer_latex. You "
+            "need to compile the book (chapter file: '%s')",
             output_file,
         )
         return
@@ -402,8 +384,6 @@ def _compile_and_open_pdf(
 # CLI
 # #############################################################################
 
-# TODO(ai_gp): typst -> typst_aima
-# TODO(ai_gp): Add output
 
 def _parse() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
@@ -423,8 +403,15 @@ def _parse() -> argparse.ArgumentParser:
         choices=list(_MODE_TO_EXTENSION.keys()),
         required=True,
         help="Output format to generate: 'springer_latex' for a Springer "
-        "SNmono LaTeX chapter, 'typst' for a Typst/AIMA-style chapter, "
+        "SNmono LaTeX chapter, 'typst_aima' for a Typst/AIMA-style chapter, "
         "'md' for a plain Markdown chapter",
+    )
+    parser.add_argument(
+        "--output",
+        type=str,
+        default="",
+        help="Path to the output book chapter file (default: derived from "
+        "the input and --mode, as '<dir>/book/<basename>.<ext>')",
     )
     parser.add_argument(
         "--dry_run",
@@ -455,7 +442,7 @@ def _parse() -> argparse.ArgumentParser:
         "--open_pdf",
         action="store_true",
         help="Compile the generated chapter to PDF and open it in Skim "
-        "(supported for --mode typst and --mode md only)",
+        "(supported for --mode typst_aima and --mode md only)",
     )
     hparser.add_verbosity_arg(parser)
     return parser
@@ -470,10 +457,16 @@ def _main(parser: argparse.ArgumentParser) -> None:
     # Get source name and compute the output path.
     src_name = csccouti.get_source_name(dir_arg, lesson_arg)
     input_file = f"{dir_arg}/lectures_source/{src_name}"
-    out_dir = f"{dir_arg}/book"
     extension = _MODE_TO_EXTENSION[args.mode]
-    basename = os.path.splitext(src_name)[0]
-    output_file = f"{out_dir}/{basename}.{extension}"
+    if args.output:
+        # Use the user-provided output path, derived `out_dir`/`basename`.
+        output_file = args.output
+        out_dir = os.path.dirname(output_file) or "."
+        basename = os.path.splitext(os.path.basename(output_file))[0]
+    else:
+        out_dir = f"{dir_arg}/book"
+        basename = os.path.splitext(src_name)[0]
+        output_file = f"{out_dir}/{basename}.{extension}"
     do_incremental = not args.no_incremental
     script_dir = os.path.dirname(os.path.abspath(__file__))
     # Step 1: Create the output directory.
@@ -482,7 +475,10 @@ def _main(parser: argparse.ArgumentParser) -> None:
     if do_incremental and os.path.exists(output_file):
         _LOG.warning("Step 2: Skipping, '%s' already exists", output_file)
     else:
-        _LOG.info("Step 2: Generating '%s' book chapter", args.mode)
+        _LOG.info(
+            "\n%s",
+            hprint.frame(f"Step 2: Generating '{args.mode}' book chapter"),
+        )
         if args.dry_run:
             _LOG.warning(
                 "As per user request, not generating book chapter for '%s'",
@@ -497,17 +493,21 @@ def _main(parser: argparse.ArgumentParser) -> None:
                 lesson_arg,
             )
     # Step 3: Track the generated file in git.
-    _LOG.info("Step 3: Adding book chapter to git")
+    _LOG.info("\n%s", hprint.frame("Step 3: Adding book chapter to git"))
     csccouti.git_add_with_retry(output_file, dry_run=args.dry_run)
     # Step 4: Lint the generated file (mode-specific).
-    # TODO(ai_gp): Generalize for markdown and latex use lint_text.py
-    if args.mode == "typst":
-        _LOG.info("Step 4: Linting Typst file")
+    _LOG.info("\n%s", hprint.frame(f"Step 4: Linting '{args.mode}' file"))
+    if args.mode == "typst_aima":
+        # TODO(gp): Move this inside lint_text.py to support also typst.
         _lint_typst_file(output_file, dry_run=args.dry_run)
+    else:
+        _lint_with_lint_text(output_file, dry_run=args.dry_run)
     # Step 5: Compile to PDF and open in Skim.
     if args.open_pdf:
-        # TODO(ai_gp): use hprint.frame for all this one.
-        _LOG.info("Step 5: Compiling to PDF and opening in Skim")
+        _LOG.info(
+            "\n%s",
+            hprint.frame("Step 5: Compiling to PDF and opening in Skim"),
+        )
         _compile_and_open_pdf(
             output_file,
             out_dir,

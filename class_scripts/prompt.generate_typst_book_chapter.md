@@ -1,6 +1,6 @@
 # Typst Book Chapter
 
-Mode-specific instructions for `--mode typst`. See
+Mode-specific instructions for `--mode typst_aima`. See
 `prompt.generate_book_chapter_common.md` for the shared style guide
 (audience, tone, content rules, constraints): this file covers only the
 Typst syntax and structure.

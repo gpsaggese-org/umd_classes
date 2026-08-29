@@ -1,0 +1,360 @@
+"""
+Unit tests for gen_book_chapter.py.
+
+Import as:
+
+import class_scripts.test.test_gen_book_chapter as csttgeboch
+"""
+
+import os
+from unittest import mock
+
+import helpers.hio as hio
+import helpers.hprint as hprint
+import helpers.hunit_test as hunitest
+
+import class_scripts.gen_book_chapter as clgeboch
+
+
+# #############################################################################
+# Test__add_line_numbers
+# #############################################################################
+
+
+class Test__add_line_numbers(hunitest.TestCase):
+    """
+    Test `_add_line_numbers()` function.
+    """
+
+    def test1(self) -> None:
+        """
+        Test happy path: each line is prefixed with its 1-based line number.
+        """
+        # Prepare inputs.
+        content = "first\nsecond\nthird"
+        # Prepare outputs.
+        expected = "    1 | first\n    2 | second\n    3 | third"
+        # Run test.
+        actual = clgeboch._add_line_numbers(content)
+        # Check outputs.
+        self.assertEqual(actual, expected)
+
+    def test2(self) -> None:
+        """
+        Test edge case: empty content returns an empty string.
+        """
+        # Prepare inputs.
+        content = ""
+        # Prepare outputs.
+        expected = ""
+        # Run test.
+        actual = clgeboch._add_line_numbers(content)
+        # Check outputs.
+        self.assertEqual(actual, expected)
+
+
+# #############################################################################
+# Test__strip_code_fence
+# #############################################################################
+
+
+class Test__strip_code_fence(hunitest.TestCase):
+    """
+    Test `_strip_code_fence()` function.
+    """
+
+    def test1(self) -> None:
+        """
+        Test happy path: a fenced block with a language tag is unwrapped.
+        """
+        # Prepare inputs.
+        text = "```latex\n\\section{Intro}\n```"
+        # Prepare outputs.
+        expected = "\\section{Intro}"
+        # Run test.
+        actual = clgeboch._strip_code_fence(text)
+        # Check outputs.
+        self.assertEqual(actual, expected)
+
+    def test2(self) -> None:
+        """
+        Test edge case: a fenced block without a language tag is unwrapped.
+        """
+        # Prepare inputs.
+        text = "```\nplain text\n```"
+        # Prepare outputs.
+        expected = "plain text"
+        # Run test.
+        actual = clgeboch._strip_code_fence(text)
+        # Check outputs.
+        self.assertEqual(actual, expected)
+
+    def test3(self) -> None:
+        """
+        Test edge case: text without an enclosing fence is left unchanged.
+        """
+        # Prepare inputs.
+        text = "# Chapter 1\nSome content."
+        # Prepare outputs.
+        expected = "# Chapter 1\nSome content."
+        # Run test.
+        actual = clgeboch._strip_code_fence(text)
+        # Check outputs.
+        self.assertEqual(actual, expected)
+
+
+# #############################################################################
+# Test__insert_provenance_tag
+# #############################################################################
+
+
+class Test__insert_provenance_tag(hunitest.TestCase):
+    """
+    Test `_insert_provenance_tag()` function.
+    """
+
+    def test1(self) -> None:
+        """
+        Test happy path: "md" mode without YAML front matter inserts an
+        HTML comment at the top of the text.
+        """
+        # Prepare inputs.
+        text = "# Chapter 1\nSome content."
+        mode = "md"
+        tag = "git_hash=abc1234 timestamp=20250101_000000"
+        # Prepare outputs.
+        expected = f"<!-- {tag} -->\n\n# Chapter 1\nSome content."
+        # Run test.
+        with mock.patch(
+            "helpers.hgit.get_generation_tag", return_value=tag
+        ):
+            actual = clgeboch._insert_provenance_tag(text, mode)
+        # Check outputs.
+        self.assertEqual(actual, expected)
+
+    def test2(self) -> None:
+        """
+        Test edge case: "md" mode with YAML front matter inserts the
+        comment right after the closing `---`.
+        """
+        # Prepare inputs.
+        text = '---\ntitle: "Chapter 1"\n---\n# Chapter 1\nSome content.'
+        mode = "md"
+        tag = "git_hash=abc1234 timestamp=20250101_000000"
+        # Prepare outputs.
+        expected = (
+            '---\ntitle: "Chapter 1"\n---\n'
+            f"<!-- {tag} -->\n\n# Chapter 1\nSome content."
+        )
+        # Run test.
+        with mock.patch(
+            "helpers.hgit.get_generation_tag", return_value=tag
+        ):
+            actual = clgeboch._insert_provenance_tag(text, mode)
+        # Check outputs.
+        self.assertEqual(actual, expected)
+
+    def test3(self) -> None:
+        """
+        Test happy path: "springer_latex" mode prefixes the tag with a
+        LaTeX `%` comment.
+        """
+        # Prepare inputs.
+        text = "\\section{Intro}"
+        mode = "springer_latex"
+        tag = "git_hash=abc1234 timestamp=20250101_000000"
+        # Prepare outputs.
+        expected = f"% {tag}\n\\section{{Intro}}"
+        # Run test.
+        with mock.patch(
+            "helpers.hgit.get_generation_tag", return_value=tag
+        ):
+            actual = clgeboch._insert_provenance_tag(text, mode)
+        # Check outputs.
+        self.assertEqual(actual, expected)
+
+    def test4(self) -> None:
+        """
+        Test happy path: "typst_aima" mode prefixes the tag with a Typst
+        `//` comment.
+        """
+        # Prepare inputs.
+        text = "= Chapter 1"
+        mode = "typst_aima"
+        tag = "git_hash=abc1234 timestamp=20250101_000000"
+        # Prepare outputs.
+        expected = f"// {tag}\n= Chapter 1"
+        # Run test.
+        with mock.patch(
+            "helpers.hgit.get_generation_tag", return_value=tag
+        ):
+            actual = clgeboch._insert_provenance_tag(text, mode)
+        # Check outputs.
+        self.assertEqual(actual, expected)
+
+
+# #############################################################################
+# Test__extract_course_and_title
+# #############################################################################
+
+
+class Test__extract_course_and_title(hunitest.TestCase):
+    """
+    Test `_extract_course_and_title()` function.
+    """
+
+    def test1(self) -> None:
+        """
+        Test happy path: course and lesson titles are extracted from the
+        `course_title`/`lesson_title` metadata directives.
+        """
+        # Prepare inputs.
+        scratch_dir = self.get_scratch_space()
+        input_file = os.path.join(scratch_dir, "Lesson01.1-Intro.smd")
+        content = hprint.dedent(
+            """
+            // course_title=MSML610: Advanced Machine Learning
+            // lesson_title=L01.1: Class Introduction
+            * Slide 1
+            """
+        )
+        hio.to_file(input_file, content)
+        # Prepare outputs.
+        expected = (
+            "MSML610: Advanced Machine Learning",
+            "L01.1: Class Introduction",
+        )
+        # Run test.
+        actual = clgeboch._extract_course_and_title(input_file, content)
+        # Check outputs.
+        self.assertEqual(actual, expected)
+
+    def test2(self) -> None:
+        """
+        Test edge case: no metadata directives falls back to the input's
+        base name for the chapter title and an empty course title.
+        """
+        # Prepare inputs.
+        scratch_dir = self.get_scratch_space()
+        input_file = os.path.join(scratch_dir, "Lesson02.1-NoTitle.smd")
+        content = "* Slide 1\nSome content.\n"
+        hio.to_file(input_file, content)
+        # Prepare outputs.
+        expected = ("", "Lesson02.1-NoTitle")
+        # Run test.
+        actual = clgeboch._extract_course_and_title(input_file, content)
+        # Check outputs.
+        self.assertEqual(actual, expected)
+
+
+# #############################################################################
+# Test__build_user_prompt
+# #############################################################################
+
+
+class Test__build_user_prompt(hunitest.TestCase):
+    """
+    Test `_build_user_prompt()` function.
+    """
+
+    def test1(self) -> None:
+        """
+        Test happy path: "md" mode builds a header without Typst-specific
+        metadata.
+        """
+        # Prepare inputs.
+        input_file = "msml610/lectures_source/Lesson01.1-Intro.smd"
+        content = "Some content."
+        mode = "md"
+        course_title = "MSML610: Advanced Machine Learning"
+        chapter_title = "Class Introduction"
+        lesson = "01.1"
+        # Prepare outputs.
+        expected = hprint.dedent(
+            """
+            Source file: msml610/lectures_source/Lesson01.1-Intro.smd
+            Chapter title: Class Introduction
+            Course title: MSML610: Advanced Machine Learning
+
+            ---
+
+                1 | Some content."""
+        )
+        # Run test.
+        actual = clgeboch._build_user_prompt(
+            input_file, content, mode, course_title, chapter_title, lesson
+        )
+        # Check outputs.
+        self.assert_equal(actual, expected, dedent=True)
+
+    def test2(self) -> None:
+        """
+        Test happy path: "typst_aima" mode adds the chapter number and the
+        Typst import line to the header.
+        """
+        # Prepare inputs.
+        input_file = "msml610/lectures_source/Lesson10.2-Name.smd"
+        content = "Some content."
+        mode = "typst_aima"
+        course_title = "MSML610: Advanced Machine Learning"
+        chapter_title = "Name"
+        lesson = "10.2"
+        # Prepare outputs.
+        expected_extra_lines = [
+            "Chapter number: 10",
+            'Typst import line: #import "../../helpers_root/'
+            'dev_scripts_helpers/typst/aima_style.typ": aima-style, '
+            "algorithm, chapter, glossary",
+        ]
+        # Run test.
+        actual = clgeboch._build_user_prompt(
+            input_file, content, mode, course_title, chapter_title, lesson
+        )
+        # Check outputs.
+        for expected_line in expected_extra_lines:
+            self.assertIn(expected_line, actual)
+
+
+# #############################################################################
+# Test__get_system_prompt
+# #############################################################################
+
+
+class Test__get_system_prompt(hunitest.TestCase):
+    """
+    Test `_get_system_prompt()` function.
+    """
+
+    def test1(self) -> None:
+        """
+        Test happy path: the common and mode-specific prompt files are
+        concatenated with a blank line in between.
+        """
+        # Prepare inputs.
+        mode = "md"
+        common_prompt = "Common style guide."
+        mode_prompt = "Markdown-specific instructions."
+        # Prepare outputs.
+        expected = f"{common_prompt}\n\n{mode_prompt}"
+        # Run test.
+        with mock.patch(
+            "helpers.hio.from_file",
+            side_effect=[common_prompt, mode_prompt],
+        ):
+            actual = clgeboch._get_system_prompt(mode)
+        # Check outputs.
+        self.assertEqual(actual, expected)
+
+    def test2(self) -> None:
+        """
+        Test edge case: an unsupported mode raises AssertionError.
+        """
+        # Prepare inputs.
+        mode = "bogus"
+        # Prepare outputs.
+        expected = "'bogus'"
+        # Run test.
+        with self.assertRaises(AssertionError) as cm:
+            clgeboch._get_system_prompt(mode)
+        # Check outputs.
+        self.assertIn(expected, str(cm.exception))

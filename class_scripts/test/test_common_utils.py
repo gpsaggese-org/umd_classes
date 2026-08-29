@@ -579,6 +579,179 @@ class Test_count_pdf_pages(hunitest.TestCase):
 
 
 # #############################################################################
+# Test_get_comment_prefix
+# #############################################################################
+
+
+class Test_get_comment_prefix(hunitest.TestCase):
+    """
+    Test `get_comment_prefix()` function.
+    """
+
+    def test1(self) -> None:
+        """
+        Test happy path: "tex" extension maps to the "%" LaTeX comment.
+        """
+        # Prepare inputs.
+        extension = "tex"
+        # Prepare outputs.
+        expected = "%"
+        # Run test.
+        actual = csccouti.get_comment_prefix(extension)
+        # Check outputs.
+        self.assertEqual(actual, expected)
+
+    def test2(self) -> None:
+        """
+        Test happy path: "typ" extension maps to the "//" Typst comment.
+        """
+        # Prepare inputs.
+        extension = "typ"
+        # Prepare outputs.
+        expected = "//"
+        # Run test.
+        actual = csccouti.get_comment_prefix(extension)
+        # Check outputs.
+        self.assertEqual(actual, expected)
+
+    def test3(self) -> None:
+        """
+        Test edge case: unsupported extension raises AssertionError.
+        """
+        # Prepare inputs.
+        extension = "md"
+        # Prepare outputs.
+        expected = "'md' in '{'tex': '%', 'typ': '//'}'"
+        # Run test.
+        with self.assertRaises(AssertionError) as cm:
+            csccouti.get_comment_prefix(extension)
+        # Check outputs.
+        self.assertIn(expected, str(cm.exception))
+
+
+# #############################################################################
+# Test_call_llm
+# #############################################################################
+
+
+class Test_call_llm(hunitest.TestCase):
+    """
+    Test `call_llm()` function.
+    """
+
+    def test1(self) -> None:
+        """
+        Test happy path: "hllm" backend dispatches to
+        `helpers.hllm.get_completion()` and forwards its response.
+        """
+        # Prepare inputs.
+        user_prompt = "What is the capital of France?"
+        system_prompt = "You are a helpful assistant."
+        model = "gpt-4"
+        llm_backend = "hllm"
+        # Prepare outputs.
+        expected = "Paris"
+        # Run test.
+        with mock.patch(
+            "helpers.hllm.get_completion", return_value=expected
+        ) as mock_get_completion:
+            actual = csccouti.call_llm(
+                user_prompt, system_prompt, model, llm_backend
+            )
+        # Check outputs.
+        self.assertEqual(actual, expected)
+        mock_get_completion.assert_called_once_with(
+            user_prompt=user_prompt,
+            system_prompt=system_prompt,
+            model=model,
+            cache_mode="NORMAL",
+            temperature=0.1,
+            images_as_base64=(),
+        )
+
+    def test2(self) -> None:
+        """
+        Test happy path: "hllm" backend forwards `images_as_base64` for
+        multi-modal context.
+        """
+        # Prepare inputs.
+        user_prompt = "Describe this slide."
+        system_prompt = "You are a helpful assistant."
+        model = ""
+        llm_backend = "hllm"
+        images_as_base64 = ("base64_image_data",)
+        # Prepare outputs.
+        expected = "A slide about causal inference."
+        # Run test.
+        with mock.patch(
+            "helpers.hllm.get_completion", return_value=expected
+        ) as mock_get_completion:
+            actual = csccouti.call_llm(
+                user_prompt,
+                system_prompt,
+                model,
+                llm_backend,
+                images_as_base64=images_as_base64,
+            )
+        # Check outputs.
+        self.assertEqual(actual, expected)
+        mock_get_completion.assert_called_once_with(
+            user_prompt=user_prompt,
+            system_prompt=system_prompt,
+            model=model,
+            cache_mode="NORMAL",
+            temperature=0.1,
+            images_as_base64=images_as_base64,
+        )
+
+    def test3(self) -> None:
+        """
+        Test happy path: "hllm_cli" backend dispatches to
+        `helpers.hllm_cli.apply_llm()` and forwards its response.
+        """
+        # Prepare inputs.
+        user_prompt = "What is the capital of France?"
+        system_prompt = "You are a helpful assistant."
+        model = "gpt-4"
+        llm_backend = "hllm_cli"
+        # Prepare outputs.
+        expected = "Paris"
+        apply_llm_return_value = (expected, None)
+        # Run test.
+        with mock.patch(
+            "helpers.hllm_cli.apply_llm", return_value=apply_llm_return_value
+        ) as mock_apply_llm:
+            actual = csccouti.call_llm(
+                user_prompt, system_prompt, model, llm_backend
+            )
+        # Check outputs.
+        self.assertEqual(actual, expected)
+        mock_apply_llm.assert_called_once_with(
+            user_prompt,
+            system_prompt=system_prompt,
+            model=model,
+            backend="library",
+        )
+
+    def test4(self) -> None:
+        """
+        Test edge case: unsupported `llm_backend` raises AssertionError.
+        """
+        # Prepare inputs.
+        user_prompt = "What is the capital of France?"
+        system_prompt = "You are a helpful assistant."
+        model = ""
+        llm_backend = "invalid_backend"
+        # Prepare outputs.
+        expected = "'invalid_backend' in '('hllm', 'hllm_cli')'"
+        # Run test.
+        with self.assertRaises(AssertionError) as cm:
+            csccouti.call_llm(user_prompt, system_prompt, model, llm_backend)
+        # Check outputs.
+        self.assertIn(expected, str(cm.exception))
+
+
+# #############################################################################
 # Test_get_pdf_page_counts
 # #############################################################################
 

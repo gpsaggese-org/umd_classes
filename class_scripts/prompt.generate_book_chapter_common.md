@@ -3,7 +3,7 @@
 This file holds the style guide shared by all `--mode` prompts used by
 `gen_book_chapter.py`:
 - `prompt.generate_latex_book_chapter.md` (`--mode springer_latex`)
-- `prompt.generate_typst_book_chapter.md` (`--mode typst`)
+- `prompt.generate_typst_book_chapter.md` (`--mode typst_aima`)
 - `prompt.generate_md_book_chapter.md` (`--mode md`)
 
 `gen_book_chapter.py` builds the final system prompt by concatenating this

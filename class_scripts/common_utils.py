@@ -305,6 +305,77 @@ def git_add_with_retry(file_name: str, *, dry_run: bool) -> None:
     hsystem.system(cmd, print_command=True, dry_run=dry_run)
 
 
+# Backends supported by `call_llm()`.
+# - "hllm": `helpers.hllm.get_completion()`, supports passing images as
+#   multi-modal context
+# - "hllm_cli": `helpers.hllm_cli.apply_llm()`, text-only
+LLM_BACKENDS = ("hllm", "hllm_cli")
+
+
+def call_llm(
+    user_prompt: str,
+    system_prompt: str,
+    model: str,
+    llm_backend: str,
+    *,
+    images_as_base64: Tuple[str, ...] = (),
+) -> str:
+    """
+    Generate a completion from an LLM through one of `LLM_BACKENDS`.
+
+    :param user_prompt: user message
+    :param system_prompt: system prompt (style guide / instructions)
+    :param model: LLM model to use, or "" to use the backend's default
+    :param llm_backend: which backend to use, one of `LLM_BACKENDS`
+    :param images_as_base64: images to pass as multi-modal context (only
+        supported by the "hllm" backend; ignored by "hllm_cli")
+    :return: generated text
+    """
+    hdbg.dassert_in(llm_backend, LLM_BACKENDS)
+    if llm_backend == "hllm":
+        import helpers.hllm as hllm
+
+        response = hllm.get_completion(
+            user_prompt=user_prompt,
+            system_prompt=system_prompt,
+            model=model,
+            cache_mode="NORMAL",
+            temperature=0.1,
+            images_as_base64=images_as_base64,
+        )
+    else:
+        import helpers.hllm_cli as hllmcli
+
+        response, _ = hllmcli.apply_llm(
+            user_prompt,
+            system_prompt=system_prompt,
+            model=model,
+            backend="library",
+        )
+    return str(response)
+
+
+# Map a file extension (without the leading dot) to the character(s) that
+# start a line comment in that file type. Used to stamp provenance tags (git
+# hash/timestamp) into LLM-generated artifacts.
+_EXTENSION_TO_COMMENT_PREFIX = {
+    "tex": "%",
+    "typ": "//",
+}
+
+
+def get_comment_prefix(extension: str) -> str:
+    """
+    Get the line-comment prefix for a file extension.
+
+    :param extension: file extension, without the leading dot (e.g.,
+        "tex", "typ")
+    :return: comment prefix (e.g., "%" for "tex", "//" for "typ")
+    """
+    hdbg.dassert_in(extension, _EXTENSION_TO_COMMENT_PREFIX)
+    return _EXTENSION_TO_COMMENT_PREFIX[extension]
+
+
 def convert_markdown_to_pdf(
     md_file: str, pdf_file: str, script_dir: str, *, dry_run: bool = False
 ) -> None:

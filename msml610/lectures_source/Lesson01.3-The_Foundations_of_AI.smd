@@ -37,7 +37,7 @@ mindmap
 - **\black{How does the mind arise from a physical brain?}**
   - **Dualism**
     - Nature follows physical laws
-    - Part of the human mind ("the soul") is exempt from physical laws
+    - Part of the human mind (_"the soul"_) is exempt from physical laws
   - **Materialism**
     - The mind is a physical system, following the laws of physics
     - Where is free will? Free will is the perception of available choices
@@ -68,10 +68,10 @@ mindmap
     - Actions justified by logic connecting goals and outcomes
   - **Consequentialism**
     - Right or wrong determined by action's expected outcomes
-    - E.g., "If you kill, you will go to jail"
+    - E.g., _"If you kill, you will go to jail"_
   - **Deontological ethics**
-    - "Right actions" based on universal laws, not outcomes
-    - E.g., "don't kill", "don't lie"
+    - _"Right actions"_ based on universal laws, not outcomes
+    - E.g., _"don't kill"_, _"don't lie"_
 
 * AI and Cognitive Psychology
 
@@ -80,8 +80,8 @@ mindmap
     - Brain is an information-processing device
     - Stimuli translated into internal representation
     - Representation manipulated by cognitive processes to derive new internal
-      representations ("beliefs")
-    - Representations turned into actions ("goals")
+      representations (_"beliefs"_)
+    - Representations turned into actions (_"goals"_)
   - **Cognitive science**
     - Use computer models to address memory, language, and logic thinking
     - Dual / opposite of AI
@@ -96,7 +96,7 @@ mindmap
     - Logical deduction rules (Boole, 1850)
     - First-order logic includes objects and relations (Frege, 1879)
   - **Limits to deduction**
-    - Some statements are "undecidable"
+    - Some statements are _"undecidable"_
     - Incompleteness theorem: in any formal theory true statements exist that
       cannot be proved (Godel, 1931)
 
@@ -141,13 +141,14 @@ mindmap
     - One player's actions influence others' utility
     - E.g., local market where one seller's pricing affects competitors
   - **Game theory**
-    - Small economies resemble a "game" (Von Neumann, 1944)
+    - Small economies resemble a _"game"_ (Von Neumann, 1944)
     - Rational agents might need randomized strategies
     - E.g., rock-paper-scissors where randomization prevents predictability
 
 * AI and Linguistics
+
 - **\black{How can you create systems that understand natural language?}**
-  - **Computational linguistics** (NLP)
+  - **Computational linguistics**
     - Studies sentence structure and meaning
     - Machine translation (e.g., Google Translate)
     - Sentiment analysis in social media
@@ -159,6 +160,7 @@ mindmap
     - E.g., first order knowledge, knowledge graphs
 
 * AI and Neuroscience
+
 ::: columns
 :::: {.column width=65%}
 - **Brain**
@@ -184,6 +186,7 @@ mindmap
 :::
 
 * The Brain Causes the Mind
+
 - **Simple cells lead to thought and consciousness**
   - **Truly amazing!**
   - Complex processes emerge
@@ -204,6 +207,7 @@ mindmap
   - Achieving brain's intelligence level remains unknown
 
 * AI and Computer Science
+
 - **\black{What can be computed?}**
   - @Algorithm@
     - Procedure to solve problems
@@ -218,6 +222,7 @@ mindmap
     - P vs NP
 
 * AI and Control Theory
+
 - **\black{How can artifacts operate under their own control?}**
   - **Control theory**
     - Study self-regulating feedback control systems

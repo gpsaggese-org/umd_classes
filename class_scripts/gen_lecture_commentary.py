@@ -236,7 +236,7 @@ _DEFAULT_SYSTEM_PROMPT = hio.from_file(_SYSTEM_PROMPT_FILE)
 # - "hllm": `helpers.hllm.get_completion()`, supports passing the slide's
 #   images as multi-modal context
 # - "hllm_cli": `helpers.hllm_cli.apply_llm()`, text-only (no image support)
-_LLM_BACKENDS = ("hllm", "hllm_cli")
+_LLM_BACKENDS = csccouti.LLM_BACKENDS
 
 
 @hcacsimp.simple_cache(cache_type="json")
@@ -267,27 +267,13 @@ def _generate_slide_commentary(
     )
     user_prompt = processed_slides[0]
     # Get completion from LLM.
-    if llm_backend == "hllm":
-        import helpers.hllm as hllm
-
-        response = hllm.get_completion(
-            user_prompt=user_prompt,
-            system_prompt=system_prompt,
-            model=model,
-            cache_mode="NORMAL",
-            temperature=0.1,
-            images_as_base64=tuple(images_as_base64),
-        )
-    else:
-        import helpers.hllm_cli as hllmcli
-
-        response, _ = hllmcli.apply_llm(
-            user_prompt,
-            system_prompt=system_prompt,
-            model=model,
-            backend="library",
-        )
-    return str(response)
+    return csccouti.call_llm(
+        user_prompt,
+        system_prompt,
+        model,
+        llm_backend,
+        images_as_base64=tuple(images_as_base64),
+    )
 
 
 def _generate_lecture_commentary(
