@@ -17,10 +17,10 @@
   - Often confused and / or used interchangeably with _deep learning_,
     _large-language models_, _predictive analytics_, and other related fields
 
-- @What is artificial intelligence?@
+- @Question@: what is artificial intelligence?
   - Before we should understand what is **human intelligence**
 
-- @What is human intelligence?@
+- @Question@: what is human intelligence?
   - We call ourselves _"homo sapiens"_ because intelligence sets us apart from
     animals
   - For thousands of years, we tried to understand how we think
@@ -42,13 +42,16 @@
 - @Characteristics@
   - Universal and applicable to any human activity and task
   - Its impact is greater than any previous historical event
-  - Currently generates trillions of dollars annually in revenue
+  - Already generates hundreds of billions of dollars annually in revenue,
+    with trillions projected by 2030
   - Presents many unresolved problems
     - This is different than many other disciplines (e.g., physics, math) where major
       concepts already established
 
 * AI Formal Definition
 
+::: columns
+:::: {.column width=65%}
 - @Definition@: AI is characterized along **two key axes**
   - Thinking vs. Acting
   - Human vs. Rational (ideal performance)
@@ -61,8 +64,25 @@
 
 - @Question@: Which definition best captures what AI should aim for?
 
-- @Key insight@: Building machines that **act rationally** should be the
+- @Key idea@: Building machines that **act rationally** should be the
   ultimate goal of AI
+
+::::
+:::: {.column width=30%}
+
+```{=typst}
+#styled-table(
+  headers: ("", "Human", "Rational"),
+  rows: (
+    ("Thinking", "Think humanly", "Think rationally"),
+    ("Acting", "Act humanly", "Act rationally"),
+  ),
+  bold-first-col: true,
+)
+```
+
+::::
+:::
 
 * 1. AI as Thinking Humanly
 
@@ -96,12 +116,12 @@
    - Formal logic representation:
  // TODO(ai_gp): Change this so that it is structured on multiple lines on the page
      $$
-     \exists x, y \, (
-       \text{Person}(x) \land \text{Person}(y) \land x \neq y \land
-       \text{Hand}(x, h_x) \land \text{Hand}(y, h_y) \land
-       \text{MoveToward}(h_x, h_y) \land \text{Contact}(h_x, h_y) \land
-       \text{Shake}(h_x, h_y) \land
-       \text{Release}(h_x, h_y)
+     \exists x, y, h_x, h_y \, (
+       Person(x) \land Person(y) \land x \neq y \land
+       Hand(x, h_x) \land Hand(y, h_y) \land
+       MoveToward(h_x, h_y) \land Contact(h_x, h_y) \land
+       Shake(h_x, h_y) \land
+       Release(h_x, h_y)
      )
      $$
 
@@ -156,7 +176,7 @@
     - Multiple forms of non-human intelligence exist
   - Intelligence by Turing test means **fooling humans** into thinking it is
     human
-  - _Example: Aeronautical engineering is about
+  - @Example@: Aeronautical engineering is about
     - Correct: Focus on wind tunnels and aerodynamics
     - Incorrect: Designing machines that imitate birds
 
@@ -187,7 +207,7 @@
 
 - @Conclusion@: AI should focus on **agents acting rationally**
 
-* Rationally is Not Absolute
+* Rationality Is Not Absolute
 
 - @Problem@: AI aims to build agents that **do the right thing**, but what
   is the _right thing_?
@@ -228,42 +248,6 @@
 - @Solution@: **"Satisficing"**: achieve _good enough_ instead of _perfect_
   - Acting appropriately given constraints
 
-* Limits of AI Compared to Human Intelligence
-
-- @Problem@: **AI and ML differ from human intelligence**
-  - Machines do not learn like humans (e.g., LLMs) and have different limitations
-  - Does the brain uses gradient descend? Unclear
-  - Does the brain uses reinformcement learning? Probably (in a certain sense)
-
-- @Limitation@
-  - **Fragility to input variations**
-    - ML models fail with slight input distortions
-    - Adversarial attacks cause misclassification by altering one pixel
-    - A model trained on a video game fails if the screen rotates slightly; humans
-      continue effortlessly
-  - **Lack of transfer learning**
-    - ML systems cannot apply knowledge across domains without retraining
-  - **Massive data and compute requirements**
-    - ML requires enormous datasets and computational resources
-    - E.g., A teenager learns to drive in hours, but self-driving systems need
-      billions of compute hours and extensive data
-  - **Poor common sense and reasoning**
-    - ML lacks built-in world knowledge and intuitive logic
-
-* Limits of AI Compared to Human Intelligence
-
-- @Limitation@:
-  - **Opaque decision-making**
-    - Many ML models offer little transparency into decision processes
-    - Limits trust, interpretability, and accountability in critical applications
-  - **Dependence on narrow objectives**
-    - ML systems excel at optimizing narrow tasks but fail with ambiguous goals
-    - E.g., an algorithm maximizing user engagement may promote harmful content
-  - **Susceptibility to bias and data quality**
-    - Models inherit and amplify biases in training data
-  - **Lack of embodiment and physical interaction**
-    - Human cognition is grounded in physical and sensory experience
-
 ## What is Machine Learning?
 
 * Machine Learning: Definitions
@@ -279,7 +263,7 @@
       memorizing positions that lead to winning
   - More formally: _"A computer program is said to learn from experience $E$ with
     respect to some task $T$ and some performance measure $P$, if $P(T)$ improves
-    with experience $E$"_ (Mitchell, 1998)
+    with experience $E$"_ (Mitchell, 1997)
 
 - @Applications@: Common examples of machine learning include
   - Computer vision
@@ -308,7 +292,7 @@
     2. It is ok if a pattern can be devised with math but we use machine learning
     3. _Without data, no progress is possible_: data is the most crucial assumption
 
-* AI vs ML vs Deep-Learning
+* AI vs ML vs Deep Learning
 
 ::: columns
 :::: {.column width=65%}
@@ -323,7 +307,7 @@
       there is no learning from data, but there is still an AI system
 
 - @Definition@:
-  - **DL (Deep Learning)**: ML using a partical type of models, i.e., neural network
+  - **DL (Deep Learning)**: ML using a particular type of models, i.e., neural network
     with many layers
   - **LLM (Large Language Models)**: neural networks trained on massive _text_ datasets
     and reinforcement learning from human feedback (RLHF)
@@ -335,11 +319,11 @@
 :::: {.column width=30%}
 
 ```tikz
-  % Define colors
-  \definecolor{AIcolor}{RGB}{255,150,150}    % Light Red
-  \definecolor{MLcolor}{RGB}{150,255,150}    % Light Green
-  \definecolor{DLcolor}{RGB}{150,255,255}    % Light Teal/Cyan
-  \definecolor{LLMcolor}{RGB}{230,150,230}   % Light Purple
+  % Define colors.
+  \definecolor{AIcolor}{RGB}{244,166,166}    % Red/Pink
+  \definecolor{MLcolor}{RGB}{178,226,178}    % Green
+  \definecolor{DLcolor}{RGB}{160,214,209}    % Teal
+  \definecolor{LLMcolor}{RGB}{198,166,244}   % Purple
 
   % Draw AI circle
   \fill[AIcolor] (0,0) circle (3);
@@ -364,3 +348,54 @@
 
 ::::
 :::
+
+* Limits of AI Compared to Human Intelligence (1/2)
+
+- @Problem@: **AI and ML differ from human intelligence**
+  - Machines do not learn like humans (e.g., LLMs) and have different limitations
+  - Does the brain use gradient descent? Unclear
+  - Does the brain use reinforcement learning? Probably (in a certain sense)
+
+- @Limitation@
+  - **Fragility to input variations**
+    - ML models fail with slight input distortions
+    - Adversarial attacks cause misclassification by altering one pixel
+    - A model trained on a video game fails if the screen rotates slightly; humans
+      continue effortlessly
+  - **Lack of transfer learning**
+    - ML systems cannot apply knowledge across domains without retraining
+  - **Massive data and compute requirements**
+    - ML requires enormous datasets and computational resources
+    - E.g., A teenager learns to drive in hours, but self-driving systems need
+      billions of compute hours and extensive data
+  - **Poor common sense and reasoning**
+    - ML lacks built-in world knowledge and intuitive logic
+
+* Limits of AI Compared to Human Intelligence (2/2)
+
+- @Limitation@:
+  - **Opaque decision-making**
+    - Many ML models offer little transparency into decision processes
+    - Limits trust, interpretability, and accountability in critical applications
+  - **Dependence on narrow objectives**
+    - ML systems excel at optimizing narrow tasks but fail with ambiguous goals
+    - E.g., an algorithm maximizing user engagement may promote harmful content
+  - **Susceptibility to bias and data quality**
+    - Models inherit and amplify biases in training data
+  - **Lack of embodiment and physical interaction**
+    - Human cognition is grounded in physical and sensory experience
+
+* Key Takeaways
+
+- @Key idea@: AI should focus on **agents acting rationally**, not on mimicking
+  human thought or behavior
+
+- @Definition@:
+  - **AI**: machines programmed to reason, learn, and act rationally
+  - **ML**: a subset of AI that performs tasks without being explicitly programmed
+  - **DL**: a subset of ML using multi-layer neural networks
+  - **LLM**: a subset of DL trained on massive text datasets with RLHF
+
+- @Remark@: current ML/DL systems, despite their power, still fall short of
+  human intelligence on fragility, transfer learning, data efficiency, and
+  common-sense reasoning
