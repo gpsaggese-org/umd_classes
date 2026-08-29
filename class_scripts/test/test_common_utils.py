@@ -8,6 +8,7 @@ import class_scripts.test.test_common_utils as csttcout
 
 # TODO(gp): Make sure this file follows our unit test conventions
 
+# TODO(ai_gp): Add logging import statement to follow template structure (testing.rules.md:## Unit Test Code Structure)
 import os
 from unittest import mock
 
@@ -16,6 +17,7 @@ import helpers.hunit_test as hunitest
 
 import class_scripts.common_utils as csccouti
 
+# TODO(ai_gp): Add _LOG = logging.getLogger(__name__) to follow template structure (testing.rules.md:## Unit Test Code Structure)
 
 # #############################################################################
 # Test_validate_dir_lesson_args
@@ -82,6 +84,7 @@ class Test_extract_lesson_from_file(hunitest.TestCase):
     Test `extract_lesson_from_file()` function.
     """
 
+    # TODO(ai_gp): Rename to `helper` to follow naming convention (testing.rules.md:## Order Helper Methods First in Test Classes)
     def _assert_extract_lesson(
         self, file_path: str, expected_dir: str, expected_lesson: str
     ) -> None:
@@ -93,9 +96,12 @@ class Test_extract_lesson_from_file(hunitest.TestCase):
         :param expected_lesson: expected lesson number from extraction
         """
         actual_dir, actual_lesson = csccouti.extract_lesson_from_file(file_path)
+        # TODO(ai_gp): Use self.assert_equal() for string comparisons instead of assertEqual() (testing.rules.md:## Assertion Patterns)
         self.assertEqual(actual_dir, expected_dir)
+        # TODO(ai_gp): Use self.assert_equal() for string comparisons instead of assertEqual() (testing.rules.md:## Assertion Patterns)
         self.assertEqual(actual_lesson, expected_lesson)
 
+    # TODO(ai_gp): Rename to `helper1` to follow naming convention (testing.rules.md:## Order Helper Methods First in Test Classes)
     def _assert_extract_lesson_raises(
         self, file_path: str, expected_error_msg: str
     ) -> None:
@@ -195,6 +201,7 @@ class Test_parse_lesson_spec(hunitest.TestCase):
     Test `parse_lesson_spec()` function.
     """
 
+    # TODO(ai_gp): Rename to `helper` to follow naming convention (testing.rules.md:## Order Helper Methods First in Test Classes)
     def _assert_parse_lesson_spec(
         self, arg: str, expected_dir: str, expected_lesson: str
     ) -> None:
@@ -206,9 +213,12 @@ class Test_parse_lesson_spec(hunitest.TestCase):
         :param expected_lesson: expected lesson
         """
         actual_dir, actual_lesson = csccouti.parse_lesson_spec(arg)
+        # TODO(ai_gp): Use self.assert_equal() for string comparisons instead of assertEqual() (testing.rules.md:## Assertion Patterns)
         self.assertEqual(actual_dir, expected_dir)
+        # TODO(ai_gp): Use self.assert_equal() for string comparisons instead of assertEqual() (testing.rules.md:## Assertion Patterns)
         self.assertEqual(actual_lesson, expected_lesson)
 
+    # TODO(ai_gp): Rename to `helper1` to follow naming convention (testing.rules.md:## Order Helper Methods First in Test Classes)
     def _assert_parse_lesson_spec_raises(
         self, arg: str, expected_error_msg: str
     ) -> None:
@@ -315,6 +325,7 @@ class Test_find_lecture_file(hunitest.TestCase):
     Test `find_lecture_file()` function.
     """
 
+    # TODO(ai_gp): Rename to `helper` to follow naming convention (testing.rules.md:## Order Helper Methods First in Test Classes)
     def _create_lecture_source_dir(self, filenames: list) -> str:
         """
         Create a `lectures_source/` scratch dir with the given filenames.
@@ -415,6 +426,7 @@ class Test_get_output_name(hunitest.TestCase):
     Test `get_output_name()` function.
     """
 
+    # TODO(ai_gp): Rename to `helper` (without underscore) to follow naming convention (testing.rules.md:## Order Helper Methods First in Test Classes)
     def _helper(self, source_name: str, extension: str, expected: str) -> None:
         """
         Test helper for `get_output_name()`.
@@ -599,6 +611,7 @@ class Test_get_comment_prefix(hunitest.TestCase):
         # Run test.
         actual = csccouti.get_comment_prefix(extension)
         # Check outputs.
+        # TODO(ai_gp): Use self.assert_equal() for string comparisons instead of assertEqual() (testing.rules.md:## Assertion Patterns)
         self.assertEqual(actual, expected)
 
     def test2(self) -> None:
@@ -612,6 +625,7 @@ class Test_get_comment_prefix(hunitest.TestCase):
         # Run test.
         actual = csccouti.get_comment_prefix(extension)
         # Check outputs.
+        # TODO(ai_gp): Use self.assert_equal() for string comparisons instead of assertEqual() (testing.rules.md:## Assertion Patterns)
         self.assertEqual(actual, expected)
 
     def test3(self) -> None:
@@ -659,6 +673,7 @@ class Test_call_llm(hunitest.TestCase):
                 user_prompt, system_prompt, model, llm_backend
             )
         # Check outputs.
+        # TODO(ai_gp): Use self.assert_equal() for string comparisons instead of assertEqual() (testing.rules.md:## Assertion Patterns)
         self.assertEqual(actual, expected)
         mock_get_completion.assert_called_once_with(
             user_prompt=user_prompt,
@@ -694,6 +709,7 @@ class Test_call_llm(hunitest.TestCase):
                 images_as_base64=images_as_base64,
             )
         # Check outputs.
+        # TODO(ai_gp): Use self.assert_equal() for string comparisons instead of assertEqual() (testing.rules.md:## Assertion Patterns)
         self.assertEqual(actual, expected)
         mock_get_completion.assert_called_once_with(
             user_prompt=user_prompt,
@@ -725,6 +741,7 @@ class Test_call_llm(hunitest.TestCase):
                 user_prompt, system_prompt, model, llm_backend
             )
         # Check outputs.
+        # TODO(ai_gp): Use self.assert_equal() for string comparisons instead of assertEqual() (testing.rules.md:## Assertion Patterns)
         self.assertEqual(actual, expected)
         mock_apply_llm.assert_called_once_with(
             user_prompt,
@@ -773,6 +790,7 @@ class Test_get_pdf_page_counts(hunitest.TestCase):
         # Prepare outputs.
         expected = {"Lesson01.pdf": 10, "Lesson02.pdf": 20}
         # Run test.
+        # TODO(ai_gp): Do not mock internal helpers like count_pdf_pages(); mock only external dependencies (testing.rules.md:## Mock Only External Dependencies)
         with mock.patch(
             "class_scripts.common_utils.count_pdf_pages",
             side_effect=page_counts,

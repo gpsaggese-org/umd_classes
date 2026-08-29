@@ -97,6 +97,7 @@ class Test__generate_slide_commentary(hunitest.TestCase):
         # Prepare outputs.
         expected = "Commentary about slide 1."
         # Run test.
+        # TODO(ai_gp): Mock the external LLM API instead of the internal helper (call_llm); follow guidance to mock external dependencies, not internal wrappers (testing.rules.md:## Mock Only External Dependencies)
         with mock.patch(
             "class_scripts.common_utils.call_llm", return_value=expected
         ) as mock_call_llm:

@@ -75,6 +75,27 @@ Lesson12.2-Causal_Discovery.smd
 // ?
 Lesson13.1-Explainability.smd
 
+# Workflow in short
+
+/slides.lint
+/slides.criticize
+/slides.add_visuals/SKILL.md
+/slides.fix_errors/SKILL.md
+/slides.fix_formatting/SKILL.md
+/slides.reduce_text/SKILL.md
+/slides.reorganize/SKILL.md
+/slides.review/SKILL.md
+/slides.add_references/SKILL.md
+/slides.add_tutorial_links/SKILL.md
+
+> lint_text.py -i 
+
+> gen_slides.py msml610/01.3
+
+> grep "^* " msml610/lectures_source/*.smd | wc -l
+
+> gen_book_chapters.py
+
 # Workflows
 
 ## Overview

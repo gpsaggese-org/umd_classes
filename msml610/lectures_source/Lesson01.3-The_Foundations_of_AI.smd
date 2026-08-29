@@ -46,6 +46,7 @@ mindmap
 
 ::: columns
 :::: {.column width=75%}
+
 - **\black{What does knowledge come from?}**
   - **Empiricism**
     - Knowledge acquired via senses
@@ -56,10 +57,12 @@ mindmap
   - **Logical Positivism**
     - Knowledge as logical theories linked to observations
     - E.g., scientific hypotheses connected to experimental data
+
 ::::
 :::: {.column width=20%}
 
 ![](msml610/lectures_source/figures/L01.2.black_swans.jpg)
+
 ::::
 :::
 
@@ -97,8 +100,8 @@ mindmap
     - First-order logic includes objects and relations (Frege, 1879)
   - **Limits to deduction**
     - Some statements are _"undecidable"_
-    - Incompleteness theorem: in any formal theory true statements exist that
-      cannot be proved (Godel, 1931)
+    - Incompleteness theorem: In any formal theory true statements exist that cannot
+      be proved (Godel, 1931)
 
 - **\black{How do we reason with uncertain information?}**
   - **Probability**
@@ -121,14 +124,13 @@ mindmap
 
 - **\black{How to make decisions when payoffs are result of several actions?}**
   - **Operations research**
-    - Make rational decisions with payoffs for sequence of actions (Bellman,
-      1957)
+    - Make rational decisions with payoffs for sequence of actions (Bellman, 1957)
     - E.g., Markov Decision Processes
   - **Satisficing**
     - Decisions that are good enough
     - Closer to human behavior
-    - E.g., choosing a restaurant that meets basic criteria rather than finding
-      the perfect one
+    - E.g., choosing a restaurant that meets basic criteria rather than finding the
+      perfect one
 
 * AI and Economics (2/2)
 
@@ -163,6 +165,7 @@ mindmap
 
 ::: columns
 :::: {.column width=65%}
+
 - **Brain**
   - Parts handle specific cognitive functions
   - Information processing in the cerebral cortex
@@ -177,11 +180,14 @@ mindmap
 
 - **Memory**
   - No theory yet about individual memory storage
-  - Current theory: memories reconstructed
+  - Current theory: Memories reconstructed
+
 ::::
 :::: {.column width=35%}
+
 ![](msml610/lectures_source/figures/L01.2.brain.jpg)
 ![](msml610/lectures_source/figures/L01.2.neuron.png)
+
 ::::
 :::
 
@@ -202,7 +208,7 @@ mindmap
     - AI improves autonomously, leading to rapid growth
     - Recursive self-improvement leads to superintelligence
   - Potential societal impact
-    - Control problem/value alignment: ensure AI aligns with human values
+    - Control problem/value alignment: Ensure AI aligns with human values
     - Economic/social disruption due to automation
   - Achieving brain's intelligence level remains unknown
 
@@ -213,11 +219,11 @@ mindmap
     - Procedure to solve problems
     - E.g., algorithm for computing GCD (Euclid, 300 BCE)
   - **Limits to computation**
-    - Turing machine (1936): computes any computable function
+    - Turing machine (1936): Computes any computable function
     - Some functions are non-computable
     - E.g., the halting problem, i.e., decide if a program terminates
   - **Tractability**
-    - Complexity classes: polynomial vs exponential complexity
+    - Complexity classes: Polynomial vs exponential complexity
     - Problem is intractable if solving time grows exponentially with size
     - P vs NP
 
@@ -230,7 +236,7 @@ mindmap
     - Mechanisms to minimize error between current and goal states
     - Kalman Filter (Kalman, 1960)
     - Based on calculus, matrix, stochastic optimal control
-    - AI: logical inference, symbolic planning, computation
+    - AI: Logical inference, symbolic planning, computation
 
 * AI and Computer Engineering
 
@@ -255,10 +261,13 @@ mindmap
   - **Quantum Computing**
     - Potential for significant acceleration in key computations
     - E.g., Shor's algorithm for factorization
+
 ::::
 :::: {.column width=40%}
+
 ![](msml610/lectures_source/figures/L01.2.eniac.png)
 ![](msml610/lectures_source/figures/L01.2.Moore_Law.png)
 ![](msml610/lectures_source/figures/L01.2.CPU_GPU_TPU.png)
+
 ::::
 :::
