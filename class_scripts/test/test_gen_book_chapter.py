@@ -42,13 +42,10 @@ class Test__add_line_numbers(hunitest.TestCase):
             """
         )
         # Prepare outputs.
-        expected = hprint.dedent(
-            """
-            1 | first
-            2 | second
-            3 | third
-            """
-        )
+        # Note: `_add_line_numbers()` right-justifies each line number to
+        # width 5, so a single-digit number gets a 4-space pad (see test3);
+        # this is data, not code indentation, so it is not dedented.
+        expected = "    1 | first\n    2 | second\n    3 | third"
         # Run test.
         actual = clgeboch._add_line_numbers(content)
         # Check outputs.
@@ -470,9 +467,7 @@ class Test__build_user_prompt(hunitest.TestCase):
             Chapter title: Name
             Course title: MSML610: Advanced Machine Learning
             Chapter number: 10
-            Typst import line: #import "../../helpers_root/
-            dev_scripts_helpers/typst/aima_style.typ": aima-style,
-            algorithm, chapter, glossary
+            Typst import line: #import "../../helpers_root/dev_scripts_helpers/typst/aima_style.typ": aima-style, algorithm, chapter, glossary
 
             ---
 

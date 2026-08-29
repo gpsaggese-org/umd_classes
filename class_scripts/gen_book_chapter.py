@@ -223,9 +223,13 @@ def _call_llm(user_prompt: str, system_prompt: str, llm_backend: str) -> str:
 # #############################################################################
 
 
+# TODO(ai_gp): Convert it into a verbose one with explanation.
+# TODO(ai_gp): Move inside the function
 # Matches an entire response wrapped in a single fenced code block, e.g. the
 # LLM answering with "```latex\n...\n```" despite being asked not to.
-_CODE_FENCE_RE = re.compile(r"^```[a-zA-Z0-9_+-]*\n(.*)\n```\s*$", re.DOTALL)
+# The `\n?` before the closing fence makes the content group optional, so an
+# empty fence (e.g., "```\n```", with no content line at all) also matches.
+_CODE_FENCE_RE = re.compile(r"^```[a-zA-Z0-9_+-]*\n(.*?)\n?```\s*$", re.DOTALL)
 
 
 def _strip_code_fence(text: str) -> str:

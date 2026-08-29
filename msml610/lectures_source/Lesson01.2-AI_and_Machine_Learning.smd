@@ -18,14 +18,14 @@
     _large-language models_, _predictive analytics_, and other related fields
 
 - @Question@: What is artificial intelligence?
-  - Before we should understand what is **human intelligence**
+  - Before that, we should first understand what **human intelligence** is
 
 - @Question@: What is human intelligence?
   - We call ourselves _"homo sapiens"_ because intelligence sets us apart from
     animals
   - For thousands of years, we tried to understand how we think
   - One of the _biggest mysteries_
-    - Brain is a small mass of matter but can understand nature secrets
+    - Brain is a small mass of matter but can understand nature's secrets
       - E.g., theory of relativity, quantum mechanics, black holes
     - How can the brain understand, predict, and manipulate a world more complicated
       than itself?
@@ -42,11 +42,10 @@
 - @Characteristics@
   - Universal and applicable to any human activity and task
   - Its impact is greater than any previous historical event
-  - Already generates hundreds of billions of dollars annually in revenue, with
-    trillions projected by 2030
-  - Presents many unresolved problems
-    - This is different than many other disciplines (e.g., physics, math) where major
-      concepts already established
+  - Already generates hundreds of billions of dollars annually in market
+    revenue, with trillions in global economic impact projected by 2030
+  - Presents many unresolved problems, unlike disciplines with settled core
+    theories (e.g., arithmetic, Newtonian mechanics within its domain)
 
 * AI Formal Definition
 
@@ -57,7 +56,7 @@
   - Thinking vs. Acting
   - Human vs. Rational (ideal performance)
 
-- This yields four possible definitions of AI as a machine that can:
+- **Four resulting definitions**: AI as a machine that can:
   1. Think humanly
   2. Think rationally
   3. Act humanly
@@ -102,39 +101,41 @@
 - @Question@: What are the rules of **correct thinking**?
   - Given correct premises, yield correct conclusions
 
-- @Approach@: **Logic** studies the "laws of thought"
+- @Techniques@: **Logic** studies the "laws of thought"
   - Formalize statements about objects and their relations
 
-- @Technique@: **Automatic theorem proving**
+- @Techniques@: **Automatic theorem proving**
   - Programs solve problems in logical notation
-  - Run indefinitely if no solution exists (related to the halting problem)
+  - Run indefinitely if no solution exists, since first-order validity is
+    only semi-decidable
 
 * Thinking Rationally: Challenges
 
-1. **Formalizing informal knowledge is difficult**
-   - _Example_: _"A handshake occurs when two people extend, grip, shake hands, then
-     release."_
-   - Formal logic representation:
+- @Challenges@
+  1. **Formalizing informal knowledge is difficult**
+     - _Example_: _"A handshake occurs when two people extend, grip, shake
+       hands, then release."_
+     - Formal logic representation:
 
- // TODO(ai_gp): Change this so that it is structured on multiple lines on the page
+   // TODO(ai_gp): Change this so that it is structured on multiple lines on the page
 
-     $$
-     \exists x, y, h_x, h_y \, (
-       Person(x) \land Person(y) \land x \neq y \land
-       Hand(x, h_x) \land Hand(y, h_y) \land
-       MoveToward(h_x, h_y) \land Contact(h_x, h_y) \land
-       Shake(h_x, h_y) \land
-       Release(h_x, h_y)
-     )
-     $$
-2. **Probabilistic nature of knowledge**
-   - _Example_: In medicine, _"Fever, cough, and fatigue could indicate flu,
-     COVID-19, or another illness."_
-3. **Scalability challenges**
-   - Large problems may need heuristics for practical solutions
-4. **Intelligence requires more than rational thinking**
-   - Importance of agent interaction with the world
-   - Problem of the "embodiment of AI"
+       $$
+       \exists x, y, h_x, h_y \, (
+         Person(x) \land Person(y) \land x \neq y \land
+         Hand(x, h_x) \land Hand(y, h_y) \land
+         MoveToward(h_x, h_y) \land Contact(h_x, h_y) \land
+         Shake(h_x, h_y) \land
+         Release(h_x, h_y)
+       )
+       $$
+  2. **Probabilistic nature of knowledge**
+     - _Example_: In medicine, _"Fever, cough, and fatigue could indicate flu,
+       COVID-19, or another illness."_
+  3. **Scalability challenges**
+     - Large problems may need heuristics for practical solutions
+  4. **Intelligence requires more than rational thinking**
+     - Importance of agent interaction with the world
+     - Problem of the "embodiment of AI"
 
 * 3. AI as Acting Humanly
 
@@ -142,19 +143,20 @@
 
 - @Goal@: AI designs **agents that can act like humans**
 
-- @Approach@: **Turing test**
-  - _"A computer passes the Turing test if a human cannot tell whether the answers to
-    questions came from a person or a computer"_
+- @Techniques@: **Turing test**
+  - _"A computer passes the Turing test if a human cannot tell whether the
+    answers to questions came from a person or a computer"_
 
 ::: columns
 :::: {.column width=75%}
 
-- @Requirements@: Passing the **(embodied) Turing test** requires
+- @Components@: Passing the **(embodied) Turing test** requires
   1. Natural language processing to communicate
   2. Knowledge representation to store information
   3. Automated reasoning to use stored knowledge and answer questions
   4. Machine learning to detect patterns
-  5. Computer vision and speech recognition to perceive objects and understand speech
+  5. Computer vision and speech recognition to perceive objects and
+     understand speech
   6. Robotics to manipulate objects and move
 
 ::::
@@ -183,8 +185,8 @@
 
 * 4. AI as Acting Rationally
 
-- @Definition@: **Rational agents** are agents that do the _"right thing"_ given what
-  they know
+- @Definition@: **Rational agents** are agents that do the _"right thing"_
+  given what they know
 
 - @Characteristics@: Agents that **act rationally** should
   1. Operate autonomously
@@ -206,7 +208,7 @@
   - Rationality can be mathematically defined
   - Human behavior is shaped by evolutionary conditions
 
-- @Conclusion@: AI should focus on **agents acting rationally**
+- @Key idea@: AI should focus on **agents acting rationally**
 
 * Rationality Is Not Absolute
 
@@ -217,17 +219,19 @@
   - _"Did you act rationally?"_
   - Probably
 
-- @Example@: You cross the street and a car knocks you over
+- @Example@: You cross the street without checking for oncoming traffic and a
+  car knocks you over
   - _"Did you act rationally?"_
-  - It depends (but probably not)
+  - It depends (but probably not, since checking first was a low-cost,
+    easy precaution)
 
-- @Challenge@: Moral issues with self-driving cars
+- @Challenges@: Moral issues with self-driving cars
   - _"Should a car swerve and hit a pedestrian to avoid a frontal crash that would
     kill two people?"_
 
 * Problems of a Rational Agent
 
-- @Challenge@: **Probabilistic environment**
+- @Challenges@: **Probabilistic environment**
   - A rational agent aims for:
     - The best outcome in a deterministic setup
     - The best expected outcome under uncertainty
@@ -237,13 +241,14 @@
     - E.g., cost function, sum of rewards, loss function, utility
   - But things are more complex
 
-- @Consideration@
+- @Limitations@
   - **Omniscience vs no-regrets**
     - Best is based on available information, not perfect knowledge
   - Sometimes **no provably correct action** exists, yet, an action must be taken
   - Even **with perfect information** rationality may not be feasible due to:
     - Cost of acquiring all data (e.g., in medicine)
-    - Computational demands (e.g., traversing a $10^{80}$ search tree)
+    - Computational demands (e.g., traversing a search tree with more
+      branches than atoms in the observable universe, $\sim 10^{80}$)
     - Real-time demands (e.g., need to decide within 1 micro-sec in HFT)
 
 - @Solution@: **"Satisficing"**: Achieve _good enough_ instead of _perfect_
@@ -278,7 +283,6 @@
   - _Building a statistical model from the dataset algorithmically_
   - Evaluating the model
   - Deploying and monitoring the model
-  -
 
 - @Problem@ (Abu-Mostafa, 2012)
   - Most of the phases are "engineering", but _building the model_ is the "research"
@@ -289,9 +293,13 @@
     3. _Data is available_
 
 - @Question@: Which assumption is **essential**?
-  1. If no pattern exists, learning fails, so that's not a problem
-  2. It is ok if a pattern can be devised with math but we use machine learning
-  3. _Without data, no progress is possible_: Data is the most crucial assumption
+  1. If no pattern exists, does it make sense to run learning?
+  2. Is it a problem if a pattern can be devised with math but we still use
+     machine learning?
+  3. Can any progress happen without data?
+
+- @Remark@: _Without data, no progress is possible_: data availability is
+  the assumption that is truly essential
 
 * AI vs ML vs Deep Learning
 
@@ -311,7 +319,8 @@
   - **DL (Deep Learning)**: ML using a particular type of models, i.e., neural
     network with many layers
   - **LLM (Large Language Models)**: Neural networks trained on massive _text_
-    datasets and reinforcement learning from human feedback (RLHF)
+    datasets to predict text, often further tuned with reinforcement learning
+    from human feedback (RLHF)
   - _DL models that are not LLMs_ are possible
     - E.g., a convolutional neural network for vision or speech is deep learning
       system but not an LLM
@@ -357,7 +366,7 @@
   - Does the brain use gradient descent? Unclear
   - Does the brain use reinforcement learning? Probably (in a certain sense)
 
-- @Limitation@
+- @Limitations@
   - **Fragility to input variations**
     - ML models fail with slight input distortions
     - Adversarial attacks cause misclassification by altering one pixel
@@ -374,7 +383,7 @@
 
 * Limits of AI Compared to Human Intelligence (2/2)
 
-- @Limitation@
+- @Limitations@
   - **Opaque decision-making**
     - Many ML models offer little transparency into decision processes
     - Limits trust, interpretability, and accountability in critical applications
@@ -388,14 +397,15 @@
 
 * Key Takeaways
 
-- @Key idea@: AI should focus on **agents acting rationally**, not on mimicking human
-  thought or behavior
+- @Key idea@: AI should focus on **agents acting rationally**, not on
+  mimicking human thought or behavior
 
 - @Definition@
   - **AI**: Machines programmed to reason, learn, and act rationally
   - **ML**: A subset of AI that performs tasks without being explicitly programmed
   - **DL**: A subset of ML using multi-layer neural networks
-  - **LLM**: A subset of DL trained on massive text datasets with RLHF
+  - **LLM**: A subset of DL trained on massive text datasets to predict
+    text, often further tuned with RLHF
 
 - @Remark@: Current ML/DL systems, despite their power, still fall short of human
   intelligence on fragility, transfer learning, data efficiency, and common-sense
