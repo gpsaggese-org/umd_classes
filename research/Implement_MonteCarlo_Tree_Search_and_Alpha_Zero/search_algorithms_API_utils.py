@@ -12,10 +12,9 @@ import research.Implement_MonteCarlo_Tree_Search_and_Alpha_Zero.search_algorithm
 """
 
 import logging
-from typing import TYPE_CHECKING, Dict, List, Tuple
+from typing import TYPE_CHECKING, Dict, List, Optional, Tuple
 
 import ipywidgets
-import matplotlib.axes
 import matplotlib.pyplot as plt
 from IPython.display import clear_output, display
 
@@ -68,7 +67,10 @@ def _flatten_minimax_events(root: rimtsaazsau.SearchNode) -> List[_Event]:
 
 
 def _build_partial_tree_graph(
-    events: List[_Event], num_events: int
+    events: List[_Event],
+    num_events: int,
+    *,
+    game: Optional[rimtsaazg.Game] = None,
 ) -> "graphviz.Digraph":
     """
     Render only the prefix `events[:num_events]` as a Graphviz tree.
@@ -80,6 +82,9 @@ def _build_partial_tree_graph(
 
     :param events: full event list from `_flatten_minimax_events()`
     :param num_events: number of leading events to render
+    :param game: switch to also render each node's board via
+        `game.render(node.state)`, same knob as `build_tree_graph(game=...)`
+        - Default: `None` (no board)
     :return: Graphviz graph, rendered natively by Jupyter's `display()`
     """
     import graphviz
@@ -96,7 +101,10 @@ def _build_partial_tree_graph(
             valued_ids.add(id(node))
 
     dot = graphviz.Digraph()
-    dot.attr("node", shape="box", fontname="Helvetica")
+    # A rendered board relies on fixed-width alignment (e.g. "X X ."); the
+    # default Helvetica is not monospace and would skew it.
+    fontname = "Courier" if game is not None else "Helvetica"
+    dot.attr("node", shape="box", fontname=fontname)
     for event_type, node in prefix:
         if event_type != "visit":
             continue
@@ -110,32 +118,12 @@ def _build_partial_tree_graph(
             # Created, but its subtree has not finished backing up a value.
             fillcolor = "#EFEFEF"
             label = f"{prefix_label}\nvalue=?"
+        if game is not None:
+            label = f"{game.render(node.state)}\n{label}"
         dot.node(node_ids[id(node)], label, fillcolor=fillcolor, style="rounded,filled")
         if node.parent is not None and id(node.parent) in node_ids:
             dot.edge(node_ids[id(node.parent)], node_ids[id(node)])
     return dot
-
-
-def _plot_step_progress(
-    ax: matplotlib.axes.Axes, events: List[_Event], num_events: int
-) -> None:
-    """
-    Plot a 2-bar chart: nodes created vs. values backed up so far.
-
-    :param ax: axes to plot into
-    :param events: full event list from `_flatten_minimax_events()`
-    :param num_events: number of leading events already replayed
-    """
-    total_nodes = sum(1 for event_type, _ in events if event_type == "visit")
-    prefix = events[:num_events]
-    num_visited = sum(1 for event_type, _ in prefix if event_type == "visit")
-    num_valued = sum(1 for event_type, _ in prefix if event_type == "value")
-    labels = ["created", "value backed up"]
-    counts = [num_visited, num_valued]
-    ax.bar(labels, counts, color=["#7FA6D9", "#4C9A2A"])
-    ax.set_ylim(0, total_nodes)
-    ax.set_ylabel("number of nodes")
-    ax.set_title(f"Progress ({num_events}/{len(events)} events)")
 
 
 def _build_minimax_step_widget(
@@ -150,7 +138,9 @@ def _build_minimax_step_widget(
     `cell5_1_build_connect_three_step_widget()` (Connect Three, a single
     state): both build the *real* tree via `build_minimax_tree()` once,
     then let the user scrub through the exact order `_minimax()` created
-    and backed up each node, via `_flatten_minimax_events()` above.
+    and backed up each node, via `_flatten_minimax_events()` above. A
+    "show board" checkbox switches `game.render(node.state)` on each node
+    on and off, the same `game=...` knob `build_tree_graph()` takes.
 
     :param game: game-agnostic rules implementation
     :param states: `{name: state}` choices for the "state" dropdown, e.g.,
@@ -173,6 +163,9 @@ def _build_minimax_step_widget(
         step=1,
         initial_value=1,
         is_float=False,
+    )
+    show_board_checkbox = ipywidgets.Checkbox(
+        value=True, description="show board", indent=False
     )
     output = ipywidgets.Output()
     # Cache `(root, events)` per state name: `build_minimax_tree()` runs
@@ -197,36 +190,49 @@ def _build_minimax_step_widget(
         root, events = get_events(state_dropdown.value)
         step_slider.max = len(events)
         num_events = int(min(step_slider.value, len(events)))
+        board_game = game if show_board_checkbox.value else None
+        comment_text = (
+            "Parameters:\n"
+            f"  state: {state_dropdown.value}\n"
+            f"  step: {num_events}/{len(events)}\n"
+        )
+        if num_events >= len(events):
+            best_move = rimtsaazsau.pick_best_move(game, root)
+            comment_text += (
+                "\n"
+                "Done:\n"
+                f"  root value Q(s0): {root.value:.2f}\n"
+                f"  best move: {best_move}"
+            )
         with output:
             clear_output(wait=True)
-            display(_build_partial_tree_graph(events, num_events))
-            _, (ax_progress, ax_comment) = plt.subplots(1, 2, figsize=(11, 4.5))
-            _plot_step_progress(ax_progress, events, num_events)
-            comment_text = (
-                "Parameters:\n"
-                f"  state: {state_dropdown.value}\n"
-                f"  step: {num_events}/{len(events)}\n"
-            )
-            if num_events >= len(events):
-                best_move = rimtsaazsau.pick_best_move(game, root)
-                comment_text += (
-                    "\n"
-                    "Done:\n"
-                    f"  root value Q(s0): {root.value:.2f}\n"
-                    f"  best move: {best_move}"
+            # The tree diagram (left) and the Comments panel (right) sit
+            # side by side: a Graphviz digraph is not a matplotlib artist,
+            # so each half gets its own `Output()`, arranged via `HBox`.
+            graph_output = ipywidgets.Output()
+            with graph_output:
+                display(
+                    _build_partial_tree_graph(events, num_events, game=board_game)
                 )
-            ax_comment.axis("off")
-            ax_comment.set_title(
-                "Comments", fontsize=14, fontweight="bold", pad=20
-            )
-            htutori.add_fitted_text_box(ax_comment, comment_text)
-            plt.tight_layout()
-            plt.show()
+            comment_output = ipywidgets.Output()
+            with comment_output:
+                _, ax_comment = plt.subplots(figsize=(4, 4.5))
+                ax_comment.axis("off")
+                ax_comment.set_title(
+                    "Comments", fontsize=14, fontweight="bold", pad=20
+                )
+                htutori.add_fitted_text_box(ax_comment, comment_text)
+                plt.tight_layout()
+                plt.show()
+            display(ipywidgets.HBox([graph_output, comment_output]))
 
     state_dropdown.observe(state_changed, names="value")
     step_slider.observe(update_plot, names="value")
+    show_board_checkbox.observe(update_plot, names="value")
     update_plot()
-    widget = ipywidgets.VBox([state_dropdown, step_box, output])
+    widget = ipywidgets.VBox(
+        [state_dropdown, step_box, show_board_checkbox, output]
+    )
     return widget
 
 

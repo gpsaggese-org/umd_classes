@@ -187,21 +187,24 @@ print(
 # **Mental model**: `build_tree_graph()`
 # - Reads only 5 fields off each node (`.value`, `.move`, `.pruned`, `.is_heuristic`, `.children`)
 # - Turns them into one of 4 colors
-# - Never re-runs a search, so any tree assembled by hand, like the one below,
-# renders exactly like a real one.
+# - Never re-runs a search, so any tree assembled by hand, like the one built
+#   up cell by cell below, renders exactly like a real one
 #
-# ## Cell 3.1: A hand-built tree covering every color
+# Each color belongs to exactly one algorithm: minimax only ever produces
+# blue/green, alpha-beta pruning adds grey/dashed, depth-limited search adds
+# amber. The 3 cells below grow one hand-built tree, one algorithm's color
+# at a time, instead of showing all 4 colors at once.
 #
-# One root with 3 children, each one demonstrating a different way a node
-# can end up:
-# - An ordinary internal node
-# - An exact terminal leaf
-# - A depth-limited cut
-# - A node alpha-beta pruned before ever exploring it.
+# ## Cell 3.1: Minimax's colors: blue and green
+#
+# `build_minimax_tree()` never prunes and never cuts early, so every node it
+# visits ends up one of exactly 2 colors:
+# - blue (has children, an exact backed-up `.value`) or
+# - green (no children, an exact terminal `.value`)
 
 # %%
 fake_root = rimtsaazsau.SearchNode(demo_state)
-fake_root.value = 0.5
+fake_root.value = 1.0
 
 # Blue: an ordinary internal node, with one exact terminal leaf (green).
 internal_state = game.apply_move(demo_state, 5)
@@ -212,43 +215,90 @@ terminal_grandchild = internal_child.add_child(
 )
 terminal_grandchild.value = 1.0
 
-# Amber: a depth-limited cut, scored by a heuristic instead of backed up.
-heuristic_child = fake_root.add_child(move=7, state=game.apply_move(demo_state, 7))
-heuristic_child.value = -0.2
-heuristic_child.is_heuristic = True
+# Green: the actual winning move for `demo_state`, a second terminal leaf.
+winning_leaf = fake_root.add_child(move=2, state=game.apply_move(demo_state, 2))
+winning_leaf.value = 1.0
 
-# Grey, dashed: alpha-beta recorded this move but never explored it.
-pruned_leaf = fake_root.add_child(move=8, state=game.apply_move(demo_state, 8))
-pruned_leaf.pruned = True
-
-# %% [markdown]
-# ## Cell 3.2: Rendering it, and reading the legend
-#
-# **Goal**:
-# - See each of the 4 colors `build_tree_graph()` can draw in a single,
-#   small diagram, next to the field that decided it
-
-# %%
 display(rimtsaazsau.build_tree_graph(fake_root, max_depth=2))
 
 # %% [markdown]
 # **Key observations**:
-#
-# - Nodes
-#     - blue (`internal_child`): has children and an exact `.value` -- an
-#       ordinary explored internal node
-#     - green (`terminal_grandchild`): an exact `.value` and no children --
-#       a terminal state, `get_winner()`'s outcome
-#     - amber (`heuristic_child`): `.is_heuristic = True` -- a depth-limited
-#       cut, `.value` is a heuristic estimate, not an exact outcome
-#     - grey, dashed (`pruned_leaf`): `.pruned = True` -- alpha-beta recorded
-#       the move but never explored it, so it has no `.value` and no children
-# - `build_tree_graph()` checks `.pruned` first, then `.is_heuristic`,
-#   then whether `.children` is empty (see the order in
-#   `search_algorithms_utils._node_style()`)
+# - blue (`internal_child`): has children and an exact `.value`, i.e., an
+#   ordinary explored internal node
+# - green (`terminal_grandchild`, `winning_leaf`): an exact `.value` and no
+#   children, i.e., a terminal state, `get_winner()`'s outcome
 # - `max_depth` (here `2`) caps how many levels below the root render
 #   before an "... N more" placeholder takes over; `DEFAULT_RENDER_DEPTH`
 #   is the value used when a caller does not override it
+
+# %% [markdown]
+# ## Cell 3.2: Alpha-beta's color: grey, dashed
+#
+# `build_alpha_beta_tree()` visits the exact same tree minimax would, minus
+# whatever a cutoff proves is not worth exploring: a **pruned** node is
+# recorded (so the diagram can show what was skipped) but has no `.value`
+# and no children. Extending the same `fake_root` from Cell 3.1 with one:
+
+# %%
+pruned_leaf = fake_root.add_child(move=7, state=game.apply_move(demo_state, 7))
+pruned_leaf.pruned = True
+
+display(rimtsaazsau.build_tree_graph(fake_root, max_depth=2))
+
+# %% [markdown]
+# **Key observations**:
+# - grey, dashed (`pruned_leaf`): `.pruned = True` -- alpha-beta recorded
+#   the move but never explored it, so it has no `.value` and no children
+# - `build_tree_graph()` checks `.pruned` before anything else in
+#   `search_algorithms_utils._node_style()`, since a pruned node has
+#   neither a `.value` nor real `.children` to fall back on
+
+# %% [markdown]
+# ## Cell 3.3: Depth-limited search's color: amber
+#
+# `build_depth_limited_tree()` cuts the search at `max_depth` and scores
+# the cut with a heuristic instead of recursing further: `.is_heuristic =
+# True` marks that `.value` is an estimate, not an exact outcome. Extending
+# `fake_root` once more:
+
+# %%
+heuristic_child = fake_root.add_child(move=8, state=game.apply_move(demo_state, 8))
+heuristic_child.value = -0.2
+heuristic_child.is_heuristic = True
+
+display(rimtsaazsau.build_tree_graph(fake_root, max_depth=2))
+
+# %% [markdown]
+# **Key observations**:
+# - amber (`heuristic_child`): `.is_heuristic = True` -- a depth-limited
+#   cut, `.value` is a heuristic estimate, not an exact outcome
+# - `fake_root` now has all 4 colors `build_tree_graph()` can draw, one
+#   introduced per algorithm: minimax (blue/green), alpha-beta (grey,
+#   dashed), depth-limited search (amber)
+
+# %% [markdown]
+# ## Cell 3.4: Switching on the board itself
+#
+# **Goal**:
+# - `.state` is a real `Game` state, not just an opaque label -- passing
+#   `game=game` renders it (via `game.render()`) on top of every node,
+#   the same diagram as Cell 3.3 otherwise
+#
+# **Parameters**:
+# - `game`: off by default (`None`), since a rendered board multiplies the
+#   size of every node -- pass it only when the extra context is worth the
+#   space
+
+# %%
+display(rimtsaazsau.build_tree_graph(fake_root, max_depth=2, game=game))
+
+# %% [markdown]
+# **Key observations**:
+# - Same tree, same 4 colors -- `game` only changes what is drawn *inside*
+#   each box, not which box gets which color
+# - The step-by-step widget in Part 4 below has the same switch as an
+#   actual "show board" checkbox, since watching the board fill in is most
+#   useful exactly while the tree is still being built
 
 # %% [markdown]
 # # Part 4: Building the minimax tree step by step
@@ -291,6 +341,8 @@ print(game.render(fork_state))
 # - `state`: switch between `demo_state` and `fork_state`
 # - `step`: how many of the (node created / value backed up) events to
 #   replay so far
+# - `show board`: Cell 3.3's `game=` switch, as a checkbox -- on by default
+#   here, since watching each board fill in is the point of this widget
 
 # %%
 rimtsaazsaau.cell4_2_build_minimax_step_widget(

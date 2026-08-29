@@ -43,9 +43,9 @@ the functions
   `search_algorithms_API_utils.py`); added `ConnectThree` to
   `game_examples.py` for the connect-3 example
 
-## [ ] Step 3
+## [x] Step 3
 
-- In build_tree_graph is it possible to show also the state of the board calling
+In build_tree_graph is it possible to show also the state of the board calling
   render?
 
 - In cell4_2_build_minimax_step_widget remove the histogram and put the Comments
@@ -55,6 +55,17 @@ the functions
   only what is needed to explain minimax (only blue and green nodes)
   - Then there is a part explaining alpha-beta search (gray nodes)
   - Then there is a part explaining a depth limited (amber nodes)
+
+- Result: `build_tree_graph()` and `_build_partial_tree_graph()` both take
+  an opt-in `game=` switch that stacks `game.render(node.state)` on each
+  node (monospace font); the step widget got a "show board" checkbox for
+  it, on by default. The widget's histogram (`_plot_step_progress()`) was
+  removed; the Comments panel now sits beside the tree diagram via
+  `ipywidgets.HBox([graph_output, comment_output])` instead of below it.
+  Part 3 of `search_algorithms.02.API.ipynb` now grows one hand-built tree
+  across 3 cells, one algorithm's color at a time (3.1 minimax:
+  blue/green, 3.2 alpha-beta: grey/dashed, 3.3 depth-limited: amber),
+  then 3.4 demos the board switch on the finished tree.
 
 ## 
 

@@ -537,11 +537,16 @@ def _node_style(node: SearchNode) -> Tuple[str, str]:
     return fillcolor, style
 
 
-def _node_label(node: SearchNode) -> str:
+def _node_label(
+    node: SearchNode, *, game: Optional[rimtsaazg.Game] = None
+) -> str:
     """
     Build the multi-line label Graphviz draws inside `node`'s box.
 
     :param node: node to label
+    :param game: if given, `game.render(node.state)` is prepended to the
+        label, e.g., a 3x3 board rendered as text above "move=2\\nvalue=1.00"
+        - Default: `None` (no board)
     :return: label text, e.g., "move=2\\nvalue=1.00"
     """
     prefix = "root" if node.parent is None else f"move={node.move}"
@@ -550,6 +555,8 @@ def _node_label(node: SearchNode) -> str:
     else:
         value_str = f"{node.value:.2f}" if node.value is not None else "?"
         label = f"{prefix}\nvalue={value_str}"
+    if game is not None:
+        label = f"{game.render(node.state)}\n{label}"
     return label
 
 
@@ -560,6 +567,7 @@ def _add_node_to_graph(
     depth: int,
     max_depth: int,
     best_move: Optional[rimtsaazg.Move],
+    game: Optional[rimtsaazg.Game],
 ) -> None:
     """
     Recursively add `node` and its descendants (up to `max_depth`) to `dot`.
@@ -570,13 +578,15 @@ def _add_node_to_graph(
     :param depth: number of levels already added above `node`
     :param max_depth: number of levels below the root to render
     :param best_move: move chosen at the root, its direct child outlined
+    :param game: forwarded to `_node_label()`, renders the board per node
+        when given
     """
     fillcolor, style = _node_style(node)
     is_best_root_child = depth == 1 and node.move == best_move
     penwidth = "2.5" if is_best_root_child else "1.0"
     dot.node(
         node_id,
-        _node_label(node),
+        _node_label(node, game=game),
         fillcolor=fillcolor,
         style=style,
         penwidth=penwidth,
@@ -597,7 +607,9 @@ def _add_node_to_graph(
     for i, child in enumerate(node.children):
         child_id = f"{node_id}_{i}"
         dot.edge(node_id, child_id)
-        _add_node_to_graph(dot, child, child_id, depth + 1, max_depth, best_move)
+        _add_node_to_graph(
+            dot, child, child_id, depth + 1, max_depth, best_move, game
+        )
 
 
 def build_tree_graph(
@@ -605,6 +617,7 @@ def build_tree_graph(
     *,
     best_move: Optional[rimtsaazg.Move] = None,
     max_depth: int = DEFAULT_RENDER_DEPTH,
+    game: Optional[rimtsaazg.Game] = None,
 ) -> "graphviz.Digraph":
     """
     Render `root` and up to `max_depth` levels of its descendants as a
@@ -629,11 +642,19 @@ def build_tree_graph(
         - Default: `None` (no highlight)
     :param max_depth: number of levels below the root to render
         - Default: `DEFAULT_RENDER_DEPTH`
+    :param game: switch to also render each node's board via
+        `game.render(node.state)`, stacked above the "move=.../value=..."
+        line; off by default since a wide/tall board multiplies the size of
+        every node in the diagram
+        - Default: `None` (no board, just "move=.../value=...")
     :return: Graphviz graph, rendered natively by Jupyter's `display()`
     """
     import graphviz
 
     dot = graphviz.Digraph()
-    dot.attr("node", shape="box", fontname="Helvetica")
-    _add_node_to_graph(dot, root, "root", 0, max_depth, best_move)
+    # A rendered board relies on fixed-width alignment (e.g. "X X ."); the
+    # default Helvetica is not monospace and would skew it.
+    fontname = "Courier" if game is not None else "Helvetica"
+    dot.attr("node", shape="box", fontname=fontname)
+    _add_node_to_graph(dot, root, "root", 0, max_depth, best_move, game)
     return dot

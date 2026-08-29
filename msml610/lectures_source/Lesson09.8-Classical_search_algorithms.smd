@@ -1005,8 +1005,8 @@ digraph route_heuristic {
     Goal  [label="Goal",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
 
     Start -> N [label=" g(n) "];
-    N -> Goal [label="  h(n)  "];
-    N -> Goal [label="  h*(n), estimate of h(n)  ", style=dashed,
+    N -> Goal [label="  h*(n), true  "];
+    N -> Goal [label="  h(n), estimate of h*(n)  ", style=dashed,
                color="#C0455B", fontcolor="#C0455B", constraint=false];
 
     fontname="Helvetica";
@@ -1052,11 +1052,11 @@ digraph route_heuristic {
   $$
   f(n) = g(n) + h(n)
   $$
-  - $g(n)$ = cost of the cheapest path reaching $n$ from the initial state
-  - $h(n)$ = estimated cost of the cheapest path from $n$ to a goal
+  - $g(n)$: cost of the cheapest path reaching $n$ from the initial state
+  - $h(n)$: estimated cost of the cheapest path from $n$ to a goal
 
-```graphviz[width=65%]
-digraph astar_fn {
+```graphviz[width=60%]
+digraph route_heuristic {
     bgcolor="transparent";
     pad="0.15";
     rankdir=LR;
@@ -1064,19 +1064,19 @@ digraph astar_fn {
     ranksep=0.55;
 
     node [shape=circle, style="filled", penwidth=1.4,
-          fontname="Helvetica", fontsize=11, width=0.50, fixedsize=true];
+          fontname="Helvetica", fontsize=11, width=0.55, fixedsize=true];
     edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.7,
           fontname="Helvetica", fontsize=10, fontcolor="#7B8794"];
 
-    S0   [label="s0",   fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
-    N    [label="n",    fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
-    Goal [label="Goal", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    Start [label="Start", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
+    N     [label="n",     fillcolor="#C7ECF0", color="#7CC6D0", fontcolor="#1F4E56"];
+    Goal  [label="Goal",  fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
 
-    S0 -> N [label="  g(n): known exactly  "];
-    N -> Goal [label="  h(n): estimated  ", style=dashed,
-               color="#C0455B", fontcolor="#C0455B"];
+    Start -> N [label=" g(n) "];
+    N -> Goal [label="  h(n)  "];
+    N -> Goal [label="  h*(n), estimate of h(n)  ", style=dashed,
+               color="#C0455B", fontcolor="#C0455B", constraint=false];
 
-    label="f(n) = g(n) + h(n): cost of a complete solution through n";
     fontname="Helvetica";
     fontsize=10;
     fontcolor="#7B8794";
