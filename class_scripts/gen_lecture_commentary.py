@@ -64,8 +64,7 @@ import argparse
 import glob
 import logging
 import os
-import re
-from typing import List, Optional
+from typing import List
 
 import pdf2image  # type: ignore
 import tqdm
@@ -73,7 +72,6 @@ from PIL import ImageOps
 
 import class_scripts.common_utils as csccouti
 import class_scripts.slides_utils as cscsluti
-import dev_scripts_helpers.documentation.preprocess_notes as dshdprno
 import dev_scripts_helpers.dockerize.lib_prettier as dshdlipr
 import helpers.hcache_simple as hcacsimp
 import helpers.hdbg as hdbg
@@ -81,7 +79,6 @@ import helpers.hgit as hgit
 import helpers.hio as hio
 import helpers.hparser as hparser
 import helpers.hprint as hprint
-import helpers.hretry as hretry
 import helpers.hsystem as hsystem
 
 _LOG = logging.getLogger(__name__)
@@ -235,40 +232,6 @@ _SYSTEM_PROMPT_FILE = os.path.join(
 _DEFAULT_SYSTEM_PROMPT = hio.from_file(_SYSTEM_PROMPT_FILE)
 
 
-def _extract_title_from_markdown(input_file: str) -> Optional[str]:
-    r"""
-    Extract title from markdown file.
-
-    First looks for a `lesson_title` metadata directive (e.g.,
-    `// lesson_title=...`) at the top of the file. If not present, falls
-    back to looking for patterns like:
-    \text{\blue{Lesson 2.1: Git}}
-
-    :param input_file: path to input markdown file
-    :return: extracted title or None if not found
-    """
-    hdbg.dassert_file_exists(input_file)
-    content = hio.from_file(input_file)
-    # Check for a `lesson_title` metadata directive at the top of the file.
-    lines = content.split("\n")
-    metadata, _ = dshdprno.extract_slide_metadata(lines)
-    if "lesson_title" in metadata:
-        title = metadata["lesson_title"].strip()
-        _LOG.info("Extracted title from metadata template: %s", title)
-        return title
-    # Pattern to match \text{\blue{...}} or \text{...} or similar LaTeX constructs.
-    pattern = r"\\text\{(?:\\blue\{)?([^}]+)\}?"
-    match = re.search(pattern, content)
-    if match:
-        title = match.group(1)
-        # Clean up the title.
-        title = title.strip()
-        _LOG.info("Extracted title: %s", title)
-        return title
-    _LOG.warning("Could not extract title from markdown file")
-    return None
-
-
 # Backends supported by `_generate_slide_commentary()`.
 # - "hllm": `helpers.hllm.get_completion()`, supports passing the slide's
 #   images as multi-modal context
@@ -370,7 +333,7 @@ def _generate_lecture_commentary(
     _LOG.info("Using base name: %s", base_name)
     _LOG.info("Reading slides from: %s", input_file)
     # Extract title from markdown file for YAML preamble.
-    title = _extract_title_from_markdown(input_file)
+    title = csccouti.extract_title_from_markdown(input_file)
     # Extract slides from markdown file.
     slides, titles = cscsluti.extract_slides_from_file(input_file)
     num_slides = len(slides)
@@ -559,33 +522,6 @@ def _parse() -> argparse.ArgumentParser:
     return parser
 
 
-# Number of times to retry `git add` before giving up.
-_GIT_ADD_NUM_ATTEMPTS = 5
-# Delay between `git add` retries, in seconds.
-_GIT_ADD_RETRY_DELAY_IN_SEC = 2
-
-
-@hretry.sync_retry(
-    num_attempts=_GIT_ADD_NUM_ATTEMPTS,
-    exceptions=(RuntimeError,),
-    retry_delay_in_sec=_GIT_ADD_RETRY_DELAY_IN_SEC,
-)
-def _git_add_with_retry(file_name: str, *, dry_run: bool) -> None:
-    """
-    Run `git add` on `file_name`, retrying on failure.
-
-    This is needed because concurrent Git commands (e.g., another
-    `gen_lecture_commentary.py` process, or an IDE) can hold
-    `.git/index.lock`, causing `git add` to fail with "Unable to create
-    '.git/index.lock': File exists.".
-
-    :param file_name: path of the file to add
-    :param dry_run: print the command without executing it
-    """
-    cmd = f"git add {file_name}"
-    hsystem.system(cmd, print_command=True, dry_run=dry_run)
-
-
 def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
@@ -663,31 +599,15 @@ def _main(parser: argparse.ArgumentParser) -> None:
             )
     # Step 4: Track the generated markdown file in git.
     _LOG.info("Step 4: Adding book chapter markdown to git")
-    _git_add_with_retry(book_chapter_md, dry_run=args.dry_run)
+    csccouti.git_add_with_retry(book_chapter_md, dry_run=args.dry_run)
     # Step 5: Convert to PDF using pandoc.
     if do_incremental and os.path.exists(pdf_file_name):
         _LOG.warning("Step 5: Skipping, '%s' already exists", pdf_file_name)
     else:
         _LOG.info("Step 5: Converting to PDF using pandoc")
-        # The book chapter markdown uses LaTeX macros (e.g., `\vmu`) defined
-        # in `latex_abbrevs.sty`, so it needs to be included in the header
-        # too, otherwise xelatex fails with "Undefined control sequence".
-        latex_abbrevs_file = os.path.join(
-            hgit.find_file("dev_scripts_helpers"),
-            "documentation",
-            "latex_abbrevs.sty",
+        csccouti.convert_markdown_to_pdf(
+            book_chapter_md, pdf_file_name, script_dir, dry_run=args.dry_run
         )
-        hdbg.dassert_file_exists(latex_abbrevs_file)
-        cmd = (
-            f"pandoc {book_chapter_md} -o {pdf_file_name} "
-            f"--pdf-engine=xelatex "
-            f"-V geometry:margin=1in "
-            f"-V fontsize=11pt "
-            f"--highlight-style=tango "
-            f"--include-in-header={latex_abbrevs_file} "
-            f"--include-in-header={script_dir}/header-style.tex"
-        )
-        hsystem.system(cmd, print_command=True, dry_run=args.dry_run)
     # Step 6: Convert to HTML using pandoc.
     if do_incremental and os.path.exists(html_file_name):
         _LOG.warning("Step 6: Skipping, '%s' already exists", html_file_name)

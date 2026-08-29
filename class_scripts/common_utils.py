@@ -11,10 +11,13 @@ import logging
 import os
 import re
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict, Optional, Tuple
 
+import dev_scripts_helpers.documentation.preprocess_notes as dshdprno
 import helpers.hdbg as hdbg
+import helpers.hgit as hgit
 import helpers.hio as hio
+import helpers.hretry as hretry
 import helpers.hsystem as hsystem
 
 _LOG = logging.getLogger(__name__)
@@ -240,3 +243,98 @@ def get_pdf_page_counts(
         page_count = count_pdf_pages(str(pdf_file))
         page_counts[pdf_file.name] = page_count
     return page_counts
+
+
+# #############################################################################
+# LLM-generated artifacts
+# #############################################################################
+
+
+def extract_title_from_markdown(input_file: str) -> Optional[str]:
+    r"""
+    Extract title from markdown file.
+
+    First looks for a `lesson_title` metadata directive (e.g.,
+    `// lesson_title=...`) at the top of the file. If not present, falls
+    back to looking for patterns like:
+    \text{\blue{Lesson 2.1: Git}}
+
+    :param input_file: path to input markdown file
+    :return: extracted title or None if not found
+    """
+    hdbg.dassert_file_exists(input_file)
+    content = hio.from_file(input_file)
+    # Check for a `lesson_title` metadata directive at the top of the file.
+    lines = content.split("\n")
+    metadata, _ = dshdprno.extract_slide_metadata(lines)
+    if "lesson_title" in metadata:
+        title = metadata["lesson_title"].strip()
+        _LOG.info("Extracted title from metadata template: %s", title)
+        return title
+    # Pattern to match \text{\blue{...}} or \text{...} or similar LaTeX constructs.
+    pattern = r"\\text\{(?:\\blue\{)?([^}]+)\}?"
+    match = re.search(pattern, content)
+    if match:
+        title = match.group(1)
+        # Clean up the title.
+        title = title.strip()
+        _LOG.info("Extracted title: %s", title)
+        return title
+    _LOG.warning("Could not extract title from markdown file")
+    return None
+
+
+@hretry.sync_retry(
+    num_attempts=5,
+    exceptions=(RuntimeError,),
+    retry_delay_in_sec=2,
+)
+def git_add_with_retry(file_name: str, *, dry_run: bool) -> None:
+    """
+    Run `git add` on `file_name`, retrying on failure.
+
+    This is needed because concurrent Git commands (e.g., another
+    generation script, or an IDE) can hold `.git/index.lock`, causing
+    `git add` to fail with "Unable to create '.git/index.lock': File
+    exists.".
+
+    :param file_name: path of the file to add
+    :param dry_run: print the command without executing it
+    """
+    cmd = f"git add {file_name}"
+    hsystem.system(cmd, print_command=True, dry_run=dry_run)
+
+
+def convert_markdown_to_pdf(
+    md_file: str, pdf_file: str, script_dir: str, *, dry_run: bool = False
+) -> None:
+    r"""
+    Convert a markdown file to PDF using pandoc.
+
+    Uses the LaTeX macros from `latex_abbrevs.sty` and header style shared by
+    the `class_scripts` LLM-generated markdown output (lecture commentary,
+    book chapters), so that macros used in the generated text (e.g., `\vmu`)
+    resolve correctly.
+
+    :param md_file: input markdown file
+    :param pdf_file: output PDF file
+    :param script_dir: directory containing `header-style.tex` (typically
+        `class_scripts/`)
+    :param dry_run: print the command without executing it
+    """
+    latex_abbrevs_file = os.path.join(
+        hgit.find_file("dev_scripts_helpers"),
+        "documentation",
+        "latex_abbrevs.sty",
+    )
+    hdbg.dassert_file_exists(latex_abbrevs_file)
+    cmd = (
+        f"pandoc {md_file} -o {pdf_file} "
+        f"--pdf-engine=xelatex "
+        f"-V geometry:margin=1in "
+        f"-V fontsize=11pt "
+        f"--highlight-style=tango "
+        f"--include-in-header={latex_abbrevs_file} "
+        f"--include-in-header={script_dir}/header-style.tex"
+    )
+    hsystem.system(cmd, print_command=True, dry_run=dry_run)
