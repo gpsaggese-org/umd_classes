@@ -24,11 +24,13 @@ from typing import List, Optional, Tuple
 
 from tqdm import tqdm
 
+import class_scripts.gen_lecture_video_script as clgelesc
 import helpers.hdbg as hdbg
 import helpers.hlint as hlint
 import helpers.hio as hio
 import helpers.hparser as hparser
 import helpers.hselect_action as hselacti
+import helpers.hselect_input_output as hseinout
 import helpers.hsystem as hsystem
 
 _LOG = logging.getLogger(__name__)
@@ -296,16 +298,22 @@ def _generate_script(
     Generate script from a lecture source file.
 
     Performs the following steps:
-    1. Calls generate_slide_script.py to create the script
+    1. Calls `gen_lecture_video_script.generate_lecture_video_script()` to
+       create the script (adds intro/outro and lints)
     2. Removes 'Transition: ' prefix using perl
     3. Lints the output using lint_text.py
 
     :param class_dir: class directory (data605 or msml610)
     :param source_path: path to source .smd file
     :param source_name: name of source file
-    :param cmd_opts: extra options string appended verbatim to the invoked
-        command
+    :param cmd_opts: unused for this action since script generation is a
+        direct Python call rather than a subprocess
     """
+    if cmd_opts:
+        _LOG.warning(
+            "cmd_opts='%s' is ignored for the 'generate_script' action",
+            cmd_opts,
+        )
     # Compute output path.
     dst_name = source_name.replace(".smd", ".script.txt")
     lectures_script_dir = os.path.join(class_dir, "lectures_video_script")
@@ -313,19 +321,13 @@ def _generate_script(
     output_path = os.path.join(lectures_script_dir, dst_name)
     # Step 1: Generate slide script.
     _LOG.info("Generating script for %s -> %s", source_name, dst_name)
-    cmd = [
-        "generate_slide_script.py",
-        f"--in_file {source_path}",
-        f"--out_file {output_path}",
-        "--slides_per_group 3",
-    ]
-    if limit:
-        cmd.extend([f"--limit {limit}"])
-    if cmd_opts:
-        cmd.append(cmd_opts)
-    cmd_str = " ".join(cmd)
-    _LOG.info("Executing: %s", cmd_str)
-    hsystem.system(cmd_str, suppress_output=False)
+    limit_range = hseinout.parse_limit_range(limit) if limit else (0, 0)
+    clgelesc.generate_lecture_video_script(
+        source_path,
+        output_path,
+        slides_per_group=3,
+        limit_range=limit_range,
+    )
     # Step 2: Remove 'Transition: ' prefix.
     cmd_str = f"perl -pi -e 's/^Transition: //g' {output_path}"
     _LOG.info("Executing: %s", cmd_str)

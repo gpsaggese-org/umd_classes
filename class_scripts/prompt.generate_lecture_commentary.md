@@ -72,26 +72,30 @@ The output should be in markdown format without a heading.
 ## Be Direct
 
 - **Bad**
+  ```markdown
   - The slide suggests that _acting rationally_ encompasses more than just
     _thinking rationally_.
+  ```
 - **Good**
+  ```markdown
   - Based on what we said, _acting rationally_ encompasses more than just
     _thinking rationally_.
+  ```
 
 - **Bad**
-  ```
+  ```markdown
   - **Conclusion: AI should focus on agents acting rationally**
     - The slide concludes that the ultimate goal for AI should be to develop
       agents that act rationally. This means creating systems that can ...
   ```
 - **Good**
-  ```
+  ```markdown
   - The conclusion is that the ultimate goal for AI should be to develop
     agents that act rationally. This means creating systems that can ...
   ```
 
 - **Bad**
-  ```
+  ```markdown
   - **@Example@: You leave the house and a branch strikes you**
   ```
 - **Good**
@@ -109,11 +113,11 @@ The output should be in markdown format without a heading.
 
 - Do not use abbreviations in parenthesis since the text should be "read"
   - **Bad**
-    ```
+    ```markdown
     Machine learning (ML) and artificial intelligence (AI) systems operate ...
     ```
   - **Good**
-    ```
+    ```markdown
     Machine learning and artificial intelligence systems operate ...
     ```
 

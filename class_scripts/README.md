@@ -63,7 +63,6 @@ automated LLM-powered transformations
 | Generation    | `gen_quizzes.py`                    | Generate quizzes (20 MC) or discussion questions (3-6) from lectures         |
 | Generation    | `gen_slides.py`                     | Generate lecture slide PDFs from source files                                |
 | Generation    | `generate_class_images.py`          | Generate images using DALL-E from text prompts                               |
-| Generation    | `generate_slide_script.py`          | Generate lecture scripts from slide content with LLM                         |
 | Generation    | `publish_class_links.py`            | Generate an HTML page linking to each lesson's slides, commentary, and recap |
 | Quality       | `fix_bold_in_slides.sh`             | Replace `**Tag**` bold labels with `@Tag@` for canonical slide tags          |
 | Quality       | `slide_check.py`                    | Check and fix text in lecture slides (spelling, grammar)                     |
@@ -93,7 +92,7 @@ automated LLM-powered transformations
 - `for_loop_lessons.py` (Main orchestrator)
   - action=`generate_pdf` -> `notes_to_pdf.py`
   - action=`generate_tex` -> `notes_to_pdf.py`
-  - action=`generate_script` -> `generate_slide_script.py`, `lint_text.py`
+  - action=`generate_script` -> `gen_lecture_video_script.py`
   - action=`reduce_slide` -> `process_slides.py`
   - action=`check_slide` -> `process_slides.py`
   - action=`improve_slide` (not yet implemented)
@@ -106,7 +105,6 @@ automated LLM-powered transformations
   - `gen_slides.py`
     - `notes_to_pdf.py`
   - `gen_lecture_video_script.py`
-    - `generate_slide_script.py`
     - `llm_cli.py`
     - `lint_text.py`
   - `gen_lecture_commentary.py`
@@ -295,40 +293,14 @@ automated LLM-powered transformations
   Total words: 1346
   ```
 
-- Generate script with a larger slide grouping (extra args are passed through
-  to `generate_slide_script.py`):
+- Generate script with a larger slide grouping:
   ```bash
   > gen_lecture_video_script.py msml610/02.3 --slides_per_group 5
   ```
 
-## `generate_slide_script.py`
-
-### What It Does
-
-- Processes markdown slides and generates presentation scripts using LLM
-- Groups slides for batch processing to optimize LLM API calls
-- Supports limiting slide ranges and customizable grouping strategies
-
-### Examples
-
-- Generate script from markdown slides with default settings:
+- Process only a range of slides:
   ```bash
-  > generate_slide_script.py --in_file slides.md --out_file script.md
-  ```
-
-- Process slides in groups of 5 for more context:
-  ```bash
-  > generate_slide_script.py --in_file lecture.txt --out_file script.txt --slides_per_group 5
-  ```
-
-- Process specific slide range:
-  ```bash
-  > generate_slide_script.py --in_file slides.md --out_file script.md --limit "10:20"
-  ```
-
-- Enable verbose logging for debugging:
-  ```bash
-  > generate_slide_script.py --in_file slides.md --out_file script.md --log_level DEBUG
+  > gen_lecture_video_script.py data605/01.1 --limit "10:20"
   ```
 
 ## `gen_lecture_commentary.py`
@@ -1114,11 +1086,7 @@ for reading and study.
   ```bash
   > i docker_bash --base-image=623860924167.dkr.ecr.eu-north-1.amazonaws.com/cmamp --skip-pull
   docker> sudo /bin/bash -c "(source /venv/bin/activate; pip install --upgrade openai)"
-  docker> generate_slide_script.py \
-    --in_file data605/lectures_source/Lesson01-Intro.txt \
-    --out_file data605/lectures_source/Lesson01-Intro.script.txt \
-    --slides_per_group 3 \
-    --limit 1:5
+  docker> gen_lecture_video_script.py data605/01 --slides_per_group 3 --limit 1:5
   ```
 
 ## Format Conversion
