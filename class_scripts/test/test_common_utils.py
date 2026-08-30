@@ -598,14 +598,15 @@ class Test_call_llm(hunitest.TestCase):
 
     def test3(self) -> None:
         """
-        Test happy path: "hllm_cli" backend dispatches to
-        `helpers.hllm_cli.apply_llm()` and forwards its response.
+        Test happy path: "hllm_cli_lib" backend dispatches to
+        `helpers.hllm_cli.apply_llm(backend="library")` and forwards its
+        response.
         """
         # Prepare inputs.
         user_prompt = "What is the capital of France?"
         system_prompt = "You are a helpful assistant."
         model = "gpt-4"
-        llm_backend = "hllm_cli"
+        llm_backend = "hllm_cli_lib"
         # Prepare outputs.
         expected = "Paris"
         apply_llm_return_value = (expected, None)
@@ -635,12 +636,44 @@ class Test_call_llm(hunitest.TestCase):
         model = ""
         llm_backend = "invalid_backend"
         # Prepare outputs.
-        expected = "'invalid_backend' in '('hllm', 'hllm_cli')'"
+        expected = (
+            "'invalid_backend' in '('hllm', 'hllm_cli_lib', 'hllm_cli_exec')'"
+        )
         # Run test.
         with self.assertRaises(AssertionError) as cm:
             csccouti.call_llm(user_prompt, system_prompt, model, llm_backend)
         # Check outputs.
         self.assertIn(expected, str(cm.exception))
+
+    def test5(self) -> None:
+        """
+        Test happy path: "hllm_cli_exec" backend dispatches to
+        `helpers.hllm_cli.apply_llm(backend="executable")` and forwards its
+        response.
+        """
+        # Prepare inputs.
+        user_prompt = "What is the capital of France?"
+        system_prompt = "You are a helpful assistant."
+        model = "gpt-4"
+        llm_backend = "hllm_cli_exec"
+        # Prepare outputs.
+        expected = "Paris"
+        apply_llm_return_value = (expected, None)
+        # Run test.
+        with mock.patch(
+            "helpers.hllm_cli.apply_llm", return_value=apply_llm_return_value
+        ) as mock_apply_llm:
+            actual = csccouti.call_llm(
+                user_prompt, system_prompt, model, llm_backend
+            )
+        # Check outputs.
+        self.assert_equal(actual, expected)
+        mock_apply_llm.assert_called_once_with(
+            user_prompt,
+            system_prompt=system_prompt,
+            model=model,
+            backend="executable",
+        )
 
 
 # #############################################################################

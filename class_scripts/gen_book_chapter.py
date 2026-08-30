@@ -24,13 +24,14 @@ This script performs the following steps:
 1. Generate the book chapter text via LLM
 2. `git_add`: add the generated file to Git (optional, off by default)
 3. `lint`: lint the generated file (on by default)
-4. `render`: compile the chapter to PDF (`typst_aima` via `run_typst.py`,
-   `md` via pandoc; not supported for `springer_latex`) (on by default)
+4. `render_pdf`: compile the chapter to PDF (`typst_aima` via
+   `run_typst.py`, `md` via pandoc; not supported for `springer_latex`)
+   (on by default)
 5. `open_pdf`: open the compiled PDF in Skim (optional, off by default)
 
 Steps 2-5 are actions and can be selected with `--action` / `--skip_action`
-/ `--only_action` (see `helpers.hselect_action`); `lint` and `render` run
-by default, `git_add` and `open_pdf` don't.
+/ `--only_action` (see `helpers.hselect_action`); `lint` and `render_pdf`
+run by default, `git_add` and `open_pdf` don't.
 
 # Usage Example
 
@@ -87,7 +88,10 @@ _MODE_TO_EXTENSION = {
 
 # Backends supported by `_call_llm()`.
 # - "hllm": `helpers.hllm.get_completion()`
-# - "hllm_cli": `helpers.hllm_cli.apply_llm()`, text-only
+# - "hllm_cli_lib": `helpers.hllm_cli.apply_llm(backend="library")`,
+#   text-only
+# - "hllm_cli_exec": `helpers.hllm_cli.apply_llm(backend="executable")`,
+#   text-only, shells out to simonw's `llm` CLI executable
 _LLM_BACKENDS = csccouti.LLM_BACKENDS
 
 # #############################################################################
@@ -99,9 +103,9 @@ _LLM_BACKENDS = csccouti.LLM_BACKENDS
 # itself (step 1) is not an action: it's gated by `--no_incremental` /
 # `--dry_run` instead, since it's the one step producing the file the other
 # four act on. `git_add` and `open_pdf` are optional (off by default);
-# `lint` and `render` run by default.
-_VALID_ACTIONS = ["git_add", "lint", "render", "open_pdf"]
-_DEFAULT_ACTIONS = ["lint", "render"]
+# `lint` and `render_pdf` run by default.
+_VALID_ACTIONS = ["git_add", "lint", "render_pdf", "open_pdf"]
+_DEFAULT_ACTIONS = ["lint", "render_pdf"]
 
 
 # #############################################################################
@@ -926,6 +930,7 @@ def _render_book_chapter(
     mode: str,
     script_dir: str,
     *,
+    no_abort_on_warnings: bool,
     dry_run: bool,
 ) -> None:
     """
@@ -945,6 +950,8 @@ def _render_book_chapter(
     :param basename: chapter file base name, without extension
     :param mode: generation mode, one of `_MODE_TO_EXTENSION`
     :param script_dir: directory of this script (for pandoc header files)
+    :param no_abort_on_warnings: don't assert if `typst compile` emits
+        warnings (`typst_aima` only, forwarded to `run_typst.py`)
     :param dry_run: print the commands without executing them
     """
     pdf_file = _get_pdf_file(out_dir, basename)
@@ -954,6 +961,8 @@ def _render_book_chapter(
             f"{run_typst_exec} --input {output_file} --output {pdf_file} "
             "--skip_action open_pdf"
         )
+        if no_abort_on_warnings:
+            cmd += " --no_abort_on_warnings"
         hsystem.system(cmd, print_command=True, dry_run=dry_run)
     elif mode == "md":
         csccouti.convert_markdown_to_pdf(
@@ -973,8 +982,8 @@ def _open_book_chapter_pdf(
     """
     Open the compiled book chapter PDF in Skim.
 
-    Assumes the PDF was already produced by a prior `render` action; does
-    not compile it.
+    Assumes the PDF was already produced by a prior `render_pdf` action;
+    does not compile it.
 
     :param output_file: path to the generated chapter file
     :param out_dir: directory holding the compiled PDF
@@ -1057,8 +1066,10 @@ def _parse() -> argparse.ArgumentParser:
         default="hllm",
         help=(
             "LLM backend to use for book chapter generation: 'hllm' "
-            "(default) uses `helpers.hllm`, 'hllm_cli' uses "
-            "`helpers.hllm_cli` (text-only)"
+            "(default) uses `helpers.hllm`, 'hllm_cli_lib' uses "
+            "`helpers.hllm_cli` with the `llm` Python library (text-only), "
+            "'hllm_cli_exec' uses `helpers.hllm_cli` shelling out to "
+            "simonw's `llm` CLI executable (text-only)"
         ),
     )
     parser.add_argument(
@@ -1067,6 +1078,13 @@ def _parse() -> argparse.ArgumentParser:
         default="",
         help="LLM model to use (e.g., 'gpt-4o', 'claude-opus-4'); empty "
         "string (default) uses the --llm_backend's default model",
+    )
+    parser.add_argument(
+        "--no_abort_on_warnings",
+        action="store_true",
+        help="Don't assert if `typst compile` emits warnings during the "
+        "'render_pdf' action (--mode typst_aima only; forwarded to "
+        "run_typst.py)",
     )
     hselacti.add_action_arg(parser, _VALID_ACTIONS, _DEFAULT_ACTIONS)
     hparser.add_verbosity_arg(parser)
@@ -1153,7 +1171,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
                 _lint_typst_file(output_file, dry_run=args.dry_run)
             else:
                 _lint_with_lint_text(output_file, dry_run=args.dry_run)
-        elif action == "render":
+        elif action == "render_pdf":
             _LOG.info("\n%s", hprint.frame("Action: Rendering to PDF"))
             _render_book_chapter(
                 output_file,
@@ -1161,6 +1179,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
                 basename,
                 args.mode,
                 script_dir,
+                no_abort_on_warnings=args.no_abort_on_warnings,
                 dry_run=args.dry_run,
             )
         elif action == "open_pdf":

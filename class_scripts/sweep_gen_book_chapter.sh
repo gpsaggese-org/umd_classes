@@ -22,11 +22,12 @@ MODE="${2:-typst_aima}"
 OUT_DIR="${3:-./sweep_results}"
 
 # Each entry is "llm_backend:model". Leave model empty to use the
-# backend's default model (e.g., "hllm_cli:").
+# backend's default model (e.g., "hllm_cli_lib:").
 COMBOS=(
-    "hllm_cli:"
-    "hllm_cli:gpt-4o"
-    "hllm_cli:claude-opus-4"
+    "hllm_cli_lib:"
+    "hllm_cli_lib:gpt-4o"
+    "hllm_cli_lib:claude-opus-4"
+    "hllm_cli_exec:"
     "hllm:"
     "hllm:gpt-4o"
 )

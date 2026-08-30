@@ -234,7 +234,11 @@ _DEFAULT_SYSTEM_PROMPT = hio.from_file(_SYSTEM_PROMPT_FILE)
 # Backends supported by `_generate_slide_commentary()`.
 # - "hllm": `helpers.hllm.get_completion()`, supports passing the slide's
 #   images as multi-modal context
-# - "hllm_cli": `helpers.hllm_cli.apply_llm()`, text-only (no image support)
+# - "hllm_cli_lib": `helpers.hllm_cli.apply_llm(backend="library")`,
+#   text-only (no image support)
+# - "hllm_cli_exec": `helpers.hllm_cli.apply_llm(backend="executable")`,
+#   text-only (no image support), shells out to simonw's `llm` CLI
+#   executable
 _LLM_BACKENDS = csccouti.LLM_BACKENDS
 
 
@@ -253,8 +257,8 @@ def _generate_slide_commentary(
     :param llm_backend: which LLM backend to use, one of `_LLM_BACKENDS`
         - "hllm": also feeds the slide's images to the LLM as multi-modal
           context
-        - "hllm_cli": text-only, since `hllm_cli.apply_llm()` has no image
-          support
+        - "hllm_cli_lib" / "hllm_cli_exec": text-only, since
+          `hllm_cli.apply_llm()` has no image support
     :return: generated commentary text
     """
     hdbg.dassert_in(llm_backend, _LLM_BACKENDS)
@@ -492,7 +496,8 @@ def _parse() -> argparse.ArgumentParser:
         help=(
             "LLM backend to use for slide commentary generation: 'hllm' "
             "(default) feeds the slide's images to the LLM as multi-modal "
-            "context, 'hllm_cli' is text-only"
+            "context, 'hllm_cli_lib' (library) and 'hllm_cli_exec' "
+            "(simonw's `llm` CLI executable) are text-only"
         ),
     )
     parser.add_argument(

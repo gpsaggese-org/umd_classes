@@ -110,6 +110,9 @@ Not needed
 
 - "References" need to be a larger font
 
+gen_book_chapter.py  msml610/01.2 --mode typst_aima --llm_backend hllm_cli -v DEBUG --model claude-opus-4.5
+gen_book_chapter.py  msml610/01.2 --mode typst_aima --llm_backend hllm_cli_exec -v DEBUG --model openrouter/anthropic/claude-opus-4.6 --no_incrementa
+
 # Workflows
 
 ## Overview

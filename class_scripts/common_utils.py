@@ -309,8 +309,18 @@ def git_add_with_retry(file_name: str, *, dry_run: bool) -> None:
 # Backends supported by `call_llm()`.
 # - "hllm": `helpers.hllm.get_completion()`, supports passing images as
 #   multi-modal context
-# - "hllm_cli": `helpers.hllm_cli.apply_llm()`, text-only
-LLM_BACKENDS = ("hllm", "hllm_cli")
+# - "hllm_cli_lib": `helpers.hllm_cli.apply_llm(backend="library")`,
+#   text-only, calls the `llm` Python library in-process
+# - "hllm_cli_exec": `helpers.hllm_cli.apply_llm(backend="executable")`,
+#   text-only, shells out to simonw's `llm` CLI executable
+LLM_BACKENDS = ("hllm", "hllm_cli_lib", "hllm_cli_exec")
+
+# Map a `LLM_BACKENDS` entry to the `backend` argument `hllm_cli.apply_llm()`
+# expects.
+_LLM_BACKEND_TO_HLLM_CLI_BACKEND = {
+    "hllm_cli_lib": "library",
+    "hllm_cli_exec": "executable",
+}
 
 
 def call_llm(
@@ -329,7 +339,8 @@ def call_llm(
     :param model: LLM model to use, or "" to use the backend's default
     :param llm_backend: which backend to use, one of `LLM_BACKENDS`
     :param images_as_base64: images to pass as multi-modal context (only
-        supported by the "hllm" backend; ignored by "hllm_cli")
+        supported by the "hllm" backend; ignored by "hllm_cli_lib" /
+        "hllm_cli_exec")
     :return: generated text
     """
     hdbg.dassert_in(llm_backend, LLM_BACKENDS)
@@ -347,11 +358,12 @@ def call_llm(
     else:
         import helpers.hllm_cli as hllmcli
 
+        hllm_cli_backend = _LLM_BACKEND_TO_HLLM_CLI_BACKEND[llm_backend]
         response, _ = hllmcli.apply_llm(
             user_prompt,
             system_prompt=system_prompt,
             model=model,
-            backend="library",
+            backend=hllm_cli_backend,
         )
     return str(response)
 
@@ -376,7 +388,8 @@ def call_llm_cached(
     :param model: LLM model to use, or "" to use the backend's default
     :param llm_backend: which backend to use, one of `LLM_BACKENDS`
     :param images_as_base64: images to pass as multi-modal context (only
-        supported by the "hllm" backend; ignored by "hllm_cli")
+        supported by the "hllm" backend; ignored by "hllm_cli_lib" /
+        "hllm_cli_exec")
     :return: generated text
     """
     return call_llm(

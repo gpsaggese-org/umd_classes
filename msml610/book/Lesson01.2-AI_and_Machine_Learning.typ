@@ -142,8 +142,8 @@
 #strong[1. AI as Thinking Humanly]
 
 - #strong[Problem]: To build machines that think like humans, we must first
-  #strong[determine how humans think]. Understanding human cognition is a complex
-  challenge due to the intricacies of human thought processes and mental
+  #strong[determine how humans think]. Understanding human cognition is a
+  complex challenge due to the intricacies of human thought processes and mental
   representations.
 
 - #strong[Pros]:
