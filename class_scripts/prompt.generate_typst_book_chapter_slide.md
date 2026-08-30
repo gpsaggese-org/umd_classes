@@ -18,34 +18,51 @@ shared style guide
 ## What You Will NEVER See in the Input, and Must NEVER Produce
 
 - No document boilerplate (`#import`, `#show`, `#chapter(...)`)
-
 - No headings (`#`, `##`, `###`, `*`)
-
 - No `::: columns` / `:::: {.column width=X%}` pandoc div markers
-
 - No raw code fences (` ```graphviz `, ` ```mermaid `, ` ```tikz `, ` ```{=typst} `)
   — these are already extracted out of your input
 
-## Placeholder Tokens: Copy Verbatim, Do Not Touch
+## Placeholder Tokens: Copy Verbatim, but Write Around Them
 
 A token that looks like `@@FIGURE_1@@`, `@@FIGURE_2@@`, etc. stands in for a figure,
 diagram, or table that has already been converted to Typst by Python. Copy each such
 token to the output **exactly as written**, on its own line, with no surrounding
-markup, no `#figure(...)`, no brackets: do not explain, describe, or wrap it. Never
-invent a token that was not in the input
+markup, no `#figure(...)`, no brackets. Never invent a token that was not in the
+input, and never put the token itself inside a sentence
+
+After the slide fragment, you are also given a `Figure manifest:` block listing each
+token's Typst label and a one-line description of what it shows — never copy that
+block into your output. For every token in the manifest, add one sentence to the
+prose you are already writing (near the token, in the same fragment) that:
+
+- refers to it by its label, written as plain text (`@fig:richardfeynman`,
+  `@tab:foundations`, ...): this is a real Typst content reference and will render
+  as an auto-numbered "Figure 1"/"Table 1"; do not alter, quote, or remove the `@`
+- explains, in that same sentence, what it shows and how it connects to the
+  surrounding discussion
+
+If the fragment is nothing but a visual, with no other prose of its own (e.g., the
+whole slide is one image), still write that one sentence — do not leave the token
+standing with no prose around it at all
 
 - Input:
-
   ```text
   - @Definition@: The term "Artificial Intelligence" was coined in 1956
 
   @@FIGURE_1@@
   ```
 
-  Output:
-
+  Figure manifest:
   ```text
-  The term "Artificial Intelligence" was coined in 1956.
+  @@FIGURE_1@@ -> label: fig:richardfeynman, shows: "Richard Feynman, 1965"
+  ```
+- Output:
+  ```text
+  The term "Artificial Intelligence" was coined in 1956. As @fig:richardfeynman
+  shows, Richard Feynman's 1965 remark that "what I cannot create, I do not
+  understand" captures the same spirit: building an intelligent system is itself a
+  path to understanding intelligence.
 
   @@FIGURE_1@@
   ```
@@ -73,22 +90,17 @@ Never emit the tag word itself as a `#strong[...]` label (`#strong[Definition]`,
   - @Definition@: An **agent** is something that perceives and acts to
     reach a goal
   ```
-
-  Bad output (relabels the tag, keeps the outline structure):
-
+- Bad output (relabels the tag, keeps the outline structure):
   ```text
   - #strong[Definition]: An #strong[agent] is something that perceives and
     acts to reach a goal.
   ```
-
-  Good output (a plain sentence; only the term is bold):
-
+- Good output (a plain sentence; only the term is bold):
   ```text
   An #strong[agent] is something that perceives and acts to reach a goal.
   ```
 
 - Input:
-
   ```text
   - @Pros@
     - Express precise theory of the human mind as a computer program
@@ -97,9 +109,7 @@ Never emit the tag word itself as a `#strong[...]` label (`#strong[Definition]`,
     - Unknown workings of the human mind
     - Anthropocentric definition
   ```
-
-  Bad output (two tag-labeled lists):
-
+- Bad output (two tag-labeled lists):
   ```text
   - #strong[Pros]:
     - Express precise theory of the human mind as a computer program.
@@ -107,9 +117,7 @@ Never emit the tag word itself as a `#strong[...]` label (`#strong[Definition]`,
     - Unknown workings of the human mind.
     - Anthropocentric definition.
   ```
-
-  Good output (one passage weighing both sides):
-
+- Good output (one passage weighing both sides):
   ```text
   Expressing this as a computer program forces a precise theory of the
   human mind instead of a vague verbal one. The cost is that the mind's
@@ -118,14 +126,11 @@ Never emit the tag word itself as a `#strong[...]` label (`#strong[Definition]`,
   ```
 
 - Input:
-
   ```text
   - @Question@: What is artificial intelligence?
     - First, understand what **human intelligence** is
   ```
-
-  Good output (the question stays a question; the tag disappears):
-
+- Good output (the question stays a question; the tag disappears):
   ```text
   What is artificial intelligence? Answering that starts with
   understanding what #strong[human intelligence] is.
@@ -138,7 +143,6 @@ Never emit the tag word itself as a `#strong[...]` label (`#strong[Definition]`,
     - **Omniscience vs no-regrets**
       - Best is based on available information, not perfect knowledge
   ```
-
   Good output (a genuinely enumerable set stays a list, without the tag label):
 
   ```text
@@ -154,13 +158,10 @@ above, never two labeled halves.
 ## Highlighting and Emphasis
 
 - `**text**` (markdown bold) → `#strong[text]`
-
 - `_text_` (markdown italic) → `#emph[text]`
-
 - Never leave `**`, `_`, or a bare `*` used as markdown emphasis in the output —
   those characters have no special meaning in Typst body markup and will render as
   literal asterisks/underscores
-
 - A plain quoted phrase (`"..."`) stays a plain quoted string: do not prefix it with
   `#`. `#"text"` is a Typst string _expression_, not a quoted phrase, and drops the
   visible quote marks
@@ -171,7 +172,6 @@ above, never two labeled halves.
   bullet (`@Definition@`, `@Example@`, `@Remark@`, ...) that holds one short point
   becomes a plain sentence in the paragraph instead: see "Semantic Tags: Dissolve,
   Don't Relabel" above
-
 - Keep a real Typst list only for content meant to be scanned as parallel items: an
   enumerated set of steps, assumptions, properties, or named alternatives. For a list
   you do keep, bullet lists (`- item`) and numbered lists (`1. item`) use the same
@@ -181,9 +181,7 @@ above, never two labeled halves.
 ## Formulas
 
 - Inline: `` `formula` `` for text-like expressions, or `$formula$` for inline math
-
 - Display math: `$ formula $` on its own line/paragraph
-
 - Prefer native Typst math syntax over raw LaTeX commands inside `$...$` (e.g.,
   `subset.eq`, `|X|` instead of `\subseteq`, `\abs{X}`)
 
@@ -191,14 +189,11 @@ above, never two labeled halves.
 
 - **Bad**:
   `- The slide suggests that _acting rationally_ encompasses more than just _thinking rationally_.`
-
 - **Good**: `- Acting rationally encompasses more than just thinking rationally.`
 
 ## Other Rules
 
 - Do not repeat a bullet verbatim; expand and explain it
-
 - Close every `#strong[`, `#emph[`, `[...]`, `(...)` you open
-
 - Output only the converted body: no commentary, no code fence wrapping the whole
   response

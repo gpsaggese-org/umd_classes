@@ -58,7 +58,7 @@ import logging
 import os
 import re
 import shutil
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
 from tqdm.auto import tqdm
 
@@ -130,7 +130,11 @@ _MODE_TO_PROMPT_FILE = {
 # Per-slide prompt file used only by the `typst_aima` per-slide generation
 # path (see "Per-slide Typst generation" below): narrower than
 # `prompt.generate_typst_book_chapter.md` since headings, columns, and
-# figures are handled deterministically in Python and never reach the LLM.
+# figures are built deterministically in Python. The LLM never sees a
+# figure/diagram/table's raw markup, but it is given a one-line label +
+# description for each one (a "figure manifest", see
+# `_build_manifest_block()`) so it can still write a real cross-reference
+# and explanation for it in the surrounding prose.
 _TYPST_SLIDE_PROMPT_FILE = os.path.join(
     _SCRIPT_DIR, "prompt.generate_typst_book_chapter_slide.md"
 )
@@ -400,6 +404,21 @@ _FIGURE_PREFIX_RE = re.compile(r"^L\d+(?:\.\d+)*\.")
 # render it); a native `.typ` file has no such convention and would
 # otherwise show the backticks and `{=typst}` suffix as literal text.
 _INLINE_TYPST_RAW_RE = re.compile(r"`([^`]+)`\{=typst\}")
+
+# A `label="..."` node/edge attribute in a Graphviz diagram, used by
+# `_describe_diagram()` to derive a fallback one-line description (and hence
+# a manifest entry and Typst caption) for a diagram that has no caption of
+# its own in the `.smd` source.
+_GRAPHVIZ_NODE_LABEL_RE = re.compile(r'label\s*=\s*"([^"\\]*(?:\\.[^"\\]*)*)"')
+# Bracketed/parenthesized node text in a Mermaid diagram (e.g. `A[Some
+# Node]`, `B(Round node)`), used the same way as `_GRAPHVIZ_NODE_LABEL_RE`.
+_MERMAID_NODE_LABEL_RE = re.compile(r"[\[({]([^\[\](){}]{2,60})[\])}]")
+# The `headers: (...)` argument of a `#styled-table(...)` call (see
+# `styled-table` in `aima_style.typ`), used by `_describe_table()` to derive
+# a fallback one-line description for a table.
+_STYLED_TABLE_HEADERS_RE = re.compile(
+    r"#styled-table\(\s*headers:\s*\(([^)]*)\)"
+)
 
 # A stray Markdown `**bold**` left in the LLM output instead of the
 # `#strong[...]` call that `prompt.generate_typst_book_chapter_slide.md`
