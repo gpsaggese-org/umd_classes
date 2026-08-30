@@ -1,11 +1,17 @@
-// git_hash=0c2bbccf6-d9s timestamp=20260829_225551
+// git_hash=d5a505bbb-mu1 timestamp=20260829_233752
 // Import AIMA style formatting and macros.
-#import "../../helpers_root/dev_scripts_helpers/typst/aima_style.typ": aima-style, algorithm, chapter, glossary
+#import "../../helpers_root/dev_scripts_helpers/typst/aima_style.typ": (
+  aima-style, algorithm, chapter, glossary, styled-table,
+)
+// Import the custom citation/bibliography system.
+#import "/helpers_root/dev_scripts_helpers/typst/umd_references.typ": (
+  cite, references,
+)
 
 // Document metadata
 #set document(
-  title: "[L01.2: AI and Machine Learning]",
-  author: "[MSML610: Advanced Machine Learning]",
+  title: "L01.2: AI and Machine Learning",
+  author: "MSML610: Advanced Machine Learning",
 )
 
 // Apply the AIMA document template (page/text/heading set + show rules).
@@ -25,360 +31,373 @@
 // Slide: ML, AI, and Intelligence
 #strong[ML, AI, and Intelligence]
 
-- #strong[Machine Learning] is a subset of #strong[Artificial Intelligence (AI)].
-  - It is often confused with #emph[deep learning], #emph[large-language models], #emph[predictive analytics], and other related fields.
+- #strong[Definition]: #strong[Machine Learning] is a subset of Artificial
+  Intelligence (AI). It is often confused with #emph[deep learning],
+  #emph[large-language models], #emph[predictive analytics], and other related
+  fields.
 
-- What is artificial intelligence?
-  - To answer this, we must first understand what #strong[human intelligence] is.
+- #strong[Question]: What is artificial intelligence? To answer this, we must
+  first understand what #strong[human intelligence] is.
 
-- What is human intelligence?
-  - We refer to ourselves as #"homo sapiens" because our intelligence distinguishes us from other animals.
-  - Throughout history, we have sought to comprehend how we think, which remains one of the biggest mysteries.
-    - The brain is a small matter yet manages to grasp the secrets of nature, such as the #emph[theory of relativity], #emph[quantum mechanics], and #emph[black holes].
-    - A question arises: How can the brain understand, predict, and manipulate a world that is more complex than itself?
-
+- #strong[Question]: What is human intelligence? We call ourselves #emph["homo
+    sapiens"] because intelligence sets us apart from animals. For thousands of
+  years, humans have tried to understand how we think. This remains one of the
+  #emph[biggest mysteries]: the brain, though small in size, can grasp nature's
+  secrets, such as the theory of relativity, quantum mechanics, and black holes.
+  How can the brain understand, predict, and manipulate a world more complex
+  than itself?
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:33 '* Artificial Intelligence'
 // Slide: Artificial Intelligence
 #strong[Artificial Intelligence]
 
-::: columns
-:::: {.column width=80%}
+#grid(
+  columns: (80%, 20%),
+  gutter: 1em,
+  [
+    - #strong[Definition]: The term #emph["Artificial Intelligence"] was coined
+      in 1956 #cite("mccarthy1955dartmouth").
 
-// From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:38 '- @Definition@: The term _"Artificial Intelligence"_ was coined in 1956'
-// Slide: Definition of Artificial Intelligence
-- #strong[Definition]: The term "Artificial Intelligence" was coined in 1956 [@mccarthy1955dartmouth].
+    - #strong[Goal]:
+      - Understand human intelligence.
+      - Create intelligent entities. As Feynman famously stated, #emph["What I
+          cannot create, I do not understand"] (1988).
 
-- #strong[Goal]
-  - Understand human intelligence.
-  - Create intelligent entities.
-  - #"What I cannot create, I do not understand" (Feynman, 1988).
-
-- #strong[Characteristics]
-  - AI applies to any human activity and task.
-  - Its impact exceeds that of any past historical event.
-  - It generates hundreds of billions of dollars in annual market revenue, with trillions projected in global economic impact by 2030 [@bughin2018aifrontier].
-  - Unlike well-defined disciplines such as arithmetic or Newtonian mechanics, AI has many unresolved problems.
-
-:::: {.column width=20%}
-
-// From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:58 '![](msml610/lectures_source/figures/L01.2.Richard_Feynman.jpg)'
-// Slide: Richard Feynman
-#figure(
-  image("msml610/lectures_source/figures/L01.2.Richard_Feynman.jpg", width: 80%),
-  caption: [_"Richard Feynman (1965)"],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:feynman>
-
-:::: 
-:::
-
+    - #strong[Characteristics]:
+      - Artificial Intelligence applies to any human activity and task.
+      - Its impact exceeds any past historical event.
+      - It generates hundreds of billions of dollars annually in market revenue,
+        with trillions in global economic impact projected by 2030 #cite(
+          "bughin2018aifrontier",
+        ).
+      - Unlike disciplines with settled core theories, such as arithmetic or
+        Newtonian mechanics within its domain, AI has many unresolved problems.
+  ],
+  [
+    #figure(
+      image("../lectures_source/figures/L01.2.Richard_Feynman.jpg", width: 80%),
+      caption: [Richard Feynman (1965)],
+      kind: "figure",
+      supplement: [Fig.],
+      placement: auto,
+    ) <fig:richardfeynman>
+  ],
+)
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:64 '* AI Formal Definition'
 // Slide: AI Formal Definition
 #strong[AI Formal Definition]
 
-::: columns
-:::: {.column width=65%}
+#grid(
+  columns: (65%, 30%),
+  gutter: 1em,
+  [
+    - #strong[Definition]: AI is characterized along #strong[two key axes]
+      #cite("russell2020aima"):
+      - Thinking vs. Acting
+      - Human vs. Rational (ideal performance)
 
-// From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:69 '- @Definition@: AI is characterized along **two key axes** [@russell2020aima]'
-// Slide: Definition of AI
-- #strong[Definition]: AI is characterized along two key axes [@russell2020aima].
-  - #emph[Thinking vs. Acting].
-  - #emph[Human vs. Rational (ideal performance)].
+    - #strong[Four resulting definitions]: AI can be defined as a machine that
+      can:
+      1. Think humanly
+      2. Think rationally
+      3. Act humanly
+      4. Act rationally
 
-- **Four resulting definitions**: AI as a machine that can:
-  1. Think humanly.
-  2. Think rationally.
-  3. Act humanly.
-  4. Act rationally.
+    - #strong[Question]: Which definition best captures what AI should aim for?
 
-- Which definition best captures what AI should aim for?
-  
-- The #strong[key idea]: Building machines that act rationally is the ultimate goal of AI.
-
-:::: {.column width=30%}
-
-// From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:87 '```{=typst} #styled-table(... ```' 
-// Slide: AI formal definition table
-```{=typst}
-#styled-table(
-  headers: ("", "Human", "Rational"),
-  rows: (
-    ("Thinking", "Think humanly", "Think rationally"),
-    ("Acting", "Act humanly", "Act rationally"),
-  ),
-  bold-first-col: true,
+    - #strong[Key idea]: Building machines that #strong[act rationally] is the
+      ultimate goal of AI.
+  ],
+  [
+    #styled-table(
+      headers: ("", "Human", "Rational"),
+      rows: (
+        ("Thinking", "Think humanly", "Think rationally"),
+        ("Acting", "Act humanly", "Act rationally"),
+      ),
+      bold-first-col: true,
+    )
+  ],
 )
-```
-:::: 
-:::
-
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:101 '* 1. AI as Thinking Humanly'
-// Slide: AI as Thinking Humanly
+// Slide: 1. AI as Thinking Humanly
 #strong[1. AI as Thinking Humanly]
 
-- The problem to address: To build machines that think like humans, we must first determine how humans think.
+- #strong[Problem]: To build machines that think like humans, it is essential to
+  first #strong[determine how humans think]. This involves understanding the
+  cognitive processes and mechanisms that underlie human thought and translating
+  them into computational models.
 
-- **Pros**:
-  - This approach allows for expressing a precise theory of the human mind as a computer program.
+- #strong[Pros]:
+  - This approach allows us to express a precise theory of the human mind as a
+    computer program. By modeling human cognition computationally, we can gain
+    insights into the processes that drive human thought and behavior.
 
-- **Cons**:
-  - The workings of the human mind are still unknown.
-  - This definition is anthropocentric and may not encompass other forms of intelligence.
+- #strong[Cons]:
+  - One major challenge is the unknown workings of the human mind. Despite
+    advances in cognitive science and neuroscience, many aspects of human
+    cognition remain mysterious and difficult to replicate in machines.
+  - Additionally, this approach relies on an anthropocentric definition of
+    intelligence, which may limit our understanding of non-human forms of
+    intelligence and the potential for machines to develop unique cognitive
+    abilities.
 
-  
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:113 '* 2. AI as Thinking Rationally'
-// Slide: AI as Thinking Rationally
+// Slide: 2. AI as Thinking Rationally
 #strong[2. AI as Thinking Rationally]
 
-::: columns
-:::: {.column width=65%}
+#grid(
+  columns: (65%, 30%),
+  gutter: 1em,
+  [
+    - #strong[Question]: What are the rules of #strong[correct thinking]?
+      - When provided with correct premises, the process should lead to correct
+        conclusions.
 
-// From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:118 '- @Question@: What are the rules of **correct thinking**?'
-// Slide: Question about correct thinking
-- What are the rules of #strong[correct thinking]?
-  - Given correct premises, one must yield correct conclusions.
+    - #strong[Techniques]: #strong[Logic] is the study of the "laws of thought."
+      - It involves formalizing statements about objects and their
+        relationships.
 
-- The #strong[Techniques]: #strong[Logic] studies the "laws of thought".
-  - This involves formalizing statements about objects and their relations.
-
-- Another #strong[Technique]: #strong[Automatic theorem proving].
-  - These programs solve problems expressed in logical notation.
-  - They may run indefinitely if no solution exists, as first-order validity is only semi-decidable.
-
-:::: {.column width=30%}
-
-// From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:132 '```graphviz digraph laws_of_thought { ... ```' 
-// Slide: Laws of Thought diagram
-```graphviz
-digraph laws_of_thought {
-    bgcolor="transparent";
-    pad="0.15";
-    splines=spline;
-    nodesep=0.4;
-    ranksep=0.5;
-    rankdir=TB;
-
-    node [shape=box,
-          style="rounded,filled",
-          penwidth=1.8,
-          fontname="Helvetica",
-          fontsize=12,
-          margin="0.22,0.14",
-          height=0.50];
-
-    edge [color="#A3B1C0",
-          penwidth=1.3,
-          arrowhead=vee,
-          arrowsize=0.75,
-          fontname="Helvetica",
-          fontsize=10,
-          fontcolor="#7B8794"];
-
-    premises [label="Correct\npremises", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
-    logic [label="Logic", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
-    conclusion [label="Correct\nconclusions", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-
-    premises -> logic -> conclusion;
-}
-```
-:::: 
-:::
-
+    - #strong[Techniques]: #strong[Automatic theorem proving]
+      - These are programs designed to solve problems expressed in logical
+        notation.
+      - They may run indefinitely if no solution exists, as first-order validity
+        is only semi-decidable.
+  ],
+  [
+// rendered_images:begin
+//     ```graphviz
+//     digraph laws_of_thought {
+//         bgcolor="transparent";
+//         pad="0.15";
+//         splines=spline;
+//         nodesep=0.4;
+//         ranksep=0.5;
+//         rankdir=TB;
+// 
+//         node [shape=box,
+//               style="rounded,filled",
+//               penwidth=1.8,
+//               fontname="Helvetica",
+//               fontsize=12,
+//               margin="0.22,0.14",
+//               height=0.50];
+// 
+//         edge [color="#A3B1C0",
+//               penwidth=1.3,
+//               arrowhead=vee,
+//               arrowsize=0.75,
+//               fontname="Helvetica",
+//               fontsize=10,
+//               fontcolor="#7B8794"];
+// 
+//         premises [label="Correct\npremises", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
+//         logic [label="Logic", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
+//         conclusion [label="Correct\nconclusions", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+// 
+//         premises -> logic -> conclusion;
+//     }
+//     ```
+// rendered_images:end
+// render_images:begin
+#figure(
+  image("Lesson01.2-AI_and_Machine_Learning.typ.figs/Lesson01.2-AI_and_Machine_Learning.1.png"),
+)
+// render_images:end
+  ],
+)
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:168 '* Thinking Rationally: Challenges'
 // Slide: Thinking Rationally: Challenges
 #strong[Thinking Rationally: Challenges]
 
 - #strong[Challenges]:
-  1. Formalizing informal knowledge is difficult.
-     - _Example_: "A handshake occurs when two people extend, grip, shake hands, then release."
-     $$
-     \begin{aligned}
-       & \exists \; x, y, h_x, h_y \\
-       & \quad Person(x) \land Person(y) \land x \neq y \land {}
-       Hand(x, h_x) \land Hand(y, h_y) \land {} \\
-       & \quad MoveToward(h_x, h_y) \land Contact(h_x, h_y) \land {}
-       Shake(h_x, h_y) \land {} \\
-       & \quad Release(h_x, h_y)
-     \end{aligned}
-     $$
-  2. The probabilistic nature of knowledge presents challenges.
-     - _Example_: In medicine, "Fever, cough, and fatigue could indicate flu, COVID-19, or another illness."
-  3. Scalability challenges arise in large problems that may require heuristics for practical solutions.
-  4. Intelligence encompasses more than just rational thinking.
-     - An agent must interact with the world, leading to the issue of the "embodiment of AI".
-
+  1. #strong[Formalizing informal knowledge is difficult]: Consider the example
+    of a handshake. It can be described informally as "a handshake occurs when
+    two people extend, grip, shake hands, then release." However, formalizing
+    this interaction requires a complex logical representation:
+    $$
+    \begin{aligned} & \exists \; x, y, h_x, h_y \\ & \quad Person(x) \land
+    Person(y) \land x \neq y \land {} Hand(x, h_x) \land Hand(y, h_y) \land {}
+    \\ & \quad MoveToward(h_x, h_y) \land Contact(h_x, h_y) \land {} Shake(h_x,
+    h_y) \land {} \\ &\quad Release(h_x, h_y) \\ \end{aligned}
+    $$
+  2. #strong[Probabilistic nature of knowledge]: In fields like medicine,
+    symptoms such as fever, cough, and fatigue could indicate flu, COVID-19, or
+    another illness. This uncertainty highlights the probabilistic nature of
+    knowledge.
+  3. #strong[Scalability challenges]: Addressing large problems often requires
+    heuristics to find practical solutions, as exhaustive methods may be
+    computationally infeasible.
+  4. #strong[Intelligence requires more than rational thinking]: An intelligent
+    agent must interact with the world, which introduces the problem of the
+    "embodiment of AI." This means that intelligence encompasses more than just
+    rational thought; it involves engaging with the environment.
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:193 '* 3. AI as Acting Humanly'
-// Slide: AI as Acting Humanly
+// Slide: 3. AI as Acting Humanly
 #strong[3. AI as Acting Humanly]
 
-- #strong[Definition]: An #strong[agent] is something that perceives and acts to achieve a goal.
-
-- #strong[Goal]: AI designs agents that can act like humans.
-
-- #strong[Techniques]: The #strong[Turing test] [@turing1950computing].
-  - A computer passes the Turing test if a human cannot discern whether the answers to questions are from a person or a computer.
-
-::: columns
-:::: {.column width=75%}
-
-// From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:206 '- @Components@: Passing the **(embodied) Turing test** requires'
-// Slide: Components of Passing Turing Test
-- #strong[Components]: To pass the embodied Turing test, an agent must have:
-  1. Natural language processing to communicate.
-  2. Knowledge representation to store information.
-  3. Automated reasoning to utilize knowledge and answer questions.
-  4. Machine learning to detect patterns.
-  5. Computer vision and speech recognition to perceive and interpret speech.
-  6. Robotics to manipulate objects and move.
-
-:::: {.column width=25%}
-
-// From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:218 '![](msml610/lectures_source/figures/L01.1.Ex_machina.jpg)'
-// Slide: Ex Machina Image
-#figure(
-  image("msml610/lectures_source/figures/L01.1.Ex_machina.jpg", width: 80%),
-  caption: [Image from "Ex Machina"],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:exmachina>
-
-:::: 
-:::
-
+#grid(
+  columns: (75%, 25%),
+  gutter: 1em,
+  [
+    - #strong[Components]: Passing the #strong[(embodied) Turing test] requires
+      several key components:
+      1. #strong[Natural language processing] to enable effective communication.
+      2. #strong[Knowledge representation] to store and organize information
+        efficiently.
+      3. #strong[Automated reasoning] to utilize stored knowledge and provide
+        answers to questions.
+      4. #strong[Machine learning] to identify and learn from patterns in data.
+      5. #strong[Computer vision and speech recognition] to perceive and
+        comprehend visual and auditory information.
+      6. #strong[Robotics] to physically interact with and manipulate objects in
+        the environment.
+  ],
+  [
+    #figure(
+      image("../lectures_source/figures/L01.1.Ex_machina.jpg", width: 80%),
+      caption: [Ex machina],
+      kind: "figure",
+      supplement: [Fig.],
+      placement: auto,
+    ) <fig:exmachina>
+  ],
+)
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:223 '* Turing Test: Pros and Cons'
 // Slide: Turing Test: Pros and Cons
 #strong[Turing Test: Pros and Cons]
 
-::: columns
-:::: {.column width=50%}
-
-// From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:228 '- @Pros@'
-// Slide: Pros of the Turing Test
-- #strong[Pros]:
-  - Provides an operational definition of intelligence.
-  - Avoids philosophical vagueness (e.g., questions like what consciousness is and whether machines can think).
-
-:::: {.column width=50%}
-
-// From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:236 '- @Cons@'
-// Slide: Cons of the Turing Test
-- #strong[Cons]:
-  - Intelligence is defined using anthropomorphic criteria anchored in human terms, despite the existence of multiple forms of non-human intelligence.
-  - Passing the test means fooling humans into believing it is human.
-
-:::: 
-:;
-
-// From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:244 '- @Example@: Aeronautical engineering is about'
-// Slide: Example from Aeronautical Engineering
-- #strong[Example]: In aeronautical engineering:
-  - Correct: Focus on wind tunnels and aerodynamics.
-  - Incorrect: Designing machines that imitate birds.
-
+#grid(
+  columns: (50%, 50%),
+  gutter: 1em,
+  [
+    - #strong[Pros]:
+      - Provides an operational definition of intelligence, which is practical
+        and actionable.
+      - Sidesteps philosophical vagueness by avoiding questions such as "What is
+        consciousness?" or "Can a machine think?" This allows for a more focused
+        and empirical approach to understanding intelligence.
+  ],
+  [
+    - #strong[Cons]:
+      - Intelligence is often defined by #strong[anthropomorphic] criteria,
+        meaning it is evaluated in human terms. This perspective overlooks the
+        existence of multiple forms of non-human intelligence, which may not
+        align with human characteristics or behaviors.
+      - Passing a test of intelligence often involves #strong[fooling humans]
+        into believing that an entity is human. This criterion emphasizes the
+        ability to mimic human-like responses rather than demonstrating genuine
+        understanding or intelligence.
+  ],
+)
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:248 '* 4. AI as Acting Rationally'
-// Slide: AI as Acting Rationally
+// Slide: 4. AI as Acting Rationally
 #strong[4. AI as Acting Rationally]
 
-- #strong[Definition]: #strong[Rational agents] are those that do the "right thing" given their knowledge.
+- #strong[Definition]: #strong[Rational agents] are agents that do the
+  #emph["right thing"] given what they know.
 
-- #strong[Characteristics]: Agents that act rationally should:
+- #strong[Characteristics]: Agents that #strong[act rationally] should:
   1. Operate autonomously.
   2. Perceive their environment.
   3. Persist over time.
   4. Adapt to change.
   5. Create and pursue goals.
 
-  
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:260 '* Acting Rationally as Ultimate Goal of AI'
 // Slide: Acting Rationally as Ultimate Goal of AI
 #strong[Acting Rationally as Ultimate Goal of AI]
 
-::: columns
-:::: {.column width=65%}
+#grid(
+  columns: (65%, 30%),
+  gutter: 1em,
+  [
+    - #strong[Question]: Which definition of AI best captures what we should
+      build?
+      - Acting vs. Thinking
+      - Rational vs. Human
 
-// From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:265 '- @Question@: Which definition of AI best captures what we should build?'
-// Slide: Question about AI Definition
-- Which definition of AI best captures our objectives?
-  - Acting vs. Thinking.
-  - Rational vs. Human.
+    - #strong[Acting is more fundamental than Thinking]: Acting rationally is
+      broader than thinking rationally.
 
-- **Acting is more fundamental than Thinking**.
-  - Acting rationally encompasses a broader concept than thinking rationally.
+    - #strong[Rational is more objective than Human]:
+      - Rationality can be mathematically defined.
+      - Human behavior is shaped by evolutionary conditions.
 
-- **Rational is more objective than Human**.
-  - Rationality can be mathematically defined, whereas human behavior is often shaped by evolutionary conditions.
-
-- The #strong[key idea]: AI should focus on agents acting rationally.
-
-:::: {.column width=30%}
-
-// From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:281 '```{=typst} #styled-table(... ```' 
-// Slide: Rationality table
-```{=typst}
-#styled-table(
-  headers: ("", "Human", "Rational"),
-  rows: (
-    ("Thinking", "Think humanly", "Think rationally"),
-    ("Acting", "Act humanly", "*Act rationally*"),
-  ),
-  bold-first-col: true,
+    - #strong[Key idea]: AI should focus on #strong[agents acting rationally].
+  ],
+  [
+    #styled-table(
+      headers: ("", "Human", "Rational"),
+      rows: (
+        ("Thinking", "Think humanly", "Think rationally"),
+        ("Acting", "Act humanly", "*Act rationally*"),
+      ),
+      bold-first-col: true,
+    )
+  ],
 )
-```
-:::: 
-:::
-
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:295 '* Rationality Is Not Absolute'
 // Slide: Rationality Is Not Absolute
 #strong[Rationality Is Not Absolute]
 
-- The problem: AI aims to construct agents that do the right thing, but what defines the "right thing"?
+- #strong[Problem]: AI aims to build agents that #strong[do the right thing],
+  but what exactly is the #emph[right thing]?
 
-- #strong[Example]: You leave your house and a tree branch strikes you.
-  - Did you act rationally? Probably.
-  
-- #strong[Example]: You cross the street without checking for traffic, resulting in being hit by a car.
-  - Did you act rationally? It depends (probably not, given that checking was a low-cost option).
+- #strong[Example]: Imagine you leave the house and a branch strikes you. The
+  question arises, #emph["Did you act rationally?"] The answer is probably yes,
+  as the event was unforeseen and unavoidable.
 
-- #strong[Challenges]: There are moral issues related to self-driving cars, such as:
-  - Should a self-driving car swerve to hit a pedestrian in order to avoid a frontal crash that would kill two people?
+- #strong[Example]: Consider crossing the street without checking for oncoming
+  traffic, resulting in being hit by a car. Here, the question is again,
+  #emph["Did you act rationally?"] The answer is less clear and likely no, since
+  taking a moment to check for traffic was a low-cost action that could have
+  prevented harm.
 
+- #strong[Challenges]: There are moral issues associated with self-driving cars.
+  For instance, #emph["Should a car swerve and hit a pedestrian to avoid a
+    frontal crash that would kill two people?"] This scenario raises complex
+  ethical questions about decision-making in AI systems.
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:313 '* Problems of a Rational Agent'
 // Slide: Problems of a Rational Agent
 #strong[Problems of a Rational Agent]
 
-- #strong[Challenges]: In a probabilistic environment, a rational agent's goals must cover:
-  - Best outcome in a deterministic scenario.
-  - Best expected outcome in uncertain situations.
+- #strong[Challenges]: #strong[Probabilistic environment]
+  - A rational agent aims for:
+    - The best outcome in a deterministic setup.
+    - The best expected outcome under uncertainty.
 
-- What does "best" mean?
-  - Classically, "best" is determined by the #strong[objective function].
-    - Examples include the cost function, sum of rewards, loss function, and utility.
-  - However, these considerations are more nuanced.
+- #strong[Problem]: What does #strong["best"] mean?
+  - The classical answer is that #emph["best"] is determined by the
+    #emph[objective function], such as a cost function, sum of rewards, loss
+    function, or utility.
+  - However, the situation is often more complex.
 
 - #strong[Limitations]:
-  - Omniscience vs. no-regrets: The best decision stems from available information rather than perfect knowledge.
-  - In some scenarios, no provably correct action exists, yet a decision must be made.
-  - Even with complete information, optimal rationality may be unattainable due to:
-    - The cost of gathering all necessary data (e.g., in medical settings).
-    - Computational burdens (e.g., navigating a search tree that may have more branches than atoms in the observable universe, approximately $10^{80}$).
-    - Time-sensitive needs (e.g., making decisions within one microsecond in high-frequency trading, or HFT).
+  - #strong[Omniscience vs no-regrets]: The best decision is based on available
+    information, not perfect knowledge.
+  - Sometimes, there is #strong[no provably correct action] available, yet an
+    action must still be taken.
+  - Even #strong[with perfect information], rationality may not be feasible due
+    to:
+    - The cost of acquiring all data, as seen in fields like medicine.
+    - Computational demands, such as traversing a search tree with more branches
+      than atoms in the observable universe, approximately $10^{80}$.
+    - Real-time demands, for example, making a decision within 1 microsecond in
+      high-frequency trading (HFT).
 
-- #strong[Solution]: "Satisficing": Achieving "good enough" instead of "perfect" [@simon1956satisficing].
-  - This approach involves acting suitably within established constraints.
+- #strong[Solution]: #strong["Satisficing"]: Achieve a #emph[good enough]
+  outcome instead of a #emph[perfect] one #cite("simon1956satisficing").
+  - This involves acting appropriately given the constraints.
 
-  
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:340 '## What Is Machine Learning?'
 // Slide: What Is Machine Learning?
 == What Is Machine Learning?
@@ -387,176 +406,212 @@ digraph laws_of_thought {
 // Slide: Machine Learning: Definitions
 #strong[Machine Learning: Definitions]
 
-::: columns
-:::: {.column width=75%}
+#grid(
+  columns: (75%, 20%),
+  gutter: 1em,
+  [
+    - #strong[Question]: How should we #strong[define machine learning]?
 
-// From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:347 '- @Question@: How should we **define machine learning**?'
-// Slide: Defining machine learning
-- How should we define #strong[machine learning]?
+    - #strong[Definition]:
+      - #emph["Machine learning is the field of study that gives computers the
+          ability to learn without being explicitly programmed"] (Samuel, 1959)
+        #cite("samuel1959checkers").
+      - Machine learning involves building machines that can perform
+        #emph[useful things] without being #emph[explicitly programmed]. For
+        example, a computer can learn to play checkers by playing against itself
+        and memorizing winning positions.
+      - More formally, #emph["A computer program is said to learn from
+          experience $E$ with respect to some task $T$ and some performance
+          measure $P$, if $P(T)$ improves with experience $E$"] (Mitchell, 1997)
+        #cite("mitchell1997machinelearning").
 
-- #strong[Definition]: 
-   - "Machine learning is the field of study that enables computers to learn without being explicitly programmed" (Samuel, 1959) [@samuel1959checkers].
-   - Machine learning builds machines to perform useful tasks without being explicitly programmed.
-     - For instance, a computer learns to play checkers by leveraging self-play to memorize winning strategies.
-   - More formally, "A computer program is said to learn from experience $E$ with respect to a particular task $T$ and a performance measure $P$, if $P(T)$ improves as a result of experience $E$" (Mitchell, 1997) [@mitchell1997machinelearning].
-
-- #strong[Applications]: Common examples of machine learning include:
-  - Computer vision.
-  - Speech recognition.
-  - Natural language processing.
-
-:::: {.column width=20%}
-
-// From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:368 '![](msml610/lectures_source/figures/L01.2.Tom_Mitchell.jpg)'
-// Slide: Tom Mitchell Image
-#figure(
-  image("msml610/lectures_source/figures/L01.2.Tom_Mitchell.jpg", width: 80%),
-  caption: [_"Tom Mitchell (2025)"],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:mitchell>
-
-:::: 
-:::
-
+    - #strong[Applications]: Common examples of machine learning include:
+      - Computer vision
+      - Speech recognition
+      - Natural language processing
+  ],
+  [
+    #figure(
+      image("../lectures_source/figures/L01.2.Tom_Mitchell.jpg", width: 80%),
+      caption: [Tom Mitchell (2025)],
+      kind: "figure",
+      supplement: [Fig.],
+      placement: auto,
+    ) <fig:tommitchell>
+  ],
+)
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:374 '* The 3 Machine Learning Assumptions'
 // Slide: The 3 Machine Learning Assumptions
 #strong[The 3 Machine Learning Assumptions]
 
-- #strong[Fact]: Machine learning addresses practical problems that include:
+- #strong[Fact]: Machine learning addresses a practical problem through a series
+  of steps:
   - Gathering a dataset.
-  - Building a statistical model algorithmically from that dataset.
+  - #emph[Building a statistical model from the dataset algorithmically].
   - Evaluating the model.
   - Deploying and monitoring the model.
 
-- #strong[Problem] (Abu-Mostafa, 2012) [@abumostafa2012learning]:
-  - While many phases are largely "engineering", the process of building the model is the "research" aspect.
-  - The **three core assumptions** of machine learning are:
-    1. A pattern exists.
-    2. The pattern cannot be precisely defined mathematically.
-    3. Data is available.
+- #strong[Problem] (Abu-Mostafa, 2012) #cite("abumostafa2012learning"):
+  - While most phases of machine learning are considered "engineering",
+    #emph[building the model] is regarded as the "research" component.
+  - The #strong[three core assumptions] of machine learning are:
+    1. A #emph[pattern exists].
+    2. The pattern cannot be #emph[precisely defined mathematically].
+    3. #emph[Data is available].
 
-- #strong[Question]: Which assumption is essential?
-  1. If no pattern exists, is there any point in running learning algorithms?
-  2. Is there an issue in utilizing machine learning even if mathematics can define the pattern?
-  3. Can progress be achieved without data?
+- #strong[Question]: Which assumption is #strong[essential]?
+  1. If no pattern exists, does it make sense to run learning?
+  2. Is it a problem if math can devise the pattern but we still use machine
+    learning?
+  3. Can progress happen without data?
 
-- #strong[Remark]: Without data, no progress is achievable; hence, data availability is the truly vital assumption.
+- #strong[Remark]: #emph[Without data, no progress is possible]: data
+  availability is the assumption that is truly essential.
 
-  
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:399 '* AI vs ML vs Deep Learning'
 // Slide: AI vs ML vs Deep Learning
 #strong[AI vs ML vs Deep Learning]
 
-::: columns
-:::: {.column width=65%}
+#grid(
+  columns: (65%, 30%),
+  gutter: 1em,
+  [
+    - #strong[Definition]:
+      - #strong[AI (Artificial Intelligence)]: Machines programmed to reason,
+        learn, and act in a rational way.
+      - #strong[ML (Machine Learning)]: Machines capable of performing tasks
+        without being explicitly programmed.
+      - #emph[AI models that are not ML] is possible. For example, handcrafted
+        rule-based systems, such as IBM Deep Blue playing chess, do not learn
+        from data but are still considered AI systems.
 
-// From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:404 '- @Definition@'
-// Slide: Definitions in AI, ML, and DL
-- #strong[Definition]:
-  - #strong[AI (Artificial Intelligence)]: Machines programmed to reason, learn, and act rationally.
-  - #strong[ML (Machine Learning)]: Machines capable of performing tasks without being explicitly programmed.
-  - It is feasible to have AI models that do not fall under the remit of ML.
-    - For example, handcrafted rule-based systems, such as IBM Deep Blue in chess, do not learn from data but are still classified as AI systems.
-
-:::: {.column width=30%}
-
-// From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:426 '```tikz % Define colors. ... ```'
-// Slide: Venn Diagram for AI, ML, and DL
-```tikz
-% Define colors.
-  \definecolor{AIcolor}{RGB}{244,166,166}    % Red/Pink
-  \definecolor{MLcolor}{RGB}{178,226,178}    % Green
-  \definecolor{DLcolor}{RGB}{160,214,209}    % Teal
-  \definecolor{LLMcolor}{RGB}{198,166,244}   % Purple
-
-  % Draw AI circle
-  \fill[AIcolor] (0,0) circle (3);
-  \draw (0,0) circle (3);
-  \node[above] at (0,2) {\textbf{AI}};
-
-  % Draw ML circle inside AI
-  \fill[MLcolor] (0.5,-0.5) circle (2);
-  \draw (0.5,-0.5) circle (2);
-  \node[above] at (0.5,0.5) {\textbf{ML}};
-
-  % Draw DL circle inside ML
-  \fill[DLcolor] (1,-1) circle (1);
-  \draw (1,-1) circle (1);
-  \node[above] at (1,-0.6) {\textbf{DL}};
-
-  % Draw LLM circle inside DL
-  \fill[LLMcolor] (1.2,-1.2) circle (0.6);
-  \draw (1.2,-1.2) circle (0.6);
-  \node[above] at (1.2,-1.4) {\textbf{LLMs}};
-```
-:::: 
-:::
-
+    - #strong[Definition]:
+      - #strong[DL (Deep Learning)]: A subset of ML that uses a particular type
+        of models, specifically neural networks with many layers.
+      - #strong[LLM (Large Language Models)]: Neural networks trained on massive
+        #emph[text] datasets to predict text, often further tuned with
+        reinforcement learning from human feedback (RLHF) #cite(
+          "ouyang2022instructgpt",
+        ).
+      - #emph[DL models that are not LLMs] are possible. For instance, a
+        convolutional neural network for vision or speech is a deep learning
+        system but not an LLM.
+  ],
+  [
+// rendered_images:begin
+//     ```tikz
+//     % Define colors.
+//       \definecolor{AIcolor}{RGB}{244,166,166}    % Red/Pink
+//       \definecolor{MLcolor}{RGB}{178,226,178}    % Green
+//       \definecolor{DLcolor}{RGB}{160,214,209}    % Teal
+//       \definecolor{LLMcolor}{RGB}{198,166,244}   % Purple
+// 
+//       % Draw AI circle
+//       \fill[AIcolor] (0,0) circle (3);
+//       \draw (0,0) circle (3);
+//       \node[above] at (0,2) {\textbf{AI}};
+// 
+//       % Draw ML circle inside AI
+//       \fill[MLcolor] (0.5,-0.5) circle (2);
+//       \draw (0.5,-0.5) circle (2);
+//       \node[above] at (0.5,0.5) {\textbf{ML}};
+// 
+//       % Draw DL circle inside ML
+//       \fill[DLcolor] (1,-1) circle (1);
+//       \draw (1,-1) circle (1);
+//       \node[above] at (1,-0.6) {\textbf{DL}};
+// 
+//       % Draw LLM circle inside DL
+//       \fill[LLMcolor] (1.2,-1.2) circle (0.6);
+//       \draw (1.2,-1.2) circle (0.6);
+//       \node[above] at (1.2,-1.4) {\textbf{LLMs}};
+//     ```
+// rendered_images:end
+// render_images:begin
+#figure(
+  image("Lesson01.2-AI_and_Machine_Learning.typ.figs/Lesson01.2-AI_and_Machine_Learning.2.png"),
+)
+// render_images:end
+  ],
+)
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:457 '* Limits of AI Compared to Human Intelligence (1/2)'
-// Slide: Limits of AI Compared to Human Intelligence
+// Slide: Limits of AI Compared to Human Intelligence (1/2)
 #strong[Limits of AI Compared to Human Intelligence (1/2)]
 
-- #strong[Problem]: AI and ML fundamentally differ from human intelligence.
-  - Machines do not learn in the same manner as humans (e.g., LLMs), leading to different limitations.
-  - It remains unclear if the human brain employs gradient descent.
-  - Reinforcement learning-like processes may exist within human cognition, in a specific sense.
+- #strong[Problem]: #strong[AI and ML differ from human intelligence]
+  - Machines do not learn in the same way humans do. For example, large language
+    models (LLMs) have distinct limitations compared to human learning
+    processes.
+  - It is unclear whether the human brain employs gradient descent as a learning
+    mechanism.
+  - The brain might use reinforcement learning, but this is likely only true in
+    a certain sense.
 
 - #strong[Limitations]:
-  - **Fragility to input variations**: 
-     - ML models are sensitive to minor input alterations; even slight distortions can lead to failures.
-     - Adversarial attacks can misclassify inputs by changing a single pixel [@su2019onepixel].
-     - Models trained on specific tasks, like video games, fail if screen conditions change even slightly, whereas humans adapt seamlessly.
-  - **Lack of transfer learning**:
-     - ML systems struggle to apply knowledge across different domains without retraining.
-  - **Massive data and computation requirements**:
-     - In comparison to humans who can learn to drive in mere hours, self-driving systems often demand billions of compute hours and extensive datasets.
-  - **Poor common sense and reasoning**:
-     - ML models typically lack inherent world knowledge and intuitive logic.
+  - #strong[Fragility to input variations]: Machine learning models often fail
+    when faced with slight input distortions. For instance, adversarial attacks
+    can cause misclassification by altering just one pixel #cite(
+      "su2019onepixel",
+    ). A model trained on a video game may fail if the screen rotates slightly,
+    whereas humans can adapt effortlessly.
+  - #strong[Lack of transfer learning]: Machine learning systems struggle to
+    apply knowledge across different domains without undergoing retraining.
+  - #strong[Massive data and compute requirements]: Machine learning requires
+    enormous datasets and computational resources. For example, while a teenager
+    can learn to drive in a matter of hours, self-driving systems demand
+    billions of compute hours and extensive data.
+  - #strong[Poor common sense and reasoning]: Machine learning lacks built-in
+    world knowledge and intuitive logic.
 
-  
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:480 '* Limits of AI Compared to Human Intelligence (2/2)'
-// Slide: Limits of AI Compared to Human Intelligence (2)
+// Slide: Limits of AI Compared to Human Intelligence (2/2)
 #strong[Limits of AI Compared to Human Intelligence (2/2)]
 
 - #strong[Limitations]:
-  - **Opaque decision-making**: 
-      - Many ML models provide little insight into their decision-making processes, which can hinder trust, interpretability, and accountability in vital applications.
-  - **Dependence on narrow objectives**: 
-      - While ML systems excel at optimizing specific tasks, they struggle with broader or ambiguous goals.
-      - For example, an algorithm focused on maximizing user engagement may inadvertently promote harmful content.
-  - **Susceptibility to bias and data quality**:
-      - ML models can inherit and magnify biases present in their training datasets.
-  - **Lack of embodiment and physical interaction**:
-      - Human cognition is deeply rooted in physical and sensory experiences.
+  - #strong[Opaque decision-making]: many machine learning models offer little
+    transparency into their decision-making processes. This lack of transparency
+    can limit trust, interpretability, and accountability, especially in
+    critical applications where understanding the rationale behind decisions is
+    essential.
+  - #strong[Dependence on narrow objectives]: machine learning systems excel at
+    optimizing for narrow, well-defined tasks but often struggle when faced with
+    ambiguous or broader goals. For example, an algorithm designed to maximize
+    user engagement might inadvertently promote harmful content, as it focuses
+    solely on increasing interaction without considering the broader
+    implications.
+  - #strong[Susceptibility to bias and data quality]: models can inherit and
+    even amplify biases present in their training data. This susceptibility can
+    lead to skewed or unfair outcomes, particularly if the data used for
+    training is not representative or is biased in some way.
+  - #strong[Lack of embodiment and physical interaction]: human cognition is
+    deeply grounded in physical and sensory experiences. Machine learning
+    models, lacking this embodiment, may struggle to replicate the nuanced
+    understanding that comes from interacting with the physical world.
 
-  
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:494 '* Key Takeaways'
 // Slide: Key Takeaways
 #strong[Key Takeaways]
 
-- The key idea: AI should concentrate on **agents acting rationally**, not merely on imitating human thought or behavior.
+- #strong[Key idea]: AI should focus on #strong[agents acting rationally],
+  rather than on mimicking human thought or behavior.
 
 - #strong[Definition]:
-  - **AI**: Machines programmed for reasoning, learning, and rational action.
-  - **ML**: A subset of AI that performs tasks without explicit programming.
-  - **DL**: A subset of ML that utilizes multi-layer neural networks.
-  - **LLM**: A specific subset of DL trained on vast text datasets to predict text, often refined using reinforcement learning from human feedback (RLHF).
+  - #strong[AI]: Machines programmed to reason, learn, and act rationally.
+  - #strong[ML]: A subset of AI that performs tasks without being explicitly
+    programmed.
+  - #strong[DL]: A subset of ML using multi-layer neural networks.
+  - #strong[LLM]: A subset of DL trained on massive text datasets to predict
+    text, often further tuned with RLHF.
 
-- #strong[Remark]: Despite the impressive capabilities of current ML and DL systems, they still fall short in areas such as fragility, transfer learning, data efficiency, and common-sense reasoning.
+- #strong[Remark]: Current ML/DL systems, despite their power, still fall short
+  of human intelligence in areas such as fragility, transfer learning, data
+  efficiency, and common-sense reasoning.
 
-  
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:510 '* References'
 // Slide: References
 #strong[References]
 
-```{=typst}
 #set text(size: 0.75em)
-#bibliography(
-  "/msml610/lectures_source/refs.bib",
-  style: "/helpers_root/dev_scripts_helpers/typst/umd-references.csl",
-  title: none,
-)
+#references("/msml610/lectures_source/refs.bib")

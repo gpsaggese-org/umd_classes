@@ -48,15 +48,15 @@ import logging
 import os
 import re
 import shutil
-from typing import Tuple
+from typing import Dict, List, Optional, Tuple
 
 import class_scripts.common_utils as csccouti
 import dev_scripts_helpers.documentation.preprocess_notes as dshdprno
 import dev_scripts_helpers.dockerize.lib_typst as dshdlity
-import helpers.hcache_simple as hcacsimp
 import helpers.hdbg as hdbg
 import helpers.hgit as hgit
 import helpers.hio as hio
+import helpers.hmarkdown_slide_iterator as hmaslite
 import helpers.hparser as hparser
 import helpers.hprint as hprint
 import helpers.hsystem as hsystem
@@ -99,6 +99,14 @@ _MODE_TO_PROMPT_FILE = {
     "md": os.path.join(_SCRIPT_DIR, "prompt.generate_md_book_chapter.md"),
 }
 
+# Per-slide prompt file used only by the `typst_aima` per-slide generation
+# path (see "Per-slide Typst generation" below): narrower than
+# `prompt.generate_typst_book_chapter.md` since headings, columns, and
+# figures are handled deterministically in Python and never reach the LLM.
+_TYPST_SLIDE_PROMPT_FILE = os.path.join(
+    _SCRIPT_DIR, "prompt.generate_typst_book_chapter_slide.md"
+)
+
 
 def _get_system_prompt(mode: str) -> str:
     """
@@ -112,6 +120,19 @@ def _get_system_prompt(mode: str) -> str:
     common_prompt = hio.from_file(_COMMON_PROMPT_FILE)
     mode_prompt = hio.from_file(_MODE_TO_PROMPT_FILE[mode])
     system_prompt = f"{common_prompt}\n\n{mode_prompt}"
+    return system_prompt
+
+
+def _get_system_prompt_slide() -> str:
+    """
+    Build the system prompt used by the `typst_aima` per-slide generation
+    path (see "Per-slide Typst generation" below).
+
+    :return: combined system prompt
+    """
+    common_prompt = hio.from_file(_COMMON_PROMPT_FILE)
+    slide_prompt = hio.from_file(_TYPST_SLIDE_PROMPT_FILE)
+    system_prompt = f"{common_prompt}\n\n{slide_prompt}"
     return system_prompt
 
 
@@ -203,8 +224,6 @@ def _build_user_prompt(
 # #############################################################################
 
 
-# TODO(ai_gp): add the cache to csccouti.call_llm and call that directly.
-@hcacsimp.simple_cache(cache_type="json")
 def _call_llm(
     user_prompt: str, system_prompt: str, model: str, llm_backend: str
 ) -> str:
@@ -218,7 +237,7 @@ def _call_llm(
     :return: generated chapter text
     """
     hdbg.dassert_in(llm_backend, _LLM_BACKENDS)
-    return csccouti.call_llm(user_prompt, system_prompt, model, llm_backend)
+    return csccouti.call_llm_cached(user_prompt, system_prompt, model, llm_backend)
 
 
 # #############################################################################
@@ -276,6 +295,449 @@ def _insert_provenance_tag(text: str, mode: str) -> str:
 
 
 # #############################################################################
+# Per-slide Typst generation
+# #############################################################################
+
+# Only `typst_aima` uses this path (see the `--mode` choice in `_parse()`).
+# It follows the same approach as `gen_lecture_commentary.py`: structure
+# (headings, `::: columns` layout, figures/diagrams/tables) is emitted
+# deterministically by Python, and the LLM is called once per slide (or
+# once per column panel, for a two-column slide), only to convert that
+# slide's *prose* into Typst body markup. This keeps each LLM call small
+# and focused, instead of asking one call to transform an entire
+# multi-hundred-line lecture (and every construct in it) at once, which is
+# what left artifacts like stray `::: columns` markers and `@Tag@` labels
+# in the whole-document path (`_generate_book_chapter()` below, still used
+# by `springer_latex` and `md`).
+
+# Matches a `::: columns` / `:::: {.column width=X%}` ... `::::` / `:::`
+# pandoc fenced-div layout (see "Use Lists"/columns in the `.smd` source
+# convention). Column width is captured so `_wrap_columns()` can rebuild a
+# Typst `#grid(columns: (...))` with the same proportions.
+_COLUMNS_OPEN_RE = re.compile(r"^:::\s*columns\s*$")
+_COLUMN_PANEL_OPEN_RE = re.compile(r"^::::\s*\{\.column\s+width=(\d+)%\}\s*$")
+_COLUMN_PANEL_CLOSE_RE = re.compile(r"^::::\s*$")
+_COLUMNS_CLOSE_RE = re.compile(r"^:::\s*$")
+
+# A raw diagram-source code fence: rendered by `render_images.py` into a
+# PNG (see `render_typst.sh`), never by the LLM.
+_DIAGRAM_FENCE_RE = re.compile(
+    r"```(graphviz|mermaid|tikz)\n(.*?)\n```", re.DOTALL
+)
+# A pandoc `{=typst}` raw block (e.g. a `#styled-table(...)`/`#references(...)`
+# call already written in native Typst in the `.smd` source): valid only
+# when spliced in unwrapped, since a Typst document (unlike a Pandoc
+# markdown-to-Typst conversion) never executes a `{=typst}` fence.
+_TYPST_RAW_FENCE_RE = re.compile(r"```\{=typst\}\n(.*?)\n```", re.DOTALL)
+# A bare Markdown image, optionally followed (after a blank line) by an
+# italicized caption line, e.g. `\footnotesize _Caption text_` or
+# `_Caption text_`.
+_IMAGE_RE = re.compile(
+    r"!\[(?P<alt>[^\]]*)\]\((?P<path>[^)]+)\)(?P<attrs>\{[^}]*\})?"
+    r"(?:\n\n?(?:\\footnotesize\s+)?_(?P<caption>[^_]+)_)?"
+)
+# Strips a leading course/lesson prefix off a figure basename, e.g.
+# "L01.2.Richard_Feynman" -> "Richard_Feynman".
+_FIGURE_PREFIX_RE = re.compile(r"^L\d+(?:\.\d+)*\.")
+# A Pandoc inline raw-Typst span, e.g. `` `#cite("key")`{=typst} `` ->
+# `#cite("key")`. This is Pandoc's markdown convention for embedding a
+# literal Typst call inline in prose (so slides, which go through Pandoc,
+# render it); a native `.typ` file has no such convention and would
+# otherwise show the backticks and `{=typst}` suffix as literal text.
+_INLINE_TYPST_RAW_RE = re.compile(r"`([^`]+)`\{=typst\}")
+
+
+def _split_column_panels(body: str) -> List[Tuple[Optional[str], str]]:
+    """
+    Split a slide body into its column panels.
+
+    :param body: raw slide body text (everything after the `* Title`
+        line), possibly wrapped in a `::: columns` div
+    :return: list of (width_percent, panel_content) tuples; `width_percent`
+        is `None` and there is a single element if `body` has no `:::
+        columns` wrapper
+    """
+    lines = body.splitlines()
+    if not any(_COLUMNS_OPEN_RE.match(l.strip()) for l in lines):
+        return [(None, body)]
+    panels: List[Tuple[str, str]] = []
+    in_columns = False
+    cur_width: Optional[str] = None
+    cur_lines: List[str] = []
+    for line in lines:
+        stripped = line.strip()
+        if not in_columns:
+            if _COLUMNS_OPEN_RE.match(stripped):
+                in_columns = True
+            continue
+        panel_open = _COLUMN_PANEL_OPEN_RE.match(stripped)
+        if panel_open:
+            if cur_width is not None:
+                panels.append((cur_width, "\n".join(cur_lines).strip("\n")))
+            cur_width = panel_open.group(1)
+            cur_lines = []
+            continue
+        if _COLUMN_PANEL_CLOSE_RE.match(stripped):
+            if cur_width is not None:
+                panels.append((cur_width, "\n".join(cur_lines).strip("\n")))
+                cur_width = None
+                cur_lines = []
+            continue
+        if _COLUMNS_CLOSE_RE.match(stripped):
+            in_columns = False
+            continue
+        cur_lines.append(line)
+    hdbg.dassert_lt(0, len(panels), "No column panels found in: %s", body)
+    return panels  # type: ignore[return-value]
+
+
+def _slugify_figure_name(path: str) -> str:
+    """
+    Turn an image path into a Typst label slug, e.g.
+    ".../L01.2.Richard_Feynman.jpg" -> "richardfeynman".
+
+    :param path: image path from the `.smd` source
+    :return: lowercase alphanumeric label slug
+    """
+    base = os.path.splitext(os.path.basename(path))[0]
+    base = _FIGURE_PREFIX_RE.sub("", base)
+    slug = re.sub(r"[^a-zA-Z0-9]", "", base).lower()
+    return slug
+
+
+def _humanize_figure_name(path: str) -> str:
+    """
+    Derive a fallback caption from an image's filename, e.g.
+    ".../L01.2.Richard_Feynman.jpg" -> "Richard Feynman".
+
+    :param path: image path from the `.smd` source
+    :return: human-readable caption derived from the filename
+    """
+    base = os.path.splitext(os.path.basename(path))[0]
+    base = _FIGURE_PREFIX_RE.sub("", base)
+    return base.replace("_", " ")
+
+
+def _render_image_placeholder(match: "re.Match[str]", output_dir: str) -> str:
+    """
+    Deterministically render a Markdown image match (see `_IMAGE_RE`) as a
+    Typst `#figure(...)` call.
+
+    :param match: `_IMAGE_RE` match
+    :param output_dir: directory the chapter file is written to (image
+        paths are resolved relative to it)
+    :return: Typst `#figure(...)` snippet
+    """
+    path = match.group("path")
+    caption = match.group("caption")
+    if not caption:
+        caption = _humanize_figure_name(path)
+    else:
+        caption = caption.strip()
+    label = _slugify_figure_name(path)
+    rel_path = os.path.relpath(path, start=output_dir)
+    lines = [
+        "#figure(",
+        f'  image("{rel_path}", width: 80%),',
+        f"  caption: [{caption}],",
+        '  kind: "figure",',
+        "  supplement: [Fig.],",
+        "  placement: auto,",
+        f") <fig:{label}>",
+    ]
+    return "\n".join(lines)
+
+
+def _render_diagram_placeholder(lang: str, code: str) -> str:
+    """
+    Pass a diagram-source fence (see `_DIAGRAM_FENCE_RE`) through
+    unchanged, as a bare (uncommented) fence.
+
+    `render_images.py` (run as a separate step by `render_typst.sh`,
+    *after* this script) is the one that comments the code out, renders
+    it, assigns it its sequential figure number, and inserts the
+    `#figure(image(...))` call — it expects to find the fence exactly as
+    written in the `.smd` source, not pre-commented or pre-numbered: doing
+    either here would just make `render_images.py` comment it out a second
+    time and never render it.
+
+    :param lang: fence language (`graphviz`, `mermaid`, or `tikz`)
+    :param code: diagram source code
+    :return: the unchanged fence
+    """
+    return f"```{lang}\n{code.strip(chr(10))}\n```"
+
+
+def _process_panel_body(
+    body: str,
+    *,
+    output_dir: str,
+    system_prompt: str,
+    model: str,
+    llm_backend: str,
+) -> str:
+    """
+    Convert one column panel's raw `.smd` body into Typst.
+
+    Figures, diagrams, and `{=typst}` raw blocks are pulled out into
+    `@@FIGURE_N@@` placeholder tokens and rendered deterministically (see
+    `prompt.generate_typst_book_chapter_slide.md` for the placeholder
+    contract); only the remaining prose, if any, is sent to the LLM. A
+    panel that is nothing but a figure/table skips the LLM call entirely.
+
+    :param body: raw panel body text
+    :param output_dir: directory the chapter file is written to
+    :param system_prompt: system prompt for the LLM (slide-body prompt)
+    :param model: LLM model to use, or "" to use the backend's default
+    :param llm_backend: which LLM backend to use, one of `_LLM_BACKENDS`
+    :return: Typst snippet for this panel
+    """
+    placeholders: Dict[str, str] = {}
+    token_idx = [0]
+
+    def _next_token() -> str:
+        token_idx[0] += 1
+        return f"@@FIGURE_{token_idx[0]}@@"
+
+    def _repl_diagram(m: "re.Match[str]") -> str:
+        token = _next_token()
+        placeholders[token] = _render_diagram_placeholder(m.group(1), m.group(2))
+        return token
+
+    def _repl_typst_raw(m: "re.Match[str]") -> str:
+        token = _next_token()
+        placeholders[token] = m.group(1).strip("\n")
+        return token
+
+    def _repl_image(m: "re.Match[str]") -> str:
+        token = _next_token()
+        placeholders[token] = _render_image_placeholder(m, output_dir)
+        return token
+
+    body = _DIAGRAM_FENCE_RE.sub(_repl_diagram, body)
+    body = _TYPST_RAW_FENCE_RE.sub(_repl_typst_raw, body)
+    body = _IMAGE_RE.sub(_repl_image, body)
+    remaining = body
+    for token in placeholders:
+        remaining = remaining.replace(token, "")
+    if remaining.strip():
+        raw_text = csccouti.call_llm_cached(
+            body, system_prompt, model, llm_backend
+        )
+        text = _strip_code_fence(raw_text)
+    else:
+        # The panel is nothing but a figure/table: no prose to convert, so
+        # skip the LLM call entirely.
+        text = body
+    for token, replacement in placeholders.items():
+        text = text.replace(token, replacement)
+    return text
+
+
+def _wrap_columns(panel_texts: List[str], widths: List[str]) -> str:
+    """
+    Wrap converted column panels in a Typst `#grid(...)` with the same
+    proportions as the source `::: columns` div.
+
+    :param panel_texts: converted Typst snippet for each panel, in order
+    :param widths: width percentage for each panel (e.g., "65"), in order
+    :return: a `#grid(...)` snippet, or `panel_texts[0]` unchanged if there
+        is only one panel
+    """
+    if len(panel_texts) == 1:
+        return panel_texts[0]
+    hdbg.dassert_eq(len(panel_texts), len(widths))
+    col_defs = ", ".join(f"{w}%" for w in widths)
+    lines = ["#grid(", f"  columns: ({col_defs}),", "  gutter: 1em,"]
+    for text in panel_texts:
+        indented = "\n".join(f"  {l}" if l else "" for l in text.splitlines())
+        lines.append(f"  [\n{indented}\n  ],")
+    lines.append(")")
+    return "\n".join(lines)
+
+
+def _generate_typst_slide(
+    slide_lines: List[str],
+    *,
+    output_dir: str,
+    system_prompt: str,
+    model: str,
+    llm_backend: str,
+    source_file: str,
+    line_number: int,
+) -> str:
+    """
+    Convert one `* Slide Title` block (with its body, and optional
+    `::: columns` layout) into Typst.
+
+    :param slide_lines: lines of the slide, starting with `* Title`
+    :param output_dir: directory the chapter file is written to
+    :param system_prompt: system prompt for the LLM (slide-body prompt)
+    :param model: LLM model to use, or "" to use the backend's default
+    :param llm_backend: which LLM backend to use, one of `_LLM_BACKENDS`
+    :param source_file: path to the `.smd` source, for the `// From:`
+        provenance comment
+    :param line_number: 1-based line number of the `* Title` line
+    :return: Typst snippet for this slide
+    """
+    title = slide_lines[0][1:].strip()
+    body = "\n".join(slide_lines[1:])
+    panels = _split_column_panels(body)
+    panel_texts = []
+    widths: List[str] = []
+    for width, content in panels:
+        panel_texts.append(
+            _process_panel_body(
+                content,
+                output_dir=output_dir,
+                system_prompt=system_prompt,
+                model=model,
+                llm_backend=llm_backend,
+            )
+        )
+        if width is not None:
+            widths.append(width)
+    body_out = _wrap_columns(panel_texts, widths) if widths else panel_texts[0]
+    parts = [
+        f"// From: {source_file}:{line_number} '{slide_lines[0]}'",
+        f"// Slide: {title}",
+        f"#strong[{title}]",
+        "",
+        body_out,
+    ]
+    return "\n".join(parts)
+
+
+def _generate_typst_header(level: int, title: str, source_file: str, line_number: int) -> str:
+    """
+    Convert one `#`/`##`/`###`-prefixed heading line into Typst.
+
+    A level-1 heading becomes a bold paragraph, not a `==` section: the
+    chapter-level `#chapter(...)` call (using the lesson's metadata title,
+    which is normally the same topic worded differently) has already been
+    emitted once, at the top of the document, so a level-1 heading in the
+    body is redundant with it rather than introducing a new chapter.
+
+    :param level: heading level (1 for `#`, 2 for `##`, etc.)
+    :param title: heading text, without the leading `#`s
+    :param source_file: path to the `.smd` source, for the `// From:`
+        provenance comment
+    :param line_number: 1-based line number of the heading line
+    :return: Typst snippet for this heading
+    """
+    marker = "#" * level
+    heading = f"#strong[{title}]" if level == 1 else f"{'=' * level} {title}"
+    parts = [
+        f"// From: {source_file}:{line_number} '{marker} {title}'",
+        f"// Slide: {title}",
+        heading,
+    ]
+    return "\n".join(parts)
+
+
+def _build_typst_document_header(
+    course_title: str, chapter_title: str, chapter_num: str
+) -> str:
+    """
+    Build the fixed Typst document boilerplate: imports, metadata, and the
+    single `#chapter(...)` call.
+
+    :param course_title: course title (e.g., "MSML610: Advanced Machine
+        Learning")
+    :param chapter_title: chapter title (e.g., "L01.2: AI and Machine
+        Learning")
+    :param chapter_num: chapter number (e.g., "1")
+    :return: Typst document header
+    """
+    lines = [
+        "// Import AIMA style formatting and macros.",
+        '#import "../../helpers_root/dev_scripts_helpers/typst/'
+        'aima_style.typ": (',
+        "  aima-style, algorithm, chapter, glossary, styled-table,",
+        ")",
+        "// Import the custom citation/bibliography system.",
+        '#import "/helpers_root/dev_scripts_helpers/typst/'
+        'umd_references.typ": cite, references',
+        "",
+        "// Document metadata",
+        "#set document(",
+        f'  title: "{chapter_title}",',
+        f'  author: "{course_title}",',
+        ")",
+        "",
+        "// Apply the AIMA document template (page/text/heading set + show rules).",
+        "#show: aima-style",
+        "",
+        f'#chapter({chapter_num}, "{chapter_title}")',
+    ]
+    return "\n".join(lines)
+
+
+def _generate_typst_chapter_per_slide(
+    input_file: str,
+    output_file: str,
+    model: str,
+    llm_backend: str,
+    lesson: str,
+    course_title: str,
+    chapter_title: str,
+) -> None:
+    """
+    Generate a `typst_aima` book chapter one slide (or column panel) at a
+    time and write it to disk (see "Per-slide Typst generation" above).
+
+    :param input_file: path to the input markdown slides file
+    :param output_file: path to write the generated `.typ` chapter to
+    :param model: LLM model to use, or "" to use the backend's default
+    :param llm_backend: which LLM backend to use, one of `_LLM_BACKENDS`
+    :param lesson: lesson number (e.g., "10.2"), used to derive the Typst
+        chapter number
+    :param course_title: course title, used in the document metadata
+    :param chapter_title: chapter title, used in `#chapter(...)` and the
+        document metadata
+    """
+    hdbg.dassert_file_exists(input_file)
+    content = _INLINE_TYPST_RAW_RE.sub(r"\1", hio.from_file(input_file))
+    lines = content.splitlines()
+    items = list(hmaslite.iterate_slide_lines(lines))
+    system_prompt = _get_system_prompt_slide()
+    output_dir = os.path.dirname(output_file) or "."
+    chapter_num = lesson.split(".")[0]
+    parts = [
+        _build_typst_document_header(course_title, chapter_title, chapter_num)
+    ]
+    for item in items:
+        if item["type"] == "header":
+            first_line = item["content"][0]
+            level = len(first_line) - len(first_line.lstrip("#"))
+            title = first_line.lstrip("#").strip()
+            parts.append(
+                _generate_typst_header(
+                    level, title, input_file, item["line_number"]
+                )
+            )
+        elif item["type"] == "slide":
+            parts.append(
+                _generate_typst_slide(
+                    item["content"],
+                    output_dir=output_dir,
+                    system_prompt=system_prompt,
+                    model=model,
+                    llm_backend=llm_backend,
+                    source_file=input_file,
+                    line_number=item["line_number"],
+                )
+            )
+        # "comment"/"preamble" items are metadata/frontmatter, already
+        # captured by `_extract_course_and_title()`, and not part of the
+        # chapter body.
+    text = "\n\n".join(parts)
+    text = _insert_provenance_tag(text, "typst_aima")
+    hio.to_file(output_file, text)
+    _LOG.info("Wrote book chapter to: %s", output_file)
+
+
+# #############################################################################
 # Book chapter generation
 # #############################################################################
 
@@ -303,6 +765,19 @@ def _generate_book_chapter(
     hdbg.dassert_in(mode, _MODE_TO_EXTENSION)
     content = hio.from_file(input_file)
     course_title, chapter_title = _extract_course_and_title(input_file, content)
+    if mode == "typst_aima":
+        # Per-slide generation path (see "Per-slide Typst generation"
+        # above): structure is deterministic, the LLM only converts prose.
+        _generate_typst_chapter_per_slide(
+            input_file,
+            output_file,
+            model,
+            llm_backend,
+            lesson,
+            course_title,
+            chapter_title,
+        )
+        return
     system_prompt = _get_system_prompt(mode)
     user_prompt = _build_user_prompt(
         input_file, content, mode, course_title, chapter_title, lesson

@@ -92,7 +92,7 @@ mindmap
       - First-order logic includes objects and relations (Frege, 1879)
     - _Limits to deduction_: some statements are _"undecidable"_
       - Incompleteness theorem: in any formal theory, true statements exist
-        that cannot be proved (Godel, 1931) [@godel1931incompleteness]
+        that cannot be proved (Godel, 1931) `#cite("godel1931incompleteness")`{=typst}
 
 - @Question@: how do we reason with uncertain information?
   - @Comparison@:
@@ -124,7 +124,7 @@ mindmap
       - E.g., algorithm for computing GCD (Euclid, 300 BCE)
     - _Limits to computation_: some functions are non-computable
       - Turing machine (1936): computes any computable function
-        [@turing1936computable]
+        `#cite("turing1936computable")`{=typst}
       - E.g., the halting problem, i.e., decide if a program terminates
     - _Tractability_: complexity classes: polynomial vs exponential
       complexity
@@ -158,10 +158,10 @@ mindmap
   actions?
   - @Comparison@:
     - _Operations research_: make rational decisions with payoffs for a
-      sequence of actions (Bellman, 1957) [@bellman1957dp]
+      sequence of actions (Bellman, 1957) `#cite("bellman1957dp")`{=typst}
       - E.g., Markov Decision Processes
     - _Satisficing_: decisions that are good enough
-      - Closer to human behavior [@simon1956satisficing]
+      - Closer to human behavior `#cite("simon1956satisficing")`{=typst}
       - E.g., choosing a restaurant that meets basic criteria rather than
         finding the perfect one
 
@@ -211,7 +211,7 @@ digraph DecisionTheory {
     - _Small economies_: one player's actions influence others' utility
       - E.g., local market where one seller's pricing affects competitors
     - _Game theory_: small economies resemble a _"game"_ (von Neumann and
-      Morgenstern, 1944) [@vonneumann1944gametheory]
+      Morgenstern, 1944) `#cite("vonneumann1944gametheory")`{=typst}
       - Rational agents might need randomized strategies
       - E.g., rock-paper-scissors where randomization prevents
         predictability
@@ -276,7 +276,7 @@ digraph DecisionTheory {
   surpasses human intelligence
   - AI improves autonomously, leading to rapid growth
   - Recursive self-improvement leads to superintelligence
-    [@good1965ultraintelligent]
+    `#cite("good1965ultraintelligent")`{=typst}
   - Potential societal impact: the control problem/value alignment
     (ensuring AI aligns with human values) and economic/social disruption
     from automation
@@ -387,7 +387,7 @@ digraph CognitivePsychology {
   - @Definition@: **electronic computers** were built during World War II
 
   - @Definition@: **Moore's Law**: performance doubled every 18 months
-    (1970-2005) [@moore1965cramming]
+    (1970-2005) `#cite("moore1965cramming")`{=typst}
     - Power and scaling issues shifted focus to multi-core over clock speed
 
 ::::
@@ -421,7 +421,7 @@ digraph CognitivePsychology {
 
   - @Definition@: **quantum computing** has the potential for significant
     acceleration in key computations
-    - E.g., Shor's algorithm for factorization [@shor1997factoring]
+    - E.g., Shor's algorithm for factorization `#cite("shor1997factoring")`{=typst}
 
 ::::
 :::: {.column width=40%}
@@ -438,7 +438,7 @@ digraph CognitivePsychology {
     control systems
     - E.g., a water regulator that maintains a constant water flow
     - Mechanisms to minimize error between current and goal states
-    - Kalman Filter (Kalman, 1960) [@kalman1960filtering]
+    - Kalman Filter (Kalman, 1960) `#cite("kalman1960filtering")`{=typst}
     - Based on calculus, matrix, stochastic optimal control
     - AI: logical inference, symbolic planning, computation
 
@@ -554,9 +554,5 @@ digraph Linguistics {
 
 ```{=typst}
 #set text(size: 0.75em)
-#bibliography(
-  "/msml610/lectures_source/refs.bib",
-  style: "/helpers_root/dev_scripts_helpers/typst/umd-references.csl",
-  title: none,
-)
+#references("/msml610/lectures_source/refs.bib")
 ```

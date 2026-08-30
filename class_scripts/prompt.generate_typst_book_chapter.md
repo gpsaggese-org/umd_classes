@@ -18,6 +18,8 @@ Copied and adapted from
 ```typst
 // Import AIMA style formatting and macros.
 #import "aima_style.typ": aima-style, chapter, algorithm, glossary
+// Import the custom citation/bibliography system.
+#import "/helpers_root/dev_scripts_helpers/typst/umd_references.typ": cite, references
 
 // Document metadata
 #set document(
@@ -131,17 +133,21 @@ Copied and adapted from
 
 ## Bibliography
 
-- A `References` section's `#bibliography(...)` call must always pass the
-  shared UMD citation style, so entries render as `Year, Author et al.,
-  "Title" (Link)` with no page numbers (see `.claude/references.rules.md`):
+- Never use Typst's native `#bibliography(...)`/`[@key]` citation syntax --
+  it cannot render a custom link label (only the raw URL/DOI text itself
+  can be hyperlinked). Use the shared `umd_references.typ` module instead,
+  which renders inline citations as superscript bracketed numbers (`[10]`)
+  and reference-list entries as `Author et al., "Title", Venue, Year. link`
+  (see `.claude/references.rules.md`)
+  (already imported by the document template above)
+- Cite inline with `#cite("<bib-key>")` (not `[@<bib-key>]`):
   ```typst
-  #bibliography(
-    "/msml610/lectures_source/refs.bib",
-    style: "/helpers_root/dev_scripts_helpers/typst/umd-references.csl",
-    title: none,
-  )
+  The Turing test #cite("turing1950computing") remains influential.
   ```
-- Never call `#bibliography(...)` without the `style:` argument
+- End the `References` section with:
+  ```typst
+  #references("/msml610/lectures_source/refs.bib")
+  ```
 
 ## Typst Syntax Requirements
 
@@ -154,10 +160,12 @@ Copied and adapted from
   character; those blocks are not Typst and must not contain `#strong[`,
   `#emph[`, or other Typst markup
 - If the source slide markdown wraps native Typst calls in a pandoc raw
-  block (` ```{=typst} ... ``` `), do NOT copy that fence into the `.typ`
-  output — the output document is already native Typst, so a
-  ` ```{=typst} ` fence is not executed there, it is shown as inert literal
-  text. Strip the fence markers and emit the enclosed Typst code directly
+  block (` ```{=typst} ... ``` `) or an inline raw span (`` `code`{=typst} ``,
+  used for a Typst call like `#cite(...)` sitting mid-sentence), do NOT
+  copy that fence/span into the `.typ` output — the output document is
+  already native Typst, so this pandoc-only wrapping is not executed
+  there, it is shown as inert literal text. Strip the fence markers or
+  the backticks + `{=typst}` and emit the enclosed Typst code directly
 - Never leave semantic tags such as `@Definition@`, `@Question@`,
   `@Example@` verbatim in a `.typ` file — `@word` is Typst
   label-reference syntax there, so it is a compile error, not just a style

@@ -198,10 +198,7 @@ short of human intelligence in areas like fragility, transfer learning, data
 efficiency, and common-sense reasoning
 
 ```{=typst}
+#import "/helpers_root/dev_scripts_helpers/typst/umd_references.typ": cite, references
 #set text(size: 0.75em)
-#bibliography(
-  "/msml610/lectures_source/refs.bib",
-  style: "/helpers_root/dev_scripts_helpers/typst/umd-references.csl",
-  title: none,
-)
+#references("/msml610/lectures_source/refs.bib")
 ```

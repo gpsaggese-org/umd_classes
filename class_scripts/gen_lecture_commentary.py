@@ -73,7 +73,6 @@ from PIL import ImageOps
 import class_scripts.common_utils as csccouti
 import class_scripts.slides_utils as cscsluti
 import dev_scripts_helpers.dockerize.lib_prettier as dshdlipr
-import helpers.hcache_simple as hcacsimp
 import helpers.hdbg as hdbg
 import helpers.hgit as hgit
 import helpers.hio as hio
@@ -239,7 +238,6 @@ _DEFAULT_SYSTEM_PROMPT = hio.from_file(_SYSTEM_PROMPT_FILE)
 _LLM_BACKENDS = csccouti.LLM_BACKENDS
 
 
-@hcacsimp.simple_cache(cache_type="json")
 def _generate_slide_commentary(
     slide_content: str,
     system_prompt: str,
@@ -266,8 +264,9 @@ def _generate_slide_commentary(
         [slide_content]
     )
     user_prompt = processed_slides[0]
-    # Get completion from LLM.
-    return csccouti.call_llm(
+    # Get completion from LLM, cached on disk since re-running this script
+    # incrementally should not re-pay for an unchanged slide.
+    return csccouti.call_llm_cached(
         user_prompt,
         system_prompt,
         model,

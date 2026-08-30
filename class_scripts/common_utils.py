@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Dict, Optional, Tuple
 
 import dev_scripts_helpers.documentation.preprocess_notes as dshdprno
+import helpers.hcache_simple as hcacsimp
 import helpers.hdbg as hdbg
 import helpers.hgit as hgit
 import helpers.hio as hio
@@ -353,6 +354,38 @@ def call_llm(
             backend="library",
         )
     return str(response)
+
+
+@hcacsimp.simple_cache(cache_type="json")
+def call_llm_cached(
+    user_prompt: str,
+    system_prompt: str,
+    model: str,
+    llm_backend: str,
+    *,
+    images_as_base64: Tuple[str, ...] = (),
+) -> str:
+    """
+    Like `call_llm()`, but cache the completion on disk keyed by its
+    arguments, so re-running a script for the same input (e.g., an
+    incremental / per-unit generation loop) does not re-pay for an
+    unchanged LLM call.
+
+    :param user_prompt: user message
+    :param system_prompt: system prompt (style guide / instructions)
+    :param model: LLM model to use, or "" to use the backend's default
+    :param llm_backend: which backend to use, one of `LLM_BACKENDS`
+    :param images_as_base64: images to pass as multi-modal context (only
+        supported by the "hllm" backend; ignored by "hllm_cli")
+    :return: generated text
+    """
+    return call_llm(
+        user_prompt,
+        system_prompt,
+        model,
+        llm_backend,
+        images_as_base64=images_as_base64,
+    )
 
 
 # Map a file extension (without the leading dot) to the character(s) that

@@ -36,7 +36,7 @@
 :::: {.column width=80%}
 
 - @Definition@: The term _"Artificial Intelligence"_ was coined in 1956
-  [@mccarthy1955dartmouth]
+  `#cite("mccarthy1955dartmouth")`{=typst}
 
 - @Goal@
   - Understand human intelligence
@@ -48,7 +48,7 @@
   - Impact exceeds any past historical event
   - Generates hundreds of billions of dollars annually in market revenue,
     with trillions in global economic impact projected by 2030
-    [@bughin2018aifrontier]
+    `#cite("bughin2018aifrontier")`{=typst}
   - Has many unresolved problems, unlike disciplines with settled core
     theories (e.g., arithmetic, Newtonian mechanics within its domain)
 
@@ -66,7 +66,7 @@
 ::: columns
 :::: {.column width=65%}
 
-- @Definition@: AI is characterized along **two key axes** [@russell2020aima]
+- @Definition@: AI is characterized along **two key axes** `#cite("russell2020aima")`{=typst}
   - Thinking vs. Acting
   - Human vs. Rational (ideal performance)
 
@@ -196,7 +196,7 @@ digraph laws_of_thought {
 
 - @Goal@: AI designs **agents that can act like humans**
 
-- @Techniques@: **Turing test** [@turing1950computing]
+- @Techniques@: **Turing test** `#cite("turing1950computing")`{=typst}
   - _"A computer passes the Turing test if a human cannot tell whether the
     answers to questions came from a person or a computer"_
 
@@ -334,7 +334,7 @@ digraph laws_of_thought {
     - Real-time demands (e.g., decide within 1 micro-sec in HFT)
 
 - @Solution@: **"Satisficing"**: Achieve _good enough_ instead of _perfect_
-  [@simon1956satisficing]
+  `#cite("simon1956satisficing")`{=typst}
   - Acting appropriately given constraints
 
 ## What Is Machine Learning?
@@ -348,14 +348,14 @@ digraph laws_of_thought {
 
 - @Definition@
   - _"Machine learning is the field of study that gives computers the ability to
-    learn without being explicitly programmed"_ (Samuel, 1959) [@samuel1959checkers]
+    learn without being explicitly programmed"_ (Samuel, 1959) `#cite("samuel1959checkers")`{=typst}
   - Machine learning builds machines to do _useful things_ without being _explicitly
     programmed_
     - E.g., a computer learns checkers by playing against itself, memorizing
       winning positions
   - More formally: _"A computer program is said to learn from experience $E$ with
     respect to some task $T$ and some performance measure $P$, if $P(T)$ improves
-    with experience $E$"_ (Mitchell, 1997) [@mitchell1997machinelearning]
+    with experience $E$"_ (Mitchell, 1997) `#cite("mitchell1997machinelearning")`{=typst}
 
 - @Applications@: Common ML examples include
   - Computer vision
@@ -379,7 +379,7 @@ digraph laws_of_thought {
   - Evaluating the model
   - Deploying and monitoring the model
 
-- @Problem@ (Abu-Mostafa, 2012) [@abumostafa2012learning]
+- @Problem@ (Abu-Mostafa, 2012) `#cite("abumostafa2012learning")`{=typst}
   - Most of the phases are "engineering", but _building the model_ is the "research"
     part
   - The **three core assumptions** of machine learning are:
@@ -415,7 +415,7 @@ digraph laws_of_thought {
     network with many layers
   - **LLM (Large Language Models)**: Neural networks trained on massive _text_
     datasets to predict text, often further tuned with reinforcement learning
-    from human feedback (RLHF) [@ouyang2022instructgpt]
+    from human feedback (RLHF) `#cite("ouyang2022instructgpt")`{=typst}
   - _DL models that are not LLMs_ are possible
     - E.g., a convolutional neural network for vision or speech is a deep
       learning system but not an LLM
@@ -465,7 +465,7 @@ digraph laws_of_thought {
   - **Fragility to input variations**
     - ML models fail with slight input distortions
     - Adversarial attacks cause misclassification by altering one pixel
-      [@su2019onepixel]
+      `#cite("su2019onepixel")`{=typst}
     - A model trained on a video game fails if the screen rotates slightly; humans
       continue effortlessly
   - **Lack of transfer learning**
@@ -511,9 +511,5 @@ digraph laws_of_thought {
 
 ```{=typst}
 #set text(size: 0.75em)
-#bibliography(
-  "/msml610/lectures_source/refs.bib",
-  style: "/helpers_root/dev_scripts_helpers/typst/umd-references.csl",
-  title: none,
-)
+#references("/msml610/lectures_source/refs.bib")
 ```
