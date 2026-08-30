@@ -77,24 +77,26 @@ Lesson13.1-Explainability.smd
 
 # Workflow in short
 
-/slides.lint
-/slides.criticize
-/slides.add_visuals/SKILL.md
-/slides.fix_errors/SKILL.md
-/slides.fix_formatting/SKILL.md
-/slides.reduce_text/SKILL.md
-/slides.reorganize/SKILL.md
-/slides.review/SKILL.md
-/slides.add_references/SKILL.md
-/slides.add_tutorial_links/SKILL.md
+/slides.lint          01.2   01.3
+/slides.review        01.2
+/slides.add_visuals   01.2   01.3
+/slides.fix_errors
+/slides.reduce_text
+
+/slides.add_references  01.2
+/slides.add_tutorial_links
+
+
+Not needed
+/slides.fix_formatting
 
 > lint_text.py -i 
 
 > gen_slides.py msml610/01.3
-
 > grep "^* " msml610/lectures_source/*.smd | wc -l
 
 > gen_book_chapters.py
+> review / edit book chapter
 
 # Workflows
 

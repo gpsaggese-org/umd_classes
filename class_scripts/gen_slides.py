@@ -91,6 +91,22 @@ def _parse() -> argparse.ArgumentParser:
     return parser
 
 
+def _extra_opts_mention_open_pdf(extra_opts: list[str]) -> bool:
+    """
+    Check if `extra_opts` already specifies an action for "open_pdf".
+
+    E.g., `--skip_action open_pdf`, `--skip_action=open_pdf`, or
+    `--action=open_pdf`. If so, the caller is managing that action
+    explicitly, so we should not also force our own `--action=open_pdf`,
+    which would make `notes_to_pdf.py` fail with an assertion since the
+    same action can't be in both `--action` and `--skip_action`.
+
+    :param extra_opts: extra options passed through to `notes_to_pdf.py`
+    :return: whether "open_pdf" already appears in `extra_opts`
+    """
+    return any("open_pdf" in opt for opt in extra_opts)
+
+
 def _release(dir_arg: str, dst_name: str) -> None:
     """
     Copy a built slides PDF from the staging dir to the published dir.
@@ -161,9 +177,11 @@ def _main(parser: argparse.ArgumentParser) -> None:
     # Add extra options if provided.
     if args.extra_opts:
         cmd_parts.extend(args.extra_opts)
-    if not args.daemon:
+    if not args.daemon and not _extra_opts_mention_open_pdf(args.extra_opts):
         # `notes_to_pdf.py`'s default actions don't include "open_pdf", so
-        # add it explicitly to open the PDF after a one-shot generation.
+        # add it explicitly to open the PDF after a one-shot generation,
+        # unless the caller already specified how to handle that action
+        # (e.g. `--skip_action open_pdf` to build without opening a viewer).
         cmd_parts.append("--action=open_pdf")
     # Prepare command by quoting all arguments to preserve special characters.
     quoted_parts = [shlex.quote(part) for part in cmd_parts]

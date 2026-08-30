@@ -32,7 +32,11 @@
 
 * Artificial Intelligence
 
+::: columns
+:::: {.column width=80%}
+
 - @Definition@: The term _"Artificial Intelligence"_ was coined in 1956
+  [@mccarthy1955dartmouth]
 
 - @Goal@
   - Understand human intelligence
@@ -44,15 +48,25 @@
   - Its impact is greater than any previous historical event
   - Already generates hundreds of billions of dollars annually in market
     revenue, with trillions in global economic impact projected by 2030
+    [@bughin2018aifrontier]
   - Presents many unresolved problems, unlike disciplines with settled core
     theories (e.g., arithmetic, Newtonian mechanics within its domain)
+
+::::
+:::: {.column width=20%}
+
+![](msml610/lectures_source/figures/L01.2.Richard_Feynman.jpg)
+
+\footnotesize _Richard Feynman (1965)_
+::::
+:::
 
 * AI Formal Definition
 
 ::: columns
 :::: {.column width=65%}
 
-- @Definition@: AI is characterized along **two key axes**
+- @Definition@: AI is characterized along **two key axes** [@russell2020aima]
   - Thinking vs. Acting
   - Human vs. Rational (ideal performance)
 
@@ -98,6 +112,9 @@
 
 * 2. AI as Thinking Rationally
 
+::: columns
+:::: {.column width=65%}
+
 - @Question@: What are the rules of **correct thinking**?
   - Given correct premises, yield correct conclusions
 
@@ -109,24 +126,60 @@
   - Run indefinitely if no solution exists, since first-order validity is
     only semi-decidable
 
+::::
+:::: {.column width=30%}
+
+```graphviz
+digraph laws_of_thought {
+    bgcolor="transparent";
+    pad="0.15";
+    splines=spline;
+    nodesep=0.4;
+    ranksep=0.5;
+    rankdir=TB;
+
+    node [shape=box,
+          style="rounded,filled",
+          penwidth=1.8,
+          fontname="Helvetica",
+          fontsize=12,
+          margin="0.22,0.14",
+          height=0.50];
+
+    edge [color="#A3B1C0",
+          penwidth=1.3,
+          arrowhead=vee,
+          arrowsize=0.75,
+          fontname="Helvetica",
+          fontsize=10,
+          fontcolor="#7B8794"];
+
+    premises [label="Correct\npremises", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
+    logic [label="Logic", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
+    conclusion [label="Correct\nconclusions", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+
+    premises -> logic -> conclusion;
+}
+```
+
+::::
+:::
+
 * Thinking Rationally: Challenges
 
 - @Challenges@
   1. **Formalizing informal knowledge is difficult**
      - _Example_: _"A handshake occurs when two people extend, grip, shake
        hands, then release."_
-     - Formal logic representation:
-
-   // TODO(ai_gp): Change this so that it is structured on multiple lines on the page
-
        $$
-       \exists x, y, h_x, h_y \, (
-         Person(x) \land Person(y) \land x \neq y \land
-         Hand(x, h_x) \land Hand(y, h_y) \land
-         MoveToward(h_x, h_y) \land Contact(h_x, h_y) \land
-         Shake(h_x, h_y) \land
-         Release(h_x, h_y)
-       )
+       \begin{aligned}
+         & \exists \; x, y, h_x, h_y \\
+         & \quad Person(x) \land Person(y) \land x \neq y \land {} 
+         Hand(x, h_x) \land Hand(y, h_y) \land {} \\
+         & \quad MoveToward(h_x, h_y) \land Contact(h_x, h_y) \land {} 
+         Shake(h_x, h_y) \land {} \\
+         &\quad Release(h_x, h_y) \\
+       \end{aligned}
        $$
   2. **Probabilistic nature of knowledge**
      - _Example_: In medicine, _"Fever, cough, and fatigue could indicate flu,
@@ -143,7 +196,7 @@
 
 - @Goal@: AI designs **agents that can act like humans**
 
-- @Techniques@: **Turing test**
+- @Techniques@: **Turing test** [@turing1950computing]
   - _"A computer passes the Turing test if a human cannot tell whether the
     answers to questions came from a person or a computer"_
 
@@ -169,21 +222,33 @@
 
 * Turing Test: Pros and Cons
 
+::: columns
+:::: {.column width=50%}
+
 - @Pros@
   - Operational definition of intelligence
-  - Sidestep philosophical vagueness
-    - What is consciousness?
-    - Can a machine think?
+  - Sidesteps philosophical vagueness (e.g., what is consciousness? can a
+    machine think?)
+
+::::
+:::: {.column width=50%}
 
 - @Cons@
   - Intelligence defined by **anthropomorphic** criteria in human terms
-    - Multiple forms of non-human intelligence exist
-  - Intelligence by Turing test means **fooling humans** into thinking it is human
-  - @Example@: Aeronautical engineering is about
-    - Correct: Focus on wind tunnels and aerodynamics
-    - Incorrect: Designing machines that imitate birds
+    (multiple forms of non-human intelligence exist)
+  - Passing means **fooling humans** into thinking it is human
+
+::::
+:::
+
+- @Example@: Aeronautical engineering is about
+  - Correct: Focus on wind tunnels and aerodynamics
+  - Incorrect: Designing machines that imitate birds
 
 * 4. AI as Acting Rationally
+
+::: columns
+:::: {.column width=65%}
 
 - @Definition@: **Rational agents** are agents that do the _"right thing"_
   given what they know
@@ -195,7 +260,27 @@
   4. Adapt to change
   5. Create and pursue goals
 
+::::
+:::: {.column width=30%}
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#EEEDFE', 'primaryBorderColor': '#7F77DD', 'primaryTextColor': '#26215C', 'lineColor': '#888888', 'fontFamily': 'Helvetica'}}}%%
+mindmap
+  root((**Rational<br/>Agent**))
+    Operate autonomously
+    Perceive environment
+    Persist over time
+    Adapt to change
+    Create and pursue goals
+```
+
+::::
+:::
+
 * Acting Rationally as Ultimate Goal of AI
+
+::: columns
+:::: {.column width=65%}
 
 - @Question@: Which definition of AI best captures what we should build?
   - Acting vs. Thinking
@@ -209,6 +294,23 @@
   - Human behavior is shaped by evolutionary conditions
 
 - @Key idea@: AI should focus on **agents acting rationally**
+
+::::
+:::: {.column width=30%}
+
+```{=typst}
+#styled-table(
+  headers: ("", "Human", "Rational"),
+  rows: (
+    ("Thinking", "Think humanly", "Think rationally"),
+    ("Acting", "Act humanly", "*Act rationally*"),
+  ),
+  bold-first-col: true,
+)
+```
+
+::::
+:::
 
 * Rationality Is Not Absolute
 
@@ -252,29 +354,42 @@
     - Real-time demands (e.g., need to decide within 1 micro-sec in HFT)
 
 - @Solution@: **"Satisficing"**: Achieve _good enough_ instead of _perfect_
+  [@simon1956satisficing]
   - Acting appropriately given constraints
 
 ## What Is Machine Learning?
 
 * Machine Learning: Definitions
 
+::: columns
+:::: {.column width=75%}
+
 - @Question@: How should we **define machine learning**?
 
 - @Definition@
   - _"Machine learning is the field of study that gives computers the ability to
-    learn without being explicitly programmed"_ (Samuel, 1959)
+    learn without being explicitly programmed"_ (Samuel, 1959) [@samuel1959checkers]
   - Machine learning builds machines to do _useful things_ without being _explicitly
     programmed_
     - E.g., a computer learns to play checkers by playing against itself, memorizing
       positions that lead to winning
   - More formally: _"A computer program is said to learn from experience $E$ with
     respect to some task $T$ and some performance measure $P$, if $P(T)$ improves
-    with experience $E$"_ (Mitchell, 1997)
+    with experience $E$"_ (Mitchell, 1997) [@mitchell1997machinelearning]
 
 - @Applications@: Common examples of machine learning include
   - Computer vision
   - Speech recognition
   - Natural language processing
+
+::::
+:::: {.column width=20%}
+
+![](msml610/lectures_source/figures/L01.2.Tom_Mitchell.jpg)
+
+\footnotesize _Tom Mitchell (2025)_
+::::
+:::
 
 * The 3 Machine Learning Assumptions
 
@@ -284,7 +399,7 @@
   - Evaluating the model
   - Deploying and monitoring the model
 
-- @Problem@ (Abu-Mostafa, 2012)
+- @Problem@ (Abu-Mostafa, 2012) [@abumostafa2012learning]
   - Most of the phases are "engineering", but _building the model_ is the "research"
     part
   - The **three core assumptions** of machine learning are:
@@ -320,7 +435,7 @@
     network with many layers
   - **LLM (Large Language Models)**: Neural networks trained on massive _text_
     datasets to predict text, often further tuned with reinforcement learning
-    from human feedback (RLHF)
+    from human feedback (RLHF) [@ouyang2022instructgpt]
   - _DL models that are not LLMs_ are possible
     - E.g., a convolutional neural network for vision or speech is deep learning
       system but not an LLM
@@ -370,6 +485,7 @@
   - **Fragility to input variations**
     - ML models fail with slight input distortions
     - Adversarial attacks cause misclassification by altering one pixel
+      [@su2019onepixel]
     - A model trained on a video game fails if the screen rotates slightly; humans
       continue effortlessly
   - **Lack of transfer learning**
@@ -410,3 +526,10 @@
 - @Remark@: Current ML/DL systems, despite their power, still fall short of human
   intelligence on fragility, transfer learning, data efficiency, and common-sense
   reasoning
+
+* References
+
+```{=typst}
+#set text(size: 0.75em)
+#bibliography("/msml610/lectures_source/refs.bib", title: none)
+```
