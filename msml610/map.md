@@ -88,7 +88,7 @@ Not needed
 /slides.fix_formatting
 /slides.add_tutorial_links
 
-> lint_text.py -i 
+> lint_text.py -i     01.2
 
 > gen_slides.py msml610/01.3
 > grep "^* " msml610/lectures_source/*.smd | wc -l
@@ -96,9 +96,20 @@ Not needed
 > gen_book_chapter.py msml610/01.2 --mode typst_aima --llm_backend hllm_cli
   TODO(ai_gp): This should check that it compiles
 > review / edit book chapter
-> render_typst.sh msml610/book/Lesson01.2-AI_and_Machine_Learning
+> run_typst.py --input msml610/book/Lesson01.2-AI_and_Machine_Learning.typ
 
-gpt-4o-mini
+
+### [ ] Improve the generation
+- Compare gpt-4o-mini to a better model
+- hllm_cli vs hllm
+- Still lots of tags... modify the prompt to remove them
+- Use Definition to have the tag on the side
+- Latex not converted correctly
+- Do not keep the formatting in the page (e.g., pros vs cons)
+- The figures embedded in the text are good, but we need caption and a reference
+  in the text
+
+- "References" need to be a larger font
 
 # Workflows
 

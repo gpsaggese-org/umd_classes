@@ -50,6 +50,8 @@ import re
 import shutil
 from typing import Dict, List, Optional, Tuple
 
+from tqdm.auto import tqdm
+
 import class_scripts.common_utils as csccouti
 import dev_scripts_helpers.documentation.preprocess_notes as dshdprno
 import dev_scripts_helpers.dockerize.lib_typst as dshdlity
@@ -240,6 +242,26 @@ def _call_llm(
     return csccouti.call_llm_cached(user_prompt, system_prompt, model, llm_backend)
 
 
+def _get_model_id(model: str, llm_backend: str) -> str:
+    """
+    Resolve the model id that `llm_backend` will actually use.
+
+    :param model: LLM model to use, or "" to use the backend's default
+    :param llm_backend: which LLM backend to use, one of `_LLM_BACKENDS`
+    :return: resolved model id
+    """
+    hdbg.dassert_in(llm_backend, _LLM_BACKENDS)
+    if llm_backend == "hllm":
+        import helpers.hllm as hllm
+
+        model_id = hllm.get_model_id(model)
+    else:
+        import helpers.hllm_cli as hllmcli
+
+        model_id = hllmcli.get_model_id(model)
+    return model_id
+
+
 # #############################################################################
 # Post-processing
 # #############################################################################
@@ -320,7 +342,7 @@ _COLUMN_PANEL_CLOSE_RE = re.compile(r"^::::\s*$")
 _COLUMNS_CLOSE_RE = re.compile(r"^:::\s*$")
 
 # A raw diagram-source code fence: rendered by `render_images.py` into a
-# PNG (see `render_typst.sh`), never by the LLM.
+# PNG (see `run_typst.py`), never by the LLM.
 _DIAGRAM_FENCE_RE = re.compile(
     r"```(graphviz|mermaid|tikz)\n(.*?)\n```", re.DOTALL
 )
@@ -345,6 +367,50 @@ _FIGURE_PREFIX_RE = re.compile(r"^L\d+(?:\.\d+)*\.")
 # render it); a native `.typ` file has no such convention and would
 # otherwise show the backticks and `{=typst}` suffix as literal text.
 _INLINE_TYPST_RAW_RE = re.compile(r"`([^`]+)`\{=typst\}")
+
+# A stray Markdown `**bold**` left in the LLM output instead of the
+# `#strong[...]` call that `prompt.generate_typst_book_chapter_slide.md`
+# ("Highlighting and Emphasis") instructs the LLM to always emit. Typst's
+# bold delimiter is a single `*`, not `**`, so a leftover `**text**` is
+# parsed as two empty `*...*` runs with nothing between the pair of
+# stars, which is what makes `typst compile` warn "no text within
+# stars". This is a safety net for LLM non-compliance, not a substitute
+# for the prompt rule.
+#
+# `(?<!\w)` / lack of a mirrored `(?!\w)` after the closing `**`: only
+# the opening delimiter is required to sit at a word boundary, which is
+# enough to rule out `x**2`/`f(**kwargs)`-style Python power/unpack
+# operators (immediately preceded by an identifier character) while
+# still matching ordinary Markdown bold (`**word`, preceded by
+# whitespace/punctuation/start-of-line). The captured text may not
+# contain a backtick (would mean the match crossed an inline-code span)
+# or a blank line (would mean it crossed a paragraph/bullet boundary).
+_STRAY_MARKDOWN_BOLD_RE = re.compile(
+    r"(?<!\w)\*\*(?!\s)((?:(?!\*\*|\n\n|`).)+?)(?<!\s)\*\*(?!\*)",
+    re.DOTALL,
+)
+
+
+def _fix_stray_markdown_bold(text: str, *, output_file: str) -> str:
+    """
+    Replace stray Markdown `**bold**` left by the LLM with `#strong[...]`
+    and warn about each fix.
+
+    :param text: full generated `.typ` document text
+    :param output_file: path being written to, included in the warning
+        so the fix can be traced back to a specific chapter
+    :return: `text` with stray `**bold**` converted to `#strong[...]`
+    """
+    for match in _STRAY_MARKDOWN_BOLD_RE.finditer(text):
+        _LOG.warning(
+            "'%s': fixing stray Markdown bold left by the LLM: '%s' -> "
+            "'#strong[%s]'",
+            output_file,
+            match.group(0),
+            match.group(1),
+        )
+    text = _STRAY_MARKDOWN_BOLD_RE.sub(r"#strong[\1]", text)
+    return text
 
 
 def _split_column_panels(body: str) -> List[Tuple[Optional[str], str]]:
@@ -453,11 +519,12 @@ def _render_diagram_placeholder(lang: str, code: str) -> str:
     Pass a diagram-source fence (see `_DIAGRAM_FENCE_RE`) through
     unchanged, as a bare (uncommented) fence.
 
-    `render_images.py` (run as a separate step by `render_typst.sh`,
-    *after* this script) is the one that comments the code out, renders
-    it, assigns it its sequential figure number, and inserts the
-    `#figure(image(...))` call — it expects to find the fence exactly as
-    written in the `.smd` source, not pre-commented or pre-numbered: doing
+    `render_images.py` (run as a separate, optional step via
+    `run_typst.py -a render_images`, *after* this script) is the one that
+    comments the code out, renders it, assigns it its sequential figure
+    number, and inserts the `#figure(image(...))` call — it expects to
+    find the fence exactly as written in the `.smd` source, not
+    pre-commented or pre-numbered: doing
     either here would just make `render_images.py` comment it out a second
     time and never render it.
 
@@ -706,7 +773,7 @@ def _generate_typst_chapter_per_slide(
     parts = [
         _build_typst_document_header(course_title, chapter_title, chapter_num)
     ]
-    for item in items:
+    for item in tqdm(items, desc="Generating slides", unit="slide"):
         if item["type"] == "header":
             first_line = item["content"][0]
             level = len(first_line) - len(first_line.lstrip("#"))
@@ -732,6 +799,7 @@ def _generate_typst_chapter_per_slide(
         # captured by `_extract_course_and_title()`, and not part of the
         # chapter body.
     text = "\n\n".join(parts)
+    text = _fix_stray_markdown_bold(text, output_file=output_file)
     text = _insert_provenance_tag(text, "typst_aima")
     hio.to_file(output_file, text)
     _LOG.info("Wrote book chapter to: %s", output_file)
@@ -942,6 +1010,17 @@ def _parse() -> argparse.ArgumentParser:
 def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
+    # Suppress verbose HTTP request logging from the LLM client libraries.
+    # shown instead while the chapter is generated.
+    import helpers.hllm_cli as hllmcli
+
+    hllmcli.shutup_llm_logging()
+    # Print the LLM backend and the (resolved) model that will be used.
+    _LOG.info(
+        "llm_backend=%s model=%s",
+        args.llm_backend,
+        _get_model_id(args.model, args.llm_backend),
+    )
     # Parse and validate arguments.
     dir_arg, lesson_arg = csccouti.parse_lesson_spec(args.input)
     csccouti.validate_dir_lesson_args(dir_arg, lesson_arg)
