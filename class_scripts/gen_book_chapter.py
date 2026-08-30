@@ -465,6 +465,64 @@ def _fix_stray_markdown_bold(text: str, *, output_file: str) -> str:
     return text
 
 
+# Matches a whole `#figure(...) <label>` block (image or table), non-greedy
+# so it stops at the first closing `) <label>`, which is how
+# `_render_image_placeholder()`/`_wrap_table_placeholder()` always end one.
+_FIGURE_BLOCK_RE = re.compile(
+    r"(?P<indent>[ \t]*)#figure\([\s\S]*?\) <(?P<label>(?:fig|tab):[a-z0-9_-]+)>"
+)
+# Matches a whole diagram fence followed by its `label=`/`caption=`
+# metadata (see `_render_diagram_placeholder()`), before `render_images.py`
+# (run separately, later) turns it into a `#figure(image(...))` call.
+_DIAGRAM_BLOCK_RE = re.compile(
+    r"(?P<indent>[ \t]*)```(?:graphviz|mermaid|tikz)\n"
+    r"[\s\S]*?\n```\n"
+    r"[ \t]*label=(?P<label>fig:[a-z0-9_-]+)\n"
+    r"[ \t]*caption=(?P<caption>[^\n]*)"
+)
+
+
+def _ensure_visual_references(text: str, manifest: Dict[str, str]) -> str:
+    """
+    Guarantee every figure, table, and diagram is referenced and explained
+    in the surrounding prose, as a safety net for LLM non-compliance with
+    "Figure, Table, and Diagram Identification Process" (see
+    `prompt.generate_book_chapter_common.md`). This is a safety net for LLM
+    non-compliance, not a substitute for the prompt rule (same idiom as
+    `_fix_stray_markdown_bold()`).
+
+    If no `@<label>` cross-reference to a visual appears anywhere else in
+    `text`, insert one deterministic sentence immediately before it.
+
+    :param text: full generated `.typ` document text
+    :param manifest: full Typst label (e.g. "fig:richardfeynman") -> its
+        one-line description, for every visual in the document
+    :return: `text` with a guaranteed reference + explanation sentence
+        before every visual that lacked one
+    """
+    offset = 0
+    matches = list(_FIGURE_BLOCK_RE.finditer(text)) + list(
+        _DIAGRAM_BLOCK_RE.finditer(text)
+    )
+    matches.sort(key=lambda m: m.start())
+    for match in matches:
+        label = match.group("label")
+        description = manifest.get(label)
+        if description is None:
+            # Not one of ours (shouldn't happen, but don't guess a caption).
+            continue
+        if f"@{label}" in text:
+            # Already referenced somewhere (by the LLM, following the
+            # prompt), no fallback needed.
+            continue
+        indent = match.group("indent")
+        sentence = f"{indent}As @{label} shows, {description}.\n\n"
+        insert_at = match.start() + offset
+        text = text[:insert_at] + sentence + text[insert_at:]
+        offset += len(sentence)
+    return text
+
+
 def _strip_column_markup(body: str) -> str:
     """
     Remove `::: columns` / `:::: {.column width=X%}` pandoc div markers
@@ -523,7 +581,102 @@ def _humanize_figure_name(path: str) -> str:
     return base.replace("_", " ")
 
 
-def _render_image_placeholder(match: "re.Match[str]", output_dir: str) -> str:
+def _slugify_text(text: str) -> str:
+    """
+    Turn arbitrary text into a lowercase alphanumeric label slug, e.g.
+    "AI and Economics (1/2)" -> "aiandeconomics12".
+
+    Used for a diagram or table label, which (unlike an image) has no
+    source filename to slugify (see `_slugify_figure_name()`).
+
+    :param text: text to slugify (typically a slide title)
+    :return: lowercase alphanumeric slug
+    """
+    return re.sub(r"[^a-zA-Z0-9]", "", text).lower()
+
+
+def _next_visual_label(kind: str, base_text: str, counter: Dict[str, int]) -> str:
+    """
+    Compute a document-unique Typst label for a diagram or table.
+
+    :param kind: "fig" for a diagram, "tab" for a table
+    :param base_text: text to derive the slug from (the slide title)
+    :param counter: mutable `slug -> count` map, shared across the whole
+        document, so repeated slide titles don't collide
+    :return: a label such as "fig:aiandeconomics12", or
+        "fig:aiandeconomics12-2" for a second visual derived from the same
+        slug
+    """
+    slug = _slugify_text(base_text) or "visual"
+    count = counter.get(slug, 0) + 1
+    counter[slug] = count
+    suffix = "" if count == 1 else f"-{count}"
+    return f"{kind}:{slug}{suffix}"
+
+
+def _describe_diagram(lang: str, code: str, slide_title: str) -> str:
+    """
+    Derive a one-line description of a diagram from its source, for use as
+    both its Typst caption and its manifest entry (see "Figure, Table, and
+    Diagram Identification Process" in `prompt.generate_book_chapter_common.md`).
+
+    :param lang: fence language (`graphviz`, `mermaid`, or `tikz`)
+    :param code: diagram source code
+    :param slide_title: title of the slide the diagram belongs to, used as
+        a fallback when no node text can be extracted (e.g. `tikz`, or a
+        diagram with unlabeled nodes)
+    :return: one-line, human-readable description of the diagram
+    """
+    label_re = {
+        "graphviz": _GRAPHVIZ_NODE_LABEL_RE,
+        "mermaid": _MERMAID_NODE_LABEL_RE,
+    }.get(lang)
+    labels: List[str] = []
+    if label_re is not None:
+        for match in label_re.finditer(code):
+            text = match.group(1).replace("\\n", " ").strip()
+            if text and text not in labels:
+                labels.append(text)
+    if labels:
+        shown = labels[:4]
+        if len(shown) == 1:
+            joined = shown[0]
+        else:
+            joined = ", ".join(shown[:-1]) + f" and {shown[-1]}"
+        description = f"Diagram relating {joined}"
+    else:
+        description = f"Diagram illustrating {slide_title}"
+    return description
+
+
+def _describe_table(raw_typst: str, slide_title: str) -> Optional[str]:
+    """
+    Derive a one-line description of a `#styled-table(...)` call from its
+    `headers` argument.
+
+    :param raw_typst: raw Typst source from a `{=typst}` fence
+    :param slide_title: title of the slide the table belongs to, used as a
+        fallback when `headers` cannot be parsed
+    :return: one-line description, or `None` if `raw_typst` is not a
+        `#styled-table(...)` call (other `{=typst}` content, e.g.
+        `#references(...)`, is passed through untouched instead)
+    """
+    if not raw_typst.strip().startswith("#styled-table("):
+        return None
+    match = _STYLED_TABLE_HEADERS_RE.search(raw_typst)
+    if not match:
+        return f"Table from the '{slide_title}' slide"
+    headers = [h.strip().strip('"') for h in match.group(1).split(",")]
+    headers = [h for h in headers if h]
+    description = f"Table of {', '.join(headers)}" if headers else (
+        f"Table from the '{slide_title}' slide"
+    )
+    return description
+
+
+def _render_image_placeholder(
+    match: "re.Match[str]", output_dir: str
+) -> Tuple[str, str, str]:
     """
     Deterministically render a Markdown image match (see `_IMAGE_RE`) as a
     Typst `#figure(...)` call.
@@ -531,78 +684,162 @@ def _render_image_placeholder(match: "re.Match[str]", output_dir: str) -> str:
     :param match: `_IMAGE_RE` match
     :param output_dir: directory the chapter file is written to (image
         paths are resolved relative to it)
-    :return: Typst `#figure(...)` snippet
+    :return: (Typst `#figure(...)` snippet, full Typst label e.g.
+        "fig:richardfeynman", one-line description used as both the caption
+        and the manifest entry handed to the LLM)
     """
     path = match.group("path")
     caption = match.group("caption")
-    if not caption:
-        caption = _humanize_figure_name(path)
+    alt = match.group("alt")
+    if caption:
+        description = caption.strip()
+    elif alt and alt.strip():
+        # Fall back to the Markdown alt text (`![alt](path)`), if any,
+        # before the filename-derived fallback: it's the author's own
+        # words, not a guess from the file's basename.
+        description = alt.strip()
     else:
-        caption = caption.strip()
+        description = _humanize_figure_name(path)
     label = _slugify_figure_name(path)
+    full_label = f"fig:{label}"
     rel_path = os.path.relpath(path, start=output_dir)
     lines = [
         "#figure(",
         f'  image("{rel_path}", width: 80%),',
-        f"  caption: [{caption}],",
+        f"  caption: [{description}],",
         '  kind: "figure",',
         "  supplement: [Fig.],",
         "  placement: auto,",
-        f") <fig:{label}>",
+        f") <{full_label}>",
+    ]
+    return "\n".join(lines), full_label, description
+
+
+def _render_diagram_placeholder(
+    lang: str, code: str, *, label: str, description: str
+) -> str:
+    """
+    Render a diagram-source fence (see `_DIAGRAM_FENCE_RE`) as a bare
+    (uncommented) fence, followed by `label=`/`caption=` metadata lines.
+
+    `render_images.py` (run as a separate, optional step via
+    `run_typst.py -a render_images`, *after* this script) is the one that
+    comments the code out, renders it, and inserts the
+    `#figure(image(...))` call — it expects to find the fence exactly as
+    written in the `.smd` source (not pre-commented or pre-numbered),
+    optionally followed by this `label=`/`caption=` metadata, which it
+    copies onto the `#figure(...)` call it generates (see its docstring).
+    Attaching them here — instead of leaving the eventual figure
+    uncaptioned and unlabeled — is what lets it be referenced and
+    explained like any other visual.
+
+    :param lang: fence language (`graphviz`, `mermaid`, or `tikz`)
+    :param code: diagram source code
+    :param label: full Typst label to attach to the rendered figure (e.g.
+        "fig:aiandeconomics12")
+    :param description: one-line caption for the rendered figure
+    :return: the fence, followed by its `label=`/`caption=` metadata
+    """
+    lines = [
+        f"```{lang}",
+        code.strip(chr(10)),
+        "```",
+        f"label={label}",
+        f"caption={description}",
     ]
     return "\n".join(lines)
 
 
-def _render_diagram_placeholder(lang: str, code: str) -> str:
+def _wrap_table_placeholder(raw_typst: str, *, label: str, description: str) -> str:
     """
-    Pass a diagram-source fence (see `_DIAGRAM_FENCE_RE`) through
-    unchanged, as a bare (uncommented) fence.
+    Wrap a raw `#styled-table(...)` call (from a `{=typst}` fence) in a
+    `#figure(...)` so it gets a caption, a label, and can be cross-
+    referenced like any other visual.
 
-    `render_images.py` (run as a separate, optional step via
-    `run_typst.py -a render_images`, *after* this script) is the one that
-    comments the code out, renders it, assigns it its sequential figure
-    number, and inserts the `#figure(image(...))` call — it expects to
-    find the fence exactly as written in the `.smd` source, not
-    pre-commented or pre-numbered: doing
-    either here would just make `render_images.py` comment it out a second
-    time and never render it.
-
-    :param lang: fence language (`graphviz`, `mermaid`, or `tikz`)
-    :param code: diagram source code
-    :return: the unchanged fence
+    :param raw_typst: raw Typst source, starting with `#styled-table(`
+    :param label: full Typst label to attach (e.g. "tab:aiandeconomics12")
+    :param description: one-line caption
+    :return: a `#figure(...)` snippet wrapping `raw_typst`
     """
-    return f"```{lang}\n{code.strip(chr(10))}\n```"
+    # Inside a function-call argument list we are already in code mode, so
+    # the leading `#` that makes `styled-table(...)` a statement at the top
+    # level of markup must be dropped here.
+    call = raw_typst.strip()
+    if call.startswith("#"):
+        call = call[1:]
+    indented_call = "\n".join(f"  {l}" if l else "" for l in call.splitlines())
+    lines = [
+        "#figure(",
+        f"{indented_call},",
+        f"  caption: [{description}],",
+        '  kind: "table",',
+        "  supplement: [Table.],",
+        "  placement: auto,",
+        f") <{label}>",
+    ]
+    return "\n".join(lines)
+
+
+def _build_manifest_block(manifest: Dict[str, Tuple[str, str]]) -> str:
+    """
+    Build the `Figure manifest:` block appended to the LLM's user message
+    (see "Placeholder Tokens" in `prompt.generate_typst_book_chapter_slide.md`).
+
+    :param manifest: token -> (full Typst label, one-line description)
+    :return: manifest block text, or "" if `manifest` is empty
+    """
+    if not manifest:
+        return ""
+    lines = ["", "Figure manifest:"]
+    for token, (label, description) in manifest.items():
+        lines.append(f'{token} -> label: {label}, shows: "{description}"')
+    return "\n".join(lines)
 
 
 def _process_slide_body(
     body: str,
     *,
     output_dir: str,
+    slide_title: str,
+    label_counter: Dict[str, int],
     system_prompt: str,
     model: str,
     llm_backend: str,
-) -> str:
+) -> Tuple[str, Dict[str, str]]:
     """
     Convert one slide's raw `.smd` body into Typst, in a single LLM call.
 
     Figures, diagrams, and `{=typst}` raw blocks are pulled out into
     `@@FIGURE_N@@` placeholder tokens and rendered deterministically (see
     `prompt.generate_typst_book_chapter_slide.md` for the placeholder
-    contract); only the remaining prose, if any, is sent to the LLM. A
-    slide body that is nothing but a figure/table skips the LLM call
-    entirely. The whole body (already stripped of any `::: columns`
-    layout by `_strip_column_markup()`) is sent as one call, so the model
-    can weave content that used to sit in separate columns (e.g. a
-    `@Pros@`/`@Cons@` pair) into one continuous passage.
+    contract); only the remaining prose, if any, is sent to the LLM, along
+    with a "figure manifest" (label + one-line description per token) so
+    the LLM can still write a real cross-reference and explanation for
+    each one, without ever seeing its raw markup. A slide body that is
+    nothing but a figure/table skips the LLM call entirely. The whole body
+    (already stripped of any `::: columns` layout by
+    `_strip_column_markup()`) is sent as one call, so the model can weave
+    content that used to sit in separate columns (e.g. a `@Pros@`/`@Cons@`
+    pair) into one continuous passage.
 
     :param body: raw slide body text
     :param output_dir: directory the chapter file is written to
+    :param slide_title: title of this slide, used to derive a
+        caption/description for diagrams and tables (which, unlike
+        images, have no source filename to work from)
+    :param label_counter: mutable `slug -> count` map, shared across the
+        whole document, used to keep diagram/table labels unique (see
+        `_next_visual_label()`)
     :param system_prompt: system prompt for the LLM (slide-body prompt)
     :param model: LLM model to use, or "" to use the backend's default
     :param llm_backend: which LLM backend to use, one of `_LLM_BACKENDS`
-    :return: Typst snippet for this slide's body
+    :return: (Typst snippet for this slide's body, manifest: full Typst
+        label -> one-line description, for every visual found in this
+        slide, used by `_ensure_visual_references()` as a document-wide
+        safety net)
     """
     placeholders: Dict[str, str] = {}
+    manifest: Dict[str, Tuple[str, str]] = {}
     token_idx = [0]
 
     def _next_token() -> str:
@@ -611,17 +848,36 @@ def _process_slide_body(
 
     def _repl_diagram(m: "re.Match[str]") -> str:
         token = _next_token()
-        placeholders[token] = _render_diagram_placeholder(m.group(1), m.group(2))
+        lang, code = m.group(1), m.group(2)
+        label = _next_visual_label("fig", slide_title, label_counter)
+        description = _describe_diagram(lang, code, slide_title)
+        placeholders[token] = _render_diagram_placeholder(
+            lang, code, label=label, description=description
+        )
+        manifest[token] = (label, description)
         return token
 
     def _repl_typst_raw(m: "re.Match[str]") -> str:
         token = _next_token()
-        placeholders[token] = m.group(1).strip("\n")
+        raw = m.group(1).strip("\n")
+        description = _describe_table(raw, slide_title)
+        if description is None:
+            # Not a `#styled-table(...)` call (e.g. `#references(...)`):
+            # pass it through untouched, as before, with no manifest entry.
+            placeholders[token] = raw
+        else:
+            label = _next_visual_label("tab", slide_title, label_counter)
+            placeholders[token] = _wrap_table_placeholder(
+                raw, label=label, description=description
+            )
+            manifest[token] = (label, description)
         return token
 
     def _repl_image(m: "re.Match[str]") -> str:
         token = _next_token()
-        placeholders[token] = _render_image_placeholder(m, output_dir)
+        snippet, label, description = _render_image_placeholder(m, output_dir)
+        placeholders[token] = snippet
+        manifest[token] = (label, description)
         return token
 
     body = _DIAGRAM_FENCE_RE.sub(_repl_diagram, body)
@@ -631,8 +887,9 @@ def _process_slide_body(
     for token in placeholders:
         remaining = remaining.replace(token, "")
     if remaining.strip():
+        llm_input = body + _build_manifest_block(manifest)
         raw_text = csccouti.call_llm_cached(
-            body, system_prompt, model, llm_backend
+            llm_input, system_prompt, model, llm_backend
         )
         text = _strip_code_fence(raw_text)
     else:
@@ -641,13 +898,16 @@ def _process_slide_body(
         text = body
     for token, replacement in placeholders.items():
         text = text.replace(token, replacement)
-    return text
+    full_manifest = {label: description for label, description in manifest.values()}
+    return text, full_manifest
 
 
 def _generate_typst_slide(
     slide_lines: List[str],
     *,
     output_dir: str,
+    label_counter: Dict[str, int],
+    visual_manifest: Dict[str, str],
     system_prompt: str,
     model: str,
     llm_backend: str,
@@ -664,6 +924,12 @@ def _generate_typst_slide(
 
     :param slide_lines: lines of the slide, starting with `* Title`
     :param output_dir: directory the chapter file is written to
+    :param label_counter: mutable `slug -> count` map, shared across the
+        whole document (see `_next_visual_label()`)
+    :param visual_manifest: mutable `full Typst label -> one-line
+        description` map, shared across the whole document, updated
+        in-place with every visual found in this slide; consumed at the
+        end by `_ensure_visual_references()`
     :param system_prompt: system prompt for the LLM (slide-body prompt)
     :param model: LLM model to use, or "" to use the backend's default
     :param llm_backend: which LLM backend to use, one of `_LLM_BACKENDS`
@@ -675,13 +941,16 @@ def _generate_typst_slide(
     title = slide_lines[0][1:].strip()
     body = "\n".join(slide_lines[1:])
     body = _strip_column_markup(body)
-    body_out = _process_slide_body(
+    body_out, slide_manifest = _process_slide_body(
         body,
         output_dir=output_dir,
+        slide_title=title,
+        label_counter=label_counter,
         system_prompt=system_prompt,
         model=model,
         llm_backend=llm_backend,
     )
+    visual_manifest.update(slide_manifest)
     parts = [
         f"// From: {source_file}:{line_number} '{slide_lines[0]}'",
         f"// Slide: {title}",
@@ -787,6 +1056,12 @@ def _generate_typst_chapter_per_slide(
     system_prompt = _get_system_prompt_slide()
     output_dir = os.path.dirname(output_file) or "."
     chapter_num = lesson.split(".")[0]
+    # `label_counter` keeps diagram/table labels unique across the whole
+    # document (see `_next_visual_label()`); `visual_manifest` accumulates
+    # every visual's label -> description across the whole document, and is
+    # consumed at the end by `_ensure_visual_references()`.
+    label_counter: Dict[str, int] = {}
+    visual_manifest: Dict[str, str] = {}
     parts = [
         _build_typst_document_header(course_title, chapter_title, chapter_num)
     ]
@@ -805,6 +1080,8 @@ def _generate_typst_chapter_per_slide(
                 _generate_typst_slide(
                     item["content"],
                     output_dir=output_dir,
+                    label_counter=label_counter,
+                    visual_manifest=visual_manifest,
                     system_prompt=system_prompt,
                     model=model,
                     llm_backend=llm_backend,
@@ -816,6 +1093,10 @@ def _generate_typst_chapter_per_slide(
         # captured by `_extract_course_and_title()`, and not part of the
         # chapter body.
     text = "\n\n".join(parts)
+    # Safety net: guarantee every visual is referenced and explained, in
+    # case the LLM didn't comply with "Figure, Table, and Diagram
+    # Identification Process" (see prompt.generate_book_chapter_common.md).
+    text = _ensure_visual_references(text, visual_manifest)
     text = _fix_stray_markdown_bold(text, output_file=output_file)
     text = _insert_provenance_tag(text, "typst_aima")
     hio.to_file(output_file, text)

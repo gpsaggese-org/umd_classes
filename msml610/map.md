@@ -94,22 +94,25 @@ Not needed
 > grep "^* " msml610/lectures_source/*.smd | wc -l
 
 > gen_book_chapter.py msml610/01.2 --mode typst_aima --llm_backend hllm_cli
+gen_book_chapter.py  msml610/01.2 --mode typst_aima --llm_backend hllm_cli -v DEBUG --model claude-opus-4.5
+gen_book_chapter.py  msml610/01.2 --mode typst_aima --llm_backend hllm_cli_exec --model openrouter/anthropic/claude-opus-4.6 --no_incremental
+gen_book_chapter.py  msml610/00.1 --mode typst_aima --llm_backend hllm_cli_exec --model openrouter/anthropic/claude-opus-4.6 --no_incremental
 
 > /text.humanize 
 > review / edit book chapter
 
 > run_typst.py --input msml610/book/Lesson01.2-AI_and_Machine_Learning.typ
 
-### gen_book_chapter.py
+### [x] gen_book_chapter.py
 
 - Print all the actions in a table using the standard function like other scripts
 - Make --action render_pdf default
 
-- The entire slide should be sent together and not in chunks as done by 
-_process_panel_body and other related functions
+- The entire slide should be sent together and not in chunks as done by
+  _process_panel_body and other related functions
   - Make a proposal in 5 bullet points of what to change
 
-### [ ] Improve the generation
+### [x] Improve the generation
 - Compare gpt-4o-mini to a better model
 - hllm_cli vs hllm
 
@@ -120,13 +123,17 @@ _process_panel_body and other related functions
 - The figures embedded in the text are good, but we need caption and a reference
   in the text
 
+### [ ] Updates
+
 - Use Definition to have the tag on the side
 
 - "References" need to be a larger font
 
-gen_book_chapter.py  msml610/01.2 --mode typst_aima --llm_backend hllm_cli -v DEBUG --model claude-opus-4.5
-gen_book_chapter.py  msml610/01.2 --mode typst_aima --llm_backend hllm_cli_exec --model openrouter/anthropic/claude-opus-4.6 --no_incremental
-gen_book_chapter.py  msml610/00.1 --mode typst_aima --llm_backend hllm_cli_exec --model openrouter/anthropic/claude-opus-4.6 --no_incremental
+### [ ]
+- Keep the chat open so that we don't have to send the same instructions over and
+  over
+
+- also we can use this to make the text smoother
 
 # Workflows
 
