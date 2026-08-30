@@ -23,11 +23,10 @@ OUT_DIR="${3:-./sweep_results}"
 
 # Each entry is "llm_backend:model". Leave model empty to use the
 # backend's default model (e.g., "hllm_cli_lib:").
+# openrouter/anthropic/claude-opus-4.6
 COMBOS=(
-    "hllm_cli_lib:"
-    "hllm_cli_lib:gpt-4o"
-    "hllm_cli_lib:claude-opus-4"
-    "hllm_cli_exec:"
+    "hllm_cli_exec:gpt-4o"
+    "hllm_cli_exec:openrouter/anthropic/claude-opus-4.6"
     "hllm:"
     "hllm:gpt-4o"
 )
