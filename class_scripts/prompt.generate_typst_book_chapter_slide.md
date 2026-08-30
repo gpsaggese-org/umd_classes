@@ -38,8 +38,7 @@ the input.
   ```
   Output:
   ```text
-  - #strong[Definition]: The term "Artificial Intelligence" was coined in
-    1956.
+  The term "Artificial Intelligence" was coined in 1956.
 
   @@FIGURE_1@@
   ```
@@ -50,22 +49,69 @@ A `#cite("key")` call is already valid Typst; copy it through unchanged,
 at the same position in the sentence. Never wrap it, quote it, or alter
 the key.
 
-## Semantic Tags
+## Semantic Tags — Dissolve, Don't Relabel
 
-Do not leave the semantic tags (e.g., `@Definition@`, `@Example@`) in the
-text — `@word` is Typst label-reference syntax, so leaving it verbatim is
-a compile error, not just a style issue. Convert `@Tag@` into
-`#strong[Tag]` and weave it into the sentence.
+`@Definition@`, `@Example@`, `@Pros@`, `@Cons@`, `@Problem@`, `@Solution@`,
+`@Question@`, `@Answer@`, `@Remark@`, `@Key idea@`, ... mark the
+*rhetorical role* of the bullet that follows; `@word` is also Typst
+label-reference syntax, so leaving it verbatim is a compile error, not
+just a style issue. See "Dissolving Semantic Tags" in the shared style
+guide for the rules — this is what applying them looks like in Typst.
+
+Never emit the tag word itself as a `#strong[...]` label
+(`#strong[Definition]`, `#strong[Pros]`, `#strong[Cons]`,
+`#strong[Problem]`, `#strong[Question]`, ...). Use `#strong[...]` only for
+the actual term or claim being introduced.
 
 - Input:
   ```text
   - @Definition@: An **agent** is something that perceives and acts to
     reach a goal
   ```
-  Output:
+  Bad output (relabels the tag, keeps the outline structure):
   ```text
   - #strong[Definition]: An #strong[agent] is something that perceives and
     acts to reach a goal.
+  ```
+  Good output (a plain sentence; only the term is bold):
+  ```text
+  An #strong[agent] is something that perceives and acts to reach a goal.
+  ```
+
+- Input:
+  ```text
+  - @Pros@
+    - Express precise theory of the human mind as a computer program
+
+  - @Cons@
+    - Unknown workings of the human mind
+    - Anthropocentric definition
+  ```
+  Bad output (two tag-labeled lists):
+  ```text
+  - #strong[Pros]:
+    - Express precise theory of the human mind as a computer program.
+  - #strong[Cons]:
+    - Unknown workings of the human mind.
+    - Anthropocentric definition.
+  ```
+  Good output (one passage weighing both sides):
+  ```text
+  Expressing this as a computer program forces a precise theory of the
+  human mind instead of a vague verbal one. The cost is that the mind's
+  own workings are still largely unknown, and the definition of "thinking
+  like a human" is inescapably anthropocentric.
+  ```
+
+- Input:
+  ```text
+  - @Question@: What is artificial intelligence?
+    - First, understand what **human intelligence** is
+  ```
+  Good output (the question stays a question; the tag disappears):
+  ```text
+  What is artificial intelligence? Answering that starts with
+  understanding what #strong[human intelligence] is.
   ```
 
 - Input:
@@ -74,12 +120,19 @@ a compile error, not just a style issue. Convert `@Tag@` into
     - **Omniscience vs no-regrets**
       - Best is based on available information, not perfect knowledge
   ```
-  Output:
+  Good output (a genuinely enumerable set stays a list, without the tag
+  label):
   ```text
-  - #strong[Limitations]:
-    - #strong[Omniscience vs no-regrets]: the best decision is based on
-      available information, not perfect knowledge.
+  - #strong[Omniscience vs no-regrets]: the best decision is based on
+    available information, not perfect knowledge.
   ```
+
+If your fragment holds only one side of a `@Pros@`/`@Cons@` (or
+`@Problem@`/`@Solution@`) pair — the source put them in separate `:::
+columns` panels, and you were only given one column — still drop the tag,
+but open with a connective ("A drawback, though, is ...", "In exchange,
+...") so the two panels still read as one argument once placed side by
+side, rather than two disconnected labels.
 
 ## Highlighting and Emphasis
 
@@ -94,9 +147,16 @@ a compile error, not just a style issue. Convert `@Tag@` into
 
 ## Lists
 
-- Bullet lists (`- item`) and numbered lists (`1. item`) use the same
-  syntax in Typst as in Markdown — copy the list structure and nesting as
-  is, just convert the text of each item per the rules above
+- Not every `-` bullet in the input should become a Typst list item. A
+  lone tagged bullet (`@Definition@`, `@Example@`, `@Remark@`, ...) that
+  holds one short point becomes a plain sentence in the paragraph instead
+  — see "Semantic Tags — Dissolve, Don't Relabel" above
+- Keep a real Typst list only for content meant to be scanned as parallel
+  items: an enumerated set of steps, assumptions, properties, or named
+  alternatives. For a list you do keep, bullet lists (`- item`) and
+  numbered lists (`1. item`) use the same syntax in Typst as in
+  Markdown — copy the list structure and nesting as is, just convert the
+  text of each item per the rules above
 
 ## Formulas
 

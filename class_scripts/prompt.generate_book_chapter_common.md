@@ -71,15 +71,61 @@ that belongs in the mode file.
 - **Be direct**: State conclusions directly instead of describing the slide
   (e.g., "The conclusion is that ..." not "The slide concludes that ...")
 - Do not repeat a slide bullet verbatim; expand and explain it instead
-- Do not leave semantic tags (e.g., `@Definition@`, `@Example@`) in the
-  text; incorporate them into the flow of the prose instead. This is not
-  optional: `@Word@` is Typst label-reference syntax, so leaving it in a
-  `.typ` file is a compile error, not just a style issue
+- Do not leave semantic tags (e.g., `@Definition@`, `@Example@`, `@Pros@`,
+  `@Problem@`) in the text. This is not optional: `@Word@` is Typst
+  label-reference syntax, so leaving it in a `.typ` file is a compile
+  error, not just a style issue
+- A semantic tag names the *rhetorical role* the bullet plays (this is a
+  definition, an example, an advantage, ...). It is a note to you, the
+  writer, telling you how to phrase the sentence — it is not a heading to
+  reproduce. Once you have used it, discard the tag word itself; do not
+  just wrap it in emphasis markup and keep it as a label (a
+  "Definition:"/"Pros:"/"Problem:" lead-in), since that only reproduces
+  the slide's outline structure instead of writing a chapter. See
+  "Dissolving Semantic Tags" below
+
+## Dissolving Semantic Tags
+
+Lecture slides mark each bullet's role with a tag (`@Definition@`,
+`@Example@`, `@Question@`, `@Answer@`, `@Problem@`, `@Solution@`,
+`@Naive Solution@`, `@Pros@`, `@Cons@`, `@Remark@`, `@Key idea@`,
+`@Intuition@`, `@Fact@`, `@Comparison@`, `@Limitations@`, ...). A book
+chapter does not carry these labels forward as bolded headers; it writes
+the sentence the label was pointing at.
+
+- **Definition / Fact / Key idea / Intuition / Remark**: state the content directly,
+  as a normal sentence. Bold the term or claim being introduced, not the tag word
+- **Example**: introduce it with ordinary transition language ("For instance, ...",
+  "Consider ...", "As an illustration, ...") instead of a bolded "Example:" lead-in
+- **Question / Answer**: pose the question as an actual question in the prose (it may
+  stay a rhetorical question), then answer it in the sentences that follow, without
+  labeling either half
+- **Problem / Solution** (and **Naive Solution / Solution**): describe the
+  difficulty, then introduce the fix with a connective ("A first, naive answer is
+  ...", "That fails because ...", "This can be solved by ...") instead of
+  "Problem:"/"Solution:" headers
+- **Pros / Cons** (and similarly **Comparison**, **Characteristics** vs
+  **Limitations**): when both sides appear in the same source fragment, merge them
+  into one continuous passage that weighs both, using connectives such as "This
+  offers ...", "The tradeoff is ...", "On the other hand, ...", "It also comes with
+  real costs: ...". Do not emit two separately labeled blocks (a "Pros:" list
+  followed by a "Cons:" list) for content that fits in one paragraph
+  - If a fragment contains only one side of such a pair (e.g., the source put `Pros`
+    and `Cons` in separate columns and only one column reaches you), still drop the
+    tag, but phrase the sentence as a continuation ("A drawback, though, is ...") so
+    the two halves still read as one argument once placed side by side
 
 ## Use Lists
 
-- Use lists when the source slide uses lists, preserving nesting. The exact
-  list syntax is given in the mode-specific file
+- Not every `-` bullet in the source should become a list item: slides use
+  bullets as an outline device for notes that are meant to be *read as
+  running prose* once expanded (a lone `@Definition@`, `@Example@`, or
+  `@Remark@`) — write those as ordinary sentences in a paragraph instead
+- Keep a real list only for content the reader is meant to scan as
+  parallel items: an enumerated set of steps, assumptions, properties, or
+  named alternatives that were already itemized in the source for that
+  reason. Preserve the nesting of a list you do keep
+- The exact list syntax is given in the mode-specific file
 
 ## Figure Identification Process
 

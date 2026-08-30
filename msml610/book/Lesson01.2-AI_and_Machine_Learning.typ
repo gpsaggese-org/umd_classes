@@ -258,45 +258,47 @@
       the negative case.
   ],
   [
-// rendered_images:begin
-//     ```graphviz
-//     digraph laws_of_thought {
-//         bgcolor="transparent";
-//         pad="0.15";
-//         splines=spline;
-//         nodesep=0.4;
-//         ranksep=0.5;
-//         rankdir=TB;
-// 
-//         node [shape=box,
-//               style="rounded,filled",
-//               penwidth=1.8,
-//               fontname="Helvetica",
-//               fontsize=12,
-//               margin="0.22,0.14",
-//               height=0.50];
-// 
-//         edge [color="#A3B1C0",
-//               penwidth=1.3,
-//               arrowhead=vee,
-//               arrowsize=0.75,
-//               fontname="Helvetica",
-//               fontsize=10,
-//               fontcolor="#7B8794"];
-// 
-//         premises [label="Correct\npremises", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
-//         logic [label="Logic", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
-//         conclusion [label="Correct\nconclusions", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-// 
-//         premises -> logic -> conclusion;
-//     }
-//     ```
-// rendered_images:end
-// render_images:begin
-#figure(
-  image("Lesson01.2-AI_and_Machine_Learning.typ.figs/Lesson01.2-AI_and_Machine_Learning.1.png"),
-)
-// render_images:end
+    // rendered_images:begin
+    //     ```graphviz
+    //     digraph laws_of_thought {
+    //         bgcolor="transparent";
+    //         pad="0.15";
+    //         splines=spline;
+    //         nodesep=0.4;
+    //         ranksep=0.5;
+    //         rankdir=TB;
+    //
+    //         node [shape=box,
+    //               style="rounded,filled",
+    //               penwidth=1.8,
+    //               fontname="Helvetica",
+    //               fontsize=12,
+    //               margin="0.22,0.14",
+    //               height=0.50];
+    //
+    //         edge [color="#A3B1C0",
+    //               penwidth=1.3,
+    //               arrowhead=vee,
+    //               arrowsize=0.75,
+    //               fontname="Helvetica",
+    //               fontsize=10,
+    //               fontcolor="#7B8794"];
+    //
+    //         premises [label="Correct\npremises", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
+    //         logic [label="Logic", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
+    //         conclusion [label="Correct\nconclusions", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+    //
+    //         premises -> logic -> conclusion;
+    //     }
+    //     ```
+    // rendered_images:end
+    // render_images:begin
+    #figure(
+      image(
+        "Lesson01.2-AI_and_Machine_Learning.typ.figs/Lesson01.2-AI_and_Machine_Learning.1.png",
+      ),
+    )
+    // render_images:end
   ],
 )
 
@@ -739,40 +741,42 @@ inevitably encounter situations its designer never anticipated.
         because it operates on visual or auditory data rather than text.
   ],
   [
-// rendered_images:begin
-//     ```tikz
-//     % Define colors.
-//       \definecolor{AIcolor}{RGB}{244,166,166}    % Red/Pink
-//       \definecolor{MLcolor}{RGB}{178,226,178}    % Green
-//       \definecolor{DLcolor}{RGB}{160,214,209}    % Teal
-//       \definecolor{LLMcolor}{RGB}{198,166,244}   % Purple
-// 
-//       % Draw AI circle
-//       \fill[AIcolor] (0,0) circle (3);
-//       \draw (0,0) circle (3);
-//       \node[above] at (0,2) {\textbf{AI}};
-// 
-//       % Draw ML circle inside AI
-//       \fill[MLcolor] (0.5,-0.5) circle (2);
-//       \draw (0.5,-0.5) circle (2);
-//       \node[above] at (0.5,0.5) {\textbf{ML}};
-// 
-//       % Draw DL circle inside ML
-//       \fill[DLcolor] (1,-1) circle (1);
-//       \draw (1,-1) circle (1);
-//       \node[above] at (1,-0.6) {\textbf{DL}};
-// 
-//       % Draw LLM circle inside DL
-//       \fill[LLMcolor] (1.2,-1.2) circle (0.6);
-//       \draw (1.2,-1.2) circle (0.6);
-//       \node[above] at (1.2,-1.4) {\textbf{LLMs}};
-//     ```
-// rendered_images:end
-// render_images:begin
-#figure(
-  image("Lesson01.2-AI_and_Machine_Learning.typ.figs/Lesson01.2-AI_and_Machine_Learning.2.png"),
-)
-// render_images:end
+    // rendered_images:begin
+    //     ```tikz
+    //     % Define colors.
+    //       \definecolor{AIcolor}{RGB}{244,166,166}    % Red/Pink
+    //       \definecolor{MLcolor}{RGB}{178,226,178}    % Green
+    //       \definecolor{DLcolor}{RGB}{160,214,209}    % Teal
+    //       \definecolor{LLMcolor}{RGB}{198,166,244}   % Purple
+    //
+    //       % Draw AI circle
+    //       \fill[AIcolor] (0,0) circle (3);
+    //       \draw (0,0) circle (3);
+    //       \node[above] at (0,2) {\textbf{AI}};
+    //
+    //       % Draw ML circle inside AI
+    //       \fill[MLcolor] (0.5,-0.5) circle (2);
+    //       \draw (0.5,-0.5) circle (2);
+    //       \node[above] at (0.5,0.5) {\textbf{ML}};
+    //
+    //       % Draw DL circle inside ML
+    //       \fill[DLcolor] (1,-1) circle (1);
+    //       \draw (1,-1) circle (1);
+    //       \node[above] at (1,-0.6) {\textbf{DL}};
+    //
+    //       % Draw LLM circle inside DL
+    //       \fill[LLMcolor] (1.2,-1.2) circle (0.6);
+    //       \draw (1.2,-1.2) circle (0.6);
+    //       \node[above] at (1.2,-1.4) {\textbf{LLMs}};
+    //     ```
+    // rendered_images:end
+    // render_images:begin
+    #figure(
+      image(
+        "Lesson01.2-AI_and_Machine_Learning.typ.figs/Lesson01.2-AI_and_Machine_Learning.2.png",
+      ),
+    )
+    // render_images:end
   ],
 )
 
