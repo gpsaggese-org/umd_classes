@@ -15,7 +15,7 @@ Print a tqdm progress bar instead
 
 ### [ ] Print the LLM cost and the conversion time, when available
 
-### [.] Convert render_typst.sh into run_typst.py similar to
+### [x] Convert render_typst.sh into run_typst.py similar to
 
 helpers_root/dev_scripts_helpers/documentation/run_latex.py
 and

@@ -22,18 +22,27 @@ and the extension for the selected `--mode`.
 
 This script performs the following steps:
 1. Generate the book chapter text via LLM
-2. Add the generated file to Git
-3. Lint the generated file
-4. Compile to PDF
-5. Open the PDF
+2. `git_add`: add the generated file to Git (optional, off by default)
+3. `lint`: lint the generated file (on by default)
+4. `render`: compile the chapter to PDF (`typst_aima` via `run_typst.py`,
+   `md` via pandoc; not supported for `springer_latex`) (on by default)
+5. `open_pdf`: open the compiled PDF in Skim (optional, off by default)
+
+Steps 2-5 are actions and can be selected with `--action` / `--skip_action`
+/ `--only_action` (see `helpers.hselect_action`); `lint` and `render` run
+by default, `git_add` and `open_pdf` don't.
 
 # Usage Example
 
 - Generate a Springer LaTeX chapter for MSML610 lesson 08.1:
 > gen_book_chapter.py --mode springer_latex msml610/08.1
 
-- Generate a Typst chapter for MSML610 lesson 10.2 and preview the PDF:
-> gen_book_chapter.py --mode typst_aima msml610/10.2 --open_pdf
+- Generate a Typst chapter for MSML610 lesson 10.2 (compiles to PDF by
+  default, without opening it or adding it to Git):
+> gen_book_chapter.py --mode typst_aima msml610/10.2
+
+- Generate a Typst chapter, add it to Git, and open the PDF once compiled:
+> gen_book_chapter.py --mode typst_aima msml610/10.2 --action git_add --action open_pdf
 
 - Generate a Markdown chapter for DATA605 lesson 01.1:
 > gen_book_chapter.py --mode md data605/01.1
@@ -54,13 +63,13 @@ from tqdm.auto import tqdm
 
 import class_scripts.common_utils as csccouti
 import dev_scripts_helpers.documentation.preprocess_notes as dshdprno
-import dev_scripts_helpers.dockerize.lib_typst as dshdlity
 import helpers.hdbg as hdbg
 import helpers.hgit as hgit
 import helpers.hio as hio
 import helpers.hmarkdown_slide_iterator as hmaslite
 import helpers.hparser as hparser
 import helpers.hprint as hprint
+import helpers.hselect_action as hselacti
 import helpers.hsystem as hsystem
 
 _LOG = logging.getLogger(__name__)
@@ -80,6 +89,19 @@ _MODE_TO_EXTENSION = {
 # - "hllm": `helpers.hllm.get_completion()`
 # - "hllm_cli": `helpers.hllm_cli.apply_llm()`, text-only
 _LLM_BACKENDS = csccouti.LLM_BACKENDS
+
+# #############################################################################
+# Actions
+# #############################################################################
+
+# Post-generation steps, selectable via `--action` / `--skip_action` /
+# `--only_action` (see `helpers.hselect_action`). Generating the chapter text
+# itself (step 1) is not an action: it's gated by `--no_incremental` /
+# `--dry_run` instead, since it's the one step producing the file the other
+# four act on. `git_add` and `open_pdf` are optional (off by default);
+# `lint` and `render` run by default.
+_VALID_ACTIONS = ["git_add", "lint", "render", "open_pdf"]
+_DEFAULT_ACTIONS = ["lint", "render"]
 
 
 # #############################################################################
@@ -208,11 +230,12 @@ def _build_user_prompt(
         # (e.g., "10.2" -> "10").
         chapter_num = lesson.split(".")[0]
         header_lines.append(f"Chapter number: {chapter_num}")
-        # `<dir>/book/` is always 2 directories below the repo root, so the
-        # relative import path is always the same regardless of `<dir>`.
+        # Use a root-absolute path (resolved against `--root`, not the
+        # output file's directory) so the import works regardless of how
+        # deep the output file lives (e.g. `<dir>/book/` vs `sweep_results/`).
         header_lines.append(
             "Typst import line: "
-            '#import "../../helpers_root/dev_scripts_helpers/typst/'
+            '#import "/helpers_root/dev_scripts_helpers/typst/'
             'aima_style.typ": aima-style, algorithm, chapter, glossary'
         )
     header = "\n".join(header_lines)
@@ -718,7 +741,7 @@ def _build_typst_document_header(
     """
     lines = [
         "// Import AIMA style formatting and macros.",
-        '#import "../../helpers_root/dev_scripts_helpers/typst/'
+        '#import "/helpers_root/dev_scripts_helpers/typst/'
         'aima_style.typ": (',
         "  aima-style, algorithm, chapter, glossary, styled-table,",
         ")",
@@ -885,7 +908,18 @@ def _lint_with_lint_text(output_file: str, *, dry_run: bool) -> None:
     hsystem.system(cmd, print_command=True, dry_run=dry_run)
 
 
-def _compile_and_open_pdf(
+def _get_pdf_file(out_dir: str, basename: str) -> str:
+    """
+    Compute the path a compiled book chapter's PDF is written to.
+
+    :param out_dir: directory holding the generated chapter
+    :param basename: chapter file base name, without extension
+    :return: path to the chapter's PDF
+    """
+    return os.path.join(out_dir, f"{basename}.pdf")
+
+
+def _render_book_chapter(
     output_file: str,
     out_dir: str,
     basename: str,
@@ -895,7 +929,15 @@ def _compile_and_open_pdf(
     dry_run: bool,
 ) -> None:
     """
-    Compile the generated book chapter to PDF and open it in Skim, if possible.
+    Compile the generated book chapter to PDF, without opening it.
+
+    - `typst_aima`: delegates to `run_typst.py` (skipping its own
+      `open_pdf` action, run separately as this script's `open_pdf`
+      action), which compiles the file inside a Docker container and
+      asserts on `typst compile` warnings
+    - `md`: converts to PDF via pandoc
+    - `springer_latex`: not supported (there's no standalone-chapter PDF
+      target; it's meant to be compiled as part of the whole book)
 
     :param output_file: path to the generated chapter file
     :param out_dir: directory holding the generated chapter (and where the
@@ -905,17 +947,14 @@ def _compile_and_open_pdf(
     :param script_dir: directory of this script (for pandoc header files)
     :param dry_run: print the commands without executing them
     """
-    pdf_file = os.path.join(out_dir, f"{basename}.pdf")
+    pdf_file = _get_pdf_file(out_dir, basename)
     if mode == "typst_aima":
-        if dry_run:
-            _LOG.warning(
-                "As per user request, not compiling '%s' to PDF", output_file
-            )
-        else:
-            repo_root = hgit.find_git_root()
-            dshdlity.run_dockerized_typst(
-                output_file, pdf_file, [], typst_root_dir=repo_root
-            )
+        run_typst_exec = hgit.find_file("run_typst.py")
+        cmd = (
+            f"{run_typst_exec} --input {output_file} --output {pdf_file} "
+            "--skip_action open_pdf"
+        )
+        hsystem.system(cmd, print_command=True, dry_run=dry_run)
     elif mode == "md":
         csccouti.convert_markdown_to_pdf(
             output_file, pdf_file, script_dir, dry_run=dry_run
@@ -926,10 +965,42 @@ def _compile_and_open_pdf(
             "need to compile the book (chapter file: '%s')",
             output_file,
         )
-        return
-    # TODO(gp): This should be a function checking on mac
-    cmd = f"open -a /Applications/Skim.app {pdf_file}"
-    hsystem.system(cmd, print_command=True, dry_run=dry_run)
+
+
+def _open_book_chapter_pdf(
+    output_file: str, out_dir: str, basename: str, mode: str, *, dry_run: bool
+) -> None:
+    """
+    Open the compiled book chapter PDF in Skim.
+
+    Assumes the PDF was already produced by a prior `render` action; does
+    not compile it.
+
+    :param output_file: path to the generated chapter file
+    :param out_dir: directory holding the compiled PDF
+    :param basename: chapter file base name, without extension
+    :param mode: generation mode, one of `_MODE_TO_EXTENSION`
+    :param dry_run: print the commands without executing them
+    """
+    if mode == "typst_aima":
+        pdf_file = _get_pdf_file(out_dir, basename)
+        run_typst_exec = hgit.find_file("run_typst.py")
+        cmd = (
+            f"{run_typst_exec} --input {output_file} --output {pdf_file} "
+            "--only_action open_pdf"
+        )
+        hsystem.system(cmd, print_command=True, dry_run=dry_run)
+    elif mode == "md":
+        pdf_file = _get_pdf_file(out_dir, basename)
+        # TODO(gp): This should be a function checking on mac
+        cmd = f"open -a /Applications/Skim.app {pdf_file}"
+        hsystem.system(cmd, print_command=True, dry_run=dry_run)
+    else:
+        _LOG.warning(
+            "PDF preview is not supported for --mode springer_latex. You "
+            "need to compile the book (chapter file: '%s')",
+            output_file,
+        )
 
 
 # #############################################################################
@@ -997,12 +1068,7 @@ def _parse() -> argparse.ArgumentParser:
         help="LLM model to use (e.g., 'gpt-4o', 'claude-opus-4'); empty "
         "string (default) uses the --llm_backend's default model",
     )
-    parser.add_argument(
-        "--open_pdf",
-        action="store_true",
-        help="Compile the generated chapter to PDF and open it in Skim "
-        "(supported for --mode typst_aima and --mode md only)",
-    )
+    hselacti.add_action_arg(parser, _VALID_ACTIONS, _DEFAULT_ACTIONS)
     hparser.add_verbosity_arg(parser)
     return parser
 
@@ -1063,30 +1129,54 @@ def _main(parser: argparse.ArgumentParser) -> None:
                 args.llm_backend,
                 lesson_arg,
             )
-    # Step 3: Track the generated file in git.
-    _LOG.info("\n%s", hprint.frame("Step 3: Adding book chapter to git"))
-    csccouti.git_add_with_retry(output_file, dry_run=args.dry_run)
-    # Step 4: Lint the generated file (mode-specific).
-    _LOG.info("\n%s", hprint.frame(f"Step 4: Linting '{args.mode}' file"))
-    if args.mode == "typst_aima":
-        # TODO(gp): Move this inside lint_text.py to support also typst.
-        _lint_typst_file(output_file, dry_run=args.dry_run)
-    else:
-        _lint_with_lint_text(output_file, dry_run=args.dry_run)
-    # Step 5: Compile to PDF and open in Skim.
-    if args.open_pdf:
-        _LOG.info(
-            "\n%s",
-            hprint.frame("Step 5: Compiling to PDF and opening in Skim"),
-        )
-        _compile_and_open_pdf(
-            output_file,
-            out_dir,
-            basename,
-            args.mode,
-            script_dir,
-            dry_run=args.dry_run,
-        )
+    # Steps 2-5: git_add / lint / render / open_pdf, selected via --action /
+    # --skip_action / --only_action.
+    actions = hselacti.select_actions(args, _VALID_ACTIONS, _DEFAULT_ACTIONS)
+    _LOG.info(
+        "\n%s", hselacti.actions_to_string(actions, _VALID_ACTIONS, add_frame=True)
+    )
+    while actions:
+        action = actions[0]
+        to_execute, actions = hselacti.mark_action(action, actions)
+        if not to_execute:
+            continue
+        if action == "git_add":
+            _LOG.info("\n%s", hprint.frame("Action: Adding book chapter to git"))
+            csccouti.git_add_with_retry(output_file, dry_run=args.dry_run)
+        elif action == "lint":
+            _LOG.info(
+                "\n%s", hprint.frame(f"Action: Linting '{args.mode}' file")
+            )
+            if args.mode == "typst_aima":
+                # TODO(gp): Move this inside lint_text.py to support also
+                # typst.
+                _lint_typst_file(output_file, dry_run=args.dry_run)
+            else:
+                _lint_with_lint_text(output_file, dry_run=args.dry_run)
+        elif action == "render":
+            _LOG.info("\n%s", hprint.frame("Action: Rendering to PDF"))
+            _render_book_chapter(
+                output_file,
+                out_dir,
+                basename,
+                args.mode,
+                script_dir,
+                dry_run=args.dry_run,
+            )
+        elif action == "open_pdf":
+            _LOG.info("\n%s", hprint.frame("Action: Opening PDF"))
+            _open_book_chapter_pdf(
+                output_file,
+                out_dir,
+                basename,
+                args.mode,
+                dry_run=args.dry_run,
+            )
+        else:
+            raise ValueError(f"Invalid action='{action}'")
+    hdbg.dassert_eq(
+        len(actions or []), 0, "There are unprocessed actions: %s", str(actions)
+    )
     _LOG.info("Book chapter generated: %s", output_file)
 
 

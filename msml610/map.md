@@ -98,7 +98,6 @@ Not needed
 > review / edit book chapter
 > run_typst.py --input msml610/book/Lesson01.2-AI_and_Machine_Learning.typ
 
-
 ### [ ] Improve the generation
 - Compare gpt-4o-mini to a better model
 - hllm_cli vs hllm
