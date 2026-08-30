@@ -281,6 +281,7 @@ def _generate_lecture_commentary(
     output_dir: str,
     input_png_dir: str,
     image_type: str,
+    model: str,
     llm_backend: str,
     *,
     output_file: str = "",
@@ -301,6 +302,7 @@ def _generate_lecture_commentary(
     :param add_new_page: if True, add `\newpage` commands before each slide
     :param image_type: image format of the files in `input_png_dir` (e.g.,
         "png", "jpg")
+    :param model: LLM model to use, or "" to use the backend's default
     :param llm_backend: which LLM backend to use to generate commentary, one
         of `_LLM_BACKENDS` (see `_generate_slide_commentary()`)
     """
@@ -427,7 +429,7 @@ def _generate_lecture_commentary(
         )
         # Generate commentary for this slide.
         commentary = _generate_slide_commentary(
-            slide_content, _DEFAULT_SYSTEM_PROMPT, "", llm_backend
+            slide_content, _DEFAULT_SYSTEM_PROMPT, model, llm_backend
         )
         slide_output.append(commentary)
         slide_output.append("")
@@ -493,6 +495,13 @@ def _parse() -> argparse.ArgumentParser:
             "(default) feeds the slide's images to the LLM as multi-modal "
             "context, 'hllm_cli' is text-only"
         ),
+    )
+    parser.add_argument(
+        "--model",
+        type=str,
+        default="",
+        help="LLM model to use (e.g., 'gpt-4o', 'claude-opus-4'); empty "
+        "string (default) uses the --llm_backend's default model",
     )
     parser.add_argument(
         "--open_pdf",
@@ -580,6 +589,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
                 out_dir,
                 png_dir,
                 args.image_type,
+                args.model,
                 args.llm_backend,
                 output_file=book_chapter_md,
             )

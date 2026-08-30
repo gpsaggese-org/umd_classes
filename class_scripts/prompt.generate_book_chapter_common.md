@@ -72,7 +72,9 @@ that belongs in the mode file.
   (e.g., "The conclusion is that ..." not "The slide concludes that ...")
 - Do not repeat a slide bullet verbatim; expand and explain it instead
 - Do not leave semantic tags (e.g., `@Definition@`, `@Example@`) in the
-  text; incorporate them into the flow of the prose instead
+  text; incorporate them into the flow of the prose instead. This is not
+  optional: `@Word@` is Typst label-reference syntax, so leaving it in a
+  `.typ` file is a compile error, not just a style issue
 
 ## Use Lists
 

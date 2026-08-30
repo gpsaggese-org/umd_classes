@@ -14,21 +14,21 @@
 * ML, AI, and Intelligence
 
 - @Definition@: **Machine Learning** is a subset of Artificial Intelligence (AI)
-  - Often confused and / or used interchangeably with _deep learning_,
-    _large-language models_, _predictive analytics_, and other related fields
+  - Often confused with _deep learning_, _large-language models_,
+    _predictive analytics_, and other related fields
 
 - @Question@: What is artificial intelligence?
-  - Before that, we should first understand what **human intelligence** is
+  - First, understand what **human intelligence** is
 
 - @Question@: What is human intelligence?
   - We call ourselves _"homo sapiens"_ because intelligence sets us apart from
     animals
   - For thousands of years, we tried to understand how we think
   - One of the _biggest mysteries_
-    - Brain is a small mass of matter but can understand nature's secrets
+    - Brain is small matter, yet grasps nature's secrets
       - E.g., theory of relativity, quantum mechanics, black holes
-    - How can the brain understand, predict, and manipulate a world more complicated
-      than itself?
+    - How can the brain understand, predict, and manipulate a world more complex than
+      itself?
 
 * Artificial Intelligence
 
@@ -44,12 +44,12 @@
   - _"What I cannot create, I do not understand"_ (Feynman, 1988)
 
 - @Characteristics@
-  - Universal and applicable to any human activity and task
-  - Its impact is greater than any previous historical event
-  - Already generates hundreds of billions of dollars annually in market
-    revenue, with trillions in global economic impact projected by 2030
+  - Applies to any human activity and task
+  - Impact exceeds any past historical event
+  - Generates hundreds of billions of dollars annually in market revenue,
+    with trillions in global economic impact projected by 2030
     [@bughin2018aifrontier]
-  - Presents many unresolved problems, unlike disciplines with settled core
+  - Has many unresolved problems, unlike disciplines with settled core
     theories (e.g., arithmetic, Newtonian mechanics within its domain)
 
 ::::
@@ -78,7 +78,7 @@
 
 - @Question@: Which definition best captures what AI should aim for?
 
-- @Key idea@: Building machines that **act rationally** should be the ultimate goal
+- @Key idea@: Building machines that **act rationally** is the ultimate goal
   of AI
 
 ::::
@@ -100,8 +100,8 @@
 
 * 1. AI as Thinking Humanly
 
-- @Problem@: To build machines that think like humans, we need to first **determine
-  how humans think**
+- @Problem@: To build machines that think like humans, first **determine how
+  humans think**
 
 - @Pros@
   - Express precise theory of the human mind as a computer program
@@ -123,7 +123,7 @@
 
 - @Techniques@: **Automatic theorem proving**
   - Programs solve problems in logical notation
-  - Run indefinitely if no solution exists, since first-order validity is
+  - Runs indefinitely if no solution exists, since first-order validity is
     only semi-decidable
 
 ::::
@@ -174,9 +174,9 @@ digraph laws_of_thought {
        $$
        \begin{aligned}
          & \exists \; x, y, h_x, h_y \\
-         & \quad Person(x) \land Person(y) \land x \neq y \land {} 
+         & \quad Person(x) \land Person(y) \land x \neq y \land {}
          Hand(x, h_x) \land Hand(y, h_y) \land {} \\
-         & \quad MoveToward(h_x, h_y) \land Contact(h_x, h_y) \land {} 
+         & \quad MoveToward(h_x, h_y) \land Contact(h_x, h_y) \land {}
          Shake(h_x, h_y) \land {} \\
          &\quad Release(h_x, h_y) \\
        \end{aligned}
@@ -187,7 +187,7 @@ digraph laws_of_thought {
   3. **Scalability challenges**
      - Large problems may need heuristics for practical solutions
   4. **Intelligence requires more than rational thinking**
-     - Importance of agent interaction with the world
+     - Agent must interact with the world
      - Problem of the "embodiment of AI"
 
 * 3. AI as Acting Humanly
@@ -206,10 +206,10 @@ digraph laws_of_thought {
 - @Components@: Passing the **(embodied) Turing test** requires
   1. Natural language processing to communicate
   2. Knowledge representation to store information
-  3. Automated reasoning to use stored knowledge and answer questions
+  3. Automated reasoning to use knowledge and answer questions
   4. Machine learning to detect patterns
-  5. Computer vision and speech recognition to perceive objects and
-     understand speech
+  5. Computer vision and speech recognition to perceive and understand
+     speech
   6. Robotics to manipulate objects and move
 
 ::::
@@ -247,35 +247,15 @@ digraph laws_of_thought {
 
 * 4. AI as Acting Rationally
 
-::: columns
-:::: {.column width=65%}
-
 - @Definition@: **Rational agents** are agents that do the _"right thing"_
   given what they know
 
 - @Characteristics@: Agents that **act rationally** should
   1. Operate autonomously
   2. Perceive environment
-  3. Persist over a prolonged time period
+  3. Persist over time
   4. Adapt to change
   5. Create and pursue goals
-
-::::
-:::: {.column width=30%}
-
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#EEEDFE', 'primaryBorderColor': '#7F77DD', 'primaryTextColor': '#26215C', 'lineColor': '#888888', 'fontFamily': 'Helvetica'}}}%%
-mindmap
-  root((**Rational<br/>Agent**))
-    Operate autonomously
-    Perceive environment
-    Persist over time
-    Adapt to change
-    Create and pursue goals
-```
-
-::::
-:::
 
 * Acting Rationally as Ultimate Goal of AI
 
@@ -287,7 +267,7 @@ mindmap
   - Rational vs. Human
 
 - **Acting is more fundamental than Thinking**
-  - Acting rationally is broader than just thinking rationally
+  - Acting rationally is broader than thinking rationally
 
 - **Rational is more objective than Human**
   - Rationality can be mathematically defined
@@ -324,8 +304,7 @@ mindmap
 - @Example@: You cross the street without checking for oncoming traffic and a
   car knocks you over
   - _"Did you act rationally?"_
-  - It depends (but probably not, since checking first was a low-cost,
-    easy precaution)
+  - It depends (probably not, since checking first was low-cost)
 
 - @Challenges@: Moral issues with self-driving cars
   - _"Should a car swerve and hit a pedestrian to avoid a frontal crash that would
@@ -335,23 +314,24 @@ mindmap
 
 - @Challenges@: **Probabilistic environment**
   - A rational agent aims for:
-    - The best outcome in a deterministic setup
-    - The best expected outcome under uncertainty
+    - Best outcome in a deterministic setup
+    - Best expected outcome under uncertainty
 
 - @Problem@: What does **"best"** mean?
-  - The classical answer is that _"best"_ is determined by the _objective function_
+  - The classical answer: _"best"_ is determined by the _objective function_
     - E.g., cost function, sum of rewards, loss function, utility
   - But things are more complex
 
 - @Limitations@
   - **Omniscience vs no-regrets**
     - Best is based on available information, not perfect knowledge
-  - Sometimes **no provably correct action** exists, yet, an action must be taken
+  - Sometimes **no provably correct action** exists, yet an action must be
+    taken
   - Even **with perfect information** rationality may not be feasible due to:
     - Cost of acquiring all data (e.g., in medicine)
     - Computational demands (e.g., traversing a search tree with more
       branches than atoms in the observable universe, $\sim 10^{80}$)
-    - Real-time demands (e.g., need to decide within 1 micro-sec in HFT)
+    - Real-time demands (e.g., decide within 1 micro-sec in HFT)
 
 - @Solution@: **"Satisficing"**: Achieve _good enough_ instead of _perfect_
   [@simon1956satisficing]
@@ -371,13 +351,13 @@ mindmap
     learn without being explicitly programmed"_ (Samuel, 1959) [@samuel1959checkers]
   - Machine learning builds machines to do _useful things_ without being _explicitly
     programmed_
-    - E.g., a computer learns to play checkers by playing against itself, memorizing
-      positions that lead to winning
+    - E.g., a computer learns checkers by playing against itself, memorizing
+      winning positions
   - More formally: _"A computer program is said to learn from experience $E$ with
     respect to some task $T$ and some performance measure $P$, if $P(T)$ improves
     with experience $E$"_ (Mitchell, 1997) [@mitchell1997machinelearning]
 
-- @Applications@: Common examples of machine learning include
+- @Applications@: Common ML examples include
   - Computer vision
   - Speech recognition
   - Natural language processing
@@ -393,7 +373,7 @@ mindmap
 
 * The 3 Machine Learning Assumptions
 
-- @Fact@: ML involves solving a practical problem of:
+- @Fact@: ML solves a practical problem of:
   - Gathering a dataset
   - _Building a statistical model from the dataset algorithmically_
   - Evaluating the model
@@ -409,9 +389,9 @@ mindmap
 
 - @Question@: Which assumption is **essential**?
   1. If no pattern exists, does it make sense to run learning?
-  2. Is it a problem if a pattern can be devised with math but we still use
-     machine learning?
-  3. Can any progress happen without data?
+  2. Is it a problem if math can devise the pattern but we still use machine
+     learning?
+  3. Can progress happen without data?
 
 - @Remark@: _Without data, no progress is possible_: data availability is
   the assumption that is truly essential
@@ -427,8 +407,8 @@ mindmap
   - **ML (Machine Learning)**: Machines capable of performing tasks without being
     explicitly programmed
   - _AI models that are not ML_ is possible
-    - E.g., in handcrafted rule-based systems (e.g., IBM Deep Blue playing chess)
-      there is no learning from data, but there is still an AI system
+    - E.g., handcrafted rule-based systems (e.g., IBM Deep Blue playing chess)
+      have no learning from data, but are still an AI system
 
 - @Definition@
   - **DL (Deep Learning)**: ML using a particular type of models, i.e., neural
@@ -437,8 +417,8 @@ mindmap
     datasets to predict text, often further tuned with reinforcement learning
     from human feedback (RLHF) [@ouyang2022instructgpt]
   - _DL models that are not LLMs_ are possible
-    - E.g., a convolutional neural network for vision or speech is deep learning
-      system but not an LLM
+    - E.g., a convolutional neural network for vision or speech is a deep
+      learning system but not an LLM
 
 ::::
 :::: {.column width=30%}
@@ -479,7 +459,7 @@ mindmap
 - @Problem@: **AI and ML differ from human intelligence**
   - Machines do not learn like humans (e.g., LLMs) and have different limitations
   - Does the brain use gradient descent? Unclear
-  - Does the brain use reinforcement learning? Probably (in a certain sense)
+  - Does the brain use reinforcement learning? Probably, in a certain sense
 
 - @Limitations@
   - **Fragility to input variations**
@@ -492,7 +472,7 @@ mindmap
     - ML systems cannot apply knowledge across domains without retraining
   - **Massive data and compute requirements**
     - ML requires enormous datasets and computational resources
-    - E.g., A teenager learns to drive in hours, but self-driving systems need
+    - E.g., a teenager learns to drive in hours, but self-driving systems need
       billions of compute hours and extensive data
   - **Poor common sense and reasoning**
     - ML lacks built-in world knowledge and intuitive logic
@@ -531,5 +511,9 @@ mindmap
 
 ```{=typst}
 #set text(size: 0.75em)
-#bibliography("/msml610/lectures_source/refs.bib", title: none)
+#bibliography(
+  "/msml610/lectures_source/refs.bib",
+  style: "/helpers_root/dev_scripts_helpers/typst/umd-references.csl",
+  title: none,
+)
 ```

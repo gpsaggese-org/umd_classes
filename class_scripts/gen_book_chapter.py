@@ -205,17 +205,20 @@ def _build_user_prompt(
 
 # TODO(ai_gp): add the cache to csccouti.call_llm and call that directly.
 @hcacsimp.simple_cache(cache_type="json")
-def _call_llm(user_prompt: str, system_prompt: str, llm_backend: str) -> str:
+def _call_llm(
+    user_prompt: str, system_prompt: str, model: str, llm_backend: str
+) -> str:
     """
     Generate the book chapter text using an LLM.
 
     :param user_prompt: user message (source content plus context)
     :param system_prompt: system prompt (style guide)
+    :param model: LLM model to use, or "" to use the backend's default
     :param llm_backend: which LLM backend to use, one of `_LLM_BACKENDS`
     :return: generated chapter text
     """
     hdbg.dassert_in(llm_backend, _LLM_BACKENDS)
-    return csccouti.call_llm(user_prompt, system_prompt, "", llm_backend)
+    return csccouti.call_llm(user_prompt, system_prompt, model, llm_backend)
 
 
 # #############################################################################
@@ -281,6 +284,7 @@ def _generate_book_chapter(
     input_file: str,
     output_file: str,
     mode: str,
+    model: str,
     llm_backend: str,
     lesson: str,
 ) -> None:
@@ -290,6 +294,7 @@ def _generate_book_chapter(
     :param input_file: path to the input markdown slides file
     :param output_file: path to write the generated chapter to
     :param mode: generation mode, one of `_MODE_TO_EXTENSION`
+    :param model: LLM model to use, or "" to use the backend's default
     :param llm_backend: which LLM backend to use, one of `_LLM_BACKENDS`
     :param lesson: lesson number (e.g., "10.2"), used to derive the Typst
         chapter number
@@ -302,7 +307,7 @@ def _generate_book_chapter(
     user_prompt = _build_user_prompt(
         input_file, content, mode, course_title, chapter_title, lesson
     )
-    raw_text = _call_llm(user_prompt, system_prompt, llm_backend)
+    raw_text = _call_llm(user_prompt, system_prompt, model, llm_backend)
     text = _strip_code_fence(raw_text)
     text = _insert_provenance_tag(text, mode)
     hio.to_file(output_file, text)
@@ -443,6 +448,13 @@ def _parse() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--model",
+        type=str,
+        default="",
+        help="LLM model to use (e.g., 'gpt-4o', 'claude-opus-4'); empty "
+        "string (default) uses the --llm_backend's default model",
+    )
+    parser.add_argument(
         "--open_pdf",
         action="store_true",
         help="Compile the generated chapter to PDF and open it in Skim "
@@ -493,6 +505,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
                 input_file,
                 output_file,
                 args.mode,
+                args.model,
                 args.llm_backend,
                 lesson_arg,
             )

@@ -63,7 +63,9 @@ Copied and adapted from
 
 - Use `#strong[text]` for concepts, definitions, algorithm names, and key
   terms
-- Use `*text*` for italics sparingly (emphasis only, not decoration)
+- Use `#emph[text]` for italics sparingly (emphasis only, not decoration);
+  `*text*` in Typst markup renders as bold, not italic, so never use it for
+  emphasis
 
 ## Algorithms and Pseudocode
 
@@ -100,9 +102,12 @@ Copied and adapted from
   caption: [Custom labeled figure.],
   kind: "figure",
   supplement: [Fig.],
-  placement: "auto",
+  placement: auto,
 ) <fig:chart>
 ```
+
+- `placement` takes a bare keyword (`auto`, `none`, `top`, `bottom`), not a
+  string — `placement: "auto"` is a type error
 
 - Every figure needs a label (`<fig:<description>>`), a one-line caption,
   and a reference in the text (`@fig:diagram`) that integrates it into the
@@ -124,9 +129,38 @@ Copied and adapted from
   // rendered_image:end
   ```
 
+## Bibliography
+
+- A `References` section's `#bibliography(...)` call must always pass the
+  shared UMD citation style, so entries render as `Year, Author et al.,
+  "Title" (Link)` with no page numbers (see `.claude/references.rules.md`):
+  ```typst
+  #bibliography(
+    "/msml610/lectures_source/refs.bib",
+    style: "/helpers_root/dev_scripts_helpers/typst/umd-references.csl",
+    title: none,
+  )
+  ```
+- Never call `#bibliography(...)` without the `style:` argument
+
 ## Typst Syntax Requirements
 
 - Follow Typst (not markdown) syntax: `#strong[text]` not `**text**`,
-  `*text*` for italic, `== Heading` / `=== Subheading` (auto-numbered)
-- Do NOT mix markdown and Typst syntax (no `**`, `__`, `~~`)
+  `#emph[text]` not `*text*`/`_text_`, `== Heading` / `=== Subheading`
+  (auto-numbered)
+- Do NOT mix markdown and Typst syntax (no `**`, `__`, `~~`, `*text*`)
+- Never rewrite the content inside a raw code fence (` ```mermaid `,
+  ` ```graphviz `, ` ```tikz `, etc.) — copy it verbatim, character for
+  character; those blocks are not Typst and must not contain `#strong[`,
+  `#emph[`, or other Typst markup
+- If the source slide markdown wraps native Typst calls in a pandoc raw
+  block (` ```{=typst} ... ``` `), do NOT copy that fence into the `.typ`
+  output — the output document is already native Typst, so a
+  ` ```{=typst} ` fence is not executed there, it is shown as inert literal
+  text. Strip the fence markers and emit the enclosed Typst code directly
+- Never leave semantic tags such as `@Definition@`, `@Question@`,
+  `@Example@` verbatim in a `.typ` file — `@word` is Typst
+  label-reference syntax there, so it is a compile error, not just a style
+  issue; convert each into `#strong[Word]` (or better, weave it into the
+  prose) instead
 - Always close `#strong[`, `[...]`, `(...)` with matching brackets

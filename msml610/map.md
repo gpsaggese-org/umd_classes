@@ -77,26 +77,28 @@ Lesson13.1-Explainability.smd
 
 # Workflow in short
 
-/slides.lint          01.2   01.3
+/slides.lint          01.2  01.3
 /slides.review        01.2
-/slides.add_visuals   01.2   01.3
-/slides.fix_errors
-/slides.reduce_text
-
-/slides.add_references  01.2
-/slides.add_tutorial_links
-
+/slides.add_visuals   01.2  01.3
+/slides.add_references 01.2 01.3
 
 Not needed
+/slides.fix_errors
+/slides.reduce_text
 /slides.fix_formatting
+/slides.add_tutorial_links
 
 > lint_text.py -i 
 
 > gen_slides.py msml610/01.3
 > grep "^* " msml610/lectures_source/*.smd | wc -l
 
-> gen_book_chapters.py
+> gen_book_chapter.py msml610/01.2 --mode typst_aima --llm_backend hllm_cli
+  TODO(ai_gp): This should check that it compiles
 > review / edit book chapter
+> render_typst.sh msml610/book/Lesson01.2-AI_and_Machine_Learning
+
+gpt-4o-mini
 
 # Workflows
 
