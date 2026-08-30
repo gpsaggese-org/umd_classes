@@ -58,7 +58,7 @@ import logging
 import os
 import re
 import shutil
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Tuple
 
 from tqdm.auto import tqdm
 
@@ -349,22 +349,28 @@ def _insert_provenance_tag(text: str, mode: str) -> str:
 
 # Only `typst_aima` uses this path (see the `--mode` choice in `_parse()`).
 # It follows the same approach as `gen_lecture_commentary.py`: structure
-# (headings, `::: columns` layout, figures/diagrams/tables) is emitted
-# deterministically by Python, and the LLM is called once per slide (or
-# once per column panel, for a two-column slide), only to convert that
+# (headings, figures/diagrams/tables) is emitted deterministically by
+# Python, and the LLM is called once per slide, only to convert that
 # slide's *prose* into Typst body markup. This keeps each LLM call small
 # and focused, instead of asking one call to transform an entire
 # multi-hundred-line lecture (and every construct in it) at once, which is
 # what left artifacts like stray `::: columns` markers and `@Tag@` labels
 # in the whole-document path (`_generate_book_chapter()` below, still used
 # by `springer_latex` and `md`).
+#
+# A `::: columns` two-column layout is a page-layout choice made in the
+# `.smd` source, not semantic content: it is stripped out (see
+# `_strip_column_markup()`) before the slide's body reaches the LLM, and
+# the LLM always converts the whole slide as one flowing passage. The
+# source's layout never affects the generated chapter.
 
 # Matches a `::: columns` / `:::: {.column width=X%}` ... `::::` / `:::`
 # pandoc fenced-div layout (see "Use Lists"/columns in the `.smd` source
-# convention). Column width is captured so `_wrap_columns()` can rebuild a
-# Typst `#grid(columns: (...))` with the same proportions.
+# convention). These lines carry only layout information (which column a
+# line sits in, and how wide it is), so `_strip_column_markup()` just
+# deletes them.
 _COLUMNS_OPEN_RE = re.compile(r"^:::\s*columns\s*$")
-_COLUMN_PANEL_OPEN_RE = re.compile(r"^::::\s*\{\.column\s+width=(\d+)%\}\s*$")
+_COLUMN_PANEL_OPEN_RE = re.compile(r"^::::\s*\{\.column[^}]*\}\s*$")
 _COLUMN_PANEL_CLOSE_RE = re.compile(r"^::::\s*$")
 _COLUMNS_CLOSE_RE = re.compile(r"^:::\s*$")
 
@@ -440,48 +446,35 @@ def _fix_stray_markdown_bold(text: str, *, output_file: str) -> str:
     return text
 
 
-def _split_column_panels(body: str) -> List[Tuple[Optional[str], str]]:
+def _strip_column_markup(body: str) -> str:
     """
-    Split a slide body into its column panels.
+    Remove `::: columns` / `:::: {.column width=X%}` pandoc div markers
+    from a slide body, keeping the content of every column, in the same
+    order it appeared in the source.
+
+    The two-column layout is a page-layout choice made in the `.smd`
+    source; it carries no semantic content, so the LLM never sees it (see
+    "What you will NEVER see in the input" in
+    `prompt.generate_typst_book_chapter_slide.md`) and the whole slide is
+    converted as a single flowing body, regardless of how many columns the
+    source used.
 
     :param body: raw slide body text (everything after the `* Title`
         line), possibly wrapped in a `::: columns` div
-    :return: list of (width_percent, panel_content) tuples; `width_percent`
-        is `None` and there is a single element if `body` has no `:::
-        columns` wrapper
+    :return: `body` with column-div marker lines removed
     """
     lines = body.splitlines()
-    if not any(_COLUMNS_OPEN_RE.match(l.strip()) for l in lines):
-        return [(None, body)]
-    panels: List[Tuple[str, str]] = []
-    in_columns = False
-    cur_width: Optional[str] = None
-    cur_lines: List[str] = []
-    for line in lines:
-        stripped = line.strip()
-        if not in_columns:
-            if _COLUMNS_OPEN_RE.match(stripped):
-                in_columns = True
-            continue
-        panel_open = _COLUMN_PANEL_OPEN_RE.match(stripped)
-        if panel_open:
-            if cur_width is not None:
-                panels.append((cur_width, "\n".join(cur_lines).strip("\n")))
-            cur_width = panel_open.group(1)
-            cur_lines = []
-            continue
-        if _COLUMN_PANEL_CLOSE_RE.match(stripped):
-            if cur_width is not None:
-                panels.append((cur_width, "\n".join(cur_lines).strip("\n")))
-                cur_width = None
-                cur_lines = []
-            continue
-        if _COLUMNS_CLOSE_RE.match(stripped):
-            in_columns = False
-            continue
-        cur_lines.append(line)
-    hdbg.dassert_lt(0, len(panels), "No column panels found in: %s", body)
-    return panels  # type: ignore[return-value]
+    kept = [
+        line
+        for line in lines
+        if not (
+            _COLUMNS_OPEN_RE.match(line.strip())
+            or _COLUMN_PANEL_OPEN_RE.match(line.strip())
+            or _COLUMN_PANEL_CLOSE_RE.match(line.strip())
+            or _COLUMNS_CLOSE_RE.match(line.strip())
+        )
+    ]
+    return "\n".join(kept)
 
 
 def _slugify_figure_name(path: str) -> str:
@@ -562,7 +555,7 @@ def _render_diagram_placeholder(lang: str, code: str) -> str:
     return f"```{lang}\n{code.strip(chr(10))}\n```"
 
 
-def _process_panel_body(
+def _process_slide_body(
     body: str,
     *,
     output_dir: str,
@@ -571,20 +564,24 @@ def _process_panel_body(
     llm_backend: str,
 ) -> str:
     """
-    Convert one column panel's raw `.smd` body into Typst.
+    Convert one slide's raw `.smd` body into Typst, in a single LLM call.
 
     Figures, diagrams, and `{=typst}` raw blocks are pulled out into
     `@@FIGURE_N@@` placeholder tokens and rendered deterministically (see
     `prompt.generate_typst_book_chapter_slide.md` for the placeholder
     contract); only the remaining prose, if any, is sent to the LLM. A
-    panel that is nothing but a figure/table skips the LLM call entirely.
+    slide body that is nothing but a figure/table skips the LLM call
+    entirely. The whole body (already stripped of any `::: columns`
+    layout by `_strip_column_markup()`) is sent as one call, so the model
+    can weave content that used to sit in separate columns (e.g. a
+    `@Pros@`/`@Cons@` pair) into one continuous passage.
 
-    :param body: raw panel body text
+    :param body: raw slide body text
     :param output_dir: directory the chapter file is written to
     :param system_prompt: system prompt for the LLM (slide-body prompt)
     :param model: LLM model to use, or "" to use the backend's default
     :param llm_backend: which LLM backend to use, one of `_LLM_BACKENDS`
-    :return: Typst snippet for this panel
+    :return: Typst snippet for this slide's body
     """
     placeholders: Dict[str, str] = {}
     token_idx = [0]
@@ -620,34 +617,12 @@ def _process_panel_body(
         )
         text = _strip_code_fence(raw_text)
     else:
-        # The panel is nothing but a figure/table: no prose to convert, so
-        # skip the LLM call entirely.
+        # The slide body is nothing but a figure/table: no prose to
+        # convert, so skip the LLM call entirely.
         text = body
     for token, replacement in placeholders.items():
         text = text.replace(token, replacement)
     return text
-
-
-def _wrap_columns(panel_texts: List[str], widths: List[str]) -> str:
-    """
-    Wrap converted column panels in a Typst `#grid(...)` with the same
-    proportions as the source `::: columns` div.
-
-    :param panel_texts: converted Typst snippet for each panel, in order
-    :param widths: width percentage for each panel (e.g., "65"), in order
-    :return: a `#grid(...)` snippet, or `panel_texts[0]` unchanged if there
-        is only one panel
-    """
-    if len(panel_texts) == 1:
-        return panel_texts[0]
-    hdbg.dassert_eq(len(panel_texts), len(widths))
-    col_defs = ", ".join(f"{w}%" for w in widths)
-    lines = ["#grid(", f"  columns: ({col_defs}),", "  gutter: 1em,"]
-    for text in panel_texts:
-        indented = "\n".join(f"  {l}" if l else "" for l in text.splitlines())
-        lines.append(f"  [\n{indented}\n  ],")
-    lines.append(")")
-    return "\n".join(lines)
 
 
 def _generate_typst_slide(
@@ -661,8 +636,12 @@ def _generate_typst_slide(
     line_number: int,
 ) -> str:
     """
-    Convert one `* Slide Title` block (with its body, and optional
-    `::: columns` layout) into Typst.
+    Convert one `* Slide Title` block (with its body) into Typst.
+
+    Any `::: columns` layout in the source is stripped before the body
+    reaches the LLM (see `_strip_column_markup()`) and never reconstructed
+    in the output: the slide is always converted as one flowing passage,
+    regardless of how the source slide was laid out.
 
     :param slide_lines: lines of the slide, starting with `* Title`
     :param output_dir: directory the chapter file is written to
@@ -676,22 +655,14 @@ def _generate_typst_slide(
     """
     title = slide_lines[0][1:].strip()
     body = "\n".join(slide_lines[1:])
-    panels = _split_column_panels(body)
-    panel_texts = []
-    widths: List[str] = []
-    for width, content in panels:
-        panel_texts.append(
-            _process_panel_body(
-                content,
-                output_dir=output_dir,
-                system_prompt=system_prompt,
-                model=model,
-                llm_backend=llm_backend,
-            )
-        )
-        if width is not None:
-            widths.append(width)
-    body_out = _wrap_columns(panel_texts, widths) if widths else panel_texts[0]
+    body = _strip_column_markup(body)
+    body_out = _process_slide_body(
+        body,
+        output_dir=output_dir,
+        system_prompt=system_prompt,
+        model=model,
+        llm_backend=llm_backend,
+    )
     parts = [
         f"// From: {source_file}:{line_number} '{slide_lines[0]}'",
         f"// Slide: {title}",
@@ -1105,6 +1076,13 @@ def _main(parser: argparse.ArgumentParser) -> None:
         args.llm_backend,
         _get_model_id(args.model, args.llm_backend),
     )
+    # Select the post-generation actions (git_add / lint / render_pdf /
+    # open_pdf) and print the full run plan upfront, before any (costly)
+    # work starts, following the same idiom as e.g. `run_typst.py`.
+    actions = hselacti.select_actions(args, _VALID_ACTIONS, _DEFAULT_ACTIONS)
+    _LOG.info(
+        "\n%s", hselacti.actions_to_string(actions, _VALID_ACTIONS, add_frame=True)
+    )
     # Parse and validate arguments.
     dir_arg, lesson_arg = csccouti.parse_lesson_spec(args.input)
     csccouti.validate_dir_lesson_args(dir_arg, lesson_arg)
@@ -1147,12 +1125,8 @@ def _main(parser: argparse.ArgumentParser) -> None:
                 args.llm_backend,
                 lesson_arg,
             )
-    # Steps 2-5: git_add / lint / render / open_pdf, selected via --action /
-    # --skip_action / --only_action.
-    actions = hselacti.select_actions(args, _VALID_ACTIONS, _DEFAULT_ACTIONS)
-    _LOG.info(
-        "\n%s", hselacti.actions_to_string(actions, _VALID_ACTIONS, add_frame=True)
-    )
+    # Steps 3-6: git_add / lint / render / open_pdf (`actions` selected and
+    # printed up front, see above).
     while actions:
         action = actions[0]
         to_execute, actions = hselacti.mark_action(action, actions)
