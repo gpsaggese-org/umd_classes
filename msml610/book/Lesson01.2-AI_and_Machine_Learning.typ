@@ -1,7 +1,7 @@
 // git_hash=b1e45801e-gu7 timestamp=20260830_185619
 // Import AIMA style formatting and macros.
 #import "/helpers_root/dev_scripts_helpers/typst/aima_style.typ": (
-  aima-style, algorithm, chapter, glossary, styled-table,
+  aima-style, algorithm, chapter, glossary, styled-table, wrap-content,
 )
 // Import the custom citation/bibliography system.
 #import "/helpers_root/dev_scripts_helpers/typst/umd_references.typ": (
@@ -27,6 +27,8 @@
 // Slide: ML, AI, and Intelligence
 == ML, AI, and Intelligence
 
+// TODO(ai_gp): Add pic https://indiaai.gov.in/article/exploring-the-significance-of-the-dartmouth-workshop
+// TODO(ai_gp): Add pic https://plus.sydney.edu.au/sites/default/files/2026-02/file-20240827-16-7tme1u_0.jpeg
 #strong[Machine Learning] is a subset of Artificial Intelligence (AI). Although
 the term is frequently conflated with #emph[deep learning], #emph[large-language
   models], #emph[predictive analytics], and other adjacent fields, each of these
@@ -61,10 +63,18 @@ be described precisely enough for a machine to simulate it
 #cite("mccarthy1955dartmouth"). 
 That proposal gave the field both its name and its ambitious scope.
 
-#grid(
-  columns: (1fr, 20%),
+#wrap-content(
+  [
+    #figure(
+      image("../lectures_source/figures/L01.2.Richard_Feynman.jpg", width: 100%),
+      caption: [Richard Feynman (1965)],
+      kind: "figure",
+      supplement: [Fig.],
+    ) <fig:richardfeynman>
+  ],
+  align: right,
   column-gutter: 1em,
-  align: (left, top),
+  columns: (1fr, 20%),
 )[
   The goals of AI are twofold: to understand human intelligence and to create
   intelligent entities. These goals reinforce each other. Building a system
@@ -83,13 +93,6 @@ That proposal gave the field both its name and its ambitious scope.
   economic impact projected by 2030 #cite("bughin2018aifrontier"). By some
   measures, its societal impact exceeds that of any past historical event,
   including the industrial revolution and the advent of the internet.
-][
-  #figure(
-    image("../lectures_source/figures/L01.2.Richard_Feynman.jpg", width: 100%),
-    caption: [Richard Feynman (1965)],
-    kind: "figure",
-    supplement: [Fig.],
-  ) <fig:richardfeynman>
 ]
 
 At the same time, AI remains a discipline with many unresolved problems. This
@@ -123,6 +126,7 @@ reproduce.
   act humanly, or (4) act rationally. @tab:aiformaldefinition lays out these four
   quadrants side by side, making the organizing logic explicit.
 ][
+  // TODO(ai_gp): Add more space for this table
   #figure(
     styled-table(
       headers: ("", "Human", "Rational"),
@@ -198,28 +202,28 @@ What are the rules of #strong[correct thinking]? At its core, correct thinking
 means that, given correct premises, the process yields correct conclusions.
 Nothing false sneaks in along the way.
 
-#grid(
-  columns: (1fr, 20%),
+#wrap-content(
+  [
+    #figure(
+      image("Lesson01.2-AI_and_Machine_Learning.typ.figs/Lesson01.2-AI_and_Machine_Learning.1.png", width: 100%),
+      caption: [Diagram relating Correct premises, Logic and Correct conclusions],
+      kind: "figure",
+      supplement: [Fig.],
+      placement: auto,
+    ) <fig:2aiasthinkingrationally>
+  ],
+  align: right,
   column-gutter: 1em,
-  align: (left, top),
+  columns: (1fr, 20%),
 )[
   #strong[Logic] provides the framework for studying these "laws of thought." It
   allows us to formalize statements about objects in the world and the relations
   among them, expressing claims in a precise symbolic language that removes the
   ambiguity inherent in natural language. Once knowledge is encoded this way,
   purely mechanical rules of inference can derive new truths from old ones.
-
   The relationship in @fig:2aiasthinkingrationally is straightforward: correct
   premises feed into logic, which in turn produces correct conclusions, making
   the entire chain only as reliable as the premises it starts from.
-][
-  #figure(
-    image("Lesson01.2-AI_and_Machine_Learning.typ.figs/Lesson01.2-AI_and_Machine_Learning.1.png", width: 100%),
-    caption: [Diagram relating Correct premises, Logic and Correct conclusions],
-    kind: "figure",
-    supplement: [Fig.],
-    placement: auto,
-  ) <fig:2aiasthinkingrationally>
 ]
 
 #strong[Automatic theorem proving] takes this idea to its practical limit:
@@ -292,22 +296,30 @@ Passing a full, #strong[embodied Turing test] (one that includes physical
 interaction, not just text exchange) demands competence across a remarkably
 broad set of capabilities:
 
-1. #strong[Natural language processing] to communicate fluently in a human
+1. #emph[Natural language processing] to communicate fluently in a human
   language.
-2. #strong[Knowledge representation] to store what it knows about the world in a
+2. #emph[Knowledge representation] to store what it knows about the world in a
   structured, retrievable form.
-3. #strong[Automated reasoning] to draw conclusions from stored knowledge and
+3. #emph[Automated reasoning] to draw conclusions from stored knowledge and
   answer novel questions.
-4. #strong[Machine learning] to detect patterns in data and adapt to new
+4. #emph[Machine learning] to detect patterns in data and adapt to new
   situations without being explicitly reprogrammed.
-5. #strong[Computer vision and speech recognition] to perceive the environment:
+5. #emph[Computer vision and speech recognition] to perceive the environment:
   recognizing objects, faces, scenes, and spoken language.
-6. #strong[Robotics] to manipulate physical objects and move through space.
+6. #emph[Robotics] to manipulate physical objects and move through space.
 
-#grid(
-  columns: (1fr, 20%),
+#wrap-content(
+  [
+    #figure(
+      image("../lectures_source/figures/L01.1.Ex_machina.jpg", width: 100%),
+      caption: [Ex machina],
+      kind: "figure",
+      supplement: [Fig.],
+    ) <fig:exmachina>
+  ],
+  align: right,
   column-gutter: 1em,
-  align: (left, top),
+  columns: (1fr, 20%),
 )[
   Each of these areas has grown into a major subfield of AI in its own right,
   yet the Turing test reminds us that genuine human-level intelligence weaves
@@ -316,13 +328,6 @@ broad set of capabilities:
   @fig:exmachina shows, popular culture has long been fascinated by this
   vision of a machine whose behavior is so fluid and integrated that it
   becomes indistinguishable from a human being.
-][
-  #figure(
-    image("../lectures_source/figures/L01.1.Ex_machina.jpg", width: 100%),
-    caption: [Ex machina],
-    kind: "figure",
-    supplement: [Fig.],
-  ) <fig:exmachina>
 ]
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:223 '* Turing Test: Pros and Cons'
@@ -335,12 +340,12 @@ think. If the interrogator cannot reliably distinguish the machine from a human,
 the machine is deemed intelligent. No metaphysics required.
 
 The tradeoff, however, is significant. Intelligence under this framing is
-measured entirely by #strong[anthropomorphic] criteria: the machine must behave
+measured entirely by #emph[anthropomorphic] criteria: the machine must behave
 in ways that seem human to a human judge. Yet multiple forms of non-human
 intelligence exist (consider the navigational abilities of migratory birds or
 the distributed problem-solving of ant colonies), none of which would pass a
 test grounded in human conversation. Worse, passing the test ultimately means
-#strong[fooling humans] into believing the machine is one of them, which
+#emph[fooling humans] into believing the machine is one of them, which
 conflates intelligence with deception and raises the question of whether
 imitation is really the goal we should be engineering toward.
 
@@ -367,17 +372,17 @@ option existed.
 What does it take for an agent to act rationally in practice? The requirements
 can be distilled into five core capabilities:
 
-1. #strong[Operate autonomously]: the agent should not depend on a human
+1. #emph[Operate autonomously]: the agent should not depend on a human
   operator to dictate every step; it must be able to select actions on its own.
-2. #strong[Perceive its environment]: through sensors or data inputs, the agent
+2. #emph[Perceive its environment]: through sensors or data inputs, the agent
   gathers information about the state of the world it inhabits.
-3. #strong[Persist over time]: rather than performing a single computation and
+3. #emph[Persist over time]: rather than performing a single computation and
   halting, a rational agent maintains an ongoing presence, continuously
   interacting with its environment.
-4. #strong[Adapt to change]: environments are rarely static, so the agent must
+4. #emph[Adapt to change]: environments are rarely static, so the agent must
   update its beliefs and strategies as new information arrives or conditions
   shift.
-5. #strong[Create and pursue goals]: autonomy without direction is aimless; a
+5. #emph[Create and pursue goals]: autonomy without direction is aimless; a
   rational agent formulates objectives and selects actions that advance those
   objectives.
 
@@ -412,12 +417,14 @@ measurable target: design systems that select actions maximizing expected
 performance given the information available, rather than chasing a moving and
 poorly understood model of human cognition.
 
+// TODO(ai_gp): Embed this in the text.
+// TODO(ai_gp): Make "Act rationally" bold
 #figure(
   styled-table(
     headers: ("", "Human", "Rational"),
     rows: (
       ("Thinking", "Think humanly", "Think rationally"),
-      ("Acting", "Act humanly", "*Act rationally*"),
+      ("Acting", "Act humanly", "Act rationally"),
     ),
     bold-first-col: true,
   ),
@@ -448,7 +455,7 @@ crossing is a near-zero-cost action that dramatically reduces the probability of
 a catastrophic outcome. Failing to perform it is hard to justify on any
 reasonable weighing of costs and benefits. The asymmetry between the two cases
 shows that rational action is not about whether the outcome was good or bad.
-It is about whether the #strong[process] of choosing was defensible given what
+It is about whether the #emph[process] of choosing was defensible given what
 you knew and what you could have done.
 
 These everyday examples already hint at deeper difficulties, but the stakes
@@ -478,14 +485,14 @@ alternatives.
 In practice, however, the picture is more complex, and several limitations
 constrain what rationality can deliver.
 
-- #strong[Omniscience vs. no-regrets]: the best decision is based on the
+- #emph[Omniscience vs. no-regrets]: the best decision is based on the
   information available at the time of acting, not on perfect knowledge of the
   world. An agent that makes a reasonable choice given what it knows has nothing
   to regret, even if the outcome turns out poorly.
-- #strong[No provably correct action]: in some situations no option can be shown
+- #emph[No provably correct action]: in some situations no option can be shown
   to be right, yet the agent must still commit to one. Standing still is itself
   a choice with consequences.
-- #strong[Feasibility of perfect reasoning]: even with complete information,
+- #emph[Feasibility of perfect reasoning]: even with complete information,
   full rationality may be out of reach for at least three reasons. First, the
   cost of acquiring all relevant data can be prohibitive: ordering every
   conceivable medical test before diagnosing a patient is neither practical nor
@@ -511,7 +518,7 @@ domains, all that can honestly be demanded.
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:342 '* Machine Learning: Definitions'
 // Slide: Machine Learning: Definitions
 
-How should we #strong[define machine learning]? The question seems
+How should we define #strong[machine learning]? The question seems
 straightforward, but the field has evolved considerably since its earliest
 formulations, and the way we frame the definition shapes how we think about what
 these systems can and cannot do.
@@ -541,6 +548,7 @@ Mitchell's contribution to formalizing these ideas helped establish machine
 learning as a rigorous discipline with clearly stated objectives rather than a
 loose collection of heuristics.
 
+// TODO(ai_gp): Make it wrap it
 #figure(
   image("../lectures_source/figures/L01.2.Tom_Mitchell.jpg", width: 80%),
   caption: [Tom Mitchell (2025)],
@@ -549,14 +557,14 @@ loose collection of heuristics.
   placement: auto,
 ) <fig:tommitchell>
 
-In practice, machine learning has grown far beyond board games. Today its most
-visible applications span #strong[computer vision] (recognizing objects, faces,
-and scenes in images), #strong[speech recognition] (converting spoken language
-into text, as in virtual assistants), and #strong[natural language processing]
-(enabling machines to read, translate, and generate human language). What unites
-all of these is the same core pattern Mitchell identified: a system that
-improves at a well-defined task by consuming more data, rather than by a
-programmer manually encoding every rule the system needs to follow.
+In practice, today most machine learning's visible applications span
+#emph[computer vision] (recognizing objects, faces, and scenes in images),
+#emph[speech recognition] (converting spoken language into text, as in virtual
+assistants), and #emph[natural language processing] (enabling machines to read,
+translate, and generate human language). What unites all of these is the same
+core pattern Mitchell identified: a system that improves at a well-defined task
+by consuming more data, rather than by a programmer manually encoding every
+rule the system needs to follow.
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:374 '* The 3 Machine Learning Assumptions'
 // Slide: The 3 Machine Learning Assumptions
@@ -566,11 +574,11 @@ stages: gathering a dataset, building a statistical model from that dataset
 algorithmically, evaluating the model's quality, and finally deploying and
 monitoring it in production. Of these stages, most are engineering concerns:
 data collection pipelines, evaluation harnesses, deployment infrastructure. But
-#strong[building the model] is the research core, the step where genuine
+#emph[building the model] is the research core, the step where genuine
 scientific questions arise.
 
 Abu-Mostafa (2012) #cite("abumostafa2012learning") distills this research core
-into #strong[three core assumptions] that underpin all of machine learning:
+into #emph[three core assumptions] that underpin all of machine learning:
 
 1. A #emph[pattern exists] in the data: there is some regularity worth
   capturing.
@@ -580,16 +588,16 @@ into #strong[three core assumptions] that underpin all of machine learning:
 3. #emph[Data is available]: without observations, no algorithm can discover
   anything.
 
-Which of these assumptions is truly essential? Consider each in turn. If no
-pattern exists, running a learning algorithm is futile: the model will fit noise
-and generalize poorly. Yet in practice we rarely face data that is pure noise;
-some structure almost always lurks beneath the surface, even if it is weak. The
-second assumption, that mathematics alone cannot pin down the pattern, is even
-softer. There are cases where a precise mathematical derivation is possible, and
-we use machine learning anyway because the learning-based solution is cheaper to
-develop, more adaptable, or good enough for the task at hand. Violating this
-assumption does not block progress; it merely means we had an alternative route
-we chose not to take.
+Which of these assumptions is truly essential? Let's consider each in turn. If
+no pattern exists, running a learning algorithm is futile: the model will fit
+noise and generalize poorly. Yet in practice we rarely face data that is pure
+noise; some structure almost always lurks beneath the surface, even if it is
+weak. The second assumption, that mathematics alone cannot pin down the
+pattern, is even softer. There are cases where a precise mathematical
+derivation is possible, and we still use machine learning anyway because the
+learning-based solution is cheaper to develop, more adaptable, or good enough
+for the task at hand. Violating this assumption does not block progress; it
+merely means we had an alternative route we chose not to take.
 
 The third assumption, however, is non-negotiable. #emph[Without data, no
   progress is possible.] A learning algorithm with no observations has nothing
@@ -618,13 +626,13 @@ feedback (RLHF) #cite("ouyang2022instructgpt"). Just as AI is broader than ML,
 DL is broader than LLMs: a convolutional neural network designed for computer
 vision or speech recognition is a deep learning system, but it is not a large
 language model because it neither processes nor generates natural language in
-the autoregressive sense that defines LLMs.
+the autoregressive sense that defines LLMs. In @fig:aivsmlvsdeeplearning, these
+categories nest concentrically: LLMs sit inside Deep Learning, which sits
+inside Machine Learning, which in turn sits inside the broader field of
+Artificial Intelligence. The nesting makes their subset relationships visually
+clear.
 
-In @fig:aivsmlvsdeeplearning, these categories nest concentrically: LLMs sit
-inside Deep Learning, which sits inside Machine Learning, which in turn sits
-inside the broader field of Artificial Intelligence. The nesting makes their
-subset relationships visually clear.
-
+// TODO(ai_gp): Use wrap-it in the text close to the reference to this fig.
 #figure(
   image("Lesson01.2-AI_and_Machine_Learning.typ.figs/Lesson01.2-AI_and_Machine_Learning.2.png", width: 50%),
   caption: [Diagram illustrating AI vs ML vs Deep Learning],
@@ -636,19 +644,19 @@ subset relationships visually clear.
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:457 '* Limits of AI Compared to Human Intelligence (1/2)'
 // Slide: Limits of AI Compared to Human Intelligence (1/2)
 
-AI and machine learning systems differ fundamentally from human intelligence.
-Machines do not learn the way humans do: large language models, for instance,
-process statistical patterns over enormous corpora, yet a child acquires
-language from a comparatively tiny stream of input. Whether the brain uses
-anything resembling gradient descent remains an open and actively debated
-question in computational neuroscience. Reinforcement learning comes closer:
-dopaminergic reward signals in the brain bear a striking resemblance to
+#strong[AI and machine learning systems differ] fundamentally from human
+intelligence and machines do not learn the way humans do: large language
+models, for instance, process statistical patterns over enormous corpora, yet a
+child acquires language from a comparatively tiny stream of input. Whether the
+brain uses anything resembling gradient descent remains an open and actively
+debated question in computational neuroscience. Reinforcement learning comes
+closer: dopaminergic reward signals in the brain bear a striking resemblance to
 temporal-difference error signals, so the brain probably does something
 analogous to reinforcement learning, at least in a loose sense. Still, the gap
 between biological and artificial learning is wide, and it shows up in several
 concrete limitations.
 
-- #strong[Fragility to input variations.] Current ML models can fail
+- #emph[Fragility to input variations.] Current ML models can fail
   catastrophically when inputs are distorted even slightly. Adversarial attacks
   demonstrate this vividly: altering a single pixel in an image can cause a
   classifier to switch its prediction entirely #cite("su2019onepixel").
@@ -657,14 +665,14 @@ concrete limitations.
   adapts effortlessly. This brittleness contrasts sharply with the robustness of
   biological perception.
 
-- #strong[Lack of transfer learning.] A physician who learns cardiology can draw
+- #emph[Lack of transfer learning.] A physician who learns cardiology can draw
   on that knowledge when studying pulmonology, because human expertise transfers
   fluidly across related domains. ML systems, by contrast, typically cannot
   apply what they have learned in one task to another without substantial
   retraining or architectural redesign. That limitation makes each new
   problem almost as expensive as the first.
 
-- #strong[Massive data and compute requirements.] Training modern ML models
+- #emph[Massive data and compute requirements.] Training modern ML models
   demands enormous datasets and computational resources. A teenager learns to
   drive competently in a matter of hours behind the wheel, yet self-driving
   systems require billions of compute hours and vast quantities of labelled
@@ -672,7 +680,7 @@ concrete limitations.
   sample-efficient biological learning remains compared to its artificial
   counterpart.
 
-- #strong[Poor common sense and reasoning.] Perhaps the most stubborn gap is
+- #emph[Poor common sense and reasoning.] Perhaps the most stubborn gap is
   that ML systems lack the built-in world knowledge and intuitive logic that
   humans take for granted. A person knows without being told that a cup of
   coffee turned upside down will spill, but an ML model has no such prior unless
@@ -682,54 +690,54 @@ concrete limitations.
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:480 '* Limits of AI Compared to Human Intelligence (2/2)'
 // Slide: Limits of AI Compared to Human Intelligence (2/2)
-#strong[Limits of AI Compared to Human Intelligence (2/2)]
 
-Many ML models remain largely #strong[opaque]: they produce predictions without
-exposing the reasoning behind them, which limits trust, interpretability, and
-accountability in high-stakes settings such as medical diagnosis or criminal
-sentencing. Even when a model performs well on its benchmark, stakeholders may
-be unable to verify _why_ a particular decision was made, making it difficult to
-catch errors or challenge outcomes.
+// TODO(ai_gp): Make the following list in the same format as the one above.
+- Many ML models remain largely #emph[opaque]: they produce predictions without
+  exposing the reasoning behind them, which limits trust, interpretability, and
+  accountability in high-stakes settings such as medical diagnosis or criminal
+  sentencing. Even when a model performs well on its benchmark, stakeholders
+  may be unable to verify _why_ a particular decision was made, making it
+  difficult to catch errors or challenge outcomes.
 
-ML systems also tend to excel only at #strong[narrow, well-defined objectives].
-When the goal is ambiguous or has many conflicting parts, optimizing a single
-proxy metric can backfire spectacularly. A recommendation algorithm told to
-maximize user engagement, for instance, may learn that sensational or harmful
-content keeps people clicking, an outcome that satisfies the literal objective
-while undermining the platform's broader mission.
+- ML systems also tend to excel only at #emph[narrow, well-defined objectives].
+  When the goal is ambiguous or has many conflicting parts, optimizing a single
+  proxy metric can backfire spectacularly. A recommendation algorithm told to
+  maximize user engagement, for instance, may learn that sensational or harmful
+  content keeps people clicking, an outcome that satisfies the literal
+  objective while undermining the platform's broader mission.
 
-A further vulnerability is #strong[susceptibility to bias and data quality].
-Because a model can only learn from the data it is given, any systematic bias in
-the training set, whether from historical discrimination, sampling gaps, or
-labeling errors, will be inherited and often amplified by the learned function.
-The result is a system that appears objective but quietly encodes the prejudices
-of its inputs.
+- A further vulnerability is #emph[susceptibility to bias and data quality].
+  Because a model can only learn from the data it is given, any systematic bias
+  in the training set, whether from historical discrimination, sampling gaps,
+  or labeling errors, will be inherited and often amplified by the learned
+  function. The result is a system that appears objective but quietly encodes
+  the prejudices of its inputs.
 
-Finally, current ML lacks #strong[embodiment and physical interaction]. Human
-cognition is deeply grounded in sensory and motor experience: we learn about
-gravity by dropping things, about heat by touching a stove. Disembodied models
-trained on text or images alone miss this layer of understanding, which may
-explain why they struggle with commonsense physical reasoning that even young
-children handle effortlessly.
+- Finally, current ML lacks #emph[embodiment and physical interaction]. Human
+  cognition is deeply grounded in sensory and motor experience: we learn about
+  gravity by dropping things, about heat by touching a stove. Disembodied
+  models trained on text or images alone miss this layer of understanding,
+  which may explain why they struggle with commonsense physical reasoning that
+  even young children handle effortlessly.
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:494 '* Key Takeaways'
 // Slide: Key Takeaways
-#strong[Key Takeaways]
+= Summary
 
 The central thesis of modern AI research is that the field should focus on
-#strong[agents acting rationally], that is, systems that perceive their
+#emph[agents acting rationally], that is, systems that perceive their
 environment and take actions that maximize their chances of achieving
 well-defined goals, rather than attempting to faithfully mimic human thought
 processes or human behavior.
 
 Within this broad vision, several nested disciplines have emerged.
-#strong[Artificial Intelligence (AI)] refers to machines programmed to reason,
-learn, and act rationally in pursuit of objectives. #strong[Machine Learning
+#emph[Artificial Intelligence (AI)] refers to machines programmed to reason,
+learn, and act rationally in pursuit of objectives. #emph[Machine Learning
   (ML)] is a subset of AI in which systems learn to perform tasks from data
 rather than being explicitly programmed with rules for every situation.
-#strong[Deep Learning (DL)] narrows the focus further to ML techniques built on
+#emph[Deep Learning (DL)] narrows the focus further to ML techniques built on
 multi-layer neural networks, which learn hierarchical representations of data.
-Finally, #strong[Large Language Models (LLMs)] are a subset of deep learning:
+Finally, #emph[Large Language Models (LLMs)] are a subset of deep learning:
 neural networks trained on massive text datasets to predict the next token in a
 sequence, often further refined through Reinforcement Learning from Human
 Feedback (RLHF) to align their outputs with human preferences.
@@ -737,13 +745,13 @@ Feedback (RLHF) to align their outputs with human preferences.
 Despite the remarkable capabilities of current ML and DL systems (from
 superhuman performance on narrow benchmarks to fluent natural-language
 conversation), they still fall well short of human intelligence in several
-important respects. They tend to be #strong[fragile], breaking down when inputs
+important respects. They tend to be #emph[fragile], breaking down when inputs
 shift even slightly from the distribution they were trained on. They struggle
-with #strong[transfer learning], finding it difficult to carry knowledge gained
+with #emph[transfer learning], finding it difficult to carry knowledge gained
 in one domain over to a related but distinct one, something humans do almost
-effortlessly. They are notably #strong[data-inefficient], often requiring
+effortlessly. They are notably #emph[data-inefficient], often requiring
 millions of labeled examples to master a task a child could learn from a handful
-of demonstrations. And they largely lack #strong[common-sense reasoning]: the
+of demonstrations. And they largely lack #emph[common-sense reasoning]: the
 vast web of intuitive physical, social, and causal knowledge that humans bring
 to bear on everyday decisions without conscious effort. Recognizing these gaps
 is essential for understanding both where the field stands today and where the
@@ -751,7 +759,7 @@ hardest open problems remain.
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:510 '* References'
 // Slide: References
-#strong[References]
+= References
 
 #set text(size: 0.75em)
 #references("/msml610/lectures_source/refs.bib")
