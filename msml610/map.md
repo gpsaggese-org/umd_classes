@@ -130,10 +130,10 @@ gen_book_chapter.py  msml610/00.1 --mode typst_aima --llm_backend hllm_cli_exec 
 - "References" need to be a larger font
 
 ### [ ]
-- Keep the chat open so that we don't have to send the same instructions over and
-  over
-
-- also we can use this to make the text smoother
+- Keep the LLM chat open so that we don't have to send the same instructions over and
+  over (only for the library version)
+- Also we can use this to keep track of the old text and make the transitions
+  smoother
 
 # Workflows
 

@@ -1228,9 +1228,16 @@ def _render_book_chapter(
     pdf_file = _get_pdf_file(out_dir, basename)
     if mode == "typst_aima":
         run_typst_exec = hgit.find_file("run_typst.py")
+        # Explicitly request `render_images` (off by default in
+        # `run_typst.py`): it turns the diagram-source placeholders left by
+        # `_render_diagram_placeholder()` into real `#figure(image(...))
+        # <label>` calls. Without it, any `graphviz`/`mermaid`/`tikz`
+        # diagram in the chapter never gets a real Typst label, so a
+        # `@fig:...` cross-reference to it fails to compile with "label
+        # does not exist".
         cmd = (
             f"{run_typst_exec} --input {output_file} --output {pdf_file} "
-            "--skip_action open_pdf"
+            "--action render_images --skip_action open_pdf"
         )
         if no_abort_on_warnings:
             cmd += " --no_abort_on_warnings"

@@ -210,40 +210,13 @@ straightforward: correct premises feed into logic, which in turn produces
 correct conclusions, making the entire chain only as reliable as the premises it
 starts from.
 
-```graphviz
-digraph laws_of_thought {
-    bgcolor="transparent";
-    pad="0.15";
-    splines=spline;
-    nodesep=0.4;
-    ranksep=0.5;
-    rankdir=TB;
-
-    node [shape=box,
-          style="rounded,filled",
-          penwidth=1.8,
-          fontname="Helvetica",
-          fontsize=12,
-          margin="0.22,0.14",
-          height=0.50];
-
-    edge [color="#A3B1C0",
-          penwidth=1.3,
-          arrowhead=vee,
-          arrowsize=0.75,
-          fontname="Helvetica",
-          fontsize=10,
-          fontcolor="#7B8794"];
-
-    premises [label="Correct\npremises", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
-    logic [label="Logic", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
-    conclusion [label="Correct\nconclusions", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
-
-    premises -> logic -> conclusion;
-}
-```
-label=fig:2aiasthinkingrationally caption=Diagram relating Correct premises,
-Logic and Correct conclusions
+#figure(
+  image("Lesson01.2-AI_and_Machine_Learning.typ.figs/Lesson01.2-AI_and_Machine_Learning.1.png", width: 40%),
+  caption: [Diagram relating Correct premises, Logic and Correct conclusions],
+  kind: "figure",
+  supplement: [Fig.],
+  placement: auto,
+) <fig:2aiasthinkingrationally>
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:168 '* Thinking Rationally: Challenges'
 // Slide: Thinking Rationally: Challenges
@@ -641,35 +614,13 @@ LLMs sit inside Deep Learning, which sits inside Machine Learning, which in turn
 sits inside the broader field of Artificial Intelligence — making their subset
 relationships visually clear.
 
-```tikz
-% Define colors.
-  \definecolor{AIcolor}{RGB}{244,166,166}    % Red/Pink
-  \definecolor{MLcolor}{RGB}{178,226,178}    % Green
-  \definecolor{DLcolor}{RGB}{160,214,209}    % Teal
-  \definecolor{LLMcolor}{RGB}{198,166,244}   % Purple
-
-  % Draw AI circle
-  \fill[AIcolor] (0,0) circle (3);
-  \draw (0,0) circle (3);
-  \node[above] at (0,2) {\textbf{AI}};
-
-  % Draw ML circle inside AI
-  \fill[MLcolor] (0.5,-0.5) circle (2);
-  \draw (0.5,-0.5) circle (2);
-  \node[above] at (0.5,0.5) {\textbf{ML}};
-
-  % Draw DL circle inside ML
-  \fill[DLcolor] (1,-1) circle (1);
-  \draw (1,-1) circle (1);
-  \node[above] at (1,-0.6) {\textbf{DL}};
-
-  % Draw LLM circle inside DL
-  \fill[LLMcolor] (1.2,-1.2) circle (0.6);
-  \draw (1.2,-1.2) circle (0.6);
-  \node[above] at (1.2,-1.4) {\textbf{LLMs}};
-```
-label=fig:aivsmlvsdeeplearning caption=Diagram illustrating AI vs ML vs Deep
-Learning
+#figure(
+  image("Lesson01.2-AI_and_Machine_Learning.typ.figs/Lesson01.2-AI_and_Machine_Learning.2.png", width: 50%),
+  caption: [Diagram illustrating AI vs ML vs Deep Learning],
+  kind: "figure",
+  supplement: [Fig.],
+  placement: auto,
+) <fig:aivsmlvsdeeplearning>
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:457 '* Limits of AI Compared to Human Intelligence (1/2)'
 // Slide: Limits of AI Compared to Human Intelligence (1/2)
