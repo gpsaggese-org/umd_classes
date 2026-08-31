@@ -69,10 +69,20 @@ That proposal gave the field both its name and its ambitious scope.
   The goals of AI are twofold: to understand human intelligence and to create
   intelligent entities. These goals reinforce each other. Building a system
   that can perceive, reason, and act forces researchers to make their theories
-  of cognition precise enough to implement. Vague verbal descriptions will not
-  compile. As @fig:richardfeynman reminds us, Richard Feynman captured this
-  idea succinctly: "What I cannot create, I do not understand." The act of
-  engineering intelligence is itself a path to understanding it.
+  of cognition precise enough to implement. As @fig:richardfeynman reminds us,
+  Richard Feynman captured this idea succinctly: "What I cannot create, I do
+  not understand." The act of engineering intelligence is itself a path to
+  understanding it.
+
+  What makes AI unique among engineering disciplines is the breadth of its
+  ambition paired with the depth of its open questions. AI applies, at least in
+  principle, to any human activity and task: from diagnosing diseases to
+  composing music, from driving vehicles to proving mathematical theorems. Its
+  economic footprint reflects that breadth: AI already generates hundreds of
+  billions of dollars annually in market revenue, with trillions in global
+  economic impact projected by 2030 #cite("bughin2018aifrontier"). By some
+  measures, its societal impact exceeds that of any past historical event,
+  including the industrial revolution and the advent of the internet.
 ][
   #figure(
     image("../lectures_source/figures/L01.2.Richard_Feynman.jpg", width: 100%),
@@ -81,16 +91,6 @@ That proposal gave the field both its name and its ambitious scope.
     supplement: [Fig.],
   ) <fig:richardfeynman>
 ]
-
-What makes AI unique among engineering disciplines is the breadth of its
-ambition paired with the depth of its open questions. AI applies, at least in
-principle, to any human activity and task: from diagnosing diseases to
-composing music, from driving vehicles to proving mathematical theorems. Its
-economic footprint reflects that breadth: AI already generates hundreds of
-billions of dollars annually in market revenue, with trillions in global
-economic impact projected by 2030 #cite("bughin2018aifrontier"). By some
-measures, its societal impact exceeds that of any past historical event,
-including the industrial revolution and the advent of the internet.
 
 At the same time, AI remains a discipline with many unresolved problems. This
 distinguishes it from fields that possess settled core theories: arithmetic
@@ -105,32 +105,39 @@ reproduce.
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:64 '* AI Formal Definition'
 // Slide: AI Formal Definition
-#strong[AI Formal Definition]
 
-AI is characterized along #strong[two key axes] #cite("russell2020aima"): the
-first distinguishes whether we care about an agent's internal _thought
-processes_ or its external _behavior_, while the second asks whether the
-standard of success is fidelity to #strong[human] performance or to an
-#strong[ideal, rational] standard. Crossing these two axes yields four distinct
-ways to define artificial intelligence: a machine that can (1) think humanly,
-(2) think rationally, (3) act humanly, or (4) act rationally.
-@tab:aiformaldefinition lays out these four quadrants side by side, making the
-organizing logic explicit.
+=== A Formal Definition of AI
 
-#figure(
-  styled-table(
-    headers: ("", "Human", "Rational"),
-    rows: (
-      ("Thinking", "Think humanly", "Think rationally"),
-      ("Acting", "Act humanly", "Act rationally"),
+#grid(
+  columns: (1fr, 45%),
+  column-gutter: 1em,
+  align: (left, top),
+)[
+  Let's now focus on finding a formal definition of AI. AI is characterized along
+  #strong[two key axes] #cite("russell2020aima"): the first distinguishes whether
+  we care about an agent's internal _thought processes_ or its external
+  _behavior_, while the second asks whether the standard of success is fidelity
+  to #strong[human] performance or to an #strong[ideal, rational] standard.
+  Crossing these two axes yields four distinct ways to define artificial
+  intelligence: a machine that can (1) think humanly, (2) think rationally, (3)
+  act humanly, or (4) act rationally. @tab:aiformaldefinition lays out these four
+  quadrants side by side, making the organizing logic explicit.
+][
+  #figure(
+    styled-table(
+      headers: ("", "Human", "Rational"),
+      rows: (
+        ("Thinking", "Think humanly", "Think rationally"),
+        ("Acting", "Act humanly", "Act rationally"),
+      ),
+      bold-first-col: true,
     ),
-    bold-first-col: true,
-  ),
-  caption: [Table of Human, Rational],
-  kind: "table",
-  supplement: [Table.],
-  placement: auto,
-) <tab:aiformaldefinition>
+    caption: [Table of Human, Rational],
+    kind: "table",
+    supplement: [Table.],
+    placement: auto,
+  ) <tab:aiformaldefinition>
+]
 
 Which of these definitions best captures what AI should ultimately aim for?
 Thinking humanly grounds the field in cognitive science, but human cognition is
@@ -147,7 +154,7 @@ in any particular style. It simply has to produce good outcomes. This makes
 rational action the most inclusive and practically useful target: it subsumes
 correct inference when inference is possible, but it also covers fast, reflexive
 responses (like pulling a hand from a hot stove) where deliberation would be too
-slow. For these reasons, building machines that #strong[act rationally] is
+slow. For these reasons, building machines that #emph[act rationally] is
 widely regarded as the central goal of modern AI research.
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:101 '* 1. AI as Thinking Humanly'
@@ -169,19 +176,18 @@ that constitutes real evidence that the underlying theory captures something
 true about human cognition.
 
 The tradeoff, however, is substantial. The workings of the human mind remain
-largely unknown. Neuroscience can measure blood flow and firing rates;
+largely unknown. Neuroscience can measure blood flow and firing rates of neurons;
 psychology can record response times and error patterns; but the precise
 algorithms the brain executes are still a matter of active debate. Building a
-faithful computational replica of a system we do not yet understand is, at best,
-an iterative approximation and, at worst, an exercise in curve-fitting
-behavioral data without genuine explanatory power. Beyond this empirical gap,
-the entire framing is #strong[anthropocentric]: it takes human cognition as the
-gold standard for intelligence, quietly assuming that the way humans happen to
-think is the way machines #emph[should] think. That assumption is far from
-obvious. Humans are subject to systematic biases, limited working memory, and a
-host of cognitive shortcuts that evolved for survival on the savanna rather than
-for optimal reasoning. Defining machine intelligence in terms of human-likeness
-risks importing those limitations as design goals rather than treating them as
+faithful computational replica of a system we do not yet understand is
+difficult, if not impossible. Beyond this empirical gap, the entire framing is
+#emph[anthropocentric]: it takes human cognition as the gold standard for
+intelligence, quietly assuming that the way humans happen to think is the way
+machines #emph[should] think. That assumption is far from obvious. Humans are
+subject to systematic biases, limited working memory, and a host of cognitive
+shortcuts that evolved for survival on the savanna rather than for optimal
+reasoning. Defining machine intelligence in terms of human-likeness risks
+importing those limitations as design goals rather than treating them as
 constraints to be overcome.
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:113 '* 2. AI as Thinking Rationally'
@@ -192,11 +198,29 @@ What are the rules of #strong[correct thinking]? At its core, correct thinking
 means that, given correct premises, the process yields correct conclusions.
 Nothing false sneaks in along the way.
 
-#strong[Logic] provides the framework for studying these "laws of thought." It
-allows us to formalize statements about objects in the world and the relations
-among them, expressing claims in a precise symbolic language that removes the
-ambiguity inherent in natural language. Once knowledge is encoded this way,
-purely mechanical rules of inference can derive new truths from old ones.
+#grid(
+  columns: (1fr, 20%),
+  column-gutter: 1em,
+  align: (left, top),
+)[
+  #strong[Logic] provides the framework for studying these "laws of thought." It
+  allows us to formalize statements about objects in the world and the relations
+  among them, expressing claims in a precise symbolic language that removes the
+  ambiguity inherent in natural language. Once knowledge is encoded this way,
+  purely mechanical rules of inference can derive new truths from old ones.
+
+  The relationship in @fig:2aiasthinkingrationally is straightforward: correct
+  premises feed into logic, which in turn produces correct conclusions, making
+  the entire chain only as reliable as the premises it starts from.
+][
+  #figure(
+    image("Lesson01.2-AI_and_Machine_Learning.typ.figs/Lesson01.2-AI_and_Machine_Learning.1.png", width: 100%),
+    caption: [Diagram relating Correct premises, Logic and Correct conclusions],
+    kind: "figure",
+    supplement: [Fig.],
+    placement: auto,
+  ) <fig:2aiasthinkingrationally>
+]
 
 #strong[Automatic theorem proving] takes this idea to its practical limit:
 programs accept a problem stated in logical notation and search for a proof.
@@ -207,27 +231,16 @@ means a theorem prover can confirm that a statement is valid but cannot always
 confirm that it is #emph[not]. That is a hard ceiling imposed by the mathematics
 itself, not by engineering shortcomings.
 
-The relationship in @fig:2aiasthinkingrationally is straightforward: correct
-premises feed into logic, which in turn produces correct conclusions, making
-the entire chain only as reliable as the premises it starts from.
-
-#figure(
-  image("Lesson01.2-AI_and_Machine_Learning.typ.figs/Lesson01.2-AI_and_Machine_Learning.1.png", width: 40%),
-  caption: [Diagram relating Correct premises, Logic and Correct conclusions],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:2aiasthinkingrationally>
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:168 '* Thinking Rationally: Challenges'
 // Slide: Thinking Rationally: Challenges
-#strong[Thinking Rationally: Challenges]
 
-Formalizing the informal knowledge that humans use effortlessly turns out to be
-extraordinarily difficult. Consider something as mundane as a handshake. In
-plain language, "a handshake occurs when two people extend, grip, shake hands,
-then release." Translating even this simple description into formal logic
-requires a surprisingly verbose expression:
+There are several #strong[challenges with thinking rationally]. The first one
+is that #emph[formalizing the informal knowledge] that humans use effortlessly
+turns out to be extraordinarily difficult. Consider something as mundane as a
+handshake. In plain language, "a handshake occurs when two people extend, grip,
+shake hands, then release." Translating even this simple description into
+formal logic requires a surprisingly verbose expression:
 
 $
   exists x, y, h_x, h_y : & "Person"(x) and "Person"(y) and x eq.not y and "Hand"(x, h_x) and "Hand"(y, h_y) \ & and "MoveToward"(h_x, h_y) and "Contact"(h_x, h_y) and "Shake"(h_x, h_y) \ & and "Release"(h_x, h_y)
@@ -236,23 +249,23 @@ $
 This explosion of predicates for a single everyday action hints at why encoding
 all of common-sense knowledge remains an open problem.
 
-A second challenge is the #strong[probabilistic nature of knowledge]. Much of
+A second challenge is the #emph[probabilistic nature of knowledge]. Much of
 what we know about the world is uncertain rather than categorical. In medicine,
 for instance, a patient presenting with fever, cough, and fatigue could have the
 flu, COVID-19, or any number of other illnesses. Deterministic logical rules
 cannot capture these overlapping, graded possibilities without being augmented
 by probability, which adds its own layer of complexity.
 
-Third, there are #strong[scalability challenges]. Even when a problem can be
+Third, there are #emph[scalability challenges]. Even when a problem can be
 stated precisely, the search space may grow so large that exact solutions are
 computationally intractable. In practice, large problems demand heuristics:
 methods that trade guaranteed optimality for the ability to find good-enough
 answers in reasonable time.
 
 Finally, intelligence requires more than rational thinking in isolation. An
-agent must #strong[interact with the world]: perceive its environment, take
+agent must #emph[interact with the world]: perceive its environment, take
 physical or communicative actions, and cope with the consequences. This is the
-problem of the #strong[embodiment of AI]: the recognition that reasoning in a
+problem of the embodiment of AI: the recognition that reasoning in a
 vacuum, no matter how logically impeccable, falls short of what we mean by
 intelligent behavior. A chess engine that cannot parse a spoken question or pick
 up a piece is intelligent only in the narrowest sense.
@@ -739,7 +752,6 @@ hardest open problems remain.
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:510 '* References'
 // Slide: References
 #strong[References]
-
 
 #set text(size: 0.75em)
 #references("/msml610/lectures_source/refs.bib")
