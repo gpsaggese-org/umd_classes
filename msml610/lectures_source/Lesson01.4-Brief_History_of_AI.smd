@@ -140,6 +140,7 @@
 //
 //% Diagonal timeline
 //\draw[blue!70!black, thick] (0,0) -- (16,16);
+
 //
 //% Adjusted coordinates: x and y increase together
 //\foreach \i/\x/\y in {
@@ -177,7 +178,7 @@
 ::: columns
 :::: {.column width=80%}
 - @Artificial neuron@
-  - Model _(McCulloch-Pitts, 1943)_ based on:
+  - Model _(McCulloch-Pitts, 1943)_ `#cite("mcculloch1943logical")`{=typst} based on:
     - Brain physiology
     - Propositional logic
   - Compute any function with connected neurons
@@ -186,19 +187,19 @@
 
 - @Alan Turing, 1947-1950@
   - Machine learning, reinforcement learning ideas (1947)
-  - Turing test (1950)
+  - Turing test (1950) `#cite("turing1950computing")`{=typst}
   - Create human-level AI by
     - Developing learning algorithms
     - Teaching machine like a child
 
 - @Birth of AI@
-  - McCarthy organized first AI workshop (1956)
+  - McCarthy organized first AI workshop (1956) `#cite("mccarthy1955dartmouth")`{=typst}
   - The Logic Theorist _(Newell and Simon, 1956)_
     - Programs to "think non-numerically" and prove theorems
 ::::
 :::: {.column width=20%}
 
-![](msml610/lectures_source/figures/L01.3.Alan_Turing.png)
+![](msml610/lectures_source/figures/L01.4.Alan_Turing.jpg)
 
 \footnotesize _Alan Turing, 1951_
 ::::
@@ -214,7 +215,7 @@
   - **General Problem Solver**
     - Imitate human problem-solving
     - Consider sub-goals and possible actions
-  - **Program learned to play checkers**
+  - **Program learned to play checkers** `#cite("samuel1959checkers")`{=typst}
     - Use reinforcement learning from victories and mistakes
   - **Lisp (1958)**
     - High-level language used for 30 years in AI
@@ -228,7 +229,7 @@
 ::::
 :::: {.column width=20%}
 
-![](msml610/lectures_source/figures/L01.3.Marvin_Minsky.png)
+![](msml610/lectures_source/figures/L01.4.Marvin_Minsky.jpg)
 
 \footnotesize _Marvin Minsky (2008)_
 ::::
@@ -324,6 +325,7 @@ digraph ExpertSystem {
 
 * Return of Neural Networks (1986-)
 - @Fact@: Back-propagation algorithm is (re)discovered in mid-1980s
+  `#cite("rumelhart1986backprop")`{=typst}
   - First applied to neural networks in 1970s (Werbos)
 
 - @Two approaches to AI are back@
@@ -380,20 +382,20 @@ digraph ExpertSystem {
   - _"Every time I fire a linguist, the performance of the speech recognizer goes up"
     (Jelinek, 1988)_
 
-- @Hidden Markov Models (1980s)@
+- @Hidden Markov Models (1980s)@ `#cite("rabiner1989hmm")`{=typst}
   - Trained on large speech corpora
   - Pros
     - Effective learning techniques
     - Strong theoretical foundation
   - HMMs became dominant
 
-- @The bitter lesson@ _(Sutton, 2019)_
+- @The bitter lesson@ _(Sutton, 2019)_ `#cite("sutton2019bitterlesson")`{=typst}
   - _"General methods + lots of data beat handcrafted systems"_
 
 * Bayesian Networks (1988-)
 ::: columns
 :::: {.column width=70%}
-- @Bayesian networks@ _(Pearl, 1988)_
+- @Bayesian networks@ _(Pearl, 1988)_ `#cite("pearl1988probabilistic")`{=typst}
   - AI is linked with:
     - Probability
     - Decision theory
@@ -408,7 +410,7 @@ digraph ExpertSystem {
 ::::
 :::: {.column width=20%}
 
-![](msml610/lectures_source/figures/L01.3.Judea_Pearl.png)
+![](msml610/lectures_source/figures/L01.4.Judea_Pearl.jpg)
 
 // TODO(ai_gp): Update with https://preposterousuniverse.com/podcast/2022/05/09/196-judea-pearl-on-cause-and-effect/
 \footnotesize _Judea Pearl (2013)_
@@ -418,7 +420,7 @@ digraph ExpertSystem {
 * Reinforcement Learning (1988-)
 ::: columns
 :::: {.column width=65%}
-- **Reinforcement Learning** _(Sutton, 1988)_ involves agents learning by
+- **Reinforcement Learning** _(Sutton, 1988)_ `#cite("sutton1988td")`{=typst} involves agents learning by
   interacting with an environment
   - E.g., a robot learning to navigate a maze by receiving rewards for
     successful paths
@@ -430,7 +432,7 @@ digraph ExpertSystem {
 ::::
 :::: {.column width=30%}
 
-![](msml610/lectures_source/figures/L01.3.Richard_Sutton.png)
+![](msml610/lectures_source/figures/L01.4.Richard_Sutton.jpg)
 
 \footnotesize _Richard Sutton (2025)_
 ::::
@@ -467,6 +469,7 @@ mindmap
     - E.g., map reduce, cloud computing
 
 - In 2011, IBM's Watson beat human _Jeopardy!_ champions
+  `#cite("ferrucci2010watson")`{=typst}
 ::::
 :::: {.column width=50%}
 
@@ -554,7 +557,7 @@ digraph DLPipeline {
 :::
 
 - @ImageNet moment@: In 2012, a DL system showed dramatic improvement in `ImageNet`
-  competition
+  competition `#cite("krizhevsky2012alexnet")`{=typst}
   - Previous systems used handcrafted features
   - Surge of interest in AI among researchers, companies, and investors
 
@@ -595,7 +598,7 @@ digraph DLPipeline {
 
 - @Robotic vehicles@
   - Waymo's driverless fleet has logged far more than its original 10
-    million-mile without serious accident
+    million-mile safety milestone
 
 - @Legged locomotion@
   - BigDog recovers on ice
@@ -626,11 +629,14 @@ digraph DLPipeline {
 :::
 
 * What Can AI Do Today? (2/2)
+::: columns
+:::: {.column width=78%}
 - @Game playing@
   - 1997: Deep Blue defeated Kasparov
   - 2011: Watson beat Jeopardy! champion
-  - 2016: AlphaGo beat Go champion (Lee Sedol)
+  - 2016: AlphaGo beat Go champion (Lee Sedol) `#cite("silver2016alphago")`{=typst}
   - 2018: AlphaZero super-human in Go and chess with only rules + self-play
+    `#cite("silver2018alphazero")`{=typst}
   - AI beats humans in videogames: Dota2, StarCraft, Quake
 
 - @Image understanding@
@@ -642,6 +648,69 @@ digraph DLPipeline {
   - AI equivalent to health care professionals
 
 - @Question@: When will we reach AGI (Artificial General Intelligence)?
+::::
+:::: {.column width=20%}
+
+![](msml610/lectures_source/figures/L01.3.Deep_Blue.jpg)
+
+\footnotesize _Deep Blue, 1997_
+
+![](msml610/lectures_source/figures/L01.3.AlphaGo_Rack.jpg)
+
+\footnotesize _AlphaGo's TPU rack, 2016_
+::::
+:::
+
+* The AI Hype Cycle
+- @Fact@: enthusiasm for AI has swung between boom and bust, not grown
+  steadily
+  - Two winters followed unmet expectations
+  - The current boom is driven by data and compute, not a single algorithm
+
+```raw_latex
+\documentclass[tikz]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+
+\begin{document}
+\begin{tikzpicture}[font=\sffamily]
+  % Axes
+  \draw[-{Latex[length=3mm]}, thick] (0,0) -- (15.5,0) node[right] {\small Year};
+  \draw[-{Latex[length=3mm]}, thick] (0,0) -- (0,6.8) node[above, align=left] {\small Hype /\\ \small funding};
+
+  % Year ticks (5 years per unit, x = (year-1950)/5)
+  \foreach \x/\lbl in {0/1950, 2/1960, 4/1970, 6/1980, 8/1990, 10/2000, 12/2010, 15/2025} {
+    \draw (\x,0) -- (\x,-0.12);
+    \node[below, font=\scriptsize] at (\x,-0.2) {\lbl};
+  }
+
+  % AI winter shading (qualitative, not measured data)
+  \fill[red!8] (4.8,0) rectangle (6.0,6.6);
+  \fill[red!8] (7.6,0) rectangle (8.6,6.6);
+
+  % Hype curve
+  \draw[blue!70!black, very thick, smooth]
+    plot coordinates {
+      (0,0.3) (1.2,1.0) (2.4,2.4) (3.0,3.4) (3.8,3.0)
+      (4.8,0.8) (5.6,0.9) (6.0,1.8) (6.6,3.2) (7.0,3.6)
+      (7.6,1.6) (8.2,0.7) (8.6,0.9) (9.4,1.3) (10.0,1.6)
+      (11.0,2.0) (12.0,2.4) (12.2,2.6) (12.4,3.2) (13.0,4.4)
+      (13.6,5.2) (14.0,5.6) (14.6,6.0) (15,6.4)
+    };
+
+  % Labels
+  \node[font=\scriptsize, align=center] at (2.2,3.9) {Early\\Enthusiasm};
+  \node[font=\scriptsize, align=center, red!60!black] at (5.4,0.35) {1st AI\\Winter};
+  \node[font=\scriptsize, align=center] at (7.0,4.4) {Expert\\Systems};
+  \node[font=\scriptsize, align=center, red!60!black] at (8.1,0.35) {2nd AI\\Winter};
+  \node[font=\scriptsize, align=center] at (10.5,2.6) {Statistical ML};
+  \node[font=\scriptsize, align=center] at (13.5,6.1) {Deep Learning\\/ LLM Boom};
+\end{tikzpicture}
+\end{document}
+```
+
+- @Key idea@: past booms also felt inevitable at the time
+  - Reason for caution about claims of imminent AGI today
 
 # Risks and Benefits of AI
 
@@ -717,12 +786,14 @@ digraph DLPipeline {
   - AI requires technical and ethical standards
 
 * Human-Level AI (AGI)
+::: columns
+:::: {.column width=68%}
 - @Human-level AI (AGI)@
   - Machines able to learn to do anything a human can do
   - Aka AGI (Artificial General Intelligence)
 
   - When AGI?
-    - Expert prediction average is 2099
+    - Expert prediction average is 2099 `#cite("grace2018whenwill")`{=typst}
       - Papers show that expert predictions no better than amateurs
       - Experts expected AI to take 100 years to beat humans in Go
     - Unclear if new breakthroughs or refinements needed
@@ -730,6 +801,41 @@ digraph DLPipeline {
 - @Artificial Super-Intelligence (ASI)@
   - Machines surpass human ability in every domain and self-improving
   - Exponential take-off
+::::
+:::: {.column width=30%}
+
+```graphviz
+digraph AGISpectrum {
+    bgcolor="transparent";
+    pad="0.15";
+    splines=spline;
+    nodesep=0.4;
+    ranksep=0.5;
+    rankdir=TB;
+
+    node [shape=box,
+          style="rounded,filled",
+          penwidth=1.8,
+          fontname="Helvetica",
+          fontsize=11,
+          margin="0.20,0.12",
+          height=0.50];
+
+    edge [color="#A3B1C0",
+          penwidth=1.3,
+          arrowhead=vee,
+          arrowsize=0.75];
+
+    Narrow [label="Narrow AI\n(single task)", fillcolor="#A9DDB0", color="#4F9A5C", fontcolor="#1F4E2E"];
+    AGI    [label="AGI\n(any human task)", fillcolor="#FFC98A", color="#D98E2B", fontcolor="#6B4517"];
+    ASI    [label="ASI\n(surpasses humans,\nself-improving)", fillcolor="#9CC4F2", color="#3C6FB0", fontcolor="#1F4E79"];
+
+    Narrow -> AGI -> ASI;
+    ASI -> ASI [style=dashed, color="#8C8C8C", label="  Exponential\n  take-off", constraint=false];
+}
+```
+::::
+:::
 
 * The Problem of Control
 - @Question@: Can humans control machines more intelligent than them?
@@ -744,7 +850,7 @@ digraph DLPipeline {
 - @Problem of alignment@
   - Super-intelligent AI might pursue goals in unintended, dangerous ways
 
-- @The paperclip problem@ _(Nick Bostrom, 2003)_
+- @The paperclip problem@ _(Nick Bostrom, 2003)_ `#cite("bostrom2003ethical")`{=typst}
   - Thought experiment in AI safety 
   - AI is tasked with maximizing paperclip production
   - AI becomes superintelligent and single-mindedly pursues this goal
@@ -757,12 +863,14 @@ digraph DLPipeline {
   - _Cons_
     - Corporations checking themselves? What can possibly go wrong?
     - Preferences are not easy to invert and are inconsistent
-  - The 2023 FLI "pause AI progress for 6 months" open letter _was a gimmick_
+  - The 2023 FLI "pause AI progress for 6 months" open letter
+    `#cite("fli2023pause")`{=typst} _was a gimmick_
 
 - @Solutions@
   - Put purpose into the machine even if objectives are unclear
   - Incentivize AI to switch off if uncertain about human objectives
   - Cooperative Inverse Reinforcement Learning (CIRL)
+    `#cite("hadfieldmenell2016cirl")`{=typst}
     - AI observes human behavior to infer reward function
 
 * Cooperative Inverse Reinforcement Learning
@@ -873,3 +981,10 @@ _Mountainhead, 2025_
 ![](msml610/lectures_source/figures/L01.3.Y2K.png)
 ::::
 :::
+
+* References
+
+```{=typst}
+#set text(size: 0.75em)
+#references("/msml610/lectures_source/refs.bib")
+```
