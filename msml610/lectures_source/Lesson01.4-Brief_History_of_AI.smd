@@ -2,7 +2,8 @@
 // course_title=MSML610: Advanced Machine Learning
 // lesson_title=L01.4: A Brief History of AI
 // slides_engine=typst
-// references=
+
+// References:
 // - AIMA (Artificial Intelligence: a Modern Approach), Chap 1
 
 // ![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
@@ -210,10 +211,8 @@
   - **General Problem Solver**
     - Imitate human problem-solving
     - Consider sub-goals and possible actions
-
   - **Program learned to play checkers**
     - Use reinforcement learning from victories and mistakes
-
   - **Lisp (1958)**
     - High-level language used for 30 years in AI
 
@@ -232,12 +231,13 @@
 ::::
 :::
 
-* First AI winter (1975-1980)
+* First AI Winter (1975-1980)
 - @Fact@: Early successes of AI set high expectations
   - In 1965-1975 AI didn't succeed on **real problems** due to:
     - Solutions were based on _human problem-solving methods_
     - Difficulty handling _combinatorial explosion_
-      - Theorem proving handles small problems with brute force, but doesn't scale
+      - Theorem proving handles small problems with brute force, but doesn't
+        scale
     - Neural networks couldn't be used since they needed:
       - Algorithms (e.g., backpropagation)
       - Compute power
@@ -255,10 +255,10 @@
   - Use inference engines to apply rules to facts
   - E.g., rule-based systems, logic programming (e.g., Prolog)
 
-- @DefinitioN@: **Weak AI** (aka "narrow AI")
+- @Definition@: **Weak AI** (aka "narrow AI")
   - Uses _"weak methods"_ (search, logic) that struggle to scale
-  - _"Narrow AI"_ Performs specific tasks (not general reasoning) and operates in a
-    limited, well-defined domain
+  - _"Narrow AI"_ performs specific tasks (not general reasoning) and
+    operates in a limited, well-defined domain
 
 - @Commercial adoption and industry growth@
   - AI shifted to practical applications
