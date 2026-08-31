@@ -8,7 +8,9 @@
 
 // ![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
 
-## Brief History of AI
+# Brief History of AI
+
+## Origins and Early AI (1943-1990)
 
 * AI Timeline
 ```raw_latex
@@ -175,15 +177,16 @@
 ::: columns
 :::: {.column width=80%}
 - @Artificial neuron@
-  - Model _(McCullock-Pitts, 1943)_ based on:
+  - Model _(McCulloch-Pitts, 1943)_ based on:
     - Brain physiology
     - Propositional logic
   - Compute any function with connected neurons
     - Neuron on/off based on stimulation from neighboring neurons
     - Implement logical AND, OR, NOT with simple neuron networks
 
-- @Alan Turing, 1947@
-  - Turing test, machine learning, reinforcement learning
+- @Alan Turing, 1947-1950@
+  - Machine learning, reinforcement learning ideas (1947)
+  - Turing test (1950)
   - Create human-level AI by
     - Developing learning algorithms
     - Teaching machine like a child
@@ -216,8 +219,8 @@
   - **Lisp (1958)**
     - High-level language used for 30 years in AI
 
-- @First neural network@ _(Minsky, 1959)_
-  - 3000 vacuum tubes for 40 neurons
+- @First neural network@ _(Minsky, 1951)_
+  - 3,000 vacuum tubes for 40 neurons
 
 - @MIT and Stanford@
   - Minsky at MIT: focus on neural network
@@ -317,9 +320,11 @@ digraph ExpertSystem {
 
 - @Consequence@: **Second AI winter** in late 1980-early 1990
 
+## The Statistical Turn (1986-2000s)
+
 * Return of Neural Networks (1986-)
 - @Fact@: Back-propagation algorithm is (re)discovered in mid-1980s
-  - Developed in early 1960s
+  - First applied to neural networks in 1970s (Werbos)
 
 - @Two approaches to AI are back@
   - _Connectionist paradigm_ (aka neural networks)
@@ -367,15 +372,15 @@ digraph ExpertSystem {
 ::::
 :::
 
-* Example: Speech Recognition
-- In 1970s @ad-hoc approaches@
+* Speech Recognition: From Rules to Statistics
+- @Ad-hoc approaches (1970s)@
   - Several approaches to Rule-based systems with limited robustness
   - Cons
     - Ad-hoc, fragile
   - _"Every time I fire a linguist, the performance of the speech recognizer goes up"
     (Jelinek, 1988)_
 
-- In 1980s @hidden Markov Models@
+- @Hidden Markov Models (1980s)@
   - Trained on large speech corpora
   - Pros
     - Effective learning techniques
@@ -385,7 +390,7 @@ digraph ExpertSystem {
 - @The bitter lesson@ _(Sutton, 2019)_
   - _"General methods + lots of data beat handcrafted systems"_
 
-* Bayesian Networks
+* Bayesian Networks (1988-)
 ::: columns
 :::: {.column width=70%}
 - @Bayesian networks@ _(Pearl, 1988)_
@@ -410,15 +415,14 @@ digraph ExpertSystem {
 ::::
 :::
 
-* Reinforcement Learning
+* Reinforcement Learning (1988-)
 ::: columns
 :::: {.column width=65%}
-- Sutton, 1988
-
-- **Reinforcement Learning** involves agents learning by interacting with an
-  environment
+- **Reinforcement Learning** _(Sutton, 1988)_ involves agents learning by
+  interacting with an environment
   - E.g., a robot learning to navigate a maze by receiving rewards for
     successful paths
+
 - **Markov Decision Problems** (MDPs) provide a framework for modeling
   decision-making
   - E.g., a game strategy modeled where each move influences the outcome with
@@ -450,6 +454,8 @@ mindmap
       Multi-agent systems
       NLP
 ```
+
+## Modern AI (2001-Present)
 
 * Big Data (2001-Present)
 ::: columns
@@ -553,7 +559,8 @@ digraph DLPipeline {
   - Surge of interest in AI among researchers, companies, and investors
 
 - @Pros@: Exceeds human performance in many recognition tasks
-- @Cons@: Needs specialized hardware (e.g., GPU, TPU, FGPA)
+
+- @Cons@: Needs specialized hardware (e.g., GPU, TPU, FPGA)
 
 - True step today towards **general artificial intelligence**
   - Universal algorithm for learning and acting, not just specialized tasks
@@ -574,6 +581,7 @@ digraph DLPipeline {
     ("AI startups", "100", "2,000", "6,000", "60x"),
   ),
 )
+```
 
 - @Compute@
   - Training times dropped 100x in 2 years
@@ -586,7 +594,8 @@ digraph DLPipeline {
 :::: {.column width=80%}
 
 - @Robotic vehicles@
-  - Waymo passed 10 million miles without serious accident
+  - Waymo's driverless fleet has logged far more than its original 10
+    million-mile without serious accident
 
 - @Legged locomotion@
   - BigDog recovers on ice
@@ -620,21 +629,21 @@ digraph DLPipeline {
 - @Game playing@
   - 1997: Deep Blue defeated Kasparov
   - 2011: Watson beat Jeopardy! champion
-  - 2017: AlphaGo beat Go champion
+  - 2016: AlphaGo beat Go champion (Lee Sedol)
   - 2018: AlphaZero super-human in Go and chess with only rules + self-play
   - AI beats humans in videogames: Dota2, StarCraft, Quake
 
 - @Image understanding@
   - Object recognition
   - Image captioning
-  - ..
+  - Visual question answering
 
 - @Medicine@
   - AI equivalent to health care professionals
 
 - @Question@: When will we reach AGI (Artificial General Intelligence)?
 
-## Risks and Benefits of AI
+# Risks and Benefits of AI
 
 * Benefits of AI
 ::: columns
@@ -707,7 +716,7 @@ digraph DLPipeline {
     - E.g., formal verification and statistical analysis insufficient
   - AI requires technical and ethical standards
 
-* Human-level AI / AGI
+* Human-Level AI (AGI)
 - @Human-level AI (AGI)@
   - Machines able to learn to do anything a human can do
   - Aka AGI (Artificial General Intelligence)
@@ -741,67 +750,14 @@ digraph DLPipeline {
   - AI becomes superintelligent and single-mindedly pursues this goal
   - Converts Earth and humans into paperclips
 
-* E/acc vs P(doom)
-::: columns
-:::: {.column width=60%}
-
-- @E/acc@
-  - Accelerationism
-  - Belief that rapid progress in AI is beneficial or inevitable
-  - Solve global problems with more powerful AI tools
-  - Slowing AI is unrealistic or counterproductive
-
-- @P(doom)@
-  - "Probability of Doom"
-  - Estimated probability that advanced AI will cause catastrophic harm
-  - Used informally by AI researchers to quantify risk
-::::
-:::: {.column width=40%}
-![](msml610/lectures_source/figures/L01.3.e_acc.png)
-
-\vspace{0.5cm}
-
-![](msml610/lectures_source/figures/L01.3.P_doom.png)
-
-_Mountainhead, 2025_
-::::
-:::
-
-* My 2 Cents
-::: columns
-:::: {.column width=55%}
-- AI alignment is a serious problem
-  - For now philosophical, at some point a real one
-  - Most tech people have used it for marketing themselves and their companies
-
-- We are quite bad at predicting the future, e.g.,
-  - [Paleofuture](https://paleofuture.com/)
-  - [Elon-O-Meter](https://elonmusk.today/)
-::::
-:::: {.column width=40%}
-![](msml610/lectures_source/figures/L01.3.Windows_failure.png)
-::::
-:::
-
-::: columns
-:::: {.column width=55%}
-- IMO it's as urgent as debating what political system humanity will need when living
-  on Mars
-  - For now we can't get airport terminals to work!
-::::
-:::: {.column width=40%}
-![](msml610/lectures_source/figures/L01.3.Y2K.png)
-::::
-:::
-
 * Solutions to Problem of Control
-- @(Naive Solution)@: **Checks-and-balances**
+- @Naive Solution@: **Checks-and-balances**
   - Researchers and corporations develop voluntary self-governance principles for AI
   - Governments and international organizations established advisory bodies
   - _Cons_
     - Corporations checking themselves? What can possibly go wrong?
     - Preferences are not easy to invert and are inconsistent
-  - The _"let's stop AI progress for 6 months" was a gimmick_
+  - The 2023 FLI "pause AI progress for 6 months" open letter _was a gimmick_
 
 - @Solutions@
   - Put purpose into the machine even if objectives are unclear
@@ -862,5 +818,58 @@ digraph CIRLLoop {
     Feedback -> Observation [style=dashed, color="#8C8C8C", label="  Loop", constraint=false];
 }
 ```
+::::
+:::
+
+* E/acc vs P(doom)
+::: columns
+:::: {.column width=60%}
+
+- @E/acc@
+  - Accelerationism
+  - Belief that rapid progress in AI is beneficial or inevitable
+  - Solve global problems with more powerful AI tools
+  - Slowing AI is unrealistic or counterproductive
+
+- @P(doom)@
+  - "Probability of Doom"
+  - Estimated probability that advanced AI will cause catastrophic harm
+  - Used informally by AI researchers to quantify risk
+::::
+:::: {.column width=40%}
+![](msml610/lectures_source/figures/L01.3.e_acc.png)
+
+\vspace{0.5cm}
+
+![](msml610/lectures_source/figures/L01.3.P_doom.png)
+
+_Mountainhead, 2025_
+::::
+:::
+
+* My 2 Cents
+::: columns
+:::: {.column width=55%}
+- AI alignment is a serious problem
+  - For now philosophical, at some point a real one
+  - Most tech people have used it for marketing themselves and their companies
+
+- We are quite bad at predicting the future, e.g.,
+  - [Paleofuture](https://paleofuture.com/)
+  - [Elon-O-Meter](https://elonmusk.today/)
+::::
+:::: {.column width=40%}
+![](msml610/lectures_source/figures/L01.3.Windows_failure.png)
+::::
+:::
+
+::: columns
+:::: {.column width=55%}
+- IMO it's as urgent as debating what political system humanity will need when living
+  on Mars
+  - For now we can't get airport terminals to work!
+::::
+:::: {.column width=40%}
+![](msml610/lectures_source/figures/L01.3.Y2K.png)
 ::::
 :::
