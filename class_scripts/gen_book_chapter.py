@@ -988,9 +988,7 @@ def _generate_typst_header(level: int, title: str, source_file: str, line_number
     return "\n".join(parts)
 
 
-def _build_typst_document_header(
-    course_title: str, chapter_title: str, chapter_num: str
-) -> str:
+def _build_typst_document_header(course_title: str, chapter_title: str) -> str:
     """
     Build the fixed Typst document boilerplate: imports, metadata, and the
     single `#chapter(...)` call.
@@ -998,8 +996,7 @@ def _build_typst_document_header(
     :param course_title: course title (e.g., "MSML610: Advanced Machine
         Learning")
     :param chapter_title: chapter title (e.g., "L01.2: AI and Machine
-        Learning")
-    :param chapter_num: chapter number (e.g., "1")
+        Learning"), used verbatim as the purple chapter bar's label
     :return: Typst document header
     """
     lines = [
@@ -1021,7 +1018,7 @@ def _build_typst_document_header(
         "// Apply the AIMA document template (page/text/heading set + show rules).",
         "#show: aima-style",
         "",
-        f'#chapter({chapter_num}, "{chapter_title}")',
+        f'#chapter("{chapter_title}")',
     ]
     return "\n".join(lines)
 
@@ -1031,7 +1028,6 @@ def _generate_typst_chapter_per_slide(
     output_file: str,
     model: str,
     llm_backend: str,
-    lesson: str,
     course_title: str,
     chapter_title: str,
 ) -> None:
@@ -1043,8 +1039,6 @@ def _generate_typst_chapter_per_slide(
     :param output_file: path to write the generated `.typ` chapter to
     :param model: LLM model to use, or "" to use the backend's default
     :param llm_backend: which LLM backend to use, one of `_LLM_BACKENDS`
-    :param lesson: lesson number (e.g., "10.2"), used to derive the Typst
-        chapter number
     :param course_title: course title, used in the document metadata
     :param chapter_title: chapter title, used in `#chapter(...)` and the
         document metadata
@@ -1055,16 +1049,13 @@ def _generate_typst_chapter_per_slide(
     items = list(hmaslite.iterate_slide_lines(lines))
     system_prompt = _get_system_prompt_slide()
     output_dir = os.path.dirname(output_file) or "."
-    chapter_num = lesson.split(".")[0]
     # `label_counter` keeps diagram/table labels unique across the whole
     # document (see `_next_visual_label()`); `visual_manifest` accumulates
     # every visual's label -> description across the whole document, and is
     # consumed at the end by `_ensure_visual_references()`.
     label_counter: Dict[str, int] = {}
     visual_manifest: Dict[str, str] = {}
-    parts = [
-        _build_typst_document_header(course_title, chapter_title, chapter_num)
-    ]
+    parts = [_build_typst_document_header(course_title, chapter_title)]
     for item in tqdm(items, desc="Generating slides", unit="slide"):
         if item["type"] == "header":
             first_line = item["content"][0]
@@ -1139,7 +1130,6 @@ def _generate_book_chapter(
             output_file,
             model,
             llm_backend,
-            lesson,
             course_title,
             chapter_title,
         )

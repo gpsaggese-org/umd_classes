@@ -88,7 +88,7 @@ Not needed
 /slides.fix_formatting
 /slides.add_tutorial_links
 
-> lint_text.py -i     01.2
+> lint_text.py -i     01.2  01.3
 
 > gen_slides.py msml610/01.3
 > grep "^* " msml610/lectures_source/*.smd | wc -l
@@ -98,7 +98,7 @@ gen_book_chapter.py  msml610/01.2 --mode typst_aima --llm_backend hllm_cli -v DE
 gen_book_chapter.py  msml610/01.2 --mode typst_aima --llm_backend hllm_cli_exec --model openrouter/anthropic/claude-opus-4.6 --no_incremental
 gen_book_chapter.py  msml610/00.1 --mode typst_aima --llm_backend hllm_cli_exec --model openrouter/anthropic/claude-opus-4.6 --no_incremental
 
-> /text.humanize 
+> /text.humanize       01.2 01.3
 > review / edit book chapter
 
 > run_typst.py --input msml610/book/Lesson01.2-AI_and_Machine_Learning.typ
