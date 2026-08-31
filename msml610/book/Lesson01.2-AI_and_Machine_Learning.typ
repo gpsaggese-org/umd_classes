@@ -61,23 +61,26 @@ be described precisely enough for a machine to simulate it
 #cite("mccarthy1955dartmouth"). 
 That proposal gave the field both its name and its ambitious scope.
 
-The goals of AI are twofold: to understand human intelligence and to create
-intelligent entities. These goals reinforce each other. Building a system that
-can perceive, reason, and act forces researchers to make their theories of
-cognition precise enough to implement. Vague verbal descriptions will not
-compile. As @fig:richardfeynman reminds us, Richard Feynman captured this idea
-succinctly: "What I cannot create, I do not understand." The act of engineering
-intelligence is itself a path to understanding it.
-
-// TODO(ai_gp): Embedded it in the text on the right and make it smaller
-// like 20% of the width of the page
-#figure(
-  image("../lectures_source/figures/L01.2.Richard_Feynman.jpg", width: 80%),
-  caption: [Richard Feynman (1965)],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:richardfeynman>
+#grid(
+  columns: (1fr, 20%),
+  column-gutter: 1em,
+  align: (left, top),
+)[
+  The goals of AI are twofold: to understand human intelligence and to create
+  intelligent entities. These goals reinforce each other. Building a system
+  that can perceive, reason, and act forces researchers to make their theories
+  of cognition precise enough to implement. Vague verbal descriptions will not
+  compile. As @fig:richardfeynman reminds us, Richard Feynman captured this
+  idea succinctly: "What I cannot create, I do not understand." The act of
+  engineering intelligence is itself a path to understanding it.
+][
+  #figure(
+    image("../lectures_source/figures/L01.2.Richard_Feynman.jpg", width: 100%),
+    caption: [Richard Feynman (1965)],
+    kind: "figure",
+    supplement: [Fig.],
+  ) <fig:richardfeynman>
+]
 
 What makes AI unique among engineering disciplines is the breadth of its
 ambition paired with the depth of its open questions. AI applies, at least in
@@ -288,23 +291,26 @@ broad set of capabilities:
   recognizing objects, faces, scenes, and spoken language.
 6. #strong[Robotics] to manipulate physical objects and move through space.
 
-Each of these areas has grown into a major subfield of AI in its own right, yet
-the Turing test reminds us that genuine human-level intelligence weaves them all
-together seamlessly. A convincing agent must not only see and speak but also
-reason about what it sees and learn from what it hears. As @fig:exmachina
-shows, popular culture has long been fascinated by this vision of a
-machine whose behavior is so fluid and integrated that it becomes
-indistinguishable from a human being.
-
-// TODO(ai_gp): Embedded it in the text on the right and make it smaller
-// like 20% of the width of the page
-#figure(
-  image("../lectures_source/figures/L01.1.Ex_machina.jpg", width: 80%),
-  caption: [Ex machina],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:exmachina>
+#grid(
+  columns: (1fr, 20%),
+  column-gutter: 1em,
+  align: (left, top),
+)[
+  Each of these areas has grown into a major subfield of AI in its own right,
+  yet the Turing test reminds us that genuine human-level intelligence weaves
+  them all together seamlessly. A convincing agent must not only see and speak
+  but also reason about what it sees and learn from what it hears. As
+  @fig:exmachina shows, popular culture has long been fascinated by this
+  vision of a machine whose behavior is so fluid and integrated that it
+  becomes indistinguishable from a human being.
+][
+  #figure(
+    image("../lectures_source/figures/L01.1.Ex_machina.jpg", width: 100%),
+    caption: [Ex machina],
+    kind: "figure",
+    supplement: [Fig.],
+  ) <fig:exmachina>
+]
 
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:223 '* Turing Test: Pros and Cons'
 // Slide: Turing Test: Pros and Cons
