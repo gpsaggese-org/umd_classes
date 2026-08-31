@@ -143,10 +143,12 @@ Never emit the tag word itself as a `#strong[...]` label (`#strong[Definition]`,
     - **Omniscience vs no-regrets**
       - Best is based on available information, not perfect knowledge
   ```
-  Good output (a genuinely enumerable set stays a list, without the tag label):
+  Good output (a genuinely enumerable set stays a list, without the tag label;
+  the item's lead phrase is emphasis, not a definition, so it is `#emph`, not
+  `#strong` — see "Highlighting and Emphasis" below):
 
   ```text
-  - #strong[Omniscience vs no-regrets]: the best decision is based on
+  - #emph[Omniscience vs no-regrets]: the best decision is based on
     available information, not perfect knowledge.
   ```
 
@@ -157,7 +159,17 @@ above, never two labeled halves.
 
 ## Highlighting and Emphasis
 
-- `**text**` (markdown bold) → `#strong[text]`
+- `#strong[...]` is reserved for the term or claim being formally defined or
+  named for the first time, normally in a sentence shaped like "#strong[Term]
+  is/refers to/means ..." or the direct answer to a "what is X?" question. Use
+  it sparingly: a handful of times per slide at most, and never for a list
+  item's lead phrase
+- Everything else the source marks for emphasis becomes `#emph[...]` instead:
+  a `**bold**` list-item lead phrase, a term already defined earlier and
+  mentioned again, or a word/phrase emphasized for rhetorical weight rather
+  than being defined. Decide `#strong` vs `#emph` by the role the phrase
+  plays in the sentence, not by mechanically mapping `**text**` → `#strong[text]`
+  — the source's markdown bold does not settle it
 - `_text_` (markdown italic) → `#emph[text]`
 - Never leave `**`, `_`, or a bare `*` used as markdown emphasis in the output —
   those characters have no special meaning in Typst body markup and will render as
@@ -165,6 +177,15 @@ above, never two labeled halves.
 - A plain quoted phrase (`"..."`) stays a plain quoted string: do not prefix it with
   `#`. `#"text"` is a Typst string _expression_, not a quoted phrase, and drops the
   visible quote marks
+
+- Input: `- **Omniscience vs. no-regrets**: the best decision is based on the
+  information available at the time of acting.`
+- Bad output (a list-item lead phrase is emphasis, not a definition):
+  `- #strong[Omniscience vs. no-regrets]: the best decision is based on the
+  information available at the time of acting.`
+- Good output:
+  `- #emph[Omniscience vs. no-regrets]: the best decision is based on the
+  information available at the time of acting.`
 
 ## Lists
 

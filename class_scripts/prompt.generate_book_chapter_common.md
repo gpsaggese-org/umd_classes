@@ -51,6 +51,8 @@ commands, Typst markup, Markdown syntax) that belongs in the mode file
 - **Language**: Use precise technical terms, avoid jargon or overly fancy synonyms
 - **No AI slop**: Avoid AI-sounding writing patterns (e.g., empty hedging, "it's
   important to note", filler transitions); write like a human expert
+- **Punctuation**: avoid em dashes (—); rewrite with a colon, a comma plus
+  parenthetical phrasing, a semicolon, or two shorter sentences instead
 - **Word count per slide**: 350-400 words (adjust as needed for content depth)
 
 ## Content Guidelines
@@ -168,8 +170,11 @@ code blocks (graphviz, mermaid, tikz), and tables
 
 - Include illustrative examples alongside abstract concepts
 - Present formulas clearly, with both intuition and formal notation
-- Maintain consistent emphasis: use the "highlight" markup for key terms and
-  concepts, and the "italic" markup for general emphasis only
+- Maintain consistent emphasis: reserve the "highlight" markup for the first,
+  canonical definition of a term, not for every important-sounding phrase; use
+  the "italic" markup for everything else, including a term's later mentions
+  and list-item lead phrases (see the mode-specific file for the exact
+  decision rule and examples)
 
 ## Constraints
 

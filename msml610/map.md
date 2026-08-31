@@ -77,8 +77,8 @@ Lesson13.1-Explainability.smd
 
 # Workflow in short
 
-/slides.lint          01.2  01.3
-/slides.review        01.2
+/slides.lint          01.2  01.3  01.4
+/slides.review        01.2  01.3
 /slides.add_visuals   01.2  01.3
 /slides.add_references 01.2 01.3
 

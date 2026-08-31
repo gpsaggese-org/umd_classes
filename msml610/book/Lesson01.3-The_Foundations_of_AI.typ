@@ -1,7 +1,7 @@
 // git_hash=52575121d-e3r timestamp=20260830_190930
 // Import AIMA style formatting and macros.
 #import "/helpers_root/dev_scripts_helpers/typst/aima_style.typ": (
-  aima-style, algorithm, chapter, glossary, styled-table,
+  aima-style, algorithm, chapter, glossary, styled-table, wrap-content,
 )
 // Import the custom citation/bibliography system.
 #import "/helpers_root/dev_scripts_helpers/typst/umd_references.typ": (
@@ -21,21 +21,19 @@
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:10 '# The Foundations of AI'
 // Slide: The Foundations of AI
-#strong[The Foundations of AI]
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:12 '## Overview'
 // Slide: Overview
-= Overview
+= The Foundations of AI
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:14 '* AI Relates to Many Other Disciplines'
 // Slide: AI Relates to Many Other Disciplines
-#strong[AI Relates to Many Other Disciplines]
-
 
 @fig:airelatestomanyotherdisciplines maps how AI connects to philosophy,
 mathematics, economics, neuroscience, psychology, computer engineering,
 control theory, and linguistics.
 
+// TODO(ai_gp): Use wrap-it in the text close to the reference to this fig.
 #figure(
   image("Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.1.png", width: 70%),
   caption: [Diagram relating AI to Philosophy, Mathematics, Economics, Neuroscience, Psychology, Computer engineering, Control theory and Linguistics],
@@ -46,18 +44,17 @@ control theory, and linguistics.
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:29 '## Philosophy'
 // Slide: Philosophy
-= Philosophy
+== Philosophy
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:31 '* AI and Philosophy (1/2)'
 // Slide: AI and Philosophy (1/2)
-#strong[AI and Philosophy (1/2)]
 
 Whether formal rules can be used to draw valid conclusions is a question at
 the heart of the rationalist tradition. Logic, the study of rules governing
 proper reasoning, traces back to Aristotle (384–322 BCE), who formulated laws
 meant to capture how a rational mind should operate. The ambition to
 mechanize at least part of that reasoning is equally old in spirit: machines
-capable of arithmetic operations, such as the #strong[Pascaline] built by
+capable of arithmetic operations, such as the #emph[Pascaline] built by
 Blaise Pascal in 1642, showed early on that formal symbol manipulation could
 be offloaded from human minds to physical devices. #strong[Rationalism] takes
 this further, holding that reasoning alone, carefully applied, can yield
@@ -83,7 +80,6 @@ metaphysical puzzle of consciousness first.
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:50 '* AI and Philosophy (2/2)'
 // Slide: AI and Philosophy (2/2)
-#strong[AI and Philosophy (2/2)]
 
 Where does knowledge come from? Philosophy offers at least three influential
 answers. #emph[Empiricism] holds that knowledge is acquired through the
@@ -94,18 +90,25 @@ such as observing many white swans and inferring that all swans are white.
 body of logical theories that must be connected to observations: scientific
 hypotheses earn their status by being linked to experimental data.
 
-The discovery of black swans in Australia, shown in @fig:blackswans, famously
-overturned the long-standing European generalisation that all swans are
-white: inductive reasoning is powerful but fallible, and this is a textbook
-case of the problem of induction.
-
-#figure(
-  image("../lectures_source/figures/L01.2.black_swans.jpg", width: 80%),
-  caption: [black swans],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:blackswans>
+#wrap-content(
+  [
+    #figure(
+      image("../lectures_source/figures/L01.2.black_swans.jpg", width: 100%),
+      caption: [black swans],
+      kind: "figure",
+      supplement: [Fig.],
+      placement: auto,
+    ) <fig:blackswans>
+  ],
+  align: right,
+  column-gutter: 1em,
+  columns: (1fr, 20%),
+)[
+  The discovery of black swans in Australia, shown in @fig:blackswans,
+  famously overturned the long-standing European generalisation that all
+  swans are white: inductive reasoning is powerful but fallible, and this is
+  a textbook case of the problem of induction.
+]
 
 A separate but equally fundamental question is how knowledge, once obtained,
 should lead to action. Two broad ethical frameworks compete here.
@@ -123,11 +126,10 @@ never traded away (a deontological one).
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:85 '## Mathematics and Computation'
 // Slide: Mathematics and Computation
-= Mathematics and Computation
+== Mathematics and Computation
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:87 '* AI and Mathematics'
 // Slide: AI and Mathematics
-#strong[AI and Mathematics]
 
 Formal rules for drawing valid conclusions come from two traditions.
 #strong[Formal logic], beginning with Boole's logical deduction rules in
@@ -177,7 +179,6 @@ these mathematical foundations.
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:116 '* AI and Computer Science'
 // Slide: AI and Computer Science
-#strong[AI and Computer Science]
 
 What can be computed? This deceptively simple question splits into three
 distinct concerns: what an algorithm is, what the fundamental limits of
@@ -189,26 +190,33 @@ the greatest common divisor of two integers around 300 BCE, and it remains
 one of the most elegant examples of step-by-step problem solving. But not
 every well-posed question has an algorithmic answer.
 
-Some functions are simply #strong[non-computable]. In 1936, Alan Turing
-introduced the #strong[Turing machine] #cite("turing1936computable"), a
-mathematical model of computation that can compute any function that is
-computable at all. This universality result also revealed hard boundaries:
-certain problems provably have no algorithmic solution. The most famous
-example is the #strong[halting problem]: given an arbitrary program and its
-input, decide whether the program eventually terminates or runs forever.
-Turing proved that no general algorithm can solve this for all possible
-programs, establishing that computation has inherent limits regardless of how
-clever or powerful the machine. Turing's contributions in the early 1950s,
-pictured in @fig:alanturing, laid the theoretical groundwork that still
-defines what we mean by "computable" today.
-
-#figure(
-  image("../lectures_source/figures/L01.3.Alan_Turing.jpg", width: 80%),
-  caption: [Alan Turing (1951)],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:alanturing>
+#wrap-content(
+  [
+    #figure(
+      image("../lectures_source/figures/L01.3.Alan_Turing.jpg", width: 100%),
+      caption: [Alan Turing (1951)],
+      kind: "figure",
+      supplement: [Fig.],
+      placement: auto,
+    ) <fig:alanturing>
+  ],
+  align: right,
+  column-gutter: 1em,
+  columns: (1fr, 20%),
+)[
+  Some functions are simply #emph[non-computable]. In 1936, Alan Turing
+  introduced the #strong[Turing machine] #cite("turing1936computable"), a
+  mathematical model of computation that can compute any function that is
+  computable at all. This universality result also revealed hard boundaries:
+  certain problems provably have no algorithmic solution. The most famous
+  example is the #strong[halting problem]: given an arbitrary program and its
+  input, decide whether the program eventually terminates or runs forever.
+  Turing proved that no general algorithm can solve this for all possible
+  programs, establishing that computation has inherent limits regardless of how
+  clever or powerful the machine. Turing's contributions in the early 1950s,
+  pictured in @fig:alanturing, laid the theoretical groundwork that still
+  defines what we mean by "computable" today.
+]
 
 Even among problems that #emph[are] computable, not all are practically
 solvable. #strong[Tractability] draws a line between problems whose solving
@@ -228,11 +236,10 @@ approximate or heuristic solutions rather than exact ones.
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:144 '## Economics'
 // Slide: Economics
-= Economics
+== Economics
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:146 '* AI and Economics (1/2)'
 // Slide: AI and Economics (1/2)
-#strong[AI and Economics (1/2)]
 
 How an agent should act to maximize its payoff, given its preferences, is a
 question two traditions address from complementary angles. In
@@ -246,7 +253,7 @@ an investment portfolio under market risk or evaluating competing policy
 proposals whose consequences depend on factors outside anyone's control.
 
 A harder question arises when payoffs depend not on a single choice but on a
-#strong[sequence of actions]. #strong[Operations research] tackles exactly
+#emph[sequence of actions]. #strong[Operations research] tackles exactly
 this setting: finding rational plans whose value accumulates over multiple
 steps. A landmark formalization is the #strong[Markov Decision Process]
 (MDP), introduced by Bellman #cite("bellman1957dp"), which decomposes a
@@ -261,22 +268,32 @@ city is a canonical example. Satisficing trades optimality for tractability
 and is often closer to actual human behavior than the idealized utility
 maximizer of classical theory.
 
-@fig:aiandeconomics12 places decision theory at the intersection of
-probability theory and utility theory: probability theory supplies beliefs
-about the world, utility theory encodes preferences over outcomes, and their
-combination yields a principled framework for action under uncertainty.
-
-#figure(
-  image("Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.2.png", width: 60%),
-  caption: [Diagram relating Probability Theory, Utility Theory and Decision Theory],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:aiandeconomics12>
+#wrap-content(
+  [
+    #figure(
+      image(
+        "Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.2.png",
+        width: 100%,
+      ),
+      caption: [Diagram relating Probability Theory, Utility Theory and Decision Theory],
+      kind: "figure",
+      supplement: [Fig.],
+      placement: auto,
+    ) <fig:aiandeconomics12>
+  ],
+  align: right,
+  column-gutter: 1em,
+  columns: (1fr, 25%),
+)[
+  @fig:aiandeconomics12 places decision theory at the intersection of
+  probability theory and utility theory: probability theory supplies beliefs
+  about the world, utility theory encodes preferences over outcomes, and
+  their combination yields a principled framework for action under
+  uncertainty.
+]
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:203 '* AI and Economics (2/2)'
 // Slide: AI and Economics (2/2)
-#strong[AI and Economics (2/2)]
 
 How multiple agents with different goals behave in a shared environment
 depends critically on how much influence each agent's decisions exert on the
@@ -339,46 +356,59 @@ strategy each regime demands.
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:230 '## Neuroscience and Psychology'
 // Slide: Neuroscience and Psychology
-= Neuroscience and Psychology
+== Neuroscience and Psychology
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:232 '* AI and Neuroscience'
 // Slide: AI and Neuroscience
-#strong[AI and Neuroscience]
 
-The #strong[brain] is fundamentally an information-processing organ, with
-different regions handling specific cognitive functions. Much of this
-processing occurs in the cerebral cortex, and damage to particular areas
-produces predictable deficits: a frontal lobe injury, for instance, may
-impair decision-making while leaving perception largely intact. This
-localization of function, pictured in @fig:brain, was one of the earliest
-clues that cognition is not a single indivisible process but a collection of
-specialized subsystems.
+#wrap-content(
+  [
+    #figure(
+      image("../lectures_source/figures/L01.2.brain.jpg", width: 100%),
+      caption: [brain],
+      kind: "figure",
+      supplement: [Fig.],
+      placement: auto,
+    ) <fig:brain>
+  ],
+  align: right,
+  column-gutter: 1em,
+  columns: (1fr, 20%),
+)[
+  The #strong[brain] is fundamentally an information-processing organ, with
+  different regions handling specific cognitive functions. Much of this
+  processing occurs in the cerebral cortex, and damage to particular areas
+  produces predictable deficits: a frontal lobe injury, for instance, may
+  impair decision-making while leaving perception largely intact. This
+  localization of function, pictured in @fig:brain, was one of the earliest
+  clues that cognition is not a single indivisible process but a collection
+  of specialized subsystems.
+]
 
-#figure(
-  image("../lectures_source/figures/L01.2.brain.jpg", width: 80%),
-  caption: [brain],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:brain>
-
-At the hardware level, the brain is composed of roughly 100 billion neurons.
-Each neuron forms between 10,000 and 100,000 synaptic connections to other
-neurons, and axons enable these connections to span long distances across the
-brain. Signals propagate through electrochemical reactions: a neuron
-integrates incoming electrical impulses and, if a threshold is reached, fires
-its own signal down the axon to downstream neighbors. @fig:neuron shows the
-basic anatomy of a single neuron, including the dendrites that receive input,
-the cell body that integrates it, and the axon that transmits the output
-signal.
-
-#figure(
-  image("../lectures_source/figures/L01.2.neuron.png", width: 80%),
-  caption: [neuron],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:neuron>
+#wrap-content(
+  [
+    #figure(
+      image("../lectures_source/figures/L01.2.neuron.png", width: 100%),
+      caption: [neuron],
+      kind: "figure",
+      supplement: [Fig.],
+      placement: auto,
+    ) <fig:neuron>
+  ],
+  align: right,
+  column-gutter: 1em,
+  columns: (1fr, 20%),
+)[
+  At the hardware level, the brain is composed of roughly 100 billion
+  neurons. Each neuron forms between 10,000 and 100,000 synaptic connections
+  to other neurons, and axons enable these connections to span long
+  distances across the brain. Signals propagate through electrochemical
+  reactions: a neuron integrates incoming electrical impulses and, if a
+  threshold is reached, fires its own signal down the axon to downstream
+  neighbors. @fig:neuron shows the basic anatomy of a single neuron,
+  including the dendrites that receive input, the cell body that integrates
+  it, and the axon that transmits the output signal.
+]
 
 What makes this network more than a fixed circuit is its capacity for
 change. Short-term signaling pathways can be strengthened or weakened over
@@ -391,14 +421,13 @@ Memory remains one of the less well-understood aspects of this system. There
 is no established theory explaining how an individual memory is stored at
 the level of specific neurons or synapses. The prevailing view is that
 memories are not filed away like entries in a database but are
-#strong[reconstructed] each time they are recalled, assembled from
+#emph[reconstructed] each time they are recalled, assembled from
 distributed patterns of neural activity. This reconstructive nature helps
 explain why memories are malleable, prone to distortion, blending, and
 revision, rather than faithful recordings of past experience.
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:262 '* The Brain Causes the Mind'
 // Slide: The Brain Causes the Mind
-#strong[The Brain Causes the Mind]
 
 Simple cells, neurons firing in electrochemical patterns, give rise to
 thought, perception, and consciousness. Complex cognitive processes emerge
@@ -444,6 +473,7 @@ baseline level of general intelligence remains an open problem: no one knows
 whether current paradigms of deep learning, symbolic reasoning, or some
 yet-undiscovered approach will be the one to close the gap.
 
+// TODO(ai_gp): Use wrap-it in the text close to the reference to this fig.
 #figure(
   image("Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.3.png", width: 90%),
   caption: [Diagram relating AI System, Improves Itself, Capability Increases and Superintelligence],
@@ -454,7 +484,6 @@ yet-undiscovered approach will be the one to close the gap.
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:322 '* AI and Cognitive Psychology'
 // Slide: AI and Cognitive Psychology
-#strong[AI and Cognitive Psychology]
 
 How do humans think and act? This question draws together several
 disciplines, each offering a distinct but complementary lens on the
@@ -473,6 +502,7 @@ systems. @fig:aiandcognitivepsychology traces this flow: stimuli enter the
 system, pass through internal representations and cognitive processes, and
 produce beliefs that guide behaviour.
 
+// TODO(ai_gp): Use wrap-it in the text close to the reference to this fig.
 #figure(
   image("Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.4.png", width: 100%),
   caption: [Diagram relating Stimuli, Internal Representation, Cognitive Processes and Beliefs],
@@ -510,25 +540,32 @@ with the second, and delivering technology to the third.
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:378 '## Engineering, Control, and Language'
 // Slide: Engineering, Control, and Language
-= Engineering, Control, and Language
+== Engineering, Control, and Language
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:380 '* AI and Computer Engineering (1/2)'
 // Slide: AI and Computer Engineering (1/2)
-#strong[AI and Computer Engineering (1/2)]
 
-Computing hardware has evolved dramatically to become fast enough for AI, and
-the story begins during World War II, when the first #strong[electronic
-computers] were built: room-sized machines such as ENIAC, shown in
-@fig:eniac, which were designed primarily for ballistics calculations but
-demonstrated that large-scale automated computation was physically feasible.
-
-#figure(
-  image("../lectures_source/figures/L01.2.eniac.png", width: 80%),
-  caption: [eniac],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:eniac>
+#wrap-content(
+  [
+    #figure(
+      image("../lectures_source/figures/L01.2.eniac.png", width: 100%),
+      caption: [eniac],
+      kind: "figure",
+      supplement: [Fig.],
+      placement: auto,
+    ) <fig:eniac>
+  ],
+  align: right,
+  column-gutter: 1em,
+  columns: (1fr, 20%),
+)[
+  Computing hardware has evolved dramatically to become fast enough for AI,
+  and the story begins during World War II, when the first #emph[electronic
+    computers] were built: room-sized machines such as ENIAC, shown in
+  @fig:eniac, which were designed primarily for ballistics calculations but
+  demonstrated that large-scale automated computation was physically
+  feasible.
+]
 
 From that point forward, hardware improved at a breathtaking pace. In 1965,
 Gordon Moore observed that the number of transistors on an integrated
@@ -540,6 +577,7 @@ larger problems, and AI workloads, which are notoriously compute-hungry,
 benefited directly. @fig:moorelaw plots this exponential trajectory across
 several decades of processor development.
 
+// TODO(ai_gp): Use wrap-it in the text close to the reference to this fig.
 #figure(
   image("../lectures_source/figures/L01.2.Moore_Law.png", width: 80%),
   caption: [Moore Law],
@@ -563,7 +601,6 @@ with the computational structure of modern AI.
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:402 '* AI and Computer Engineering (2/2)'
 // Slide: AI and Computer Engineering (2/2)
-#strong[AI and Computer Engineering (2/2)]
 
 What hardware trends are shaping AI systems today? The answer begins with
 three families of processors that have come to define modern AI
@@ -594,6 +631,7 @@ lays out the architectural differences among CPUs, GPUs, and TPUs, showing
 how each successive design trades away general-purpose flexibility for raw
 parallel arithmetic density.
 
+// TODO(ai_gp): Use wrap-it in the text close to the reference to this fig.
 #figure(
   image("../lectures_source/figures/L01.2.CPU_GPU_TPU.png", width: 80%),
   caption: [CPU GPU TPU],
@@ -602,7 +640,7 @@ parallel arithmetic density.
   placement: auto,
 ) <fig:cpugputpu>
 
-Looking further ahead, #strong[quantum computing] has the potential for
+Looking further ahead, #emph[quantum computing] has the potential for
 significant acceleration in key computational tasks that remain intractable
 on classical hardware. Shor's algorithm for integer factorization
 #cite("shor1997factoring") shows what's possible: it can factor large
@@ -615,7 +653,6 @@ inside larger AI pipelines.
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:434 '* AI and Control Theory'
 // Slide: AI and Control Theory
-#strong[AI and Control Theory]
 
 #strong[Control theory] is the study of self-regulating feedback control
 systems, the mechanisms that let artifacts operate under their own control.
@@ -649,6 +686,7 @@ observable, or requires discrete decisions among qualitatively different
 actions, situations where symbolic reasoning complements, and sometimes
 surpasses, the continuous optimization perspective of traditional control.
 
+// TODO(ai_gp): Use wrap-it in the text close to the reference to this fig.
 #figure(
   image("Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.5.png", width: 90%),
   caption: [Diagram relating Goal State, Controller, System and Current State],
@@ -659,7 +697,6 @@ surpasses, the continuous optimization perspective of traditional control.
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:482 '* AI and Linguistics'
 // Slide: AI and Linguistics
-#strong[AI and Linguistics]
 
 How can we create systems that understand natural language? This challenge
 falls under #strong[computational linguistics], which studies sentence
@@ -680,6 +717,7 @@ and knowledge representation at the intersection of natural language
 understanding and machine reasoning, with machine translation serving as a
 concrete application that draws on both.
 
+// TODO(ai_gp): Use wrap-it in the text close to the reference to this fig.
 #figure(
   image("Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.6.png", width: 80%),
   caption: [Diagram relating Natural Language, Computational Linguistics, Knowledge Representation and Machine Translation],
@@ -690,11 +728,10 @@ concrete application that draws on both.
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:540 '## Wrap-Up'
 // Slide: Wrap-Up
-= Wrap-Up
+= Summary
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:542 '* Key Takeaways'
 // Slide: Key Takeaways
-#strong[Key Takeaways]
 
 AI did not spring from a single discipline. Its core questions, formalisms,
 and tools were inherited from a remarkably broad constellation of fields:
@@ -721,8 +758,7 @@ advances across multiple fronts simultaneously.
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:553 '* References'
 // Slide: References
-#strong[References]
-
+= References
 
 #set text(size: 0.75em)
 #references("/msml610/lectures_source/refs.bib")
