@@ -17,6 +17,7 @@ import class_scripts.common_utils as csccouti
 
 _LOG = logging.getLogger(__name__)
 
+
 # #############################################################################
 # Test_validate_dir_lesson_args
 # #############################################################################
@@ -201,9 +202,7 @@ class Test_parse_lesson_spec(hunitest.TestCase):
     Test `parse_lesson_spec()` function.
     """
 
-    def helper1(
-        self, arg: str, expected_dir: str, expected_lesson: str
-    ) -> None:
+    def helper1(self, arg: str, expected_dir: str, expected_lesson: str) -> None:
         """
         Test helper for `parse_lesson_spec()`.
 

@@ -120,7 +120,12 @@ def _build_partial_tree_graph(
             label = f"{prefix_label}\nvalue=?"
         if game is not None:
             label = f"{game.render(node.state)}\n{label}"
-        dot.node(node_ids[id(node)], label, fillcolor=fillcolor, style="rounded,filled")
+        dot.node(
+            node_ids[id(node)],
+            label,
+            fillcolor=fillcolor,
+            style="rounded,filled",
+        )
         if node.parent is not None and id(node.parent) in node_ids:
             dot.edge(node_ids[id(node.parent)], node_ids[id(node)])
     return dot
@@ -212,7 +217,9 @@ def _build_minimax_step_widget(
             graph_output = ipywidgets.Output()
             with graph_output:
                 display(
-                    _build_partial_tree_graph(events, num_events, game=board_game)
+                    _build_partial_tree_graph(
+                        events, num_events, game=board_game
+                    )
                 )
             comment_output = ipywidgets.Output()
             with comment_output:

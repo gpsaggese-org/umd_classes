@@ -12,7 +12,7 @@ from unittest import mock
 
 import helpers.hunit_test as hunitest
 
-import class_scripts.count_pdf_pages as clcopdpa
+import class_scripts.count_pdf_pages as cscopdpa
 
 
 # #############################################################################
@@ -34,7 +34,7 @@ class Test_parse(hunitest.TestCase):
         # Prepare outputs.
         expected = "msml610/lectures"
         # Run test.
-        parser = clcopdpa._parse()
+        parser = cscopdpa._parse()
         args = parser.parse_args(arg_list)
         # Check outputs.
         self.assert_equal(args.dir, expected)
@@ -48,7 +48,7 @@ class Test_parse(hunitest.TestCase):
         # Prepare outputs.
         expected = "msml610/lectures/Lesson01.pdf"
         # Run test.
-        parser = clcopdpa._parse()
+        parser = cscopdpa._parse()
         args = parser.parse_args(arg_list)
         # Check outputs.
         self.assert_equal(args.input, expected)
@@ -65,7 +65,7 @@ class Test_parse(hunitest.TestCase):
             "msml610/lectures/Lesson01.pdf",
         ]
         # Run test.
-        parser = clcopdpa._parse()
+        parser = cscopdpa._parse()
         with self.assertRaises(SystemExit):
             parser.parse_args(arg_list)
 
@@ -76,7 +76,7 @@ class Test_parse(hunitest.TestCase):
         # Prepare inputs.
         arg_list = []
         # Run test.
-        parser = clcopdpa._parse()
+        parser = cscopdpa._parse()
         with self.assertRaises(SystemExit):
             parser.parse_args(arg_list)
 
@@ -110,10 +110,8 @@ class Test_main(hunitest.TestCase):
             with self.assertLogs(
                 "class_scripts.count_pdf_pages", level="INFO"
             ) as cm:
-                with mock.patch(
-                    "sys.argv", ["count_pdf_pages.py"] + arg_list
-                ):
-                    clcopdpa._main(clcopdpa._parse())
+                with mock.patch("sys.argv", ["count_pdf_pages.py"] + arg_list):
+                    cscopdpa._main(cscopdpa._parse())
         # Check outputs.
         mock_get_counts.assert_called_once_with(
             scratch_dir, pattern="Lesson*.pdf"
@@ -143,10 +141,8 @@ class Test_main(hunitest.TestCase):
             with self.assertLogs(
                 "class_scripts.count_pdf_pages", level="INFO"
             ) as cm:
-                with mock.patch(
-                    "sys.argv", ["count_pdf_pages.py"] + arg_list
-                ):
-                    clcopdpa._main(clcopdpa._parse())
+                with mock.patch("sys.argv", ["count_pdf_pages.py"] + arg_list):
+                    cscopdpa._main(cscopdpa._parse())
         # Check outputs.
         mock_count_pages.assert_called_once_with(pdf_path)
         # Log records are prefixed with the level and logger name, so only

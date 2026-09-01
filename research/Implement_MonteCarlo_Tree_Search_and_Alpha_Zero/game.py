@@ -6,7 +6,7 @@ Any two-player, zero-sum, perfect-information game that implements this
 6-method contract can be searched (without touching search implementation) by:
 - `search_algorithms_utils.py` (minimax, alpha-beta pruning, depth-limited
   search)
-- `mcts_utils.py` (flat Monte Carlo, MCTS) 
+- `mcts_utils.py` (flat Monte Carlo, MCTS)
 
 Import as:
 

@@ -270,7 +270,9 @@ def _call_llm(
     :return: generated chapter text
     """
     hdbg.dassert_in(llm_backend, _LLM_BACKENDS)
-    return csccouti.call_llm_cached(user_prompt, system_prompt, model, llm_backend)
+    return csccouti.call_llm_cached(
+        user_prompt, system_prompt, model, llm_backend
+    )
 
 
 def _get_model_id(model: str, llm_backend: str) -> str:
@@ -595,7 +597,9 @@ def _slugify_text(text: str) -> str:
     return re.sub(r"[^a-zA-Z0-9]", "", text).lower()
 
 
-def _next_visual_label(kind: str, base_text: str, counter: Dict[str, int]) -> str:
+def _next_visual_label(
+    kind: str, base_text: str, counter: Dict[str, int]
+) -> str:
     """
     Compute a document-unique Typst label for a diagram or table.
 
@@ -668,8 +672,10 @@ def _describe_table(raw_typst: str, slide_title: str) -> Optional[str]:
         return f"Table from the '{slide_title}' slide"
     headers = [h.strip().strip('"') for h in match.group(1).split(",")]
     headers = [h for h in headers if h]
-    description = f"Table of {', '.join(headers)}" if headers else (
-        f"Table from the '{slide_title}' slide"
+    description = (
+        f"Table of {', '.join(headers)}"
+        if headers
+        else (f"Table from the '{slide_title}' slide")
     )
     return description
 
@@ -750,7 +756,9 @@ def _render_diagram_placeholder(
     return "\n".join(lines)
 
 
-def _wrap_table_placeholder(raw_typst: str, *, label: str, description: str) -> str:
+def _wrap_table_placeholder(
+    raw_typst: str, *, label: str, description: str
+) -> str:
     """
     Wrap a raw `#styled-table(...)` call (from a `{=typst}` fence) in a
     `#figure(...)` so it gets a caption, a label, and can be cross-
@@ -898,7 +906,9 @@ def _process_slide_body(
         text = body
     for token, replacement in placeholders.items():
         text = text.replace(token, replacement)
-    full_manifest = {label: description for label, description in manifest.values()}
+    full_manifest = {
+        label: description for label, description in manifest.values()
+    }
     return text, full_manifest
 
 
@@ -961,7 +971,9 @@ def _generate_typst_slide(
     return "\n".join(parts)
 
 
-def _generate_typst_header(level: int, title: str, source_file: str, line_number: int) -> str:
+def _generate_typst_header(
+    level: int, title: str, source_file: str, line_number: int
+) -> str:
     """
     Convert one `#`/`##`/`###`-prefixed heading line into Typst.
 
@@ -1001,8 +1013,7 @@ def _build_typst_document_header(course_title: str, chapter_title: str) -> str:
     """
     lines = [
         "// Import AIMA style formatting and macros.",
-        '#import "/helpers_root/dev_scripts_helpers/typst/'
-        'aima_style.typ": (',
+        '#import "/helpers_root/dev_scripts_helpers/typst/aima_style.typ": (',
         "  aima-style, algorithm, chapter, glossary, styled-table,",
         ")",
         "// Import the custom citation/bibliography system.",
@@ -1378,7 +1389,8 @@ def _main(parser: argparse.ArgumentParser) -> None:
     # work starts, following the same idiom as e.g. `run_typst.py`.
     actions = hselacti.select_actions(args, _VALID_ACTIONS, _DEFAULT_ACTIONS)
     _LOG.info(
-        "\n%s", hselacti.actions_to_string(actions, _VALID_ACTIONS, add_frame=True)
+        "\n%s",
+        hselacti.actions_to_string(actions, _VALID_ACTIONS, add_frame=True),
     )
     # Parse and validate arguments.
     dir_arg, lesson_arg = csccouti.parse_lesson_spec(args.input)

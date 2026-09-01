@@ -455,6 +455,11 @@ _CONNECT_THREE_WIN_LINES = _build_win_lines(
 )
 
 
+# #############################################################################
+# ConnectThree
+# #############################################################################
+
+
 class ConnectThree(rimtsaazg.Game):
     """
     3-column x 3-row Connect Three: `ConnectFour`'s gravity-drop rule on a

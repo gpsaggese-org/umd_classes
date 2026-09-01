@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.5
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -262,7 +262,9 @@ display(rimtsaazsau.build_tree_graph(fake_root, max_depth=2))
 # `fake_root` once more:
 
 # %%
-heuristic_child = fake_root.add_child(move=8, state=game.apply_move(demo_state, 8))
+heuristic_child = fake_root.add_child(
+    move=8, state=game.apply_move(demo_state, 8)
+)
 heuristic_child.value = -0.2
 heuristic_child.is_heuristic = True
 
@@ -387,4 +389,6 @@ print("legal moves:", connect_three.get_legal_moves(ct_demo_state))
 # ## Cell 5.2: The same widget, a different game
 
 # %%
-rimtsaazsaau.cell5_1_build_connect_three_step_widget(connect_three, ct_demo_state)
+rimtsaazsaau.cell5_1_build_connect_three_step_widget(
+    connect_three, ct_demo_state
+)

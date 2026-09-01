@@ -69,7 +69,6 @@ def pick_best_move(game: rimtsaazg.Game, root: "SearchNode") -> rimtsaazg.Move:
     return cast(rimtsaazg.Move, best_child.move)
 
 
-
 # #############################################################################
 # Constants
 # #############################################################################
@@ -157,9 +156,7 @@ class SearchNode:
         if self.pruned:
             count = 0
         else:
-            count = 1 + sum(
-                child.num_explored_nodes for child in self.children
-            )
+            count = 1 + sum(child.num_explored_nodes for child in self.children)
         return count
 
     def add_child(
@@ -257,7 +254,9 @@ def run_minimax(game: rimtsaazg.Game, state: rimtsaazg.State) -> rimtsaazg.Move:
     return best_move
 
 
-def make_minimax_player() -> Callable[[rimtsaazg.Game, rimtsaazg.State], rimtsaazg.Move]:
+def make_minimax_player() -> Callable[
+    [rimtsaazg.Game, rimtsaazg.State], rimtsaazg.Move
+]:
     """
     Build a `(game, state) -> move` player function backed by minimax.
 
@@ -370,7 +369,9 @@ def run_alpha_beta(
     return best_move
 
 
-def make_alpha_beta_player() -> Callable[[rimtsaazg.Game, rimtsaazg.State], rimtsaazg.Move]:
+def make_alpha_beta_player() -> Callable[
+    [rimtsaazg.Game, rimtsaazg.State], rimtsaazg.Move
+]:
     """
     Build a `(game, state) -> move` player function backed by alpha-beta
     pruning.

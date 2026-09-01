@@ -101,7 +101,8 @@ def parse_lesson_spec(arg: str) -> Tuple[str, str]:
     if "lectures_source" in arg or arg.endswith(".smd"):
         return extract_lesson_from_file(arg)
     hdbg.dassert_in(
-        "/", arg,
+        "/",
+        arg,
         f"Invalid input '{arg}'. Use 'data605/08.1' or "
         "'data605/lectures_source/Lesson08.1-Name.smd'",
     )

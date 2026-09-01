@@ -342,7 +342,9 @@ def run_mcts(
     return best_move
 
 
-def random_player(game: rimtsaazg.Game, state: rimtsaazg.State) -> rimtsaazg.Move:
+def random_player(
+    game: rimtsaazg.Game, state: rimtsaazg.State
+) -> rimtsaazg.Move:
     """
     Select a uniformly random legal move.
 
@@ -418,7 +420,9 @@ def play_game(
 
 def evaluate_win_rate(
     game: rimtsaazg.Game,
-    player_under_test: Callable[[rimtsaazg.Game, rimtsaazg.State], rimtsaazg.Move],
+    player_under_test: Callable[
+        [rimtsaazg.Game, rimtsaazg.State], rimtsaazg.Move
+    ],
     opponent: Callable[[rimtsaazg.Game, rimtsaazg.State], rimtsaazg.Move],
     *,
     num_games: int = 200,

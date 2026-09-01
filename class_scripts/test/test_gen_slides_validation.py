@@ -91,7 +91,9 @@ class Test_gen_slides_batch_validation(hunitest.TestCase):
         # Check outputs.
         for course_dir, lessons in all_lessons.items():
             for lesson in lessons:
-                error_msg = error_msg_template.format(lesson=lesson, course=course_dir)
+                error_msg = error_msg_template.format(
+                    lesson=lesson, course=course_dir
+                )
                 self.assertRegex(
                     lesson,
                     valid_lesson_pattern,

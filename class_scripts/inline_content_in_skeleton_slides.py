@@ -106,9 +106,7 @@ def _strip_comment_blocks(lines: List[str]) -> List[str]:
     return out_lines
 
 
-def _extract_titled_content(
-    lines: List[str], title: str
-) -> Optional[List[str]]:
+def _extract_titled_content(lines: List[str], title: str) -> Optional[List[str]]:
     """
     Extract the body of the section titled `title` from `lines`.
 

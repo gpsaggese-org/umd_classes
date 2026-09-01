@@ -14,7 +14,7 @@ import helpers.hio as hio
 import helpers.hprint as hprint
 import helpers.hunit_test as hunitest
 
-import class_scripts.gen_book_chapter as clgeboch
+import class_scripts.gen_book_chapter as csgeboch
 
 _LOG = logging.getLogger(__name__)
 
@@ -47,7 +47,7 @@ class Test__add_line_numbers(hunitest.TestCase):
         # this is data, not code indentation, so it is not dedented.
         expected = "    1 | first\n    2 | second\n    3 | third"
         # Run test.
-        actual = clgeboch._add_line_numbers(content)
+        actual = csgeboch._add_line_numbers(content)
         # Check outputs.
         self.assertEqual(actual, expected)
 
@@ -60,7 +60,7 @@ class Test__add_line_numbers(hunitest.TestCase):
         # Prepare outputs.
         expected = ""
         # Run test.
-        actual = clgeboch._add_line_numbers(content)
+        actual = csgeboch._add_line_numbers(content)
         # Check outputs.
         self.assertEqual(actual, expected)
 
@@ -73,7 +73,7 @@ class Test__add_line_numbers(hunitest.TestCase):
         # Prepare outputs.
         expected = "    1 | only line"
         # Run test.
-        actual = clgeboch._add_line_numbers(content)
+        actual = csgeboch._add_line_numbers(content)
         # Check outputs.
         self.assertEqual(actual, expected)
 
@@ -103,7 +103,7 @@ class Test__strip_code_fence(hunitest.TestCase):
         # Prepare outputs.
         expected = "\\section{Intro}"
         # Run test.
-        actual = clgeboch._strip_code_fence(text)
+        actual = csgeboch._strip_code_fence(text)
         # Check outputs.
         self.assertEqual(actual, expected)
 
@@ -122,7 +122,7 @@ class Test__strip_code_fence(hunitest.TestCase):
         # Prepare outputs.
         expected = "plain text"
         # Run test.
-        actual = clgeboch._strip_code_fence(text)
+        actual = csgeboch._strip_code_fence(text)
         # Check outputs.
         self.assertEqual(actual, expected)
 
@@ -140,7 +140,7 @@ class Test__strip_code_fence(hunitest.TestCase):
         # Prepare outputs.
         expected = text
         # Run test.
-        actual = clgeboch._strip_code_fence(text)
+        actual = csgeboch._strip_code_fence(text)
         # Check outputs.
         self.assertEqual(actual, expected)
 
@@ -158,7 +158,7 @@ class Test__strip_code_fence(hunitest.TestCase):
         # Prepare outputs.
         expected = ""
         # Run test.
-        actual = clgeboch._strip_code_fence(text)
+        actual = csgeboch._strip_code_fence(text)
         # Check outputs.
         self.assertEqual(actual, expected)
 
@@ -184,10 +184,8 @@ class Test__insert_provenance_tag(hunitest.TestCase):
         tag = "git_hash=abc1234 timestamp=20250101_000000"
         expected_with_tag = expected.format(tag=tag)
         # Run test.
-        with mock.patch(
-            "helpers.hgit.get_generation_tag", return_value=tag
-        ):
-            actual = clgeboch._insert_provenance_tag(text, mode)
+        with mock.patch("helpers.hgit.get_generation_tag", return_value=tag):
+            actual = csgeboch._insert_provenance_tag(text, mode)
         # Check outputs.
         self.assertEqual(actual, expected_with_tag)
 
@@ -312,9 +310,7 @@ class Test__extract_course_and_title(hunitest.TestCase):
     Test `_extract_course_and_title()` function.
     """
 
-    def helper(
-        self, filename: str, content: str, expected: tuple
-    ) -> None:
+    def helper(self, filename: str, content: str, expected: tuple) -> None:
         """
         Test helper for _extract_course_and_title.
 
@@ -327,7 +323,7 @@ class Test__extract_course_and_title(hunitest.TestCase):
         input_file = os.path.join(scratch_dir, filename)
         hio.to_file(input_file, content)
         # Run test.
-        actual = clgeboch._extract_course_and_title(input_file, content)
+        actual = csgeboch._extract_course_and_title(input_file, content)
         # Check outputs.
         self.assertEqual(actual, expected)
 
@@ -442,7 +438,7 @@ class Test__build_user_prompt(hunitest.TestCase):
                 1 | Some content."""
         )
         # Run test.
-        actual = clgeboch._build_user_prompt(
+        actual = csgeboch._build_user_prompt(
             input_file, content, mode, course_title, chapter_title, lesson
         )
         # Check outputs.
@@ -474,7 +470,7 @@ class Test__build_user_prompt(hunitest.TestCase):
                 1 | Some content."""
         )
         # Run test.
-        actual = clgeboch._build_user_prompt(
+        actual = csgeboch._build_user_prompt(
             input_file, content, mode, course_title, chapter_title, lesson
         )
         # Check outputs.
@@ -503,7 +499,7 @@ class Test__build_user_prompt(hunitest.TestCase):
             """
         )
         # Run test.
-        actual = clgeboch._build_user_prompt(
+        actual = csgeboch._build_user_prompt(
             input_file, content, mode, course_title, chapter_title, lesson
         )
         # Check outputs.
@@ -542,7 +538,7 @@ class Test__get_system_prompt(hunitest.TestCase):
             "helpers.hio.from_file",
             side_effect=[common_prompt, mode_prompt],
         ):
-            actual = clgeboch._get_system_prompt(mode)
+            actual = csgeboch._get_system_prompt(mode)
         # Check outputs.
         self.assertEqual(actual, expected)
 
@@ -556,6 +552,6 @@ class Test__get_system_prompt(hunitest.TestCase):
         expected = "'bogus'"
         # Run test.
         with self.assertRaises(AssertionError) as cm:
-            clgeboch._get_system_prompt(mode)
+            csgeboch._get_system_prompt(mode)
         # Check outputs.
         self.assertIn(expected, str(cm.exception))

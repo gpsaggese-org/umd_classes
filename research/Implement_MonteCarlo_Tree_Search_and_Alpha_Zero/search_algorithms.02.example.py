@@ -208,7 +208,9 @@ print(
     f"alpha-beta: {alpha_beta_empty_root.num_explored_nodes:>7} nodes,"
     f" {alpha_beta_empty_time:5.2f} s, value={alpha_beta_empty_root.value}"
 )
-speedup = minimax_empty_root.node_count / alpha_beta_empty_root.num_explored_nodes
+speedup = (
+    minimax_empty_root.node_count / alpha_beta_empty_root.num_explored_nodes
+)
 print(f"node-count speedup: {speedup:.1f}x")
 
 # %% [markdown]
@@ -238,9 +240,18 @@ print(f"node-count speedup: {speedup:.1f}x")
 # as slightly *bad* for X.
 
 # %%
-print("evaluate_tic_tac_toe(empty_state):", rimtsaazge.evaluate_tic_tac_toe(empty_state))
-print("evaluate_tic_tac_toe(demo_state): ", rimtsaazge.evaluate_tic_tac_toe(demo_state))
-print("evaluate_tic_tac_toe(fork_state): ", rimtsaazge.evaluate_tic_tac_toe(fork_state))
+print(
+    "evaluate_tic_tac_toe(empty_state):",
+    rimtsaazge.evaluate_tic_tac_toe(empty_state),
+)
+print(
+    "evaluate_tic_tac_toe(demo_state): ",
+    rimtsaazge.evaluate_tic_tac_toe(demo_state),
+)
+print(
+    "evaluate_tic_tac_toe(fork_state): ",
+    rimtsaazge.evaluate_tic_tac_toe(fork_state),
+)
 
 # %% [markdown]
 # ## Cell 5.2: A cut that is too shallow misses the fork

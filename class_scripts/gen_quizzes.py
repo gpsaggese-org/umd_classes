@@ -159,8 +159,7 @@ def _parse() -> argparse.ArgumentParser:
         "--llm_cli_args",
         action="store",
         default=None,
-        help="Additional options string passed through verbatim to "
-        "llm_cli.py",
+        help="Additional options string passed through verbatim to llm_cli.py",
     )
     hparser.add_verbosity_arg(parser)
     return parser

@@ -15,7 +15,7 @@ import helpers.hio as hio
 import helpers.hprint as hprint
 import helpers.hunit_test as hunitest
 
-import class_scripts.inline_content_in_skeleton_slides as clincoss
+import class_scripts.inline_content_in_skeleton_slides as csicisksl
 
 _LOG = logging.getLogger(__name__)
 
@@ -59,9 +59,9 @@ class Test_inline_content_in_skeleton_slides_py(hunitest.TestCase):
             skeleton_file,
         ] + extra_args
         # Run test.
-        parser = clincoss._parse()
+        parser = csicisksl._parse()
         with mock.patch("sys.argv", argv):
-            clincoss._main(parser)
+            csicisksl._main(parser)
         # Check outputs.
         actual_txt = hio.from_file(skeleton_file)
         self.assert_equal(actual_txt, expected_txt)
@@ -133,16 +133,14 @@ class Test_inline_content_in_skeleton_slides(hunitest.TestCase):
         skeleton_txt = hprint.dedent(skeleton_txt)
         root_dir = self.get_scratch_space()
         for rel_path, content in source_files.items():
-            hio.to_file(
-                os.path.join(root_dir, rel_path), hprint.dedent(content)
-            )
+            hio.to_file(os.path.join(root_dir, rel_path), hprint.dedent(content))
         lines = skeleton_txt.split("\n")
         # Run test.
         (
             actual_lines,
             actual_num_inlined,
             actual_num_missing,
-        ) = clincoss.inline_content_in_skeleton_slides(
+        ) = csicisksl.inline_content_in_skeleton_slides(
             lines, root_dir=root_dir, no_abort_on_issue=no_abort_on_issue
         )
         # Check outputs.
@@ -378,7 +376,7 @@ class Test_inline_content_in_skeleton_slides(hunitest.TestCase):
         root_dir = self.get_scratch_space()
         # Run test and check output.
         with self.assertRaises(AssertionError):
-            clincoss.inline_content_in_skeleton_slides(
+            csicisksl.inline_content_in_skeleton_slides(
                 lines, root_dir=root_dir, no_abort_on_issue=False
             )
 
@@ -407,7 +405,7 @@ class Test__parse(hunitest.TestCase):
         :param expected_no_abort_on_issue: expected `args.no_abort_on_issue`
         """
         # Run test.
-        parser = clincoss._parse()
+        parser = csicisksl._parse()
         args = parser.parse_args(arg_list)
         # Check outputs.
         self.assert_equal(args.input_file, expected_input_file)
@@ -457,7 +455,7 @@ class Test__get_title_level(hunitest.TestCase):
         :param expected: expected `(is_title, level, title)` tuple
         """
         # Run test.
-        actual = clincoss._get_title_level(line)
+        actual = csicisksl._get_title_level(line)
         # Check outputs.
         self.assert_equal(str(actual), str(expected))
 
@@ -539,7 +537,7 @@ class Test__strip_comment_blocks(hunitest.TestCase):
         txt = hprint.dedent(txt)
         lines = txt.split("\n")
         # Run test.
-        actual = "\n".join(clincoss._strip_comment_blocks(lines))
+        actual = "\n".join(csicisksl._strip_comment_blocks(lines))
         # Check outputs.
         self.assert_equal(actual, expected, dedent=True)
 
@@ -720,7 +718,7 @@ class Test__extract_titled_content(hunitest.TestCase):
         txt = hprint.dedent(txt)
         lines = txt.split("\n")
         # Run test.
-        actual = clincoss._extract_titled_content(lines, title)
+        actual = csicisksl._extract_titled_content(lines, title)
         # Check outputs.
         self.assert_equal(str(actual), str(expected))
 
@@ -840,7 +838,7 @@ class Test__parse_from_tag(hunitest.TestCase):
         :param expected: expected `(file, slide_title)` tuple, or `None`
         """
         # Run test.
-        actual = clincoss._parse_from_tag(line)
+        actual = csicisksl._parse_from_tag(line)
         # Check outputs.
         self.assert_equal(str(actual), str(expected))
 
@@ -904,7 +902,7 @@ class Test__find_next_title_line(hunitest.TestCase):
         txt = hprint.dedent(txt)
         lines = txt.split("\n")
         # Run test.
-        actual = clincoss._find_next_title_line(lines, start_idx)
+        actual = csicisksl._find_next_title_line(lines, start_idx)
         # Check outputs.
         self.assertEqual(actual, expected)
 

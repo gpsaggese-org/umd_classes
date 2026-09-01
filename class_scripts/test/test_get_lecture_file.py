@@ -14,7 +14,7 @@ from unittest import mock
 import helpers.hio as hio
 import helpers.hunit_test as hunitest
 
-import class_scripts.get_lecture_file as clgelifi
+import class_scripts.get_lecture_file as csgelefi
 
 
 # #############################################################################
@@ -36,7 +36,7 @@ class Test_parse(hunitest.TestCase):
         # Prepare outputs.
         expected_input = "msml610/01.1"
         # Run test.
-        parser = clgelifi._parse()
+        parser = csgelefi._parse()
         args = parser.parse_args(arg_list)
         # Check outputs.
         self.assert_equal(args.input, expected_input)
@@ -73,7 +73,7 @@ class Test_main(hunitest.TestCase):
             "class_scripts.get_lecture_file", level="INFO"
         ) as cm:
             with mock.patch("sys.argv", ["get_lecture_file.py"] + arg_list):
-                clgelifi._main(clgelifi._parse())
+                csgelefi._main(csgelefi._parse())
         # Check outputs.
         # Log records are prefixed with the level and logger name, so only
         # the last (only) record is checked.

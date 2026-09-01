@@ -24,7 +24,7 @@ from typing import List, Optional, Tuple
 
 from tqdm import tqdm
 
-import class_scripts.gen_lecture_video_script as clgelesc
+import class_scripts.gen_lecture_video_script as csglvisc
 import helpers.hdbg as hdbg
 import helpers.hlint as hlint
 import helpers.hio as hio
@@ -322,7 +322,7 @@ def _generate_script(
     # Step 1: Generate slide script.
     _LOG.info("Generating script for %s -> %s", source_name, dst_name)
     limit_range = hseinout.parse_limit_range(limit) if limit else (0, 0)
-    clgelesc.generate_lecture_video_script(
+    csglvisc.generate_lecture_video_script(
         source_path,
         output_path,
         slides_per_group=3,
@@ -517,9 +517,7 @@ def _generate_class_recap(
     _LOG.info(
         "Generating class recap for %s (lesson %s)", source_name, lesson_number
     )
-    cmd_str = (
-        f"gen_quizzes.py --for_class_recap -i {class_dir}/{lesson_number}"
-    )
+    cmd_str = f"gen_quizzes.py --for_class_recap -i {class_dir}/{lesson_number}"
     if cmd_opts:
         cmd_str += f' --llm_cli_args="{cmd_opts}"'
     _LOG.info("Executing: %s", cmd_str)

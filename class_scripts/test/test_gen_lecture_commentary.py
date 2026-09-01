@@ -12,7 +12,7 @@ from unittest import mock
 import helpers.hprint as hprint
 import helpers.hunit_test as hunitest
 
-import class_scripts.gen_lecture_commentary as clgelcom
+import class_scripts.gen_lecture_commentary as csgeleco
 
 _LOG = logging.getLogger(__name__)
 
@@ -36,7 +36,7 @@ class Test_get_image_extension(hunitest.TestCase):
         :param expected: expected file extension
         """
         # Run test.
-        actual = clgelcom.get_image_extension(image_type)
+        actual = csgeleco.get_image_extension(image_type)
         # Check outputs.
         self.assert_equal(actual, expected)
 
@@ -67,6 +67,7 @@ class Test_get_image_extension(hunitest.TestCase):
 # Test__generate_slide_commentary
 # #############################################################################
 
+
 class Test__generate_slide_commentary(hunitest.TestCase):
     """
     Test `class_scripts.gen_lecture_commentary._generate_slide_commentary()`
@@ -94,7 +95,7 @@ class Test__generate_slide_commentary(hunitest.TestCase):
         with mock.patch(
             "helpers.hllm.get_completion", return_value=expected
         ) as mock_get_completion:
-            actual = clgelcom._generate_slide_commentary(
+            actual = csgeleco._generate_slide_commentary(
                 slide_content, system_prompt, model, llm_backend
             )
         # Check outputs.
