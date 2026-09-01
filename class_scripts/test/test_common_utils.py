@@ -677,6 +677,164 @@ class Test_call_llm(hunitest.TestCase):
 
 
 # #############################################################################
+# Test_get_lesson_numbers
+# #############################################################################
+
+
+class Test_get_lesson_numbers(hunitest.TestCase):
+    """
+    Test `get_lesson_numbers()` function.
+    """
+
+    def helper(self, filenames: list) -> str:
+        """
+        Create a `lectures_source/` scratch dir with the given filenames.
+
+        :param filenames: file names to create under `lectures_source/`
+        :return: path to the parent (course) directory
+        """
+        scratch_dir = self.get_scratch_space()
+        source_dir = os.path.join(scratch_dir, "lectures_source")
+        os.makedirs(source_dir, exist_ok=True)
+        for filename in filenames:
+            hio.to_file(os.path.join(source_dir, filename), "content")
+        return scratch_dir
+
+    def test1(self) -> None:
+        """
+        Test happy path: lesson numbers are extracted and sorted.
+        """
+        # Prepare inputs.
+        filenames = [
+            "Lesson02-Intro.smd",
+            "Lesson01.1-BigData.smd",
+            "Lesson01.2-History.smd",
+        ]
+        course_dir = self.helper(filenames)
+        # Prepare outputs.
+        expected = ["01.1", "01.2", "02"]
+        # Run test.
+        actual = csccouti.get_lesson_numbers(course_dir)
+        # Check outputs.
+        self.assert_equal(str(actual), str(expected))
+
+    def test2(self) -> None:
+        """
+        Test edge case: duplicate lesson numbers (e.g., a .smd and a .pdf
+        for the same lesson) are de-duplicated.
+        """
+        # Prepare inputs.
+        filenames = ["Lesson01-Intro.smd", "Lesson01-Intro.pdf"]
+        course_dir = self.helper(filenames)
+        # Prepare outputs.
+        expected = ["01"]
+        # Run test.
+        actual = csccouti.get_lesson_numbers(course_dir)
+        # Check outputs.
+        self.assert_equal(str(actual), str(expected))
+
+    def test3(self) -> None:
+        """
+        Test edge case: missing `lectures_source/` dir raises
+        AssertionError.
+        """
+        # Prepare inputs.
+        course_dir = self.get_scratch_space()
+        # Run test.
+        with self.assertRaises(AssertionError):
+            csccouti.get_lesson_numbers(course_dir)
+
+
+# #############################################################################
+# Test_get_lesson_files
+# #############################################################################
+
+
+class Test_get_lesson_files(hunitest.TestCase):
+    """
+    Test `get_lesson_files()` function.
+    """
+
+    def helper(self, filenames: list) -> str:
+        """
+        Create a `lectures_source/` scratch dir with the given filenames.
+
+        :param filenames: file names to create under `lectures_source/`
+        :return: path to the parent (course) directory
+        """
+        scratch_dir = self.get_scratch_space()
+        source_dir = os.path.join(scratch_dir, "lectures_source")
+        os.makedirs(source_dir, exist_ok=True)
+        for filename in filenames:
+            hio.to_file(os.path.join(source_dir, filename), "content")
+        return scratch_dir
+
+    def test1(self) -> None:
+        """
+        Test happy path: lesson file paths are returned sorted.
+        """
+        # Prepare inputs.
+        filenames = ["Lesson02-Intro.smd", "Lesson01-BigData.smd"]
+        course_dir = self.helper(filenames)
+        # Prepare outputs.
+        expected = [
+            os.path.join(course_dir, "lectures_source", "Lesson01-BigData.smd"),
+            os.path.join(course_dir, "lectures_source", "Lesson02-Intro.smd"),
+        ]
+        # Run test.
+        actual = csccouti.get_lesson_files(course_dir)
+        # Check outputs.
+        self.assert_equal(str(actual), str(expected))
+
+    def test2(self) -> None:
+        """
+        Test edge case: non-lesson files are ignored.
+        """
+        # Prepare inputs.
+        filenames = ["Lesson01-Intro.smd", "README.md"]
+        course_dir = self.helper(filenames)
+        # Prepare outputs.
+        expected = [
+            os.path.join(course_dir, "lectures_source", "Lesson01-Intro.smd"),
+        ]
+        # Run test.
+        actual = csccouti.get_lesson_files(course_dir)
+        # Check outputs.
+        self.assert_equal(str(actual), str(expected))
+
+
+# #############################################################################
+# Test_collect_all_lessons
+# #############################################################################
+
+
+class Test_collect_all_lessons(hunitest.TestCase):
+    """
+    Test `collect_all_lessons()` function.
+    """
+
+    def test1(self) -> None:
+        """
+        Test happy path: lessons are collected per course dir via
+        `get_lesson_numbers()`.
+        """
+        # Prepare outputs.
+        expected = {
+            "data605": ["01"],
+            "msml610": ["02"],
+            "book_springer": ["03"],
+        }
+        # Run test.
+        with mock.patch(
+            "class_scripts.common_utils.get_lesson_numbers",
+            side_effect=lambda course_dir: expected[course_dir],
+        ):
+            actual = csccouti.collect_all_lessons()
+        # Check outputs.
+        self.assert_equal(str(actual), str(expected))
+
+
+# #############################################################################
 # Test_get_pdf_page_counts
 # #############################################################################
 

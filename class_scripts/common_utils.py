@@ -11,13 +11,14 @@ import logging
 import os
 import re
 from pathlib import Path
-from typing import Dict, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 import dev_scripts_helpers.documentation.preprocess_notes as dshdprno
 import helpers.hcache_simple as hcacsimp
 import helpers.hdbg as hdbg
 import helpers.hgit as hgit
 import helpers.hio as hio
+import helpers.hprint as hprint
 import helpers.hretry as hretry
 import helpers.hsystem as hsystem
 
@@ -244,6 +245,82 @@ def get_pdf_page_counts(
         page_count = count_pdf_pages(str(pdf_file))
         page_counts[pdf_file.name] = page_count
     return page_counts
+
+
+# #############################################################################
+# Lesson discovery
+# #############################################################################
+
+
+def get_lesson_numbers(course_dir: str) -> List[str]:
+    """
+    Get all lesson numbers in a course.
+
+    :param course_dir: Course directory (data605 or msml610)
+    :return: Sorted list of lesson numbers like
+        ```
+        ["01.1", "01.2", "02", "03", "04.1"]
+        ```
+    """
+    _LOG.debug(hprint.to_str("course_dir"))
+    lectures_source_dir = os.path.join(course_dir, "lectures_source")
+    hdbg.dassert_dir_exists(lectures_source_dir)
+    lessons = []
+    for file in os.listdir(lectures_source_dir):
+        # Match lesson numbers from filenames like "Lesson01.1-BigData.smd"
+        # -> "01.1".
+        match = re.match(r"Lesson(\d+(?:\.[0-9A-Za-z]+)?)", file)
+        if match:
+            lesson_num = match.group(1)
+            lessons.append(lesson_num)
+    # De-dup since e.g. both "Lesson01.1-*.smd" and "Lesson01.1-*.pdf" match.
+    lessons = sorted(set(lessons))
+    _LOG.debug("return=%s", lessons)
+    return lessons
+
+
+def get_lesson_files(course_dir: str) -> List[str]:
+    """
+    Discover all lesson files in a course directory.
+
+    :param course_dir: Course directory (data605 or msml610)
+    :return: Sorted list of lesson file paths, e.g.,
+        ```
+        ["data605/lectures_source/Lesson01.1-BigData.smd",
+        "data605/lectures_source/Lesson01.2-History.smd"]
+        ```
+    """
+    _LOG.debug(hprint.to_str("course_dir"))
+    lectures_source_dir = os.path.join(course_dir, "lectures_source")
+    hdbg.dassert_dir_exists(lectures_source_dir)
+    lesson_files = []
+    for file in os.listdir(lectures_source_dir):
+        # Match files like "Lesson01.1-BigData.smd" or
+        # "Lesson02-Introduction.smd".
+        if re.match(r"^Lesson\d+", file):
+            file_path = os.path.join(lectures_source_dir, file)
+            lesson_files.append(file_path)
+    lesson_files = sorted(lesson_files)
+    _LOG.debug("return=%s", lesson_files)
+    return lesson_files
+
+
+def collect_all_lessons() -> Dict[str, List[str]]:
+    """
+    Collect all lessons organized by course.
+
+    :return: Dict with course dirs as keys and lesson lists as values, e.g.,
+        ```
+        {"data605": ["01.1", "01.2", "02"], "msml610": ["01", "02.1"]}
+        ```
+    """
+    all_lessons = {}
+    # TODO(gp): Look for all dirs that have a lectures_source.
+    valid_dirs = ["data605", "msml610", "book_springer"]
+    for course_dir in valid_dirs:
+        all_lessons[course_dir] = get_lesson_numbers(course_dir)
+    _LOG.debug("return=%s", all_lessons)
+    return all_lessons
 
 
 # #############################################################################
