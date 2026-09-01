@@ -78,9 +78,9 @@ Lesson13.1-Explainability.smd
 # Workflow in short
 
 /slides.lint          01.2  01.3  01.4
-/slides.review        01.2  01.3
-/slides.add_visuals   01.2  01.3
-/slides.add_references 01.2 01.3
+/slides.review        01.2  01.3  01.4
+/slides.add_visuals   01.2  01.3  .
+/slides.add_references 01.2 01.3  .
 
 Not needed
 /slides.fix_errors
@@ -88,7 +88,7 @@ Not needed
 /slides.fix_formatting
 /slides.add_tutorial_links
 
-> lint_text.py -i     01.2  01.3
+> lint_text.py -i     01.2  01.3  .
 
 > gen_slides.py msml610/01.3
 > grep "^* " msml610/lectures_source/*.smd | wc -l

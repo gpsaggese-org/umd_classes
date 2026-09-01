@@ -29,18 +29,28 @@
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:14 '* AI Relates to Many Other Disciplines'
 // Slide: AI Relates to Many Other Disciplines
 
-@fig:airelatestomanyotherdisciplines maps how AI connects to philosophy,
-mathematics, economics, neuroscience, psychology, computer engineering,
-control theory, and linguistics.
-
-// TODO(ai_gp): Use wrap-it in the text close to the reference to this fig.
-#figure(
-  image("Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.1.png", width: 70%),
-  caption: [Diagram relating AI to Philosophy, Mathematics, Economics, Neuroscience, Psychology, Computer engineering, Control theory and Linguistics],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:airelatestomanyotherdisciplines>
+#wrap-content(
+  [
+    #figure(
+      image(
+        "Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.1.png",
+        width: 100%,
+      ),
+      caption: [Diagram relating AI to other disciplines],
+      kind: "figure",
+      supplement: [Fig.],
+      placement: auto,
+    ) <fig:airelatestomanyotherdisciplines>
+  ],
+  align: right,
+  column-gutter: 1em,
+  columns: (1fr, 50%),
+)[
+  @fig:airelatestomanyotherdisciplines maps how AI connects to philosophy,
+  mathematics, economics, neuroscience, psychology, computer engineering,
+  control theory, and linguistics.
+  // TODO(ai_gp): Add more
+]
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:29 '## Philosophy'
 // Slide: Philosophy
@@ -50,12 +60,12 @@ control theory, and linguistics.
 // Slide: AI and Philosophy (1/2)
 
 Whether formal rules can be used to draw valid conclusions is a question at
-the heart of the rationalist tradition. Logic, the study of rules governing
-proper reasoning, traces back to Aristotle (384–322 BCE), who formulated laws
-meant to capture how a rational mind should operate. The ambition to
-mechanize at least part of that reasoning is equally old in spirit: machines
-capable of arithmetic operations, such as the #emph[Pascaline] built by
-Blaise Pascal in 1642, showed early on that formal symbol manipulation could
+the heart of the rationalist tradition. #strong[Logic], the study of rules
+governing proper reasoning, traces back to Aristotle (384–322 BCE), who
+formulated laws meant to capture how a rational mind should operate. The
+ambition to mechanize at least part of that reasoning is equally old in spirit:
+machines capable of arithmetic operations, such as the #emph[Pascaline] built
+by Blaise Pascal in 1642, showed early on that formal symbol manipulation could
 be offloaded from human minds to physical devices. #strong[Rationalism] takes
 this further, holding that reasoning alone, carefully applied, can yield
 genuine understanding of the world.
@@ -66,29 +76,29 @@ that nature generally follows physical laws but carves out an exception: some
 part of the human mind, traditionally called "the soul," is held to be exempt
 from those laws, operating in a realm physics cannot reach.
 #strong[Materialism] rejects that exemption outright, treating the mind as a
-physical system governed entirely by the laws of physics. If materialism is
-correct, however, an uncomfortable puzzle surfaces: where is free will? The
-materialist answer reframes the question rather than dismissing it: free will
-is understood not as an escape from physical causation but as the perception
-of available choices. When a system is complex enough to model its own
-options and select among them, the subjective experience of "choosing
-freely" emerges, even though every step in the process is, in principle,
-physically determined. This reframing matters for AI because it suggests
-that building a system capable of representing and evaluating alternatives
-may be sufficient for rational action, without needing to solve the
-metaphysical puzzle of consciousness first.
+physical system governed entirely by the laws of physics.
+
+If materialism is correct, however, an uncomfortable puzzle surfaces:
+#emph[where is free will]? The materialist answer reframes the question rather
+than dismissing it: free will is the perception of available choices. When a
+system is complex enough to model its own options and select among them, the
+subjective experience of "choosing freely" emerges, even though every step in
+the process is, in principle, physically determined. This reframing matters for
+AI because it suggests that building a system capable of representing and
+evaluating alternatives may be sufficient for rational action, without needing
+to solve the metaphysical puzzle of consciousness first.
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:50 '* AI and Philosophy (2/2)'
 // Slide: AI and Philosophy (2/2)
 
-Where does knowledge come from? Philosophy offers at least three influential
-answers. #emph[Empiricism] holds that knowledge is acquired through the
-senses: we learn that trees are green by looking at them. #emph[Induction]
+#emph[Where does knowledge come from]? Philosophy offers at least three influential
+answers. #strong[Empiricism] holds that knowledge is acquired through the
+senses: we learn that trees are green by looking at them. #strong[Induction]
 goes a step further, extracting general rules from repeated associations,
 such as observing many white swans and inferring that all swans are white.
-#emph[Logical positivism] refines the picture again, treating knowledge as a
-body of logical theories that must be connected to observations: scientific
-hypotheses earn their status by being linked to experimental data.
+#strong[Logical positivism] treats knowledge as a body of logical theories that
+must be connected to observations: scientific hypotheses earn their status by
+being linked to experimental data.
 
 #wrap-content(
   [
@@ -102,7 +112,7 @@ hypotheses earn their status by being linked to experimental data.
   ],
   align: right,
   column-gutter: 1em,
-  columns: (1fr, 20%),
+  columns: (1fr, 30%),
 )[
   The discovery of black swans in Australia, shown in @fig:blackswans,
   famously overturned the long-standing European generalisation that all
@@ -110,13 +120,13 @@ hypotheses earn their status by being linked to experimental data.
   a textbook case of the problem of induction.
 ]
 
-A separate but equally fundamental question is how knowledge, once obtained,
-should lead to action. Two broad ethical frameworks compete here.
-#emph[Consequentialism] judges whether an action is right or wrong by its
-expected outcomes. Its classical form, #emph[utilitarianism], says that
+A separate but equally fundamental question is _how obtained knowledge
+should lead to action_. Two broad ethical frameworks compete here.
+#strong[Consequentialism] judges whether an action is right or wrong by its
+expected outcomes. Its classical form, #strong[utilitarianism], says that
 actions are justified by the goals and outcomes they produce: a policy is
 judged by whether it raises overall well-being, not by whatever rule it
-happens to follow. #emph[Deontological ethics] takes the opposite stance,
+happens to follow. #strong[Deontological ethics] takes the opposite stance,
 grounding right action in universal laws rather than outcomes: prohibitions
 such as "don't kill" or "don't lie" hold regardless of the consequences that
 breaking them might avert. The tension between these two views resurfaces
@@ -137,14 +147,14 @@ Formal rules for drawing valid conclusions come from two traditions.
 purely symbolic manipulation. Frege extended this in 1879 with
 #strong[first-order logic], which introduced objects and relations into the
 logical language, vastly increasing its expressive power. Yet deduction has
-inherent limits: some statements are #emph[undecidable], meaning no finite
-proof can establish their truth or falsity. Gödel's #strong[incompleteness
+inherent limits: some statements are #strong[undecidable], meaning no finite
+proof can establish their truth or falsity. Gödel's #emph[incompleteness
 theorem] demonstrated in 1931 that in any sufficiently rich formal theory,
 there exist true statements that cannot be proved within that theory
 #cite("godel1931incompleteness"). This result placed a fundamental boundary
 on what pure logical reasoning can accomplish.
 
-How, then, do we reason when the available information is uncertain?
+The, _how do we reason when the available information is uncertain_?
 #strong[Probability] provides the mathematical language for quantifying
 uncertainty, with foundations laid by Cardano, Pascal, Bernoulli, and Bayes
 across the 1500s through the 1700s. #strong[Statistics] builds on probability
@@ -155,40 +165,19 @@ offer principled ways to act and reason when certainty is unavailable, as it
 usually is in practice. Together, these traditions supply the formal backbone
 of modern AI: logic for structured knowledge representation and deduction,
 and probability theory for learning and decision-making under uncertainty.
-@tab:aiandmathematics summarizes the key contributors and eras that shaped
-these mathematical foundations.
-
-#figure(
-  styled-table(
-    headers: ("Field", "Key Contributors", "Era"),
-    rows: (
-      ("Formal Logic", "Boole, Frege, Godel", "1847 - 1931"),
-      (
-        "Probability & Statistics",
-        "Cardano, Pascal, Bernoulli, Bayes",
-        "1500s - 1700s",
-      ),
-    ),
-    bold-first-col: true,
-  ),
-  caption: [Table of Field, Key Contributors, Era],
-  kind: "table",
-  supplement: [Table.],
-  placement: auto,
-) <tab:aiandmathematics>
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:116 '* AI and Computer Science'
 // Slide: AI and Computer Science
 
-What can be computed? This deceptively simple question splits into three
+_What can be computed_? This deceptively simple question splits into three
 distinct concerns: what an algorithm is, what the fundamental limits of
 computation are, and which problems are practically solvable.
 
 An #strong[algorithm] is a well-defined procedure for solving a class of
-problems. The idea is ancient: Euclid described an algorithm for computing
-the greatest common divisor of two integers around 300 BCE, and it remains
-one of the most elegant examples of step-by-step problem solving. But not
-every well-posed question has an algorithmic answer.
+problems. The idea was already known in the ancient world: Euclid described an
+algorithm for computing the greatest common divisor of two integers around 300
+BCE, and it remains one of the most elegant examples of step-by-step problem
+solving. But not every well-posed question has an algorithmic answer.
 
 #wrap-content(
   [
@@ -204,8 +193,8 @@ every well-posed question has an algorithmic answer.
   column-gutter: 1em,
   columns: (1fr, 20%),
 )[
-  Some functions are simply #emph[non-computable]. In 1936, Alan Turing
-  introduced the #strong[Turing machine] #cite("turing1936computable"), a
+  Some functions are simply #strong[non-computable]. In 1936, Alan Turing
+  introduced the #emph[Turing machine] #cite("turing1936computable"), a
   mathematical model of computation that can compute any function that is
   computable at all. This universality result also revealed hard boundaries:
   certain problems provably have no algorithmic solution. The most famous
@@ -241,16 +230,42 @@ approximate or heuristic solutions rather than exact ones.
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:146 '* AI and Economics (1/2)'
 // Slide: AI and Economics (1/2)
 
-How an agent should act to maximize its payoff, given its preferences, is a
+_How an agent should act to maximize its payoff_, given its preferences, is a
 question two traditions address from complementary angles. In
 #strong[economics], agents are modeled as maximizers of their own well-being,
 formally captured by a #strong[utility] function, and the field studies the
 structure of desires and preferences that make such maximization coherent.
-#strong[Decision theory] sharpens this picture by combining probability
-theory with utility theory, providing a calculus for choosing among
-alternatives when outcomes are uncertain. Everyday examples include selecting
-an investment portfolio under market risk or evaluating competing policy
-proposals whose consequences depend on factors outside anyone's control.
+
+#wrap-content(
+  [
+    #figure(
+      image(
+        "Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.2.png",
+        width: 100%,
+      ),
+      caption: [Probability, utility, and decision theory],
+      kind: "figure",
+      supplement: [Fig.],
+      placement: auto,
+    ) <fig:aiandeconomics12>
+  ],
+  align: right,
+  column-gutter: 1em,
+  columns: (1fr, 35%),
+)[
+  #strong[Decision theory] sharpens this picture by combining probability
+  theory with utility theory, providing a calculus for choosing among
+  alternatives when outcomes are uncertain. Everyday examples include selecting
+  an investment portfolio under market risk or evaluating competing policy
+  proposals whose consequences depend on factors outside anyone's control.
+
+  @fig:aiandeconomics12 places decision theory at the intersection of
+  probability theory and utility theory: probability theory supplies beliefs
+  about the world, utility theory encodes preferences over outcomes, and
+  their combination yields a principled framework for action under
+  uncertainty.
+]
+
 
 A harder question arises when payoffs depend not on a single choice but on a
 #emph[sequence of actions]. #strong[Operations research] tackles exactly
@@ -261,41 +276,17 @@ sequential problem into stages so that an optimal policy can be computed
 recursively. Not every real decision-maker, however, hunts for the global
 optimum. Herbert Simon's concept of #strong[satisficing]
 #cite("simon1956satisficing") captures the observation that humans, and many
-practical systems, settle for outcomes that are "good enough" rather than
+practical systems, settle for outcomes that are _"good enough"_ rather than
 provably best. Choosing a restaurant that meets basic criteria for price,
 distance, and cuisine instead of exhaustively ranking every option in the
 city is a canonical example. Satisficing trades optimality for tractability
 and is often closer to actual human behavior than the idealized utility
 maximizer of classical theory.
 
-#wrap-content(
-  [
-    #figure(
-      image(
-        "Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.2.png",
-        width: 100%,
-      ),
-      caption: [Diagram relating Probability Theory, Utility Theory and Decision Theory],
-      kind: "figure",
-      supplement: [Fig.],
-      placement: auto,
-    ) <fig:aiandeconomics12>
-  ],
-  align: right,
-  column-gutter: 1em,
-  columns: (1fr, 25%),
-)[
-  @fig:aiandeconomics12 places decision theory at the intersection of
-  probability theory and utility theory: probability theory supplies beliefs
-  about the world, utility theory encodes preferences over outcomes, and
-  their combination yields a principled framework for action under
-  uncertainty.
-]
-
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:203 '* AI and Economics (2/2)'
 // Slide: AI and Economics (2/2)
 
-How multiple agents with different goals behave in a shared environment
+How _multiple agents with different goals behave_ in a shared environment
 depends critically on how much influence each agent's decisions exert on the
 others. In #strong[large economies], there are so many participants that no
 single agent's choice measurably affects anyone else's outcome. An individual
@@ -313,22 +304,22 @@ cannot plan in isolation; they must anticipate and respond to what others
 will do.
 
 This interdependence is precisely the domain of #strong[game theory], the
-framework formalized by von Neumann and Morgenstern in 1944 #cite(
-  "vonneumann1944gametheory",
-), which models small economies as strategic #emph[games]. One of the most
-striking insights from game theory is that rational agents may need to adopt
-#strong[randomized (mixed) strategies] rather than deterministic ones.
-Rock-paper-scissors illustrates why: any fixed, predictable choice is
-immediately exploitable by an opponent who observes the pattern, so the only
-unexploitable strategy is to choose uniformly at random. More generally,
-whenever an agent's best action depends on what others choose, and vice
-versa, deterministic play can be self-defeating, and introducing controlled
-randomness becomes the rational response.
+framework formalized by von Neumann and Morgenstern in 1944
+#cite("vonneumann1944gametheory"), which models small economies as strategic
+#emph[games]. One of the most striking insights from game theory is that
+rational agents may need to adopt #emph[randomized (mixed) strategies] rather
+than deterministic ones. Rock-paper-scissors illustrates why: any fixed,
+predictable choice is immediately exploitable by an opponent who observes the
+pattern, so the only unexploitable strategy is to choose uniformly at random.
+More generally, whenever an agent's best action depends on what others choose,
+and vice versa, deterministic play can be self-defeating, and introducing
+controlled randomness becomes the rational response.
 
 @tab:aiandeconomics22 summarizes how these three regimes differ along key
 dimensions, from the degree of mutual influence among agents to the type of
 strategy each regime demands.
 
+// TODO(ai_gp): Keep the table here.
 #figure(
   styled-table(
     headers: ("Aspect", "Large Economies", "Small Economies", "Game Theory"),
@@ -365,7 +356,7 @@ strategy each regime demands.
   [
     #figure(
       image("../lectures_source/figures/L01.2.brain.jpg", width: 100%),
-      caption: [brain],
+      caption: [Brain],
       kind: "figure",
       supplement: [Fig.],
       placement: auto,
@@ -373,7 +364,7 @@ strategy each regime demands.
   ],
   align: right,
   column-gutter: 1em,
-  columns: (1fr, 20%),
+  columns: (1fr, 40%),
 )[
   The #strong[brain] is fundamentally an information-processing organ, with
   different regions handling specific cognitive functions. Much of this
@@ -389,7 +380,7 @@ strategy each regime demands.
   [
     #figure(
       image("../lectures_source/figures/L01.2.neuron.png", width: 100%),
-      caption: [neuron],
+      caption: [Neuron],
       kind: "figure",
       supplement: [Fig.],
       placement: auto,
@@ -397,7 +388,7 @@ strategy each regime demands.
   ],
   align: right,
   column-gutter: 1em,
-  columns: (1fr, 20%),
+  columns: (1fr, 40%),
 )[
   At the hardware level, the brain is composed of roughly 100 billion
   neurons. Each neuron forms between 10,000 and 100,000 synaptic connections
@@ -457,10 +448,29 @@ core mechanism is #strong[recursive self-improvement]: an AI system
 redesigns its own architecture or training process, each improvement making
 the next one easier and faster, and eventually producing a superintelligence
 that far exceeds any human cognitive ability #cite("good1965ultraintelligent").
-@fig:thebraincausesthemind traces this feedback loop: an AI system improves
-itself, its capability increases, and that increased capability feeds back
-into further self-improvement, a cycle that makes the singularity scenario
-qualitatively different from ordinary technological progress.
+
+#wrap-content(
+  [
+    #figure(
+      image(
+        "Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.3.png",
+        width: 100%,
+      ),
+      caption: [Diagram relating AI System, Improves Itself, Capability Increases and Superintelligence],
+      kind: "figure",
+      supplement: [Fig.],
+      placement: auto,
+    ) <fig:thebraincausesthemind>
+  ],
+  align: right,
+  column-gutter: 1em,
+  columns: (1fr, 30%),
+)[
+  @fig:thebraincausesthemind traces this feedback loop: an AI system improves
+  itself, its capability increases, and that increased capability feeds back
+  into further self-improvement, a cycle that makes the singularity scenario
+  qualitatively different from ordinary technological progress.
+]
 
 The prospect raises urgent questions. The #strong[control problem], sometimes
 called #strong[value alignment], asks how we can ensure that a recursively
@@ -473,15 +483,6 @@ baseline level of general intelligence remains an open problem: no one knows
 whether current paradigms of deep learning, symbolic reasoning, or some
 yet-undiscovered approach will be the one to close the gap.
 
-// TODO(ai_gp): Use wrap-it in the text close to the reference to this fig.
-#figure(
-  image("Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.3.png", width: 90%),
-  caption: [Diagram relating AI System, Improves Itself, Capability Increases and Superintelligence],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:thebraincausesthemind>
-
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:322 '* AI and Cognitive Psychology'
 // Slide: AI and Cognitive Psychology
 
@@ -489,27 +490,36 @@ How do humans think and act? This question draws together several
 disciplines, each offering a distinct but complementary lens on the
 machinery of the mind.
 
-#strong[Cognitive psychology] treats the brain as an information-processing
-device. External stimuli are first translated into an internal
-representation, a structured encoding of what has been perceived. Cognitive
-processes then manipulate that representation to derive new internal
-representations, commonly called #emph[beliefs]. Finally, those beliefs are
-translated back into actions directed at #emph[goals]. The pipeline,
-stimulus → representation → belief → action, mirrors the sense–think–act
-loop that appears throughout AI agent design, and it is no coincidence:
-early AI researchers drew heavily on this model when building their first
-systems. @fig:aiandcognitivepsychology traces this flow: stimuli enter the
-system, pass through internal representations and cognitive processes, and
-produce beliefs that guide behaviour.
-
-// TODO(ai_gp): Use wrap-it in the text close to the reference to this fig.
-#figure(
-  image("Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.4.png", width: 100%),
-  caption: [Diagram relating Stimuli, Internal Representation, Cognitive Processes and Beliefs],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:aiandcognitivepsychology>
+#wrap-content(
+  [
+    #figure(
+      image(
+        "Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.4.png",
+        width: 100%,
+      ),
+      caption: [Diagram relating Stimuli, Internal Representation, Cognitive Processes and Beliefs],
+      kind: "figure",
+      supplement: [Fig.],
+      placement: auto,
+    ) <fig:aiandcognitivepsychology>
+  ],
+  align: right,
+  column-gutter: 1em,
+  columns: (1fr, 30%),
+)[
+  #strong[Cognitive psychology] treats the brain as an information-processing
+  device. External stimuli are first translated into an internal
+  representation, a structured encoding of what has been perceived. Cognitive
+  processes then manipulate that representation to derive new internal
+  representations, commonly called #emph[beliefs]. Finally, those beliefs are
+  translated back into actions directed at #emph[goals]. The pipeline,
+  stimulus → representation → belief → action, mirrors the sense–think–act
+  loop that appears throughout AI agent design, and it is no coincidence:
+  early AI researchers drew heavily on this model when building their first
+  systems. @fig:aiandcognitivepsychology traces this flow: stimuli enter the
+  system, pass through internal representations and cognitive processes, and
+  produce beliefs that guide behaviour.
+]
 
 #strong[Cognitive science] pushes this analogy further by using computer
 models as explanatory tools for human cognition. Rather than simply claiming
@@ -567,24 +577,30 @@ with the second, and delivering technology to the third.
   feasible.
 ]
 
-From that point forward, hardware improved at a breathtaking pace. In 1965,
-Gordon Moore observed that the number of transistors on an integrated
-circuit was doubling roughly every eighteen months, an empirical trend that
-held remarkably steady from about 1970 through 2005
-#cite("moore1965cramming"). This pattern, known as #strong[Moore's Law],
-meant that each new generation of processors could handle substantially
-larger problems, and AI workloads, which are notoriously compute-hungry,
-benefited directly. @fig:moorelaw plots this exponential trajectory across
-several decades of processor development.
-
-// TODO(ai_gp): Use wrap-it in the text close to the reference to this fig.
-#figure(
-  image("../lectures_source/figures/L01.2.Moore_Law.png", width: 80%),
-  caption: [Moore Law],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:moorelaw>
+#wrap-content(
+  [
+    #figure(
+      image("../lectures_source/figures/L01.2.Moore_Law.png", width: 100%),
+      caption: [Moore Law],
+      kind: "figure",
+      supplement: [Fig.],
+      placement: auto,
+    ) <fig:moorelaw>
+  ],
+  align: right,
+  column-gutter: 1em,
+  columns: (1fr, 30%),
+)[
+  From that point forward, hardware improved at a breathtaking pace. In 1965,
+  Gordon Moore observed that the number of transistors on an integrated
+  circuit was doubling roughly every eighteen months, an empirical trend that
+  held remarkably steady from about 1970 through 2005
+  #cite("moore1965cramming"). This pattern, known as #strong[Moore's Law],
+  meant that each new generation of processors could handle substantially
+  larger problems, and AI workloads, which are notoriously compute-hungry,
+  benefited directly. @fig:moorelaw plots this exponential trajectory across
+  several decades of processor development.
+]
 
 Around 2005, however, raw clock-speed scaling hit a wall. Power dissipation
 and heat constraints made it impractical to keep pushing single-core
@@ -611,34 +627,40 @@ machine-learning workloads), and wafer-scale engines such as those built by
 Cerebras, which dedicate an entire silicon wafer to a single, enormous
 processor.
 
-Several characteristics of these platforms stand out. First, they all
-exploit #strong[massive parallelism], an architectural principle loosely
-analogous to the brain's own strategy of coordinating billions of relatively
-slow neurons rather than relying on a single fast serial processor. Second,
-the pace of improvement has been staggering: the compute budget used in the
-largest AI training runs has doubled roughly every three to four months
-since 2012, far outstripping the roughly two-year doubling cadence of
-Moore's Law. This acceleration does not come from silicon shrinks alone; it
-combines more chips, better chips, and dramatically higher spending. Third,
-deep-learning workloads lean heavily on GPUs and TPUs because these devices
-are optimized for the dense matrix multiplications that dominate
-neural-network training. Fourth, high numerical precision turns out to be
-largely unnecessary for deep learning: 64-bit floating-point arithmetic, the
-gold standard in scientific computing, can often be replaced by 16-bit or
-even 8-bit formats with negligible loss in model quality, which in turn
-doubles or quadruples the effective throughput of every chip. @fig:cpugputpu
-lays out the architectural differences among CPUs, GPUs, and TPUs, showing
-how each successive design trades away general-purpose flexibility for raw
-parallel arithmetic density.
-
-// TODO(ai_gp): Use wrap-it in the text close to the reference to this fig.
-#figure(
-  image("../lectures_source/figures/L01.2.CPU_GPU_TPU.png", width: 80%),
-  caption: [CPU GPU TPU],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:cpugputpu>
+#wrap-content(
+  [
+    #figure(
+      image("../lectures_source/figures/L01.2.CPU_GPU_TPU.png", width: 100%),
+      caption: [CPU GPU TPU],
+      kind: "figure",
+      supplement: [Fig.],
+      placement: auto,
+    ) <fig:cpugputpu>
+  ],
+  align: right,
+  column-gutter: 1em,
+  columns: (1fr, 30%),
+)[
+  Several characteristics of these platforms stand out. First, they all
+  exploit #strong[massive parallelism], an architectural principle loosely
+  analogous to the brain's own strategy of coordinating billions of relatively
+  slow neurons rather than relying on a single fast serial processor. Second,
+  the pace of improvement has been staggering: the compute budget used in the
+  largest AI training runs has doubled roughly every three to four months
+  since 2012, far outstripping the roughly two-year doubling cadence of
+  Moore's Law. This acceleration does not come from silicon shrinks alone; it
+  combines more chips, better chips, and dramatically higher spending. Third,
+  deep-learning workloads lean heavily on GPUs and TPUs because these devices
+  are optimized for the dense matrix multiplications that dominate
+  neural-network training. Fourth, high numerical precision turns out to be
+  largely unnecessary for deep learning: 64-bit floating-point arithmetic, the
+  gold standard in scientific computing, can often be replaced by 16-bit or
+  even 8-bit formats with negligible loss in model quality, which in turn
+  doubles or quadruples the effective throughput of every chip. @fig:cpugputpu
+  lays out the architectural differences among CPUs, GPUs, and TPUs, showing
+  how each successive design trades away general-purpose flexibility for raw
+  parallel arithmetic density.
+]
 
 Looking further ahead, #emph[quantum computing] has the potential for
 significant acceleration in key computational tasks that remain intractable
@@ -673,27 +695,36 @@ rest on calculus, matrix algebra, and stochastic optimal control, giving
 engineers precise, well-characterized tools for designing controllers with
 provable stability and performance guarantees.
 
-The feedback loop in @fig:aiandcontroltheory, connecting a goal state, a
-controller, a system, and the current state, captures the essential
-architecture shared by classical control and AI planning alike. Where the
-two fields diverge is in the nature of their internal representations and
-reasoning mechanisms. Classical control operates over continuous signals and
-differential equations, whereas AI brings logical inference, symbolic
-planning, and general-purpose computation to bear on the same high-level
-problem: steering a system from where it is to where it should be. This
-difference matters most when the environment is complex, partially
-observable, or requires discrete decisions among qualitatively different
-actions, situations where symbolic reasoning complements, and sometimes
-surpasses, the continuous optimization perspective of traditional control.
-
-// TODO(ai_gp): Use wrap-it in the text close to the reference to this fig.
-#figure(
-  image("Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.5.png", width: 90%),
-  caption: [Diagram relating Goal State, Controller, System and Current State],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:aiandcontroltheory>
+#wrap-content(
+  [
+    #figure(
+      image(
+        "Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.5.png",
+        width: 100%,
+      ),
+      caption: [Diagram relating Goal State, Controller, System and Current State],
+      kind: "figure",
+      supplement: [Fig.],
+      placement: auto,
+    ) <fig:aiandcontroltheory>
+  ],
+  align: right,
+  column-gutter: 1em,
+  columns: (1fr, 30%),
+)[
+  The feedback loop in @fig:aiandcontroltheory, connecting a goal state, a
+  controller, a system, and the current state, captures the essential
+  architecture shared by classical control and AI planning alike. Where the
+  two fields diverge is in the nature of their internal representations and
+  reasoning mechanisms. Classical control operates over continuous signals and
+  differential equations, whereas AI brings logical inference, symbolic
+  planning, and general-purpose computation to bear on the same high-level
+  problem: steering a system from where it is to where it should be. This
+  difference matters most when the environment is complex, partially
+  observable, or requires discrete decisions among qualitatively different
+  actions, situations where symbolic reasoning complements, and sometimes
+  surpasses, the continuous optimization perspective of traditional control.
+]
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:482 '* AI and Linguistics'
 // Slide: AI and Linguistics
@@ -706,25 +737,34 @@ Google Translate convert text between languages, sentiment analysis tools
 mine opinions from social media, and automated chatbots handle customer
 support interactions at scale.
 
-A related question follows: how does language relate to thought? To bridge
-that gap, #strong[knowledge representation] studies how to encode knowledge
-in forms that computers can reason over. Formalisms such as first-order
-logic let a system draw inferences from stated facts, while knowledge graphs
-capture rich webs of relationships between entities, giving a machine
-something closer to a structured understanding of the world rather than a
-mere string of words. @fig:aiandlinguistics places computational linguistics
-and knowledge representation at the intersection of natural language
-understanding and machine reasoning, with machine translation serving as a
-concrete application that draws on both.
-
-// TODO(ai_gp): Use wrap-it in the text close to the reference to this fig.
-#figure(
-  image("Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.6.png", width: 80%),
-  caption: [Diagram relating Natural Language, Computational Linguistics, Knowledge Representation and Machine Translation],
-  kind: "figure",
-  supplement: [Fig.],
-  placement: auto,
-) <fig:aiandlinguistics>
+#wrap-content(
+  [
+    #figure(
+      image(
+        "Lesson01.3-The_Foundations_of_AI.typ.figs/Lesson01.3-The_Foundations_of_AI.6.png",
+        width: 100%,
+      ),
+      caption: [Diagram relating Natural Language, Computational Linguistics, Knowledge Representation and Machine Translation],
+      kind: "figure",
+      supplement: [Fig.],
+      placement: auto,
+    ) <fig:aiandlinguistics>
+  ],
+  align: right,
+  column-gutter: 1em,
+  columns: (1fr, 30%),
+)[
+  A related question follows: how does language relate to thought? To bridge
+  that gap, #strong[knowledge representation] studies how to encode knowledge
+  in forms that computers can reason over. Formalisms such as first-order
+  logic let a system draw inferences from stated facts, while knowledge graphs
+  capture rich webs of relationships between entities, giving a machine
+  something closer to a structured understanding of the world rather than a
+  mere string of words. @fig:aiandlinguistics places computational linguistics
+  and knowledge representation at the intersection of natural language
+  understanding and machine reasoning, with machine translation serving as a
+  concrete application that draws on both.
+]
 
 // From: msml610/lectures_source/Lesson01.3-The_Foundations_of_AI.smd:540 '## Wrap-Up'
 // Slide: Wrap-Up
