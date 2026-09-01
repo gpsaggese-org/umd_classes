@@ -201,7 +201,7 @@
 
 ![](msml610/lectures_source/figures/L01.4.Alan_Turing.jpg)
 
-\footnotesize _Alan Turing, 1951_
+\scriptsize `#text(size: 0.8em)[`{=typst}_Alan Turing, 1951_`]`{=typst}
 ::::
 :::
 
@@ -231,7 +231,7 @@
 
 ![](msml610/lectures_source/figures/L01.4.Marvin_Minsky.jpg)
 
-\footnotesize _Marvin Minsky (2008)_
+\scriptsize `#text(size: 0.8em)[`{=typst}_Marvin Minsky (2008)_`]`{=typst}
 ::::
 :::
 
@@ -394,7 +394,7 @@ digraph ExpertSystem {
 
 * Bayesian Networks (1988-)
 ::: columns
-:::: {.column width=70%}
+:::: {.column width=65%}
 - @Bayesian networks@ _(Pearl, 1988)_ `#cite("pearl1988probabilistic")`{=typst}
   - AI is linked with:
     - Probability
@@ -408,12 +408,12 @@ digraph ExpertSystem {
   - Predictive text input in smartphones
   - Fraud detection in banking
 ::::
-:::: {.column width=20%}
+:::: {.column width=30%}
 
 ![](msml610/lectures_source/figures/L01.4.Judea_Pearl.jpg)
 
 // TODO(ai_gp): Update with https://preposterousuniverse.com/podcast/2022/05/09/196-judea-pearl-on-cause-and-effect/
-\footnotesize _Judea Pearl (2013)_
+\scriptsize `#text(size: 0.8em)[`{=typst}_Judea Pearl (2013)_`]`{=typst}
 ::::
 :::
 
@@ -434,7 +434,7 @@ digraph ExpertSystem {
 
 ![](msml610/lectures_source/figures/L01.4.Richard_Sutton.jpg)
 
-\footnotesize _Richard Sutton (2025)_
+\scriptsize `#text(size: 0.8em)[`{=typst}_Richard Sutton (2025)_`]`{=typst}
 ::::
 :::
 
@@ -491,14 +491,14 @@ mindmap
 
 * Deep Learning (2011-Present)
 ::: columns
-:::: {.column width=55%}
+:::: {.column width=58%}
 - @Deep learning@
-  - Use ML models with multiple layers of computing elements
+  - ML models with multiple layers of computing elements
   - Ideas known since 1970s, but then forgot
-  - Success in handwritten digit recognition in 1990s
+  - Success in digit recognition in 1990s
 
 ::::
-:::: {.column width=40%}
+:::: {.column width=37%}
 
 ```graphviz
 digraph DLPipeline {
@@ -558,16 +558,14 @@ digraph DLPipeline {
 
 - @ImageNet moment@: In 2012, a DL system showed dramatic improvement in `ImageNet`
   competition `#cite("krizhevsky2012alexnet")`{=typst}
-  - Previous systems used handcrafted features
-  - Surge of interest in AI among researchers, companies, and investors
+  - Eclipsed handcrafted-feature systems, sparking industry interest
 
 - @Pros@: Exceeds human performance in many recognition tasks
 
 - @Cons@: Needs specialized hardware (e.g., GPU, TPU, FPGA)
 
 - True step today towards **general artificial intelligence**
-  - Universal algorithm for learning and acting, not just specialized tasks
-  - E.g., driving, playing chess, recognizing speech
+  - Universal algorithm for learning and acting (e.g., driving, chess, speech)
 
 * Progress in AI Research
 - @Huge interest in deep learning@
@@ -651,13 +649,13 @@ digraph DLPipeline {
 ::::
 :::: {.column width=20%}
 
-![](msml610/lectures_source/figures/L01.3.Deep_Blue.jpg)
+![](msml610/lectures_source/figures/L01.3.Deep_Blue.jpg){width=65%}
 
-\footnotesize _Deep Blue, 1997_
+\scriptsize `#text(size: 0.8em)[`{=typst}_Deep Blue, 1997_`]`{=typst}
 
-![](msml610/lectures_source/figures/L01.3.AlphaGo_Rack.jpg)
+![](msml610/lectures_source/figures/L01.3.AlphaGo_Rack.jpg){width=65%}
 
-\footnotesize _AlphaGo's TPU rack, 2016_
+\scriptsize `#text(size: 0.8em)[`{=typst}_AlphaGo's TPU rack, 2016_`]`{=typst}
 ::::
 :::
 
@@ -667,7 +665,7 @@ digraph DLPipeline {
   - Two winters followed unmet expectations
   - The current boom is driven by data and compute, not a single algorithm
 
-```raw_latex
+```raw_latex[width=62%]
 \documentclass[tikz]{standalone}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta}

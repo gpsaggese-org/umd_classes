@@ -145,34 +145,37 @@ mindmap
 
 * AI and Economics (1/2)
 
-- @Question@: how to make decisions to maximize payoff given preferences?
+::: columns
+:::: {.column width=68%}
+
+- @Question@: how to decide to maximize payoff given preferences?
   - @Comparison@:
     - _Economies_: agents maximize economic well-being (utility)
       - Studies desires and preferences
-    - _Decision theory_: making decisions under uncertainty for preferred
-      outcomes
+    - _Decision theory_: deciding under uncertainty for preferred outcomes
       - Probability theory + utility theory
-      - E.g., investment choices, policy decisions
 
-- @Question@: how to make decisions when payoffs are the result of several
+- @Question@: how to decide when payoffs result from a sequence of
   actions?
   - @Comparison@:
-    - _Operations research_: make rational decisions with payoffs for a
-      sequence of actions (Bellman, 1957) `#cite("bellman1957dp")`{=typst}
+    - _Operations research_: rational decisions over a sequence of actions
+      (Bellman, 1957) `#cite("bellman1957dp")`{=typst}
       - E.g., Markov Decision Processes
     - _Satisficing_: decisions that are good enough
       - Closer to human behavior `#cite("simon1956satisficing")`{=typst}
-      - E.g., choosing a restaurant that meets basic criteria rather than
-        finding the perfect one
+      - E.g., picking a decent restaurant instead of the perfect one
+
+::::
+:::: {.column width=30%}
 
 ```graphviz
 digraph DecisionTheory {
     bgcolor="transparent";
     pad="0.15";
     splines=spline;
-    nodesep=0.5;
-    ranksep=0.5;
-    rankdir=LR;
+    nodesep=0.4;
+    ranksep=0.4;
+    rankdir=TB;
 
     node [shape=box,
           style="rounded,filled",
@@ -199,6 +202,9 @@ digraph DecisionTheory {
     Utility -> Dec;
 }
 ```
+
+::::
+:::
 
 * AI and Economics (2/2)
 
@@ -241,14 +247,12 @@ digraph DecisionTheory {
 
 - @Components@: anatomy of the brain
   - Composed of ~100 billion neurons
-    - Each neuron connects with 10-100k others via synapses
-    - Axons enable long-range connections
+    - Each neuron connects with 10-100k others via synapses and axons
   - Signals propagate through electrochemical reactions
   - Short-term pathways support long-term connections (learning)
 
 - @Remark@: memory
-  - No theory yet about individual memory storage
-  - Current theory: memories reconstructed
+  - No unified theory of storage; current view: memories are reconstructed
 
 ::::
 :::: {.column width=35%}
@@ -262,15 +266,12 @@ digraph DecisionTheory {
 * The Brain Causes the Mind
 
 - @Remark@: simple cells give rise to thought and consciousness
-  - Truly amazing: complex processes emerge from simple components
 
-- @Remark@: supercomputers can exceed the brain in raw computational
-  throughput, but still lack its flexibility, learning speed, and energy
-  efficiency
+- @Remark@: supercomputers exceed the brain in raw compute, but still lack
+  its flexibility, learning speed, and energy efficiency
 
 - @Example@: brain-machine interfaces
-  - Brain adjusts to devices
-  - E.g., learn to use prosthetics as limbs
+  - Brain adjusts to devices, e.g., learning to use prosthetics as limbs
 
 - @Definition@: the **AI singularity** is the future point when AI
   surpasses human intelligence
@@ -282,7 +283,7 @@ digraph DecisionTheory {
     from automation
   - Achieving the brain's intelligence level remains unknown
 
-```graphviz
+```graphviz[width=28%]
 digraph Singularity {
     bgcolor="transparent";
     pad="0.15";
@@ -412,21 +413,20 @@ digraph CognitivePsychology {
 
   - @Characteristics@: current trends
     - Massive parallelism (like brain function)
-    - Compute used in the largest AI training runs has doubled roughly
-      every 3-4 months since 2012, a much faster pace than Moore's Law,
-      since it combines more and better chips with more spending, not
-      silicon improvement alone
+    - Training compute has doubled every 3-4 months since 2012, far
+      outpacing Moore's Law, driven by more/better chips and spending,
+      not silicon gains alone
     - GPUs / TPUs used in deep learning
     - High precision (e.g., 64b) often unnecessary
-
-  - @Definition@: **quantum computing** has the potential for significant
-    acceleration in key computations
-    - E.g., Shor's algorithm for factorization `#cite("shor1997factoring")`{=typst}
 
 ::::
 :::: {.column width=40%}
 
 ![](msml610/lectures_source/figures/L01.2.CPU_GPU_TPU.png)
+
+- @Definition@: **quantum computing** has the potential for significant
+  acceleration in key computations
+  - E.g., Shor's algorithm for factorization `#cite("shor1997factoring")`{=typst}
 
 ::::
 :::
@@ -493,7 +493,7 @@ digraph ControlLoop {
     knowledge for computer reasoning
     - E.g., first-order logic, knowledge graphs
 
-```graphviz
+```graphviz[width=42%]
 digraph Linguistics {
     bgcolor="transparent";
     pad="0.15";
