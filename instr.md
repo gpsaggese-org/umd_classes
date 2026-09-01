@@ -1,49 +1,58 @@
-Create a script 
+Step 1
+create a script called compress_pdf.py using a dockerized version the code
+in compress_pdf() in
+./helpers_root/dev_scripts_helpers/documentation/lib_notes_to_pdf.py
+if --backend "ghostscript_global"
 
-./helpers_root/dev_scripts_helpers/thin_client/tmux_reset.py
+Step 2
+if --backend "ghostscript_dockerized"
 
-that for each tmux window sets the name to an empty string.
+docker pull minidocks/ghostscript
+docker run --rm -v "$(pwd)":/data minidocks/ghostscript \
+  gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook \
+     -dNOPAUSE -dBATCH -dQUIET \
+     -sOutputFile=/data/compressed.pdf /data/original.pdf
 
-The first window to have pwd end with helpers_root should
-e.g., /Users/saggese/src/umd_classes1/helpers_root
-be called *helpers* and the remaining empty string
+using the infrastructure already present in hdocker.py
 
 ## Plan
-
-- [x] Create `helpers_root/dev_scripts_helpers/thin_client/tmux_reset.py`
-  following the `_parse()` / `_main(parser)` script skeleton
-  - [x] List the windows of the current tmux session (`tmux list-windows`),
-    getting each window's index and the current working directory of its
-    active pane
-  - [x] Compute the new name for each window:
-    - The first window whose pane working directory basename is
-      `helpers_root` is named `helpers`
-    - Every other window (including further `helpers_root` matches) is
-      named `""` (empty string)
-  - [x] Rename each window (`tmux rename-window`), honoring a `--dry_run`
-    flag that only logs what would be renamed
-- [x] Make the script executable (`chmod +x`)
-- [x] `git add` the new file (do not commit)
-- [x] Scope: operate only on the tmux session the script runs in (not all
-  sessions), per user confirmation
+- [x] Step 1: create `compress_pdf.py`
+  - [x] Add CLI script `helpers_root/dev_scripts_helpers/documentation/compress_pdf.py`
+    following the `_parse()`/`_main()` script conventions
+  - [x] Add `--input`/`-i`, `--output`/`-o` (default: overwrite `--input` in
+    place), `--quality`, and `--backend` (choices: `ghostscript_global`,
+    `ghostscript_dockerized`) CLI args
+  - [x] Implement the `ghostscript_global` backend, adapted from
+    `compress_pdf()` in `lib_notes_to_pdf.py` (host `gs` binary, not Docker)
+  - [x] Have `ghostscript_dockerized` raise `NotImplementedError` (left for
+    step 2)
+  - [x] Add unit tests `helpers_root/dev_scripts_helpers/documentation/test/test_compress_pdf.py`
+  - [x] `git add` the new files (no commit)
+- [ ] Step 2 (not requested this run): implement `ghostscript_dockerized`
+  backend using `helpers/hdocker.py`
 
 ## Result
-
-- Done this
-  - Created `helpers_root/dev_scripts_helpers/thin_client/tmux_reset.py`,
-    following the repo's `_parse()` / `_main(parser)` script skeleton and
-    `dassert`/logging conventions
-  - Script lists the windows of the tmux session it runs in, renames the
-    first window whose active pane is in a `helpers_root` directory to
-    `helpers`, and clears the name of every other window
-  - Added a `--dry_run` flag (per `script.rules.md`) that logs, per window,
-    the window index, its current working directory, and the name it would
-    get, without renaming anything
-  - Verified both `--dry_run` and the real run against a scratch tmux
-    session with 3 windows (two under `helpers_root`, one elsewhere): only
-    the first `helpers_root` window was named `helpers`, the rest were
-    cleared, and `--dry_run` left names untouched
-  - Made the script executable and `git add`ed it inside the `helpers_root`
-    submodule (not committed)
-- Done that
-  - N/A: no part of the plan was skipped
+- Done: created `compress_pdf.py` with a `--backend` flag; implemented the
+  `ghostscript_global` path
+  - Adapted `compress_pdf()` from `lib_notes_to_pdf.py`: same `gs` flags
+    (`-sDEVICE=pdfwrite -dPDFSETTINGS=<quality> -dNOPAUSE -dQUIET -dBATCH`),
+    generalized to support `--output` (not just in-place) via a
+    `<output>.compressed.tmp` intermediate file
+  - Found and fixed a real bug during testing: on this repo's thin client, a
+    bare `gs` on `PATH` resolves to `dev_scripts_helpers/git/gs` (a `git
+    status` alias), not Ghostscript, since that dir is ahead of
+    `/opt/homebrew/bin` on `PATH`. Added `_find_gs_binary()`, which checks
+    known Ghostscript install paths first, falling back to a plain `PATH`
+    lookup
+  - Verified end-to-end on a real PDF (`msml610/lectures_pdf/Lesson01.1-Intro.pdf`
+    copy): compressed 1.5MB -> 616KB in place
+  - Added `test_compress_pdf.py` (6 tests, all passing) covering
+    `_find_gs_binary()`, `_compress_pdf_ghostscript_global()` (in-place and
+    separate output file, via `capture_sys_calls`), and the CLI end-to-end
+    (default backend, and `ghostscript_dockerized` raising
+    `NotImplementedError`)
+  - `git add`ed `compress_pdf.py` and its test file in `helpers_root` (not
+    committed)
+- Not done: Step 2 (`ghostscript_dockerized` backend) — out of scope for
+  this run (`ARGUMENTS: step 1`); the `--backend` flag already has the
+  choice wired up and raises `NotImplementedError` until implemented
