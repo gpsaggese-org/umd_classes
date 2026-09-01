@@ -39,9 +39,9 @@ class Test_parse(hunitest.TestCase):
         Test parser accepts input in dir/lesson format.
         """
         # Prepare inputs.
-        arg_list = ["msml610/08.1"]
+        arg_list = ["-i", "msml610/08.1"]
         # Prepare outputs.
-        expected_values = {"input": "msml610/08.1", "extra_opts": []}
+        expected_values = {"input": "msml610/08.1", "notes_to_pdf_args": None}
         # Run test.
         parser = cscgesli._parse()
         self.assertIsInstance(parser, argparse.ArgumentParser)
@@ -52,25 +52,30 @@ class Test_parse(hunitest.TestCase):
         Test parser accepts file path.
         """
         # Prepare inputs.
-        arg_list = ["msml610/lectures_source/Lesson10-Name.txt"]
+        arg_list = ["-i", "msml610/lectures_source/Lesson10-Name.txt"]
         # Prepare outputs.
         expected_values = {
             "input": "msml610/lectures_source/Lesson10-Name.txt",
-            "extra_opts": [],
+            "notes_to_pdf_args": None,
         }
         # Run test.
         self._assert_parse_args(arg_list, expected_values)
 
     def test3(self) -> None:
         """
-        Test parser accepts extra positional arguments.
+        Test parser accepts options to pass through to notes_to_pdf.py.
         """
         # Prepare inputs.
-        arg_list = ["data605/01.1", "extra_arg1", "extra_arg2"]
+        arg_list = [
+            "-i",
+            "data605/01.1",
+            "--notes_to_pdf_args",
+            "extra_arg1 extra_arg2",
+        ]
         # Prepare outputs.
         expected_values = {
             "input": "data605/01.1",
-            "extra_opts": ["extra_arg1", "extra_arg2"],
+            "notes_to_pdf_args": "extra_arg1 extra_arg2",
         }
         # Run test.
         self._assert_parse_args(arg_list, expected_values)

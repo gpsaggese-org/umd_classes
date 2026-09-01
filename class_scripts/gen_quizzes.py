@@ -17,13 +17,13 @@ This script generates questions from lecture content using `llm_cli.py`.
 # Usage Example
 
 - Generate multiple-choice quizzes for DATA605 lesson 01.1:
-> gen_quizzes.py --for_class_quizzes data605/01.1
+> gen_quizzes.py --for_class_quizzes -i data605/01.1
 
 - Generate discussion/review questions for MSML610 lesson 02.3:
-> gen_quizzes.py --for_class_recap msml610/02.3
+> gen_quizzes.py --for_class_recap -i msml610/02.3
 
 - Generate discussion/review questions for DATA605 lesson 01.2 without auto-formatting the output:
-> gen_quizzes.py --for_class_recap data605/01.2 --no_lint
+> gen_quizzes.py --for_class_recap -i data605/01.2 --no_lint
 
 Import as:
 
@@ -126,7 +126,9 @@ def _parse() -> argparse.ArgumentParser:
         formatter_class=hparser.CustomHelpFormatter,
     )
     parser.add_argument(
-        "input",
+        "-i",
+        "--input",
+        required=True,
         type=str,
         help="Lecture specification: 'data605/08.1', 'msml610/08.1', "
         "or file path 'msml610/lectures_source/Lesson10.2-Name.smd'",
@@ -154,9 +156,11 @@ def _parse() -> argparse.ArgumentParser:
         help="Skip running lint_text.py on output file",
     )
     parser.add_argument(
-        "extra_opts",
-        nargs="*",
-        help="Additional options to pass to llm_cli.py",
+        "--llm_cli_args",
+        action="store",
+        default=None,
+        help="Additional options string passed through verbatim to "
+        "llm_cli.py",
     )
     hparser.add_verbosity_arg(parser)
     return parser
@@ -213,8 +217,8 @@ def _main(parser: argparse.ArgumentParser) -> None:
         prompt_file_arg,
     ]
     # Add extra options if provided.
-    if args.extra_opts:
-        cmd_parts.extend(args.extra_opts)
+    if args.llm_cli_args:
+        cmd_parts.append(args.llm_cli_args)
     cmd = " ".join(cmd_parts)
     _LOG.info("%s", hprint.color_highlight(f"> {cmd}", "green"))
     # Execute the command.

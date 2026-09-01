@@ -4,7 +4,7 @@
 
 - Render the slides
   ```
-  > gen_slides.py book_springer/02.1 --daemon
+  > gen_slides.py -i book_springer/02.1 --daemon
   ```
 
 - Render the book

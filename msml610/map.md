@@ -90,7 +90,7 @@ Not needed
 
 > lint_text.py -i     01.2  01.3  .
 
-> gen_slides.py msml610/01.3
+> gen_slides.py -i msml610/01.3
 > grep "^* " msml610/lectures_source/*.smd | wc -l
 
 > gen_book_chapter.py msml610/01.2 --mode typst_aima --llm_backend hllm_cli
@@ -148,9 +148,9 @@ gen_book_chapter.py  msml610/00.1 --mode typst_aima --llm_backend hllm_cli_exec 
 
 - Generate slides when editing the source
   ```bash
-  > gen_slides.py msml610/lectures_source/Lesson01.1-Intro.smd
-  > gen_slides.py msml610/01.1 --daemon
-  > gen_slides.py msml610/01.1 --daemon
+  > gen_slides.py -i msml610/lectures_source/Lesson01.1-Intro.smd
+  > gen_slides.py -i msml610/01.1 --daemon
+  > gen_slides.py -i msml610/01.1 --daemon
   ```
 
 - The file is generated in `lectures_pdf.tmp`

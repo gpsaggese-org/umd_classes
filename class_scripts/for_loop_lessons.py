@@ -475,9 +475,11 @@ def _generate_class_quizzes(
     _LOG.info(
         "Generating class quizzes for %s (lesson %s)", source_name, lesson_number
     )
-    cmd_str = f"gen_quizzes.py --for_class_quizzes {class_dir}/{lesson_number}"
+    cmd_str = (
+        f"gen_quizzes.py --for_class_quizzes -i {class_dir}/{lesson_number}"
+    )
     if cmd_opts:
-        cmd_str += f" {cmd_opts}"
+        cmd_str += f' --llm_cli_args="{cmd_opts}"'
     _LOG.info("Executing: %s", cmd_str)
     hsystem.system(cmd_str, suppress_output=False)
 
@@ -515,9 +517,11 @@ def _generate_class_recap(
     _LOG.info(
         "Generating class recap for %s (lesson %s)", source_name, lesson_number
     )
-    cmd_str = f"gen_quizzes.py --for_class_recap {class_dir}/{lesson_number}"
+    cmd_str = (
+        f"gen_quizzes.py --for_class_recap -i {class_dir}/{lesson_number}"
+    )
     if cmd_opts:
-        cmd_str += f" {cmd_opts}"
+        cmd_str += f' --llm_cli_args="{cmd_opts}"'
     _LOG.info("Executing: %s", cmd_str)
     hsystem.system(cmd_str, suppress_output=False)
 

@@ -236,35 +236,36 @@ automated LLM-powered transformations
 
 - Generates lecture slide PDFs from source files using `notes_to_pdf.py` to
   convert markdown to PDF, writing output to `<dir>/lectures/`
-  - Takes a single positional `input`: either `<dir>/<lesson>` (e.g.,
-    `data605/08.1`) or a direct path to a `Lesson*.txt` file
+  - `-i`/`--input`: either `<dir>/<lesson>` (e.g., `data605/08.1`) or a direct
+    path to a `Lesson*.txt` file
   - `--daemon` watches the input file and regenerates the PDF on change;
   - `--slides_engine {beamer,typst}` selects the rendering engine
-  - Any trailing args are passed through to `notes_to_pdf.py`
+  - `--notes_to_pdf_args` passes a verbatim options string through to
+    `notes_to_pdf.py`
 
 ### Examples
 
 - Generate slides with default settings:
   ```bash
-  > gen_slides.py data605/01.1
+  > gen_slides.py -i data605/01.1
   Running command: notes_to_pdf.py --input=data605/lectures_source/Lesson01.1-Intro.txt --output=data605/lectures/Lesson01.1-Intro.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after
   [notes_to_pdf output...]
   ```
 
 - Generate slides directly from a source file path:
   ```bash
-  > gen_slides.py msml610/lectures_source/Lesson10.2-Causal_Discovery.txt
+  > gen_slides.py -i msml610/lectures_source/Lesson10.2-Causal_Discovery.txt
   ```
 
 - Regenerate the PDF automatically whenever the source file changes:
   ```bash
-  > gen_slides.py data605/01.1 --daemon
+  > gen_slides.py -i data605/01.1 --daemon
   ```
 
 - Render with the Typst engine and pass an extra option through to
   `notes_to_pdf.py`:
   ```bash
-  > gen_slides.py msml610/02.3 --slides_engine typst --filter_by_slides 1:5
+  > gen_slides.py -i msml610/02.3 --slides_engine typst --notes_to_pdf_args="--filter_by_slides 1:5"
   ```
 
 ## `gen_lecture_video_script.py`
@@ -346,7 +347,7 @@ automated LLM-powered transformations
 
 - Generate multiple choice quiz:
   ```bash
-  > gen_quizzes.py --for_class_quizzes data605/01.1
+  > gen_quizzes.py --for_class_quizzes -i data605/01.1
   Reading lecture from: data605/lectures_source/Lesson01.1-Intro.txt
   Generating 20 multiple choice questions...
   Formatting with prettier...
@@ -356,7 +357,7 @@ automated LLM-powered transformations
 
 - Generate discussion questions:
   ```bash
-  > gen_quizzes.py --for_class_recap msml610/02.3
+  > gen_quizzes.py --for_class_recap -i msml610/02.3
   Reading lecture from: msml610/lectures_source/Lesson02.3-...txt
   Generating 5 discussion questions...
   Recap saved to: msml610/lectures_recap/Lesson02.3-...recap.md
@@ -364,12 +365,12 @@ automated LLM-powered transformations
 
 - Generate without linting:
   ```bash
-  > gen_quizzes.py --for_class_recap data605/01.2 --no_lint
+  > gen_quizzes.py --for_class_recap -i data605/01.2 --no_lint
   ```
 
 - Generate with specific model:
   ```bash
-  > gen_quizzes.py --for_class_quizzes data605/01.1 --model gpt-4
+  > gen_quizzes.py --for_class_quizzes -i data605/01.1 --model gpt-4
   ```
 
 ## `create_book_toc_from_slides.py`
@@ -514,18 +515,19 @@ automated LLM-powered transformations
 - Checks and fixes text (spelling, grammar, formatting) in lecture slides,
   in place, by shelling out to `process_slides.py --action text_check_fix
   --use_llm_transform`
-- Any trailing args are passed through to `process_slides.py` (e.g., `--limit`)
+- `--process_slides_args` passes a verbatim options string through to
+  `process_slides.py` (e.g., `--limit`)
 
 ### Examples
 
 - Check and fix slides for a lesson (overwrites the source file):
   ```bash
-  > slide_check.py data605/01.1
+  > slide_check.py -i data605/01.1
   ```
 
 - Check and fix only a slide range:
   ```bash
-  > slide_check.py msml610/02.3 --limit "1:5"
+  > slide_check.py -i msml610/02.3 --process_slides_args="--limit 1:5"
   ```
 
 ## `slide_improve.py`
@@ -534,13 +536,14 @@ automated LLM-powered transformations
 
 - Improves lecture slides in place using LLM suggestions, by shelling out to
   `process_slides.py --action slide_improve --use_llm_transform`
-- Any trailing args are passed through to `process_slides.py`
+- `--process_slides_args` passes a verbatim options string through to
+  `process_slides.py`
 
 ### Examples
 
 - Improve slides for a lesson (overwrites the source file):
   ```bash
-  > slide_improve.py data605/01.1
+  > slide_improve.py -i data605/01.1
   Improving slides in: data605/lectures_source/Lesson01.1-Intro.txt
   Processing 9 slides with LLM improvement suggestions...
   Slide 1: Suggested clearer explanation of key concepts
@@ -553,7 +556,7 @@ automated LLM-powered transformations
 
 - Improve only a slide range:
   ```bash
-  > slide_improve.py msml610/02.3 --limit "1:5"
+  > slide_improve.py -i msml610/02.3 --process_slides_args="--limit 1:5"
   ```
 
 ## `slide_reduce.py`
@@ -562,13 +565,14 @@ automated LLM-powered transformations
 
 - Reduces and simplifies lecture slides in place using LLM, by shelling out
   to `process_slides.py --action slide_reduce --use_llm_transform`
-- Any trailing args are passed through to `process_slides.py`
+- `--process_slides_args` passes a verbatim options string through to
+  `process_slides.py`
 
 ### Examples
 
 - Reduce slide content for a lesson (overwrites the source file):
   ```bash
-  > slide_reduce.py data605/01.1
+  > slide_reduce.py -i data605/01.1
   Reducing slides in: data605/lectures_source/Lesson01.1-Intro.txt
   Processing 9 slides with LLM reduction...
   Slide 1: Reduced from 150 words to 95 words (37% reduction)
@@ -581,7 +585,7 @@ automated LLM-powered transformations
 
 - Reduce only a slide range:
   ```bash
-  > slide_reduce.py msml610/02.3 --limit "1:5"
+  > slide_reduce.py -i msml610/02.3 --process_slides_args="--limit 1:5"
   ```
 
 ## `fix_bold_in_slides.sh`
@@ -971,7 +975,7 @@ for reading and study.
 
 - Alternatively, use the direct script:
   ```bash
-  > gen_quizzes.py --for_class_quizzes data605/01.1
+  > gen_quizzes.py --for_class_quizzes -i data605/01.1
   ```
 
 ### Generate Discussion/review Questions
@@ -984,7 +988,7 @@ for reading and study.
 
 - Alternatively, use the direct script:
   ```bash
-  > gen_quizzes.py --for_class_recap data605/01.1
+  > gen_quizzes.py --for_class_recap -i data605/01.1
   ```
 
 ## Slide Quality Improvement
@@ -1007,7 +1011,7 @@ for reading and study.
 
 - Alternatively, use the direct script:
   ```bash
-  > slide_check.py data605/01.1
+  > slide_check.py -i data605/01.1
   ```
 
 ### Improve Slide Clarity and Structure
@@ -1015,7 +1019,7 @@ for reading and study.
 - `for_loop_lessons.py --action improve_slide` is **not yet implemented** and
   aborts with an error; use the direct script instead:
   ```bash
-  > slide_improve.py data605/01.1
+  > slide_improve.py -i data605/01.1
   ```
 
 - Or use `llm_transform.py` directly:
@@ -1038,7 +1042,7 @@ for reading and study.
 
 - Alternatively, use the direct script:
   ```bash
-  > slide_reduce.py data605/01.1
+  > slide_reduce.py -i data605/01.1
   ```
 
 ### Fix Slides with Custom LLM Prompt

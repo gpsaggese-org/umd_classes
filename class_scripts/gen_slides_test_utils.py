@@ -540,7 +540,10 @@ class Run_gen_slides_py_TestCase(hunitest.TestCase):
         Run gen_slides for a lesson, generating only TeX output.
         """
         _LOG.debug(hprint.to_str("course_dir lesson"))
-        cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open_pdf --no_pdf"
+        cmd = (
+            f"gen_slides.py -i {course_dir}/{lesson} "
+            '--notes_to_pdf_args="--skip_action open_pdf --no_pdf"'
+        )
         hsystem.system(cmd)
 
     @pytest.mark.slow

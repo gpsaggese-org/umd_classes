@@ -47,30 +47,39 @@ class Test_parse(hunitest.TestCase):
         Test parser accepts `input`, with no extra options.
         """
         # Prepare inputs.
-        arg_list = ["msml610/01.1"]
+        arg_list = ["-i", "msml610/01.1"]
         # Prepare outputs.
         expected_input = "msml610/01.1"
-        expected_extra_opts: list = []
+        expected_process_slides_args = None
         # Run test.
         parser = cscslimp._parse()
         args = parser.parse_args(arg_list)
         # Check outputs.
         self.assert_equal(args.input, expected_input)
-        self.assert_equal(str(args.extra_opts), str(expected_extra_opts))
+        self.assert_equal(
+            str(args.process_slides_args), str(expected_process_slides_args)
+        )
 
     def test2(self) -> None:
         """
-        Test parser accepts extra positional options.
+        Test parser accepts options to pass through to process_slides.py.
         """
         # Prepare inputs.
-        arg_list = ["msml610/01.1", "extra_arg1", "extra_arg2"]
+        arg_list = [
+            "-i",
+            "msml610/01.1",
+            "--process_slides_args",
+            "extra_arg1 extra_arg2",
+        ]
         # Prepare outputs.
-        expected_extra_opts = ["extra_arg1", "extra_arg2"]
+        expected_process_slides_args = "extra_arg1 extra_arg2"
         # Run test.
         parser = cscslimp._parse()
         args = parser.parse_args(arg_list)
         # Check outputs.
-        self.assert_equal(str(args.extra_opts), str(expected_extra_opts))
+        self.assert_equal(
+            str(args.process_slides_args), str(expected_process_slides_args)
+        )
 
 
 # #############################################################################
@@ -93,7 +102,7 @@ class Test_main(hunitest.TestCase):
         lecture_file = os.path.join(
             scratch_dir, "lectures_source", "Lesson01.1-Intro.smd"
         )
-        arg_list = [lecture_file]
+        arg_list = ["-i", lecture_file]
         # Prepare outputs.
         expected_cmd = (
             f"process_slides.py --in_file {lecture_file} "
@@ -119,14 +128,19 @@ class Test_main(hunitest.TestCase):
 
     def test2(self) -> None:
         """
-        Test `extra_opts` are appended to the built command.
+        Test `process_slides_args` is appended to the built command.
         """
         # Prepare inputs.
         scratch_dir = _create_lecture_source(self)
         lecture_file = os.path.join(
             scratch_dir, "lectures_source", "Lesson01.1-Intro.smd"
         )
-        arg_list = [lecture_file, "extra_arg1", "extra_arg2"]
+        arg_list = [
+            "-i",
+            lecture_file,
+            "--process_slides_args",
+            "extra_arg1 extra_arg2",
+        ]
         # Prepare outputs.
         expected_cmd = (
             f"process_slides.py --in_file {lecture_file} "
