@@ -98,10 +98,17 @@ gen_book_chapter.py  msml610/01.2 --mode typst_aima --llm_backend hllm_cli -v DE
 gen_book_chapter.py  msml610/01.2 --mode typst_aima --llm_backend hllm_cli_exec --model openrouter/anthropic/claude-opus-4.6 --no_incremental
 gen_book_chapter.py  msml610/00.1 --mode typst_aima --llm_backend hllm_cli_exec --model openrouter/anthropic/claude-opus-4.6 --no_incremental
 
+compress_pdf.py
+
 > /text.humanize       01.2 01.3
 > review / edit book chapter
 
 > run_typst.py --input msml610/book/Lesson01.2-AI_and_Machine_Learning.typ
+
+### [ ] Add cc loop in gen_book_chapters
+Instead of using an LLM use cc agent
+
+run_typst.py --input msml610/book/Lesson01.4-Brief_History_of_AI.typ --output msml610/book/Lesson01.4-Brief_History_of_AI.pdf --action render_images --skip_action open_pdf
 
 ### [x] gen_book_chapter.py
 
