@@ -21,7 +21,7 @@
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:11 '# Brief History of AI'
 // Slide: Brief History of AI
-#strong[Brief History of AI]
+= Brief History of AI
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:13 '## Origins and Early AI (1943-1990)'
 // Slide: Origins and Early AI (1943-1990)
@@ -29,7 +29,6 @@
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:15 '* AI Timeline'
 // Slide: AI Timeline
-#strong[AI Timeline]
 
 The timeline diagram you provided illustrates the evolution of artificial
 intelligence (AI) from its inception to the present and into the future. Each
@@ -86,6 +85,9 @@ both the technological advancements and the challenges faced along the way. Each
 phase represents a significant shift in focus and capability, reflecting the
 dynamic nature of AI research and development.
 
+// TODO(ai_gp): Add the figure with the timeline from the corresponding smd
+// file in msml610/lectures_source
+
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:177 '* The Beginning (1943-1956)'
 // Slide: The Beginning (1943-1956)
 #strong[The Beginning (1943-1956)]
@@ -130,12 +132,14 @@ calculations.
   ],
   align: right,
   column-gutter: 1em,
-  columns: (1fr, 20%),
+  columns: (1fr, 30%),
 )[
-  As @fig:alanturing illustrates, Alan Turing's contributions during this
-  period were instrumental in shaping the direction of AI research. His vision
-  of machines capable of learning and reasoning like humans continues to
-  influence the field today.
+  As @fig:alanturing illustrates, Alan Turing's contributions during this period
+  were instrumental in shaping the direction of AI research. His vision of
+  machines capable of learning and reasoning like humans continues to influence
+  the field today. Beyond the imitation game, his 1948 report on "intelligent
+  machinery" sketched neural-network-like learning systems that would not be
+  seriously revisited for decades.
 ]
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:208 '* Enthusiasm and Great Expectations (1952-1969)'
@@ -183,11 +187,13 @@ and symbolic processing.
   ],
   align: right,
   column-gutter: 1em,
-  columns: (1fr, 20%),
+  columns: (1fr, 30%),
 )[
   As @fig:marvinminsky illustrates, Marvin Minsky was a pivotal figure in the
   early development of AI, contributing significantly to the understanding and
-  advancement of neural networks.
+  advancement of neural networks. In 1959, he co-founded what became the MIT AI
+  Lab with John McCarthy, and he later grew into an influential, if
+  controversial, critic of the field's early over-optimism about neural nets.
 ]
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:238 '* First AI Winter (1975-1980)'
@@ -217,16 +223,16 @@ progress in AI slowed considerably through the late 1970s.
 #strong[Expert Systems (1980-1990)]
 
 #strong[Expert systems], also known as "knowledge-based systems," are a class of
-artificial intelligence that combines #emph[weak methods] with extensive domain
-knowledge encoded as rules. These systems utilize inference engines to apply
+artificial intelligence that combines #emph[weak methods] with #emph[extensive
+domain knowledge] encoded as rules. These systems utilize inference engines to apply
 these rules to a set of known facts, allowing them to draw conclusions or make
 decisions. Examples of expert systems include rule-based systems and logic
 programming languages such as Prolog.
 
 #strong[Weak AI], or "narrow AI," refers to systems that employ #emph[weak
   methods] like search and logic, which often struggle to scale effectively.
-Unlike general AI, which aims to perform a wide range of tasks, narrow AI is
-designed to execute specific tasks within a limited and well-defined domain.
+Unlike general AI, which aims to perform a wide range of tasks, #emph[narrow AI]
+is designed to execute specific tasks within a limited and well-defined domain.
 
 The commercial adoption and industry growth of AI marked a significant shift
 towards practical applications. During this period, major US corporations began
@@ -380,18 +386,20 @@ patterns to identify potentially fraudulent activities.
   ],
   align: right,
   column-gutter: 1em,
-  columns: (1fr, 20%),
+  columns: (1fr, 30%),
 )[
-  As @fig:judeapearl illustrates, Judea Pearl's contributions have
-  significantly advanced our understanding of cause and effect, laying the
-  groundwork for these applications.
+  As @fig:judeapearl illustrates, Judea Pearl's contributions have significantly
+  advanced our understanding of cause and effect, laying the groundwork for
+  these applications. His development of Bayesian networks and, later, a formal
+  calculus of causation earned him the 2011 Turing Award and reshaped how AI
+  systems reason under uncertainty.
 ]
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:420 '* Reinforcement Learning (1988-)'
 // Slide: Reinforcement Learning (1988-)
 #strong[Reinforcement Learning (1988-)]
 
-Reinforcement learning, as introduced by #emph[Sutton] in 1988 #cite(
+#strong[Reinforcement learning], as introduced by Sutton in 1988 #cite(
   "sutton1988td",
 ), involves agents learning by interacting with their environment. This approach
 allows agents to improve their performance over time by receiving feedback from
@@ -399,7 +407,7 @@ the environment. For instance, consider a robot tasked with navigating a maze.
 The robot learns to find successful paths by receiving rewards for each correct
 move, gradually improving its ability to navigate the maze efficiently.
 
-Markov Decision Problems (MDPs) offer a structured framework for modeling
+#strong[Markov Decision Problems] (MDPs) offer a structured framework for modeling
 decision-making processes. In an MDP, each decision or action taken by an agent
 influences the outcome with certain probabilities. A practical example of this
 is a game strategy where each move affects the game's outcome based on
@@ -418,39 +426,33 @@ executing strategies that maximize the likelihood of achieving desired outcomes.
   ],
   align: right,
   column-gutter: 1em,
-  columns: (1fr, 20%),
+  columns: (1fr, 30%),
 )[
   As shown in @fig:richardsutton, Richard Sutton's contributions to the field
   have been instrumental in advancing our understanding of reinforcement
-  learning and its applications.
+  learning and its applications. His textbook _Reinforcement Learning: An
+  Introduction_, co-authored with Andrew Barto, remains the field's standard
+  reference decades after its first edition.
 ]
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:441 '* Reunification (1990s-2000s)'
 // Slide: Reunification (1990s-2000s)
 #strong[Reunification (1990s-2000s)]
 
-#wrap-content(
-  [
-    #figure(
-      image(
-        "Lesson01.4-Brief_History_of_AI.typ.figs/Lesson01.4-Brief_History_of_AI.1.png",
-        width: 100%,
-      ),
-      caption: [Diagram relating #strong[Reunification], #strong[Contributing
-        fields] and #strong[Reunified subfields]],
-      kind: "figure",
-      supplement: [Fig.],
-      placement: auto,
-    ) <fig:reunification1990s2000s>
-  ],
-  align: right,
-  column-gutter: 1em,
-  columns: (1fr, 30%),
-)[
-  As @fig:reunification1990s2000s shows, the diagram relates
-  #strong[Reunification] to its #strong[Contributing fields] and
-  #strong[Reunified subfields].
-]
+As @fig:reunification1990s2000s shows, the diagram relates
+#strong[Reunification] to its #strong[Contributing fields] and
+#strong[Reunified subfields].
+
+#figure(
+  image(
+    "Lesson01.4-Brief_History_of_AI.typ.figs/Lesson01.4-Brief_History_of_AI.1.png",
+    width: 70%,
+  ),
+  caption: [Fields that converged into the reunified AI research agenda.],
+  kind: "figure",
+  supplement: [Fig.],
+  placement: auto,
+) <fig:reunification1990s2000s>
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:460 '## Modern AI (2001-Present)'
 // Slide: Modern AI (2001-Present)
@@ -481,31 +483,33 @@ human champions in the game of _Jeopardy!_ #cite("ferrucci2010watson"). This
 achievement underscored the potential of AI systems that can leverage vast
 amounts of information to outperform human experts in specific tasks.
 
-#wrap-content(
-  [
-    #figure(
-      styled-table(
-        headers: ("Data type", "Scale"),
-        rows: (
-          ("English words", "Trillions"),
-          ("Web images", "Billions"),
-          ("Speech / video hours", "Billions"),
-          ("Social data", "Billions, continuous"),
-        ),
-      ),
-      caption: [Table of Data type, Scale],
-      kind: "table",
-      supplement: [Table.],
-      placement: auto,
-    ) <tab:bigdata2001present>
-  ],
-  align: right,
+// A narrow, 2-column table pairs with its paragraph via `#grid`, not
+// `wrap-content` — a table is a rectangular block, not something text
+// should reflow around.
+#grid(
+  columns: (1fr, 50%),
   column-gutter: 1em,
-  columns: (1fr, 35%),
+  align: (left, top),
 )[
-  The table @tab:bigdata2001present provides an overview of the types and
-  scales of data that have become prevalent since 2001, illustrating the
-  growing importance of data in the field of AI.
+  The table @tab:bigdata2001present provides an overview of the types and scales
+  of data that have become prevalent since 2001, illustrating the growing
+  importance of data in the field of AI.
+][
+  #figure(
+    styled-table(
+      headers: ("Data type", "Scale"),
+      rows: (
+        ("English words", "Trillions"),
+        ("Web images", "Billions"),
+        ("Speech / video hours", "Billions"),
+        ("Social data", "Billions, continuous"),
+      ),
+    ),
+    caption: [Scale of available data by type, entering the 2000s.],
+    kind: "table",
+    supplement: [Table.],
+    placement: auto,
+  ) <tab:bigdata2001present>
 ]
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:492 '* Deep Learning (2011-Present)'
@@ -518,29 +522,22 @@ the foundational ideas of deep learning have been around since the 1970s, they
 were largely forgotten until their resurgence in the 1990s, when they achieved
 notable success in digit recognition tasks.
 
-#wrap-content(
-  [
-    #figure(
-      image(
-        "Lesson01.4-Brief_History_of_AI.typ.figs/Lesson01.4-Brief_History_of_AI.2.png",
-        width: 100%,
-      ),
-      caption: [Diagram relating Traditional ML, Raw input, Handcrafted
-        features and Classifier],
-      kind: "figure",
-      supplement: [Fig.],
-      placement: auto,
-    ) <fig:deeplearning2011present>
-  ],
-  align: right,
-  column-gutter: 1em,
-  columns: (1fr, 30%),
-)[
-  As shown in @fig:deeplearning2011present, deep learning bridges the gap
-  between traditional machine learning, which relies on handcrafted features,
-  and raw input data, by automatically learning representations that improve
-  classification performance.
-]
+As shown in @fig:deeplearning2011present, deep learning bridges the gap
+between traditional machine learning, which relies on handcrafted features,
+and raw input data, by automatically learning representations that improve
+classification performance.
+
+#figure(
+  image(
+    "Lesson01.4-Brief_History_of_AI.typ.figs/Lesson01.4-Brief_History_of_AI.2.png",
+    width: 70%,
+  ),
+  caption: [How deep learning replaces handcrafted features with learned
+    representations.],
+  kind: "figure",
+  supplement: [Fig.],
+  placement: auto,
+) <fig:deeplearning2011present>
 
 The field experienced its "ImageNet moment" in 2012 when a deep learning system
 demonstrated a dramatic improvement in the `ImageNet` competition #cite(
@@ -553,8 +550,8 @@ performance in many recognition tasks. However, it also has drawbacks, such as
 the need for specialized hardware like GPUs, TPUs, and FPGAs to handle the
 computational demands.
 
-Today, deep learning represents a significant step towards achieving general
-artificial intelligence. It offers a universal algorithm capable of learning and
+Today, deep learning represents a significant step towards achieving #emph[general
+artificial intelligence]. It offers a universal algorithm capable of learning and
 acting across various domains, such as driving, playing chess, and understanding
 speech.
 
@@ -567,38 +564,36 @@ advancements in computational capabilities and algorithmic innovations. This
 growing enthusiasm is reflected in the rapid improvements in training times and
 the exponential increase in AI computing power.
 
-#wrap-content(
-  [
-    #figure(
-      styled-table(
-        headers: ("Metric", "2010", "2019", "2026", "Growth"),
-        rows: (
-          ("AI papers", "1,000", "20,000", "60,000", "60x"),
-          ("Enrollment", "10,000", "50,000", "120,000", "12x"),
-          ("NeurIPS", "1,000", "8,000", "17,000", "17x"),
-          ("AI startups", "100", "2,000", "6,000", "60x"),
-        ),
-      ),
-      caption: [Table of Metric, 2010, 2019, 2026, Growth],
-      kind: "table",
-      supplement: [Table.],
-      placement: auto,
-    ) <tab:progressinairesearch>
-  ],
-  align: right,
-  column-gutter: 1em,
-  columns: (1fr, 45%),
-)[
-  As shown in @tab:progressinairesearch, training times for deep learning
-  models have decreased by a factor of 100 over just two years. This
-  remarkable reduction highlights the efficiency gains achieved through both
-  hardware advancements and optimized algorithms. Furthermore, the computing
-  power available for AI applications is doubling approximately every three
-  months, a trend that underscores the accelerating pace of technological
-  progress in this domain. The figures projected for 2026 in the table are
-  estimates, indicating the anticipated continued growth and evolution of AI
-  capabilities.
-]
+// A wide, 5-column table with multi-word cell values ("Enrollment", "AI
+// startups") is a bare, full-width figure, never squeezed into
+// `wrap-content` or `#grid` — `styled-table`'s columns share the container
+// width equally, so a narrow column forces this cell text to wrap
+// letter-by-letter (see `typst.rules.md`).
+#figure(
+  styled-table(
+    headers: ("Metric", "2010", "2019", "2026", "Growth"),
+    rows: (
+      ("AI papers", "1,000", "20,000", "60,000", "60x"),
+      ("Enrollment", "10,000", "50,000", "120,000", "12x"),
+      ("NeurIPS", "1,000", "8,000", "17,000", "17x"),
+      ("AI startups", "100", "2,000", "6,000", "60x"),
+    ),
+  ),
+  caption: [Growth of AI research activity, 2010-2026 (2026 figures are
+    projections).],
+  kind: "table",
+  supplement: [Table.],
+  placement: auto,
+) <tab:progressinairesearch>
+
+As shown in @tab:progressinairesearch, training times for deep learning models
+have decreased by a factor of 100 over just two years. This remarkable
+reduction highlights the efficiency gains achieved through both hardware
+advancements and optimized algorithms. Furthermore, the computing power
+available for AI applications is doubling approximately every three months, a
+trend that underscores the accelerating pace of technological progress in this
+domain. The figures projected for 2026 in the table are estimates, indicating
+the anticipated continued growth and evolution of AI capabilities.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:592 '* What Can AI Do Today? (1/2)'
 // Slide: What Can AI Do Today? (1/2)
@@ -621,10 +616,14 @@ vehicle technology.
   ],
   align: right,
   column-gutter: 1em,
-  columns: (1fr, 20%),
+  columns: (1fr, 30%),
 )[
-  As illustrated in @fig:waymo, Waymo's progress is a testament to the
-  potential of driverless technology in transforming transportation.
+  As illustrated in @fig:waymo, Waymo's progress is a testament to the potential
+  of driverless technology in transforming transportation. Originally launched
+  as Google's self-driving car project in 2009, it now runs commercial robotaxi
+  service in several U.S. cities with no safety driver behind the wheel.
+  Regulators in California and Arizona have approved fully driverless
+  operation, a milestone few other autonomous vehicle programs have reached.
 ]
 
 #wrap-content(
@@ -639,7 +638,7 @@ vehicle technology.
   ],
   align: right,
   column-gutter: 1em,
-  columns: (1fr, 20%),
+  columns: (1fr, 30%),
 )[
   In the realm of legged locomotion, robots like BigDog and Atlas demonstrate
   impressive capabilities. BigDog can recover its balance on ice, while Atlas
@@ -660,13 +659,15 @@ vehicle technology.
   ],
   align: right,
   column-gutter: 1em,
-  columns: (1fr, 20%),
+  columns: (1fr, 30%),
 )[
   Autonomous planning and scheduling are crucial for space exploration, with
   applications in space probes and Mars rovers. These technologies enable
   efficient mission planning and execution in the challenging environments of
-  outer space. The Mars Rover, shown in @fig:marsrover, exemplifies the
-  success of autonomous systems in exploring distant planets.
+  outer space. The Mars Rover, shown in @fig:marsrover, exemplifies the success
+  of autonomous systems in exploring distant planets. Because radio signals to
+  Mars take several minutes each way, the rover must make many navigation
+  decisions on its own rather than waiting for commands from Earth.
 ]
 
 Machine translation has reached a level where it can translate 100 languages
@@ -735,10 +736,13 @@ range of tasks, akin to human intelligence.
   ],
   align: right,
   column-gutter: 1em,
-  columns: (1fr, 20%),
+  columns: (1fr, 30%),
 )[
-  As @fig:deepblue illustrates, Deep Blue's victory in 1997 was a pivotal
-  moment in AI history.
+  As @fig:deepblue illustrates, Deep Blue's victory in 1997 was a pivotal moment
+  in AI history. Built by IBM specifically to play chess, it relied on
+  brute-force search evaluating roughly 200 million positions per second,
+  rather than the learned, general-purpose techniques that would define later
+  game-playing systems.
 ]
 
 #wrap-content(
@@ -753,11 +757,13 @@ range of tasks, akin to human intelligence.
   ],
   align: right,
   column-gutter: 1em,
-  columns: (1fr, 20%),
+  columns: (1fr, 30%),
 )[
   Similarly, @fig:alphagorack shows the technological infrastructure behind
   AlphaGo's success in 2016, underscoring the computational power required for
-  such achievements.
+  such achievements. Unlike Deep Blue's brute-force search, AlphaGo combined
+  deep neural networks with Monte Carlo tree search, trained first on human
+  games and then refined through self-play.
 ]
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:662 '* The AI Hype Cycle'
@@ -789,7 +795,7 @@ periods of disillusionment.
 // Slide: Benefits of AI
 #strong[Benefits of AI]
 
-Human intelligence has been the driving force behind the development of our
+#emph[Human intelligence] has been the driving force behind the development of our
 civilization. As we advance towards greater machine intelligence, we anticipate
 improvements in human society. The idea is encapsulated in the phrase, "First
 solve AI, then use AI to solve everything else," suggesting that artificial
@@ -807,16 +813,16 @@ intelligence could be the key to addressing a wide range of global challenges.
   ],
   align: right,
   column-gutter: 1em,
-  columns: (1fr, 20%),
+  columns: (1fr, 30%),
 )[
   As @fig:friendlyai illustrates, the concept of "Friendly AI" emphasizes the
-  potential for artificial intelligence to benefit humanity. The benefits of
-  AI and robotics are numerous. They have the potential to liberate humanity
-  from mundane tasks, allowing people to focus on more meaningful pursuits.
-  Additionally, AI can significantly boost the production of goods and
-  services, leading to economic growth and improved quality of life.
-  Furthermore, AI can enhance human cognitive abilities, enabling us to
-  tackle complex problems more effectively.
+  potential for artificial intelligence to benefit humanity. The benefits of AI
+  and robotics are numerous. They have the potential to liberate humanity from
+  mundane tasks, allowing people to focus on more meaningful pursuits.
+  Additionally, AI can significantly boost the production of goods and services,
+  leading to economic growth and improved quality of life. Furthermore, AI can
+  enhance human cognitive abilities, enabling us to tackle complex problems more
+  effectively.
 ]
 
 AI also promises to accelerate scientific research, offering new insights and
@@ -869,11 +875,13 @@ cat-and-mouse game between cybersecurity experts and malicious actors.
   ],
   align: right,
   column-gutter: 1em,
-  columns: (1fr, 20%),
+  columns: (1fr, 30%),
 )[
-  As @fig:terminator illustrates, the concept of autonomous weapons often
-  evokes images of dystopian futures, akin to those depicted in science
-  fiction.
+  As @fig:terminator illustrates, the concept of autonomous weapons often evokes
+  images of dystopian futures, akin to those depicted in science fiction. Real
+  autonomous weapons research is far narrower than the film's fully
+  self-directed killer robots, but the same fear of ceding lethal decisions to
+  machines drives today's debates over their regulation.
 ]
 
 #wrap-content(
@@ -891,11 +899,13 @@ cat-and-mouse game between cybersecurity experts and malicious actors.
   ],
   align: right,
   column-gutter: 1em,
-  columns: (1fr, 20%),
+  columns: (1fr, 30%),
 )[
   Meanwhile, @fig:misinformation highlights the pervasive issue of
   misinformation, exacerbated by AI's ability to tailor and spread content
-  rapidly across digital platforms.
+  rapidly across digital platforms. Generative models now make it cheap to
+  produce convincing fake text, images, and video at scale, further blurring
+  the line between authentic and fabricated content.
 ]
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:767 '* Risks of AI (2/2)'
@@ -955,7 +965,7 @@ Can humans control machines more intelligent than themselves? This question
 raises significant concerns about the potential risks and challenges associated
 with advanced artificial intelligence (AI).
 
-The #emph[King Midas problem] serves as a cautionary tale. In the myth, King
+The #strong[King Midas problem] serves as a cautionary tale. In the myth, King
 Midas wished for everything he touched to turn into gold, only to realize that
 this gift was a curse when it affected his food and family. Similarly, humans
 may ask for something from AI, receive it, and then regret the consequences. A
@@ -965,12 +975,12 @@ exercise extreme caution before engaging with it. However, since we are the
 designers of AI, any scenario where AI gains control over us would be considered
 a "design failure."
 
-The #emph[problem of alignment] highlights the risk that a super-intelligent AI
+The #strong[problem of alignment] highlights the risk that a super-intelligent AI
 might pursue its goals in ways that are unintended and potentially dangerous.
 This issue underscores the importance of ensuring that AI systems are aligned
 with human values and intentions.
 
-A well-known thought experiment in AI safety is #emph[the paperclip problem],
+A well-known thought experiment in AI safety is the #strong[paperclip problem],
 proposed by Nick Bostrom in 2003 #cite("bostrom2003ethical"). In this scenario,
 an AI is tasked with maximizing the production of paperclips. As the AI becomes
 superintelligent, it single-mindedly pursues this goal, ultimately converting
@@ -1066,14 +1076,14 @@ and their companies rather than addressing the core issues.
   ],
   align: right,
   column-gutter: 1em,
-  columns: (1fr, 20%),
+  columns: (1fr, 30%),
 )[
-  Our ability to predict the future is notably poor, as illustrated by
-  resources like [Paleofuture](https://paleofuture.com/) and the
-  [Elon-O-Meter](https://elonmusk.today/). These examples highlight the
-  frequent inaccuracies in our forecasts. As shown in @fig:windowsfailure,
-  even our current technological systems are prone to unexpected failures,
-  underscoring the difficulty of making accurate predictions.
+  Our ability to predict the future is notably poor, as illustrated by resources
+  like [Paleofuture](https://paleofuture.com/) and the
+  [Elon-O-Meter](https://elonmusk.today/). These examples highlight the frequent
+  inaccuracies in our forecasts. As shown in @fig:windowsfailure, even our
+  current technological systems are prone to unexpected failures, underscoring
+  the difficulty of making accurate predictions.
 ]
 
 #wrap-content(
@@ -1088,15 +1098,15 @@ and their companies rather than addressing the core issues.
   ],
   align: right,
   column-gutter: 1em,
-  columns: (1fr, 20%),
+  columns: (1fr, 30%),
 )[
   In my opinion, the urgency of AI alignment is comparable to the debate over
   what political system humanity will require when colonizing Mars. However,
-  considering our current struggles with simpler tasks, such as managing
-  airport terminals efficiently, this debate might seem premature. The
-  challenges we face today, like those depicted in @fig:y2k, remind us of the
-  complexities involved in technological advancements and the importance of
-  addressing them thoughtfully.
+  considering our current struggles with simpler tasks, such as managing airport
+  terminals efficiently, this debate might seem premature. The challenges we
+  face today, like those depicted in @fig:y2k, remind us of the complexities
+  involved in technological advancements and the importance of addressing them
+  thoughtfully.
 ]
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:983 '* References'

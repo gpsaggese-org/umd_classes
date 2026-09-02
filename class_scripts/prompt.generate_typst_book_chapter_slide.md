@@ -2,8 +2,11 @@
 
 Mode-specific instructions for `--mode typst_aima`'s per-slide generation path. See
 `prompt.generate_book_chapter_common.md` for the shared style guide (audience, tone,
-content rules) and `prompt.generate_typst_book_chapter_common.md` for Typst rules
-shared with the whole-document path (emphasis, semantic tags, formulas)
+content rules). `prompt.generate_typst_book_chapter_common.md` is concatenated
+ahead of this file, so its rules already apply here: general Typst syntax
+(emphasis, formulas, lists), pulled in via its own
+`@.claude/skills/typst.rules.md` reference, plus what's specific to this
+pipeline (dissolving semantic tags, never fabricating a diagram's rendered figure)
 Unlike `prompt.generate_typst_book_chapter.md` (used for the older whole-document
 generation path), this prompt is used to convert **one slide's entire body text at a
 time**, in a single call, regardless of whether the source slide used a `:::
@@ -31,6 +34,33 @@ diagram, or table that has already been converted to Typst by Python. Copy each 
 token to the output **exactly as written**, on its own line, with no surrounding
 markup, no `#figure(...)`, no brackets. Never invent a token that was not in the
 input, and never put the token itself inside a sentence
+
+For a token backed by a diagram, the manifest tells you its label and what it
+shows, but never its rendered image path — you cannot know that path, so
+never write your own `#figure(image(...))` (or `#wrap-content(...)` around
+one) in place of the token, even one that looks plausible from the label and
+description. Python substitutes the real diagram source in for the bare
+token after your call returns; wrapping the token in synthesized figure
+markup yourself just produces a second, fake figure around it. See
+"Diagrams: Never Fabricate the Rendered Figure" in
+`prompt.generate_typst_book_chapter_common.md`
+
+- Bad output (token wrapped in fabricated figure markup):
+  ```text
+  #wrap-content(
+    [
+      #figure(
+        image("some/guessed/path.png", width: 100%),
+        caption: [Diagram relating Correct premises, Logic and Correct conclusions],
+      ) <fig:2aiasthinkingrationally>
+    ],
+    align: right,
+  )[@@FIGURE_1@@]
+  ```
+- Good output (the token, bare, on its own line):
+  ```text
+  @@FIGURE_1@@
+  ```
 
 After the slide fragment, you are also given a `Figure manifest:` block listing each
 token's Typst label and a one-line description of what it shows — never copy that
@@ -87,20 +117,15 @@ above, never two labeled halves.
 
 ## Highlighting and Emphasis
 
-See "Highlighting and Emphasis" in
-`prompt.generate_typst_book_chapter_common.md`.
+See "Highlighting and Emphasis" in `.claude/skills/typst.rules.md`.
 
 ## Lists
 
-- Not every `-` bullet in the input should become a Typst list item. A lone tagged
-  bullet (`@Definition@`, `@Example@`, `@Remark@`, ...) that holds one short point
-  becomes a plain sentence in the paragraph instead: see "Semantic Tags: Dissolve,
-  Don't Relabel" above
-- Keep a real Typst list only for content meant to be scanned as parallel items: an
-  enumerated set of steps, assumptions, properties, or named alternatives. For a list
-  you do keep, bullet lists (`- item`) and numbered lists (`1. item`) use the same
-  syntax in Typst as in Markdown: copy the list structure and nesting as is, just
-  convert the text of each item per the rules above
+See "Lists" in `.claude/skills/typst.rules.md` for the general rule (a lone
+tagged bullet becomes a plain sentence; a real list is kept only for
+parallel items). A lone tagged bullet (`@Definition@`, `@Example@`,
+`@Remark@`, ...) dissolving into prose here follows "Semantic Tags:
+Dissolve, Don't Relabel" above.
 
 ## Be Direct
 
@@ -111,6 +136,5 @@ See "Highlighting and Emphasis" in
 ## Other Rules
 
 - Do not repeat a bullet verbatim; expand and explain it
-- Close every `#strong[`, `#emph[`, `[...]`, `(...)` you open
 - Output only the converted body: no commentary, no code fence wrapping the whole
   response
