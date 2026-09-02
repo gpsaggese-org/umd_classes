@@ -12,8 +12,15 @@ of three formats selected via `--mode`:
 The style guide for all three modes is split across:
 - `prompt.generate_book_chapter_common.md`: shared style guide (audience,
   tone, content rules, constraints) common to all modes
-- `prompt.generate_latex_book_chapter.md`, `prompt.generate_typst_book_chapter.md`,
-  `prompt.generate_md_book_chapter.md`: mode-specific syntax and structure
+- `prompt.generate_typst_book_chapter_common.md`: Typst rules (emphasis,
+  semantic tags, formulas) shared by both `typst_aima` generation paths
+  below
+- Mode-specific syntax and structure
+  - `prompt.generate_latex_book_chapter.md`
+  - `prompt.generate_typst_book_chapter.md` (`typst_aima` whole-document
+    path) / `prompt.generate_typst_book_chapter_slide.md` (`typst_aima`
+    per-slide path)
+  - `prompt.generate_md_book_chapter.md`
 
 The output is written next to the input's course directory, in a sibling
 `book/` directory (e.g., `msml610/lectures_source/Lesson10.2-Name.smd` ->
@@ -51,6 +58,9 @@ run by default, `git_add` and `open_pdf` don't.
 Import as:
 
 import class_scripts.gen_book_chapter as clgeboch
+
+For a description of the architecture of this file, see the file
+gen_book_chapter.py.README.md
 """
 
 import argparse
@@ -139,6 +149,14 @@ _TYPST_SLIDE_PROMPT_FILE = os.path.join(
     _SCRIPT_DIR, "prompt.generate_typst_book_chapter_slide.md"
 )
 
+# Typst rules shared by both `typst_aima` generation paths (emphasis,
+# semantic tags, formulas): concatenated into the system prompt of both
+# `_get_system_prompt("typst_aima")` and `_get_system_prompt_slide()`, right
+# after the cross-mode common style guide.
+_TYPST_COMMON_PROMPT_FILE = os.path.join(
+    _SCRIPT_DIR, "prompt.generate_typst_book_chapter_common.md"
+)
+
 
 def _get_system_prompt(mode: str) -> str:
     """
@@ -149,9 +167,11 @@ def _get_system_prompt(mode: str) -> str:
     :return: combined system prompt
     """
     hdbg.dassert_in(mode, _MODE_TO_PROMPT_FILE)
-    common_prompt = hio.from_file(_COMMON_PROMPT_FILE)
-    mode_prompt = hio.from_file(_MODE_TO_PROMPT_FILE[mode])
-    system_prompt = f"{common_prompt}\n\n{mode_prompt}"
+    parts = [hio.from_file(_COMMON_PROMPT_FILE)]
+    if mode == "typst_aima":
+        parts.append(hio.from_file(_TYPST_COMMON_PROMPT_FILE))
+    parts.append(hio.from_file(_MODE_TO_PROMPT_FILE[mode]))
+    system_prompt = "\n\n".join(parts)
     return system_prompt
 
 
@@ -163,8 +183,9 @@ def _get_system_prompt_slide() -> str:
     :return: combined system prompt
     """
     common_prompt = hio.from_file(_COMMON_PROMPT_FILE)
+    typst_common_prompt = hio.from_file(_TYPST_COMMON_PROMPT_FILE)
     slide_prompt = hio.from_file(_TYPST_SLIDE_PROMPT_FILE)
-    system_prompt = f"{common_prompt}\n\n{slide_prompt}"
+    system_prompt = f"{common_prompt}\n\n{typst_common_prompt}\n\n{slide_prompt}"
     return system_prompt
 
 

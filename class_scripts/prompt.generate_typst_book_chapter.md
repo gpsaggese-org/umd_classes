@@ -1,9 +1,12 @@
 # Typst Book Chapter
 
-Mode-specific instructions for `--mode typst_aima`. See
-`prompt.generate_book_chapter_common.md` for the shared style guide
-(audience, tone, content rules, constraints): this file covers only the
-Typst syntax and structure.
+Mode-specific instructions for `--mode typst_aima`'s whole-document
+generation path. See `prompt.generate_book_chapter_common.md` for the shared
+style guide (audience, tone, content rules, constraints) and
+`prompt.generate_typst_book_chapter_common.md` for Typst rules shared with
+the per-slide path (emphasis, semantic tags, formulas): this file covers only
+document structure and syntax specific to generating the whole document in
+one call.
 
 Copied and adapted from
 `/Users/saggese/src/notes1/book_proposals/prompt.create_typst_book_chap_from_lesson_slides.md`.
@@ -17,7 +20,7 @@ Copied and adapted from
 
 ```typst
 // Import AIMA style formatting and macros.
-#import "aima_style.typ": aima-style, chapter, algorithm, glossary
+#import "aima_style.typ": aima-style, chapter, algorithm, glossary, wrap-content
 // Import the custom citation/bibliography system.
 #import "/helpers_root/dev_scripts_helpers/typst/umd_references.typ": cite, references
 
@@ -61,14 +64,6 @@ Copied and adapted from
   // Slide: Some Heading
   ```
 
-## Highlighting and Emphasis
-
-- Use `#strong[text]` for concepts, definitions, algorithm names, and key
-  terms
-- Use `#emph[text]` for italics sparingly (emphasis only, not decoration);
-  `*text*` in Typst markup renders as bold, not italic, so never use it for
-  emphasis
-
 ## Algorithms and Pseudocode
 
 - Use `#algorithm("NAME", [...])` for all structured algorithms, pseudocode,
@@ -76,14 +71,6 @@ Copied and adapted from
   - Format with `#h(1em)` for indentation levels
   - Use `*keyword*` for language keywords (function, if, loop, return, etc.)
   - Use symbolic notation ($sigma$, $in.not$, etc.) where appropriate
-
-## Formulas
-
-- Inline: `` `formula` `` for text-like expressions (e.g.,
-  `` `f(n) = g(n) + h(n)` ``), or `$formula$` for inline math
-- Display math: `$ formula $` on its own line/paragraph
-- Prefer native Typst math syntax over raw LaTeX inside `$...$` (e.g.,
-  `subset.eq`, `|X|` instead of `\subseteq`, `\abs{X}`)
 
 ## Use Lists
 
@@ -131,6 +118,51 @@ Copied and adapted from
   // rendered_image:end
   ```
 
+## Text-Wrapped Figures
+
+- For a figure that should sit beside its own explanatory paragraph
+  (magazine-style, text flowing around the image) instead of a full-width
+  figure floating separately from the text, use `#wrap-content(...)` (from
+  `aima_style.typ`, re-exporting the `wrap-it` package) instead of a bare
+  `#figure(...)` call
+- Signature: `#wrap-content([figure-block], align: right, column-gutter:
+  1em, columns: (1fr, <width>))[body text]`
+  - First positional argument: a content block containing the `#figure(...)`
+    call (with its own `caption`, `kind`, `supplement`, and label as usual)
+  - `align: right` places the figure on the right (the standard choice in
+    this book; do not switch sides without a reason)
+  - `columns: (1fr, <width>)` sets the text-column / figure-column widths;
+    pick `<width>` (e.g. `20%`, `30%`, `40%`) to roughly match the figure's
+    aspect ratio so it doesn't dominate or shrink to nothing
+  - Trailing bracket content: the paragraph(s) that wrap around the figure;
+    reference the figure from inside this text with `@fig:<label>`
+  ```typst
+  #wrap-content(
+    [
+      #figure(
+        image("path/to/img.jpg", width: 100%),
+        caption: [Caption text],
+        kind: "figure",
+        supplement: [Fig.],
+      ) <fig:mylabel>
+    ],
+    align: right,
+    column-gutter: 1em,
+    columns: (1fr, 20%),
+  )[
+    Paragraph text that wraps around the figure, referencing it as
+    @fig:mylabel.
+  ]
+  ```
+- Use `#wrap-content` for one figure paired with the paragraph(s) discussing
+  it (the common case for portraits, small diagrams, single illustrative
+  images); keep a bare `#figure(...)` (no wrapping) for figures that need
+  the full text width (tables via `styled-table`, multi-panel grids, wide
+  diagrams) or that aren't tied to one specific paragraph
+- `#wrap-content` still requires everything a normal figure needs: a label
+  (`<fig:...>`), a one-line caption, and an in-text reference (`@fig:...`)
+  inside the wrapped body
+
 ## Bibliography
 
 - Never use Typst's native `#bibliography(...)`/`[@key]` citation syntax --
@@ -169,6 +201,6 @@ Copied and adapted from
 - Never leave semantic tags such as `@Definition@`, `@Question@`,
   `@Example@` verbatim in a `.typ` file — `@word` is Typst
   label-reference syntax there, so it is a compile error, not just a style
-  issue; convert each into `#strong[Word]` (or better, weave it into the
-  prose) instead
+  issue; dissolve each into prose per "Semantic Tags in Typst" in
+  `prompt.generate_typst_book_chapter_common.md`
 - Always close `#strong[`, `[...]`, `(...)` with matching brackets

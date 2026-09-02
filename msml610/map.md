@@ -79,8 +79,8 @@ Lesson13.1-Explainability.smd
 
 /slides.lint          01.2  01.3  01.4
 /slides.review        01.2  01.3  01.4
-/slides.add_visuals   01.2  01.3  .
-/slides.add_references 01.2 01.3  .
+/slides.add_visuals   01.2  01.3  01.4
+/slides.add_references 01.2 01.3  01.4
 
 Not needed
 /slides.fix_errors
@@ -88,7 +88,7 @@ Not needed
 /slides.fix_formatting
 /slides.add_tutorial_links
 
-> lint_text.py -i     01.2  01.3  .
+> lint_text.py -i     01.2  01.3  0.14
 
 > gen_slides.py -i msml610/01.3
 > grep "^* " msml610/lectures_source/*.smd | wc -l
@@ -96,19 +96,23 @@ Not needed
 > gen_book_chapter.py msml610/01.2 --mode typst_aima --llm_backend hllm_cli
 gen_book_chapter.py  msml610/01.2 --mode typst_aima --llm_backend hllm_cli -v DEBUG --model claude-opus-4.5
 gen_book_chapter.py  msml610/01.2 --mode typst_aima --llm_backend hllm_cli_exec --model openrouter/anthropic/claude-opus-4.6 --no_incremental
-gen_book_chapter.py  msml610/00.1 --mode typst_aima --llm_backend hllm_cli_exec --model openrouter/anthropic/claude-opus-4.6 --no_incremental
 
-compress_pdf.py
+> compress_pdf.py     01.2  01.3  01.4
 
-> /text.humanize       01.2 01.3
+> /text.humanize      01.2  01.3  01.4
 > review / edit book chapter
 
 > run_typst.py --input msml610/book/Lesson01.2-AI_and_Machine_Learning.typ
 
 ### [ ] Add cc loop in gen_book_chapters
-Instead of using an LLM use cc agent
+- Instead of using an LLM use cc agent
+  - Iterate until it compiles
+  - run_typst.py --input msml610/book/Lesson01.4-Brief_History_of_AI.typ --output msml610/book/Lesson01.4-Brief_History_of_AI.pdf --action render_images --skip_action open_pdf
 
-run_typst.py --input msml610/book/Lesson01.4-Brief_History_of_AI.typ --output msml610/book/Lesson01.4-Brief_History_of_AI.pdf --action render_images --skip_action open_pdf
+- Keep the LLM chat open so that we don't have to send the same instructions over and
+  over (only for the library version)
+- Also we can use this to keep track of the old text and make the transitions
+  smoother
 
 ### [x] gen_book_chapter.py
 
@@ -120,27 +124,18 @@ run_typst.py --input msml610/book/Lesson01.4-Brief_History_of_AI.typ --output ms
   - Make a proposal in 5 bullet points of what to change
 
 ### [x] Improve the generation
-- Compare gpt-4o-mini to a better model
-- hllm_cli vs hllm
+- [x] Compare gpt-4o-mini to a better model
+  - hllm_cli vs hllm
 
-- Still lots of tags... modify the prompt to remove them
-- Latex not converted correctly
-- Do not keep the formatting in the page (e.g., pros vs cons)
+- [x] Still lots of tags... modify the prompt to remove them
+  - Latex not converted correctly
+  - Do not keep the formatting in the page (e.g., pros vs cons)
 
-- The figures embedded in the text are good, but we need caption and a reference
+- [x] The figures embedded in the text are good, but we need caption and a reference
   in the text
 
-### [ ] Updates
-
-- Use Definition to have the tag on the side
-
-- "References" need to be a larger font
-
-### [ ]
-- Keep the LLM chat open so that we don't have to send the same instructions over and
-  over (only for the library version)
-- Also we can use this to keep track of the old text and make the transitions
-  smoother
+- [ ] Use Definition to have the tag on the side
+- x ] "References" need to be a larger font
 
 # Workflows
 

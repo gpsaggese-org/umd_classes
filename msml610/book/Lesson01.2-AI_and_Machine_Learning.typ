@@ -267,7 +267,6 @@ means a theorem prover can confirm that a statement is valid but cannot always
 confirm that it is #emph[not]. That is a hard ceiling imposed by the mathematics
 itself, not by engineering shortcomings.
 
-
 // From: msml610/lectures_source/Lesson01.2-AI_and_Machine_Learning.smd:168 '* Thinking Rationally: Challenges'
 // Slide: Thinking Rationally: Challenges
 
