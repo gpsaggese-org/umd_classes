@@ -21,7 +21,8 @@
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:11 '# Brief History of AI'
 // Slide: Brief History of AI
-= Brief History of AI
+// Note: no body-level heading here; #chapter(...) above already carries the
+// document's top-level title.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:13 '## Origins and Early AI (1943-1990)'
 // Slide: Origins and Early AI (1943-1990)
