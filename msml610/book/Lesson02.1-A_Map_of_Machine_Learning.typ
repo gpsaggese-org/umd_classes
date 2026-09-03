@@ -1,7 +1,7 @@
 // git_hash=44abcfb27-twy timestamp=20260903_094703
 // Import AIMA style formatting and macros.
 #import "/helpers_root/dev_scripts_helpers/typst/aima_style.typ": (
-  aima-style, algorithm, chapter, glossary, styled-table,
+  aima-style, chapter, styled-table, wrap-content,
 )
 // Import the custom citation/bibliography system.
 #import "/helpers_root/dev_scripts_helpers/typst/umd_references.typ": (
@@ -21,19 +21,20 @@
 
 // From: msml610/lectures_source/Lesson02.1-A_Map_of_Machine_Learning.smd:13 '# A Map of Machine Learning'
 // Slide: A Map of Machine Learning
-#strong[A Map of Machine Learning]
 
 // From: msml610/lectures_source/Lesson02.1-A_Map_of_Machine_Learning.smd:15 '* Four Branches of Machine Learning'
 // Slide: Four Branches of Machine Learning
-#strong[Four Branches of Machine Learning]
+= Four Branches of Machine Learning
 
-A map of the field orients you before the details: it shows where a new method
+A map of the field can orient before the details: it shows where a new method
 fits, which tool suits a given problem, and what this course will and will not
 cover.
 
 Machine learning is a sprawling field with many branches #cite(
   "burkov2019hundredpage",
-), and one useful way to organize it is along four dimensions.
+), and one useful way to organize it is along four dimensions, as in
+@fig:fourbranchesofmachinelearning.
+
 #strong[Paradigms] describe how learning is set up: whether the system learns
 from labeled examples, from rewards, or from unlabeled structure #cite(
   "russell2020aima",
@@ -41,12 +42,7 @@ from labeled examples, from rewards, or from unlabeled structure #cite(
 functions to deep neural networks #cite("hastie2009elements").
 #strong[Techniques] are the algorithms and processes used to fit those models to
 data. Finally, #strong[theory] provides the formal foundations, the guarantees
-and limits that tell us when and why a method works. As
-@fig:fourbranchesofmachinelearning illustrates, paradigms, models, and
-techniques branch out from machine learning as three complementary axes; theory
-underpins all of them. Throughout this course we will revisit this map
-repeatedly, placing each new topic in its proper branch so the pieces connect
-rather than accumulate as isolated facts.
+and limits that tell us when and why a method works.
 
 // rendered_images:begin
 // ```mermaid
@@ -94,7 +90,7 @@ rather than accumulate as isolated facts.
 
 // From: msml610/lectures_source/Lesson02.1-A_Map_of_Machine_Learning.smd:71 '* Learning Paradigms'
 // Slide: Learning Paradigms
-#strong[Learning Paradigms]
+= Learning Paradigms
 
 How do you set up a learning problem? The answer depends on what kind of
 feedback the learner receives and how it interacts with its environment.
@@ -147,7 +143,6 @@ interactive or sequential.
   caption: [Diagram relating Learning Paradigms, Label Availability and Interactive/Sequential],
 ) <fig:learningparadigms>
 // render_images:end
-Availability and Interactive/Sequential
 
 In #strong[supervised learning], the learner receives a dataset of input-output
 pairs and must discover a mapping from inputs to outputs that generalizes to
@@ -184,7 +179,7 @@ exploration-exploitation tradeoff.
 
 // From: msml610/lectures_source/Lesson02.1-A_Map_of_Machine_Learning.smd:110 '* Model Families'
 // Slide: Model Families
-#strong[Model Families]
+= Model Families
 
 What functional form can a model take? Machine learning models generally fall
 into three broad families, each making different assumptions about how the
@@ -280,11 +275,11 @@ branch from the central concept of an ML model.
 
 // From: msml610/lectures_source/Lesson02.1-A_Map_of_Machine_Learning.smd:156 '* Stages of an ML Pipeline'
 // Slide: Stages of an ML Pipeline
-#strong[Stages of an ML Pipeline]
+= Stages of an ML Pipeline
 
-What are the stages and common techniques used in a machine learning pipeline? A
-typical pipeline moves through several distinct phases, each with its own set of
-tools and concerns.
+What are the #emph[stages] and #emph[common techniques] used in a machine
+learning pipeline? A typical pipeline moves through several distinct phases,
+each with its own set of tools and concerns.
 
 The process begins with #strong[input processing], where raw data is transformed
 into a form suitable for modeling. This includes data cleaning (handling missing
@@ -381,16 +376,16 @@ practitioner to revisit earlier decisions when later stages reveal problems.
 
 // From: msml610/lectures_source/Lesson02.1-A_Map_of_Machine_Learning.smd:211 '* Theoretical Foundations'
 // Slide: Theoretical Foundations
-#strong[Theoretical Foundations]
+= Theoretical Foundations
 
 What is the theoretical basis underpinning machine learning and its common
 phenomena? Several foundational frameworks address this question, each offering
 a different lens on why learning from data works and when it fails.
 
 #strong[VC theory] #cite("vapnikchervonenkis1971uniform") measures a model's
-"capacity" by examining the complexity of its hypothesis space. Rather than
-counting parameters directly, VC dimension quantifies how many data points a
-model class can shatter (classify in every possible way), providing
+#emph["capacity"] by examining the complexity of its hypothesis space. Rather
+than counting parameters directly, VC dimension quantifies how many data points
+a model class can shatter (classify in every possible way), providing
 distribution-free guarantees on generalization. A model with high VC dimension
 can fit more patterns but also needs more data to generalize reliably.
 
@@ -438,7 +433,7 @@ and practice is essential for applying any of these tools responsibly.
 
 // From: msml610/lectures_source/Lesson02.1-A_Map_of_Machine_Learning.smd:234 '* Adages of Machine Learning'
 // Slide: Adages of Machine Learning
-#strong[Adages of Machine Learning]
+= Adages of Machine Learning
 
 Machine learning has accumulated a rich body of folk wisdom, crystallized into
 adages that capture recurring lessons practitioners encounter again and again.
@@ -482,7 +477,7 @@ dominant drivers of progress.
 
 // From: msml610/lectures_source/Lesson02.1-A_Map_of_Machine_Learning.smd:252 '* References'
 // Slide: References
-#strong[References]
+= References
 
 #set text(size: 0.75em)
 #references("/msml610/lectures_source/refs.bib")

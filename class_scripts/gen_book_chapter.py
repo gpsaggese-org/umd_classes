@@ -52,17 +52,17 @@ run by default, `git_add` and `open_pdf` don't.
 # Usage Example
 
 - Generate a Springer LaTeX chapter for MSML610 lesson 08.1:
-> gen_book_chapter.py --mode springer_latex msml610/08.1
+> gen_book_chapter.py --mode springer_latex -i msml610/08.1
 
 - Generate a Typst chapter for MSML610 lesson 10.2 (compiles to PDF by
   default, without opening it or adding it to Git):
-> gen_book_chapter.py --mode typst_aima msml610/10.2
+> gen_book_chapter.py --mode typst_aima -i msml610/10.2
 
 - Generate a Typst chapter, add it to Git, and open the PDF once compiled:
-> gen_book_chapter.py --mode typst_aima msml610/10.2 --action git_add --action open_pdf
+> gen_book_chapter.py --mode typst_aima -i msml610/10.2 --action git_add --action open_pdf
 
 - Generate a Markdown chapter for DATA605 lesson 01.1:
-> gen_book_chapter.py --mode md data605/01.1
+> gen_book_chapter.py --mode md -i data605/01.1
 
 Import as:
 
@@ -1388,7 +1388,9 @@ def _parse() -> argparse.ArgumentParser:
     )
     # TODO(gp2): This should be factor out (maybe also dry run and no_incremental)?
     parser.add_argument(
-        "input",
+        "-i",
+        "--input",
+        required=True,
         type=str,
         help="Lecture specification: 'data605/08.1', 'msml610/08.1', "
         "or file path 'msml610/lectures_source/Lesson10.2-Name.smd'",
