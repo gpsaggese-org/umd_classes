@@ -21,22 +21,20 @@
 
 // From: msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.smd:11 '# Input Processing'
 // Slide: Input Processing
-#strong[Input Processing]
 
 // From: msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.smd:13 '## Overview'
 // Slide: Overview
-== Overview
+= Overview
 
 // From: msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.smd:15 '* From Raw Data to Model Input'
 // Slide: From Raw Data to Model Input
-#strong[From Raw Data to Model Input]
 
 Raw data rarely arrives in the shape a model needs. Sensors drop readings,
 categorical fields use inconsistent labels, and numeric features span wildly
-different ranges. A fixed sequence of transformations turns that messy input
-into clean, well-scaled, informative features, and the payoff is immediate:
-better model performance, stronger generalization to unseen data, and more
-stable training dynamics.
+different ranges. A fixed sequence of transformations is needed to turn messy
+input into clean, well-scaled, informative features, yielding better model
+performance, stronger generalization to unseen data, and more stable training
+dynamics.
 
 This lesson walks through that sequence in the order you would typically apply
 it. First comes #emph[data quality]: removing duplicates and errors, denoising,
@@ -51,9 +49,9 @@ discipline of fitting every transformation on the training set only and then
 applying it identically to validation and test data, along with techniques for
 augmenting the training set when labeled examples are scarce.
 
-@fig:fromrawdatatomodelinput illustrates this pipeline as a flow from raw data
-through cleaning, outlier and missing-value handling, and scaling and encoding
-stages before the result reaches the model.
+@fig:fromrawdatatomodelinput shows the pipeline: raw data flows through
+cleaning, outlier and missing-value handling, and scaling and encoding before
+reaching the model.
 
 // rendered_images:begin
 // ```graphviz[width=95%]
@@ -64,12 +62,12 @@ stages before the result reaches the model.
 //   nodesep=0.28;
 //   ranksep=0.4;
 //   rankdir=LR;
-//
+// 
 //   node [shape=box, style="rounded,filled", penwidth=1.6,
 //         fontname="Helvetica", fontsize=10, margin="0.14,0.10", height=0.42];
 //   edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.65,
 //         fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
-//
+// 
 //   raw   [label="Raw Data", fillcolor="#FFD1A6", color="#D9902B", fontcolor="#6B4517"];
 //   clean [label="Clean &\nDenoise", fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
 //   fix   [label="Handle Outliers\n& Missing Values", fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
@@ -77,7 +75,7 @@ stages before the result reaches the model.
 //   eng   [label="Construct &\nReduce Features", fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
 //   aug   [label="Augment", fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
 //   ready [label="Model-Ready\nData", fillcolor="#B2E2B2", color="#4F9A5C", fontcolor="#1F4E2E"];
-//
+// 
 //   raw -> clean -> fix -> scale -> eng -> aug -> ready;
 // }
 // ```
@@ -86,11 +84,8 @@ stages before the result reaches the model.
 // rendered_images:end
 // render_images:begin
 #figure(
-  image(
-    "Lesson02.3-ML_Techniques_Input_Processing.typ.figs/Lesson02.3-ML_Techniques_Input_Processing.1.png",
-  ),
-  caption: [Diagram relating Raw Data, Clean & Denoise, Handle Outliers &
-    Missing Values and Scale & Encode],
+  image("Lesson02.3-ML_Techniques_Input_Processing.typ.figs/Lesson02.3-ML_Techniques_Input_Processing.1.png"),
+  caption: [Diagram relating Raw Data, Clean & Denoise, Handle Outliers & Missing Values and Scale & Encode],
 ) <fig:fromrawdatatomodelinput>
 // render_images:end
 
@@ -100,9 +95,8 @@ stages before the result reaches the model.
 
 // From: msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.smd:57 '* Data Cleaning'
 // Slide: Data Cleaning
-#strong[Data Cleaning]
 
-The goal of data cleaning is to ensure data quality so that models train on
+The goal of #strong[data cleaning] is to ensure data quality so that models train on
 accurate, consistent inputs. Errors or inconsistencies in the raw dataset, if
 left uncorrected, propagate directly into learned parameters and degrade every
 downstream prediction.
@@ -135,14 +129,13 @@ that floor drop closer to the true Bayes error.
 
 // From: msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.smd:77 '* Noise Removal and Smoothing'
 // Slide: Noise Removal and Smoothing
-#strong[Noise Removal and Smoothing]
 
-The goal of denoising is to remove irrelevant or corrupt variation from a signal
-so that the underlying pattern becomes clearer and downstream models can learn
-from it more robustly. A familiar example is cleaning noisy speech: a recording
-picked up in a crowded room contains high-frequency hiss and crackle that
-obscures the speaker's words, and stripping that noise out makes the signal
-usable for transcription or further analysis.
+The goal of #strong[denoising] is to remove irrelevant or corrupt variation from a signal
+so that the underlying pattern becomes clearer and models can learn from it.
+A familiar example is cleaning noisy speech: a recording picked up in a crowded
+room contains high-frequency hiss and crackle that obscures the speaker's words,
+and stripping that noise out makes the signal usable for transcription or
+further analysis.
 
 Two broad families of techniques handle most practical denoising tasks.
 #emph[Smoothing] replaces each sample with the average of its neighbors inside a
@@ -167,7 +160,6 @@ production.
 
 // From: msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.smd:92 '* Outliers'
 // Slide: Outliers
-#strong[Outliers]
 
 An #strong[outlier] is a data point that falls outside the interval
 $[Q_1 - 1.5 dot.op "IQR", Q_3 + 1.5 dot.op "IQR"]$, where IQR is the
@@ -187,29 +179,28 @@ values at the fence boundaries (sometimes called Winsorizing), or applying a
 variance-stabilizing transform such as a log scale that compresses the tails and
 reduces the leverage of extreme points.
 
-Before applying any of these treatments, it is worth pausing to ask whether a
-given outlier is an error or a rare but genuine event. In fraud detection,
-anomaly detection, and risk modeling, the outlier #emph[is] the signal: a
-suspiciously large transaction or an unusual sensor reading may be exactly the
-case the model needs to catch. Removing it would destroy the information the
-analysis was built to find. The decision to keep or discard an outlier should
-therefore be guided by domain knowledge about its likely cause, not applied as a
-blanket preprocessing step.
+Before applying any of these treatments, ask whether a given outlier is an
+error or a rare but genuine event. In fraud detection, anomaly detection, and
+risk modeling, the outlier #emph[is] the signal: a suspiciously large
+transaction or an unusual sensor reading may be exactly the case the model needs
+to catch. Removing it would destroy the information the analysis was built to
+find. The decision to keep or discard an outlier should be guided by domain
+knowledge about its likely cause, not applied as a blanket preprocessing step.
 
 // From: msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.smd:111 '* Missing Data and Imputation'
 // Slide: Missing Data and Imputation
-#strong[Missing Data and Imputation]
 
-Three mechanisms explain why a value may be absent #cite(
-  "rubin1976missingdata",
-). #strong[MCAR] (missing completely at random) means the probability of
-missingness has no relationship to any variable, observed or unobserved, so
-simple imputation yields unbiased estimates. #strong[MAR] (missing at random)
-means missingness depends on other observed variables but not on the missing
-value itself; imputation conditioned on those observed variables remains
-unbiased. #strong[MNAR] (missing not at random) means the missingness depends on
-the unobserved value, so any imputation is biased unless the analyst explicitly
-models the missingness mechanism.
+// TODO(ai_gp): Invert MAR -> #emph[Missing at random] (MAR)
+Pieces of data are often #strong[missing] in data sets.
+Three mechanisms explain why a value may be absent #cite("rubin1976missingdata",). #emph[MCAR] (missing
+completely at random) means the probability of missingness has no relationship
+to any variable, observed or unobserved, so simple imputation yields unbiased
+estimates. #emph[MAR] (missing at random) means missingness depends on other
+observed variables but not on the missing value itself; imputation conditioned
+on those observed variables remains unbiased. #emph[MNAR] (missing not at
+random) means the missingness depends on the unobserved value, so any
+imputation is biased unless the analyst explicitly models the missingness
+mechanism.
 
 Several practical techniques address missing data:
 
@@ -232,16 +223,15 @@ support it.
 
 // From: msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.smd:126 '## Feature Scaling and Encoding'
 // Slide: Feature Scaling and Encoding
-== Feature Scaling and Encoding
+= Feature Scaling and Encoding
 
 // From: msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.smd:128 '* Feature Scaling'
 // Slide: Feature Scaling
-#strong[Feature Scaling]
 
 Feature scaling puts all input dimensions on comparable footing so that no
 single feature dominates distance calculations or gradient updates simply
 because its raw numbers are larger. Two classical approaches handle this.
-#strong[Min-max normalization] rescales every value to the interval $[0, 1]$
+#[Min-max normalization] rescales every value to the interval $[0, 1]$
 using
 
 $ x' = (x - x_(min)) / (x_(max) - x_(min)) $
@@ -269,7 +259,6 @@ or gradient-based optimizers) assume a specific scale.
 
 // From: msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.smd:147 '* Feature Scaling'
 // Slide: Feature Scaling
-#strong[Feature Scaling]
 
 When choosing a preprocessing strategy, it helps to know which models actually
 care about the scale of their inputs. #emph[Scale-sensitive] models include KNN,
@@ -294,12 +283,11 @@ performance.
 
 // From: msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.smd:158 '* Categorical Encoding'
 // Slide: Categorical Encoding
-#strong[Categorical Encoding]
 
 Most machine learning algorithms operate on numeric inputs, so categorical
 features (color names, country codes, size labels) must be converted into
-numbers before a model can use them. Several encoding strategies exist, each
-with different assumptions and tradeoffs.
+numbers before a model can use them. Several #strong[categorical encoding]
+strategies exist, each with different assumptions and tradeoffs.
 
 #emph[Label encoding] assigns a distinct integer to each category: for instance,
 `red`, `green`, `blue` become `1`, `2`, `3`. This is simple and
@@ -338,7 +326,6 @@ category to it at serving time, so the model always receives a valid input.
 
 // From: msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.smd:180 '* Discretization'
 // Slide: Discretization
-#strong[Discretization]
 
 #strong[Discretization] converts a continuous quantity into a categorical one by
 partitioning its range into a finite set of bins. Several techniques exist for
@@ -354,9 +341,10 @@ data's own density structure determine the boundaries.
 
 Consider discretizing age into four categories: `Child` for the interval
 $[0, 13)$, `Teen` for $[13, 20)$, `Adult` for $[20, 65)$, and `Senior` for
-$[65, oo)$. Under this scheme an age of 32 maps to `Adult`, as illustrated in
+$[65, oo)$. Under this scheme an age of 32 maps to `Adult`, as shown in
 @fig:discretization.
 
+// TODO(ai_gp): Use wrap it
 // rendered_images:begin
 // ```graphviz[width=90%]
 // digraph AgeBinning {
@@ -366,20 +354,20 @@ $[65, oo)$. Under this scheme an age of 32 maps to `Adult`, as illustrated in
 //   nodesep=0.22;
 //   ranksep=0.3;
 //   rankdir=LR;
-//
+// 
 //   node [shape=box, style="rounded,filled", penwidth=1.4,
 //         fontname="Helvetica", fontsize=10, margin="0.14,0.09", height=0.4];
 //   edge [color="#A3B1C0", penwidth=1.1, arrowhead=vee, arrowsize=0.6,
 //         fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
-//
+// 
 //   child  [label="Child\n[0, 13)",    fillcolor="#E8F1FB", color="#7CA6CE", fontcolor="#1F4E79"];
 //   teen   [label="Teen\n[13, 20)",    fillcolor="#E8F1FB", color="#7CA6CE", fontcolor="#1F4E79"];
 //   adult  [label="Adult\n[20, 65)",   fillcolor="#B2E2B2", color="#4F9A5C", fontcolor="#1F4E2E"];
 //   senior [label="Senior\n[65, inf)", fillcolor="#E8F1FB", color="#7CA6CE", fontcolor="#1F4E79"];
-//
+// 
 //   child -> teen -> adult -> senior [style=invis];
 //   { rank=same; child; teen; adult; senior; }
-//
+// 
 //   age32 [label="Age = 32", shape=ellipse, fillcolor="#FFD1A6", color="#D9902B", fontcolor="#6B4517"];
 //   age32 -> adult [label="mapped to", color="#D9902B", fontcolor="#6B4517"];
 // }
@@ -389,11 +377,8 @@ $[65, oo)$. Under this scheme an age of 32 maps to `Adult`, as illustrated in
 // rendered_images:end
 // render_images:begin
 #figure(
-  image(
-    "Lesson02.3-ML_Techniques_Input_Processing.typ.figs/Lesson02.3-ML_Techniques_Input_Processing.2.png",
-  ),
-  caption: [Diagram relating Child \[0, 13), Teen \[13, 20), Adult \[20, 65) and
-    Senior \[65, inf)],
+  image("Lesson02.3-ML_Techniques_Input_Processing.typ.figs/Lesson02.3-ML_Techniques_Input_Processing.2.png"),
+  caption: [Diagram relating Child \[0, 13), Teen \[13, 20), Adult \[20, 65) and Senior \[65, inf)],
 ) <fig:discretization>
 // render_images:end
 
@@ -413,7 +398,6 @@ edge, hiding the very signal the analyst hoped to capture.
 
 // From: msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.smd:238 '* Feature Construction'
 // Slide: Feature Construction
-#strong[Feature Construction]
 
 #strong[Feature engineering] is the practice of deriving more informative
 variables from raw inputs, encoding domain knowledge that the original columns
@@ -441,7 +425,6 @@ time.
 
 // From: msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.smd:256 '* Dimensionality Reduction'
 // Slide: Dimensionality Reduction
-#strong[Dimensionality Reduction]
 
 The goal of #strong[dimensionality reduction] is to shrink the number of
 features in a dataset while preserving the information that matters most.
@@ -468,11 +451,11 @@ approach, projecting the data onto axes that maximize the separation between
 known classes rather than overall variance. For visualization, non-linear
 techniques such as #emph[t-SNE] #cite("vandermaaten2008tsne") and #emph[UMAP]
 #cite("mcinnes2018umap") embed high-dimensional data into two or three
-dimensions while attempting to preserve local neighborhood structure. It is
-worth noting that several of these methods are scale-dependent: features
-measured in different units or with very different ranges should be standardized
-before the transformation is applied, or the result will be dominated by
-whichever feature happens to have the largest numeric spread.
+dimensions while attempting to preserve local neighborhood structure. Several
+of these methods are scale-dependent: features measured in different units or
+with very different ranges should be standardized before the transformation is
+applied, or the result will be dominated by whichever feature happens to have
+the largest numeric spread.
 
 Dimensionality reduction delivers practical benefits across the modeling
 pipeline. Fewer features reduce the risk of overfitting by eliminating noise
@@ -489,7 +472,6 @@ the original high-dimensional space.
 
 // From: msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.smd:282 '* Fit on Train, Apply to Validation and Test'
 // Slide: Fit on Train, Apply to Validation and Test
-#strong[Fit on Train, Apply to Validation and Test]
 
 Every fitted preprocessing step, whether a scaler, an imputer, an encoder, or a
 PCA projection, learns summary statistics from the data it sees: the column
@@ -510,12 +492,12 @@ already "seen" the held-out data indirectly.
 //   nodesep=0.3;
 //   ranksep=0.4;
 //   rankdir=LR;
-//
+// 
 //   node [shape=box, style="rounded,filled", penwidth=1.5,
 //         fontname="Helvetica", fontsize=10, margin="0.14,0.10", height=0.42];
 //   edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.6,
 //         fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
-//
+// 
 //   subgraph cluster_wrong {
 //     label     = "Wrong: fit before split";
 //     labelloc  = "t";
@@ -526,13 +508,13 @@ already "seen" the held-out data indirectly.
 //     fillcolor = "#FBE5E5";
 //     color     = "#D98C8C";
 //     margin    = 14;
-//
+// 
 //     all_data [label="All Data", fillcolor="#FFD1A6", color="#D9902B", fontcolor="#6B4517"];
 //     fit_all  [label="Fit scaler/imputer\non ALL rows", fillcolor="#FBC6C6", color="#D64545", fontcolor="#6B1F1F"];
 //     split_w  [label="Split", fillcolor="#FBC6C6", color="#D64545", fontcolor="#6B1F1F"];
 //     train_w  [label="Train", fillcolor="#F6C6C6", color="#D98C8C", fontcolor="#6B2A2A"];
 //     test_w   [label="Test\n(already leaked into)", fillcolor="#F6C6C6", color="#D98C8C", fontcolor="#6B2A2A"];
-//
+// 
 //     all_data -> fit_all -> split_w;
 //     split_w -> train_w;
 //     split_w -> test_w;
@@ -544,17 +526,14 @@ already "seen" the held-out data indirectly.
 // rendered_images:end
 // render_images:begin
 #figure(
-  image(
-    "Lesson02.3-ML_Techniques_Input_Processing.typ.figs/Lesson02.3-ML_Techniques_Input_Processing.3.png",
-  ),
-  caption: [Diagram relating Wrong: fit before split, All Data, Fit
-    scaler/imputer on ALL rows and Split],
+  image("Lesson02.3-ML_Techniques_Input_Processing.typ.figs/Lesson02.3-ML_Techniques_Input_Processing.3.png"),
+  caption: [Diagram relating Wrong: fit before split, All Data, Fit scaler/imputer on ALL rows and Split],
 ) <fig:fitontrainapplytovalidationandtest>
 // render_images:end
 
-@fig:fitontrainapplytovalidationandtest illustrates the incorrect workflow:
-fitting a scaler or imputer on all rows before splitting means the validation
-fold's own distribution has already shaped the transform.
+@fig:fitontrainapplytovalidationandtest shows the incorrect workflow: fitting
+a scaler or imputer on all rows before splitting means the validation fold's
+own distribution has already shaped the transform.
 
 The fix is straightforward: split first, then fit every transformer on the
 training fold only, and apply the already-fitted transformer to the validation
@@ -574,12 +553,12 @@ the held-out fold applies each one without refitting.
 //   nodesep=0.3;
 //   ranksep=0.4;
 //   rankdir=LR;
-//
+// 
 //   node [shape=box, style="rounded,filled", penwidth=1.5,
 //         fontname="Helvetica", fontsize=10, margin="0.14,0.10", height=0.42];
 //   edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.6,
 //         fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
-//
+// 
 //   subgraph cluster_correct {
 //     label     = "Correct: split before fit";
 //     labelloc  = "t";
@@ -590,14 +569,14 @@ the held-out fold applies each one without refitting.
 //     fillcolor = "#E5F4EE";
 //     color     = "#8FB79A";
 //     margin    = 14;
-//
+// 
 //     all_data2 [label="All Data", fillcolor="#FFD1A6", color="#D9902B", fontcolor="#6B4517"];
 //     split_c   [label="Split", fillcolor="#B7DDD0", color="#6FA890", fontcolor="#1F4E39"];
 //     train_c   [label="Train", fillcolor="#B2E2B2", color="#4F9A5C", fontcolor="#1F4E2E"];
 //     fit_c     [label="Fit scaler/imputer\non TRAIN only", fillcolor="#B2E2B2", color="#4F9A5C", fontcolor="#1F4E2E"];
 //     test_c    [label="Test", fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
 //     apply_c   [label="Apply fitted\ntransform", fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
-//
+// 
 //     all_data2 -> split_c;
 //     split_c -> train_c -> fit_c;
 //     split_c -> test_c -> apply_c;
@@ -610,11 +589,8 @@ the held-out fold applies each one without refitting.
 // rendered_images:end
 // render_images:begin
 #figure(
-  image(
-    "Lesson02.3-ML_Techniques_Input_Processing.typ.figs/Lesson02.3-ML_Techniques_Input_Processing.4.png",
-  ),
-  caption: [Diagram relating Correct: split before fit, All Data, Split and
-    Train],
+  image("Lesson02.3-ML_Techniques_Input_Processing.typ.figs/Lesson02.3-ML_Techniques_Input_Processing.4.png"),
+  caption: [Diagram relating Correct: split before fit, All Data, Split and Train],
 ) <fig:fitontrainapplytovalidationandtest-2>
 // render_images:end
 
@@ -624,7 +600,6 @@ into evaluation.
 
 // From: msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.smd:390 '* Data Augmentation'
 // Slide: Data Augmentation
-#strong[Data Augmentation]
 
 The goal of #strong[data augmentation] is to increase the effective size and
 diversity of a training dataset by applying label-preserving transformations to
