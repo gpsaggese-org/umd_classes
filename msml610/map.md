@@ -77,10 +77,13 @@ Lesson13.1-Explainability.smd
 
 # Workflow in short
 
-/slides.lint          01.2  01.3  01.4  02.1
-/slides.review        01.2  01.3  01.4  02.1
-/slides.add_visuals   01.2  01.3  01.4  02.1
-/slides.add_references 01.2 01.3  01.4
+/slides.review          02.1  02.2
+
+Edit
+
+/slides.add_visuals     02.1
+/slides.add_references  02.1
+/slides.lint            02.1
 
 Not needed
 /slides.fix_errors
@@ -88,21 +91,24 @@ Not needed
 /slides.fix_formatting
 /slides.add_tutorial_links
 
-> lint_text.py -i     01.2  01.3  0.14
+> lint_text.py          02.1
+> lint_text.py -i msml610/lectures_source/Lesson02.1*.smd
 
 > gen_slides.py -i msml610/01.3
 > grep "^* " msml610/lectures_source/*.smd | wc -l
+
+gen_book_chapter        02.1
 
 > gen_book_chapter.py msml610/01.2 --mode typst_aima --llm_backend hllm_cli
 gen_book_chapter.py  msml610/01.2 --mode typst_aima --llm_backend hllm_cli -v DEBUG --model claude-opus-4.5
 gen_book_chapter.py  msml610/01.2 --mode typst_aima --llm_backend hllm_cli_exec --model openrouter/anthropic/claude-opus-4.6 --no_incremental
 
-> compress_pdf.py     01.2  01.3  01.4
-
-> /text.humanize      01.2  01.3  01.4
-> review / edit book chapter
-
 > run_typst.py --input msml610/book/Lesson01.2-AI_and_Machine_Learning.typ
+
+> compress_pdf.py       02.1
+
+> /text.humanize        02.1
+> review / edit book chapter
 
 ### [ ] Add cc loop in gen_book_chapters
 - Instead of using an LLM use cc agent

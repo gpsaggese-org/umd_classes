@@ -14,17 +14,20 @@
 
 * Four Branches of Machine Learning
 
-- @Motivation@: a map orients you before the details, showing where a new
-  method fits, which tool suits a given problem, and what this course will
-  and will not cover
+- @Motivation@: A map orients you before the details, showing where a new method
+  fits, which tool suits a given problem, and what this course will and will not
+  cover
 
 ::: columns
 :::: {.column width=30%}
+
 - Machine Learning is a field with @many branches@
-  - @Paradigms@: how to set up learning
-  - @Models@: functional forms
-  - @Techniques@: algorithms and processes
-  - @Theory@: formal foundations
+  `#cite("burkov2019hundredpage")`{=typst}
+  - @Paradigms@: How to set up learning `#cite("russell2020aima")`{=typst}
+  - @Models@: Functional forms `#cite("hastie2009elements")`{=typst}
+  - @Techniques@: Algorithms and processes
+  - @Theory@: Formal foundations
+
 ::::
 :::: {.column width=70%}
 
@@ -68,7 +71,6 @@ mindmap
 * Learning Paradigms
 
 - @Question@: How do you set up the learning problem?
-
 ```graphviz[width=80%]
 digraph LearningParadigms {
   graph [rankdir=LR, splines=curved, bgcolor="transparent",
@@ -108,7 +110,6 @@ digraph LearningParadigms {
 * Model Families
 
 - @Question@: What functional form can a model take?
-
 ```graphviz[width=70%]
 digraph MLModelsTaxonomy {
   graph [rankdir=LR, splines=curved, bgcolor="transparent",
@@ -156,7 +157,7 @@ digraph MLModelsTaxonomy {
 
 - @Question@: What are the _stages_ and _common techniques_ used in a ML pipeline?
   - @Input processing@
-    - Data cleaning, Dimensionality reduction, Feature engineering, ...
+    - Data cleaning, Dimensionality reduction, Feature engineering,
   - @Model building@
     - Choosing a model / functional form for the hypothesis
     - Learning algorithms
@@ -166,8 +167,8 @@ digraph MLModelsTaxonomy {
     - Bias-variance curves, Learning curves
   - @Regularization@
   - @Aggregation@
-    - Boosting, Bagging, Stacking, ...
-
+    - Boosting `#cite("freundschapire1997boosting")`{=typst}, Bagging
+      `#cite("breiman1996bagging")`{=typst}, Stacking,
 ```graphviz
 digraph MLPipeline {
   bgcolor="transparent";
@@ -208,39 +209,49 @@ digraph MLPipeline {
 ```
 
 * Theoretical Foundations
+
 - @Question@: What is the theoretical basis that underpins machine learning and its
   common phenomena?
-  - @VC theory@
+  - @VC theory@ `#cite("vapnikchervonenkis1971uniform")`{=typst}
     - Measure model _"capacity"_ based on hypothesis space complexity
-  - @Bias-variance decomposition@
+  - @Bias-variance decomposition@ `#cite("geman1992biasvariance")`{=typst}
     - Prediction error decomposes as: $Error = Bias^2 + Variance + \sigma^2$
       - _Bias_: Error from simplistic model assumptions
       - _Variance_: Error due to sensitivity to training data fluctuations
-      - _Irreducible noise_ ($\sigma^2$): Inherent randomness in the data,
-        not reducible by any model
-  - @Description length@
+      - _Irreducible noise_ ($\sigma^2$): Inherent randomness in the data, not
+        reducible by any model
+  - @Description length@ `#cite("rissanen1978mdl")`{=typst}
     - Related to information theory and compression
       - E.g., _Minimum Description Length (MDL)_ measures model complexity via
         efficient model and data description
-  - @Bayesian approach@
+  - @Bayesian approach@ `#cite("bishop2006prml")`{=typst}
     - Treat ML as probability
     - Combine prior knowledge with observed data to update belief
 
-- @Remark@: a common problem in ML theory is that assumptions may not align with
+- @Remark@: A common problem in ML theory is that assumptions may not align with
   practical problems
 
 * Adages of Machine Learning
 
 - Adages summarize folklore / common phenomena in machine learning
-  - _"An explanation of the data should be as simple as possible, but not
-    simpler"_ (Einstein)
+  - _"An explanation of the data should be as simple as possible, but not simpler"_
+    (Einstein)
   - _"The simplest model that fits the data is also the most plausible"_ (Occam's
     razor)
   - _"Garbage in, garbage out"_ (Fuechse, 1957)
   - _"All models are wrong, but some are useful"_ (Box, 1976)
+    `#cite("box1976science")`{=typst}
   - _"If you torture the data long enough it will confess whatever you want"_
     (Coase, 1982)
   - _"Data is the new oil"_ (Humby, 2006)
   - _"More data beats clever algorithms"_ (Norvig, 2006)
   - _"The unreasonable effectiveness of data"_ (Halevy, Norvig, Pereira, 2009)
-  - _"The bitter lesson"_ (Sutton, 2019)
+    `#cite("halevy2009unreasonable")`{=typst}
+  - _"The bitter lesson"_ (Sutton, 2019) `#cite("sutton2019bitterlesson")`{=typst}
+
+* References
+
+```{=typst}
+#set text(size: 0.75em)
+#references("/msml610/lectures_source/refs.bib")
+```
