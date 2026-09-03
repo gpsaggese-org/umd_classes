@@ -15,16 +15,15 @@
 * A Map of Machine Learning
 
 ::: columns
-:::: {.column width=20%}
+:::: {.column width=30%}
 - Machine Learning is a field with @many branches@
-  - @Paradigms@
-  - @Theory@
-  - @Models@
-  - @Techniques@
+  - @Paradigms@: how to set up learning
+  - @Theory@: formal foundations
+  - @Models@: functional forms
+  - @Techniques@: algorithms and processes
 ::::
-:::: {.column width=80%}
+:::: {.column width=70%}
 
-// TODO(ai_gp): Use the style from the .claude/skills/visuals.rules.md
 ```mermaid
 mindmap
   root((**Machine Learning**))
@@ -97,24 +96,26 @@ mindmap
     - Treat ML as probability
     - Combine prior knowledge with observed data to update belief
 
-- @Common problem in ML theory@
-  - Assumptions may not align with practical problems
+- @Remark@: a common problem in ML theory is that assumptions may not align with
+  practical problems
 
 * Machine Learning Models
+
 - @Question@: What functional form can a model take?
 
-    - Linear models
-    - Generalized linear models
-      - E.g., logistic regression, Poisson regression
-    - Support Vector Machines (SVM)
-    - Nearest neighbors
-      - E.g., k-means clustering, KNN
-    - Gaussian processes
-    - Graphical models
-      - Model joint distributions with graphs
-      - E.g., hidden Markov models (HMM), Kalman filters, Bayesian networks
-    - Neural networks
-    - ..
+- @Variants@:
+  - Linear models
+  - Generalized linear models
+    - E.g., logistic regression, Poisson regression
+  - Support Vector Machines (SVM)
+  - Nearest neighbors
+    - E.g., k-means clustering, KNN
+  - Gaussian processes
+  - Graphical models
+    - Model joint distributions with graphs
+    - E.g., hidden Markov models (HMM), Kalman filters, Bayesian networks
+  - Neural networks
+  - ..
 
 * Machine Learning Techniques
 - @Question@: What are the _stages_ and _common techniques_ used in a ML pipeline?
@@ -136,9 +137,9 @@ mindmap
     - Bagging
     - Stacking
 
-* Machine Learning Adages
+* Some machine Learning Adages
 
-- Summarize common phenomena in machine learning
+- Adages summarize folklore / common phenomena in machine learning
   - _"An explanation of the data should be as simple as possible, but not
     simpler"_ (Einstein)
   - _"The simplest model that fits the data is also the most plausible"_ (Occam's
