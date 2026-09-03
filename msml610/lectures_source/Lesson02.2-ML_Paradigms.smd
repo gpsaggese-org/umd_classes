@@ -19,9 +19,10 @@
   - @Reinforcement Learning@
     - Learn through _interaction with an environment_, receiving rewards/punishments
     - E.g., deep Q-Learning for playing Atari games
+      `#cite("mnih2015dqn")`{=typst}
   - @Self-Supervised Learning@
     - Generate _pseudo-labels from unlabeled data_ to pre-train models
-    - E.g., BERT (Masked Language Modeling)
+    - E.g., BERT (Masked Language Modeling) `#cite("devlin2019bert")`{=typst}
   - @Semi-Supervised Learning@
     - Combine _small labeled data with large unlabeled data_ to improve performance
     - E.g., named entity recognition (NER) using annotated sentences with entity tags
@@ -40,21 +41,23 @@
 - @Meta-Learning@
   - _"Learning to learn"_: Adapt quickly to new tasks using prior experience
   - E.g., a model can be fine-tuned quickly on a new task using just a few gradient
-    steps
+    steps `#cite("finn2017maml")`{=typst}
 
 - @Zero-Shot / Few-Shot Learning@
   - Generalize to new tasks with _no or few labeled examples_
   - E.g., GPT-4 solving tasks with zero-shot prompting
+    `#cite("openai2023gpt4")`{=typst}
 
 - @Active Learning@
   - The _model selects_ the most informative samples to be labeled by an oracle
-    (e.g., a human)
+    (e.g., a human) `#cite("settles2009survey")`{=typst}
   - E.g., pick samples where the model is least confident to get more examples
 
 * Machine Learning Paradigms: Examples (3/3)
 
 - @Federated Learning@
   - Train models _across decentralized devices_ without sharing raw data
+    `#cite("mcmahan2017federated")`{=typst}
   - E.g., fraud detection or credit scoring across banks
 
 - @Evolutionary Learning@
@@ -64,19 +67,21 @@
 
 - @Curriculum Learning@
   - Train models on easier tasks first, _gradually increasing difficulty_
+    `#cite("bengio2009curriculum")`{=typst}
   - E.g., training in robotic control simulations
 
 - @Multi-Agent Learning@
   - _Multiple agents_ learn and interact in shared environments, often in
     game-theoretic settings (e.g., competition, collaboration)
   - E.g., AlphaStar to play StarCraft II
+    `#cite("vinyals2019alphastar")`{=typst}
 
 ## The Three Core Paradigms
 
 * Supervised Learning
 
 - @Definition@: **Supervised learning** learns a function $f: X \to Y$ that maps
-  inputs to correct outputs
+  inputs to correct outputs `#cite("mitchell1997machinelearning")`{=typst}
   - Training examples $(\vx, y)$ with pairs of inputs and correct outputs
   - Requires labeled data $y_i$ for training
   - Measure performance with error on a separate test set
@@ -114,12 +119,12 @@
     - E.g., market basket analysis (e.g., "people who buy X also buy Y")
 
 - @Algorithms@
-  - K-means, PCA, Autoencoders
+  - K-means `#cite("macqueen1967kmeans")`{=typst}, PCA, Autoencoders
 
 * Reinforcement Learning
 
 - @Definition@: RL learns by _interacting with an environment_ to _maximize
-  cumulative reward_
+  cumulative reward_ `#cite("suttonbarto2018rlbook")`{=typst}
   - Learn policy $\pi(s) \to a$ that maximizes expected reward
   - Trade-off between exploration (trying new actions) and exploitation (using known
     good actions)
@@ -172,7 +177,7 @@ digraph BayesianFlow {
 
 - @Applications@
   - **Game playing**: Learn strategies through trial and error
-    - E.g., AlphaGo mastering the game of Go
+    - E.g., AlphaGo mastering the game of Go `#cite("silver2016alphago")`{=typst}
   - **Robotics**: Learn control policies for movement and manipulation
   - **Autonomous driving**: Learn safe and efficient driving behaviors
   - **Resource management**: Optimize allocation of limited resources over time
@@ -265,7 +270,7 @@ digraph BayesianFlow {
   - Gap between a well-tuned generic model and the best specialized model is often
     small compared to more / better data
   - _"It's not who has the best algorithm that wins. It's who has the most data"_
-    (Banko and Brill, 2001)
+    `#cite("banko2001data")`{=typst}
   - _"Every time I fire a linguist, the performance of the speech recognizer goes
     up"_ (IBM researcher in speech recognition)
 
@@ -409,19 +414,20 @@ digraph BayesianFlow {
   - The component whose oracle gives the largest jump in end-to-end performance is
     the highest-value target for further work
   - Measure, don't guess!
-    - "Premature optimizations are the root of all evil" (Knuth, 1974)
+    - "Premature optimizations are the root of all evil"
+      `#cite("knuth1974premature")`{=typst}
 
 * Ceiling Analysis for ML Pipeline: OCT Example
 
 ::: columns
-:::: {.column width=50%}
+:::: {.column width=30%}
 
 - @Example@: OCR pipeline, baseline accuracy 72%
   - Text detection is the highest-value target: Perfecting it alone accounts for most
     of the achievable gain
 
-:::: {.column width=50%}
 ::::
+:::: {.column width=70%}
 
 ```{=typst}
 #styled-table(
@@ -432,9 +438,15 @@ digraph BayesianFlow {
     ("+ Char. segmentation", "90%", "+1%"),
     ("+ Char. classification", "100%", "+10%"),
   ),
-  caption: "Ceiling analysis on the OCR pipeline",
 )
 ```
 
 ::::
-::
+:::
+
+* References
+
+```{=typst}
+#set text(size: 0.75em)
+#references("/msml610/lectures_source/refs.bib")
+```
