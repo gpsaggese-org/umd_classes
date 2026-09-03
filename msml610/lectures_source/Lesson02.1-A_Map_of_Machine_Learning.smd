@@ -12,94 +12,100 @@
 
 # A Map of Machine Learning
 
-* A Map of Machine Learning
+* Four Branches of Machine Learning
+
+- @Motivation@: a map orients you before the details, showing where a new
+  method fits, which tool suits a given problem, and what this course will
+  and will not cover
 
 ::: columns
 :::: {.column width=30%}
 - Machine Learning is a field with @many branches@
   - @Paradigms@: how to set up learning
-  - @Theory@: formal foundations
   - @Models@: functional forms
   - @Techniques@: algorithms and processes
+  - @Theory@: formal foundations
 ::::
 :::: {.column width=70%}
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#EEEDFE', 'primaryBorderColor': '#7F77DD', 'primaryTextColor': '#26215C', 'lineColor': '#888888', 'fontFamily': 'Helvetica'}}}%%
 mindmap
   root((**Machine Learning**))
     (**Paradigms**)
       Supervised
       Unsupervised
+      Self-supervised
+      Semi-supervised
       RL
       Active
       Online
-    (**Theory**)
-      VC theory
-      Bias-variance decomposition
-      MDL
-      Bayesian
     (**Models**)
       Linear
       GLM
       Neural networks
       KNN
       SVM
+      Gaussian processes
       Graphical models
     (**Techniques**)
-      Pre-processing
+      Input processing
       Model building
       Performance evaluation
+      Diagnostic
       Regularization
-      Ensemble learning
+      Aggregation
+    (**Theory**)
+      VC theory
+      Bias-variance decomposition
+      Description length
+      Bayesian
 ```
 
 ::::
 :::
 
-* Machine Learning Paradigms
+* Learning Paradigms
+
 - @Question@: How do you set up the learning problem?
 
-  - @Supervised learning@
-    - The dataset includes inputs with corresponding outputs
-    - Develop an input-output relationship
+```graphviz[width=80%]
+digraph LearningParadigms {
+  graph [rankdir=LR, splines=curved, bgcolor="transparent",
+         ranksep="1.0 equally", nodesep=0.24, pad=0.3, fontname="Helvetica"];
+  node  [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12,
+         fontcolor="#26215C", color="#D8D6EE", penwidth=1.2,
+         height=0.46, margin="0.18,0.09"];
+  edge  [arrowhead=none, penwidth=1.4, color="#B9B6D6"];
 
-  - @Unsupervised learning@
-    - The data is unlabeled, discover structure within the data
-    - E.g., anomaly detection, clustering
+  root [label="Learning Paradigms", shape=box, style="rounded,filled",
+        fillcolor="#26215C", fontcolor="white", fontsize=14, penwidth=0,
+        margin="0.26,0.16"];
 
-  - @Reinforcement learning@
-    - The correct answer is not immediately available
-    - Evaluate actions based on final outcomes
+  // Label availability - violet
+  label_avail [label="Label Availability", fillcolor="white", color="#7C74D6", fontcolor="#45296B", penwidth=1.6, fontsize=12];
+  supervised   [label=<<b>Supervised</b><br/><font point-size="9" color="#45296B">Labeled input-output pairs</font>>, fillcolor="#EFEDFC", color="#CBC7F0", fontcolor="#45296B"];
+  unsupervised [label=<<b>Unsupervised</b><br/><font point-size="9" color="#45296B">Unlabeled data, discover structure</font>>, fillcolor="#EFEDFC", color="#CBC7F0", fontcolor="#45296B"];
+  selfsup      [label=<<b>Self-supervised</b><br/><font point-size="9" color="#45296B">Labels derived from data</font>>, fillcolor="#EFEDFC", color="#CBC7F0", fontcolor="#45296B"];
+  semisup      [label=<<b>Semi-supervised</b><br/><font point-size="9" color="#45296B">Mixed labeled + unlabeled</font>>, fillcolor="#EFEDFC", color="#CBC7F0", fontcolor="#45296B"];
 
-  - @Active learning@
-    - Not all examples are available initially
-    - Request outputs for specific inputs
+  // Interactive - blue
+  interactive  [label="Interactive/Sequential", fillcolor="white", color="#3E86C8", fontcolor="#1F4E79", penwidth=1.6, fontsize=12];
+  rl           [label=<<b>Reinforcement</b><br/><font point-size="9" color="#1F4E79">Learn from delayed rewards</font>>, fillcolor="#E8F1FB", color="#BFD8F1", fontcolor="#1F4E79"];
+  active       [label=<<b>Active Learning</b><br/><font point-size="9" color="#1F4E79">Request labels on demand</font>>, fillcolor="#E8F1FB", color="#BFD8F1", fontcolor="#1F4E79"];
+  online       [label=<<b>Online Learning</b><br/><font point-size="9" color="#1F4E79">Sequential data, incremental update</font>>, fillcolor="#E8F1FB", color="#BFD8F1", fontcolor="#1F4E79"];
 
-* Machine Learning Theory
-- @Question@: What is the theoretical basis that underpins machine learning and its
-  common phenomena?
+  root -> label_avail [color="#7C74D6", penwidth=2.0];
+  root -> interactive [color="#3E86C8", penwidth=2.0];
 
-  - @VC theory@
-    - Measure model _"capacity"_ based on hypothesis space complexity
+  label_avail -> {supervised unsupervised selfsup semisup} [color="#A9A3E6"];
+  interactive -> {rl active online}                        [color="#8FB6DE"];
 
-  - @Bias-variance decomposition@
-    - Prediction error is the sum of:
-      - _Bias_: Error from simplistic model assumptions
-      - _Variance_: Error due to sensitivity to training data fluctuations
+  { rank=same; supervised; unsupervised; selfsup; semisup; rl; active; online; }
+}
+```
 
-  - @Computation complexity@
-    - Related to information theory and compression
-      - E.g., _Minimum Description Length (MDL)_ measures model complexity via
-        efficient model and data description
-
-  - @Bayesian approach@
-    - Treat ML as probability
-    - Combine prior knowledge with observed data to update belief
-
-- @Remark@: a common problem in ML theory is that assumptions may not align with
-  practical problems
-
-* Machine Learning Models
+* Model Families
 
 - @Question@: What functional form can a model take?
 
@@ -124,7 +130,7 @@ digraph MLModelsTaxonomy {
 
   // Non-parametric - blue
   nonparam   [label="Non-parametric", fillcolor="white", color="#3E86C8", fontcolor="#1F4E79", penwidth=1.6, fontsize=12];
-  knn        [label=<<b>Nearest neighbors</b><br/><font point-size="9" color="#1F4E79">KNN, k-means, non-linear</font>>, fillcolor="#E8F1FB", color="#BFD8F1", fontcolor="#1F4E79"];
+  knn        [label=<<b>Nearest neighbors</b><br/><font point-size="9" color="#1F4E79">KNN, non-linear</font>>, fillcolor="#E8F1FB", color="#BFD8F1", fontcolor="#1F4E79"];
   svm        [label=<<b>SVM</b><br/><font point-size="9" color="#1F4E79">Kernelized, non-linear</font>>, fillcolor="#E8F1FB", color="#BFD8F1", fontcolor="#1F4E79"];
   gp         [label=<<b>Gaussian processes</b><br/><font point-size="9" color="#1F4E79">Non-linear, probabilistic</font>>, fillcolor="#E8F1FB", color="#BFD8F1", fontcolor="#1F4E79"];
 
@@ -146,7 +152,7 @@ digraph MLModelsTaxonomy {
 }
 ```
 
-* Machine Learning Techniques
+* Stages of an ML Pipeline
 
 - @Question@: What are the _stages_ and _common techniques_ used in a ML pipeline?
   - @Input processing@
@@ -201,7 +207,29 @@ digraph MLPipeline {
 }
 ```
 
-* Some machine Learning Adages
+* Theoretical Foundations
+- @Question@: What is the theoretical basis that underpins machine learning and its
+  common phenomena?
+  - @VC theory@
+    - Measure model _"capacity"_ based on hypothesis space complexity
+  - @Bias-variance decomposition@
+    - Prediction error decomposes as: $Error = Bias^2 + Variance + \sigma^2$
+      - _Bias_: Error from simplistic model assumptions
+      - _Variance_: Error due to sensitivity to training data fluctuations
+      - _Irreducible noise_ ($\sigma^2$): Inherent randomness in the data,
+        not reducible by any model
+  - @Description length@
+    - Related to information theory and compression
+      - E.g., _Minimum Description Length (MDL)_ measures model complexity via
+        efficient model and data description
+  - @Bayesian approach@
+    - Treat ML as probability
+    - Combine prior knowledge with observed data to update belief
+
+- @Remark@: a common problem in ML theory is that assumptions may not align with
+  practical problems
+
+* Adages of Machine Learning
 
 - Adages summarize folklore / common phenomena in machine learning
   - _"An explanation of the data should be as simple as possible, but not
