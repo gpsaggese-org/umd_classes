@@ -140,14 +140,14 @@ WARNING: Can't find s3fs: continuing
 
 # Workflow in short
 
-/slides.review          02.1  02.2
+/slides.review          02.1  02.2  02.3
 
 Edit slides
 
-/slides.add_visuals     02.1  02.2
-/slides.add_references  02.1  02.2
-/slides.lint            02.1  02.2
-/slides.
+/slides.add_visuals     02.1  02.2  02.3
+/slides.add_references  02.1  02.2  .
+/slides.lint            02.1  02.2  .
+/slides.fix_rendered_pdf            02.3
 
 Not needed
 /slides.fix_errors
@@ -162,10 +162,8 @@ Not needed
 > grep "^* " msml610/lectures_source/*.smd | wc -l
 
 gen_book_chapter        02.1
-
-> gen_book_chapter.py msml610/01.2 --mode typst_aima --llm_backend hllm_cli
-gen_book_chapter.py  msml610/01.2 --mode typst_aima --llm_backend hllm_cli -v DEBUG --model claude-opus-4.5
-gen_book_chapter.py  msml610/01.2 --mode typst_aima --llm_backend hllm_cli_exec --model openrouter/anthropic/claude-opus-4.6 --no_incremental
+gen_book_chapter.py -i msml610/01.2 --mode typst_aima --llm_backend hllm_cli -v DEBUG --model claude-opus-4.5
+gen_book_chapter.py -i msml610/01.2 --mode typst_aima --llm_backend hllm_cli_exec --model openrouter/anthropic/claude-opus-4.6 --no_incremental
 
 > run_typst.py --input msml610/book/Lesson01.2-AI_and_Machine_Learning.typ
 
