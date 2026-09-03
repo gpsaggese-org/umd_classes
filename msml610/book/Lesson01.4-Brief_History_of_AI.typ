@@ -1,7 +1,7 @@
 // git_hash=1cac7b548-ejw timestamp=20260901_163554
 // Import AIMA style formatting and macros.
 #import "/helpers_root/dev_scripts_helpers/typst/aima_style.typ": (
-  aima-style, algorithm, chapter, glossary, styled-table, wrap-content,
+  aima-style, chapter, styled-table, wrap-content,
 )
 // Import the custom citation/bibliography system.
 #import "/helpers_root/dev_scripts_helpers/typst/umd_references.typ": (
@@ -21,18 +21,16 @@
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:11 '# Brief History of AI'
 // Slide: Brief History of AI
-// Note: no body-level heading here; #chapter(...) above already carries the
-// document's top-level title.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:13 '## Origins and Early AI (1943-1990)'
 // Slide: Origins and Early AI (1943-1990)
-== Origins and Early AI (1943-1990)
+= Origins and Early AI (1943-1990)
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:15 '* AI Timeline'
 // Slide: AI Timeline
 
-The timeline diagram you provided illustrates the evolution of artificial
-intelligence (AI) from its inception to the present and into the future. Each
+The timeline diagram provided illustrates the evolution of artificial
+intelligence (AI) from its inception to the present. Each
 milestone is marked along a diagonal line, with significant events and periods
 in AI development annotated at various points. Here's a breakdown of the key
 phases and events depicted in the timeline:
@@ -86,12 +84,21 @@ both the technological advancements and the challenges faced along the way. Each
 phase represents a significant shift in focus and capability, reflecting the
 dynamic nature of AI research and development.
 
-// TODO(ai_gp): Add the figure with the timeline from the corresponding smd
-// file in msml610/lectures_source
+#figure(
+  image(
+    "Lesson01.4-Brief_History_of_AI.typ.figs/Lesson01.4-Brief_History_of_AI.1.png",
+    width: 100%,
+  ),
+  caption: [Milestones in the history of AI, from the McCulloch-Pitts neuron
+    (1943) to the present.],
+  kind: "figure",
+  supplement: [Fig.],
+  placement: auto,
+) <fig:aitimeline>
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:177 '* The Beginning (1943-1956)'
 // Slide: The Beginning (1943-1956)
-#strong[The Beginning (1943-1956)]
+== The Beginning (1943-1956)
 
 #strong[Artificial neuron] models, introduced by McCulloch and Pitts in 1943
 #cite("mcculloch1943logical"), are inspired by both brain physiology and
@@ -145,7 +152,7 @@ calculations.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:208 '* Enthusiasm and Great Expectations (1952-1969)'
 // Slide: Enthusiasm and Great Expectations (1952-1969)
-#strong[Enthusiasm and Great Expectations (1952-1969)]
+== Enthusiasm and Great Expectations (1952-1969)
 
 The early years of artificial intelligence (AI) were marked by significant
 achievements. Initially, computers were limited to performing arithmetic
@@ -199,7 +206,7 @@ and symbolic processing.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:238 '* First AI Winter (1975-1980)'
 // Slide: First AI Winter (1975-1980)
-#strong[First AI Winter (1975-1980)]
+== First AI Winter (1975-1980)
 
 Early successes in artificial intelligence (AI) led to high expectations for the
 field. However, between 1965 and 1975, AI struggled to address #strong[real
@@ -221,7 +228,7 @@ progress in AI slowed considerably through the late 1970s.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:254 '* Expert Systems (1980-1990)'
 // Slide: Expert Systems (1980-1990)
-#strong[Expert Systems (1980-1990)]
+== Expert Systems (1980-1990)
 
 #strong[Expert systems], also known as "knowledge-based systems," are a class of
 artificial intelligence that combines #emph[weak methods] with #emph[extensive
@@ -242,7 +249,7 @@ industry.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:310 '* Second AI Winter (late 1980-early 1990)'
 // Slide: Second AI Winter (late 1980-early 1990)
-#strong[Second AI Winter (late 1980-early 1990)]
+== Second AI Winter (late 1980-early 1990)
 
 The initial excitement surrounding expert systems was immense, but they
 ultimately failed to meet expectations. This shortfall can be attributed to
@@ -268,11 +275,11 @@ technologies led to reduced funding and interest in AI research and development.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:324 '## The Statistical Turn (1986-2000s)'
 // Slide: The Statistical Turn (1986-2000s)
-== The Statistical Turn (1986-2000s)
+= The Statistical Turn (1986-2000s)
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:326 '* Return of Neural Networks (1986-)'
 // Slide: Return of Neural Networks (1986-)
-#strong[Return of Neural Networks (1986-)]
+== Return of Neural Networks (1986-)
 
 The #emph[back-propagation algorithm] was (re)discovered in the mid-1980s,
 marking a significant advancement in the field of artificial intelligence. This
@@ -304,7 +311,7 @@ data.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:344 '* Probabilistic Reasoning and ML (1987-)'
 // Slide: Probabilistic Reasoning and ML (1987-)
-#strong[Probabilistic Reasoning and ML (1987-)]
+== Probabilistic Reasoning and ML (1987-)
 
 The integration of artificial intelligence with the scientific method emphasizes
 the use of rigorous methods to evaluate performance. This approach is evident in
@@ -325,7 +332,7 @@ in AI.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:377 '* Speech Recognition: From Rules to Statistics'
 // Slide: Speech Recognition: From Rules to Statistics
-#strong[Speech Recognition: From Rules to Statistics]
+== Speech Recognition: From Rules to Statistics
 
 In the 1970s, the field of artificial intelligence saw the development of
 several ad-hoc approaches, particularly in the realm of rule-based systems.
@@ -357,7 +364,7 @@ performance without the need for extensive manual intervention.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:395 '* Bayesian Networks (1988-)'
 // Slide: Bayesian Networks (1988-)
-#strong[Bayesian Networks (1988-)]
+== Bayesian Networks (1988-)
 
 Bayesian networks, as introduced by Judea Pearl in 1988 #cite(
   "pearl1988probabilistic",
@@ -398,7 +405,7 @@ patterns to identify potentially fraudulent activities.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:420 '* Reinforcement Learning (1988-)'
 // Slide: Reinforcement Learning (1988-)
-#strong[Reinforcement Learning (1988-)]
+== Reinforcement Learning (1988-)
 
 #strong[Reinforcement learning], as introduced by Sutton in 1988 #cite(
   "sutton1988td",
@@ -438,7 +445,7 @@ executing strategies that maximize the likelihood of achieving desired outcomes.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:441 '* Reunification (1990s-2000s)'
 // Slide: Reunification (1990s-2000s)
-#strong[Reunification (1990s-2000s)]
+== Reunification (1990s-2000s)
 
 As @fig:reunification1990s2000s shows, the diagram relates
 #strong[Reunification] to its #strong[Contributing fields] and
@@ -446,7 +453,7 @@ As @fig:reunification1990s2000s shows, the diagram relates
 
 #figure(
   image(
-    "Lesson01.4-Brief_History_of_AI.typ.figs/Lesson01.4-Brief_History_of_AI.1.png",
+    "Lesson01.4-Brief_History_of_AI.typ.figs/Lesson01.4-Brief_History_of_AI.2.png",
     width: 70%,
   ),
   caption: [Fields that converged into the reunified AI research agenda.],
@@ -457,11 +464,11 @@ As @fig:reunification1990s2000s shows, the diagram relates
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:460 '## Modern AI (2001-Present)'
 // Slide: Modern AI (2001-Present)
-== Modern AI (2001-Present)
+= Modern AI (2001-Present)
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:462 '* Big Data (2001-Present)'
 // Slide: Big Data (2001-Present)
-#strong[Big Data (2001-Present)]
+== Big Data (2001-Present)
 
 The focus in artificial intelligence has shifted significantly from algorithms
 to data. For the past 60 years, the primary emphasis in AI was on developing
@@ -515,7 +522,7 @@ amounts of information to outperform human experts in specific tasks.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:492 '* Deep Learning (2011-Present)'
 // Slide: Deep Learning (2011-Present)
-#strong[Deep Learning (2011-Present)]
+== Deep Learning (2011-Present)
 
 Deep learning refers to machine learning models that consist of multiple layers
 of computing elements, allowing them to learn complex patterns in data. Although
@@ -530,7 +537,7 @@ classification performance.
 
 #figure(
   image(
-    "Lesson01.4-Brief_History_of_AI.typ.figs/Lesson01.4-Brief_History_of_AI.2.png",
+    "Lesson01.4-Brief_History_of_AI.typ.figs/Lesson01.4-Brief_History_of_AI.3.png",
     width: 70%,
   ),
   caption: [How deep learning replaces handcrafted features with learned
@@ -558,7 +565,7 @@ speech.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:570 '* Progress in AI Research'
 // Slide: Progress in AI Research
-#strong[Progress in AI Research]
+== Progress in AI Research
 
 The field of deep learning has seen a surge in interest, driven by significant
 advancements in computational capabilities and algorithmic innovations. This
@@ -598,7 +605,7 @@ the anticipated continued growth and evolution of AI capabilities.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:592 '* What Can AI Do Today? (1/2)'
 // Slide: What Can AI Do Today? (1/2)
-#strong[What Can AI Do Today? (1/2)]
+== What Can AI Do Today? (1/2)
 
 Robotic vehicles have made significant strides, with Waymo's driverless fleet
 achieving remarkable milestones. The fleet has logged far more miles than its
@@ -689,7 +696,7 @@ personalized content, improving user engagement and satisfaction.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:629 '* What Can AI Do Today? (2/2)'
 // Slide: What Can AI Do Today? (2/2)
-#strong[What Can AI Do Today? (2/2)]
+== What Can AI Do Today? (2/2)
 
 The history of AI in game playing is marked by several significant milestones.
 In 1997, IBM's Deep Blue made headlines by defeating world chess champion Garry
@@ -769,7 +776,7 @@ range of tasks, akin to human intelligence.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:662 '* The AI Hype Cycle'
 // Slide: The AI Hype Cycle
-#strong[The AI Hype Cycle]
+== The AI Hype Cycle
 
 Enthusiasm for artificial intelligence has not grown steadily over the years;
 instead, it has experienced cycles of boom and bust. Historically, there have
@@ -790,11 +797,11 @@ periods of disillusionment.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:713 '# Risks and Benefits of AI'
 // Slide: Risks and Benefits of AI
-#strong[Risks and Benefits of AI]
+== Risks and Benefits of AI
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:715 '* Benefits of AI'
 // Slide: Benefits of AI
-#strong[Benefits of AI]
+== Benefits of AI
 
 #emph[Human intelligence] has been the driving force behind the development of our
 civilization. As we advance towards greater machine intelligence, we anticipate
@@ -834,7 +841,7 @@ sustainable and prosperous future for all.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:736 '* Risks of AI (1/2)'
 // Slide: Risks of AI (1/2)
-#strong[Risks of AI (1/2)]
+== Risks of AI (1/2)
 
 The development of #emph[autonomous weapons] raises significant ethical and
 strategic concerns. These systems are designed to locate and eliminate targets
@@ -911,7 +918,7 @@ cat-and-mouse game between cybersecurity experts and malicious actors.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:767 '* Risks of AI (2/2)'
 // Slide: Risks of AI (2/2)
-#strong[Risks of AI (2/2)]
+== Risks of AI (2/2)
 
 The impact of machines on employment is a multifaceted issue. On one hand,
 machines have the potential to eliminate jobs by automating tasks previously
@@ -935,7 +942,7 @@ ensure safety and reliability.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:786 '* Human-Level AI (AGI)'
 // Slide: Human-Level AI (AGI)
-#strong[Human-Level AI (AGI)]
+== Human-Level AI (AGI)
 
 The concept of #strong[Human-level AI], also known as #strong[Artificial General
   Intelligence] (AGI), refers to machines that can learn to perform any task
@@ -960,7 +967,7 @@ surpasses human intelligence and is self-improving.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:838 '* The Problem of Control'
 // Slide: The Problem of Control
-#strong[The Problem of Control]
+== The Problem of Control
 
 Can humans control machines more intelligent than themselves? This question
 raises significant concerns about the potential risks and challenges associated
@@ -992,7 +999,7 @@ for AI systems.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:857 '* Solutions to Problem of Control'
 // Slide: Solutions to Problem of Control
-#strong[Solutions to Problem of Control]
+== Solutions to Problem of Control
 
 The #strong[checks-and-balances] approach is a naive solution to AI governance.
 It relies on researchers and corporations to develop voluntary self-governance
@@ -1017,7 +1024,7 @@ cooperation and alignment between AI systems and their human users.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:874 '* Cooperative Inverse Reinforcement Learning'
 // Slide: Cooperative Inverse Reinforcement Learning
-#strong[Cooperative Inverse Reinforcement Learning]
+== Cooperative Inverse Reinforcement Learning
 
 AI systems can infer human goals by observing actions and behaviors. For
 instance, consider a scenario where an AI observes a person, GP, who appears
@@ -1040,7 +1047,7 @@ reaction).
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:930 '* E/acc vs P(doom)'
 // Slide: E/acc vs P(doom)
-#strong[E/acc vs P(doom)]
+== E/acc vs P(doom)
 
 Accelerationism, often abbreviated as #emph[e/acc], is the belief that rapid
 progress in artificial intelligence is either beneficial or inevitable.
@@ -1055,7 +1062,7 @@ framework for discussing potential dangers.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:956 '* My 2 Cents'
 // Slide: My 2 Cents
-#strong[My 2 Cents]
+== My 2 Cents
 
 AI alignment is a pressing issue that, while currently philosophical, is
 expected to become a tangible challenge in the future. Many in the tech industry
@@ -1080,9 +1087,11 @@ and their companies rather than addressing the core issues.
   columns: (1fr, 30%),
 )[
   Our ability to predict the future is notably poor, as illustrated by resources
-  like [Paleofuture](https://paleofuture.com/) and the
-  [Elon-O-Meter](https://elonmusk.today/). These examples highlight the frequent
-  inaccuracies in our forecasts. As shown in @fig:windowsfailure, even our
+  like #underline(text(fill: blue)[#link("https://paleofuture.com/")[Paleofuture]])
+  and the
+  #underline(text(fill: blue)[#link("https://elonmusk.today/")[Elon-O-Meter]]).
+  These examples highlight the frequent inaccuracies in our forecasts. As shown
+  in @fig:windowsfailure, even our
   current technological systems are prone to unexpected failures, underscoring
   the difficulty of making accurate predictions.
 ]
@@ -1112,7 +1121,7 @@ and their companies rather than addressing the core issues.
 
 // From: msml610/lectures_source/Lesson01.4-Brief_History_of_AI.smd:983 '* References'
 // Slide: References
-#strong[References]
+= References
 
 #set text(size: 0.75em)
 #references("/msml610/lectures_source/refs.bib")

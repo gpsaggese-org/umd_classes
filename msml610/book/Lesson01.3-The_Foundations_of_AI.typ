@@ -266,7 +266,6 @@ structure of desires and preferences that make such maximization coherent.
   uncertainty.
 ]
 
-
 A harder question arises when payoffs depend not on a single choice but on a
 #emph[sequence of actions]. #strong[Operations research] tackles exactly
 this setting: finding rational plans whose value accumulates over multiple
