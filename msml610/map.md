@@ -155,21 +155,22 @@ Not needed
 /slides.fix_formatting
 /slides.add_tutorial_links
 
-> lint_text.py          02.1
+> lint_text.py          02.1        02.3
 > lint_text.py -i msml610/lectures_source/Lesson02.1*.smd
 
 > gen_slides.py -i msml610/01.3
 > grep "^* " msml610/lectures_source/*.smd | wc -l
 
-gen_book_chapter        02.1
+gen_book_chapter        02.1        02.3
 gen_book_chapter.py -i msml610/01.2 --mode typst_aima --llm_backend hllm_cli -v DEBUG --model claude-opus-4.5
 gen_book_chapter.py -i msml610/01.2 --mode typst_aima --llm_backend hllm_cli_exec --model openrouter/anthropic/claude-opus-4.6 --no_incremental
 
 > run_typst.py --input msml610/book/Lesson01.2-AI_and_Machine_Learning.typ
 
-> compress_pdf.py       02.1
+compress_pdf.py         02.1        02.3
+> compress_pdf.py --input msml610/book/Lesson01.3*.pdf
 
-> /text.humanize        02.1
+> /text.humanize        02.1        02.3
 > review / edit book chapter
 
 ### [ ] Add cc loop in gen_book_chapters

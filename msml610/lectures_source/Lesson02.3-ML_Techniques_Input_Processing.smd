@@ -100,7 +100,8 @@ digraph InputProcessingPipeline {
 * Outliers
 
 - @Definition@: a data point that falls outside $[Q_1 - 1.5 \cdot IQR,
-  Q_3 + 1.5 \cdot IQR]$ (the interquartile range rule) or has $|z| > 3$
+  Q_3 + 1.5 \cdot IQR]$ (the interquartile range rule
+  `#cite("tukey1977eda")`{=typst}) or has $|z| > 3$
   - _Causes_: measurement errors, or genuine variability in the data
 
 - @Techniques@:
@@ -120,8 +121,9 @@ digraph InputProcessingPipeline {
 
 ::: columns
 :::: {.column width=50%}
-- @Definition@: three mechanisms explain why a value is missing, and which one
-  holds decides whether imputation is safe
+- @Definition@: three mechanisms explain why a value is missing
+  `#cite("rubin1976missingdata")`{=typst}, and which one holds decides whether
+  imputation is safe
   - _MCAR_ (missing completely at random): missingness unrelated to any
     variable, imputation is unbiased
   - _MAR_ (missing at random): missingness depends on observed variables,
@@ -321,9 +323,12 @@ digraph AgeBinning {
     longer directly interpretable
 
 - @Techniques@:
-  - _PCA_: unsupervised, linear combinations that maximize variance
+  - _PCA_ `#cite("pearson1901pca")`{=typst}: unsupervised, linear combinations
+    that maximize variance
   - _LDA_: supervised, projects data to maximize class separability
-  - _t-SNE_, _UMAP_: non-linear methods used mainly for visualization
+  - _t-SNE_ `#cite("vandermaaten2008tsne")`{=typst}, _UMAP_
+    `#cite("mcinnes2018umap")`{=typst}: non-linear methods used mainly for
+    visualization
   - Some techniques are scale dependent
 
 - @Applications@
@@ -342,7 +347,7 @@ digraph AgeBinning {
   each learns statistics from data
   - E.g., mean, min/max, category list, principal axes
   - Fitting them on the full dataset (before splitting) leaks information into
-    training
+    training `#cite("kaufman2012leakage")`{=typst}
 ::::
 :::: {.column width=50%}
 
@@ -448,6 +453,7 @@ digraph FitTransformLeakage {
   - _Text_: synonym replacement, back-translation, random word dropout
   - _Audio_: pitch shift, time stretch, added background noise
   - _Tabular_: SMOTE-style synthetic minority oversampling
+    `#cite("chawla2002smote")`{=typst}
 
 - @Remark@: augmentation acts as a "regularizer"
   - It exposes the model to more variation than the raw dataset contains, without
@@ -457,3 +463,10 @@ digraph FitTransformLeakage {
   - An augmentation that changes the true label trains the model on wrong data
     - E.g., flipping an image of a `6` into a `9`
   - Make sure the synthetic data has the same distribution of the true data
+
+* References
+
+```{=typst}
+#set text(size: 0.75em)
+#references("/msml610/lectures_source/refs.bib")
+```

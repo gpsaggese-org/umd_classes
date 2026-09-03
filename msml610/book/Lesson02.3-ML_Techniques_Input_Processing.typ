@@ -64,12 +64,12 @@ stages before the result reaches the model.
 //   nodesep=0.28;
 //   ranksep=0.4;
 //   rankdir=LR;
-// 
+//
 //   node [shape=box, style="rounded,filled", penwidth=1.6,
 //         fontname="Helvetica", fontsize=10, margin="0.14,0.10", height=0.42];
 //   edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.65,
 //         fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
-// 
+//
 //   raw   [label="Raw Data", fillcolor="#FFD1A6", color="#D9902B", fontcolor="#6B4517"];
 //   clean [label="Clean &\nDenoise", fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
 //   fix   [label="Handle Outliers\n& Missing Values", fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
@@ -77,18 +77,22 @@ stages before the result reaches the model.
 //   eng   [label="Construct &\nReduce Features", fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
 //   aug   [label="Augment", fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
 //   ready [label="Model-Ready\nData", fillcolor="#B2E2B2", color="#4F9A5C", fontcolor="#1F4E2E"];
-// 
+//
 //   raw -> clean -> fix -> scale -> eng -> aug -> ready;
 // }
 // ```
-// label=fig:fromrawdatatomodelinput caption=Diagram relating Raw Data, Clean &
+// label=fig:fromrawdatatomodelinput
+// caption=Diagram relating Raw Data, Clean & Denoise, Handle Outliers & Missing Values and Scale & Encode
 // rendered_images:end
 // render_images:begin
 #figure(
-  image("Lesson02.3-ML_Techniques_Input_Processing.typ.figs/Lesson02.3-ML_Techniques_Input_Processing.1.png"),
-) <fig:fromrawdatatomodelinput caption=Diagram relating Raw Data, Clean &>
+  image(
+    "Lesson02.3-ML_Techniques_Input_Processing.typ.figs/Lesson02.3-ML_Techniques_Input_Processing.1.png",
+  ),
+  caption: [Diagram relating Raw Data, Clean & Denoise, Handle Outliers &
+    Missing Values and Scale & Encode],
+) <fig:fromrawdatatomodelinput>
 // render_images:end
-Denoise, Handle Outliers & Missing Values and Scale & Encode
 
 // From: msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.smd:55 '## Data Quality'
 // Slide: Data Quality
@@ -362,32 +366,36 @@ $[65, oo)$. Under this scheme an age of 32 maps to `Adult`, as illustrated in
 //   nodesep=0.22;
 //   ranksep=0.3;
 //   rankdir=LR;
-// 
+//
 //   node [shape=box, style="rounded,filled", penwidth=1.4,
 //         fontname="Helvetica", fontsize=10, margin="0.14,0.09", height=0.4];
 //   edge [color="#A3B1C0", penwidth=1.1, arrowhead=vee, arrowsize=0.6,
 //         fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
-// 
+//
 //   child  [label="Child\n[0, 13)",    fillcolor="#E8F1FB", color="#7CA6CE", fontcolor="#1F4E79"];
 //   teen   [label="Teen\n[13, 20)",    fillcolor="#E8F1FB", color="#7CA6CE", fontcolor="#1F4E79"];
 //   adult  [label="Adult\n[20, 65)",   fillcolor="#B2E2B2", color="#4F9A5C", fontcolor="#1F4E2E"];
 //   senior [label="Senior\n[65, inf)", fillcolor="#E8F1FB", color="#7CA6CE", fontcolor="#1F4E79"];
-// 
+//
 //   child -> teen -> adult -> senior [style=invis];
 //   { rank=same; child; teen; adult; senior; }
-// 
+//
 //   age32 [label="Age = 32", shape=ellipse, fillcolor="#FFD1A6", color="#D9902B", fontcolor="#6B4517"];
 //   age32 -> adult [label="mapped to", color="#D9902B", fontcolor="#6B4517"];
 // }
 // ```
-// label=fig:discretization caption=Diagram relating Child [0, 13), Teen [13, 20),
+// label=fig:discretization
+// caption=Diagram relating Child [0, 13), Teen [13, 20), Adult [20, 65) and Senior [65, inf)
 // rendered_images:end
 // render_images:begin
 #figure(
-  image("Lesson02.3-ML_Techniques_Input_Processing.typ.figs/Lesson02.3-ML_Techniques_Input_Processing.2.png"),
-) <fig:discretization caption=Diagram relating Child [0, 13), Teen [13, 20),>
+  image(
+    "Lesson02.3-ML_Techniques_Input_Processing.typ.figs/Lesson02.3-ML_Techniques_Input_Processing.2.png",
+  ),
+  caption: [Diagram relating Child \[0, 13), Teen \[13, 20), Adult \[20, 65) and
+    Senior \[65, inf)],
+) <fig:discretization>
 // render_images:end
-Adult [20, 65) and Senior [65, inf)
 
 The convenience of discretization comes with real costs. All within-bin
 variation is discarded: ages 21 and 64 both become `Adult`, even though they
@@ -502,12 +510,12 @@ already "seen" the held-out data indirectly.
 //   nodesep=0.3;
 //   ranksep=0.4;
 //   rankdir=LR;
-// 
+//
 //   node [shape=box, style="rounded,filled", penwidth=1.5,
 //         fontname="Helvetica", fontsize=10, margin="0.14,0.10", height=0.42];
 //   edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.6,
 //         fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
-// 
+//
 //   subgraph cluster_wrong {
 //     label     = "Wrong: fit before split";
 //     labelloc  = "t";
@@ -518,27 +526,31 @@ already "seen" the held-out data indirectly.
 //     fillcolor = "#FBE5E5";
 //     color     = "#D98C8C";
 //     margin    = 14;
-// 
+//
 //     all_data [label="All Data", fillcolor="#FFD1A6", color="#D9902B", fontcolor="#6B4517"];
 //     fit_all  [label="Fit scaler/imputer\non ALL rows", fillcolor="#FBC6C6", color="#D64545", fontcolor="#6B1F1F"];
 //     split_w  [label="Split", fillcolor="#FBC6C6", color="#D64545", fontcolor="#6B1F1F"];
 //     train_w  [label="Train", fillcolor="#F6C6C6", color="#D98C8C", fontcolor="#6B2A2A"];
 //     test_w   [label="Test\n(already leaked into)", fillcolor="#F6C6C6", color="#D98C8C", fontcolor="#6B2A2A"];
-// 
+//
 //     all_data -> fit_all -> split_w;
 //     split_w -> train_w;
 //     split_w -> test_w;
 //   }
 // }
 // ```
-// label=fig:fitontrainapplytovalidationandtest caption=Diagram relating Wrong: fit
+// label=fig:fitontrainapplytovalidationandtest
+// caption=Diagram relating Wrong: fit before split, All Data, Fit scaler/imputer on ALL rows and Split
 // rendered_images:end
 // render_images:begin
 #figure(
-  image("Lesson02.3-ML_Techniques_Input_Processing.typ.figs/Lesson02.3-ML_Techniques_Input_Processing.3.png"),
-) <fig:fitontrainapplytovalidationandtest caption=Diagram relating Wrong: fit>
+  image(
+    "Lesson02.3-ML_Techniques_Input_Processing.typ.figs/Lesson02.3-ML_Techniques_Input_Processing.3.png",
+  ),
+  caption: [Diagram relating Wrong: fit before split, All Data, Fit
+    scaler/imputer on ALL rows and Split],
+) <fig:fitontrainapplytovalidationandtest>
 // render_images:end
-before split, All Data, Fit scaler/imputer on ALL rows and Split
 
 @fig:fitontrainapplytovalidationandtest illustrates the incorrect workflow:
 fitting a scaler or imputer on all rows before splitting means the validation
@@ -562,12 +574,12 @@ the held-out fold applies each one without refitting.
 //   nodesep=0.3;
 //   ranksep=0.4;
 //   rankdir=LR;
-// 
+//
 //   node [shape=box, style="rounded,filled", penwidth=1.5,
 //         fontname="Helvetica", fontsize=10, margin="0.14,0.10", height=0.42];
 //   edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.6,
 //         fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
-// 
+//
 //   subgraph cluster_correct {
 //     label     = "Correct: split before fit";
 //     labelloc  = "t";
@@ -578,14 +590,14 @@ the held-out fold applies each one without refitting.
 //     fillcolor = "#E5F4EE";
 //     color     = "#8FB79A";
 //     margin    = 14;
-// 
+//
 //     all_data2 [label="All Data", fillcolor="#FFD1A6", color="#D9902B", fontcolor="#6B4517"];
 //     split_c   [label="Split", fillcolor="#B7DDD0", color="#6FA890", fontcolor="#1F4E39"];
 //     train_c   [label="Train", fillcolor="#B2E2B2", color="#4F9A5C", fontcolor="#1F4E2E"];
 //     fit_c     [label="Fit scaler/imputer\non TRAIN only", fillcolor="#B2E2B2", color="#4F9A5C", fontcolor="#1F4E2E"];
 //     test_c    [label="Test", fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
 //     apply_c   [label="Apply fitted\ntransform", fillcolor="#D3E3F3", color="#7CA6CE", fontcolor="#1F4E79"];
-// 
+//
 //     all_data2 -> split_c;
 //     split_c -> train_c -> fit_c;
 //     split_c -> test_c -> apply_c;
@@ -593,14 +605,18 @@ the held-out fold applies each one without refitting.
 //   }
 // }
 // ```
-// label=fig:fitontrainapplytovalidationandtest-2 caption=Diagram relating Correct:
+// label=fig:fitontrainapplytovalidationandtest-2
+// caption=Diagram relating Correct: split before fit, All Data, Split and Train
 // rendered_images:end
 // render_images:begin
 #figure(
-  image("Lesson02.3-ML_Techniques_Input_Processing.typ.figs/Lesson02.3-ML_Techniques_Input_Processing.4.png"),
-) <fig:fitontrainapplytovalidationandtest-2 caption=Diagram relating Correct:>
+  image(
+    "Lesson02.3-ML_Techniques_Input_Processing.typ.figs/Lesson02.3-ML_Techniques_Input_Processing.4.png",
+  ),
+  caption: [Diagram relating Correct: split before fit, All Data, Split and
+    Train],
+) <fig:fitontrainapplytovalidationandtest-2>
 // render_images:end
-split before fit, All Data, Split and Train
 
 @fig:fitontrainapplytovalidationandtest-2 shows the corrected flow: the data is
 split before any fitting occurs, so the training fold's statistics never leak
