@@ -2,14 +2,6 @@
 // course_title=MSML610: Advanced Machine Learning
 // lesson_title=L02.2: Machine Learning Paradigms
 // slides_engine=typst
-// references=
-// - Burkov: "The Hundred-Page Machine Learning Book" (2019)
-// - Russell et al.: "Artificial Intelligence: A Modern Approach" (4th ed, 2020)
-// - Hastie et al.: "The Elements of Statistical Learning" (2nd ed, 2009)
-
-
-// Model assessment and selection
-// Hastie 7 (p. 238)
 
 # Machine Learning Paradigms
 
@@ -89,43 +81,47 @@
   - Requires labeled data $y_i$ for training
   - Measure performance with error on a separate test set
 
-- @Classification@: output is a discrete label, e.g.,
-  - `Spam` vs `Not Spam`
-  - Digit recognition `0`, `1`, ..
-  - Sentiment analysis `Pos`, `Neg`, `Neutral`
+- @Examples@: two main task types
+  - **Classification**: output is a discrete label
+    - `Spam` vs `Not Spam`
+    - Digit recognition `0`, `1`, ...
+    - Sentiment analysis `Pos`, `Neg`, `Neutral`
 
-- @Regression@: output is a continuous value, e.g.,
-  - House prices given features like size and location
-  - Oil demand
-  - Stock prices
+  - **Regression**: output is a continuous value
+    - House prices given features like size and location
+    - Oil demand
+    - Stock prices
 
-- @Algorithms@
+- @Algorithms@:
   - Linear regression, decision trees, neural networks, etc.
 
 * Unsupervised Learning
-- @Definition@: **Unsupervised learnings** learns from data _without_ labeled outputs
+- @Definition@: **Unsupervised learning** learns from data _without_ labeled outputs
   - Goal: discover patterns or structure in the data
   - No explicit feedback signal
   - Evaluation can be qualitative
 
-- @Techniques@
+- @Techniques@:
   - **Clustering**: Group similar examples, e.g.,
     - Customer segmentation
     - Grouping news articles by topic without knowing the topics
+
   - **Dimensionality Reduction**: Reduce number of variables while preserving
     structure
     - E.g., visualize high-dimensional data in 2D (e.g., via PCA)
+
   - **Density Estimation**: Estimate probability distribution of data
     - E.g., anomaly detection in server logs
+
   - **Association Rule Learning**: Discover interesting relations between variables
     - E.g., market basket analysis (e.g., "people who buy X also buy Y")
 
-- @Algorithms@
+- @Algorithms@:
   - K-means, PCA, Autoencoders
 
 * Reinforcement Learning
-- @Definition@: RL learn by _interacting with an environment_ to _maximize cumulative
-  reward_
+- @Definition@: RL learns by _interacting with an environment_ to _maximize
+  cumulative reward_
   - Learn policy $\pi(s) \to a$ that maximizes expected reward
   - Trade-off between exploration (trying new actions) and exploitation (using known
     good actions)
@@ -136,13 +132,13 @@
 ::: columns
 :::: {.column width=60%}
 - @Components@:
-  - Agent: Learner and decision maker
-  - Environment: Everything the agent interacts with
-  - State $s$
-  - Action $a$
-  - Reward $r$
+  - _Agent_: learner and decision maker
+  - _Environment_: everything the agent interacts with
+  - _State_: $s$
+  - _Action_: $a$
+  - _Reward_: $r$
 
-- @Algorithms:@
+- @Algorithms@:
   - Q-learning, policy gradient methods
 ::::
 :::: {.column width=35%}
@@ -171,32 +167,29 @@ digraph BayesianFlow {
 :::
 
 * Reinforcement Learning: Examples
-- @Game playing@: learn strategies through trial and error
-  - E.g., AlphaGo mastering the game of Go
-- @Robotics@: learn control policies for movement and manipulation
-- @Autonomous driving@: learn safe and efficient driving behaviors
-- @Resource management@: optimize allocation of limited resources over time
-  - E.g., data center cooling or CPU job scheduling
-- @Personalized recommendations@: adapt suggestions based on user interaction
-  - E.g., newsfeed ranking adjusting based on user clicks
-- @Healthcare@: optimize treatment plans over time
+
+- @Applications@:
+  - **Game playing**: learn strategies through trial and error
+    - E.g., AlphaGo mastering the game of Go
+  - **Robotics**: learn control policies for movement and manipulation
+  - **Autonomous driving**: learn safe and efficient driving behaviors
+  - **Resource management**: optimize allocation of limited resources over time
+    - E.g., data center cooling or CPU job scheduling
+  - **Personalized recommendations**: adapt suggestions based on user interaction
+    - E.g., newsfeed ranking adjusting based on user clicks
+  - **Healthcare**: optimize treatment plans over time
 
 ## Machine Learning in Practice
 
 * Machine Learning Flow (1/2)
-- @Question@
-  - E.g., "How can we predict house prices?"
 
-- @Input data@
-  - E.g., historical data of house sales
-- @Features@
-  - E.g., number of bedrooms, location, square footage
-- @Model@
-  - E.g., linear regression, decision trees
-- @Parameters@
-  - E.g., learning rate, number of trees in a random forest
-- @Evaluation@
-  - E.g., accuracy, precision, recall
+- @Components@: the stages of the ML pipeline, in order
+  - _Question_: e.g., "How can we predict house prices?"
+  - _Input data_: e.g., historical data of house sales
+  - _Features_: e.g., number of bedrooms, location, square footage
+  - _Model_: e.g., linear regression, decision trees
+  - _Parameters_: e.g., learning rate, number of trees in a random forest
+  - _Evaluation_: e.g., accuracy, precision, recall
 
 * Machine Learning Flow (2/2)
 
@@ -232,63 +225,57 @@ digraph BayesianFlow {
   - _Model_ is often less important (contrary to popular belief!)
 
 * Framing the Question
-- **Make the question concrete and precise**
-  - Define the problem clearly
-  - Specify inputs and expected outputs
+- Formulating question is @the most important part@ of the machine learning
+  problem
+  - Misunderstanding leads to:
+    - Solving the wrong problem
+    - Collecting wrong data
+    - ... nothing possibly good ...
+
+- _"If I were given one hour to save the planet, I would spend 59 minutes
+  defining the problem and one minute resolving it"_ (Einstein, unverified)
+
+- @Make the question concrete and precise@
   - Align question with business or research objectives
+  - Define the problem clearly
   - E.g.,:
     - **Bad**: _"How can we improve sales?"_
     - **Good**: _"What factors most significantly impact sales of product X in
       region Y during season Z?"_
 
-- Formulating question is **the most important part** of the machine learning
-  problem
-  - Misunderstanding leads to:
-    - Solving the wrong problem
-    - Collecting wrong data
-    - ..
-
-- _"If I were given one hour to save the planet, I would spend 59 minutes
-  defining the problem and one minute resolving it"_ (often attributed to
-  Einstein, though unverified)
-
 * Input Data: Fit, Quality, and Scale
-- Ensure **data is specific to prediction** goal
-  - E.g., use known movie ratings to predict unseen movie ratings from the same
-    population
-  - Training set $\approx$ test set
+- Ensure @data is specific to prediction@ goal
+  - E.g., use known movie ratings to predict unseen ratings from _same population_
+  - Training set must $\approx$ test set $\approx$ prod data
 
-- Relationship between data and prediction goal is **not always direct**
+- Relationship between data and prediction goal is @not always direct@
   - E.g., interested in prices but predict supply and demand instead
 
 - Poor-quality data leads to inaccurate predictions
-  - _"Garbage in - garbage out"_
+  - _"Garbage in, garbage out"_
 
-- Recognize **when data is insufficient** for valid answers
-  - _"The combination of some data and an aching desire for an answer does not
-    ensure that a reasonable answer can be extracted from a given body of
-    data"_ (John Tukey)
+- Recognize @when data is insufficient@ for valid answers
+  - _"Desire for an answer does not ensure that a reasonable answer can be extracted
+    from the given body of data"_ (John Tukey)
 
-- **More data vs better models**
-  - In practice, the gap between a well-tuned generic model and the best
-    specialized model is often small compared to the gap from more or better
-    data
-  - _"It's not who has the best algorithm that wins. It's who has the most
-    data"_ (paraphrase of Banko and Brill's 2001 finding, popularized by
-    Andrew Ng)
-  - _"Every time I fire a linguist, the performance of the speech recognizer
-    goes up"_ (IBM researcher in speech recognition)
+- @More data vs better models@
+  - Gap between a well-tuned generic model and the best specialized model is often
+    small compared to more / better data
+  - _"It's not who has the best algorithm that wins. It's who has the most data"_
+    (Banko and Brill, 2001)
+  - _"Every time I fire a linguist, the performance of the speech recognizer goes
+    up"_ (IBM researcher in speech recognition)
 
 * What Makes a Good Feature
-- **Features** provide high-level information about inputs
+- @Definition@: **Features** provide high-level information about inputs
   - E.g., use intensity and symmetry for scanned numbers instead of raw bit maps
 
 - @Characteristics@:
-  1. Perform data compression
-  2. Retain relevant information
+  1. Retain relevant information
+  2. Perform data compression
   3. Often created with expert knowledge
 
-- **Common mistakes in feature building**:
+- @Common mistakes in feature building@:
   1. Automating feature selection may lead to overfitting
      - Black box predictions can be accurate but stop working anytime
      - E.g., Google Flu's unclear feature-model link
@@ -297,46 +284,46 @@ digraph BayesianFlow {
   3. Unnecessarily discarding information
 
 * What Makes a Good Model
-- Desirable properties, often in tension with each other:
-  - **Interpretable**
+- @Characteristics@: desirable properties, often in tension with each other
+  - @Interpretable@
     - Allow users to understand and trust the model's decisions
-    - E.g., decision trees are appropriate in medical studies since they produce
-      a "reasoning"
-  - **Simple**
+    - E.g., decision trees are great since they produce a "reasoning"
+  - @Simple@
     - Easier to implement and maintain
     - Reduces the risk of overfitting
-  - **Accurate**
+  - @Accurate@
     - Often accuracy is traded off for remaining characteristics
     - E.g., accuracy vs interpretability, accuracy vs speed
-  - **Fast**
+  - @Fast@
     - Reduce computational costs to train and test
     - E.g., real-time applications
-  - **Scalable**
+  - @Scalable@
     - Can handle large datasets efficiently (growing data and user bases)
-    - E.g., in the Netflix prize, Netflix didn't end up implementing the best
-      algorithm since it wasn't scalable enough
+    - E.g., in the Netflix prize, the algorithm that won wasn't implemented since it
+      wasn't scalable enough
 
 ## Pipeline Organization
 
 * How Are Machine Learning Systems Organized?
 
-- Machine learning systems organized in a **pipeline**
+- @Fact@: Machine learning systems @are organized in a pipeline@
   1. **Break down** problem into sub-problems
   2. **Solve** problems one at a time
   3. **Combine** solutions to solve initial problem
 
-- @Remark@: overall pipeline performance $p_{system}$ is **not** a weighted
-  sum of the per-stage performances $p_i$
-  - Stage errors compound: a mistake early in the pipeline propagates to every
+- @Remark@:
+  - Overall pipeline performance $p_{system}$ is **not a weighted sum** of the
+    per-stage performances $p_i$
+  - **Stage errors compound**: a mistake early in the pipeline propagates to every
     later stage
-  - Ceiling analysis instead measures each stage's **marginal** contribution
-    to system performance:
+  - **Ceiling analysis** measures each stage's marginal contribution to system
+    performance:
     $$
     \Delta p_{system} \approx \alpha_i \cdot \Delta p_i
     $$
     where:
-    - $\Delta p_i$: Improvement in the performance of stage $i$ alone (e.g.,
-      replacing it with an oracle)
+    - $\Delta p_i$: Improvement in the performance of stage $i$ alone
+      - E.g., replacing stage with an "oracle"
     - $\alpha_i$: Resulting improvement in overall system performance
 
 * Example of Photo OCR System
@@ -344,7 +331,7 @@ digraph BayesianFlow {
 - @Goal@: build systems to read text in a picture
   - OCR = "Optical Character Recognition"
 
-- **Stages of ML pipeline for OCR:**
+- @Stages of ML pipeline for OCR@:
   - Text detection: find text areas in the picture
   - Character segmentation: split text into letter boxes
     - E.g., `h e l l o`
@@ -352,72 +339,80 @@ digraph BayesianFlow {
   - Spelling correction: fix text errors using context
     - E.g., `hell0` corrected to `hello`
 
-- **Sliding window approach**
-  - @Problem@: Unknown text location and size
-  - Text detection
-    - Train classifier to recognize letters vs non-letters
+- @Sliding window approach@: the text location and size is unknown
+  - **Text detection**
+    - Train classifier to _recognize letters vs non-letters_ (simpler!)
     - Scan image in two directions with different sizes for text
-    - Evaluating the classifier per window is cheap relative to training, so
-      scanning many windows is affordable
+    - Evaluating the classifier on a window is cheap
     - Create text likelihood map (e.g., heatmap) using classifier probabilities
     - Enclose text areas in boxes
     - Discard boxes not fitting aspect ratio (valid text width > height)
-  - Character segmentation
-    - Use sliding window classifiers to find "breaks" between characters
+  - Same approach for **character segmentation** and find characters
 
 * Getting More Data
-- The ideal recipe for ML is:
-  "low-bias algorithm + train on massive amount of data"
+- The **ideal recipe for ML** is:
+  _"low-bias algorithm + massive amount of data"_
 
-- Use learning curves to make sure we are taking advantage of more data
+- @Problem@: How do we know we are using the data effectively?
+  - E.g., use _learning curves_ to make sure we are taking advantage of more data
+  
+- @Problem@: How to get a **large amount of data**?
+  - Always ask yourself: _"how much work is to get 10x more data than we
+    currently have?"_
 
-- The **problem** is getting large amount of data
+  - Often it is not that difficult:
+    1. **Artificial data**
+       - E.g., synthesize / amplify data set
+    2. **Collect and label by hand**
+       - E.g., crowd sourcing (e.g., Amazon Mechanical Turk or other services), LLMs
+         (risky)
 
-- Always ask yourself: _"how much work is to get 10x more data than we
-  currently have?"_
-
-- Often it is not that difficult:
-  1. Artificial data
-     - E.g., synthesize or amplify data set
-  2. Collect and label by hand
-     - E.g., crowd sourcing like Amazon Mechanical Turk
-
-* OCR Pipeline: Example of Artificial Data Synthesis
-- @Question@: How can we increase data set size?
-  1. Synthesize data set
+* Getting Mode Data: OCR Pipeline
+- @Question@: How can we increase data set size for OCR problem?
+  1. **Synthesize data set**
      - Use font libraries to generate large training sets
      - Paste characters against random backgrounds
      - Apply scaling, distortion, adding noise, etc
-  2. Amplify a data set
+  2. **Amplify a data set**
      - Add examples by warping/distorting existing examples
+  3. **Distill other models**
+  4. **Buy or create datasets**
+  5. **Crowdsourcing** / **Gamification**
 
-- Transformations and noise should be specific to the application domain
+- For 1. and 2., transformations and noise should be specific to the application
+  domain
   - E.g., Gaussian noise is not always appropriate
 
 * Ceiling Analysis for ML Pipeline
-- The most valuable resource is time
-  - You work on optimization for months
-  - Find out that the optimization doesn't make much difference
+- @Fact@: The **most valuable resource is time**
+  - Researchers' time is extremly expensive
+  - E.g.,
+    - You work on optimization for months
+    - Find out that the optimization doesn't make much difference
 
 - @Problem@: On which part of the pipeline should time/resource be spent?
 
 - @Solution@: Ceiling analysis to analyze pipeline performance
-  - Single number for system performance
+  - Use a single number for system performance
+    - Too many metrics make things difficult
     - E.g., accuracy for OCR
   - For each component, in pipeline order:
-    - Mock component with "oracle" (always give correct output)
-    - Leave others untouched
+    - Mock component with an "oracle" (always give correct output)
+    - Leave other components untouched
     - Compute pipeline performance
-  - The component whose oracle gives the largest jump in end-to-end
-    performance is the highest-value target for further work
+  - The component whose oracle gives the largest jump in end-to-end performance is
+    the highest-value target for further work
   - Measure, don't guess!
+    - "Premature optimizations are the root of all evil" (Knuth, 1974)
 
+* Ceiling Analysis for ML Pipeline: OCT Example
 ::: columns
 :::: {.column width=50%}
 - @Example@: OCR pipeline, baseline accuracy $72\%$
   - Text detection is the highest-value target: perfecting it alone accounts
     for most of the achievable gain
 :::: {.column width=45%}
+::::
 ```{=typst}
 #styled-table(
   headers: ("Component made perfect", "Accuracy", "Gain"),
@@ -430,6 +425,5 @@ digraph BayesianFlow {
   caption: "Ceiling analysis on the OCR pipeline",
 )
 ```
-
 ::::
-:::
+::
