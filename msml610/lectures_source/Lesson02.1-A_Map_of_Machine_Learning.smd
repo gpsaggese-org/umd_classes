@@ -14,12 +14,17 @@
 
 * A Map of Machine Learning
 
-- Machine Learning is a field with many branches
-  - Paradigms
-  - Theory
-  - Models
-  - Techniques
+::: columns
+:::: {.column width=20%}
+- Machine Learning is a field with @many branche@s
+  - **Paradigms**
+  - **Theory**
+  - **Models**
+  - **Techniques**
+::::
+:::: {.column width=80%}
 
+// TODO(ai_gp): Use the style from the .claude/skills/visuals.rules.md
 ```mermaid
 mindmap
   root((**Machine Learning**))
@@ -49,6 +54,9 @@ mindmap
       Ensemble learning
 ```
 
+::::
+:::
+
 * Machine Learning Paradigms
 - @Question@: How do you set up the learning problem?
 
@@ -69,25 +77,28 @@ mindmap
     - Request outputs for specific inputs
 
 * Machine Learning Theory
-- **VC theory**
-  - Measure model capacity and generalize based on hypothesis space complexity
+- @Question@: What is the theoretical basis that underpin machine learning
+  and its common phenomena?
 
-- **Bias-variance decomposition**
-  - Prediction error is the sum of:
-    - Bias: Error from simplistic model assumptions
-    - Variance: Error due to sensitivity to training data fluctuations
+  - **VC theory**
+    - Measure model capacity and generalize based on hypothesis space complexity
 
-- **Computation complexity**
-  - Related to information theory and compression
-  - E.g., Minimum Description Length (MDL) measures model complexity via
-    efficient model and data description
+  - **Bias-variance decomposition**
+    - Prediction error is the sum of:
+      - _Bias_: Error from simplistic model assumptions
+      - _Variance_: Error due to sensitivity to training data fluctuations
 
-- **Bayesian approach**
-  - Treat ML as probability
-  - Combine prior knowledge with observed data to update belief about a model
+  - **Computation complexity**
+    - Related to information theory and compression
+      - E.g., Minimum Description Length (MDL) measures model complexity via
+        efficient model and data description
 
-- **Problem in ML theory**
-  - Assumptions may not align with practical problems
+  - **Bayesian approach**
+    - Treat ML as probability
+    - Combine prior knowledge with observed data to update belief about a model
+
+  - **Common problem in ML theory**
+    - Assumptions may not align with practical problems
 
 * Machine Learning Models
 - @Question@
