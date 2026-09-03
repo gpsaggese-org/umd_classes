@@ -10,7 +10,6 @@
 * Machine Learning Paradigms: Examples (1/3)
 
 - @Question@: How to set up a machine learning problem?
-
   - @Supervised Learning@
     - Learn from _labeled data_ to predict labels for new inputs
     - E.g., image classification using ResNet on ImageNet
@@ -25,8 +24,8 @@
     - E.g., BERT (Masked Language Modeling)
   - @Semi-Supervised Learning@
     - Combine _small labeled data with large unlabeled data_ to improve performance
-    - E.g., named entity recognition (NER) using annotated sentences with entity
-      tags combined with many raw text documents
+    - E.g., named entity recognition (NER) using annotated sentences with entity tags
+      combined with many raw text documents
 
 * Machine Learning Paradigms: Examples (2/3)
 
@@ -39,9 +38,9 @@
   - E.g., learn sentiment analysis and question answering
 
 - @Meta-Learning@
-  - _"Learning to learn"_: adapt quickly to new tasks using prior experience
-  - E.g., a model can be fine-tuned quickly on a new task using just a few
-    gradient steps
+  - _"Learning to learn"_: Adapt quickly to new tasks using prior experience
+  - E.g., a model can be fine-tuned quickly on a new task using just a few gradient
+    steps
 
 - @Zero-Shot / Few-Shot Learning@
   - Generalize to new tasks with _no or few labeled examples_
@@ -75,73 +74,75 @@
 ## The Three Core Paradigms
 
 * Supervised Learning
+
 - @Definition@: **Supervised learning** learns a function $f: X \to Y$ that maps
   inputs to correct outputs
   - Training examples $(\vx, y)$ with pairs of inputs and correct outputs
   - Requires labeled data $y_i$ for training
   - Measure performance with error on a separate test set
 
-- @Examples@: two main task types
-  - **Classification**: output is a discrete label
+- @Examples@: Two main task types
+  - **Classification**: Output is a discrete label
     - `Spam` vs `Not Spam`
-    - Digit recognition `0`, `1`, ...
+    - Digit recognition `0`, `1`,
     - Sentiment analysis `Pos`, `Neg`, `Neutral`
-
-  - **Regression**: output is a continuous value
+  - **Regression**: Output is a continuous value
     - House prices given features like size and location
     - Oil demand
     - Stock prices
 
-- @Algorithms@:
-  - Linear regression, decision trees, neural networks, etc.
+- @Algorithms@
+  - Linear regression, decision trees, neural networks, etc
 
 * Unsupervised Learning
+
 - @Definition@: **Unsupervised learning** learns from data _without_ labeled outputs
-  - Goal: discover patterns or structure in the data
+  - Goal: Discover patterns or structure in the data
   - No explicit feedback signal
   - Evaluation can be qualitative
 
-- @Techniques@:
+- @Techniques@
   - **Clustering**: Group similar examples, e.g.,
     - Customer segmentation
     - Grouping news articles by topic without knowing the topics
-
   - **Dimensionality Reduction**: Reduce number of variables while preserving
     structure
     - E.g., visualize high-dimensional data in 2D (e.g., via PCA)
-
   - **Density Estimation**: Estimate probability distribution of data
     - E.g., anomaly detection in server logs
-
   - **Association Rule Learning**: Discover interesting relations between variables
     - E.g., market basket analysis (e.g., "people who buy X also buy Y")
 
-- @Algorithms@:
+- @Algorithms@
   - K-means, PCA, Autoencoders
 
 * Reinforcement Learning
+
 - @Definition@: RL learns by _interacting with an environment_ to _maximize
   cumulative reward_
   - Learn policy $\pi(s) \to a$ that maximizes expected reward
   - Trade-off between exploration (trying new actions) and exploitation (using known
     good actions)
-  - Reward signals can be sparse, delayed, or hard to specify outside games
-    and simulators, which makes credit assignment hard
+  - Reward signals can be sparse, delayed, or hard to specify outside games and
+    simulators, which makes credit assignment hard
   - Often involve physical simulation or real-world interaction
 
 ::: columns
 :::: {.column width=60%}
-- @Components@:
-  - _Agent_: learner and decision maker
-  - _Environment_: everything the agent interacts with
+
+- @Components@
+  - _Agent_: Learner and decision maker
+  - _Environment_: Everything the agent interacts with
   - _State_: $s$
   - _Action_: $a$
   - _Reward_: $r$
 
-- @Algorithms@:
+- @Algorithms@
   - Q-learning, policy gradient methods
+
 ::::
 :::: {.column width=35%}
+
 ```graphviz
 digraph BayesianFlow {
     splines=true;
@@ -163,33 +164,34 @@ digraph BayesianFlow {
     Env -> Agent [label="  Reward", fontcolor=black, labeldistance=2.0];
 }
 ```
+
 ::::
 :::
 
 * Reinforcement Learning: Examples
 
-- @Applications@:
-  - **Game playing**: learn strategies through trial and error
+- @Applications@
+  - **Game playing**: Learn strategies through trial and error
     - E.g., AlphaGo mastering the game of Go
-  - **Robotics**: learn control policies for movement and manipulation
-  - **Autonomous driving**: learn safe and efficient driving behaviors
-  - **Resource management**: optimize allocation of limited resources over time
+  - **Robotics**: Learn control policies for movement and manipulation
+  - **Autonomous driving**: Learn safe and efficient driving behaviors
+  - **Resource management**: Optimize allocation of limited resources over time
     - E.g., data center cooling or CPU job scheduling
-  - **Personalized recommendations**: adapt suggestions based on user interaction
+  - **Personalized recommendations**: Adapt suggestions based on user interaction
     - E.g., newsfeed ranking adjusting based on user clicks
-  - **Healthcare**: optimize treatment plans over time
+  - **Healthcare**: Optimize treatment plans over time
 
 ## Machine Learning in Practice
 
 * Machine Learning Flow (1/2)
 
-- @Components@: the stages of the ML pipeline, in order
-  - _Question_: e.g., "How can we predict house prices?"
-  - _Input data_: e.g., historical data of house sales
-  - _Features_: e.g., number of bedrooms, location, square footage
-  - _Model_: e.g., linear regression, decision trees
-  - _Parameters_: e.g., learning rate, number of trees in a random forest
-  - _Evaluation_: e.g., accuracy, precision, recall
+- @Components@: The stages of the ML pipeline, in order
+  - _Question_: E.g., "How can we predict house prices?"
+  - _Input data_: E.g., historical data of house sales
+  - _Features_: E.g., number of bedrooms, location, square footage
+  - _Model_: E.g., linear regression, decision trees
+  - _Parameters_: E.g., learning rate, number of trees in a random forest
+  - _Evaluation_: E.g., accuracy, precision, recall
 
 * Machine Learning Flow (2/2)
 
@@ -225,25 +227,26 @@ digraph BayesianFlow {
   - _Model_ is often less important (contrary to popular belief!)
 
 * Framing the Question
-- Formulating question is @the most important part@ of the machine learning
-  problem
+
+- Formulating question is @the most important part@ of the machine learning problem
   - Misunderstanding leads to:
     - Solving the wrong problem
     - Collecting wrong data
-    - ... nothing possibly good ...
+    - ... nothing possibly good
 
-- _"If I were given one hour to save the planet, I would spend 59 minutes
-  defining the problem and one minute resolving it"_ (Einstein, unverified)
+- _"If I were given one hour to save the planet, I would spend 59 minutes defining
+  the problem and one minute resolving it"_ (Einstein, unverified)
 
 - @Make the question concrete and precise@
   - Align question with business or research objectives
   - Define the problem clearly
   - E.g.,:
     - **Bad**: _"How can we improve sales?"_
-    - **Good**: _"What factors most significantly impact sales of product X in
-      region Y during season Z?"_
+    - **Good**: _"What factors most significantly impact sales of product X in region
+      Y during season Z?"_
 
 * Input Data: Fit, Quality, and Scale
+
 - Ensure @data is specific to prediction@ goal
   - E.g., use known movie ratings to predict unseen ratings from _same population_
   - Training set must $\approx$ test set $\approx$ prod data
@@ -267,15 +270,16 @@ digraph BayesianFlow {
     up"_ (IBM researcher in speech recognition)
 
 * What Makes a Good Feature
+
 - @Definition@: **Features** provide high-level information about inputs
   - E.g., use intensity and symmetry for scanned numbers instead of raw bit maps
 
-- @Characteristics@:
+- @Characteristics@
   1. Retain relevant information
   2. Perform data compression
   3. Often created with expert knowledge
 
-- @Common mistakes in feature building@:
+- @Common mistakes in feature building@
   1. Automating feature selection may lead to overfitting
      - Black box predictions can be accurate but stop working anytime
      - E.g., Google Flu's unclear feature-model link
@@ -284,7 +288,8 @@ digraph BayesianFlow {
   3. Unnecessarily discarding information
 
 * What Makes a Good Model
-- @Characteristics@: desirable properties, often in tension with each other
+
+- @Characteristics@: Desirable properties, often in tension with each other
   - @Interpretable@
     - Allow users to understand and trust the model's decisions
     - E.g., decision trees are great since they produce a "reasoning"
@@ -311,10 +316,10 @@ digraph BayesianFlow {
   2. **Solve** problems one at a time
   3. **Combine** solutions to solve initial problem
 
-- @Remark@:
+- @Remark@
   - Overall pipeline performance $p_{system}$ is **not a weighted sum** of the
     per-stage performances $p_i$
-  - **Stage errors compound**: a mistake early in the pipeline propagates to every
+  - **Stage errors compound**: A mistake early in the pipeline propagates to every
     later stage
   - **Ceiling analysis** measures each stage's marginal contribution to system
     performance:
@@ -328,18 +333,18 @@ digraph BayesianFlow {
 
 * Example of Photo OCR System
 
-- @Goal@: build systems to read text in a picture
+- @Goal@: Build systems to read text in a picture
   - OCR = "Optical Character Recognition"
 
-- @Stages of ML pipeline for OCR@:
-  - Text detection: find text areas in the picture
-  - Character segmentation: split text into letter boxes
+- @Stages of ML pipeline for OCR@
+  - Text detection: Find text areas in the picture
+  - Character segmentation: Split text into letter boxes
     - E.g., `h e l l o`
-  - Character classification: classify characters individually
-  - Spelling correction: fix text errors using context
+  - Character classification: Classify characters individually
+  - Spelling correction: Fix text errors using context
     - E.g., `hell0` corrected to `hello`
 
-- @Sliding window approach@: the text location and size is unknown
+- @Sliding window approach@: The text location and size is unknown
   - **Text detection**
     - Train classifier to _recognize letters vs non-letters_ (simpler!)
     - Scan image in two directions with different sizes for text
@@ -350,16 +355,15 @@ digraph BayesianFlow {
   - Same approach for **character segmentation** and find characters
 
 * Getting More Data
-- The **ideal recipe for ML** is:
-  _"low-bias algorithm + massive amount of data"_
+
+- The **ideal recipe for ML** is: _"low-bias algorithm + massive amount of data"_
 
 - @Problem@: How do we know we are using the data effectively?
   - E.g., use _learning curves_ to make sure we are taking advantage of more data
-  
-- @Problem@: How to get a **large amount of data**?
-  - Always ask yourself: _"how much work is to get 10x more data than we
-    currently have?"_
 
+- @Problem@: How to get a **large amount of data**?
+  - Always ask yourself: _"how much work is to get 10x more data than we currently
+    have?"_
   - Often it is not that difficult:
     1. **Artificial data**
        - E.g., synthesize / amplify data set
@@ -368,6 +372,7 @@ digraph BayesianFlow {
          (risky)
 
 * Getting Mode Data: OCR Pipeline
+
 - @Question@: How can we increase data set size for OCR problem?
   1. **Synthesize data set**
      - Use font libraries to generate large training sets
@@ -384,6 +389,7 @@ digraph BayesianFlow {
   - E.g., Gaussian noise is not always appropriate
 
 * Ceiling Analysis for ML Pipeline
+
 - @Fact@: The **most valuable resource is time**
   - Researchers' time is extremly expensive
   - E.g.,
@@ -406,13 +412,17 @@ digraph BayesianFlow {
     - "Premature optimizations are the root of all evil" (Knuth, 1974)
 
 * Ceiling Analysis for ML Pipeline: OCT Example
+
 ::: columns
 :::: {.column width=50%}
-- @Example@: OCR pipeline, baseline accuracy $72\%$
-  - Text detection is the highest-value target: perfecting it alone accounts
-    for most of the achievable gain
-:::: {.column width=45%}
+
+- @Example@: OCR pipeline, baseline accuracy 72%
+  - Text detection is the highest-value target: Perfecting it alone accounts for most
+    of the achievable gain
+
+:::: {.column width=50%}
 ::::
+
 ```{=typst}
 #styled-table(
   headers: ("Component made perfect", "Accuracy", "Gain"),
@@ -425,5 +435,6 @@ digraph BayesianFlow {
   caption: "Ceiling analysis on the OCR pipeline",
 )
 ```
+
 ::::
 ::
