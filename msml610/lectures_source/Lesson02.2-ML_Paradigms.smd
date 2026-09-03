@@ -200,7 +200,7 @@ digraph BayesianFlow {
 
 * Machine Learning Flow (2/2)
 
-```graphviz[height=80%]
+```graphviz
 digraph BayesianFlow {
     rankdir=LR;
     splines=true;
@@ -224,13 +224,12 @@ digraph BayesianFlow {
 }
 ```
 
-- **Not all phases are equally important!**
+- @Remark@: Not all phases are equally important!
   - Question $>$ Data $>$ Features $>$ Model
-
-- Clarity of the **question** impacts project success
-- Quality and relevance of **data** are crucial for performance
-- Proper **feature** selection simplifies the model and improves accuracy
-- @Model@: is often less important (contrary to popular belief!)
+  - Clarity of the _question_ impacts project success
+  - Quality and relevance of _data_ are crucial for performance
+  - Proper _feature_ selection simplifies the model and improves accuracy
+  - _Model_ is often less important (contrary to popular belief!)
 
 * Framing the Question
 - **Make the question concrete and precise**
