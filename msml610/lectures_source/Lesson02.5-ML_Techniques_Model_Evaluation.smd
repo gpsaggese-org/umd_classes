@@ -90,8 +90,38 @@
     - Augment data artificially, like in image processing
     - Use transfer learning with pre-trained models on related tasks
 
-// TODO: Add plot for the splitting of data
-// E.g., https://medium.com/@rahulchavan4894/understanding-train-test-and-validation-dataset-split-in-simple-quick-terms-5a8630fe58c8
+* Data Splitting Visualization
+
+- @Illustration@: How data is split into training, validation, and test sets:
+
+```tikz
+% Data splitting visualization
+\draw[thick, ->] (0,0) -- (14,0);
+\draw[thick] (0,-0.1) -- (0,0.1);
+\draw[thick] (14,-0.1) -- (14,0.1);
+
+% Full dataset bar
+\draw[fill=gray!30, draw=gray, thick] (0,1.5) rectangle (14,2.2);
+\node[left] at (-0.5,1.85) {Original};
+\node[above] at (7,2.3) {Dataset (100%)};
+
+% Training set (60%)
+\draw[fill=blue!40, draw=blue, thick] (0,0.5) rectangle (8.4,1.1);
+\node[font=\bfseries] at (4.2,0.8) {Training (60%)};
+
+% Validation set (20%)
+\draw[fill=green!40, draw=green, thick] (8.4,0.5) rectangle (11.2,1.1);
+\node[font=\bfseries] at (9.8,0.8) {Validation (20%)};
+
+% Test set (20%)
+\draw[fill=red!40, draw=red, thick] (11.2,0.5) rectangle (14,1.1);
+\node[font=\bfseries] at (12.6,0.8) {Test (20%)};
+
+% Purpose annotations
+\node[below, font=\small, blue] at (4.2,0.3) {Learn parameters};
+\node[below, font=\small, green] at (9.8,0.3) {Select hyperparams};
+\node[below, font=\small, red] at (12.6,0.3) {Evaluate};
+```
 
 * Splitting Data Into Training, Validation, Test Sets
 
@@ -140,6 +170,39 @@
 - You should use _learning curves_ to track this effect
 
 ![](msml610/lectures_source/figures/L02.5.Learning_Curves_Example.png){width=30%}
+
+* Data Splitting Visualization
+
+- @Illustration@: How data is split into training, validation, and test sets:
+
+```tikz
+% Data splitting visualization
+\draw[thick, ->] (0,0) -- (14,0);
+\draw[thick] (0,-0.1) -- (0,0.1);
+\draw[thick] (14,-0.1) -- (14,0.1);
+
+% Full dataset bar
+\draw[fill=gray!30, draw=gray, thick] (0,1.5) rectangle (14,2.2);
+\node[left] at (-0.5,1.85) {Original};
+\node[above] at (7,2.3) {Dataset (100%)};
+
+% Training set (60%)
+\draw[fill=blue!40, draw=blue, thick] (0,0.5) rectangle (8.4,1.1);
+\node[font=\bfseries] at (4.2,0.8) {Training (60%)};
+
+% Validation set (20%)
+\draw[fill=green!40, draw=green, thick] (8.4,0.5) rectangle (11.2,1.1);
+\node[font=\bfseries] at (9.8,0.8) {Validation (20%)};
+
+% Test set (20%)
+\draw[fill=red!40, draw=red, thick] (11.2,0.5) rectangle (14,1.1);
+\node[font=\bfseries] at (12.6,0.8) {Test (20%)};
+
+% Purpose annotations
+\node[below, font=\small, blue] at (4.2,0.3) {Learn parameters};
+\node[below, font=\small, green] at (9.8,0.3) {Select hyperparams};
+\node[below, font=\small, red] at (12.6,0.3) {Evaluate};
+```
 
 * Using Test Data
 
@@ -911,8 +974,19 @@
 
 * Boosting
 
+::: columns
+:::: {.column width=60%}
+
 - @Definition@: **Boosting** builds models that complement each other
   - Typically use homogeneous models, i.e., parametrized models from $\calH$
+
+::::
+:::: {.column width=40%}
+
+![](msml610/lectures_source/figures/L02.5.Boosting_Concept.png){width=30%}
+
+::::
+:::
 
 - @Remark@: Strong classifiers can be built from weak classifiers
   - E.g., a tree is built out of decision stumps (i.e., decision trees with one level)
@@ -926,16 +1000,23 @@
   - Combination of linear models is still a linear model
   - OLS finds optimal weights in one step
 
-![](msml610/lectures_source/figures/L02.5.Boosting_Concept.png){width=30%}
-
 * Adaboost.M1
+
+::: columns
+:::: {.column width=60%}
 
 - @Definition@: AdaBoost (Adaptive Boosting) is a powerful ensemble method,
   widely used for classification
   - Assumes examples can be weighted in the cost function used to learn
     (otherwise use resampling)
 
+::::
+:::: {.column width=40%}
+
 ![](msml610/lectures_source/figures/L02.5.AdaBoost_Diagram.png){width=28%}
+
+::::
+:::
 
 - @Algorithm@: Learning procedure
   - Start with equal weights for all examples
@@ -951,12 +1032,20 @@
 * Stacking
 
 ::: columns
-:::: {.column width=65%}
+:::: {.column width=60%}
 
 - @Definition@: **Stacking** is about learning how to combine models (not necessarily
   of the same type)
 
 - @Problem@: With voting / averaging we don't know which model to trust
+
+::::
+:::: {.column width=40%}
+
+![](msml610/lectures_source/figures/L02.5.Stacking_Ensemble.png)
+
+::::
+:::
 
 - @Solution@: Instead of voting or weighting we can use a meta-learner (level 1) to
   learn how to pick / mix models (level 0)
@@ -972,32 +1061,24 @@
     - Use probabilities from level 0, so level 1 can assess the confidence of each
       model
 
-::::
-:::: {.column width=32%}
-
-![](msml610/lectures_source/figures/L02.5.Stacking_Ensemble.png)
-
-::::
-:::
-
 * Boosting vs Bagging vs Stacking
 
-#figure(
-  table(
-    columns: (1fr, 1fr, 1fr, 1fr),
-    align: (col, row) => (left, left, left, left),
-    stroke: 0.5pt,
-    fill: (col, row) => if row == 0 { luma(200) } else if calc.odd(row) { luma(245) } else { white },
-    [*Aspect*], [*Bagging*], [*Boosting*], [*Stacking*],
-    [Combines], [Models of same type], [Models of same type], [Different types],
-    [Learning], [Independent], [Iterative], [Independent],
-    [Predicting], [Uniform or data-driven weights], [Learned weights], [Learned weights/confidence],
-    [Main Objective], [Reduce variance], [Reduce bias], [Improve generalization via diversity],
-    [Base Learners], [Often strong], [Often weak], [Any type (heterogeneous)],
-    [Sensitivity to Noise], [Low], [High], [Medium],
-    [Parallelizable], [Yes], [No (sequential)], [Partially (base models)],
-    [Meta-model], [Not used], [Not used], [Required],
-    [Examples], [Random Forest], [AdaBoost, Gradient Boosting], [Stacked Generalization, Blending],
+```{=typst}
+#styled-table(
+  headers: ("Aspect", "Bagging", "Boosting", "Stacking"),
+  rows: (
+    ("Combines", "Models of same type", "Models of same type", "Different types"),
+    ("Learning", "Independent", "Iterative", "Independent"),
+    ("Predicting", "Uniform or data-driven weights", "Learned weights", "Learned weights/confidence"),
+    ("Main Objective", "Reduce variance", "Reduce bias", "Improve generalization via diversity"),
+    ("Base Learners", "Often strong", "Often weak", "Any type (heterogeneous)"),
+    ("Sensitivity to Noise", "Low", "High", "Medium"),
+    ("Parallelizable", "Yes", "No (sequential)", "Partially (base models)"),
+    ("Meta-model", "Not used", "Not used", "Required"),
+    ("Examples", "Random Forest", "AdaBoost, Gradient Boosting", "Stacked Generalization, Blending"),
   ),
-  caption: [Comparison of ensemble learning techniques]
+  col-widths: (1.7fr, 1.7fr, 1.7fr, 1.7fr),
+  bold-first-col: true,
+  caption: "Comparison of ensemble learning techniques",
 )
+```
