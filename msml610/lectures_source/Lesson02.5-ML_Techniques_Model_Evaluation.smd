@@ -137,41 +137,9 @@
   - Eventually, adding more data results in smaller accuracy gains and may not
     justify increased computational cost
 
-```tikz
-% Learning curves
-\draw[thick, ->] (0,0) -- (8,0);
-\draw[thick, ->] (0,0) -- (0,5);
-
-% Axes labels
-\node[below] at (4,-0.3) {Training Set Size};
-\node[left] at (-0.3,2.5) {Accuracy};
-
-% Axis values
-\node[below] at (0,-0.5) {0};
-\node[below] at (8,-0.5) {$n$};
-\node[left] at (-0.4,5) {1.0};
-\node[left] at (-0.4,0) {0};
-
-% Training curve (improvement)
-\draw[thick, blue, smooth] (0.5,0.5) to (1.5,1.8) to (3,3.2) to (5,4.2) to (7,4.6);
-\node[blue] at (7.5,4.8) {\small Train error};
-
-% Test curve (higher starting, converges)
-\draw[thick, red, smooth] (0.5,1.5) to (1.5,2.8) to (3,3.8) to (5,4.4) to (7,4.7);
-\node[red] at (7.5,3.5) {\small Test error};
-
-% Gap annotation
-\draw[dashed] (3,3.2) -- (3,3.8);
-\node[right] at (3.3,3.5) {Generalization gap};
-
-% Saturation annotation
-\draw[dashed] (6,4.6) -- (7,4.6);
-\node[above] at (6.5,4.8) {Diminishing returns};
-```
-
 - You should use _learning curves_ to track this effect
 
-![](msml610/lectures_source/figures/L02.5.Learning_Curves_Example.png)
+![](msml610/lectures_source/figures/L02.5.Learning_Curves_Example.png){width=30%}
 
 * Using Test Data
 
@@ -473,8 +441,6 @@
       actual spam emails were correctly identified as spam
   - Measures _"quantity"_ of prediction (coverage)
 
-![](msml610/lectures_source/figures/L02.5.Precision_Recall_ROC.png)
-
 * Precision / Recall for Trivial Classifiers
 
 - @Example@: A classifier that **outputs always most common class** has:
@@ -533,6 +499,9 @@
 
 * Precision-Recall Curves
 
+::: columns
+:::: {.column width=60%}
+
 - @Definition@: **Precision-recall curves** show _precision vs recall trade-off_ for
   a classifier as its threshold $\theta$ varies
   - Plot the curve on a precision-recall plane ($x =$ recall, $y =$ precision)
@@ -540,11 +509,12 @@
 
 - @Remark@: on a precision-recall plane
   - **Best classifier** (precision = recall = 1) is in the top-right corner
-  - A curve **higher** than another one means a better classifier (for the same
-    recall you get higher precision)
-  - The baseline "random classifier" is a horizontal line at the fraction of positive
-    examples
-  - A curve above the baseline is better than random guessing
+  - A curve **higher** than another one means a better classifier
+  - The baseline "random classifier" is a horizontal line at the fraction of
+    positive examples, and a curve above it is better than random guessing
+
+::::
+:::: {.column width=38%}
 
 ```tikz
 % Precision-Recall curve
@@ -577,6 +547,9 @@
 \node[red, above] at (0.3,6.3) {Best};
 ```
 
+::::
+:::
+
 * ROC Curves
 
 - @Definition@: A **ROC curve** ("Receiver Operating Characteristic") plots _true
@@ -598,9 +571,11 @@
 
 * Area Under the Curve
 
+::: columns
+:::: {.column width=65%}
+
 - @Definition@: **AUC** is the _area under the precision-recall curve_
   - Provides a robust metric by integrating over all thresholds
-  - Higher AUC indicates better class differentiation
   - AUC near the positive-class **prevalence** suggests no discriminative power,
     since that is the score of a random classifier
   - AUC closer to 1.0 indicates high performance
@@ -611,10 +586,16 @@
   - Handles imbalanced datasets effectively
 
 - @Example@
-  - AUC helps understand model's ability to distinguish between patients with and
-    without a disease
+  - Helps understand a model's ability to distinguish between patients with
+    and without a disease
+
+::::
+:::: {.column width=32%}
 
 ![](msml610/lectures_source/figures/L02.5.AUC_ROC_Curve.png)
+
+::::
+:::
 
 * F-Score
 
@@ -729,6 +710,9 @@
 
 * Model Selection as Learning
 
+::: columns
+:::: {.column width=60%}
+
 - @Interpretation@: _"picking the model with smallest $E_{val}$"_ is a **form of
   learning**:
   - Hypothesis set: $\{g_1, ... , g_N\}$
@@ -749,6 +733,9 @@
       $$
     - Use VC dimension for an infinite number of hypotheses (e.g., choice of
       $\lambda$ for regularization)
+
+::::
+:::: {.column width=38%}
 
 ```tikz
 % Bias in model selection: E_val vs E_out relationship
@@ -780,6 +767,9 @@
 \draw[fill=red] (5,2) circle (0.2);
 \node[red, above] at (5,2.5) {Optimal $\lambda$};
 ```
+
+::::
+:::
 
 ## Ensemble Learning
 
@@ -871,6 +861,9 @@
 
 * Bagging
 
+::: columns
+:::: {.column width=68%}
+
 - @Definition@: Bagging stands for "Bootstrap AGGregation"
 
 - @Algorithm@: Learning procedure
@@ -887,7 +880,13 @@
   - Bagging mimics extracting more training sets (though not independent) from the
     unknown distribution
 
+::::
+:::: {.column width=28%}
+
 ![](msml610/lectures_source/figures/L02.5.Bagging_Classifier.png)
+
+::::
+:::
 
 * Bagging and Instability in Learning Algorithms
 
@@ -927,17 +926,16 @@
   - Combination of linear models is still a linear model
   - OLS finds optimal weights in one step
 
-![](msml610/lectures_source/figures/L02.5.Boosting_Concept.png)
+![](msml610/lectures_source/figures/L02.5.Boosting_Concept.png){width=30%}
 
 * Adaboost.M1
 
-- @Definition@: AdaBoost (Adaptive Boosting) is a powerful ensemble method
-- Widely used for classification
+- @Definition@: AdaBoost (Adaptive Boosting) is a powerful ensemble method,
+  widely used for classification
+  - Assumes examples can be weighted in the cost function used to learn
+    (otherwise use resampling)
 
-- Assume examples can be weighted in the cost function used to learn
-  - Otherwise use resampling
-
-![](msml610/lectures_source/figures/L02.5.AdaBoost_Diagram.png)
+![](msml610/lectures_source/figures/L02.5.AdaBoost_Diagram.png){width=28%}
 
 - @Algorithm@: Learning procedure
   - Start with equal weights for all examples
@@ -951,6 +949,9 @@
 ### Stacking
 
 * Stacking
+
+::: columns
+:::: {.column width=65%}
 
 - @Definition@: **Stacking** is about learning how to combine models (not necessarily
   of the same type)
@@ -971,7 +972,13 @@
     - Use probabilities from level 0, so level 1 can assess the confidence of each
       model
 
+::::
+:::: {.column width=32%}
+
 ![](msml610/lectures_source/figures/L02.5.Stacking_Ensemble.png)
+
+::::
+:::
 
 * Boosting vs Bagging vs Stacking
 
