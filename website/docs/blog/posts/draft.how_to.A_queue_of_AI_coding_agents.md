@@ -14,25 +14,28 @@ TL;DR: My workflow to run a queue of AI agents that fix issues asynchronously.
 <!-- more -->
 
 - This blog is a short description of my workflow to organize and run a queue of AI
-  agents fixing issues asynchrously
+  agents fixing issues asynchronously
 
-- My coding set up is:
-  - GitHub (GH) / Git
-  - Claude Code (CC)
-  - `ai_helpers` repo
+- My current coding set up is:
+  - Source control: GitHub (GH) / Git
+  - Agent harness: Claude Code (CC)
+  - Model: Anthropic models
+  - `helpers` repo
 
-- None of this assumptions is strictly needed, but you can generalize to other code
+- None of this assumptions is strictly needed, and you can generalize to other code
   hosting / control systems, code harness, and models
 
 # Overview
 
 - The core components are:
-  - **Queue**: A set of GitHub Issues that should be executed asynchrously
+  - **Queue**: A set of GitHub Issues that should be implemented asynchronously
     (identified by a specific label or assigned to a specific user, e.g., `claude`)
   - **Trigger**: a GitHub Action that runs when an issue is labeled assigned marking
     it as part of the Queue
-  - **Agent**: Claude Code, running in the GH Actions, which reads the issue, writes
-    the code (running regressions, linting, etc) and then opens a PR for human review
+  - **Agent**: Claude Code, running in the GH Actions, which
+    - reads the issue
+    - writes the code (running regressions, linting, etc)
+    - opens a PR for human review and merge
 
 - The actions are:
   - Create a list of issues with specs that can be executed asynchronously
@@ -41,20 +44,23 @@ TL;DR: My workflow to run a queue of AI agents that fix issues asynchronously.
 
 ## Getting Tasks in the Queue
 
-- I maintain a markdown file called `.claude/ai_task_queue.md` with everything that I
-  would like to be done over time
+- I maintain a markdown file called `ai_task_queue.md` with everything that I would
+  like to be done over time
 
-- The format of the queue is simply a markdown file:
-  - With several sections (`Ready`, `Backlog`, `Done`)
-  - For each section a checklist of issues described in terms of title and specs
+- The format of the task queue is simply a markdown file:
+  - It has several sections (`Ready`, `Backlog`, `Done`) to represent the state of
+    the tasks
+  - Each section has a checklist of issues described in terms of title and specs
 
-- E.g.,
+- `ai_task_queue.md` looks like:
   ```markdown
   # Ready
 
-  ## [ ] Use System_to_one_line() in Hgit.py
-
   ## [ ] <GitHub Issue Title>
+
+  <Specs>
+
+  ## [ ] Use System_to_one_line() in hgit.py
 
   <Specs>
 
@@ -67,22 +73,25 @@ TL;DR: My workflow to run a queue of AI agents that fix issues asynchronously.
   ...
   ```
 
-- E.g., potential targets for asynchronous bugs are:
-  - Todos in the codebase (e.g., marked with `TODO(ai_gp)`)
-  - Ensure that file have 100% code coverage by unit tests
+- Potential targets for asynchronous tasks are:
+  - Todos in the codebase
+    - E.g., marked with `TODO(ai_gp)` to communicate that are assigned by my user for
+      AI execution
+  - Ensure that files have a high enough code coverage by unit tests
   - Make sure all files follow the style rules of the repo
-  - Make sure all files pass the linter stage (e.g., have no `pyright` warnings /
-    errors)
+  - Make sure all files pass the linter stage
+    - E.g., have no `pyright` warnings / errors
   - Triage and propose a solution for unit tests that are disabled
   - One-off refactoring and other code clean ups
-  - Prototyping / "Tracer bullet" to one-shot something to see what is its impact
+  - Prototyping / "Tracer bullet" to one-shot implement something to see what is its
+    impact and how it looks like
   - Explore research ideas
 
-- Certain classes of tasks are run more as on a schedule (rather than as
-  `ai_task_queue.md`, which are mainly one-offs)
-  - E.g.,
-    - Maintaining the documentation in sync with code
-    - Making sure code coverage for the entire repo is high enough
+- Certain classes of tasks are run on a schedule rather than as `ai_task_queue.md`
+  (which are mainly one-off tasks), e.g.,
+  - Maintaining the documentation in sync with code
+    - You want to run this every day or every commit
+  - Making sure code coverage for the entire repo is high enough
 
 ## The Unit of Work
 
