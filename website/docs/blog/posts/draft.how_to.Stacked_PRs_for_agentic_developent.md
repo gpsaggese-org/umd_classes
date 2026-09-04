@@ -23,4 +23,7 @@
     increase costs of applying our changes once we review things
 - In this case the specs need to be all written at once
 
+// TODO(ai_gp): Explain how to use GitHub new stacked PR feature
+
+// TODO(ai_gp): Explain how to use git-spice
 

@@ -73,6 +73,15 @@ TL;DR: My workflow to run a queue of AI agents that fix issues asynchronously.
   ...
   ```
 
+- Each task has
+  ```
+  Title:
+  Problem:
+  Solution:
+  Implementation complexity:
+  Importance:
+  ```
+
 - Potential targets for asynchronous tasks are:
   - Todos in the codebase
     - E.g., marked with `TODO(ai_gp)` to communicate that are assigned by my user for
@@ -92,96 +101,100 @@ TL;DR: My workflow to run a queue of AI agents that fix issues asynchronously.
   - Maintaining the documentation in sync with code
     - You want to run this every day or every commit
   - Making sure code coverage for the entire repo is high enough
+    - You want to run this every day or every commit
 
 ## The Unit of Work
 
-- In my workflow, the unit of work is a something that corresponds to a GitHub issue
+- In my workflow, the unit of work is something that corresponds to a GitHub issue
 
 - Often it's implemented as a single Git branch + a GitHub PR
 - Sometimes one GitHub issue can correspond to multiple Git branches / GitHub PR
   - E.g., the same refactoring can be done in "chunks" with several follow up PRs
-    (for both safety and ease of review)
+    for both safety and ease of review
 
-- In my workflow, a GitHub Issue is named after the title using a fixed convention 
-  - E.g., For GitHub Issue `<num>` with title "Do this and that", the the Git branch
-    and the PRs are named as `<Repo>_<Issue Number>_Do_this_and_that`, decorated with
-    an `<id>` when there are multiple branches / PRs associated  (e.g.,
-    `<Repo>_<Issue Number>_Do_this_and_that_<id>`
+- In my workflow, a GitHub Issue is named using a fixed convention to keep it in sync
+  with the corresponding branch(es) and PRs
+  - E.g., For GitHub Issue `<num>` with title `<title>` (e.g., "Do this and that"),
+    the Git branch and the PRs are named as `<Repo>_<Issue Number>_Do_this_and_that`,
+    decorated with an `<id>` when there are multiple branches / PRs associated
+    (e.g., `<Repo>_<Issue Number>_Do_this_and_that_<id>`
 
 ## Adding Tasks to the Queue
 
 - My approach is to:
-  - Add tasks to `Backlog` in `ai_task_queue.md` as they come up,
-  - Re-organize them
+  - Add tasks to `Backlog` in `ai_task_queue.md` as they come up
+  - Re-organize them over time
   - Triage their importance over time
-  - Add specs
-  - Then mark them as ready for execution at a certain point
+  - Add / refine specs
+  - Finally mark them as ready for execution when I feel they are clear enough
 
 - Once in a while I grep the code base looking for TODOs that are suitable to be
-  executed asynchronously, e.g., with my code
-  ```bash
-  > rigtodo
-  > rigtodo . py --todo ai_gp | tee cfile
-  > vim -c "cfile cfile"
-  ...
-  ```
+  executed asynchronously
+  - E.g., in `helpers` you can run:
+    ```bash
+    > rigtodo
+    > rigtodo . py --todo ai_gp | tee cfile
+    > vim -c "cfile cfile"
+    ...
+    ```
 - Note that not all TODOs might be ready to go, so I manually review the list of
-  potential tasks and move them manually to `Backlog` (and then `Ready`)
+  potential tasks and add them manually to `Backlog` (and then `Ready`)
 
 ## Add Specs
 
 - Besides prioritizing, I also want to make sure that the model has enough
-  information to implement the code in the proper way, so I write enough specs
-  to direct the model to do something in a way that would not surprise me
+  information to implement the code in the proper way, so I write enough specs to
+  direct the model to do something in a way that would not surprise me at the
+  time of the PR review
 
-- I have several skills to help with managing the specs
-  - `/auto_task.create_specs`: specs for a list of TODOs
+- I have several agent skills to help with managing the specs:
+  - `/auto_task.create_specs`: create specs for a list of TODOs
   - `/auto_task.criticize`: to review and improve specs of tasks that will be
-    executed asynchrously
+    executed asynchronously
 
-## Feed Auto Tasks to Claude Code
+## Feed Auto Tasks to Agent
 
-- Each task conceptually has:
-  - A problem
-  - A solution
-  - A complexity
-  - An importance
+- At this point each task conceptually has:
+  - A description of the problem (e.g., title, bug description)
+  - A solution (in terms of specs)
+  - A complexity (low, medium, high)
+  - An importance (low, medium, high)
 
-- I keep improving `ai_task_queue.md` (review and edit the specs, ranking issues by
-  "simplicity" and "importance")
+- I keep improving `ai_task_queue.md` by reviewing and editing the specs, ranking
+  issues by "complexity" and "importance"
 
-- Once I see tasks that are in the `Ready` state, I pass it to the workers by
+- Once I see tasks that are in the `Ready` state, I pass it to the workers by running
   ```
   > git_create_issue_and_branch.py --gh_issue_title 'Implement TODOs' --gh_issue_body_file instr.md
   ```
+  - This command automatically create a GitHub issue, a branch, and a PR all named
+    following the convention, so that it's easy to relate one to the others
+  - There is overlap with GitHub `gh` command to manage issues but personally I
+    prefer to batch the issues in a GH, keep working / refining them, and then push
+    everything to GitHub with a script
 
-./helpers_root/dev_scripts_helpers/ai/todo_janitor.template.md
-./helpers_root/todo_janitor.prompt.update_plan.md
-
+`./helpers_root/dev_scripts_helpers/ai/todo_janitor.template.md`
 
 - This is the master list of what needs to be done
 
-- User reviews them and add a [ ] ready
-
-- There is overlap with GitHub `gh` to manage issues but personally I prefer to batch
-  the issues in a GH, keep working / refining them, and then push everything to
-  GitHub with a script
-
 - The workflow is:
   - Maintain / replenish `ai_task_queue.md`
-  - Create GitHub issue
-  - Create a branch / PR /
-  - Let CC fix the issues (interacting on GitHub, running regressions, etc)
+  - Create GitHub issues
+  - Create a branch / PR for the agent to do the work
+  - Let the agent fix the issues (running on GitHub infra, running regressions, etc)
     and creating a PR when ready
-  - (Optional) Check out the branch to make changes manually, when explaining
-    something takes longer than just doing it
+  - (Optional) Humans check out the branch to make changes manually
+    - E.g., when explaining something to do to the agent takes longer than just doing
+      it
   - Review PR and merge it
   - Close GH Issue
   - Update `ai_task_queue.md` with the ones that were done
+    E.g., `./helpers_root/todo_janitor.prompt.update_plan.md`
 
 - This is the same workflow I used to use with collaborators with the main difference
-  that now AI agents are doing the work (and there is a bump in throughput and often
-  time in quality, at least for PR that pure implementation and not design)
+  that now AI agents are doing the work
+  - Of course there is a bump in throughput and often in quality, at least for PR
+    that are pure implementation and not design
 
 - Other tasks can be executed on **GitHub**
 
@@ -191,15 +204,16 @@ TL;DR: My workflow to run a queue of AI agents that fix issues asynchronously.
 
   Assign the task to Claude to let it go using the GH actions or use the Desktop
 
-
 ### An Alternative Local Flow
 
-- There are also tasks that can / should be run **locally**
+- Some tasks are best done **locally** and **interactively**
   - E.g., run the local regressions, more control and interactivity
-  - I use the same approach as above but I work with the AI agent in worktrees
-    (which is managed automatically together with GH Issue, Git branch, GH PR
-    using proper tooling)
+
+- I use the same approach as above but working with AI agent in worktrees, which are
+  managed automatically together with GH Issue, Git branch, GH PR using the same
+  tool
   ```
+  # Create a task, 
   > git_create_issue_and_branch.py --gh_issue_title 'Implement TODOs' --gh_issue_body_file instr.md --create_worktree
   > cd /Users/saggese/src/helpers1_worktree_1325; dev_scripts_helpers/thin_client/tmux.py --index 1325
   ```
