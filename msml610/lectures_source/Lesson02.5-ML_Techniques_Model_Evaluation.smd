@@ -103,19 +103,19 @@
 % Full dataset bar
 \draw[fill=gray!30, draw=gray, thick] (0,1.5) rectangle (14,2.2);
 \node[left] at (-0.5,1.85) {Original};
-\node[above] at (7,2.3) {Dataset (100%)};
+\node[above] at (7,2.3) {Dataset (100\%)};
 
 % Training set (60%)
 \draw[fill=blue!40, draw=blue, thick] (0,0.5) rectangle (8.4,1.1);
-\node[font=\bfseries] at (4.2,0.8) {Training (60%)};
+\node[font=\bfseries] at (4.2,0.8) {Training (60\%)};
 
 % Validation set (20%)
 \draw[fill=green!40, draw=green, thick] (8.4,0.5) rectangle (11.2,1.1);
-\node[font=\bfseries] at (9.8,0.8) {Validation (20%)};
+\node[font=\bfseries] at (9.8,0.8) {Validation (20\%)};
 
 % Test set (20%)
 \draw[fill=red!40, draw=red, thick] (11.2,0.5) rectangle (14,1.1);
-\node[font=\bfseries] at (12.6,0.8) {Test (20%)};
+\node[font=\bfseries] at (12.6,0.8) {Test (20\%)};
 
 % Purpose annotations
 \node[below, font=\small, blue] at (4.2,0.3) {Learn parameters};
@@ -184,19 +184,19 @@
 % Full dataset bar
 \draw[fill=gray!30, draw=gray, thick] (0,1.5) rectangle (14,2.2);
 \node[left] at (-0.5,1.85) {Original};
-\node[above] at (7,2.3) {Dataset (100%)};
+\node[above] at (7,2.3) {Dataset (100\%)};
 
 % Training set (60%)
 \draw[fill=blue!40, draw=blue, thick] (0,0.5) rectangle (8.4,1.1);
-\node[font=\bfseries] at (4.2,0.8) {Training (60%)};
+\node[font=\bfseries] at (4.2,0.8) {Training (60\%)};
 
 % Validation set (20%)
 \draw[fill=green!40, draw=green, thick] (8.4,0.5) rectangle (11.2,1.1);
-\node[font=\bfseries] at (9.8,0.8) {Validation (20%)};
+\node[font=\bfseries] at (9.8,0.8) {Validation (20\%)};
 
 % Test set (20%)
 \draw[fill=red!40, draw=red, thick] (11.2,0.5) rectangle (14,1.1);
-\node[font=\bfseries] at (12.6,0.8) {Test (20%)};
+\node[font=\bfseries] at (12.6,0.8) {Test (20\%)};
 
 % Purpose annotations
 \node[below, font=\small, blue] at (4.2,0.3) {Learn parameters};
@@ -1079,6 +1079,5 @@
   ),
   col-widths: (1.7fr, 1.7fr, 1.7fr, 1.7fr),
   bold-first-col: true,
-  caption: "Comparison of ensemble learning techniques",
 )
 ```

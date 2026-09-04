@@ -346,12 +346,14 @@ deployment.
 // % Legend
 // \node[anchor=west, font=\small] at (0.5,-1.8) {Note: Only retrain model with full dataset after test set evaluation is complete};
 // ```
-// label=fig:usingtestdata caption=Diagram illustrating Using Test Data
+// label=fig:usingtestdata
+// caption=Diagram illustrating Using Test Data
 // rendered_images:end
 // render_images:begin
 #figure(
   image("Lesson02.5-ML_Techniques_Model_Evaluation.typ.figs/Lesson02.5-ML_Techniques_Model_Evaluation.1.png"),
-) <fig:usingtestdata caption=Diagram illustrating Using Test Data>
+  caption: [Diagram illustrating Using Test Data],
+) <fig:usingtestdata>
 // render_images:end
 
 // From: msml610/lectures_source/Lesson02.5-ML_Techniques_Model_Evaluation.smd:196 '## Choosing an Error Measure'
@@ -404,15 +406,14 @@ a #strong[false negative] (rejecting a valid one). The weight assigned to each
 type of error depends entirely on the application.
 
 Consider a supermarket loyalty program that uses fingerprint scanning to verify
-discount eligibility. A false positive here, shown by @fig:checkmark, is a minor
-issue: one customer receives an undeserved discount. A false negative, indicated
-by @fig:warning, is far more costly: a legitimate customer is denied their
-discount, leading to frustration and checkout delays. Now consider access
-control at a CIA facility. The calculus reverses completely. A false positive,
-represented by @fig:skull, is critical: an unauthorized person gains entry,
-creating a security breach. A false negative, marked by @fig:checkmark, is
-acceptable: a legitimate employee is simply asked to verify their identity
-through an additional check.
+discount eligibility. A false positive here (✓) is a minor issue:
+one customer receives an undeserved discount. A false negative (⚠)
+is far more costly: a legitimate customer is denied their discount, leading to
+frustration and checkout delays. Now consider access control at a CIA facility.
+The calculus reverses completely. A false positive (💀) is critical: an
+unauthorized person gains entry, creating a security breach. A false negative
+(✓) is acceptable: a legitimate employee is simply asked to verify
+their identity through an additional check.
 
 #figure(
   styled-table(
@@ -667,12 +668,14 @@ between the two kinds of mistakes.
 // \node at (1,1) {\textbf{FP}};
 // \node at (3,1) {\textbf{TN}};
 // ```
-// label=fig:confusionmatrix caption=Diagram illustrating Confusion Matrix
+// label=fig:confusionmatrix
+// caption=Diagram illustrating Confusion Matrix
 // rendered_images:end
 // render_images:begin
 #figure(
   image("Lesson02.5-ML_Techniques_Model_Evaluation.typ.figs/Lesson02.5-ML_Techniques_Model_Evaluation.2.png"),
-) <fig:confusionmatrix caption=Diagram illustrating Confusion Matrix>
+  caption: [Diagram illustrating Confusion Matrix],
+) <fig:confusionmatrix>
 // render_images:end
 
 The confusion matrix is more than a bookkeeping device: its four cells can be
@@ -895,12 +898,14 @@ and how the random baseline provides a floor for useful performance.
 // \draw[fill=red] (0.3,5.95) circle (0.15);
 // \node[red, above] at (0.3,6.3) {Best};
 // ```
-// label=fig:precisionrecallcurves caption=Diagram illustrating Precision-Recall
+// label=fig:precisionrecallcurves
+// caption=Diagram illustrating Precision-Recall
 // rendered_images:end
 // render_images:begin
 #figure(
   image("Lesson02.5-ML_Techniques_Model_Evaluation.typ.figs/Lesson02.5-ML_Techniques_Model_Evaluation.3.png"),
-) <fig:precisionrecallcurves caption=Diagram illustrating Precision-Recall>
+  caption: [Diagram illustrating Precision-Recall],
+) <fig:precisionrecallcurves>
 // render_images:end
 Curves
 
@@ -1129,12 +1134,14 @@ evaluation, and final retraining on the combined dataset.
 // \draw[thick, ->] (4.5,1.2) to (4.5,0.5);
 // \node[rectangle, draw, fill=purple!30, thick] at (4.5,0.2) {Deploy: $g_m^*$};
 // ```
-// label=fig:modelselectionprocess caption=Diagram illustrating Model Selection
+// label=fig:modelselectionprocess
+// caption=Diagram illustrating Model Selection
 // rendered_images:end
 // render_images:begin
 #figure(
   image("Lesson02.5-ML_Techniques_Model_Evaluation.typ.figs/Lesson02.5-ML_Techniques_Model_Evaluation.4.png"),
-) <fig:modelselectionprocess caption=Diagram illustrating Model Selection>
+  caption: [Diagram illustrating Model Selection],
+) <fig:modelselectionprocess>
 // render_images:end
 Process
 
@@ -1181,12 +1188,14 @@ cannot be trusted as a final performance estimate.
 // \draw[fill=red] (5,2) circle (0.2);
 // \node[red, above] at (5,2.5) {Optimal $\lambda$};
 // ```
-// label=fig:modelselectionaslearning caption=Diagram illustrating Model Selection
+// label=fig:modelselectionaslearning
+// caption=Diagram illustrating Model Selection
 // rendered_images:end
 // render_images:begin
 #figure(
   image("Lesson02.5-ML_Techniques_Model_Evaluation.typ.figs/Lesson02.5-ML_Techniques_Model_Evaluation.5.png"),
-) <fig:modelselectionaslearning caption=Diagram illustrating Model Selection>
+  caption: [Diagram illustrating Model Selection],
+) <fig:modelselectionaslearning>
 // render_images:end
 as Learning
 
