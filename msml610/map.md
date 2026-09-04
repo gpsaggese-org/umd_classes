@@ -140,13 +140,13 @@ WARNING: Can't find s3fs: continuing
 
 # Workflow in short
 
-/slides.review          02.1  02.2  02.3
+/slides.review          02.1  02.2  02.3  02.4  02.5
 
 Edit slides
 
 /slides.add_visuals     02.1  02.2  02.3
-/slides.add_references  02.1  02.2  .
-/slides.lint            02.1  02.2  .
+/slides.add_references  02.1  02.2  02.3
+/slides.lint            02.1  02.2  02.3
 /slides.fix_rendered_pdf            02.3
 
 Not needed
