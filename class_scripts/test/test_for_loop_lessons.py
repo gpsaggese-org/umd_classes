@@ -745,10 +745,10 @@ class Test_generate_script_e2e(hunitest.TestCase):
         source_content = """
         # Lesson 04.1: Scripts
 
-        ## Transition: Start
+        * Slide 1
         Beginning.
 
-        ## Content
+        * Slide 2
         Body.
         """
         source_content = hprint.dedent(source_content)
@@ -834,10 +834,10 @@ class Test_process_lecture_file_e2e(hunitest.TestCase):
         source_content = """
         # Lesson 03.1: Script Test
 
-        ## Transition: Start
+        * Slide 1
         Begin.
 
-        ## Content
+        * Slide 2
         Body text.
         """
         source_content = hprint.dedent(source_content)
