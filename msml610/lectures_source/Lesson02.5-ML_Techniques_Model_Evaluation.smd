@@ -136,9 +136,6 @@
   - Initially, increasing data size significantly improves performance
   - Eventually, adding more data results in smaller accuracy gains and may not
     justify increased computational cost
-// TODO(ai_gp): Use a 
-// ::: columns
-// :::: {.column width=65%}
 
 ```tikz
 % Learning curves
@@ -174,12 +171,7 @@
 
 - You should use _learning curves_ to track this effect
 
-// TODO(ai_gp): Use a 
-// ::: columns
-// :::: {.column width=65%}
-
-// Use the pic https://ohdsi.github.io/PatientLevelPrediction/articles/PlottingLearningCurves.html
-// Use the pic https://en.wikipedia.org/wiki/Learning_curve_%28machine_learning%29
+![](msml610/lectures_source/figures/L02.5.Learning_Curves_Example.png)
 
 * Using Test Data
 
@@ -191,36 +183,45 @@
   - The reported $E_{test}$ now estimates the **procedure**, not the exact deployed
     model, since the deployed model was retrained on more data
 
-// TODO(ai_gp): Improve and make it look better and more professional
 ```tikz
-% Timeline showing test set usage
-\draw[thick, ->] (0,0) -- (10,0);
-\node[below] at (5,-0.3) {Timeline};
+% Timeline showing test set usage - professional version
+\draw[thick, ->] (0,0) -- (11,0);
+\node[below] at (5.5,-0.5) {Development Pipeline Timeline};
 
-% Phase 1
-\draw[fill=blue!30] (0.5,0.3) rectangle (2.5,0.8);
-\node at (1.5,0.55) {\small Train};
+% Axes and grid
+\draw[thin, gray] (0,0) grid[step=0.5] (11,0);
 
-% Phase 2
-\draw[fill=green!30] (3,0.3) rectangle (4.5,0.8);
-\node at (3.75,0.55) {\small Val};
+% Phase 1: Training
+\draw[fill=blue!40, draw=blue, thick] (0.5,0.3) rectangle (3,0.9);
+\node[font=\bfseries] at (1.75,0.6) {Training};
+\node[below, font=\small] at (1.75,-0.8) {60\% data};
 
-% Phase 3
-\draw[fill=red!30] (5,0.3) rectangle (6.5,0.8);
-\node at (5.75,0.55) {\small Test};
+% Phase 2: Validation
+\draw[fill=green!40, draw=green, thick] (3.5,0.3) rectangle (5.5,0.9);
+\node[font=\bfseries] at (4.5,0.6) {Validation};
+\node[below, font=\small] at (4.5,-0.8) {20\% data};
 
-% Phase 4
-\draw[fill=purple!30] (7,0.3) rectangle (9.5,0.8);
-\node at (8.25,0.55) {\small Deploy (retrain)};
+% Phase 3: Testing
+\draw[fill=red!40, draw=red, thick] (6,0.3) rectangle (8,0.9);
+\node[font=\bfseries] at (7,0.6) {Testing};
+\node[below, font=\small] at (7,-0.8) {20\% data};
 
-% Annotations
-\node[above] at (1.5,1.2) {Model selection};
-\node[above] at (5.75,1.2) {Final evaluation};
-\node[above] at (8.25,1.2) {Use all data};
+% Phase 4: Deployment
+\draw[fill=purple!40, draw=purple, thick] (8.5,0.3) rectangle (10.5,0.9);
+\node[font=\bfseries] at (9.5,0.6) {Deploy (Retrain)};
+\node[below, font=\small] at (9.5,-0.8) {100\% data};
 
-% Arrow showing reuse
-\draw[dashed, ->] (6.5,0.15) to (7,0.15);
-\node[below] at (6.75,-0.4) {reuse test data};
+% Annotations above phases
+\node[above, font=\small] at (1.75,1.3) {Model selection};
+\node[above, font=\small] at (7,1.3) {Final evaluation};
+\node[above, font=\small] at (9.5,1.3) {Production};
+
+% Arrow showing data reuse
+\draw[dashed, thick, ->] (8,0.15) to (8.5,0.15);
+\node[font=\small, gray] at (8.25,-1.1) {Reuse test data};
+
+% Legend
+\node[anchor=west, font=\small] at (0.5,-1.8) {Note: Only retrain model with full dataset after test set evaluation is complete};
 ```
 
 
@@ -472,6 +473,8 @@
       actual spam emails were correctly identified as spam
   - Measures _"quantity"_ of prediction (coverage)
 
+![](msml610/lectures_source/figures/L02.5.Precision_Recall_ROC.png)
+
 * Precision / Recall for Trivial Classifiers
 
 - @Example@: A classifier that **outputs always most common class** has:
@@ -527,8 +530,6 @@
 - @Cons@
   - You have two different numbers $\to$ difficult to compare classifiers
     - Solutions: F-score, AUC
-
-// TODO(ai_gp): https://spotintelligence.com/2024/09/11/precision-and-recall/
 
 * Precision-Recall Curves
 
@@ -613,7 +614,7 @@
   - AUC helps understand model's ability to distinguish between patients with and
     without a disease
 
-// TODO(ai_gp): https://media.geeksforgeeks.org/wp-content/uploads/20250206150241961244/AUC-ROC-Curve.webp
+![](msml610/lectures_source/figures/L02.5.AUC_ROC_Curve.png)
 
 * F-Score
 
@@ -675,7 +676,56 @@
   6. Retrain model with entire $D = D_{train} \cup D_{val} \cup D_{test}$ to get final
      $g_m^{*}$
 
-// TODO(ai_gp): Add a tikz or a graphviz plot explaining this
+```tikz
+% Model Selection Process Diagram
+% Horizontal layout showing data splitting and evaluation flow
+
+% Data sources
+\node[rectangle, draw, thick, fill=blue!30] at (1,3) {Dataset};
+
+% Splitting
+\draw[thick, ->] (1,2.7) to (0.5,2.2);
+\draw[thick, ->] (1,2.7) to (1.5,2.2);
+
+% Training data
+\node[rectangle, draw, thick, fill=blue!20] at (0.5,1.5) {$D_{train}$ (60\%)};
+
+% Validation data
+\node[rectangle, draw, thick, fill=green!20] at (1.5,1.5) {$D_{val}$ (20\%)};
+
+% Learning process
+\draw[thick, ->] (0.5,1.2) to (0.5,0.8);
+\node[above, font=\small] at (0.7,1.0) {Learn N models};
+
+% Learned models
+\node[rectangle, draw] at (0.5,0.2) {$g_1, ..., g_N$};
+
+% Evaluation on validation
+\draw[thick, ->] (1.2,1.2) to (1.2,0.8);
+\node[above, font=\small] at (1.4,1.0) {Evaluate};
+
+% Selection
+\node[rectangle, draw, fill=yellow!20] at (1.2,0.2) {Best: $g_m$};
+
+% Test set
+\node[rectangle, draw, thick, fill=red!20] at (3,1.5) {$D_{test}$ (20\%)};
+
+% Final evaluation
+\draw[thick, ->] (1.7,0.2) to (2.5,0.2);
+\draw[thick, ->] (2.9,1.2) to (2.9,0.5);
+
+% Final performance
+\node[rectangle, draw, fill=red!30, thick] at (3,0.2) {$E_{test}(g_m)$};
+
+% Retraining
+\draw[thick, ->] (1,2.5) to (4.5,2.5);
+\draw[thick, ->] (4.5,2.5) to (4.5,1.2);
+
+% Full data retrain
+\node[rectangle, draw] at (4.5,1.5) {$D_{train+val+test}$};
+\draw[thick, ->] (4.5,1.2) to (4.5,0.5);
+\node[rectangle, draw, fill=purple!30, thick] at (4.5,0.2) {Deploy: $g_m^*$};
+```
 
 * Model Selection as Learning
 
@@ -700,7 +750,36 @@
     - Use VC dimension for an infinite number of hypotheses (e.g., choice of
       $\lambda$ for regularization)
 
-// TODO: Add a tikz plot 
+```tikz
+% Bias in model selection: E_val vs E_out relationship
+\draw[thick, ->] (0,0) -- (10,0);
+\draw[thick, ->] (0,0) -- (0,7);
+
+\node[below] at (5,-0.3) {Model Complexity};
+\node[left] at (-0.3,3.5) {Error};
+
+% Axis labels
+\node[below] at (0,-0.5) {0};
+\node[below] at (10,-0.5) {$\lambda$ (regularization)};
+\node[left] at (-0.4,0) {0};
+
+% E_out curve (true error)
+\draw[thick, red, smooth] (1,3) to (3,2.2) to (5,2) to (7,2.5) to (9,4);
+\node[red, above] at (5,2) {$E_{out}(g_m)$};
+
+% E_val curve (validation error - lower due to bias)
+\draw[thick, blue, smooth] (1,2) to (3,1.2) to (5,1) to (7,1.5) to (9,3);
+\node[blue, above] at (5,1) {$E_{val}(g_m)$};
+
+% Gap between curves
+\draw[dashed, gray] (5,1) -- (5,2);
+\node[gray, right] at (5.3,1.5) {Bias from};
+\node[gray, right] at (5.3,1.3) {model selection};
+
+% Optimal point
+\draw[fill=red] (5,2) circle (0.2);
+\node[red, above] at (5,2.5) {Optimal $\lambda$};
+```
 
 ## Ensemble Learning
 
@@ -808,7 +887,7 @@
   - Bagging mimics extracting more training sets (though not independent) from the
     unknown distribution
 
-// TODO(ai_gp): Add https://media.geeksforgeeks.org/wp-content/uploads/20250903170453175347/bagging_classifier.webp
+![](msml610/lectures_source/figures/L02.5.Bagging_Classifier.png)
 
 * Bagging and Instability in Learning Algorithms
 
@@ -848,17 +927,17 @@
   - Combination of linear models is still a linear model
   - OLS finds optimal weights in one step
 
-// TODO(ai_gp): Add picture from https://media.geeksforgeeks.org/wp-content/uploads/20260207125417223231/420046939.webp
+![](msml610/lectures_source/figures/L02.5.Boosting_Concept.png)
 
 * Adaboost.M1
 
-- @Definition@: Ada
+- @Definition@: AdaBoost (Adaptive Boosting) is a powerful ensemble method
 - Widely used for classification
 
 - Assume examples can be weighted in the cost function used to learn
   - Otherwise use resampling
 
-// TODO(ai_gp): Add picture https://www.sciencedirect.com/topics/engineering/adaboost
+![](msml610/lectures_source/figures/L02.5.AdaBoost_Diagram.png)
 
 - @Algorithm@: Learning procedure
   - Start with equal weights for all examples
@@ -892,21 +971,26 @@
     - Use probabilities from level 0, so level 1 can assess the confidence of each
       model
 
-// TODO(ai_gp): https://i0.wp.com/spotintelligence.com/wp-content/uploads/2024/03/stacking-1024x576.webp?resize=1024%2C576&ssl=1
+![](msml610/lectures_source/figures/L02.5.Stacking_Ensemble.png)
 
 * Boosting vs Bagging vs Stacking
 
-// TODO(ai_gp): Convert to typst table
-| **Aspect**               | **Bagging**                         | **Boosting**                       | **Stacking**                             |
-| ------------------------ | ----------------------------------- | ---------------------------------- | ---------------------------------------- |
-| **Combines**             | Models of the same type             | Models of the same type            | Models of different types                |
-|                          |                                     |                                    |
-| **Learning**             | Models trained independently        | Iterative training                 | Models trained independently             |
-| **Predicting**           | Uses uniform or data-driven weights | Uses learned weights from training | Uses learned weights or confidence       |
-| **Main Objective**       | Reduce variance                     | Reduce bias                        | Improve generalization through diversity |
-| **Base Learners**        | Often strong learners               | Often weak learners                | Any model type (heterogeneous ensemble)  |
-| **Sensitivity to Noise** | Low                                 | High                               | Medium                                   |
-| **Parallelizable**       | Yes                                 | No (sequential dependency)         | Partially (base models parallelized)     |
-| **Meta-model**           | Not used                            | Not used                           | Required                                 |
-|                          |                                     |                                    |
-| **Examples**             | Random Forest                       | AdaBoost, Gradient Boosting        | Stacked Generalization, Blending         |
+#figure(
+  table(
+    columns: (1fr, 1fr, 1fr, 1fr),
+    align: (col, row) => (left, left, left, left),
+    stroke: 0.5pt,
+    fill: (col, row) => if row == 0 { luma(200) } else if calc.odd(row) { luma(245) } else { white },
+    [*Aspect*], [*Bagging*], [*Boosting*], [*Stacking*],
+    [Combines], [Models of same type], [Models of same type], [Different types],
+    [Learning], [Independent], [Iterative], [Independent],
+    [Predicting], [Uniform or data-driven weights], [Learned weights], [Learned weights/confidence],
+    [Main Objective], [Reduce variance], [Reduce bias], [Improve generalization via diversity],
+    [Base Learners], [Often strong], [Often weak], [Any type (heterogeneous)],
+    [Sensitivity to Noise], [Low], [High], [Medium],
+    [Parallelizable], [Yes], [No (sequential)], [Partially (base models)],
+    [Meta-model], [Not used], [Not used], [Required],
+    [Examples], [Random Forest], [AdaBoost, Gradient Boosting], [Stacked Generalization, Blending],
+  ),
+  caption: [Comparison of ensemble learning techniques]
+)
