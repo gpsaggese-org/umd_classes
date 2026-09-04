@@ -206,16 +206,17 @@
 
 * Feature Scaling in Gradient Descent
 
-- @Problem@: unscaled features make the level sets of $E_{in}(\vw)$ elongated
-  ellipses, so a single learning rate is too large along steep directions and
-  too small along flat ones
+- @Problem@:
+  - Unscaled features make the level sets of $E_{in}(\vw)$ elongated ellipses
+    - E.g., a feature ranging from 1 to 1000 vs. one ranging from 0.01 to 1 causes
+      inefficient updates
+  - A single learning rate is too large along steep directions and too small along
+    flat ones
   - This ill-conditioning causes slow, unstable convergence ("bouncing")
-  - E.g., a feature ranging from 1 to 1000 vs. one ranging from 0.01 to 1
-    causes inefficient updates
 
-- @Solution@: converge faster by scaling features to comparable ranges
-  (min-max scaling, standardization), which makes the level sets closer to
-  circular
+- @Solution@: converge faster by scaling features to comparable ranges (min-max
+  scaling, standardization)
+  - Makes the level sets closer to circular
 
 # Scaling to Large Datasets
 
@@ -226,7 +227,7 @@
   \triangleq \frac{1}{N} \sum_{i=1}^N (h_{\vw}(\vx_i) - y_i) ^ 2
   $$
 
-- **Batch Gradient Descent (BGD)** updates each weight component:
+- @Definition@: **Batch Gradient Descent (BGD)** updates each weight component:
   $$
   \vw(t + 1) = \vw(t) - \eta \frac{\nabla E_{in}}{\|\nabla E_{in}\|}
   $$
@@ -239,14 +240,14 @@
     \frac{\partial h_{\vw}(\vx_i)}{\partial w_j}
     $$
 
-  - @Cons@: gradient descent with many training examples (e.g., $N = 10^6$)
-    - Is computationally expensive, requiring gradient evaluation from all
-      examples for one update
-    - Requires storing all data in memory
+- @Cons@: gradient descent with many training examples (e.g., $N = 10^6$)
+  - Is computationally expensive, requiring gradient evaluation from all
+    examples for one update
+  - Requires storing all data in memory
 
 * Stochastic Gradient Descent
-- Idea of **Stochastic Gradient Descent (SGD)**: update the weights only for one
-  training example picked at random
+- @Definition@: **Stochastic Gradient Descent** (SGD) updates the weights only for
+  one training example picked at random
 
 - @Algorithm@
   - Pick one $(\vx_n, y_n)$ at a time from the available examples
@@ -260,11 +261,11 @@
     \frac{\partial h_{\vw}(\vx_t)}{\partial w_j}
     $$
 
-- @Cons@: in Stochastic Gradient Descent
+- @Cons@:
   - Path in weight space is random
   - Oscillates around local minimum
 
-- **Why SGD works**
+- @Intuition@: **Why SGD works**
   - $\nabla e$ is a function of a random var $\vx_n$
   - The average direction of SGD is the same direction as batch version
     $$
@@ -275,11 +276,11 @@
     $$
 
 * Mini-Batch Gradient Descent
-- **Mini-Batch Gradient Descent** brings together characteristics of both Batch
-  and Stochastic Gradient Descent
+- @Definition@: **Mini-Batch Gradient Descent** brings together characteristics of
+  both _Batch_ and _Stochastic Gradient Descent_
   - Use $b$ examples to make an update to the current weight
   - $b$ represents the batch size
-  - A common choice is $b = 32$ or $b = 64$
+  - E.g., a common choice is $b = 32$ or $b = 64$
 
 * SGD vs BGD vs Mini-Batch
 
@@ -287,14 +288,14 @@
 #styled-table(
   headers: ("Aspect", "Batch GD", "Stochastic GD", "Mini-Batch GD"),
   rows: (
-    ("Computation", "Uses all examples", "One random example at a time", "A random subset ($b$ examples) at a time"),
+    ("Computation", "Uses all examples", "One random example at a time", "A random subset (b examples) at a time"),
     ("Memory", "Requires all examples in memory", "Requires little memory", "Requires little memory"),
     ("Randomization", "More likely to terminate in flat regions", "Avoids local minima due to randomness", "Some randomness, less noisy than SGD"),
     ("Regularization", "No implicit regularization", "Oscillations act as regularization", "Mild implicit regularization"),
     ("Parallelization", "Can be parallelized", "Less parallel-friendly", "Can be parallelized within a batch"),
     ("Online learning", "Not suitable", "Suitable", "Suitable"),
   ),
-  col-widths: (1fr, 1.5fr, 1.5fr, 1.5fr),
+  col-widths: (1.6fr, 1.7fr, 1.7fr, 1.7fr),
   bold-first-col: true,
 )
 ```
@@ -303,21 +304,11 @@
 ::: columns
 :::: {.column width=65%}
 
-- In many applications, **continuous stream** of training examples $\to$
-  requires
-  updating the model
-  - In real-time systems, adapt model with new data points without full
-    retraining
+- In many applications, there is a @continuous stream@ of training examples $\to$
+  need to update the model
+- In real-time systems
+  - Adapt model with new data points without full retraining
   - Handle variation in underlying process dynamics
-
-- Stochastic GD and mini-batch GD **suitable for online learning**
-  - Update model one example at a time
-  - Discard examples for "compressed" model representation
-    - Useful for large data streams where storing every data point is
-      impractical
-    - E.g., in stock market prediction
-    - E.g., in training a language model on live chat data, discard older
-      conversations after updates
 
 ::::
 :::: {.column width=40%}
@@ -346,13 +337,24 @@ digraph StreamModel {
 ::::
 :::
 
+
+- Stochastic GD and mini-batch GD @suitable for online learning@
+  - Update model one example at a time
+  - Discard examples and keep "compressed" model representation
+    - Useful for large data streams where storing every data point is impractical,
+      e.g.,
+    - In stock market prediction
+    - In training a language model on live chat data, discard older conversations
+      after updates
+  - Discarding the data is a _bad idea_
+
 * Map-Reduce for Batch Gradient Descent
 ::: columns
 :::: {.column width=45%}
 
-- Batch GD (and many learning algorithms) can be expressed in map-reduce
+- Batch GD can be expressed in @map-reduce@ (like many learning algorithms)
 
-- **In map-reduce**
+- @Definition@: **Map-reduce** is a big data framework for distribute computation
   - **Map step**: use $k$ machines to parallelize summation
   - **Reduce step**: send $k$ partial sums to a single node to accumulate result
 
@@ -413,7 +415,7 @@ digraph BayesianFlow {
 # Alternatives to Gradient Descent
 
 * Coordinate Descent
-- **Idea**: minimize $J(x_0, ..., x_n)$ by optimizing along one direction $x_i$
+- @Idea@: minimize $J(x_0, ..., x_n)$ by optimizing along one direction $x_i$
   at a time
   - Instead of computing all derivatives
 
@@ -428,16 +430,16 @@ digraph BayesianFlow {
   - The minimum is local
 
 * Gradient Descent vs Pseudo-Inverse
-- For linear models, you can use pseudo-inverse or gradient descent to find
-  optimal $\vw^*$
+- For linear models, you can use pseudo-inverse or gradient descent to find optimal
+  $\vw^*$
 
-- **Gradient descent**
+- @Gradient descent@
   - Choose learning rate $\eta$
   - Requires many iterations
   - Monitor stopping criteria, oscillations
   - Effective for many features $P$
 
-- **Pseudo-inverse**
+- @Pseudo-inverse@
   - No parameter selection
   - Converges in one iteration
   - Computes a $P \times P$ matrix $(\mX^T \mX)^{-1}$
