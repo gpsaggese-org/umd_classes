@@ -144,10 +144,10 @@ WARNING: Can't find s3fs: continuing
 
 Edit slides
 
-/slides.add_visuals     02.1  02.2  02.3
-/slides.add_references  02.1  02.2  02.3
-/slides.lint            02.1  02.2  02.3
-/slides.fix_rendered_pdf            02.3
+/slides.add_visuals     02.1  02.2  02.3  02.4  02.5
+/slides.add_references  02.1  02.2  02.3  02.4  02.5
+/slides.lint            02.1  02.2  02.3  02.4  02.5
+/slides.fix_rendered_pdf            02.3  02.4  02.5
 
 Not needed
 /slides.fix_errors
@@ -155,13 +155,13 @@ Not needed
 /slides.fix_formatting
 /slides.add_tutorial_links
 
-> lint_text.py          02.1        02.3
+> lint_text.py          02.1        02.3  02.4  02.5
 > lint_text.py -i msml610/lectures_source/Lesson02.1*.smd
 
 > gen_slides.py -i msml610/01.3
 > grep "^* " msml610/lectures_source/*.smd | wc -l
 
-gen_book_chapter        02.1        02.3
+gen_book_chapter        02.1        02.3  02.4  02.5
 gen_book_chapter.py -i msml610/01.2 --mode typst_aima --llm_backend hllm_cli -v DEBUG --model claude-opus-4.5
 gen_book_chapter.py -i msml610/01.2 --mode typst_aima --llm_backend hllm_cli_exec --model openrouter/anthropic/claude-opus-4.6 --no_incremental
 
