@@ -38,7 +38,7 @@
       complexity
   - Complexity of a hypothesis set $\calH$
     - E.g., VC dimension of the model
-      [@abumostafa2012learning]
+      `#cite("abumostafa2012learning")`{=typst}
   - Complexity of both $h$ and $\calH$ are related by counting:
     - If you need $l$ bits to specify $h$, then $h$ is one of $2^l$ elements of
       set $\calH$
@@ -81,7 +81,7 @@
     - The model views the world through training data
   - Formalized by Hoeffding's hypothesis in ML theory: training and testing
     distributions are the same
-    [@abumostafa2012learning]
+    `#cite("abumostafa2012learning")`{=typst}
 
 - @Causes of Sampling Bias@
   - _Non-random sampling_: Favors certain outcomes or groups
@@ -124,7 +124,7 @@ mindmap
 * Data Snooping (1/2)
 - @Definition@: **Data snooping** occurs when test set information improperly
   influences model-building
-  [@hastie2009statlearn]
+  `#cite("hastie2009statlearn")`{=typst}
 
 - @Causes of Data Snooping@
   - _Train-test contamination_: Test data leaks into training
@@ -166,7 +166,7 @@ mindmap
 \endgroup
 
 * "Burning the Test Set"
-- @Problem@ [@hastie2009statlearn]
+- @Problem@ `#cite("hastie2009statlearn")`{=typst}
   - Repeated test set use during development leaks into training $\to$ overfitting to
     _test data_
   - _"If you torture the data long enough, it will confess whatever you want"_
@@ -190,8 +190,7 @@ mindmap
 
 * How to Achieve Out-Of-Sample Fit
 - @Goal@: Choose an hypothesis $g \in \calH$ approximates the unknown target
-  function $f$
-  [@abumostafa2012learning]
+  function $f$ `#cite("abumostafa2012learning")`{=typst}
   - $g \approx f$ means $E_{out}(g) \approx 0$
 
 - @Solution@:
@@ -203,7 +202,7 @@ mindmap
 * What If Out-Of-Sample Fit Is Poor?
 - @Problem@: the model performs well in sample ($E_{in} \approx 0$) but poorly out of
   sample ($E_{out} \gg E_{in}$)
-  [@abumostafa2012learning]
+  `#cite("abumostafa2012learning")`{=typst}
   - In-sample performance is optimistic
   - Model is overfitted and fails to generalize
 
@@ -239,7 +238,7 @@ mindmap
 \endgroup
 
 * Why Using a Lot of Data?
-- @Fact@: **Several studies** show that: [@abumostafa2012learning]
+- @Fact@: **Several studies** show that: `#cite("abumostafa2012learning")`{=typst}
   - Different algorithms/models have remarkably similar performance
   - Increasing training set improves performance
 
@@ -288,16 +287,10 @@ mindmap
 * Right and Wrong Approach to Research
 - @Problem@: It is rarely clear how to prioritize the different possible tasks
 
-::: columns
-:::: {.column width=45%}
-
 - @Bad approach@
   1. Use gut feeling to choose a task
   2. Complete task
   3. Re-evaluate performance
-
-::::
-:::: {.column width=55%}
 
 - @Good approach@
   1. Build a simple algorithm (within 1 day!)
@@ -310,9 +303,6 @@ mindmap
   4. Understand the problem (debug)
      - Review misclassified emails manually: what are their types?
   5. Sometimes you just need to try approaches to see if they work
-
-::::
-:::
 
 * Example: Spam Filter Classification
 - You use $N$ = 5 fixed words in an email to distinguish spam / non-spam emails using
@@ -413,3 +403,10 @@ _Iterative_
 _Incremental vs Iterative_
 ::::
 :::
+
+* References
+
+```{=typst}
+#set text(size: 0.75em)
+#references("/msml610/lectures_source/refs.bib")
+```
