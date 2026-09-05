@@ -16,26 +16,27 @@ switches, balancing productivity gains against review complexity.
 
 ## The Challenge
 
-When working with AI agents, two competing goals create tension:
+- When working with AI agents, two competing goals create tension:
+  - **Goal 1**: Let agents run longer on extended task sequences (ideally full-day
+    runs)
+  - **Goal 2**: Review agent work frequently without losing context or having
+    the agent make expensive mistakes
 
-- **Goal 1**: Let agents run longer on extended task sequences (ideally full-day
-  runs)
-- **Goal 2**: Review work frequently without losing context or making expensive
-  mistakes
-
-As humans, we avoid constant context switching. We prefer continuous blocks of
-similar work: reviewing five related changes feels more productive and
-error-resistant than alternating between running tasks, reviewing, running
-again, reviewing again.
+- As humans, we avoid constant context switching and prefer continuous blocks of
+  similar work
+  - E.g., reviewing five related changes is more productive and error-resistant than
+    alternating between running tasks, reviewing, running again, reviewing again
 
 ## Understanding Your Workflow
 
-The right approach depends on how tasks relate to each other:
+- The right approach to direct agents depends on how tasks relate to each other:
 
-- **Independent tasks**: Agents run in parallel on separate paths, and you
-  review all results when complete
-- **Sequential tasks**: Each task must complete before the next begins, and
-  feedback between steps shapes future work
+  - **Independent tasks**: Agents run in parallel on separate paths, and you review all
+    results when complete
+  - **Sequential tasks**: Each task must complete before the next begins, and feedback
+    between steps shapes future work
+    - Sequential tasks depend on feedback from previous steps, forcing a linear
+      progression
 
 ```mermaid
 graph TB
@@ -57,24 +58,33 @@ graph TB
   end
 ```
 
-Independent tasks run in parallel without affecting each other. Sequential tasks
-depend on feedback from previous steps, forcing a linear progression.
+- Independent tasks run in parallel without affecting each other
+  - The problem is that
+    - It's difficult to keep track of N independent tasks
+    - Often we would rather finish completely one task in 1 day, rather than
+      completing $N$ tasks in $N$ days
 
 ## Strategy 1: Interactive Workflows
 
-An interactive workflow runs fast feedback loops:
+- An interactive workflow runs fast feedback loops:
+  - Write all task specifications upfront (single spec session)
+  - Assign one task to the agent
+  - Review the result
+  - Assign the next task based on what you learned
 
-- Write all task specifications upfront (single spec session)
-- Assign one task to the agent
-- Review the result
-- Assign the next task based on what you learned
+- **Pros**:
+  - This approach minimizes divergence: feedback is frequent and specific so the
+    agent and the user are in sync
 
-This approach minimizes divergence: feedback is frequent and specific. The
-trade-off is constant context switching between review and dispatch.
+- **Cons**:
+  - User has constant context switching between review and dispatch
+  - Sometimes user gets stuck waiting for the agent to finish
 
-**Optimization**: Use a precompiled task list. This removes spec-writing time
-from the loop, leaving only: run → review → repeat. Faster feedback and lower
-cognitive load per cycle.
+## Strategy 2: Precompiled task list
+
+- This approach is still interactive, but the idea is to remove spec-writing time
+  from the loop, leaving only: run → review → repeat with faster feedback and lower
+  cognitive load per cycle
 
 ```mermaid
 timeline
@@ -91,26 +101,30 @@ timeline
   Loop 3: You review
 ```
 
-Each cycle completes quickly, but your attention alternates between agent and
-review work.
+- A variation of the precompiled is to let the agent go ahead through the task list
+  and commit multiple times
+- **Cons**:
+  - Reviewing the work becomes difficult since in Git / GitHub the unit of work is
+    typically a PR as a group of commits and not a list of commits
 
 ## Strategy 2: Stacked PRs
 
-Stacked PRs reduce interruptions by letting the agent work longer:
+- Stacked PRs reduce interruptions by letting the agent work longer:
+  - Write all task specifications once, upfront
+  - Agent completes multiple tasks in sequence
+  - Agent creates multiple PRs automatically (one per task or logical change)
+  - You review all PRs together when the agent finishes
 
-- Write all task specifications once, upfront
-- Agent completes multiple tasks in sequence
-- Agent creates multiple PRs automatically (one per task or logical change)
-- You review all PRs together when the agent finishes
+- **Pros**:
+  - This creates a single uninterrupted work block for the user and the agent
 
-This creates a single uninterrupted work block for the agent. The trade-offs:
-
-- **Divergence risk grows**: longer task sequences without feedback increase the
-  chance the agent misunderstands requirements
-- **Compound complexity**: later tasks depend on earlier ones, so review becomes
-  interconnected
-- **Expensive corrections**: fixing mistakes mid-sequence requires rebasing all
-  downstream changes
+- **Cons**
+  - _Divergence risk grows_: longer task sequences without feedback increase the
+    chance the agent misunderstands requirements (or it was poorly specified)
+  - _Compound complexity_: later tasks depend on earlier ones, so review becomes
+    interconnected
+  - _Expensive corrections_: fixing mistakes mid-sequence requires rebasing all
+    downstream changes (aka the problem of "stacked PRs")
 
 ```mermaid
 timeline
@@ -124,8 +138,9 @@ timeline
   Review Phase: Rebase if needed
 ```
 
-Agent works uninterrupted; your review happens once at the end. Fewer context
-switches, but higher stakes when corrections are needed.
+- Agent works uninterrupted with high efficiency
+- Your review happens once at the end with fewer context switches
+- Higher stakes when corrections are needed and overhead 
 
 ## When to Use Each Strategy
 
@@ -133,41 +148,43 @@ switches, but higher stakes when corrections are needed.
     - Tasks are exploratory or uncertain
     - Feedback shapes future work
     - Costs of divergence are high
-    - You want to steer the agent frequently
 
 - **Use stacked PRs** when:
     - Tasks are well-defined and independent
     - Agent can work with clear, complete specifications
     - You prefer focused review sessions over frequent interruptions
-    - Tasks fit a logical sequence (e.g., modular features or refactoring
-      stages)
+    - Tasks fit a logical sequence (e.g., modular features or refactoring stages)
 
-## Implementing Stacked PRs
+# Implementing Stacked PRs
 
-Both examples below implement the same feature split into three sequential
-tasks:
+- Both examples below implement the same feature split into three sequential tasks:
+  - **Task 1**: Add the database schema
+  - **Task 2**: Add the API endpoint (depends on Task 1)
+  - **Task 3**: Add the UI component (depends on Task 2)
 
-- **Task 1**: Add the database schema
-- **Task 2**: Add the API endpoint (depends on Task 1)
-- **Task 3**: Add the UI component (depends on Task 2)
+## GitHub Stacked PRs
 
-### GitHub Stacked PRs
+- GitHub started offering native stacked PR support in summer 2026, allowing multiple
+  PRs to stack on a single branch with automatic dependency tracking
+  - Each PR links to the previous one, and merging happens in order
 
-GitHub now offers native stacked PR support, allowing multiple PRs to stack on a
-single branch with automatic dependency tracking. Each PR links to the previous
-one, and merging happens in order.
-
-**Creating the stack**: branch each task off the previous one and open a PR
-against that parent branch:
+- **Creating the stack**: branch each task off the previous one and open a PR against
+  that parent branch:
 
 ```bash
+# Create the branch.
 > git checkout -b feature/step-1-schema main
 # ... agent adds database schema ...
 > git add -A && git commit -m "Step 1: add database schema"
 > git push -u origin feature/step-1-schema
+# ... agent works ...
+
+# Create review on GitHub.
 > gh pr create --base main --head feature/step-1-schema \
     --title "Step 1: add database schema"
+```
 
+```
 > git checkout -b feature/step-2-api feature/step-1-schema
 # ... agent adds API endpoint ...
 > git add -A && git commit -m "Step 2: add API endpoint"
@@ -204,22 +221,28 @@ branch needs a manual rebase:
 > git push --force-with-lease
 ```
 
-Refer to
-[GitHub's stacked PRs documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-stacked-pull-requests)
-for setup and workflow details.
+- Refer to [GitHub's stacked PRs
+  documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-stacked-pull-requests)
+  for setup and workflow details
 
-### Git-Spice
+## GitHub Stacked PRs + helpers
 
-`git-spice` is a CLI tool designed specifically for managing stacked PR
-workflows. It automates:
+// TODO(ai_gp): Add explanation of how to use our tools like
+// `git_create_issue_and_branch.py`, git_branch_create, git_merge_master
 
-- Creating and managing branch stacks
-- Rebasing dependent changes
-- Syncing multiple PRs in batch
+i git_branch_diff --target master to see what is the difference
 
-**Creating the stack**: `gs branch create` stacks a new branch on top of the
-current one and, with `-m`, commits the staged changes in the same step. There
-is no need to name a base branch by hand: `gs` tracks it automatically.
+## Git-Spice
+
+- `git-spice` is a CLI tool designed specifically for managing stacked PR workflows.
+  It automates:
+  - Creating and managing branch stacks
+  - Rebasing dependent changes
+  - Syncing multiple PRs in batch
+
+- **Creating the stack**: `gs branch create` stacks a new branch on top of the
+  current one and, with `-m`, commits the staged changes in the same step. There is
+  no need to name a base branch by hand: `gs` tracks it automatically.
 
 ```bash
 > gs repo init
@@ -291,4 +314,3 @@ sequences are stable and well-understood.
 
 #
 
-i git_branch_diff --target master
