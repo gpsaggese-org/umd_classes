@@ -10,9 +10,9 @@
 // Model assessment and selection
 // Hastie 7 (p. 238)
 
-## How to Do Research
+# How to Do Research
 
-### Simple Is Better
+## Simple Is Better
 
 * Occam's Razor
 - **Simple is better**
@@ -158,7 +158,7 @@
     - Minimum Description Length (MDL) penalizes complex models and repeated
       fitting
 
-### Research Methodology
+## Research Methodology
 
 * How to Achieve Out-Of-Sample Fit
 - @Goal@: Choose an hypothesis $g \in \calH$ approximates the unknown target
@@ -248,6 +248,46 @@
 ::::
 :::
 
+* Right and Wrong Approach to Research
+- It is not clear how to prioritize the different possible tasks
+
+- **Bad**
+  1. Use gut feeling to choose a task
+  2. Complete task
+  3. Re-evaluate performance
+
+- **Good**
+  1. Build a simple algorithm
+     - Within 1 day
+  2. Set up performance evaluation
+     - Single number and bounds to improve
+     - Use cross-validation
+  3. Set up diagnostic tools
+     - Compute learning and bias-variance curves
+     - Understand issues before fixing (avoid premature optimization)
+  4. Review misclassified emails manually
+     - Identify features to improve performance
+     - E.g., what are types of misclassified emails?
+
+- Sometimes you just need to try approaches to see if they work
+  - E.g., use stemming software to equate words
+
+* Example: Spam Filter Classification
+- You use $N = 5$ words in an email to distinguish spam / non-spam emails using
+  logistic regression
+  - Words are `buy`, `now`, `deal`, `discount`, `your name`
+
+- @Goal@: improve classifier performance
+  1. **Collect more data**
+     - Honeypot project: fake email account to collect spam
+  2. **Use better features**
+     - Email routing info (spammers use unusual accounts, mask emails as
+       legitimate)
+  3. **Use better features from message body**
+  4. **Detect intentional misspellings**
+     - Spammers use misspelled words (e.g., `w4tch` for `watch`)
+     - Use stemming software
+
 * Why We Do Things?
 - **Always, always, always:**
   - Understand the purpose of the task
@@ -290,46 +330,6 @@
   - E.g., _"Next, conduct detailed analysis on demographics contributing most to
     sales growth"_
     - Outline potential experiments or analyses to validate findings further
-
-* Example: Spam Filter Classification
-- You use $N = 5$ words in an email to distinguish spam / non-spam emails using
-  logistic regression
-  - Words are `buy`, `now`, `deal`, `discount`, `your name`
-
-- @Goal@: improve classifier performance
-  1. **Collect more data**
-     - Honeypot project: fake email account to collect spam
-  2. **Use better features**
-     - Email routing info (spammers use unusual accounts, mask emails as
-       legitimate)
-  3. **Use better features from message body**
-  4. **Detect intentional misspellings**
-     - Spammers use misspelled words (e.g., `w4tch` for `watch`)
-     - Use stemming software
-
-* Right and Wrong Approach to Research
-- It is not clear how to prioritize the different possible tasks
-
-- **Bad**
-  1. Use gut feeling to choose a task
-  2. Complete task
-  3. Re-evaluate performance
-
-- **Good**
-  1. Build a simple algorithm
-     - Within 1 day
-  2. Set up performance evaluation
-     - Single number and bounds to improve
-     - Use cross-validation
-  3. Set up diagnostic tools
-     - Compute learning and bias-variance curves
-     - Understand issues before fixing (avoid premature optimization)
-  4. Review misclassified emails manually
-     - Identify features to improve performance
-     - E.g., what are types of misclassified emails?
-
-- Sometimes you just need to try approaches to see if they work
-  - E.g., use stemming software to equate words
 
 * Incremental vs Iterative
 
