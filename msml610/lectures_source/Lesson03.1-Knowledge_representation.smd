@@ -8,6 +8,9 @@
 
 * Roadmap
 
+::: columns
+:::: {.column width=55%}
+
 - @Goal@: Build up from **why** knowledge must be represented explicitly to **how**
   it is organized, reasoned over, and reused
   - **Foundations**: What knowledge representation is, and the core design tradeoffs
@@ -17,6 +20,24 @@
   - **Reasoning**: Entailment, inference, soundness and completeness
   - **Agents**: Reflex, rule-based, and knowledge-based agents
   - **Ontologies**: Components, examples, and reasoning tasks
+
+::::
+:::: {.column width=45%}
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#EEEDFE', 'primaryBorderColor': '#7F77DD', 'primaryTextColor': '#26215C', 'lineColor': '#888888', 'fontFamily': 'Helvetica'}}}%%
+mindmap
+  root((**Knowledge<br/>Representation**))
+    (**Foundations**)
+    (**Languages**)
+    (**Semantics**)
+    (**Reasoning**)
+    (**Agents**)
+    (**Ontologies**)
+```
+
+::::
+:::
 
 ## What Is Knowledge Representation
 
@@ -37,10 +58,14 @@
 
 * Why Knowledge Representation Matters
 
+::: columns
+:::: {.column width=70%}
+
 - @Motivation@: Why knowledge representation is essential to AI?
   1. @Learning alone is not enough@: Machines need to _reason_ about the world
-     - Example: A medical AI trained on patient data can _predict_ diseases
-     - But to _explain_ a diagnosis to a doctor, it needs structured knowledge
+     - Example: A medical AI can _predict_ diseases
+     - But to _explain_ a diagnosis to a doctor or patience, it needs structured
+       knowledge
   2. @Bridges perception and reasoning@
      - Sensors provide _perception_ (i.e., raw data)
      - KR turns raw data into _actionable knowledge_ through _reasoning_
@@ -50,6 +75,37 @@
   4. @Enables planning and abstract reasoning@
      - Robots plan actions using abstract symbolic knowledge
      - Conversational agents can reason about intent and context
+
+::::
+:::: {.column width=30%}
+
+```graphviz
+digraph WhyKR {
+  bgcolor="transparent";
+  pad="0.15";
+  rankdir=TB;
+  splines=spline;
+  nodesep=0.4;
+  ranksep=0.5;
+
+  node [shape=box, style="rounded,filled", penwidth=1.8,
+        fontname="Helvetica", fontsize=12, margin="0.22,0.14", height=0.50];
+  edge [color="#A3B1C0", penwidth=1.3, arrowhead=vee, arrowsize=0.75,
+        fontname="Helvetica", fontsize=10, fontcolor="#7B8794"];
+
+  Perception [label="Perception\n(raw data)", fillcolor="#FFD1A6", color="#D9A85F", fontcolor="#6B4517"];
+  KR         [label="Knowledge\nRepresentation", fillcolor="#A0D6D1", color="#4F9A8F", fontcolor="#1F4E4A"];
+  Reasoning  [label="Reasoning", fillcolor="#A0D6D1", color="#4F9A8F", fontcolor="#1F4E4A"];
+  Action     [label="Action /\nExplanation", fillcolor="#A6C8F4", color="#3C6FB0", fontcolor="#1F4E79"];
+
+  Perception -> KR;
+  KR -> Reasoning;
+  Reasoning -> Action;
+}
+```
+
+::::
+:::
 
 ## Design Choices in Knowledge Representation
 
@@ -151,26 +207,26 @@
 
 - @Definition@: **Conceptual spaces** are frameworks for representing knowledge using
   geometric structures
-  - Each dimension represents an interpretable feature
+  - Each "dimension" represents an interpretable feature
   - Similarity between objects is modeled by spatial distance
   - A **concept** is a region in a multidimensional space
 
 - @Pros@
   - Natural modeling of similarity and vagueness
-  - Unlike symbolic systems, whose discrete symbols carry no similarity structure
-    (e.g., `Car` vs `Bicycle`)
+  - Better than symbolic systems, in which discrete symbols carry no similarity
+    structure (e.g., `Car` vs `Bicycle`)
 
 ::: columns
-:::: {.column width=55%}
+:::: {.column width=65%}
 
 - @Example@: Transportation methods
-  - Dimensions: `Environmental Friendliness`, `Technological Advancement`
-  - `Wooden` (red region) overlaps `Vehicle` (blue region) in `dugout canoe`
-  - `Bicycle`, `Motorbike`, `Car` are nested subregions of `Vehicle`
-  - `Elevator` sits in `Vehicle` outside any of those subregions
+  - Dimensions: `Environmental friendliness`, `Technological advancement`
+  - `Wooden` (red region) overlaps `Vehicle` (blue region)
+  - `Bicycle`, `Motorbike`, ... are nested subregions of `Vehicle`
+  - `Elevator` in `Vehicle` outside any other subregion
 
 ::::
-:::: {.column width=40%}
+:::: {.column width=35%}
 
 ![](msml610/lectures_source/figures/L03.conceptual_spaces.png)
 
@@ -190,17 +246,17 @@
     - Meaning depends on the sentence and context
     - E.g., "Look!"
 
-- @Definition@: The **Sapir-Whorf hypothesis** is the contested claim that _"the
-  language you speak shapes how you perceive, think about, and experience the world"_
+- @Definition@: The **Sapir-Whorf hypothesis** claims: _"the language you speak
+  shapes how you perceive, think about, and experience the world"_
   - Even through arbitrary grammatical features (e.g., gender of nouns)
   - The strong version (language determines what you can think) is rejected; only a
-    weak influence on habitual attention is supported by evidence
+    weak influence is supported by evidence
 
 - @Example@
   - Some languages lack words for certain concepts (e.g., direction)
   - Some languages have more fine-grained vocabulary for a concept
-    - E.g., Russian distinguishes dark blue (`siniy`) and light blue (`goluboy`) as
-      two basic colors, not shades of one
+    - E.g., Russian distinguishes dark blue and light blue as two basic colors, not
+      shades of one
   - Newspeak from 1984 (Orwell)
     - You can't think certain concepts since you don't have words for it
 
@@ -229,6 +285,9 @@
 
 * Limits of Programming Languages
 
+::: columns
+:::: {.column width=60%}
+
 - @Definition@: A **programming language** (e.g., C++, Python) is a formal and
   procedural language
   - _Data structures_ represent facts
@@ -249,7 +308,66 @@
   2. _Inference_ is domain independent
   - E.g., propositional logic, first order logic
 
+::::
+:::: {.column width=38%}
+
+```graphviz
+digraph ProgVsDeclarative {
+  bgcolor="transparent";
+  pad="0.15";
+  rankdir=TB;
+  splines=spline;
+  nodesep=0.5;
+  ranksep=0.4;
+
+  node [shape=box, style="rounded,filled", penwidth=1.6,
+        fontname="Helvetica", fontsize=11, margin="0.2,0.12", height=0.45];
+  edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.7,
+        fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
+
+  subgraph cluster_prog {
+    label = "Programming Language";
+    labelloc = "t";
+    fontname = "Helvetica-Bold";
+    fontsize = 11.5;
+    fontcolor = "#3A4A5C";
+    style = "rounded,filled";
+    fillcolor = "#F7F9FB";
+    color = "#C7D0DA";
+    penwidth = 1.0;
+    margin = 14;
+
+    Data [label="Data structures\n(facts)", fillcolor="#FFD1A6", color="#D9A85F", fontcolor="#6B4517"];
+    Code [label="Code\n(domain logic)", fillcolor="#A0D6D1", color="#4F9A8F", fontcolor="#1F4E4A"];
+    Data -> Code [label="  coupled", dir=both];
+  }
+
+  subgraph cluster_decl {
+    label = "Declarative Language";
+    labelloc = "t";
+    fontname = "Helvetica-Bold";
+    fontsize = 11.5;
+    fontcolor = "#3A4A5C";
+    style = "rounded,filled";
+    fillcolor = "#F7F9FB";
+    color = "#C7D0DA";
+    penwidth = 1.0;
+    margin = 14;
+
+    Knowledge [label="Knowledge\n(domain-specific)", fillcolor="#FFD1A6", color="#D9A85F", fontcolor="#6B4517"];
+    Inference [label="Inference\n(domain-independent)", fillcolor="#A6C8F4", color="#3C6FB0", fontcolor="#1F4E79"];
+    Knowledge -> Inference [label="  separate", style=dashed];
+  }
+}
+```
+
+::::
+:::
+
 * Propositional Logic
+
+::: columns
+:::: {.column width=62%}
 
 - @Definition@: **Propositional logic** uses atomic statements (propositions) and
   logical connectives to represent knowledge
@@ -272,6 +390,35 @@
 - @Limitations@
   - Cannot represent objects, relations, or quantifiers
   - Not suitable for open or dynamic domains
+
+::::
+:::: {.column width=35%}
+
+```graphviz
+digraph PropLogic {
+  bgcolor="transparent";
+  pad="0.15";
+  rankdir=TB;
+  splines=spline;
+  nodesep=0.4;
+  ranksep=0.45;
+
+  node [shape=box, style="rounded,filled", penwidth=1.6,
+        fontname="Helvetica", fontsize=11, margin="0.2,0.12", height=0.45];
+  edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.7,
+        fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
+
+  Syntax    [label="Syntax\nP, Q,\nNOT/AND/OR/IMPLIES", fillcolor="#FFD1A6", color="#D9A85F", fontcolor="#6B4517"];
+  Semantics [label="Semantics\nTruth tables", fillcolor="#A6C8F4", color="#3C6FB0", fontcolor="#1F4E79"];
+  Inference [label="Inference\nModus ponens,\nResolution", fillcolor="#A0D6D1", color="#4F9A8F", fontcolor="#1F4E4A"];
+
+  Syntax -> Semantics [label="  means"];
+  Syntax -> Inference [label="  derives"];
+}
+```
+
+::::
+:::
 
 * First-Order Logic (FOL)
 
@@ -300,6 +447,9 @@
 
 * Syntax and Semantics of a KB
 
+::: columns
+:::: {.column width=60%}
+
 - @Definition@: **Knowledge base (KB)** is a set of:
   - _Sentences_ $\alpha$ expressing assertions (observed, assumed or derived) about
     the world
@@ -325,6 +475,41 @@
     - E.g., $Truth(\alpha) = 0.5$
   - **Probabilistic logic**: Sentences have probability of being true
     - E.g., $\Pr(\alpha) = 0.3$
+
+::::
+:::: {.column width=38%}
+
+```graphviz
+digraph KBStructure {
+  bgcolor="transparent";
+  pad="0.15";
+  rankdir=TB;
+  splines=spline;
+  nodesep=0.4;
+  ranksep=0.4;
+
+  node [shape=box, style="rounded,filled", penwidth=1.6,
+        fontname="Helvetica", fontsize=10.5, margin="0.18,0.1", height=0.42];
+  edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.65,
+        fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
+
+  Sentences [label="Sentences", fillcolor="#FFD1A6", color="#D9A85F", fontcolor="#6B4517"];
+  Rules     [label="Rules", fillcolor="#FFD1A6", color="#D9A85F", fontcolor="#6B4517"];
+  KB        [label="Knowledge Base", fillcolor="#F4A6A6", color="#C0455B", fontcolor="#6B2A2A"];
+  Syntax    [label="Syntax\n(well-formed)", fillcolor="#A0D6D1", color="#4F9A8F", fontcolor="#1F4E4A"];
+  Semantics [label="Semantics\n(meaning per world)", fillcolor="#A6C8F4", color="#3C6FB0", fontcolor="#1F4E79"];
+  Inference [label="Inference", fillcolor="#B2E2B2", color="#4F9A5C", fontcolor="#1F4E2E"];
+
+  Sentences -> KB;
+  Rules -> KB;
+  KB -> Syntax [style=dashed, label="  form"];
+  KB -> Semantics [style=dashed, label="  meaning"];
+  KB -> Inference [label="  derives new"];
+}
+```
+
+::::
+:::
 
 * Grounding
 
@@ -425,6 +610,9 @@ digraph G {
 
 * Satisfaction
 
+::: columns
+:::: {.column width=60%}
+
 - @Recap@: A model $m$ fixes all the variables $x_1, ..., x_n$ used in sentences
   - E.g., $(Rain = T, WetGround = T)$
 
@@ -438,6 +626,46 @@ digraph G {
   - E.g.,
     - $\alpha: Rain = T$
     - $M(Rain = T) = \{(Rain = T, WetGround = T), (Rain = T, WetGround = F)\}$
+
+::::
+:::: {.column width=38%}
+
+```graphviz
+digraph Satisfaction {
+  bgcolor="transparent";
+  pad="0.15";
+  rankdir=TB;
+  splines=spline;
+  nodesep=0.3;
+  ranksep=0.3;
+
+  node [shape=box, style="rounded,filled", penwidth=1.4,
+        fontname="Helvetica", fontsize=9.5, margin="0.14,0.08", height=0.4];
+
+  subgraph cluster_all {
+    label = "All possible worlds  (blue = M(Rain=T))";
+    labelloc = "t";
+    fontname = "Helvetica-Bold";
+    fontsize = 10.5;
+    fontcolor = "#3A4A5C";
+    style = "rounded,filled";
+    fillcolor = "#F7F9FB";
+    color = "#C7D0DA";
+    penwidth = 1.0;
+    margin = 14;
+
+    W1 [label="Rain=T\nWetGround=T", fillcolor="#A6C8F4", color="#3C6FB0", fontcolor="#1F4E79"];
+    W2 [label="Rain=T\nWetGround=F", fillcolor="#A6C8F4", color="#3C6FB0", fontcolor="#1F4E79"];
+    W3 [label="Rain=F\nWetGround=T", fillcolor="#EDEDED", color="#B0B8C0", fontcolor="#5A6472"];
+    W4 [label="Rain=F\nWetGround=F", fillcolor="#EDEDED", color="#B0B8C0", fontcolor="#5A6472"];
+
+    { rank=same; W1; W2; W3; W4; }
+  }
+}
+```
+
+::::
+:::
 
 ## Entailment and Inference
 
@@ -467,6 +695,9 @@ digraph G {
 
 * Entailment, Implication, and Inference
 
+::: columns
+:::: {.column width=58%}
+
 - Entailment, implication, and inference are related but distinct
   - _Implication_ is a relationship between two statements inside the logic
   - _Logical entailment_ is truth necessarily following from known facts
@@ -495,7 +726,39 @@ digraph G {
   - Entailment is "meta-level truth-following across all models"
   - Inference is "the reasoning process that (ideally) tracks entailment"
 
+::::
+:::: {.column width=40%}
+
+```graphviz
+digraph EII {
+  bgcolor="transparent";
+  pad="0.15";
+  rankdir=TB;
+  splines=spline;
+  nodesep=0.4;
+  ranksep=0.45;
+
+  node [shape=box, style="rounded,filled", penwidth=1.6,
+        fontname="Helvetica", fontsize=10.5, margin="0.18,0.12", height=0.55];
+  edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.65,
+        fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
+
+  Implication [label="Implication\n(A implies B)\nstatement inside logic", fillcolor="#FFD1A6", color="#D9A85F", fontcolor="#6B4517"];
+  Entailment  [label="Entailment\n(KB entails alpha)\ntruth across all models", fillcolor="#A6C8F4", color="#3C6FB0", fontcolor="#1F4E79"];
+  Inference   [label="Inference\nreasoning process", fillcolor="#A0D6D1", color="#4F9A8F", fontcolor="#1F4E4A"];
+
+  Implication -> Entailment [label="  used to state"];
+  Inference -> Entailment [label="  aims to track", style=dashed];
+}
+```
+
+::::
+:::
+
 * Inference Engines
+
+::: columns
+:::: {.column width=48%}
 
 - @Definition@: An **inference engine** is the mechanism that applies logical rules
   to a KB to derive conclusions or answer queries
@@ -509,7 +772,57 @@ digraph G {
     - A complete inference rule for propositional and first-order logic
     - Useful in automated theorem proving
 
+::::
+:::: {.column width=50%}
+
+```graphviz
+digraph InferenceEngines {
+  bgcolor="transparent";
+  pad="0.15";
+  rankdir=TB;
+  splines=spline;
+  nodesep=0.7;
+  ranksep=0.35;
+
+  node [shape=box, style="rounded,filled", penwidth=1.5,
+        fontname="Helvetica", fontsize=9.5, margin="0.16,0.1", height=0.4];
+  edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.6,
+        fontname="Helvetica", fontsize=8.5, fontcolor="#7B8794"];
+
+  FCLabel [label="Forward chaining", shape=plaintext, fontname="Helvetica-Bold", fontsize=9.5, fontcolor="#3A4A5C"];
+  BCLabel [label="Backward chaining", shape=plaintext, fontname="Helvetica-Bold", fontsize=9.5, fontcolor="#3A4A5C"];
+  ResLabel [label="Resolution", shape=plaintext, fontname="Helvetica-Bold", fontsize=9.5, fontcolor="#3A4A5C"];
+
+  FactsFC [label="Facts: A", fillcolor="#FFD1A6", color="#D9A85F", fontcolor="#6B4517"];
+  ConclFC [label="Conclusion: B", fillcolor="#A6C8F4", color="#3C6FB0", fontcolor="#1F4E79"];
+
+  GoalBC  [label="Goal: B", fillcolor="#A6C8F4", color="#3C6FB0", fontcolor="#1F4E79"];
+  FactsBC [label="Facts: A", fillcolor="#FFD1A6", color="#D9A85F", fontcolor="#6B4517"];
+
+  Clauses       [label="Clauses", fillcolor="#FFD1A6", color="#D9A85F", fontcolor="#6B4517"];
+  Contradiction [label="Contradiction", fillcolor="#A6C8F4", color="#3C6FB0", fontcolor="#1F4E79"];
+
+  { rank=same; FCLabel; BCLabel; ResLabel; }
+  { rank=same; FactsFC; GoalBC; Clauses; }
+  { rank=same; ConclFC; FactsBC; Contradiction; }
+
+  FCLabel -> FactsFC [style=invis];
+  BCLabel -> GoalBC [style=invis];
+  ResLabel -> Clauses [style=invis];
+
+  FactsFC -> ConclFC [label="  apply rule"];
+  GoalBC -> FactsBC [label="  find support"];
+  Clauses -> Contradiction [label="  derive"];
+}
+```
+
+::::
+:::
+
 * Model Checking
+
+::: columns
+:::: {.column width=55%}
 
 - @Recap@: $M(KB)$ represents all the models / possible worlds in which our $KB$ is
   true
@@ -528,6 +841,39 @@ digraph G {
   2. Find which models are possible given the $KB$, i.e., $M(KB)$
   3. Check whether the sentence $\alpha$ is true in all the models that are
      compatible with the $KB$
+
+::::
+:::: {.column width=42%}
+
+```graphviz
+digraph ModelChecking {
+  bgcolor="transparent";
+  pad="0.15";
+  rankdir=TB;
+  splines=spline;
+  nodesep=0.4;
+  ranksep=0.4;
+
+  node [shape=box, style="rounded,filled", penwidth=1.5,
+        fontname="Helvetica", fontsize=10, margin="0.18,0.12", height=0.45];
+  edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.65,
+        fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
+
+  Step1        [label="1. Enumerate all\npossible worlds", fillcolor="#FFD1A6", color="#D9A85F", fontcolor="#6B4517"];
+  Step2        [label="2. Find M(KB)\n(models where KB true)", fillcolor="#A0D6D1", color="#4F9A8F", fontcolor="#1F4E4A"];
+  Step3        [label="3. Check alpha true\nin all of M(KB)", shape=diamond, fillcolor="#A6C8F4", color="#3C6FB0", fontcolor="#1F4E79"];
+  Entailed     [label="KB entails alpha", fillcolor="#B2E2B2", color="#4F9A5C", fontcolor="#1F4E2E"];
+  NotEntailed  [label="KB does not\nentail alpha", fillcolor="#F4A6A6", color="#C0455B", fontcolor="#6B2A2A"];
+
+  Step1 -> Step2;
+  Step2 -> Step3;
+  Step3 -> Entailed [label="  yes"];
+  Step3 -> NotEntailed [label="  no"];
+}
+```
+
+::::
+:::
 
 * Soundness and Completeness
 
@@ -617,6 +963,9 @@ digraph EntailmentSemantics {
 
 * Reflex and Rule-Based Agents
 
+::: columns
+:::: {.column width=58%}
+
 - @Definition@: A **reflex agent** acts on the current percept alone, using a
   predefined condition-action rule: _"if condition, then action"_
   - E.g., a thermostat: _"if temperature < threshold, turn on the heater"_
@@ -639,6 +988,39 @@ digraph EntailmentSemantics {
   - _Rule_: If a patient has a fever and a rash, then suggest measles
   - _Fact_: Patient has a fever and a rash
   - _Conclusion_: Suggest measles
+
+::::
+:::: {.column width=40%}
+
+```graphviz
+digraph RuleBasedLoop {
+  bgcolor="transparent";
+  pad="0.15";
+  rankdir=TB;
+  splines=spline;
+  nodesep=0.4;
+  ranksep=0.4;
+
+  node [shape=box, style="rounded,filled", penwidth=1.6,
+        fontname="Helvetica", fontsize=10.5, margin="0.2,0.12", height=0.45];
+  edge [color="#A3B1C0", penwidth=1.3, arrowhead=vee, arrowsize=0.7,
+        fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
+
+  Match    [label="Match\n(find matching rules)", fillcolor="#A0D6D1", color="#4F9A8F", fontcolor="#1F4E4A"];
+  Conflict [label="Conflict resolution\n(pick rule)", fillcolor="#A0D6D1", color="#4F9A8F", fontcolor="#1F4E4A"];
+  Act      [label="Act\n(apply rule)", fillcolor="#A0D6D1", color="#4F9A8F", fontcolor="#1F4E4A"];
+  Memory   [label="Working memory\n(current facts)", fillcolor="#FFD1A6", color="#D9A85F", fontcolor="#6B4517"];
+
+  Match -> Conflict;
+  Conflict -> Act;
+  Act -> Match [label="  repeat", constraint=false];
+  Memory -> Match [style=dashed];
+  Act -> Memory [style=dashed, label="  updates", constraint=false];
+}
+```
+
+::::
+:::
 
 * Rule-Based Systems: Trade-offs
 
@@ -664,6 +1046,9 @@ digraph EntailmentSemantics {
 
 * Knowledge-based Agents
 
+::: columns
+:::: {.column width=58%}
+
 - @Fact@: Intelligence is achieved by _reasoning_ on an internal representation of
   knowledge
 
@@ -681,6 +1066,38 @@ digraph EntailmentSemantics {
     - E.g., medical diagnosis system infers diseases, suggests treatments
     - E.g., chess program uses move database to plan strategy
   - Handles incomplete or uncertain information through probabilistic reasoning
+
+::::
+:::: {.column width=40%}
+
+```graphviz
+digraph KBAgent {
+  bgcolor="transparent";
+  pad="0.15";
+  rankdir=TB;
+  splines=spline;
+  nodesep=0.4;
+  ranksep=0.45;
+
+  node [shape=box, style="rounded,filled", penwidth=1.6,
+        fontname="Helvetica", fontsize=11, margin="0.2,0.12", height=0.5];
+  edge [color="#A3B1C0", penwidth=1.3, arrowhead=vee, arrowsize=0.7,
+        fontname="Helvetica", fontsize=9, fontcolor="#7B8794"];
+
+  Percept   [label="Percept / Fact", fillcolor="#FFD1A6", color="#D9A85F", fontcolor="#6B4517"];
+  KB        [label="Knowledge Base", fillcolor="#F4A6A6", color="#C0455B", fontcolor="#6B2A2A"];
+  Inference [label="Inference", fillcolor="#A0D6D1", color="#4F9A8F", fontcolor="#1F4E4A"];
+  Action    [label="Action", fillcolor="#A6C8F4", color="#3C6FB0", fontcolor="#1F4E79"];
+
+  Percept -> KB [label="  TELL"];
+  KB -> Inference;
+  Inference -> KB [style=dashed, constraint=false];
+  KB -> Action [label="  ASK"];
+}
+```
+
+::::
+:::
 
 ## Ontologies
 
@@ -710,6 +1127,9 @@ digraph EntailmentSemantics {
 
 * Components of an Ontology
 
+::: columns
+:::: {.column width=55%}
+
 - @Components@
   - _Classes / Concepts_: General concepts in a domain
     - E.g., `Person`, `City`, `Car`
@@ -726,6 +1146,41 @@ digraph EntailmentSemantics {
     - E.g., all humans are mortal: $\forall x (Human(x) \implies Mortal(x))$
   - _Hierarchies_: Parent-child relationships between classes and properties
     - E.g., `Student` is a subclass of `Person`
+
+::::
+:::: {.column width=42%}
+
+```graphviz
+digraph OntologyComponents {
+  bgcolor="transparent";
+  pad="0.15";
+  rankdir=TB;
+  splines=spline;
+  nodesep=0.4;
+  ranksep=0.35;
+
+  node [shape=box, style="rounded,filled", penwidth=1.5,
+        fontname="Helvetica", fontsize=9.5, margin="0.16,0.1", height=0.4];
+  edge [color="#A3B1C0", penwidth=1.2, arrowhead=vee, arrowsize=0.6,
+        fontname="Helvetica", fontsize=8.5, fontcolor="#7B8794"];
+
+  ParentClass [label="Person (class)", fillcolor="#A6C8F4", color="#3C6FB0", fontcolor="#1F4E79"];
+  ChildClass  [label="Student (subclass)", fillcolor="#A6C8F4", color="#3C6FB0", fontcolor="#1F4E79"];
+  Individual  [label="GP (individual)", fillcolor="#C6A6F4", color="#8F5FC0", fontcolor="#45296B"];
+  Property    [label="hasAge (property)", fillcolor="#A0D6D1", color="#4F9A8F", fontcolor="#1F4E4A"];
+  Attribute   [label="42 (attribute value)", fillcolor="#FFD1A6", color="#D9A85F", fontcolor="#6B4517"];
+  Axiom       [label="Axiom:\nHuman(x) => Mortal(x)", fillcolor="#F4A6A6", color="#C0455B", fontcolor="#6B2A2A"];
+
+  ChildClass -> ParentClass [label="  subclass of"];
+  Individual -> ParentClass [label="  instance of"];
+  Individual -> Property [label="  has"];
+  Property -> Attribute [label="  value"];
+  ParentClass -> Axiom [style=dashed, label="  constrained by"];
+}
+```
+
+::::
+:::
 
 * Example: University Ontology
 

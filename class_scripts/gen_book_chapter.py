@@ -40,14 +40,14 @@ This script performs the following steps:
 1. Generate the book chapter text via LLM
 2. `git_add`: add the generated file to Git (optional, off by default)
 3. `lint`: lint the generated file (on by default)
-4. `render_pdf`: compile the chapter to PDF (`typst_aima` via
-   `run_typst.py`, `md` via pandoc; not supported for `springer_latex`)
-   (on by default)
-5. `open_pdf`: open the compiled PDF in Skim (optional, off by default)
-
-Steps 2-5 are actions and can be selected with `--action` / `--skip_action`
-/ `--only_action` (see `helpers.hselect_action`); `lint` and `render_pdf`
-run by default, `git_add` and `open_pdf` don't.
+4. `fix_typst_code`: use Claude Code (via `ccp`) to fix any Typst compile
+   issues, so that `run_typst.py --input <FILE>` compiles cleanly,
+   `typst_aima` only
+5. `render_pdf`: compile the chapter to PDF
+    - `typst_aima` via `run_typst.py`
+    - `md` via pandoc
+    - not supported for `springer_latex`)
+6. `open_pdf`: open the compiled PDF in Skim (optional, off by default)
 
 # Usage Example
 
@@ -113,18 +113,20 @@ _MODE_TO_EXTENSION = {
 #   text-only, shells out to simonw's `llm` CLI executable
 _LLM_BACKENDS = csccouti.LLM_BACKENDS
 
-# #############################################################################
-# Actions
-# #############################################################################
-
 # Post-generation steps, selectable via `--action` / `--skip_action` /
-# `--only_action` (see `helpers.hselect_action`). Generating the chapter text
-# itself (step 1) is not an action: it's gated by `--no_incremental` /
-# `--dry_run` instead, since it's the one step producing the file the other
-# four act on. `git_add` and `open_pdf` are optional (off by default);
-# `lint` and `render_pdf` run by default.
-_VALID_ACTIONS = ["git_add", "lint", "render_pdf", "open_pdf"]
-_DEFAULT_ACTIONS = ["lint", "render_pdf"]
+# `--only_action` (see `helpers.hselect_action`).
+# TODO(ai_gp): Make the following text more schematic by using bullet points.
+
+# Generating the chapter text itself (step 1) is not an action: it's gated by
+# `--no_incremental` / `--dry_run` instead, since it's the one step producing
+# the file the other steps act on. `git_add` and `open_pdf` are optional (off
+# by default); `lint`, `fix_typst_code`, and `render_pdf` run by default.
+# `fix_typst_code` runs before `render_pdf` so that any compile issue it fixes
+# is already resolved by the time `render_pdf` compiles for real (`render_pdf`
+# asserts on a `typst compile` failure, which would otherwise abort the script
+# before a later action could run).
+_VALID_ACTIONS = ["git_add", "lint", "fix_typst_code", "render_pdf", "open_pdf"]
+_DEFAULT_ACTIONS = ["lint", "fix_typst_code", "render_pdf"]
 
 
 # #############################################################################
@@ -159,15 +161,15 @@ _TYPST_SLIDE_PROMPT_FILE = os.path.join(
 )
 
 # Typst rules specific to *this pipeline* (dissolving semantic tags, never
-# fabricating a diagram's rendered figure): concatenated into the system
-# prompt of both `_get_system_prompt("typst_aima")` and
-# `_get_system_prompt_slide()`, right after the cross-mode common style
-# guide. This file, in turn, references the general Typst syntax rules at
-# `.claude/skills/typst.rules.md` via an inline `` `@.claude/skills/
-# typst.rules.md` `` mention, resolved below by `expand_referenced_files()`
-# (not read as a separate constant here, unlike `_TYPST_SLIDE_PROMPT_FILE`
-# above: an `@file` mention lets the prompt text name the file once, in
-# prose, instead of every caller having to know its path)
+# fabricating a diagram's rendered figure): concatenated into the system prompt
+# of both `_get_system_prompt("typst_aima")` and `_get_system_prompt_slide()`,
+# right after the cross-mode common style guide. This file, in turn, references
+# the general Typst syntax rules at `.claude/skills/typst.rules.md` via an
+# inline `@.claude/skills/ typst.rules.md` mention, resolved below by
+# `expand_referenced_files()` (not read as a separate constant here, unlike
+# `_TYPST_SLIDE_PROMPT_FILE` above: an `@file` mention lets the prompt text
+# name the file once, in prose, instead of every caller having to know its
+# path).
 _TYPST_COMMON_PROMPT_FILE = os.path.join(
     _SCRIPT_DIR, "prompt.generate_typst_book_chapter_common.md"
 )
@@ -1268,6 +1270,36 @@ def _lint_with_lint_text(output_file: str, *, dry_run: bool) -> None:
     hsystem.system(cmd, print_command=True, dry_run=dry_run)
 
 
+def _fix_typst_code(output_file: str, mode: str, *, dry_run: bool) -> None:
+    """
+    Use Claude Code (via `ccp`) to fix `output_file` so that
+    `run_typst.py --input <output_file>` compiles cleanly.
+
+    Delegates to the `book.fix_rendered_pdf` skill (see
+    `.claude/skills/book.fix_rendered_pdf/SKILL.md`), which runs
+    `run_typst.py`, checks the Typst source against
+    `.claude/skills/typst.rules.md`, and checks the rendered PDF, iterating
+    until there are no `typst compile` warnings/errors and the PDF looks
+    good. Only supported for `--mode typst_aima`, since the other modes
+    don't produce a `.typ` file.
+
+    :param output_file: path to the generated chapter file
+    :param mode: generation mode, one of `_MODE_TO_EXTENSION`
+    :param dry_run: print the command without executing it
+    """
+    if mode != "typst_aima":
+        _LOG.warning(
+            "'fix_typst_code' action is only supported for --mode "
+            "typst_aima, skipping for '%s'",
+            output_file,
+        )
+        return
+    ccp_exec = hgit.find_file("ccp")
+    prompt = f"/book.fix_rendered_pdf {output_file}"
+    cmd = " ".join([ccp_exec, prompt])
+    hsystem.system(cmd, print_command=True, dry_run=dry_run)
+
+
 def _get_pdf_file(out_dir: str, basename: str) -> str:
     """
     Compute the path a compiled book chapter's PDF is written to.
@@ -1521,8 +1553,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
                 args.llm_backend,
                 lesson_arg,
             )
-    # Steps 3-6: git_add / lint / render / open_pdf (`actions` selected and
-    # printed up front, see above).
+    # Steps 3-7: git_add / lint / fix_typst_code / render / open_pdf.
     while actions:
         action = actions[0]
         to_execute, actions = hselacti.mark_action(action, actions)
@@ -1541,6 +1572,14 @@ def _main(parser: argparse.ArgumentParser) -> None:
                 _lint_typst_file(output_file, dry_run=args.dry_run)
             else:
                 _lint_with_lint_text(output_file, dry_run=args.dry_run)
+        elif action == "fix_typst_code":
+            _LOG.info(
+                "\n%s",
+                hprint.frame(
+                    "Action: Fixing Typst compile issues with Claude Code"
+                ),
+            )
+            _fix_typst_code(output_file, args.mode, dry_run=args.dry_run)
         elif action == "render_pdf":
             _LOG.info("\n%s", hprint.frame("Action: Rendering to PDF"))
             _render_book_chapter(
