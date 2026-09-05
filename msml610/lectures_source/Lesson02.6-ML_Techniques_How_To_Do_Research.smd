@@ -50,9 +50,22 @@
       complexity
   - Complexity of a hypothesis set $\calH$
     - E.g., VC dimension of the model
+      [@abumostafa2012learning]
   - Complexity of $h$ and $\calH$ related by counting:
     - If you need $l$ bits to specify $h$, then $h$ is one of $2^l$ elements of
       set $\calH$
+
+\begingroup \footnotesize
+```{=typst}
+#styled-table(
+  headers: ("Complexity Of", "Measure", "Example"),
+  rows: (
+    ("Single hypothesis $h$", "Description length", "Polynomial order, MDL, Kolmogorov complexity"),
+    ("Hypothesis set $\calH$", "Capacity", "VC dimension"),
+  ),
+)
+```
+\endgroup
 
 * Model Soundness
 - **Model should tell a story**
@@ -81,12 +94,27 @@
   - Biased sampling leads to biased outcomes
   - Model views world through training data
   - Hoeffding's hypothesis: training and testing distributions are the same
+    [@abumostafa2012learning]
 
 - **Causes of Sampling Bias**
   - _Non-random sampling_: Favors certain outcomes or groups
   - _Undercoverage_: Inadequate representation of some population members
   - _Survivorship bias_: Includes only successful subjects
   - _Self-selection bias_: Participants choose to participate, introducing bias
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#EEEDFE', 'primaryBorderColor': '#7F77DD', 'primaryTextColor': '#26215C', 'lineColor': '#888888', 'fontFamily': 'Helvetica'}}}%%
+mindmap
+  root((**Sampling Bias**))
+    (**Non-random sampling**)
+      Favors certain outcomes
+    (**Undercoverage**)
+      Inadequate representation
+    (**Survivorship bias**)
+      Only successful subjects
+    (**Self-selection bias**)
+      Participants opt in
+```
 
 - **Consequences**
   - Systematic errors distort relationships or predictions
@@ -109,6 +137,7 @@
 * Data Snooping (1/2)
 - **Data snooping** occurs when test set information improperly influences
   model-building
+  [@hastie2009statlearn]
 
 - **Typical Sources**
   - _Train-test contamination_: Test data leaks into training
@@ -136,8 +165,20 @@
   - Use cross-validation properly
   - Fit preprocessing steps only on training data, then apply to test data
 
+\begingroup \footnotesize
+```{=typst}
+#styled-table(
+  headers: ("Source", "Preventive Strategy"),
+  rows: (
+    ("Train-test contamination", "Keep training, validation, and test sets separate"),
+    ("Multiple hypothesis testing", "Use cross-validation properly; fit preprocessing on training data only"),
+  ),
+)
+```
+\endgroup
+
 * "Burning the Test Set"
-- @Problem@
+- @Problem@ [@hastie2009statlearn]
   - Repeated test set use during development leaks into training
   - Overfitting to test data
   - _"If you torture the data long enough, it will confess whatever you want"_
@@ -163,6 +204,7 @@
 * How to Achieve Out-Of-Sample Fit
 - @Goal@: Choose an hypothesis $g \in \calH$ approximates the unknown target
   function $f$
+  [@abumostafa2012learning]
   - What does $g \approx f$ mean?
     $$
     g \approx f \iff E_{out}(g) \approx 0
@@ -179,6 +221,7 @@
 - The model performs well in sample ($E_{in} \approx 0$) but poorly out of
   sample
   ($E_{out} \gg E_{in}$)
+  [@abumostafa2012learning]
 
 - **What does it mean?**
   - In-sample performance is optimistic
@@ -200,8 +243,23 @@
      - Decrease regularization $\lambda$ $\iff$ fixes high bias
      - Increase regularization $\lambda$ $\iff$ fixes high variance
 
+\begingroup \footnotesize
+```{=typst}
+#styled-table(
+  headers: ("Lever", "Action", "Effect"),
+  rows: (
+    ("Training data", "Get more data", "Fixes high variance"),
+    ("Features", "Remove features", "Fixes high variance"),
+    ("Features", "Add (derived) features", "Fixes high bias"),
+    ("Regularization", "Decrease $\lambda$", "Fixes high bias"),
+    ("Regularization", "Increase $\lambda$", "Fixes high variance"),
+  ),
+)
+```
+\endgroup
+
 * Why Using a Lot of Data?
-- **Several studies** show that:
+- **Several studies** show that: [@abumostafa2012learning]
   - Different algorithms/models have remarkably similar performance
   - Increasing training set improves performance
 
@@ -251,10 +309,16 @@
 * Right and Wrong Approach to Research
 - It is not clear how to prioritize the different possible tasks
 
+::: columns
+:::: {.column width=45%}
+
 - **Bad**
   1. Use gut feeling to choose a task
   2. Complete task
   3. Re-evaluate performance
+
+::::
+:::: {.column width=55%}
 
 - **Good**
   1. Build a simple algorithm
@@ -268,6 +332,9 @@
   4. Review misclassified emails manually
      - Identify features to improve performance
      - E.g., what are types of misclassified emails?
+
+::::
+:::
 
 - Sometimes you just need to try approaches to see if they work
   - E.g., use stemming software to equate words
