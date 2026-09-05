@@ -45,27 +45,23 @@
     - Separating hyperplane appears wiggly, but defined by few support vectors
 
 - **Measures of complexity**
-  - Complexity of a single hypothesis $h$
-    - E.g., polynomial order, MDL (describe hypothesis in bits), Kolmogorov
-      complexity
-  - Complexity of a hypothesis set $\calH$
-    - E.g., VC dimension of the model
-      [@abumostafa2012learning]
   - Complexity of $h$ and $\calH$ related by counting:
     - If you need $l$ bits to specify $h$, then $h$ is one of $2^l$ elements of
       set $\calH$
 
-\begingroup \footnotesize
 ```{=typst}
 #styled-table(
   headers: ("Complexity Of", "Measure", "Example"),
   rows: (
-    ("Single hypothesis $h$", "Description length", "Polynomial order, MDL, Kolmogorov complexity"),
-    ("Hypothesis set $\calH$", "Capacity", "VC dimension"),
+    (
+      "Single hypothesis", "Description length",
+      "Polynomial order, MDL, Kolmogorov complexity",
+    ),
+    ("Hypothesis set", "Capacity", "VC dimension"),
   ),
+  caption: [#cite("abumostafa2012learning")],
 )
 ```
-\endgroup
 
 * Model Soundness
 - **Model should tell a story**
@@ -94,15 +90,11 @@
   - Biased sampling leads to biased outcomes
   - Model views world through training data
   - Hoeffding's hypothesis: training and testing distributions are the same
-    [@abumostafa2012learning]
+    `#cite("abumostafa2012learning")`{=typst}
 
 - **Causes of Sampling Bias**
-  - _Non-random sampling_: Favors certain outcomes or groups
-  - _Undercoverage_: Inadequate representation of some population members
-  - _Survivorship bias_: Includes only successful subjects
-  - _Self-selection bias_: Participants choose to participate, introducing bias
 
-```mermaid
+```mermaid[width=45%]
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#EEEDFE', 'primaryBorderColor': '#7F77DD', 'primaryTextColor': '#26215C', 'lineColor': '#888888', 'fontFamily': 'Helvetica'}}}%%
 mindmap
   root((**Sampling Bias**))
@@ -136,8 +128,7 @@ mindmap
 
 * Data Snooping (1/2)
 - **Data snooping** occurs when test set information improperly influences
-  model-building
-  [@hastie2009statlearn]
+  model-building `#cite("hastie2009statlearn")`{=typst}
 
 - **Typical Sources**
   - _Train-test contamination_: Test data leaks into training
@@ -170,15 +161,21 @@ mindmap
 #styled-table(
   headers: ("Source", "Preventive Strategy"),
   rows: (
-    ("Train-test contamination", "Keep training, validation, and test sets separate"),
-    ("Multiple hypothesis testing", "Use cross-validation properly; fit preprocessing on training data only"),
+    (
+      "Train-test contamination",
+      "Keep training, validation, and test sets separate",
+    ),
+    (
+      "Multiple hypothesis testing",
+      "Use cross-validation properly; fit preprocessing on training data only",
+    ),
   ),
 )
 ```
 \endgroup
 
 * "Burning the Test Set"
-- @Problem@ [@hastie2009statlearn]
+- @Problem@ `#cite("hastie2009statlearn")`{=typst}
   - Repeated test set use during development leaks into training
   - Overfitting to test data
   - _"If you torture the data long enough, it will confess whatever you want"_
@@ -203,8 +200,7 @@ mindmap
 
 * How to Achieve Out-Of-Sample Fit
 - @Goal@: Choose an hypothesis $g \in \calH$ approximates the unknown target
-  function $f$
-  [@abumostafa2012learning]
+  function $f$ `#cite("abumostafa2012learning")`{=typst}
   - What does $g \approx f$ mean?
     $$
     g \approx f \iff E_{out}(g) \approx 0
@@ -220,8 +216,7 @@ mindmap
 * What If Out-Of-Sample Fit Is Poor?
 - The model performs well in sample ($E_{in} \approx 0$) but poorly out of
   sample
-  ($E_{out} \gg E_{in}$)
-  [@abumostafa2012learning]
+  ($E_{out} \gg E_{in}$) `#cite("abumostafa2012learning")`{=typst}
 
 - **What does it mean?**
   - In-sample performance is optimistic
@@ -243,23 +238,8 @@ mindmap
      - Decrease regularization $\lambda$ $\iff$ fixes high bias
      - Increase regularization $\lambda$ $\iff$ fixes high variance
 
-\begingroup \footnotesize
-```{=typst}
-#styled-table(
-  headers: ("Lever", "Action", "Effect"),
-  rows: (
-    ("Training data", "Get more data", "Fixes high variance"),
-    ("Features", "Remove features", "Fixes high variance"),
-    ("Features", "Add (derived) features", "Fixes high bias"),
-    ("Regularization", "Decrease $\lambda$", "Fixes high bias"),
-    ("Regularization", "Increase $\lambda$", "Fixes high variance"),
-  ),
-)
-```
-\endgroup
-
 * Why Using a Lot of Data?
-- **Several studies** show that: [@abumostafa2012learning]
+- **Several studies** show that: `#cite("abumostafa2012learning")`{=typst}
   - Different algorithms/models have remarkably similar performance
   - Increasing training set improves performance
 
@@ -302,7 +282,7 @@ mindmap
     - Next step: use all $100M$ instances to train the model
 ::::
 :::: {.column width=40%}
-![](msml610/lectures_source/figures/L02.6.Learning_curves.png)
+![](msml610/lectures_source/figures/L02.6.Learning_curves.png){width=90%}
 ::::
 :::
 
@@ -436,3 +416,10 @@ mindmap
 \small _Incremental vs Iterative_
 ::::
 :::
+
+* References
+
+```{=typst}
+#set text(size: 0.75em)
+#references("/msml610/lectures_source/refs.bib")
+```
