@@ -140,14 +140,14 @@ WARNING: Can't find s3fs: continuing
 
 # Workflow in short
 
-/slides.review          02.1  02.2  02.3  02.4  02.5
+/slides.review          03.1   .    .   .   .   .
 
 Edit slides
 
-/slides.add_visuals     02.1  02.2  02.3  02.4  02.5
-/slides.add_references  02.1  02.2  02.3  02.4  02.5
-/slides.lint            02.1  02.2  02.3  02.4  02.5
-/slides.fix_rendered_pdf            02.3  02.4  02.5
+/slides.add_visuals     03.1
+/slides.add_references  03.1
+/slides.lint            03.1
+/slides.fix_rendered_pdf     
 
 Not needed
 /slides.fix_errors
@@ -155,22 +155,22 @@ Not needed
 /slides.fix_formatting
 /slides.add_tutorial_links
 
-> lint_text.py          02.1        02.3  02.4  02.5
+lint_text.py          
 > lint_text.py -i msml610/lectures_source/Lesson02.1*.smd
 
 > gen_slides.py -i msml610/01.3
 > grep "^* " msml610/lectures_source/*.smd | wc -l
 
-gen_book_chapter        02.1        02.3  02.4  02.5
+gen_book_chapter        
 gen_book_chapter.py -i msml610/01.2 --mode typst_aima --llm_backend hllm_cli -v DEBUG --model claude-opus-4.5
 gen_book_chapter.py -i msml610/01.2 --mode typst_aima --llm_backend hllm_cli_exec --model openrouter/anthropic/claude-opus-4.6 --no_incremental
 
 > run_typst.py --input msml610/book/Lesson01.2-AI_and_Machine_Learning.typ
 
-compress_pdf.py         02.1        02.3
+compress_pdf.py         03.1
 > compress_pdf.py --input msml610/book/Lesson01.3*.pdf
 
-> /text.humanize        02.1        02.3
+> /text.humanize        03.1
 > review / edit book chapter
 
 ### [ ] Add cc loop in gen_book_chapters

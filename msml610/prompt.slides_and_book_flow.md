@@ -4,7 +4,7 @@ FILE=msml610/lectures_source/Lesson02.6-ML_Techniques_How_To_Do_Research.smd
 
 /slides.review $FILE
 
-Implement the high importance and the restructuring of the slides
+Implement the restructuring of the slides and fix the high importance issues
 
 - [ ] Add visuals and references
 
