@@ -227,10 +227,88 @@ branch needs a manual rebase:
 
 ## GitHub Stacked PRs + helpers
 
-// TODO(ai_gp): Add explanation of how to use our tools like
-// `git_create_issue_and_branch.py`, git_branch_create, git_merge_master
+The helpers framework provides several CLI tools to streamline the stacked PR workflow:
 
-i git_branch_diff --target master to see what is the difference
+### Creating Branches with Issues
+
+- Use `git_create_issue_and_branch.py` to create a GitHub issue and corresponding
+  branch simultaneously:
+
+  ```bash
+  # Create a new GitHub issue and branch for a feature
+  > git_create_issue_and_branch.py \
+      --gh_issue_title "Step 1: Add database schema" \
+      --create_worktree
+
+  # Or use an existing issue ID to create a branch
+  > git_create_issue_and_branch.py \
+      --gh_issue_id 123
+  ```
+
+- This script:
+  - Creates the GitHub issue (or uses an existing one with `--gh_issue_id`)
+  - Creates a git branch and PR named after the issue ID (e.g., `IssueId123_Description`)
+  - Optionally creates a git worktree for parallel work
+  - Handles symmetric branch creation in submodules if present
+
+### Creating Branches Without Issues
+
+- Use the `invoke git_branch_create` task to create a branch with a simpler workflow:
+
+  ```bash
+  # Create a branch directly
+  > invoke git_branch_create --name "feature/step-1-schema"
+
+  # Create a branch from an existing GitHub issue
+  > invoke git_branch_create --issue-id 123
+
+  # Optionally skip PR creation
+  > invoke git_branch_create --name "feature/step-1-schema" --no-create-pr
+  ```
+
+### Syncing with Master
+
+- After creating your branch stack, use `invoke git_merge_master` to bring in changes
+  from master without frequent context switches:
+
+  ```bash
+  # Merge master into the current branch
+  > invoke git_merge_master
+
+  # Skip automatic push (resolve conflicts manually first)
+  > invoke git_merge_master --no-auto-merge
+  ```
+
+- This follows the merge-based approach (not rebase) to minimize conflict resolution
+  when your branch has accumulated many small commits. See
+  [Merge, Rebase, or Squash: Choosing How to Catch Up with Master](/blog/how-to-i-git-merge-master)
+  for a deeper explanation of the merge strategy.
+
+### Comparing Branches
+
+- Use `git_branch_diff` to see differences between your branch and a target
+
+- The `--target` options:
+  - `base`: diff against your branch point (most useful for seeing what you changed)
+  - `master`: diff against `origin/master`
+  - `head`: diff only modified files
+  - `hash`: diff against a specific commit hash with `--hash-value`
+
+- E.g.,
+  ```bash
+  # See what changed between your branch and master
+  > invoke git_branch_diff --target master
+
+  # See files changed since branching point
+  > invoke git_branch_diff --target base
+
+  # Only print file names (useful for scripts)
+  > invoke git_branch_diff --target master --only-print-files
+
+  # Filter to specific file types
+  > invoke git_branch_diff --target master --file-types py,md
+  ```
+
 
 ## Git-Spice
 
@@ -311,6 +389,3 @@ better as the stack grows: a 6-task stack means 6 manual rebases with plain
 
 When in doubt, start with interactive workflows. Use stacked PRs once task
 sequences are stable and well-understood.
-
-#
-
