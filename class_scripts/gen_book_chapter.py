@@ -76,7 +76,6 @@ import argparse
 import logging
 import os
 import re
-import shutil
 from typing import Dict, List, Optional, Tuple
 
 from tqdm.auto import tqdm
@@ -1242,25 +1241,14 @@ def _generate_book_chapter(
     _LOG.info("Wrote book chapter to: %s", output_file)
 
 
-def _lint_typst_file(typst_file: str, *, dry_run: bool) -> None:
-    """
-    Lint a Typst file in place with `typstyle`, if it is on the PATH.
-
-    :param typst_file: path to the `.typ` file to lint
-    :param dry_run: print the command without executing it
-    """
-    if shutil.which("typstyle") is None:
-        _LOG.warning(
-            "'typstyle' not found on PATH, skipping lint of '%s'", typst_file
-        )
-        return
-    cmd = f"typstyle --inplace --wrap-text -l 80 {typst_file}"
-    hsystem.system(cmd, print_command=True, dry_run=dry_run)
-
-
 def _lint_with_lint_text(output_file: str, *, dry_run: bool) -> None:
     """
-    Lint a Markdown or LaTeX file in place with `lint_text.py`.
+    Lint a file in place with `lint_text.py`.
+
+    `lint_text.py` infers the formatting pipeline from the file's extension
+    (Markdown, LaTeX, plain text, slide markdown, or `typstyle` for `.typ`
+    Typst files), so this covers every mode's output, including
+    `typst_aima`.
 
     :param output_file: path to the file to lint (its type is inferred
         from its extension)
@@ -1566,12 +1554,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
             _LOG.info(
                 "\n%s", hprint.frame(f"Action: Linting '{args.mode}' file")
             )
-            if args.mode == "typst_aima":
-                # TODO(gp): Move this inside lint_text.py to support also
-                # typst.
-                _lint_typst_file(output_file, dry_run=args.dry_run)
-            else:
-                _lint_with_lint_text(output_file, dry_run=args.dry_run)
+            _lint_with_lint_text(output_file, dry_run=args.dry_run)
         elif action == "fix_typst_code":
             _LOG.info(
                 "\n%s",
