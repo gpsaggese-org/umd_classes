@@ -288,3 +288,7 @@ better as the stack grows: a 6-task stack means 6 manual rebases with plain
 
 When in doubt, start with interactive workflows. Use stacked PRs once task
 sequences are stable and well-understood.
+
+#
+
+i git_branch_diff --target master

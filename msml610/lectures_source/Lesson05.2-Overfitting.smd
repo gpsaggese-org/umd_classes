@@ -30,6 +30,7 @@
 :::: {.column width=45%}
 
 ```tikz
+\bfseries
 % Axis
 \draw[->] (0,0) -- (7,0) node[right] {$\text{VC dimension, } d_{\text{vc}}$};
 \draw[->] (0,0) -- (0,5) node[above] {Error};
@@ -672,6 +673,7 @@
 :::: {.column width=40%}
 
 ```tikz
+\bfseries
 % Axes
 \draw[->] (0,0) -- (7,0) node[below] {Number of Data Points, $N$};
 \draw[->] (0,0) -- (0,4) node[above] {Expected Error};

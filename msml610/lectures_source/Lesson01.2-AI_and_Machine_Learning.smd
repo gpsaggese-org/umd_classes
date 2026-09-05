@@ -425,6 +425,7 @@ digraph laws_of_thought {
 :::: {.column width=30%}
 
 ```tikz
+\bfseries
 % Define colors.
   \definecolor{AIcolor}{RGB}{244,166,166}    % Red/Pink
   \definecolor{MLcolor}{RGB}{178,226,178}    % Green

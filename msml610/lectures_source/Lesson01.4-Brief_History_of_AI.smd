@@ -21,13 +21,13 @@
 
 \begin{document}
 \begin{tikzpicture}[
-  font=\sffamily,
+  font=\bfseries,
   year/.style={font=\large\bfseries, text=blue!70!black},
   circlemark/.style={
     draw=blue!70!black, fill=white, line width=2pt, circle, minimum size=10pt
   },
   event/.style={
-    align=left, text width=5.5cm, font=\large
+    align=left, text width=5.5cm, font=\large\bfseries
   }
 ]
 
@@ -672,7 +672,7 @@ digraph DLPipeline {
 \usetikzlibrary{arrows.meta}
 
 \begin{document}
-\begin{tikzpicture}[font=\sffamily]
+\begin{tikzpicture}[font=\bfseries]
   % Axes
   \draw[-{Latex[length=3mm]}, thick] (0,0) -- (15.5,0) node[right] {\small Year};
   \draw[-{Latex[length=3mm]}, thick] (0,0) -- (0,6.8) node[above, align=left] {\small Hype /\\ \small funding};
@@ -680,7 +680,7 @@ digraph DLPipeline {
   % Year ticks (5 years per unit, x = (year-1950)/5)
   \foreach \x/\lbl in {0/1950, 2/1960, 4/1970, 6/1980, 8/1990, 10/2000, 12/2010, 15/2025} {
     \draw (\x,0) -- (\x,-0.12);
-    \node[below, font=\scriptsize] at (\x,-0.2) {\lbl};
+    \node[below, font=\scriptsize\bfseries] at (\x,-0.2) {\lbl};
   }
 
   % AI winter shading (qualitative, not measured data)
@@ -698,12 +698,12 @@ digraph DLPipeline {
     };
 
   % Labels
-  \node[font=\scriptsize, align=center] at (2.2,3.9) {Early\\Enthusiasm};
-  \node[font=\scriptsize, align=center, red!60!black] at (5.4,0.35) {1st AI\\Winter};
-  \node[font=\scriptsize, align=center] at (7.0,4.4) {Expert\\Systems};
-  \node[font=\scriptsize, align=center, red!60!black] at (8.1,0.35) {2nd AI\\Winter};
-  \node[font=\scriptsize, align=center] at (10.5,2.6) {Statistical ML};
-  \node[font=\scriptsize, align=center] at (13.5,6.1) {Deep Learning\\/ LLM Boom};
+  \node[font=\scriptsize\bfseries, align=center] at (2.2,3.9) {Early\\Enthusiasm};
+  \node[font=\scriptsize\bfseries, align=center, red!60!black] at (5.4,0.35) {1st AI\\Winter};
+  \node[font=\scriptsize\bfseries, align=center] at (7.0,4.4) {Expert\\Systems};
+  \node[font=\scriptsize\bfseries, align=center, red!60!black] at (8.1,0.35) {2nd AI\\Winter};
+  \node[font=\scriptsize\bfseries, align=center] at (10.5,2.6) {Statistical ML};
+  \node[font=\scriptsize\bfseries, align=center] at (13.5,6.1) {Deep Learning\\/ LLM Boom};
 \end{tikzpicture}
 \end{document}
 ```

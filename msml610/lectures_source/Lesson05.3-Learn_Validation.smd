@@ -188,6 +188,7 @@ _Train / test validation_
 \vspace{0.1cm}
 
 ```tikz
+\bfseries
     \def\blockwidth{1.2}
     \def\blockheight{0.7}
 
@@ -219,6 +220,7 @@ _5x cross-validation_
 \vspace{0.1cm}
 
 ```tikz
+\bfseries
 \def\blockwidth{1.2}
 \def\blockheight{0.7}
 \def\vspacing{1.2} % vertical spacing between iterations
