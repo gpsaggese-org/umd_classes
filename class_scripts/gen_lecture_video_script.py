@@ -273,7 +273,7 @@ def generate_lecture_video_script(
     _LOG.info("Step 5: Linting the final script")
     cmd = (
         f"lint_text.py -i {output_file} -o {output_file} "
-        f"--use_dockerized_prettier --action prettier --action frame_chapters"
+        f"--use_dockerized_prettier --action beautify --action frame_chapters"
     )
     hsystem.system(cmd)
     _LOG.info("Lecture script generated: %s", output_file)
