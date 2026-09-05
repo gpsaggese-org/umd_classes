@@ -15,80 +15,74 @@
 ## Simple Is Better
 
 * Occam's Razor
-- **Simple is better**
+- @Fact@: **Simple is better**
   - _"The simplest model that fits the data is also the most plausible"_
     (Occam)
-
   - _"An explanation of the data should be as simple as possible, but not
     simpler"_ (Einstein?)
+  - You need to trim the model to the bare minimum necessary to explain the data
 
-- Corollary:
-  - Trim the model to the bare minimum necessary to explain the data
+- @Question@: What does **simple** and **better** mean?
+  - A model is _simple_ when it is one of few possible objects
+  - A model is _better_ means better out of sample performance
 
-- @Question@
-  - A model is simple when it is one of few possible objects
-
-- @Question@
-  - A model is better means better out of sample performance
-
-- **Why it's true**?
+- @Question@: **Why it's true**?
   - Less likely to fit a given data by coincidence
   - An event is more significant if it is unlikely (formalized in terms entropy)
 
 * What is a "simple model"?
-- An object is **simple** when it is one of few possible objects
+- @Definition@: An object is **simple** when it is one of few possible objects
 
-- @Examples@: 
+- @Examples@:
   - Polynomial of order 2 is simpler than order 17
     - More polynomials of order 17 than order 2, though both are infinite sets
-  - SVM (Support Vector Machine) characteristics:
-    - Separating hyperplane appears wiggly, but defined by few support vectors
+  - For SVM (Support Vector Machine) separating hyperplane appears wiggly
+    ("complex"?), but defined by few support vectors (simple)
 
-- **Measures of complexity**
+- @Definition@: There are many **measures of complexity**
   - Complexity of a single hypothesis $h$
     - E.g., polynomial order, MDL (describe hypothesis in bits), Kolmogorov
       complexity
   - Complexity of a hypothesis set $\calH$
     - E.g., VC dimension of the model
-  - Complexity of $h$ and $\calH$ related by counting:
+  - Complexity of both $h$ and $\calH$ are related by counting:
     - If you need $l$ bits to specify $h$, then $h$ is one of $2^l$ elements of
       set $\calH$
 
 * Model Soundness
-- **Model should tell a story**
+- @Model should tell a story@
   - You cannot blindly accept results of modeling
   - Ask: _"What criticisms would you give if the model was presented for the
     first time?"_
 
-- **Benchmark models**: compute performance if model outputs:
+- Compare model to a @benchmark@ by computing performance to a model that outputs:
   - Always 0 or 1
     - E.g., long-only model for stock predictions
   - Random results
     - E.g., bootstrap of null hypothesis "no prediction power"
 
-- **Perfect fit can mean nothing**, e.g.,
+- @Fact@: A **perfect fit can mean nothing**, e.g.,
   - Get 2 data points on a plane
     - Fit data with a linear relationship
-    - Perfect fit
-  - Means nothing since:
-    - Always a line between 2 points
-    - Data cannot falsify hypothesis
-  - The model (line) is too complex for data set (only 2 points)
+  - The perfect fit means nothing since: there is always a line between 2 points
+    - The model (line) is too complex for data set (only 2 points)
+  - Data cannot falsify hypothesis
 
 * Sampling Bias (1/2)
-- **Sampling bias** occurs when data is not representative of the intended
-  population
+- @Definition@: **Sampling bias** occurs when data is not representative of the
+  intended population
   - Biased sampling leads to biased outcomes
-  - Model views world through training data
-  - Hoeffding's hypothesis: training and testing distributions are the same
+    - The model views the world through training data
+  - Formalized by Hoeffding's hypothesis in ML theory: training and testing
+    distributions are the same
 
-- **Causes of Sampling Bias**
+- @Causes of Sampling Bias@
   - _Non-random sampling_: Favors certain outcomes or groups
   - _Undercoverage_: Inadequate representation of some population members
   - _Survivorship bias_: Includes only successful subjects
   - _Self-selection bias_: Participants choose to participate, introducing bias
 
-- **Consequences**
+- @Consequences@
   - Systematic errors distort relationships or predictions
   - Models trained on biased samples perform poorly on real-world data
   - Leads to incorrect or unfair decisions
@@ -100,27 +94,28 @@
   - Predicting income using data only from employed individuals omits unemployed
     people
 
-- **Mitigation**
+- @Mitigation@
   - Compare sample statistics with population statistics
   - Use stratified sampling or resampling to balance data
   - Apply re-weighting or bias correction techniques
   - If data points have zero probability ($\Pr = 0$), no remedies possible
 
 * Data Snooping (1/2)
-- **Data snooping** occurs when test set information improperly influences
-  model-building
+- @Definition@: **Data snooping** occurs when test set information improperly
+  influences model-building
 
-- **Typical Sources**
+- @Causes of Data Snooping@
   - _Train-test contamination_: Test data leaks into training
     - E.g., Using test data during feature engineering, model selection, or
       tuning
   - _Multiple hypothesis testing_: Trying many models inflates performance
+    - E.g., p-hacking but also more subtle phenomena
 
-- **Consequences**
+- @Consequences@
   - Overly optimistic evaluations
-  - Models perform well in validation but fail on unseen data
+  - Models perform well in validation / test, but fail on unseen data
 
-- **Why It's Dangerous**
+- @Why It's Dangerous@
   - Misleading results
   - False confidence in model quality
   - Common pitfall in machine learning workflows
@@ -131,25 +126,24 @@
     not present in deployment
   - E.g., demean the entire data and then split in train / test
 
-- **Preventive Strategies**
+- @Preventive Strategies@
   - Keep training, validation, and test sets separate
+    - Fit preprocessing steps only on training data, then apply to test data
   - Use cross-validation properly
-  - Fit preprocessing steps only on training data, then apply to test data
 
 * "Burning the Test Set"
 - @Problem@
-  - Repeated test set use during development leaks into training
-  - Overfitting to test data
+  - Repeated test set use during development leaks into training $\to$ overfitting to
+    _test data_
   - _"If you torture the data long enough, it will confess whatever you want"_
     (Coase, 1982)
 
-- **Symptoms**
-  - Test accuracy improves; real-world performance stagnates or degrades
-  - Model evaluation becomes untrustworthy
+- @Consequences@
+  - Test accuracy improves but (unknown) real performance stagnates / degrades
+  - You can't trust your own model evaluation process
 
-- **Solutions**
-  - _One-time use principle_: Evaluate on test set once, post-tuning
-  - _Use a validation set_: For model development and tuning
+- @Mitigation@
+  - _One-time use principle_: Evaluate on test set _once_ after all the tuning
   - _Statistical adjustments_:
     - Adjust p-values for multiple testing
     - Use Bonferroni or False Discovery Rate corrections
@@ -163,22 +157,17 @@
 * How to Achieve Out-Of-Sample Fit
 - @Goal@: Choose an hypothesis $g \in \calH$ approximates the unknown target
   function $f$
-  - What does $g \approx f$ mean?
-    $$
-    g \approx f \iff E_{out}(g) \approx 0
-    $$
+  - $g \approx f$ means $E_{out}(g) \approx 0$
 
 - @Solution@: 
-  - Achieve:
+  - Build a model that has:
     - Good in-sample performance $E_{in}(g) \approx 0$
     - Good generalization $E_{out}(g) \approx E_{in}(g)$
-  - Together $\implies$ good out-of-sample performance
-    $E_{out}(g) \approx 0$
+  - Together good out-of-sample performance $E_{out}(g) \approx 0$
 
 * What If Out-Of-Sample Fit Is Poor?
-- The model performs well in sample ($E_{in} \approx 0$) but poorly out of
-  sample
-  ($E_{out} \gg E_{in}$)
+- @Problem@: the model performs well in sample ($E_{in} \approx 0$) but poorly out of
+  sample ($E_{out} \gg E_{in}$)
 
 - **What does it mean?**
   - In-sample performance is optimistic
