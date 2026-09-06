@@ -39,7 +39,6 @@ import class_scripts.common_utils as csccouti
 import class_scripts.slides_utils as cscsluti
 import helpers.hdbg as hdbg
 import helpers.hio as hio
-import helpers.hllm as hllm
 import helpers.hparser as hparser
 import helpers.hselect_input_output as hseinout
 import helpers.hsystem as hsystem
@@ -104,6 +103,8 @@ def _process_slides_group(
     :param model: LLM model to use
     :return: generated script content
     """
+    import helpers.hllm as hllm
+
     hdbg.dassert_isinstance(slides_group, list)
     hdbg.dassert_lt(0, len(slides_group))
     # Process images from slides.
