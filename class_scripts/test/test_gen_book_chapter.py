@@ -10,7 +10,6 @@ import logging
 import os
 from unittest import mock
 
-import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hprint as hprint
 import helpers.hunit_test as hunitest
@@ -23,6 +22,7 @@ _LOG = logging.getLogger(__name__)
 # #############################################################################
 # Test_add_line_numbers
 # #############################################################################
+
 
 class Test_add_line_numbers(hunitest.TestCase):
     """
@@ -188,7 +188,9 @@ class Test_insert_provenance_tag(hunitest.TestCase):
         tag = "git_hash=abc1234 timestamp=20250101_000000"
         expected_with_tag = expected.format(tag=tag)
         # Run test.
-        with mock.patch.object(csgeboch.hgit, "get_generation_tag", return_value=tag):
+        with mock.patch.object(
+            csgeboch.hgit, "get_generation_tag", return_value=tag
+        ):
             actual = csgeboch._insert_provenance_tag(text, mode)
         # Check outputs.
         # TODO(ai_gp): Use self.assert_equal() instead of assertEqual() for string comparison (testing.rules.md:## Assertion Patterns)
