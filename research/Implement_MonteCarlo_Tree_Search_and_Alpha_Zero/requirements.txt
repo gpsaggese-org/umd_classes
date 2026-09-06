@@ -1,10 +1,3 @@
 matplotlib
 numpy
-pandas
 tqdm
-
-# Third-party MCTS libraries compared in mcts_library_survey.ipynb.
-imparaai-montecarlo
-mcts-simple
-mctspy
-monte-carlo-tree-search
