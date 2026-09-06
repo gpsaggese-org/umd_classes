@@ -21,34 +21,34 @@
 
 // From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:7 '# Knowledge Representation'
 // Slide: Knowledge Representation
-#strong[Knowledge Representation]
 
 // From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:9 '* Roadmap'
 // Slide: Roadmap
-#strong[Roadmap]
+= Roadmap
 
-Knowledge representation is the study of how to encode what an agent knows so
-that it can reason, plan, and act effectively. The progression here moves from
-foundational motivations to concrete mechanisms: first understanding #emph[why]
-explicit representation matters, then examining #emph[how] knowledge is
-structured, interpreted, and put to work.
+#strong[Knowledge representation] is the study of how to encode what an agent
+knows so that it can reason, plan, and act effectively. The progression in this
+chapter moves from foundational motivations to concrete mechanisms: first
+understanding #emph[why] explicit representation matters, then examining
+#emph[how] knowledge is structured, interpreted, and put to work.
 
-The foundations establish what knowledge representation actually is and the core
-design tradeoffs every representation scheme must navigate: expressiveness
+The foundations establish what knowledge representation actually is and the
+core design tradeoffs every representation scheme must navigate: expressiveness
 versus computational tractability, generality versus domain specificity, and
 formal precision versus ease of authoring. From there, the discussion turns to
 the #emph[languages] available for encoding knowledge, spanning natural
 language, programming languages, propositional logic, and first-order logic,
-each offering a different point in that tradeoff space. Semantics then pins down
-what it means for a knowledge base to be "about" the world: how symbols are
-grounded in referents, what a model is, and what it means for a sentence to be
-satisfied. Reasoning builds on that semantic foundation by defining entailment
-(what follows from what), inference (the mechanical process of deriving new
-sentences), and the twin guarantees of soundness and completeness that connect
-the two. With these pieces in place, the focus shifts to agents that actually
-use represented knowledge: from simple reflex agents, through rule-based
-systems, to full knowledge-based agents that maintain an internal knowledge base
-and query it before acting. Finally, ontologies provide the large-scale
+each offering a different point in that tradeoff space. #emph[Semantics] then
+pins down what it means for a knowledge base to be "about" the world: how
+symbols are grounded in referents, what a model is, and what it means for a
+sentence to be satisfied. #emph[Reasoning] builds on that semantic foundation
+by defining #emph[entailment] (what follows from what), #emph[inference] (the
+mechanical process of deriving new sentences), and the twin guarantees of
+#emph[soundness] and #emph[completeness] that connect the two. With these
+pieces in place, the focus shifts to #emph[agents] that actually use
+represented knowledge: from simple reflex agents, through rule-based systems,
+to full knowledge-based agents that maintain an internal knowledge base and
+query it before acting. Finally, #emph[ontologies] provide the large-scale
 organizational scaffolding, specifying the categories, relations, and axioms
 that let knowledge be shared and reused across tasks and domains.
 
@@ -58,8 +58,6 @@ that let knowledge be shared and reused across tasks and domains.
 
 // From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:23 '* Defining Knowledge Representation'
 // Slide: Defining Knowledge Representation
-#strong[Defining Knowledge Representation]
-
 #strong[Knowledge Representation (KR)] is the study of how to formally encode
 information so that machines can reason with it. Rather than storing raw data,
 KR provides a structured language for capturing facts, relationships, and rules
@@ -68,10 +66,10 @@ production rules, first-order logic, ontologies, and semantic networks, each
 offering different tradeoffs between expressiveness and computational
 tractability.
 
-KR defines two essential aspects of any encoding. #emph[Structure] determines
+KR defines two essential aspects of any encoding. #strong[Syntax] determines
 how knowledge is organized: whether as a flat set of propositions, a hierarchy
 of classes and instances, or a graph of interconnected concepts.
-#emph[Semantics] determines what the encoded statements actually mean: the
+#strong[Semantics] determines what the encoded statements actually mean: the
 formal interpretation that lets a reasoner distinguish valid inferences from
 invalid ones. Without clear semantics, a knowledge base is just syntax; without
 clear structure, it becomes unwieldy as the domain grows.
@@ -89,33 +87,33 @@ retrieving not just stored facts but also their logical consequences.
 // Slide: Why Knowledge Representation Matters
 #strong[Why Knowledge Representation Matters]
 
-Why is knowledge representation essential to AI? There are several compelling
-reasons that go beyond what learning from data alone can achieve.
+Why is knowledge representation essential to AI? Learning from data alone falls
+short in several ways.
 
-First, learning alone is not enough. Machines need to #emph[reason] about the
-world, not just recognize patterns. A medical AI trained on patient data can
-#emph[predict] diseases with impressive accuracy, but to #emph[explain] a
-diagnosis to a doctor, it needs structured knowledge that captures relationships
-between symptoms, conditions, and treatments.
+Machines need to #emph[reason] about the world, not just recognize patterns. A
+medical AI trained on patient data can #emph[predict] diseases with impressive
+accuracy, but to #emph[explain] a diagnosis to a doctor, it needs structured
+knowledge that captures relationships between symptoms, conditions, and
+treatments. Without that structure, prediction divorced from reasoning is
+often useless.
 
-Second, knowledge representation bridges perception and reasoning. Sensors
-provide #emph[perception] in the form of raw data, but that data is not
-inherently meaningful. Knowledge representation turns raw data into
-#emph[actionable knowledge] through #emph[reasoning], allowing a system to move
-from "these pixels form a stop sign" to "I should decelerate the vehicle."
+Knowledge representation bridges perception and reasoning. Sensors provide
+#emph[perception] in the form of raw data, but that data is not inherently
+meaningful. Representation turns raw data into #emph[actionable knowledge]
+through #emph[reasoning], allowing a system to move from "these pixels form a
+stop sign" to "I should decelerate the vehicle."
 
-Third, knowledge representation enables explainability. When a system's
-knowledge is explicitly represented, users can understand #emph[why] it made a
-particular decision. This is critical for high-stakes domains such as
-healthcare, law, and autonomous systems, where a black-box prediction is often
-insufficient and sometimes legally unacceptable.
+When knowledge is explicitly represented, users can understand #emph[why] a
+system made a particular decision. This matters in high-stakes domains:
+healthcare, law, autonomous systems, where a black-box prediction is often
+insufficient and sometimes legally unacceptable. Explainability requires a
+chain of reasoning the system can show.
 
-Fourth, knowledge representation enables planning and abstract reasoning. Robots
-plan actions using abstract symbolic knowledge: they do not re-derive the
-concept of "door" from pixel data every time they need to navigate a room.
-Similarly, conversational agents reason about intent and context, mapping a
-user's words to goals and selecting responses that advance those goals rather
-than simply pattern-matching against a training corpus.
+Robots plan actions using abstract symbolic knowledge: they do not re-derive the
+concept of "door" from pixel data every time they navigate a room. Conversational
+agents reason about intent and context, mapping a user's words to goals and
+selecting responses that advance those goals rather than pattern-matching
+against a training corpus.
 
 // From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:54 '## Design Choices in Knowledge Representation'
 // Slide: Design Choices in Knowledge Representation
@@ -125,17 +123,15 @@ than simply pattern-matching against a training corpus.
 // Slide: Expressiveness Vs. Tractability
 #strong[Expressiveness Vs. Tractability]
 
-In knowledge representation, a fundamental #strong[trade-off] exists between two
-competing goals. #emph[Expressiveness] refers to the richness of concepts a
-language can capture: how much detail and nuance it can encode about the world.
-#emph[Tractability] refers to whether reasoning in that language can be
-performed efficiently, ideally in polynomial time or better. As
-@fig:expressivenessvstractability illustrates, these two properties pull in
-opposite directions: more expressive languages lead to harder computation, often
-pushing reasoning problems into undecidable or intractable territory. Choosing
-the right knowledge representation therefore depends heavily on the application
-and the balance it demands between descriptive power and computational
-feasibility.
+Knowledge representation always trades off two competing goals. #emph[Expressiveness]
+is the richness of concepts a language can capture: how much detail and nuance it
+can encode about the world. #emph[Tractability] is whether reasoning in that
+language can be performed efficiently, ideally in polynomial time or better.
+These two properties pull in opposite directions: more expressive languages lead
+to harder computation, often pushing reasoning problems into undecidable or
+intractable territory (as shown in @fig:expressivenessvstractability). Choosing the
+right representation depends heavily on the application and the balance it demands
+between descriptive power and computational feasibility.
 
 // rendered_images:begin
 // ```tikz
@@ -231,9 +227,8 @@ methods, but they lack transparency. A 768-dimensional vector for the concept
 "dog" does not explain _why_ it sits near "wolf" and far from "democracy" in any
 way a domain expert can audit.
 
-@fig:symbolicvssubsymbolic illustrates the contrast between these two paradigms,
-highlighting how symbolic and sub-symbolic representations differ in their
-structure, interpretability, and tolerance for ambiguity.
+@fig:symbolicvssubsymbolic contrasts symbolic and sub-symbolic representations
+in structure, interpretability, and tolerance for ambiguity.
 
 #figure(
   image(
@@ -267,12 +262,12 @@ spatial distance: the closer two points lie, the more alike the objects they
 represent. A #strong[concept], in this framework, is simply a region in that
 multidimensional space.
 
-This geometric grounding gives conceptual spaces a natural way to handle
-similarity and vagueness. Symbolic systems, by contrast, represent categories
-with discrete tokens such as `Car` or `Bicycle` that carry no built-in
-similarity structure; nothing in the symbol itself tells you how alike a car and
-a bicycle are. In a conceptual space, their proximity along shared dimensions
-(number of wheels, passenger capacity, speed) does that work automatically.
+Conceptual spaces handle similarity and vagueness through geometric grounding.
+Symbolic systems, by contrast, represent categories with discrete tokens such as
+`Car` or `Bicycle` that carry no built-in similarity structure; nothing in the
+symbol itself tells you how alike a car and a bicycle are. In a conceptual space,
+their proximity along shared dimensions (number of wheels, passenger capacity,
+speed) does that work automatically.
 
 Consider transportation methods as a concrete illustration. Suppose the space
 has two dimensions: #emph[Environmental Friendliness] and #emph[Technological
@@ -300,17 +295,13 @@ feature profile.
 // Slide: Natural Languages
 #strong[Natural Languages]
 
-#strong[Natural languages], such as English or Italian, differ fundamentally
-from formal languages in three key respects. First, they are _expressive_:
-natural language evolved as a medium for communication between people rather
-than as a system for precise representation of knowledge. Second, they are
-_ambiguous_: a single word can carry multiple unrelated meanings. The word
-"spring," for instance, refers both to a season and to a coiled object that
-stores mechanical energy. Third, they are _context-dependent_: the meaning of an
-utterance shifts depending on the sentence it appears in and the situation in
-which it is used. A one-word exclamation like "Look!" conveys entirely different
-information depending on whether the speaker is pointing at a sunset or warning
-of an oncoming car.
+#strong[Natural languages], such as English or Italian, are _expressive_,
+_ambiguous_, and _context-dependent_. They evolved as media for human
+communication, not for precise representation of knowledge. A single word like
+"spring" carries multiple unrelated meanings: both a season and a coiled object
+storing mechanical energy. Meaning shifts with the sentence and situation: the
+exclamation "Look!" conveys entirely different information depending on whether
+the speaker points at a sunset or warns of an oncoming car.
 
 The #strong[Sapir-Whorf hypothesis] is the contested claim that "the language
 you speak shapes how you perceive, think about, and experience the world,"
@@ -341,22 +332,20 @@ shared.
 // Slide: Procedural vs Declarative Approaches
 #strong[Procedural vs Declarative Approaches]
 
-#strong[Procedural approach] focuses on _how_ a task is done: it encodes the
-desired behavior directly into the program as an explicit sequence of
-instructions. Consider a robot navigating a maze: in the procedural style, the
-programmer writes out every turn and straight segment the robot should follow,
+#strong[Procedural approach] focuses on _how_ a task is done: it encodes desired
+behavior as an explicit sequence of instructions. Consider a robot navigating a
+maze: the programmer writes out every turn and segment the robot should follow,
 step by step. The result is precise and predictable, but brittle: if the maze
 changes, the entire program must be rewritten.
 
-#strong[Declarative approach], by contrast, specifies _what_ the goal is without
-dictating how to reach it. Instead of hand-coding each movement, you describe
-the relationships between actions, states, and goals, then let the system search
-for a solution on its own. For the same maze robot, a declarative specification
-simply states "reach the exit," and the robot's inference engine figures out
-which corridors to take. This buys flexibility and modularity at the cost of
-less direct control over execution and a heavier computational burden: the
-system needs a sufficiently powerful search or inference mechanism to turn that
-abstract goal into concrete behavior.
+#strong[Declarative approach] specifies _what_ the goal is without dictating how
+to reach it. Instead of hand-coding each movement, you describe the
+relationships between actions, states, and goals, then let the system search for
+a solution. For the maze robot, a declarative specification simply states "reach
+the exit," and the inference engine figures out which corridors to take. This
+trades flexibility and modularity for less direct control over execution and a
+heavier computational burden: the system needs a sufficiently powerful search
+mechanism to turn that abstract goal into concrete behavior.
 
 #figure(
   styled-table(
@@ -382,10 +371,8 @@ abstract goal into concrete behavior.
   placement: auto,
 ) <tab:proceduraldeclarative>
 
-@tab:proceduraldeclarative summarizes the core tradeoff: procedural
-representations give the designer fine-grained control but resist change, while
-declarative representations are easier to extend and reason about but demand
-more from the underlying solver.
+The tradeoff: procedural representations give control but resist change;
+declarative ones are easier to modify but demand more from the solver.
 
 In practice, many successful AI systems use a hybrid of both styles. Declarative
 knowledge can be _compiled_ into procedural code: a classical planner, for
@@ -402,13 +389,12 @@ two paradigms, capturing the strengths of each.
 A #strong[programming language] such as C++ or Python is a formal, procedural
 language in which data structures represent facts about the world and code
 updates those structures in domain-specific ways. This approach is powerful but
-comes with real limitations. First, programming languages lack a general
-mechanism for deriving new facts from existing ones; any such derivation must be
-hand-coded by the programmer using their own domain knowledge. Second, they
-cannot gracefully handle partial information. A variable holds a single value or
-remains unknown entirely; there is no built-in way to express something like "a
-white knight is on b1 or on f6" or to quantify uncertainty about which square it
-occupies.
+has real limitations. Programming languages lack a general mechanism for deriving
+new facts from existing ones: any such derivation must be hand-coded by the
+programmer. They also cannot gracefully handle partial information. A variable
+holds a single value or remains unknown entirely; there is no built-in way to
+express something like "a white knight is on b1 or on f6" or to quantify
+uncertainty about which square it occupies.
 
 A #strong[declarative language] addresses these shortcomings by separating
 knowledge from inference. In a declarative framework, knowledge captures the
@@ -551,35 +537,33 @@ uncertainty a knowledge-based agent can represent and reason about.
 #strong[Grounding]
 
 #strong[Grounding] connects abstract symbols to real-world entities or
-observations. In a knowledge base, a symbol like `Apple` is just a string with
-no inherent meaning; grounding is the bridge that links it to the actual fruit
-you can see and hold. Without this connection, a reasoning system manipulates
-tokens according to syntactic rules but has no way to verify whether its
-conclusions correspond to anything in the physical world.
+observations. In a knowledge base, a symbol like `Apple` is just a string; it
+takes grounding to link it to the actual fruit you can see and hold. Without
+this connection, a reasoning system manipulates tokens according to syntactic
+rules but has no way to verify whether its conclusions correspond to anything in
+the physical world.
 
-The goal of grounding is to make representations meaningful beyond their syntax.
-An agent that can ground its symbols is able to act meaningfully in the real
-world: it recognizes that the symbol `Apple` refers to the red object on the
-table, not just to a node in a graph. Without grounding, even a logically
-flawless inference engine is performing purely symbolic manipulation with no
-real-world relevance.
+Grounding makes representations meaningful beyond their syntax. An agent that
+can ground its symbols acts on the world: it recognizes that the symbol `Apple`
+refers to the red object on the table, not just to a node in a graph. Without
+grounding, even a logically flawless inference engine is performing purely
+symbolic manipulation with no real-world relevance.
 
 Grounding is far from straightforward. Sensory data is noisy and incomplete: a
 camera image of an apple may be partially occluded, poorly lit, or taken from an
 unusual angle. The mapping from raw inputs to abstract concepts is also
 context-dependent. The word "bank" grounds to a financial institution in one
-conversation and to the edge of a river in another, and resolving this requires
-situational knowledge that goes well beyond pattern matching on pixels or
-characters.
+conversation and to the edge of a river in another; resolving this requires
+situational knowledge beyond pattern matching on pixels or characters.
 
-These challenges make grounding a central concern across several applied
-domains. In robotics, grounding enables object recognition and manipulation: a
-robot must connect its internal label for "cup" to the specific object it needs
-to grasp. In natural language understanding, grounding ties words and phrases to
-the entities and events they describe, which is essential for tasks like visual
-question answering or instruction following. More broadly, autonomous agents and
-cognitive systems depend on grounded representations to close the loop between
-perception, reasoning, and action in open-ended environments.
+These challenges make grounding critical across applied domains. In robotics,
+grounding enables object recognition and manipulation: a robot must connect its
+internal label for "cup" to the specific object it needs to grasp. In natural
+language understanding, grounding ties words and phrases to the entities and
+events they describe, essential for visual question answering or instruction
+following. Autonomous agents and cognitive systems depend on grounded
+representations to close the loop between perception, reasoning, and action in
+open-ended environments.
 
 // From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:360 '* Can We Trust Grounding?'
 // Slide: Can We Trust Grounding?
@@ -620,15 +604,13 @@ contradicts old conclusions.
 // Slide: Models and Possible Worlds
 #strong[Models and Possible Worlds]
 
-Consider a world with two Boolean variables, _rain_ and _wet ground_. Each
+Consider a world with two Boolean variables: _rain_ and _wet ground_. Each
 possible world (or #strong[model]) assigns a truth value to every relevant
-variable, producing a complete snapshot of how things might be. With just these
-two variables there are four models: $("Rain" = T, "WetGround" = T)$,
+variable. With just these two, there are four models: $("Rain" = T, "WetGround" = T)$,
 $("Rain" = T, "WetGround" = F)$, $("Rain" = F, "WetGround" = T)$, and
-$("Rain" = F, "WetGround" = F)$. A model $m$ is the mathematical abstraction that
-captures one such possible world; for instance, $m$ might be the assignment
-$("Rain" = F, "WetGround" = T)$, representing a world where the ground is wet even
-though it has not rained.
+$("Rain" = F, "WetGround" = F)$. A model $m$ captures one possible world; for
+instance, $m$ might be $("Rain" = F, "WetGround" = T)$, representing a world where
+the ground is wet though it has not rained.
 
 // rendered_images:begin
 // ```graphviz
@@ -661,9 +643,9 @@ though it has not rained.
 // render_images:end
 worlds and Grounding
 
-As @fig:modelsandpossibleworlds illustrates, a model serves as the formal bridge
-between the abstract notion of "possible world" and the concrete variable
-assignments that ground our reasoning.
+A model serves as the formal bridge between the abstract notion of "possible
+world" and the concrete variable assignments that ground our reasoning
+(@fig:modelsandpossibleworlds).
 
 Now consider a richer scenario: men and women sitting at a table. Here the model
 represents every possible world as "there are $x$ men and $y$ women." A sentence
@@ -735,11 +717,10 @@ and β is "$x dot.op y = 0$." Here α entails β because in any model where $x =
 is true, $x dot.op y = 0$ is necessarily true regardless of the value of $y$.
 The truth of α constrains the world tightly enough that β cannot fail.
 
-Entailment is not tied to any particular proof procedure; it simply preserves
-truth across all models. Think of it as a constraint on consistent belief: if
-you believe the sentences in your KB, you #emph[must] believe the entailed
-sentences as well. No valid interpretation of the world lets you accept the
-premises while rejecting the conclusion.
+Entailment is not tied to any particular proof procedure; it preserves
+truth across all models. If you believe the sentences in your KB, you
+#emph[must] believe the entailed sentences as well. No valid interpretation of
+the world lets you accept the premises while rejecting the conclusion.
 
 // From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:468 '* Entailment, Implication, and Inference'
 // Slide: Entailment, Implication, and Inference
@@ -846,20 +827,18 @@ inference: a syntactic derivation that produces a new sentence from existing
 ones, following a rule (here, modus ponens) without ever inspecting models
 directly.
 
-Two properties determine whether an inference algorithm can be trusted. A
-#strong[sound] inference algorithm derives only sentences that are entailed by
-the knowledge base. In other words, whatever the algorithm finds is correct: it
-never asserts something as following from $"KB"$ when it does not. There are no
-false positives. A #strong[complete] inference algorithm can derive every
-sentence entailed by the knowledge base. It never misses a valid conclusion:
-there are no false negatives.
+Two properties determine whether an inference algorithm can be trusted.
+#strong[Soundness]: the algorithm derives only sentences entailed by the
+knowledge base. Whatever it finds is correct: it never asserts something as
+following from $"KB"$ when it does not. #strong[Completeness]: the algorithm
+derives every sentence entailed by the knowledge base. It never misses a valid
+conclusion.
 
-For instance, model checking (the brute-force enumeration of all possible truth
-assignments) is both sound and complete when the space of models is finite. It
-is sound because every model it finds consistent with $"KB" and alpha$ genuinely
-makes α true, so it never asserts a false entailment. It is complete because
-enumerating all finitely many models guarantees that every entailed sentence
-will be discovered. No valid conclusion slips through the exhaustive search.
+Model checking (brute-force enumeration of all truth assignments) is both sound
+and complete when the model space is finite. It is sound because every model
+consistent with $"KB" and alpha$ genuinely makes α true, so it never asserts a
+false entailment. It is complete because exhaustive enumeration guarantees that
+every entailed sentence will be discovered.
 
 The ideal inference algorithm achieves both properties simultaneously: it finds
 everything that follows from the knowledge base, and nothing that does not.
@@ -939,13 +918,12 @@ world.
 // render_images:end
 Follows, Semantics and Representation
 
-@fig:representationmirrorstheworld illustrates this parallel: on one side, the
-semantics of the world determines what is actually true; on the other, the
-representation and its entailment relation determine what can be derived. The
-diagram shows that the "follows" relation within the formal system is anchored,
-via semantics, to genuine facts about reality. This is what makes logic-based
-agents trustworthy: their internal derivations are not arbitrary symbol games
-but faithful mirrors of the relationships they represent.
+@fig:representationmirrorstheworld shows this parallel: on one side, the world's
+semantics determine what is actually true; on the other, the representation and
+its entailment relation determine what can be derived. The "follows" relation
+within the formal system is anchored to genuine facts about reality via semantics.
+This makes logic-based agents trustworthy: their internal derivations track
+real-world relationships rather than playing arbitrary symbol games.
 
 // From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:616 '## Logical Agents and Rule-Based Systems'
 // Slide: Logical Agents and Rule-Based Systems
@@ -1073,13 +1051,12 @@ disease to a medication. A geographical ontology works the same way, describing
 how cities belong to states and states belong to countries through hierarchical
 containment properties.
 
-The purpose of building an ontology is threefold. First, it provides a shared
-vocabulary for a domain of knowledge, so that different systems and teams use
-the same terms with the same meanings. Second, it enables reasoning about
-entities and their relationships, letting an inference engine derive new facts
-from the structure already encoded. Third, it allows machines and humans to
-understand and share information consistently, bridging the gap between how a
-database stores data and how a domain expert thinks about it.
+An ontology provides a shared vocabulary so different systems and teams use the
+same terms with the same meanings. It enables reasoning about entities and their
+relationships: inference engines derive new facts from the structure already
+encoded. It lets machines and humans understand and share information
+consistently, bridging the gap between how a database stores data and how a
+domain expert thinks about it.
 
 Several related concepts are worth distinguishing. A #emph[database schema]
 defines columns with fixed types and is generally more rigid than an ontology;
@@ -1132,11 +1109,11 @@ of a domain that supports both querying and automated inference.
 // Slide: Example: University Ontology
 #strong[Example: University Ontology]
 
-An ontology organizes knowledge into a formal structure built from a few core
-building blocks. The first of these is #strong[classes], which represent the
-categories of things in the domain. In a university setting, the natural classes
-are `Student`, `Professor`, `Course`, and `Department`. Each class groups
-together all individuals that share a common role in the institution.
+An ontology organizes knowledge into a formal structure built from core
+building blocks. #strong[Classes] represent the categories of things in the
+domain. In a university setting, the natural classes are `Student`, `Professor`,
+`Course`, and `Department`. Each groups together all individuals that share a
+common role.
 
 // rendered_images:begin
 // ```graphviz
@@ -1193,31 +1170,24 @@ together all individuals that share a common role in the institution.
 // render_images:end
 Course and Department
 
-The second building block is #strong[properties], which capture the
-relationships between classes. For instance, `takesCourse` links a `Student` to
-a `Course`, `teachesCourse` links a `Professor` to a `Course`, and
-`belongsToDepartment` connects both students and professors to a `Department`.
-These directed relationships, shown in @fig:exampleuniversityontology, make the
-structure of the domain explicit: rather than leaving it implicit that
-professors teach courses, the ontology encodes that link as a first-class
-element that reasoners can query and check.
+#strong[Properties] capture relationships between classes. `takesCourse` links
+a `Student` to a `Course`, `teachesCourse` links a `Professor` to a `Course`,
+and `belongsToDepartment` connects students and professors to a `Department`.
+These directed relationships (shown in @fig:exampleuniversityontology) make
+the domain structure explicit: the ontology encodes that professors teach
+courses as a first-class element, not an implicit assumption.
 
-Third, #strong[individuals] are specific instances of classes. Alice and Bob are
-individuals belonging to the `Student` class; GP and DrNo are individuals of
-type `Professor`; DATA605 and MSML610 are individual `Course` instances.
-Individuals populate the ontology with concrete facts that ground the abstract
-class hierarchy in real data.
+#strong[Individuals] are specific instances of classes. Alice and Bob belong to
+`Student`; GP and DrNo belong to `Professor`; DATA605 and MSML610 are
+`Course` instances. Individuals ground the abstract class hierarchy in real data.
 
-Finally, #strong[axioms] are logical rules that every valid state of the
-ontology must satisfy. Two axioms illustrate the idea here: every `Course` must
-be taught by exactly one `Professor`, and every `Student` must belong to exactly
-one `Department`. These constraints do more than document expectations; a
-reasoner can use them to detect inconsistencies (a course with no instructor, a
-student claimed by two departments) and to infer missing facts (if a course
-exists and only one professor is linked to it, that professor must be its
-instructor). Together, classes, properties, individuals, and axioms give an
-ontology enough structure to support both human understanding and automated
-reasoning over the domain.
+#strong[Axioms] are logical rules that valid states of the ontology must
+satisfy. Two examples: every `Course` must be taught by exactly one `Professor`,
+and every `Student` must belong to exactly one `Department`. Axioms let the
+reasoner detect inconsistencies (a course with no instructor, a student claimed
+by two departments) and infer missing facts. Together, these four elements give
+an ontology the structure to support both human understanding and automated
+reasoning.
 
 // From: msml610/lectures_source/Lesson03.1-Knowledge_representation.smd:805 '## Reasoning in Ontologies'
 // Slide: Reasoning in Ontologies
@@ -1342,13 +1312,12 @@ explicitly stated but follows from the axioms already present.
   placement: auto,
 ) <fig:protegeowl>
 
-As @fig:protegeowl illustrates, Protégé provides a visual workspace for
-inspecting and editing ontology elements. The platform supports the major
-ontology languages, including OWL (Web Ontology Language) and RDF (Resource
-Description Framework), along with multiple serialization formats such as
-RDF/XML, Turtle, and OWL Functional Syntax. This broad format support makes it
-straightforward to exchange ontologies with other tools in the Semantic Web
-ecosystem.
+Protégé provides a visual workspace for inspecting and editing ontology elements
+(shown in @fig:protegeowl). The platform supports major ontology languages,
+including OWL (Web Ontology Language) and RDF (Resource Description Framework),
+along with multiple serialization formats: RDF/XML, Turtle, and OWL Functional
+Syntax. This breadth of format support makes exchanging ontologies with other
+Semantic Web tools straightforward.
 
 Protégé's use cases span a wide range of domains:
 
@@ -1367,45 +1336,41 @@ Protégé's use cases span a wide range of domains:
 // Slide: Summary
 #strong[Summary]
 
-Knowledge representation serves as the bridge between raw perception and
-structured reasoning: it takes what is implicitly known and makes it explicit,
-organized, and amenable to machine processing. Without this bridge, an agent may
-perceive the world richly but lack the internal structure to draw conclusions,
-plan actions, or communicate its understanding.
+Knowledge representation bridges raw perception and structured reasoning: it
+takes what is implicitly known and makes it explicit, organized, and amenable to
+machine processing. Without it, an agent may perceive richly but lack the
+internal structure to draw conclusions, plan actions, or communicate its
+understanding.
 
-Several core themes run through the study of knowledge representation. First,
-every representational choice involves #emph[design tradeoffs]: more expressive
-languages can capture subtler distinctions but tend to make inference harder,
-while simpler languages keep reasoning tractable at the cost of what they can
-say. The tension between symbolic approaches (which manipulate discrete,
-human-readable structures) and sub-symbolic ones (which operate over continuous
-numerical representations) reflects the same balancing act.
+Several core themes run through knowledge representation. Every representational
+choice involves #emph[design tradeoffs]: more expressive languages capture finer
+distinctions but make inference harder, while simpler languages keep reasoning
+tractable at the cost of expressiveness. Symbolic approaches (discrete,
+human-readable structures) and sub-symbolic ones (continuous numerical
+representations) reflect the same tension.
 
-Second, the #emph[languages] available for encoding knowledge span a wide
-spectrum. Natural language is maximally expressive but riddled with ambiguity.
-Programming languages are precise and executable but typically lack the
-declarative semantics needed for general reasoning. Propositional logic offers
-clean truth-functional semantics but cannot quantify over objects, while
-first-order logic adds variables, quantifiers, and predicates, bringing enough
-expressiveness to formalize most of the reasoning patterns that knowledge-based
-AI requires.
+#emph[Languages] for encoding knowledge span a wide spectrum. Natural language is
+maximally expressive but riddled with ambiguity. Programming languages are
+precise and executable but lack the declarative semantics needed for general
+reasoning. Propositional logic offers clean truth-functional semantics but cannot
+quantify over objects. First-order logic adds variables, quantifiers, and
+predicates, enabling the expressiveness knowledge-based AI requires.
 
-Third, the #emph[semantics] of a knowledge base give its sentences meaning. A KB
-is a set of sentences grounded in the world through an interpretation function;
+The #emph[semantics] of a knowledge base give its sentences meaning. A KB is a
+set of sentences grounded in the world through an interpretation function:
 whether a sentence is true or false is evaluated over models, which are possible
-configurations of the domain. This model-theoretic grounding is what separates a
+configurations of the domain. Model-theoretic grounding is what separates a
 knowledge base from a mere collection of strings.
 
-Fourth, #emph[reasoning] in this framework is governed by entailment: a sentence
-follows from a KB exactly when every model that satisfies the KB also satisfies
-that sentence. Sound inference never produces a conclusion that fails to follow;
+#emph[Reasoning] in this framework is governed by entailment: a sentence follows
+from a KB exactly when every model that satisfies the KB also satisfies that
+sentence. Sound inference never produces a conclusion that fails to follow;
 complete inference never misses one that does. Together, soundness and
-completeness guarantee that the mechanical process of inference perfectly tracks
-the semantic notion of logical consequence.
+completeness guarantee that mechanical inference perfectly tracks logical
+consequence.
 
-Finally, the progression from simple reflex rules to full #emph[knowledge-based
-  agents] shows how richer internal representations unlock more capable
-behavior. Ontologies provide the shared, structured vocabularies that let agents
-(and teams of agents) organize their knowledge into coherent categories, reason
-over those categories, and communicate unambiguously about the world they
-inhabit.
+Simple reflex rules give way to full #emph[knowledge-based agents] with richer
+internal representations and more capable behavior. Ontologies provide shared,
+structured vocabularies that let agents (and teams of agents) organize knowledge
+into coherent categories, reason over them, and communicate unambiguously about
+the world.

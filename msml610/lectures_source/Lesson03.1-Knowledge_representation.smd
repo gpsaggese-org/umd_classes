@@ -506,7 +506,7 @@ digraph KBStructure {
 * Can We Trust Grounding?
 
 - @Question@: How do we know the symbols in the KB actually match reality?
-  - We can't never be sure!
+  - We can never be sure!
   - What is reality? Do we live in a simulation?
 
 - @Answers@: We **need to make assumptions**
@@ -810,7 +810,7 @@ digraph ModelChecking {
 ::: columns
 :::: {.column width=50%}
 
-- In other words, even if the inference operates on "syntax" (the internal
+- In other words, even if inference operates on "syntax" (the internal
   representation):
   - _"Sentences in the representation"_ correspond to _"aspects of the real world"_
   - _"Entailment between sentences in the representation"_ corresponds to
