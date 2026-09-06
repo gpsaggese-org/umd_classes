@@ -42,7 +42,7 @@
 * Ontological Commitment
 
 - @Definition@: **Ontological commitments** are assumptions about reality made by
-  a language [@russell2020aima]
+  a language `#cite("russell2020aima")`{=typst}
   - Different formal models make different assumptions on how truth is defined
 
 ::: columns
@@ -104,7 +104,7 @@ digraph OntologicalLevels {
 :::: {.column width=45%}
 
 - @Definition@: **Non-monotonic logic** is a logic where adding new information
-  can invalidate previous conclusions [@mccarthy1980circumscription]
+  can invalidate previous conclusions `#cite("mccarthy1980circumscription")`{=typst}
 
 - @Comparison@:
   - _Classical logic_: once proven, conclusions remain true even with new
@@ -153,7 +153,7 @@ digraph NonMonotonicReasoning {
 
 - @Definition@: **Default reasoning** makes assumptions by default in the absence
   of contrary evidence, allowing conclusions based on typical situations unless
-  exceptions are found [@reiter1980default]
+  exceptions are found `#cite("reiter1980default")`{=typst}
 
 - @Key idea@:
   - Assume the most likely case unless specified otherwise
@@ -359,7 +359,7 @@ digraph ILP {
 * Description Logic
 
 - @Definition@: **Description logic** represents structured knowledge about a
-  domain [@baader2003dlhandbook]
+  domain `#cite("baader2003dlhandbook")`{=typst}
   - Balances expressivity and computational efficiency
   - More expressive than propositional logic, less than first-order logic
 
@@ -430,7 +430,7 @@ digraph DescriptionLogic {
 * SHOIN
 
 - @Definition@: **SHOIN** is a description logic more expressive than ALC
-  [@horrocks2003owl]
+  `#cite("horrocks2003owl")`{=typst}
 
 ::: columns
 :::: {.column width=45%}
@@ -487,7 +487,7 @@ digraph SHOINFeatures {
 ::: columns
 :::: {.column width=45%}
 
-- @Definition@: **Web Ontology Language (OWL)** [@mcguinness2004owl]
+- @Definition@: **Web Ontology Language (OWL)** `#cite("mcguinness2004owl")`{=typst}
   - Semantic web language for complex knowledge
   - Rich representation on the web (based on SHOIN)
   - Formal semantics for machine reasoning
@@ -567,7 +567,7 @@ digraph OWL_Example {
 
 * RDF (Resource Description Framework)
 
-- @Definition@: **Resource Description Framework (RDF)** [@klyne2004rdf]
+- @Definition@: **Resource Description Framework (RDF)** `#cite("klyne2004rdf")`{=typst}
   - Is a standard model for data interchange on the web
   - Represents structured information in a machine-readable way
 
@@ -610,7 +610,7 @@ digraph OWL_Example {
 
 * SPARQL
 
-- @Definition@: **SPARQL** [@prudhommeaux2008sparql]
+- @Definition@: **SPARQL** `#cite("prudhommeaux2008sparql")`{=typst}
   - Is the query language for RDF data
   - Allows retrieval and manipulation of data stored in RDF format
 
@@ -696,7 +696,7 @@ digraph SemanticWebStack {
 :::: {.column width=45%}
 
 - @Definition@: **WikiData** is a free, collaborative knowledge base for Wikipedia
-  [@vrandecic2014wikidata]
+  `#cite("vrandecic2014wikidata")`{=typst}
   - Accessible via SPARQL APIs
   - Graph-based data model
 
@@ -750,7 +750,7 @@ digraph WikiDataStructure {
 :::: {.column width=55%}
 
 - @Definition@: **DBpedia** extracts structured content from Wikipedia, creating
-  a large-scale, multilingual knowledge graph [@lehmann2015dbpedia]
+  a large-scale, multilingual knowledge graph `#cite("lehmann2015dbpedia")`{=typst}
 
 - @Components@:
   - Data as RDF triples _(Subject, Predicate, Object)_
@@ -825,7 +825,7 @@ digraph SemanticNetwork {
 ::: columns
 :::: {.column width=50%}
 
-- @Definition@: **WordNet** [@miller1995wordnet]
+- @Definition@: **WordNet** `#cite("miller1995wordnet")`{=typst}
   - Is a large lexical database of English words
   - Models semantic relationships between words
   - Manually curated
@@ -854,7 +854,7 @@ digraph SemanticNetwork {
 
 * ConceptNet
 
-- @Definition@: **ConceptNet** [@speer2017conceptnet]
+- @Definition@: **ConceptNet** `#cite("speer2017conceptnet")`{=typst}
   - Is a large knowledge graph connecting words and phrases with labeled semantic
     relationships
   - Represents commonsense knowledge
@@ -888,7 +888,7 @@ digraph SemanticNetwork {
 * Knowledge Graphs
 
 - @Definition@: **Knowledge Graphs (KGs)** represent entities and relationships
-  as graph structures [@hogan2021knowledgegraphs]
+  as graph structures `#cite("hogan2021knowledgegraphs")`{=typst}
 
 - @Components@
   - _Nodes_: entities
@@ -944,4 +944,11 @@ digraph UniversityOntology {
     ComputerScience -> CS101 [label="offersCourse"];
     Mathematics -> MATH201 [label="offersCourse"];
 }
+```
+
+* References
+
+```{=typst}
+#set text(size: 0.75em)
+#references("/msml610/lectures_source/refs.bib")
 ```
